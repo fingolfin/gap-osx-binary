@@ -1,0 +1,284 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: T1 and T2</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: T1 and T2">
+<META NAME="keywords" CONTENT="Singular Manual: T1 and T2">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC925"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_873.htm#SEC924"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Polar curves" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_875.htm#SEC926"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Deformations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.4.4 T1 and T2 </H3>
+<!--docid::SEC925::-->
+<P>
+
+<IMG
+ WIDTH="23" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_407.png"
+ ALT="$T^1$">, resp. 
+<IMG
+ WIDTH="23" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_408.png"
+ ALT="$T^2$">, of an ideal 
+<IMG
+ WIDTH="12" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_53.png"
+ ALT="$j$"> usually denote the modules of
+infinitesimal deformations, resp. of obstructions.
+In S<SMALL>INGULAR</SMALL> there are procedures <CODE>T_1</CODE> and <CODE>T_2</CODE> in
+<CODE>sing.lib</CODE> such that
+<CODE>T_1(j)</CODE> and <CODE>T_2(j)</CODE> compute a standard basis of
+a presentation of these modules.
+If 
+<IMG
+ WIDTH="47" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_409.png"
+ ALT="$T^1,T_2$"> are finite dimensional K-vector spaces (e.g., for isolated
+singularities), a basis can be computed by applying
+<CODE>kbase(T_1(j));</CODE>, resp. <CODE>kbase(T_2(j));</CODE>, the dimensions by
+applying <CODE>vdim</CODE>.
+For a complete intersection j the procedure <CODE>Tjurina</CODE> also
+computes 
+<IMG
+ WIDTH="23" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_407.png"
+ ALT="$T^1$">, but faster (
+<IMG
+ WIDTH="52" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_410.png"
+ ALT="$T^2=0$"> in this case).
+For a non complete intersection, it is faster to use the procedure <CODE>T_12</CODE>
+instead of <CODE>T_1</CODE> and <CODE>T_2</CODE>.
+Type <CODE>help T_1;</CODE> (or <CODE>help T_2;</CODE> or <CODE>help T_12;</CODE>) to obtain
+more detailed information about these procedures.
+</P><P>
+
+We give three examples, the first being a hypersurface, the second a complete
+intersection, the third not a complete intersection:
+<UL>
+<LI>
+load <CODE>sing.lib</CODE>
+<LI>
+check whether the ideal j is a complete intersection. It is, if
+     number of variables = dimension + minimal number of generators
+<LI>
+compute the Tjurina number
+<LI>
+compute a vector space basis (kbase) of 
+<IMG
+ WIDTH="23" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_407.png"
+ ALT="$T^1$"><P>
+
+<LI>
+compute the Hilbert function of 
+<IMG
+ WIDTH="23" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_407.png"
+ ALT="$T^1$"><P>
+
+<LI>
+create a polynomial encoding the Hilbert series
+<LI>
+compute the dimension of 
+<IMG
+ WIDTH="23" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_408.png"
+ ALT="$T^2$"><P>
+
+</UL>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  LIB "sing.lib";
+  ring R=32003,(x,y,z),ds;
+  // ---------------------------------------
+  // hypersurface case (from series T[p,q,r]):
+  int p,q,r = 3,3,4;
+  poly f = x^p+y^q+z^r+xyz;
+  tjurina(f);
+==> 8
+  // Tjurina number = 8
+  kbase(Tjurina(f));
+==> // Tjurina number = 8
+==> _[1]=z3
+==> _[2]=z2
+==> _[3]=yz
+==> _[4]=xz
+==> _[5]=z
+==> _[6]=y
+==> _[7]=x
+==> _[8]=1
+  // ---------------------------------------
+  // complete intersection case (from series P[k,l]):
+  int k,l =3,2;
+  ideal j=xy,x^k+y^l+z2;
+  dim(std(j));          // Krull dimension
+==> 1
+  size(minbase(j));     // minimal number of generators
+==> 2
+  tjurina(j);           // Tjurina number
+==> 6
+  module T=Tjurina(j);
+==> // Tjurina number = 6
+  kbase(T);             // a sparse output of the k-basis of T_1
+==> _[1]=z*gen(1)
+==> _[2]=gen(1)
+==> _[3]=y*gen(2)
+==> _[4]=x2*gen(2)
+==> _[5]=x*gen(2)
+==> _[6]=gen(2)
+  print(kbase(T));      // columns of matrix are a k-basis of T_1
+==> z,1,0,0, 0,0,
+==> 0,0,y,x2,x,1 
+  // ---------------------------------------
+  // general case (cone over rational normal curve of degree 4):
+  ring r1=0,(x,y,z,u,v),ds;
+  matrix m[2][4]=x,y,z,u,y,z,u,v;
+  ideal i=minor(m,2);   // 2x2 minors of matrix m
+  module M=T_1(i);       // a presentation matrix of T_1
+==> // dim T_1 = 4
+  vdim(M);              // Tjurina number
+==> 4
+  hilb(M);              // display of both Hilbert series
+==> //         4 t^0
+==> //       -20 t^1
+==> //        40 t^2
+==> //       -40 t^3
+==> //        20 t^4
+==> //        -4 t^5
+==> 
+==> //         4 t^0
+==> // dimension (local)   = 0
+==> // multiplicity = 4
+  intvec v1=hilb(M,1);  // first Hilbert series as intvec
+  intvec v2=hilb(M,2);  // second Hilbert series as intvec
+  v1;
+==> 4,-20,40,-40,20,-4,0
+  v2;
+==> 4,0
+  v1[3];                // 3rd coefficient of the 1st Hilbert series
+==> 40
+  module N=T_2(i);
+==> // dim T_2 = 3
+</FONT></pre></td></tr></table><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>// In some cases it might be useful to have a polynomial in some ring
+// encoding the Hilbert series. This polynomial can then be
+// differentiated, evaluated etc. It can be done as follows:
+ring H = 0,t,ls;
+poly h1;
+int ii;
+for (ii=1; ii&lt;=size(v1); ii=ii+1)
+{
+   h1=h1+v1[ii]*t^(ii-1);
+}
+h1;                   // 1st Hilbert series
+==> 4-20t+40t2-40t3+20t4-4t5
+diff(h1,t);           // differentiate  h1
+==> -20+80t-120t2+80t3-20t4
+subst(h1,t,1);        // substitute t by 1
+==> 0
+
+// The procedures T_1, T_2, T_12 may be called with two arguments and then
+// they return a list with more information (type help T_1; etc.)
+// e.g., T_12(i,&lt;any&gt;); returns a list with 9 nonempty objects where
+// _[1] = std basis of T_1-module, _[2] = std basis of T_2-module,
+// _[3]= vdim of T_1, _[4]= vdim of T_2
+setring r1;           // make r1 again the basering
+list L = T_12(i,1);
+==> // dim T_1  =  4
+==> // dim T_2  =  3
+kbase(L[1]);          // kbase of T_1
+==> _[1]=1*gen(2)
+==> _[2]=1*gen(3)
+==> _[3]=1*gen(6)
+==> _[4]=1*gen(7)
+kbase(L[2]);          // kbase of T_2
+==> _[1]=1*gen(6)
+==> _[2]=1*gen(8)
+==> _[3]=1*gen(9)
+L[3];                 // vdim of T_1
+==> 4
+L[4];                 // vdim of T_2
+==> 3
+</FONT></pre></td></tr></table><A NAME="Deformations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_873.htm#SEC924"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Polar curves" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_875.htm#SEC926"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Deformations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

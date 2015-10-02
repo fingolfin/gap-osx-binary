@@ -5,8 +5,6 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: catenary-tame.gd,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado,
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the
@@ -275,4 +273,155 @@ DeclareGlobalFunction("TameDegreeOfSetOfFactorizations");
 ##
 #############################################################################
 DeclareGlobalFunction("RClassesOfSetOfFactorizations");
+
+########################################################
+#  MaximalDenumerantOfElementInNumericalSemigroup(x,s)
+#  returns the number of factorizations of maximal length of x in 
+#  the numerical semigroup s
+########################################################
+DeclareGlobalFunction("MaximalDenumerantOfElementInNumericalSemigroup");
+
+########################################################
+#  MaximalDenumerantOfSetOfFactorizations(ls)
+#  returns the number of factorizations of maximal length in ls
+########################################################
+DeclareGlobalFunction("MaximalDenumerantOfSetOfFactorizations");
+
+########################################################
+# MaximalDenumerantOfNumericalSemigroup(s)
+# computes the maximal denumerant of a numerical semigroup
+# by using de algorithm given by Bryant and Hamblin 
+# Semigroup Forum 86 (2013), 571-582
+########################################################
+DeclareGlobalFunction("MaximalDenumerantOfNumericalSemigroup");
+
+########################################################
+# AdjustmentOfNumericalSemigroup(s)
+# computes the adjustment a numerical semigroup
+# by using de algorithm given by Bryant and Hamblin 
+# Semigroup Forum 86 (2013), 571-582
+########################################################
+DeclareGlobalFunction("AdjustmentOfNumericalSemigroup");
+
+##############################################################
+# IsAdditiveNumericalSemigroup(s)
+# Detects if s is an additive numerical semigroup, that is, 
+# ord(m+x)=ord(x)+1 for all x in s. For these semigroups gr_m(K[[s]]) is 
+# Cohen-Macaulay.	
+# We use Proposition 4.7 in  Semigroup Forum 86 (2013), 571-582
+##############################################################
+DeclareGlobalFunction("IsAdditiveNumericalSemigroup");
+
+##############################################################
+# IsSuperSymmetricNumericalSemigroup(s)
+# Detects if s is a numerical semigroup is supersymmetric, that is, 
+# it is symmetric, additive and whenever w+w'=f+m 
+# (with m the multiplicity and f the Frobenius number) we have 
+# ord(w+w')=ord(w)+ord(w')
+##############################################################
+DeclareGlobalFunction("IsSuperSymmetricNumericalSemigroup");
+
+#######################################################################
+# BelongsToHomogenizationOfNumericalSemigroup(n,s)
+# checks if the pair n belongs to the homogenization of s
+#######################################################################
+DeclareGlobalFunction("BelongsToHomogenizationOfNumericalSemigroup");
+
+#######################################################################
+# FactorizationsInHomogenizationOfNumericalSemigroup(n,s)
+# computes the set of factorizations of  n with respect to generators of  
+# the homogenization of s
+#######################################################################
+DeclareGlobalFunction("FactorizationsInHomogenizationOfNumericalSemigroup");
+
+#######################################################################
+# HomogeneousBettiElementsOfNumericalSemigroup(s) 
+#  Computes the Betti elements of the Homogenization of s 
+#  uses Cox-Little-O'Shea, Chapter 8, Theorem 4  for finding 
+#  a system of generators of the ideal of S^h
+#######################################################################
+DeclareGlobalFunction("HomogeneousBettiElementsOfNumericalSemigroup");
+
+####################################################################
+#F HomogeneousCatenaryDegreeOfNumericalSemigroup(s) computes the 
+##  homogeneous catenary degree of the numerical semigroup s ([GSOSN])
+####################################################################
+DeclareGlobalFunction("HomogeneousCatenaryDegreeOfNumericalSemigroup");
+
+########################################
+#F DenumerantElementInNumericalSemigroup(n,s)
+## returns the denumerant
+########################################
+DeclareGlobalFunction("DenumerantOfElementInNumericalSemigroup");
+
+####################################################################
+#F MoebiusFunctionAssociatedToNumericalSemigroup(s,x)
+## Computes the value in x of  Moebius function of the poset 
+## associated to a numerial semigroup s 
+## -Chappelon and Ramirez Alfonsin, Semigroup Forum 87 (2013), 313-330
+####################################################################
+DeclareGlobalFunction("MoebiusFunctionAssociatedToNumericalSemigroup");
+
+###################################################################
+#F  AdjacentCatenaryDegreeOfSetOfFactorizations(ls)
+## computes the adjacent catenary degree of the set of factorizations ls
+###################################################################
+DeclareGlobalFunction("AdjacentCatenaryDegreeOfSetOfFactorizations");
+
+###################################################################
+#F EqualCatenaryDegreeOfSetOfFactorizations(ls) 
+## computes the equal catenary degree of of the set of factorizations
+###################################################################
+DeclareGlobalFunction("EqualCatenaryDegreeOfSetOfFactorizations");
+
+###################################################################
+#F MonotoneCatenaryDegreeOfSetOfFactorizations(ls) 
+## computes the equal catenary degree of of the set of factorizations
+###################################################################
+DeclareGlobalFunction("MonotoneCatenaryDegreeOfSetOfFactorizations");
+
+############################################################
+#F LShapesOfNumericalSemigroup(s)
+## computes the set of LShapes associated to S (see [AG-GS])
+##########################################################
+DeclareGlobalFunction("LShapesOfNumericalSemigroup");
+
+###########################################################################
+#F  MonotonePrimitiveElementsOfNumericalSemigroup(s)
+##
+## Computes the sets of elements in s, such that there exists a minimal 
+## solution to msg*x-msg*y = 0, |x|<=|y| such that x,y are factorizations of s
+## Used to compute the monotone catenary degree of the semigroup s
+##
+#############################################################################
+DeclareGlobalFunction("MonotonePrimitiveElementsOfNumericalSemigroup");
+
+###########################################################################
+#F  EqualPrimitiveElementsOfNumericalSemigroup(s)
+##
+## Computes the sets of elements in s, such that there exists a minimal 
+## solution to msg*x-msg*y = 0, |x|=|y| such that x,y are factorizations of s
+## Used to compute the equal catenary degree of the semigroup
+##
+#############################################################################
+DeclareGlobalFunction("EqualPrimitiveElementsOfNumericalSemigroup");
+
+####################################################################
+#F EqualCatenaryDegreeOfNumericalSemigroup(s) computes the 
+##  adjacent catenary degree of the numerical semigroup s
+##  the equal catenary degree is reached in the set of primitive
+##  elements of s (see [PH])
+####################################################################
+DeclareGlobalFunction("EqualCatenaryDegreeOfNumericalSemigroup");
+
+####################################################################
+#F MonotoneCatenaryDegreeOfNumericalSemigroup(s) computes the 
+##  adjacent catenary degree of the numerical semigroup s
+##  the monotone catenary degree is reached in the set of primitive
+##  elements of s (see [PH])
+####################################################################
+DeclareGlobalFunction("MonotoneCatenaryDegreeOfNumericalSemigroup");
+
+
+
 

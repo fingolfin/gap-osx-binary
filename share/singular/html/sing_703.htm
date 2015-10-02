@@ -1,0 +1,158 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: involution</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: involution">
+<META NAME="keywords" CONTENT="Singular Manual: involution">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC754"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_702.htm#SEC753"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ncdetection" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_704.htm#SEC755"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: isInvolution" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: freegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: involut_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.9.0. involution </H5>
+<!--docid::SEC754::-->
+Procedure from library <CODE>involut.lib</CODE> (see  <A HREF="sing_698.htm#SEC749">involut_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>involution(m, theta); m is a poly/vector/ideal/matrix/module, theta is a map
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>object of the same type as m
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>applies the involution, presented by theta to the object m
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>for an involution theta and two polynomials a,b from the algebra,
+<BR> theta(ab) = theta(b) theta(a); theta is linear with respect to the ground field
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>This is generalized "theta(m)" for data types unsupported by "map".
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "involut.lib";
+ring R = 0,(x,d),dp;
+def r = nc_algebra(1,1); setring r; // Weyl-Algebra
+map F = r,x,-d;
+F(F);  // should be maxideal(1) for an involution
+==> _[1]=x
+==> _[2]=d
+poly f =  x*d^2+d;
+poly If = involution(f,F);
+f-If;
+==> 0
+poly g = x^2*d+2*x*d+3*x+7*d;
+poly tg = -d*x^2-2*d*x+3*x-7*d;
+poly Ig = involution(g,F);
+tg-Ig;
+==> 0
+ideal I = f,g;
+ideal II = involution(I,F);
+II;
+==> II[1]=xd2+d
+==> II[2]=-x2d-2xd+x-7d-2
+matrix(I) - involution(II,F);
+==> _[1,1]=0
+==> _[1,2]=0
+module M  = [f,g,0],[g,0,x^2*d];
+module IM = involution(M,F);
+print(IM);
+==> xd2+d,          -x2d-2xd+x-7d-2,
+==> -x2d-2xd+x-7d-2,0,              
+==> 0,              -x2d-2x         
+print(matrix(M) - involution(IM,F));
+==> 0,0,
+==> 0,0,
+==> 0,0 
+</FONT></pre></td></tr></table><P>
+
+<A NAME="isInvolution"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_702.htm#SEC753"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ncdetection" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_704.htm#SEC755"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: isInvolution" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: freegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: involut_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

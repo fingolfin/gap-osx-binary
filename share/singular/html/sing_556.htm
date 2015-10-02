@@ -1,0 +1,175 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: bfctAnn</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: bfctAnn">
+<META NAME="keywords" CONTENT="Singular Manual: bfctAnn">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC607"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_555.htm#SEC606"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bfctSyz" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_557.htm#SEC608"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: bfctOneGB" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_546.htm#SEC597"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: bimodules_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_567.htm#SEC618"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: central_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_553.htm#SEC604"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bfun_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.2.0. bfctAnn </H5>
+<!--docid::SEC607::-->
+Procedure from library <CODE>bfun.lib</CODE> (see  <A HREF="sing_553.htm#SEC604">bfun_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>bfctAnn(f [,a,b,c]); f a poly, a, b, c optional ints
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list of ideal and intvec
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes the roots of the Bernstein-Sato polynomial b(s) for the
+<BR> hypersurface defined by f.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is commutative and of characteristic 0.
+<P>
+
+<DT><STRONG>Background:</STRONG>
+<DD>In this proc, Ann(f^s) is computed and then a system of linear
+<BR> equations is solved by linear reductions.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>In the output list, the ideal contains all the roots and the intvec
+<BR> their multiplicities.
+<BR> If a&lt;&gt;0, only f is appended to Ann(f^s), otherwise, and by default,
+<BR> f and all its partial derivatives are appended.
+<BR> If b&lt;&gt;0, <CODE>std</CODE> is used for GB computations, otherwise, and by
+<BR> default, <CODE>slimgb</CODE> is used.
+<BR> If c&lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations of ideals
+<BR> &lt;I+J&gt; when I is already a Groebner basis of &lt;I&gt;.
+<BR> Otherwise, and by default the engine determined by the switch b is used.
+<BR> Note that in the case c&lt;&gt;0, the choice for b will be overwritten only
+<BR> for the types of ideals mentioned above.
+<BR> This means that if b&lt;&gt;0, specifying c has no effect.
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If printlevel=1, progress debug messages will be printed,
+<BR> if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "bfun.lib";
+ring r = 0,(x,y),dp;
+poly f = x^2+y^3+x*y^2;
+bfctAnn(f);
+==> [1]:
+==>    _[1]=-5/6
+==>    _[2]=-1
+==>    _[3]=-7/6
+==> [2]:
+==>    1,1,1
+def R = reiffen(4,5); setring R;
+RC; // the Reiffen curve in 4,5
+==> xy4+y5+x4
+bfctAnn(RC,0,1);
+==> [1]:
+==>    _[1]=-9/20
+==>    _[2]=-11/20
+==>    _[3]=-13/20
+==>    _[4]=-7/10
+==>    _[5]=-17/20
+==>    _[6]=-9/10
+==>    _[7]=-19/20
+==>    _[8]=-1
+==>    _[9]=-21/20
+==>    _[10]=-11/10
+==>    _[11]=-23/20
+==>    _[12]=-13/10
+==>    _[13]=-27/20
+==> [2]:
+==>    1,1,1,1,1,1,1,1,1,1,1,1,1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="bfctOneGB"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_555.htm#SEC606"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bfctSyz" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_557.htm#SEC608"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: bfctOneGB" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_546.htm#SEC597"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: bimodules_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_567.htm#SEC618"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: central_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_553.htm#SEC604"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bfun_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

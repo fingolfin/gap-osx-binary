@@ -1,0 +1,255 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: tropical_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: tropical_lib">
+<META NAME="keywords" CONTENT="Singular Manual: tropical_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2038"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1962.htm#SEC2037"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: realizationDimPoly" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1964.htm#SEC2039"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: tropicalLifting" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.13.3 tropical_lib </H3>
+<!--docid::SEC2038::-->
+<P>
+
+<A NAME="IDX673"></A>
+<A NAME="IDX674"></A>
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>tropical.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>  Computations in Tropical Geometry
+<P>
+
+<DT><STRONG>Authors:</STRONG>
+<DD>Anders Jensen Needergard, email: jensen@math.tu-berlin.de
+<BR> Hannah Markwig, email: hannah@uni-math.gwdg.de
+<BR> Thomas Markwig, email: keilen@mathematik.uni-kl.de
+<P>
+
+<DT><STRONG>Warning:</STRONG>
+<DD>- tropicalLifting will only work with LINUX and if in addition gfan is installed.
+<BR>- drawTropicalCurve and drawTropicalNewtonSubdivision will only display the
+<BR> tropical curve with LINUX and if in addition latex and kghostview
+<BR> are installed.
+<BR>- For tropicalLifting in the definition of the basering the parameter t
+<BR> from the Puiseux series field C{{t}} must be defined as a variable,
+<BR> while for all other procedures it must be defined as a parameter.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Fix some base field K and a bunch of lattice points v0,...,vm in the integer
+lattice Z^n, then this defines a toric variety as the closure of (K*)^n in
+the projective space P^m, where the torus is embedded via the map sending a
+point x in (K*)^n to the point (x^v0,...,x^vm).
+<BR>The generic hyperplane sections are just the images of the hypersurfaces
+in (K*)^n defined by the polynomials f=a0*x^v0+...+am*x^vm=0. Some properties
+of these hypersurfaces can be studied via tropicalisation.
+<P>
+
+For this we suppose that K=C{{t}} is the field of Puiseux series over the
+field of complex numbers (or any other field with a valuation into the real
+numbers). One associates to the hypersurface given by f=a0*x^v0+...+am*x^vm
+the tropical hypersurface defined by the tropicalisation
+trop(f)=min{val(a0)+&lt;v0,x&gt;,...,val(am)+&lt;vm,x&gt;}.
+<BR>Here, &lt;v,x&gt; denotes the standard scalar product of the integer vector v in Z^n
+with the vector x=(x1,...,xn) of variables, so that trop(f) is a piecewise
+linear function on R^n. The corner locus of this function (i.e. the points
+at which the minimum is attained a least twice) is the tropical hypersurface
+defined by trop(f).
+<BR>The theorem of Newton-Kapranov states that this tropical hypersurface is
+the same as if one computes pointwise the valuation of the hypersurface
+given by f. The analogue holds true if one replaces one equation f by an
+ideal I. A constructive proof of the theorem is given by an adapted
+version of the Newton-Puiseux algorithm. The hard part is to find a point
+in the variety over C{{t}} which corresponds to a given point in the
+tropical variety.
+</P><P>
+
+It is the purpose of this library to provide basic means to deal with
+tropical varieties. Of course we cannot represent the field of Puiseux
+series over C in its full strength, however, in order to compute interesting
+examples it will be sufficient to replace the complex numbers C by the
+rational numbers Q and to replace Puiseux series in t by rational functions
+in t, i.e. we replace C{{t}} by Q(t), or sometimes even by Q[t].
+Note, that this in particular forbids rational exponents for the t's.
+</P><P>
+
+Moreover, in @sc{Singular} no negative exponents of monomials are allowed, so
+that the integer vectors vi will have to have non-negative entries.
+Shifting all exponents by a fixed integer vector does not change the
+tropicalisation nor does it change the toric variety. Thus this does not
+cause any restriction.
+<BR>If, however, for some reason you prefer to work with general vi, then you
+have to pass right away to the tropicalisation of the equations, whereever
+this is allowed -- these are linear polynomials where the constant coefficient
+corresponds to the valuation of the original coefficient and where
+the non-constant coefficient correspond to the exponents of the monomials,
+thus they may be rational numbers respectively negative numbers:
+e.g. if f=t^{1/2}*x^{-2}*y^3+2t*x*y+4 then trop(f)=min{1/2-2x+3y,1+x+y,0}.
+</P><P>
+
+The main tools provided in this library are as follows:
+<BR> - tropicalLifting implements the constructive proof of the Theorem of
+Newton-Kapranov and constructs a point in the variety
+over C{{t}} corresponding to a given point in the
+<BR>corresponding tropical variety associated to an
+<BR>ideal I; the generators of I have to be in the
+<BR>polynomial ring Q[t,x1,...,xn] considered as a
+<BR>subring of C{{t}}[x1,...,xn]; a solution will be
+<BR>constructed up to given order; note that several
+<BR>field extensions of Q might be necessary throughout
+<BR>the intermediate computations; the procedures use
+<BR>the external program gfan
+<BR> - puiseuxExpansion computes a Newton-Puiseux expansion of a plane curve
+singularity
+<BR> - drawTropicalCurve visualises a tropical plane curve either given by a
+polynomial in Q(t)[x,y] or by a list of linear
+<BR>polynomials of the form ax+by+c with a,b in Z and c
+<BR>in Q; latex must be installed on your computer
+<BR> - tropicalJInvariant computes the tropical j-invaiant of a tropical
+elliptic curve
+<BR> - jInvariant computes the j-invariant of an elliptic curve
+<BR> - weierstrassForm computes the Weierstrass form of an elliptic curve
+</P><P>
+
+</DL>
+<P>
+
+<STRONG>Procedures for tropical lifting:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1964.htm#SEC2039">D.13.3.1 tropicalLifting</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes a point in the tropical variety</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1965.htm#SEC2040">D.13.3.2 displayTropicalLifting</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">displays the output of tropicalLifting</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1966.htm#SEC2041">D.13.3.3 puiseuxExpansion</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes a Newton-Puiseux expansion in the plane</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1967.htm#SEC2042">D.13.3.4 displayPuiseuxExpansion</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">displays the output of puiseuxExpansion</TD></TR>
+</TABLE></BLOCKQUOTE>
+<STRONG>Procedures for drawing tropical curves:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1968.htm#SEC2043">D.13.3.5 tropicalCurve</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes a tropical curve and its Newton subdivision</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1969.htm#SEC2044">D.13.3.6 drawTropicalCurve</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">produces a post script image of a tropical curve</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1970.htm#SEC2045">D.13.3.7 drawNewtonSubdivision</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">produces a post script image of a Newton subdivision PROCEDURES FOR J-INVARIANTS:</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1971.htm#SEC2046">D.13.3.8 tropicalJInvariant</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the tropical j-invariant of a tropical curve</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1972.htm#SEC2047">D.13.3.9 weierstrassForm</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the Weierstrass form of a cubic polynomial</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1973.htm#SEC2048">D.13.3.10 jInvariant</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the j-invariant of a cubic polynomial</TD></TR>
+</TABLE></BLOCKQUOTE>
+<STRONG>General procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1974.htm#SEC2049">D.13.3.11 conicWithTangents</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes a conic through five points with tangents</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1975.htm#SEC2050">D.13.3.12 tropicalise</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the tropicalisation of a polynomial</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1976.htm#SEC2051">D.13.3.13 tropicaliseSet</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the tropicalisation several polynomials</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1977.htm#SEC2052">D.13.3.14 tInitialForm</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the tInitial form of a polynomial in Q[t,x_1,...,x_n]</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1978.htm#SEC2053">D.13.3.15 tInitialIdeal</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the tInitial ideal of an ideal in Q[t,x_1,...,x_n]</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1979.htm#SEC2054">D.13.3.16 initialForm</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the initial form of poly in Q[x_1,...,x_n]</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1980.htm#SEC2055">D.13.3.17 initialIdeal</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the initial ideal of an ideal in Q[x_1,...,x_n]</TD></TR>
+</TABLE></BLOCKQUOTE>
+<STRONG>Procedures for latex conversion:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1981.htm#SEC2056">D.13.3.18 texNumber</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">outputs the texcommand for the leading coefficient of poly</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1982.htm#SEC2057">D.13.3.19 texPolynomial</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">outputs the texcommand for the polynomial poly</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1983.htm#SEC2058">D.13.3.20 texMatrix</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">outputs the texcommand for the matrix</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1984.htm#SEC2059">D.13.3.21 texDrawBasic</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">embeds output of texDrawTropical in a texdraw environment</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1985.htm#SEC2060">D.13.3.22 texDrawTropical</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the texdraw commands for a tropical curve</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1986.htm#SEC2061">D.13.3.23 texDrawNewtonSubdivision</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes texdraw commands for a Newton subdivision</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1987.htm#SEC2062">D.13.3.24 texDrawTriangulation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes texdraw commands for a triangulation</TD></TR>
+</TABLE></BLOCKQUOTE>
+<STRONG>Auxilary procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1988.htm#SEC2063">D.13.3.25 radicalMemberShip</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">checks radical membership</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1989.htm#SEC2064">D.13.3.26 tInitialFormPar</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the t-initial form of poly in Q(t)[x_1,...,x_n]</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1990.htm#SEC2065">D.13.3.27 tInitialFormParMax</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">same as tInitialFormPar, but uses maximum</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1991.htm#SEC2066">D.13.3.28 solveTInitialFormPar</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">displays approximated solution of a 0-dim ideal</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1992.htm#SEC2067">D.13.3.29 detropicalise</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the detropicalisation of a linear form</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1993.htm#SEC2068">D.13.3.30 tDetropicalise</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the detropicalisation of a linear form</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1994.htm#SEC2069">D.13.3.31 dualConic</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the dual of an affine plane conic</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1995.htm#SEC2070">D.13.3.32 parameterSubstitute</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">substitutes in the polynomial the parameter t by t^N</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1996.htm#SEC2071">D.13.3.33 tropicalSubst</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">makes certain substitutions in a tropical polynomial</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1997.htm#SEC2072">D.13.3.34 randomPolyInT</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes a polynomial with random coefficients</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1998.htm#SEC2073">D.13.3.35 cleanTmp</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">clears /tmp from files created by other procedures</TD></TR>
+</TABLE></BLOCKQUOTE>
+<A NAME="IDX675"></A>
+<A NAME="IDX676"></A>
+<P>
+
+<A NAME="tropicalLifting"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1962.htm#SEC2037"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: realizationDimPoly" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1964.htm#SEC2039"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: tropicalLifting" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

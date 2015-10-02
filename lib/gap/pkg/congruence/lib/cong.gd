@@ -119,12 +119,12 @@ DeclareProperty( "IsIntersectionOfCongruenceSubgroups", IsCongruenceSubgroup );
 ##
 ## Declaration of global functions - constructors of congruence subgroups
 ##
-DeclareGlobalFunction("PrincipalCongruenceSubgroup");
-DeclareGlobalFunction("CongruenceSubgroupGamma0");
-DeclareGlobalFunction("CongruenceSubgroupGammaUpper0");
-DeclareGlobalFunction("CongruenceSubgroupGamma1");
-DeclareGlobalFunction("CongruenceSubgroupGammaUpper1");
-DeclareGlobalFunction("CongruenceSubgroupGammaMN");
+DeclareOperation("PrincipalCongruenceSubgroup", [IsPosInt]);
+DeclareOperation("CongruenceSubgroupGamma0", [IsPosInt]);
+DeclareOperation("CongruenceSubgroupGammaUpper0", [IsPosInt]);
+DeclareOperation("CongruenceSubgroupGamma1", [IsPosInt]);
+DeclareOperation("CongruenceSubgroupGammaUpper1", [IsPosInt]);
+DeclareOperation("CongruenceSubgroupGammaMN", [IsPosInt,IsPosInt]);
 
 
 #############################################################################
@@ -165,19 +165,20 @@ DeclareAttribute( "IndexInSL2Z", IsCongruenceSubgroup );
 ## IntersectionOfCongruenceSubgroups( <list of subgroups> )
 ##
 ## We declare special type of congruence subgroups that are intersections of
-## a finite number congruence subgroups of types CongruenceSubgroupGamma, CongruenceSubgroupGamma_0, CongruenceSubgroupGamma^0, 
-## CongruenceSubgroupGamma_1 and CongruenceSubgroupGamma^1. The list of subgroups defining this intersection will
-## be stored in the attribute "DefiningCongruenceSubgroups" 
+## a finite number congruence subgroups of types CongruenceSubgroupGamma, 
+## CongruenceSubgroupGamma_0, CongruenceSubgroupGamma^0, CongruenceSubgroupGamma_1 
+## and CongruenceSubgroupGamma^1. The list of subgroups defining this 
+##  intersection will be stored in the attribute "DefiningCongruenceSubgroups".
 ##
 DeclareGlobalFunction("IntersectionOfCongruenceSubgroups");
 DeclareAttribute( "DefiningCongruenceSubgroups", 
-                  IsIntersectionOfCongruenceSubgroups );
+                  IsCongruenceSubgroup );
                   
 #############################################################################
 #
 # CanEasilyCompareCongruenceSubgroups( G, H )
 #
-DeclareGlobalFunction( "CanEasilyCompareCongruenceSubgroups" );
+DeclareOperation( "CanEasilyCompareCongruenceSubgroups", [ IsCongruenceSubgroup, IsCongruenceSubgroup ] );
 
 
 #############################################################################
@@ -191,7 +192,7 @@ DeclareGlobalFunction( "CanEasilyCompareCongruenceSubgroups" );
 # This is used in IntersectionOfCongruenceSubgroups to reduce the list of
 # canonical subgroups forming the intersection.
 #
-DeclareGlobalFunction( "CanReduceIntersectionOfCongruenceSubgroups" );
+DeclareOperation( "CanReduceIntersectionOfCongruenceSubgroups", [ IsCongruenceSubgroup, IsCongruenceSubgroup ] );
 
 
 #############################################################################

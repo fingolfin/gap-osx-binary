@@ -1,0 +1,140 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: StabEqn</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: StabEqn">
+<META NAME="keywords" CONTENT="Singular Manual: StabEqn">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1626"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1550.htm#SEC1625"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: QuotientEquations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1552.htm#SEC1627"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: StabEqnId" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1541.htm#SEC1616"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: mondromy_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1547.htm#SEC1622"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: qhmoduli_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.12.4 StabEqn </H4>
+<!--docid::SEC1626::-->
+Procedure from library <CODE>qhmoduli.lib</CODE> (see  <A HREF="sing_1547.htm#SEC1622">qhmoduli_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>StabEqn(f); f polynomial
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute the equations of the isometry group of f.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f semiquasihomogeneous polynomial with an isolated singularity at 0
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list of two rings 'S1', 'S2'
+<BR>- 'S1' contians the equations of the stabilizer (ideal 'stabid') <BR>
+- 'S2' contains the action of the stabilizer (ideal 'actionid')
+<P>
+
+<DT><STRONG>Global:</STRONG>
+<DD>varSubsList, contains the index j s.t. x(i) -&gt; x(i)t(j) ...
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "qhmoduli.lib";
+ring B = 0,(x,y,z), ls;
+poly f = -z5+y5+x2z+x2y;
+list stab = StabEqn(f);
+def S1 = stab[1]; setring S1;  stabid;
+==> stabid[1]=s(2)*s(3)
+==> stabid[2]=s(1)^2*s(2)+s(1)^2*s(3)-1
+==> stabid[3]=s(1)^2*s(3)^2-s(3)
+==> stabid[4]=s(2)^4-s(3)^4+s(1)^2
+==> stabid[5]=s(1)^4+s(2)^3-s(3)^3
+==> stabid[6]=s(3)^5-s(1)^2*s(3)
+def S2 = stab[2]; setring S2;  actionid;
+==> actionid[1]=s(1)*x
+==> actionid[2]=s(3)*y+s(2)*z
+==> actionid[3]=s(2)*y+s(3)*z
+</FONT></pre></td></tr></table><P>
+
+<A NAME="StabEqnId"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1550.htm#SEC1625"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: QuotientEquations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1552.htm#SEC1627"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: StabEqnId" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1541.htm#SEC1616"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: mondromy_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1547.htm#SEC1622"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: qhmoduli_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

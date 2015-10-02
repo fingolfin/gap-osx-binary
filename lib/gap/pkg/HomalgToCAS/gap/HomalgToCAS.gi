@@ -217,6 +217,12 @@ InstallValue( HOMALG_IO,
                 ## assign a "sparse" list of matrix entries to a variable:
                 sparse                                  := "spr",
                 
+                ## list of assumed inequalities:
+                Inequalities                            := "<>0",
+                
+                ## list of assumed inequalities:
+                MaximalIndependentSet                   := "idp",
+                
                 ##
                 ## mandatory matrix operations:
                 ##
@@ -417,10 +423,10 @@ InstallValue( HOMALG_IO,
                 ##
                 
                 ## Hilbert-Poincare series of a module:
-                HilbertPoincareSeries                   := "hps",
+                HilbertPoincareSeries                   := "HPs",
                 
                 ## Hilbert polynomial of a module:
-                HilbertPolynomial                       := "hil",
+                HilbertPolynomial                       := "Hil",
                 
                 ## affine dimension of a module:
                 AffineDimension                         := "dim",

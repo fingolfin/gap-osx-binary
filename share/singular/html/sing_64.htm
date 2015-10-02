@@ -1,0 +1,122 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ASSUME</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ASSUME">
+<META NAME="keywords" CONTENT="Singular Manual: ASSUME">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC100"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_65.htm#SEC101"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Tracing of procedures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_71.htm#SEC110"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Dynamic loading" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.9.1 ASSUME </H3>
+<!--docid::SEC100::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>ASSUME (</CODE> int_constant <CODE>,</CODE> expression <CODE>)</CODE>
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>Tests the expression for correctness if the int_constant is smaller
+as a variable <CODE>assumeLevel</CODE>. If no such variable exist the int expression
+is compared against 0. It is possible to define an individual <CODE>assumeLevel</CODE> for each library and/or procedure
+If the expression is evaluated and not true (i.e. does not evaluate to <CODE>int(0)</CODE> an error is raised.
+<DT><CODE><STRONG>Note:</STRONG> <CODE>ASSUME</CODE> shall be used for documentation and debugging,</CODE>
+<DD>production code of a library must never define <CODE>assumeLevel</CODE>.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ASSUME(0,2==2); // always tested
+  ASSUME(1,1==2); // not evaluated
+  int assumeLevel=2;
+  ASSUME(1,1==2);
+==>    ? ASSUME failed:  ASSUME(1,1==2);
+==>    ? error occurred in or before ./examples/ASSUME.sing line 4: `  ASSUME\
+   (1,1==2);`
+  // setting a different assumeLevel for poly.lib:
+  int Poly::assumeLevel=2;
+==> Poly of type 'ANY'. Trying load.
+==> // ** redefining `assumeLevel` **
+</FONT></pre></td></tr></table></DL>
+<P>
+
+<A NAME="Tracing of procedures"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_65.htm#SEC101"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Tracing of procedures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_71.htm#SEC110"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Dynamic loading" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

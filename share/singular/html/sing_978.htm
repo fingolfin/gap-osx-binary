@@ -1,0 +1,173 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: show</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: show">
+<META NAME="keywords" CONTENT="Singular Manual: show">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1053"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_977.htm#SEC1052"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: rMacaulay" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_979.htm#SEC1054"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: showrecursive" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_983.htm#SEC1058"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: poly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: inout_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.5.5 show </H4>
+<!--docid::SEC1053::-->
+Procedure from library <CODE>inout.lib</CODE> (see  <A HREF="sing_973.htm#SEC1048">inout_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>show(id); id any object of basering or of type ring/qring
+<BR> show(R,s); R=ring, s=string (s = name of an object belonging to R)
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>display id/s in a compact format together with some information
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>no return value
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>objects of type string, int, intvec, intmat belong to any ring.
+id may be a ring or a qring. In this case the minimal polynomial is
+displayed, and, for a qring, also the defining ideal.
+<BR>id may be of type list but the list must not contain a ring.
+<BR> show(R,s) does not work inside a procedure!
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "inout.lib";
+ring r;
+show(r);
+==> // ring: (32003),(x,y,z),(dp(3),C);
+==> // minpoly = 0
+==> // objects belonging to this ring:
+ideal i=x^3+y^5-6*z^3,xy,x3-y2;
+show(i,3);            // introduce 3 space tabs before information
+==>    // ideal, 3 generator(s)
+==> y5+x3-6z3,
+==> xy,
+==> x3-y2
+vector v=x*gen(1)+y*gen(3);
+module m=v,2*v+gen(4);
+list L = i,v,m;
+show(L);
+==> // list, 3 element(s):
+==> [1]:
+==>    // ideal, 3 generator(s)
+==> y5+x3-6z3,
+==> xy,
+==> x3-y2
+==> [2]:
+==>    // vector
+==> [x,0,y]
+==> [3]:
+==>    // module, 2 generator(s)
+==> [x,0,y]
+==> [2x,0,2y,1]
+ring S=(0,T),(a,b,c,d),ws(1,2,3,4);
+minpoly = T^2+1;
+ideal i=a2+b,c2+T^2*d2; i=std(i);
+qring Q=i;
+show(Q);
+==> // ring: (0,T),(a,b,c,d),(ws(1,2,3,4),C);
+==> // minpoly = (T2+1)
+==> // quotient ring from ideal:
+==> _[1]=a2+b
+==> _[2]=c2-d2
+==> // objects belonging to this ring:
+map F=r,a2,b^2,3*c3;
+show(F);
+==> // i-th variable of preimage ring is mapped to @map[i]
+==> // @map map  from r
+==> @map[1]=a2
+==> @map[2]=b2
+==> @map[3]=3*c3
+// Apply 'show' to i (which does not belong to the basering) by typing
+// ring r; ideal i=xy,x3-y2; ring Q; show(r,"i");
+</FONT></pre></td></tr></table><P>
+
+<A NAME="showrecursive"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_977.htm#SEC1052"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: rMacaulay" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_979.htm#SEC1054"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: showrecursive" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_983.htm#SEC1058"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: poly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: inout_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -5,8 +5,6 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: operations.gi,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado, 
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the 
@@ -55,7 +53,7 @@ end);
 ##  A short for QuotientOfNumericalSemigroup(S, p)
 ##
 #############################################################################
-InstallMethod(\/, "for a numerical semigroup and a positive integer", true,
+InstallOtherMethod(\/, "for a numerical semigroup and a positive integer", true,
         [IsNumericalSemigroup,
          IsPosInt and IsMultiplicativeElement], 999999990,
         function( S,p )

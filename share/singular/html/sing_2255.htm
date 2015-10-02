@@ -1,0 +1,145 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: compareTasks</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: compareTasks">
+<META NAME="keywords" CONTENT="Singular Manual: compareTasks">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2330"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2254.htm#SEC2329"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: copyTask" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2256.htm#SEC2331"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: printTask" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2246.htm#SEC2321"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: resources_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: derham_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2251.htm#SEC2326"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tasks_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.20.4 compareTasks </H4>
+<!--docid::SEC2330::-->
+Procedure from library <CODE>tasks.lib</CODE> (see  <A HREF="sing_2251.htm#SEC2326">tasks_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>compareTasks(t1, t2), t1, t2 tasks
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>1, if t1 and t2 coincide;
+<BR>0, otherwise.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The arguments and the results of t1 and t2 are not compared.
+<BR> 't1 == t2' is a shortcut for 'compareTasks(t1, t2)'.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "tasks.lib";
+ring R = 0, (x,y), dp;
+ideal I = x9y2+x10, x2y7-y8;
+task t1 = "std", list(I);
+task t2 = "std", list(I);
+compareTasks(t1, t2);
+==> 1
+startTasks(t1);
+waitAllTasks(t1);
+t1 == t2;   // the same as compareTasks(t1, t2);
+==> 0
+killTask(t1);
+killTask(t2);
+// The arguments and the result are not compared!
+ideal J = x;
+task t3 = "std", list(I);
+task t4 = "std", list(J);
+t3 == t4;
+==> 1
+killTask(t3);
+killTask(t4);
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_2254.htm#SEC2329">copyTask</A>;
+ <A HREF="sing_2263.htm#SEC2338">getArguments</A>;
+ <A HREF="sing_2262.htm#SEC2337">getCommand</A>;
+ <A HREF="sing_2264.htm#SEC2339">getResult</A>;
+ <A HREF="sing_2265.htm#SEC2340">getState</A>;
+ <A HREF="sing_2256.htm#SEC2331">printTask</A>.
+<P>
+
+<A NAME="printTask"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2254.htm#SEC2329"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: copyTask" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2256.htm#SEC2331"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: printTask" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2246.htm#SEC2321"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: resources_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: derham_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2251.htm#SEC2326"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tasks_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

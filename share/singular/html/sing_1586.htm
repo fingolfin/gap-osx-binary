@@ -1,0 +1,159 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: KSpencerKernel</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: KSpencerKernel">
+<META NAME="keywords" CONTENT="Singular Manual: KSpencerKernel">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1661"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1585.htm#SEC1660"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: posweight" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1587.htm#SEC1662"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: spectrum_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: sing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1587.htm#SEC1662"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: spectrum_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1577.htm#SEC1652"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: spcurve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.14.9 KSpencerKernel </H4>
+<!--docid::SEC1661::-->
+Procedure from library <CODE>spcurve.lib</CODE> (see  <A HREF="sing_1577.htm#SEC1652">spcurve_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>KSpencerKernel(M[,s][,v]); M matrix, s string, v intvec <BR>
+optional parameters (please specify in this order, if both are
+present):
+<BR>* s = first of the names of the new rings
+<BR>e.g. "R" leads to ring names R and R1
+<BR>* v of size n(n+1) leads to the following module ordering <BR>
+gen(v[1]) &gt; gen(v[2]) &gt; ... &gt; gen(v[n(n+1)]) where the matrix
+entry ij corresponds to gen((i-1)*n+j)
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>M is a quasihomogeneous n x (n+1) matrix where the n minors define
+an isolated space curve singularity
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>new ring containing the coefficient matrix KS representing
+the kernel of the Kodaira-Spencer map of the family of
+non-negative deformations having the given singularity as
+special fibre
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>* the initial basering should not contain variables with name
+e(i) or T(i), since those variable names will internally be
+used by the script
+<BR>* setting an intvec with 5 entries and name watchProgress
+shows the progress of the computations: <BR>
+watchProgress[1]&gt;0 =&gt; option(prot) in groebner commands <BR>
+watchProgress[2]&gt;0 =&gt; trace output for highcorner <BR>
+watchProgress[3]&gt;0 =&gt; output of deformed matrix <BR>
+watchProgress[4]&gt;0 =&gt; result of elimination step <BR>
+watchProgress[4]&gt;1 =&gt; trace output of multiplications with xyz
+and subsequent reductions <BR>
+watchProgress[5]&gt;0 =&gt; matrix representing the kernel using print
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "spcurve.lib";
+ring r=0,(x,y,z),ds;
+matrix M[3][2]=z-x^7,0,y^2,z,x^9,y;
+def rneu=KSpencerKernel(M,"ar");
+setring rneu;
+basering;
+==> //   characteristic : 0
+==> //   number of vars : 17
+==> //        block   1 : ordering Ws
+==> //                  : names    e(1) e(2) e(3) e(4) e(5) e(6) x y z
+==> //                  : weights  -21 -10 -32 -21 -27 -16 3 16 21
+==> //        block   2 : ordering wp
+==> //                  : names    T(1) T(2) T(3) T(4) T(5) T(6) T(7) T(8)
+==> //                  : weights     8    5    2   10    7    4    1    2
+==> //        block   3 : ordering C
+print(KS);
+==> T(7),   0,      0,      0,     0,     0,     0,     0,  
+==> KS[2,1],6*T(3), 3*T(7), 0,     0,     0,     0,     0,  
+==> KS[3,1],KS[3,2],KS[3,3],6*T(3),3*T(7),0,     0,     0,  
+==> 10*T(4),8*T(1), 7*T(5), 5*T(2),4*T(6),2*T(8),2*T(3),T(7)
+</FONT></pre></td></tr></table><A NAME="spectrum_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1585.htm#SEC1660"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: posweight" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1587.htm#SEC1662"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: spectrum_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: sing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1587.htm#SEC1662"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: spectrum_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1577.htm#SEC1652"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: spcurve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

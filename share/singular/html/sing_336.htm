@@ -1,0 +1,200 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: listvar</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: listvar">
+<META NAME="keywords" CONTENT="Singular Manual: listvar">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC375"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_335.htm#SEC374"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: liftstd" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_337.htm#SEC376"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: lres" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.77 listvar </H3>
+<!--docid::SEC375::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>listvar (</CODE> [package] <CODE>)</CODE>
+<BR><CODE>listvar (</CODE> [package<CODE>,</CODE>] type <CODE>)</CODE>
+<BR><CODE>listvar (</CODE> [package<CODE>,</CODE>] ring_name <CODE>)</CODE>
+<BR><CODE>listvar (</CODE> [package<CODE>,</CODE>] name <CODE>)</CODE>
+<BR><CODE>listvar (</CODE> [package<CODE>,</CODE>] <CODE>all )</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>none
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>lists all (user-)defined names:
+<UL>
+<LI><CODE>listvar()</CODE>: all currently visible names except procedures in the current namespace,
+<LI><CODE>listvar(</CODE>type<CODE>)</CODE>: all currently visible names of the given
+type,
+<LI><CODE>listvar(</CODE>ring_name<CODE>)</CODE>: all names which belong to the given
+ring,
+<LI><CODE>listvar(</CODE>name<CODE>)</CODE>: the object with the given name,
+<LI><CODE>listvar(all)</CODE>: all names except procedures in the current and <CODE>Top</CODE> namespace.
+</UL>
+The current basering is marked with a <CODE>*</CODE>.  The nesting level of
+variables in procedures is shown in square brackets.
+<P>
+
+package can be <CODE>Current</CODE>, <CODE>Top</CODE> or any other
+identifier of type package.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  proc t1 { }
+  proc t2 { }
+  ring s;
+  poly ss;
+  ring r;
+  poly f=x+y+z;
+  int i=7;
+  ideal I=f,x,y;
+  listvar();
+==> // i                              [0]  int 7
+==> // r                              [0]  *ring
+==> //      I                              [0]  ideal, 3 generator(s)
+==> //      f                              [0]  poly
+==> // s                              [0]  ring
+  listvar(r);
+==> // r                              [0]  *ring
+==> // I                              [0]  ideal, 3 generator(s)
+==> // f                              [0]  poly
+  listvar(t1);
+==> // t1                             [0]  proc
+  listvar(proc);
+==> // t2                             [0]  proc
+==> // t1                             [0]  proc
+==> // min                            [0]  proc from standard.lib
+==> // max                            [0]  proc from standard.lib
+==> // datetime                       [0]  proc from standard.lib
+==> // weightKB                       [0]  proc from standard.lib
+==> // fprintf                        [0]  proc from standard.lib
+==> // printf                         [0]  proc from standard.lib
+==> // sprintf                        [0]  proc from standard.lib
+==> // quotient4                      [0]  proc from standard.lib
+==> // quotient5                      [0]  proc from standard.lib
+==> // quotient3                      [0]  proc from standard.lib
+==> // quotient2                      [0]  proc from standard.lib
+==> // quotient1                      [0]  proc from standard.lib
+==> // quot                           [0]  proc from standard.lib
+==> // res                            [0]  proc from standard.lib
+==> // groebner                       [0]  proc from standard.lib
+==> // qslimgb                        [0]  proc from standard.lib
+==> // hilbRing                       [0]  proc from standard.lib
+==> // par2varRing                    [0]  proc from standard.lib
+==> // quotientList                   [0]  proc from standard.lib
+==> // stdhilb                        [0]  proc from standard.lib
+==> // stdfglm                        [0]  proc from standard.lib
+  LIB "poly.lib";
+  listvar(Poly);
+==> // Poly                           [0]  package Poly (S,Poly)
+==> // ::newtonDiag                   [0]  proc from poly.lib
+==> // ::subrInterred                 [0]  proc from poly.lib
+==> // ::id2mod                       [0]  proc from poly.lib
+==> // ::mod2id                       [0]  proc from poly.lib
+==> // ::content                      [0]  proc from poly.lib
+==> // ::lcm                          [0]  proc from poly.lib
+==> // ::rad_con                      [0]  proc from poly.lib
+==> // ::normalize                    [0]  proc from poly.lib
+==> // ::mindeg1                      [0]  proc from poly.lib
+==> // ::mindeg                       [0]  proc from poly.lib
+==> // ::maxdeg1                      [0]  proc from poly.lib
+==> // ::maxdeg                       [0]  proc from poly.lib
+==> // ::maxcoef                      [0]  proc from poly.lib
+==> // ::is_zero                      [0]  proc from poly.lib
+==> // ::freerank                     [0]  proc from poly.lib
+==> // ::kat_var                      [0]  proc from poly.lib
+==> // ::katsura                      [0]  proc from poly.lib
+==> // ::elemSymmId                   [0]  proc from poly.lib
+==> // ::elemSymmPoly                 [0]  proc from poly.lib
+==> // ::cyclic                       [0]  proc from poly.lib
+==> // ::substitute                   [0]  proc from poly.lib
+==> // ::hilbPoly                     [0]  proc from poly.lib
+==> // ::bino                         [0]  proc from poly.lib (static)
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_37.htm#SEC64">Names</A>;
+ <A HREF="sing_46.htm#SEC82">Names in procedures</A>;
+ <A HREF="sing_275.htm#SEC314">defined</A>;
+ <A HREF="sing_356.htm#SEC395">names</A>;
+ <A HREF="sing_144.htm#SEC183">package</A>;
+ <A HREF="sing_410.htm#SEC449">type</A>.
+<A NAME="lres"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_335.htm#SEC374"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: liftstd" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_337.htm#SEC376"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: lres" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

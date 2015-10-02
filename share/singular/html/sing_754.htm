@@ -1,0 +1,189 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: preimageNC</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: preimageNC">
+<META NAME="keywords" CONTENT="Singular Manual: preimageNC">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC805"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_753.htm#SEC804"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: eliminateNC" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_755.htm#SEC806"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: admissibleSub" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_740.htm#SEC791"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncfactor_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_760.htm#SEC811"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: nctools_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.14.0. preimageNC </H5>
+<!--docid::SEC805::-->
+Procedure from library <CODE>ncpreim.lib</CODE> (see  <A HREF="sing_752.htm#SEC803">ncpreim_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>preimageNC(A,f,J[,P,eng]); A ring, f map or ideal, J ideal,
+P optional string, eng optional int
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f defines a map from A to the basering.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>nothing, instead exports an object `preim' of type ideal to ring A,
+being the preimage of J under f.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>If P is given and not equal to the empty string, the preimage is
+exported to A under the name specified by P.
+<BR>Otherwise (and by default), P is set to `preim'.
+<BR> If eng&lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations,
+otherwise (and by default) <CODE>slimgb</CODE> is used.
+<BR> If printlevel=1, progress debug messages will be printed,
+if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+<DT><STRONG>Remark:</STRONG>
+<DD>Reference: (Lev)
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ncpreim.lib";
+def A = makeUgl(3); setring A; A; // universal enveloping algebra of gl_3
+==> //   characteristic : 0
+==> //   number of vars : 9
+==> //        block   1 : ordering dp
+==> //                  : names    e_1_1 e_1_2 e_1_3 e_2_1 e_2_2 e_2_3 e_3_1 \
+   e_3_2 e_3_3
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    e_1_2e_1_1=e_1_1*e_1_2-e_1_2
+==> //    e_1_3e_1_1=e_1_1*e_1_3-e_1_3
+==> //    e_2_1e_1_1=e_1_1*e_2_1+e_2_1
+==> //    e_3_1e_1_1=e_1_1*e_3_1+e_3_1
+==> //    e_2_1e_1_2=e_1_2*e_2_1-e_1_1+e_2_2
+==> //    e_2_2e_1_2=e_1_2*e_2_2-e_1_2
+==> //    e_2_3e_1_2=e_1_2*e_2_3-e_1_3
+==> //    e_3_1e_1_2=e_1_2*e_3_1+e_3_2
+==> //    e_2_1e_1_3=e_1_3*e_2_1+e_2_3
+==> //    e_3_1e_1_3=e_1_3*e_3_1-e_1_1+e_3_3
+==> //    e_3_2e_1_3=e_1_3*e_3_2-e_1_2
+==> //    e_3_3e_1_3=e_1_3*e_3_3-e_1_3
+==> //    e_2_2e_2_1=e_2_1*e_2_2+e_2_1
+==> //    e_3_2e_2_1=e_2_1*e_3_2+e_3_1
+==> //    e_2_3e_2_2=e_2_2*e_2_3-e_2_3
+==> //    e_3_2e_2_2=e_2_2*e_3_2+e_3_2
+==> //    e_3_1e_2_3=e_2_3*e_3_1-e_2_1
+==> //    e_3_2e_2_3=e_2_3*e_3_2-e_2_2+e_3_3
+==> //    e_3_3e_2_3=e_2_3*e_3_3-e_2_3
+==> //    e_3_3e_3_1=e_3_1*e_3_3+e_3_1
+==> //    e_3_3e_3_2=e_3_2*e_3_3+e_3_2
+ring r3 = 0,(x,y,z,Dx,Dy,Dz),dp;
+def B = Weyl(); setring B; B;     // third Weyl algebra
+==> //   characteristic : 0
+==> //   number of vars : 6
+==> //        block   1 : ordering dp
+==> //                  : names    x y z Dx Dy Dz
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    Dxx=x*Dx+1
+==> //    Dyy=y*Dy+1
+==> //    Dzz=z*Dz+1
+ideal ff = x*Dx,x*Dy,x*Dz,y*Dx,y*Dy,y*Dz,z*Dx,z*Dy,z*Dz;
+map f = A,ff;                     // f: A -&gt; B, e(i,j) |-&gt; x(i)D(j)
+ideal J = 0;
+preimageNC(A,f,J,"K");            // compute K := ker(f)
+setring A;
+K;
+==> K[1]=e_2_3*e_3_2-e_2_2*e_3_3-e_2_2
+==> K[2]=e_1_3*e_3_2-e_1_2*e_3_3-e_1_2
+==> K[3]=e_2_3*e_3_1-e_2_1*e_3_3-e_2_1
+==> K[4]=e_2_2*e_3_1-e_2_1*e_3_2
+==> K[5]=e_1_3*e_3_1-e_1_1*e_3_3-e_1_1
+==> K[6]=e_1_2*e_3_1-e_1_1*e_3_2
+==> K[7]=e_1_3*e_2_2-e_1_2*e_2_3+e_1_3
+==> K[8]=e_1_3*e_2_1-e_1_1*e_2_3
+==> K[9]=e_1_2*e_2_1-e_1_1*e_2_2-e_1_1
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_523.htm#SEC562">preimage (plural)</A>.
+<P>
+
+<A NAME="admissibleSub"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_753.htm#SEC804"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: eliminateNC" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_755.htm#SEC806"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: admissibleSub" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_740.htm#SEC791"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncfactor_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_760.htm#SEC811"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: nctools_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

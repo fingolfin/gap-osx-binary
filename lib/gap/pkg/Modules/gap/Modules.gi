@@ -116,7 +116,7 @@ InstallMethod( MapHavingCertainGeneratorsAsItsImage,
     
     n := NrGenerators( M );
     
-    if not First( l, a -> a > n ) = [ ] then
+    if not First( l, a -> a > n ) = fail then
         Error( "demand more generators than exist" );
     fi;
     
@@ -1699,7 +1699,7 @@ InstallMethod( AMaximalIdealContaining,
         [ IsFinitelyPresentedSubmoduleRep and ConstructedAsAnIdeal ],
         
   function( I )
-    local R, A, indets, ideal, m, v, l, n_is_one, n, a, k;
+    local R, A, indets, ideal, m, v, l, n_is_one, n, a, k, d;
     
     if I = 1 then
         Error( "expected a proper ideal\n" );
@@ -1783,7 +1783,11 @@ InstallMethod( AMaximalIdealContaining,
     
     m := RadicalDecomposition( m );
     
-    m := m[1];
+    d := List( m, AffineDegree );
+    
+    d := Minimum( d );
+    
+    m := First( m, p -> AffineDegree( p ) = d );
     
     Assert( 4, AffineDimension( m ) = 0 );
     
@@ -1822,6 +1826,10 @@ InstallMethod( IdealOfRationalPoints,
     indets := List( indets, x -> x / S );
     
     indets := List( indets, x -> x^(c^d) - x );
+    
+    if indets = [ ] then
+        return S * I;
+    fi;
     
     if IsHomalgLeftObjectOrMorphismOfLeftObjects( I ) then
         indets := LeftSubmodule( indets );

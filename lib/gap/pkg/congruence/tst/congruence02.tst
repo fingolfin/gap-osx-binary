@@ -1,6 +1,6 @@
 # congruence, chapter 2
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 65, 88 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 65, 88 ]
 
 gap> G_8:=PrincipalCongruenceSubgroup(8);
 <principal congruence subgroup of level 8 in SL_2(Z)>
@@ -24,31 +24,31 @@ gap> IsSubgroup(SL_2,G_8);
 true
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 122, 127 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 122, 127 ]
 
 gap> G0_4:=CongruenceSubgroupGamma0(4);
 <congruence subgroup CongruenceSubgroupGamma_0(4) in SL_2(Z)>
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 161, 166 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 161, 166 ]
 
 gap> GU0_2:=CongruenceSubgroupGammaUpper0(2);
 <congruence subgroup CongruenceSubgroupGamma^0(2) in SL_2(Z)>
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 200, 205 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 200, 205 ]
 
 gap> G1_6:=CongruenceSubgroupGamma1(6);
 <congruence subgroup CongruenceSubgroupGamma_1(6) in SL_2(Z)>
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 239, 244 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 239, 244 ]
 
 gap> GU1_4:=CongruenceSubgroupGammaUpper1(4);
 <congruence subgroup CongruenceSubgroupGamma^1(4) in SL_2(Z)>
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 273, 280 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 273, 280 ]
 
 gap> I:=IntersectionOfCongruenceSubgroups(G0_4,GU1_4);
 <principal congruence subgroup of level 4 in SL_2(Z)>
@@ -56,7 +56,7 @@ gap> J:=IntersectionOfCongruenceSubgroups(G0_4,G1_6);
 <intersection of congruence subgroups of resulting level 12 in SL_2(Z)>
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 307, 316 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 307, 316 ]
 
 gap> IsPrincipalCongruenceSubgroup(G_8);
 true
@@ -66,7 +66,7 @@ gap> IsPrincipalCongruenceSubgroup(I);
 true
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 380, 387 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 380, 387 ]
 
 gap> IsIntersectionOfCongruenceSubgroups(I);
 false
@@ -74,7 +74,7 @@ gap> IsIntersectionOfCongruenceSubgroups(J);
 true
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 407, 418 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 407, 418 ]
 
 gap> LevelOfCongruenceSubgroup(G_8);
 8
@@ -86,7 +86,7 @@ gap> LevelOfCongruenceSubgroup(J);
 12
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 429, 440 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 429, 440 ]
 
 gap> IndexInSL2Z(G_8);
 384
@@ -98,14 +98,22 @@ gap> IndexInSL2Z(GU1_4);
 12
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 454, 460 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 456, 470 ]
 
 gap> DefiningCongruenceSubgroups(J);
 [ <congruence subgroup CongruenceSubgroupGamma_0(4) in SL_2(Z)>,
   <congruence subgroup CongruenceSubgroupGamma_1(6) in SL_2(Z)> ]
+gap> P:=PrincipalCongruenceSubgroup(6);
+<principal congruence subgroup of level 6 in SL_2(Z)>
+gap> Q:=PrincipalCongruenceSubgroup(10); 
+<principal congruence subgroup of level 10 in SL_2(Z)>
+gap> G:=IntersectionOfCongruenceSubgroups(Q,P);  
+<principal congruence subgroup of level 30 in SL_2(Z)>
+gap> DefiningCongruenceSubgroups(G);
+[ <principal congruence subgroup of level 30 in SL_2(Z)> ] 
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 487, 494 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 497, 504 ]
 
 gap> Random(G_2) in G_2;
 true
@@ -113,7 +121,7 @@ gap> Random(G_8,2) in G_8;
 true
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 506, 513 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 516, 523 ]
 
 gap> \in([ [ 21, 10 ], [ 2, 1 ] ],G_2);
 true
@@ -121,13 +129,13 @@ gap> \in([ [ 21, 10 ], [ 2, 1 ] ],G_8);
 false
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 535, 540 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 545, 550 ]
 
 gap> CanEasilyCompareCongruenceSubgroups(G_8,I);
 false
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 554, 572 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 564, 582 ]
 
 gap> IsSubset(G_2,G_8);
 true
@@ -146,7 +154,7 @@ gap> for g in g2 do
 [ false, false, false, false, true ]
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/cong.xml", 585, 590 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/cong.xml", 595, 600 ]
 
 gap> Index(G_2,G_8);
 32

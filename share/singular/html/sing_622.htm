@@ -1,0 +1,168 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: restrictionModule</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: restrictionModule">
+<META NAME="keywords" CONTENT="Singular Manual: restrictionModule">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC673"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_621.htm#SEC672"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: restrictionIdeal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_623.htm#SEC674"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: integralIdeal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.5.0. restrictionModule </H5>
+<!--docid::SEC673::-->
+Procedure from library <CODE>dmodapp.lib</CODE> (see  <A HREF="sing_611.htm#SEC662">dmodapp_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>restrictionModule(I,w,[,eng,m,G]);
+<BR> I ideal, w intvec, eng and m optional ints, G optional ideal
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring (a Weyl algebra) containing a module 'resMod'
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is the n-th Weyl algebra over a field of characteristic 0
+<BR> and for all 1&lt;=i&lt;=n the identity var(i+n)*var(i)=var(i)*var(i+1)+1
+<BR> holds, i.e. the sequence of variables is given by
+<BR> x(1),...,x(n),D(1),...,D(n), where D(i) is the differential operator
+<BR> belonging to x(i).
+<BR> Further, assume that I is holonomic and that w is n-dimensional with
+<BR> non-negative entries.
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes the restriction module of a holonomic ideal to the subspace
+<BR> defined by the variables corresponding to the non-zero entries of the
+<BR> given intvec
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The output ring is the Weyl algebra defined by the zero entries of w.
+<BR> It contains a module 'resMod' being the restriction module of I wrt w.
+<BR> If there are no zero entries, the input ring is returned.
+<BR> If eng&lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations,
+<BR> otherwise, and by default, <CODE>slimgb</CODE> is used.
+<BR> The minimal integer root of the b-function of I wrt the weight (-w,w)
+<BR> can be specified via the optional argument m.
+<BR> The optional argument G is used for specifying a Groebner Basis of I
+<BR> wrt the weight (-w,w), that is, the initial form of G generates the
+<BR> initial ideal of I wrt the weight (-w,w).
+<BR> Further note, that the assumptions on m and G (if given) are not
+<BR> checked.
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If printlevel=1, progress debug messages will be printed,
+<BR> if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodapp.lib";
+ring r = 0,(a,x,b,Da,Dx,Db),dp;
+def D3 = Weyl();
+setring D3;
+ideal I = a*Db-Dx+2*Da, x*Db-Da, x*Da+a*Da+b*Db+1,
+x*Dx-2*x*Da-a*Da, b*Db^2+Dx*Da-Da^2+Db,
+a*Dx*Da+2*x*Da^2+a*Da^2+b*Dx*Db+Dx+2*Da;
+intvec w = 1,0,0;
+def rm = restrictionModule(I,w);
+setring rm; rm;
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering C
+==> //        block   2 : ordering dp
+==> //                  : names    x b Dx Db
+==> //   noncommutative relations:
+==> //    Dxx=x*Dx+1
+==> //    Dbb=b*Db+1
+print(resMod);
+==> 2*x*Db-Dx,x*Dx+2*b*Db+2,4*b*Db^2+Dx^2+6*Db
+</FONT></pre></td></tr></table><P>
+
+<A NAME="integralIdeal"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_621.htm#SEC672"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: restrictionIdeal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_623.htm#SEC674"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: integralIdeal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

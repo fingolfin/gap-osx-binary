@@ -1,0 +1,183 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: slimgb (plural)</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: slimgb (plural)">
+<META NAME="keywords" CONTENT="Singular Manual: slimgb (plural)">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC566"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_526.htm#SEC565"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ringlist (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_528.htm#SEC567"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: std (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 7.3.25 slimgb (plural) </H3>
+<!--docid::SEC566::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>slimgb (</CODE> ideal_expression<CODE>)</CODE>
+<BR><CODE>slimgb (</CODE> module_expression<CODE>)</CODE>
+<P>
+
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>same type as argument
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>returns a left Groebner basis of a left ideal or module with respect to the
+global monomial ordering of the basering.
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>The commutative algorithm is described in the diploma thesis of Michael Brickenstein "Neue Varianten zur Berechnung von Groebnerbasen",
+written 2004 under supervision of G.-M. Greuel in Kaiserslautern.
+<P>
+
+It is designed to keep polynomials or vectors slim (short with small coefficients).
+Currently best results are examples over function fields (parameters).
+</P><P>
+
+The current implementation may not be optimal for weighted degree orderings.
+</P><P>
+
+The program only supports the options <CODE>prot</CODE>, which will give protocol output and <CODE>redSB</CODE> for returning a reduced Groebner basis.
+The protocol messages of <CODE>slimgb</CODE> mean the following:
+<BR> <CODE>M[n,m]</CODE> means a parallel reduction of <CODE>n</CODE> elements with <CODE>m</CODE> non-zero output elements,
+<BR> <CODE>b</CODE> notices an exchange trick described in the thesis and
+<BR> <CODE>e</CODE> adds a reductor with non-minimal leading term.
+</P><P>
+
+<CODE>slimgb</CODE> works for grade commutative algebras but not for general GR-algebras.
+Please use <CODE>qslimgb</CODE> instead.
+</P><P>
+
+For a detailed commutative example see  <A HREF="sing_856.htm#SEC907">slim Groebner bases</A>.
+</P><P>
+
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "nctools.lib";
+LIB "ncalg.lib";
+def U = makeUsl(2);
+// U is the U(sl_2) algebra
+setring U;
+ideal I = e^3, f^3, h^3-4*h;
+option(redSB);
+ideal J = slimgb(I);
+J;
+==> J[1]=h3-4h
+==> J[2]=fh2-2fh
+==> J[3]=eh2+2eh
+==> J[4]=2efh-h2-2h
+==> J[5]=f3
+==> J[6]=e3
+// compare slimgb with std:
+ideal K = std(I);
+print(matrix(NF(K,J)));
+==> 0,0,0,0,0,0
+print(matrix(NF(J,K)));
+==> 0,0,0,0,0,0
+// hence both Groebner bases are equal
+;
+// another example for exterior algebras
+ring r;
+def E = Exterior();
+setring E; E;
+==> //   characteristic : 32003
+==> //   number of vars : 3
+==> //        block   1 : ordering dp
+==> //                  : names    x y z
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    yx=-xy
+==> //    zx=-xz
+==> //    zy=-yz
+==> // quotient ring from ideal
+==> _[1]=z2
+==> _[2]=y2
+==> _[3]=x2
+slimgb(xy+z);
+==> _[1]=yz
+==> _[2]=xz
+==> _[3]=xy+z
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_364.htm#SEC403">option</A>;
+ <A HREF="sing_528.htm#SEC567">std (plural)</A>.
+<P>
+
+<A NAME="std (plural)"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_526.htm#SEC565"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ringlist (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_528.htm#SEC567"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: std (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

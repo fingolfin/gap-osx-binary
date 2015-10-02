@@ -1,0 +1,91 @@
+<Chapter Label="AR-theory"><Heading>Auslander-Reiten theory</Heading>
+
+This chapter describes the functions implemented for almost split sequences and 
+Auslander-Reiten theory in QPA.<P/> 
+
+
+<Section><Heading>Almost split sequences and AR-quivers</Heading>
+
+<ManSection>
+   <Attr Name="AlmostSplitSequence" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - an indecomposable non-projective module.<Br />
+   </Description>
+   <Returns>the almost split sequence ending in the
+   module <Arg>M</Arg> if it is indecomposable and not projective. It
+   returns the almost split sequence in terms of two maps, a left
+   minimal almost split map and a right minimal almost split map.
+   </Returns>
+   <Description>
+    The range of the right minimal almost split map is not necessarily
+    equal to the module <Arg>M</Arg> one started with, but isomorphic. 
+    The function assumes that the module <Arg>M</Arg> is indecomposable. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="PredecessorOfModule" Arg="M, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - an indecomposable non-projective module
+     and <Arg>n</Arg> - a positive integer.<Br />
+   </Description>
+   <Returns>the predecessors of the module <Arg>M</Arg> in the
+    AR-quiver of the algebra <Arg>M</Arg> is given over of distance
+    less or equal to <Arg>n</Arg>. 
+   </Returns>
+   <Description>
+    It returns two lists, the first is the indecomposable modules in
+    the different layers and the second is the valuations for the
+    arrows in the AR-quiver.  The different entries in the first list
+    are the modules at distance zero, one, two, three, and so on, until
+    layer  <Arg>n</Arg>. The <C>m</C>-th entry in the second list is 
+    the valuations of the irreducible morphism from indecomposable 
+    module number <C>i</C> in layer <C>m+1</C> to indecomposable module
+    number <C>j</C> in layer <C>m</C> for the values of <C>i</C> and 
+    <C>j</C> there is an irreducible morphism. Whenever <C>false</C> 
+    occur in the output, it means that this valuation has not been 
+    computed. 
+
+    The function assumes that the module <Arg>M</Arg> is indecomposable 
+    and that the quotient of the path algebra is given over a finite field. 
+   </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> A := KroneckerAlgebra(GF(4),2);       
+<GF(2^2)[<quiver with 2 vertices and 2 arrows>]>
+gap> S := SimpleModules(A)[1];             
+<[ 1, 0 ]>
+gap> ass := AlmostSplitSequence(S);   
+[ <<[ 3, 2 ]> ---> <[ 4, 2 ]>>
+    , <<[ 4, 2 ]> ---> <[ 1, 0 ]>>
+     ]
+gap> DecomposeModule(Range(ass[1]));
+[ <[ 2, 1 ]>, <[ 2, 1 ]> ]
+gap> PredecessorsOfModule(S,5);   
+[ [ [ <[ 1, 0 ]> ], [ <[ 2, 1 ]> ], [ <[ 3, 2 ]> ], [ <[ 4, 3 ]> ], 
+      [ <[ 5, 4 ]> ], [ <[ 6, 5 ]> ] ], 
+  [ [ [ 1, 1, [ 2, false ] ] ], [ [ 1, 1, [ 2, 2 ] ] ], 
+      [ [ 1, 1, [ 2, 2 ] ] ], [ [ 1, 1, [ 2, 2 ] ] ], 
+      [ [ 1, 1, [ false, 2 ] ] ] ] ]
+gap> A:=NakayamaAlgebra([5,4,3,2,1],GF(4));
+<GF(2^2)[<quiver with 5 vertices and 4 arrows>]>
+gap> S := SimpleModules(A)[1];             
+<[ 1, 0, 0, 0, 0 ]>
+gap> PredecessorsOfModule(S,5);
+[ [ [ <[ 1, 0, 0, 0, 0 ]> ], [ <[ 1, 1, 0, 0, 0 ]> ], 
+      [ <[ 0, 1, 0, 0, 0 ]>, <[ 1, 1, 1, 0, 0 ]> ], 
+      [ <[ 0, 1, 1, 0, 0 ]>, <[ 1, 1, 1, 1, 0 ]> ], 
+      [ <[ 0, 0, 1, 0, 0 ]>, <[ 0, 1, 1, 1, 0 ]>, <[ 1, 1, 1, 1, 1 ]> 
+         ], [ <[ 0, 0, 1, 1, 0 ]>, <[ 0, 1, 1, 1, 1 ]> ] ], 
+  [ [ [ 1, 1, [ 1, false ] ] ], 
+      [ [ 1, 1, [ 1, 1 ] ], [ 2, 1, [ 1, false ] ] ], 
+      [ [ 1, 1, [ 1, 1 ] ], [ 1, 2, [ 1, 1 ] ], 
+          [ 2, 2, [ 1, false ] ] ], 
+      [ [ 1, 1, [ 1, 1 ] ], [ 2, 1, [ 1, 1 ] ], [ 2, 2, [ 1, 1 ] ], 
+          [ 3, 2, [ 1, false ] ] ], 
+      [ [ 1, 1, [ false, 1 ] ], [ 1, 2, [ false, 1 ] ], 
+          [ 2, 2, [ false, 1 ] ], [ 2, 3, [ false, 1 ] ] ] ] ] ]]>
+</Example>
+</Section>
+</Chapter>

@@ -1,0 +1,148 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Limitations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Limitations">
+<META NAME="keywords" CONTENT="Singular Manual: Limitations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC494"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_456.htm#SEC495"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: System dependent limitations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> 6.1 Limitations </H2>
+<!--docid::SEC494::-->
+<P>
+
+S<SMALL>INGULAR</SMALL> has the following limitations:
+<UL>
+<LI>
+the characteristic of a prime field must be less than or equal to 2147483647 (2^31)
+<BR> (the characteristic of a prime field in the factory routines must be less than 536870912 (2^29))
+<BR> (the characteristic of a prime field in the NTL routines must be less than NTL_SP_BOUND (2^30) on 32bit
+machines - This is always the case since currently, only factory uses NTL.)
+<LI>
+the number of elements in GF(p,n) must be less than 65536
+<LI>
+the (weighted) degree of a monomial must be less or equal  than 2147483647
+<LI>
+the rank of any free module
+must be less or equal than 2147483647
+<LI>
+the maximal allowed exponent of a ring variable
+depends on the ordering of the ring and is at least 32767.
+<LI>
+the precision of long floating point numbers (for ground field <CODE>real</CODE>)
+must be less or equal  than 32767
+<LI>
+integers (of type <CODE>int</CODE>) have the limited range
+from -2147483648 to 2147483647
+<LI>
+floating point numbers (type <CODE>number</CODE> from field <CODE>real</CODE>) have
+a limited range which is machine dependent. A typical range is -1.0e-38
+to 1.0e+38.  The string representation of overflow and underflow is
+machine dependent, as well. For example "<CODE>Inf</CODE>" on Linux, or
+"<CODE>+.+00e+00</CODE>" on HPUX.
+<BR>Their input syntax is given by <CODE>scanf</CODE>, but must start with a digit.
+<LI>
+floating point numbers (type <CODE>number</CODE> from field <CODE>real</CODE> with a precision p larger then 3) use internally <CODE>mpf_set_default_prec(3.5*p+1)</CODE>.
+<BR>Their input syntax is given by <CODE>mpf_set_str</CODE> from GMP, but must start with a digit.
+<LI>
+the length of an identifier is unlimited but <CODE>listvar</CODE>
+displays only the first 20 characters
+<LI>
+statements may not contain more than 10000 tokens
+<LI>
+tokens (i.e. strings, numbers, ...) may not be longer than 16382 characters
+<LI>
+<A NAME="IDX273"></A>
+<A NAME="IDX274"></A>
+<A NAME="IDX275"></A>
+All input to S<SMALL>INGULAR</SMALL> must be 7-bit clean, i.e. special characters like the
+the German Umlaute (&auml;, &ouml;, etc.), or the French accent characters may
+neither appear as input to S<SMALL>INGULAR</SMALL>, nor in libraries or procedure
+definitions.
+</UL>
+<P>
+
+<A NAME="System dependent limitations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_456.htm#SEC495"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: System dependent limitations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

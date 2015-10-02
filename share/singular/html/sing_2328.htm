@@ -1,0 +1,235 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Notes for Singular users</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Notes for Singular users">
+<META NAME="keywords" CONTENT="Singular Manual: Notes for Singular users">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2407"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2327.htm#SEC2406"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Version schema for Singular" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2329.htm#SEC2415"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Notes for developers" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2325.htm#SEC2400"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: News and changes" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2332.htm#SEC2418"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Download instructions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2326.htm#SEC2405"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singular 3 and Singular 4" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> E.2.2 Notes for Singular users </H3>
+<!--docid::SEC2407::-->
+<P>
+
+<A NAME="SEC2408"></A>
+<H4> Coefficient rings  </H4>
+<!--docid::SEC2408::-->
+<P>
+
+To allow for easy integration of new coefficient rings into Singular, the the way
+coefficient rings are being handled has been redesigned.
+</P><P>
+
+In general, the user syntax has not changed, however there are some changes in the behaviour of Singular:
+</P><P>
+
+<UL>
+<LI>setting <CODE>minpoly</CODE> results in changing the current coefficient domain
+and clears all previously defined varaiables of that ring
+<P>
+
+<LI>Minor changes in the output of coefficient ring description. Moreover the output of elements of certain rings has been improved (for example, reals).
+<P>
+
+<LI>Algebraic and transcendental extensions of rationals and finite fields
+      have been reimplemented. In particular, the heuristics for clearing denominators and factoring out content
+      have been changed. In some cases this leads to a different, mathematically equivalent results of Groebner
+      bases and related computations. For example a Groebner basis element may differ by a unit.
+<P>
+
+<LI>Most noteably, due to the redesign of the coefficient rings, if the user sets the minimal polynomial
+      all variables dependent on the current ring are deleted.
+<P>
+
+</UL>
+<P>
+
+<A NAME="SEC2409"></A>
+<H4> Ring-dependent options </H4>
+<!--docid::SEC2409::-->
+<P>
+
+Formally global Singular  <A HREF="sing_364.htm#SEC403">option</A> now belong to individual polynomial rings. This includes:
+</P><P>
+
+<UL>
+<LI><CODE>intStrategy</CODE>
+<LI><CODE>redTail</CODE>
+<LI><CODE>redThrough</CODE>
+</UL>
+<P>
+
+Also the following settings now belong to individual (currently active) polynomial rings:
+</P><P>
+
+<UL>
+<LI><CODE>short</CODE>
+<LI><CODE>minpoly</CODE>
+<LI><CODE>noether</CODE>
+</UL>
+<P>
+
+Hence setting these options only affects the current ring. Be aware of this
+when switching between different rings, since the options affect the
+result of various computations (in particular Groebner bases).
+</P><P>
+
+<A NAME="SEC2410"></A>
+<H4> New libraries depending on Singular 4 </H4>
+<!--docid::SEC2410::-->
+<P>
+
+In Singular 4 there several new features are implemented within a
+dynamic module <CODE>syzextra.so</CODE>, not available in Singular 3.
+It implements the low-level functions for Schreyer resolutions and many auxiliary functions.
+The following new libraries  <A HREF="sing_2266.htm#SEC2341">derham_lib</A>,  <A HREF="sing_2269.htm#SEC2344">schreyer_lib</A> depend on it:
+</P><P>
+
+<UL>
+<LI> <A HREF="sing_2266.htm#SEC2341">derham_lib</A> - computes de Rham cohomology
+<LI> <A HREF="sing_2269.htm#SEC2344">schreyer_lib</A> - computes Schreyer resolution via several approaches. It also serves as a high-level wrapper to the dynamic module <CODE>syzextra.so</CODE>
+</UL>
+<P>
+
+<A NAME="SEC2411"></A>
+<H4> Path names </H4>
+<!--docid::SEC2411::-->
+<P>
+
+<UL>
+<LI>The tree structure of the binary Singular distribution has been changed.
+The typical tree now looks as show at <A HREF="https://github.com/Singular/Sources/wiki/Sw-tree">https://github.com/Singular/Sources/wiki/Sw-tree</A>
+<P>
+
+<LI>Accordingly Singular search paths (where Singular searches for libraries, dynamic modules, etc.) have been changed. You can display them by calling Singular by <CODE>Singular -v</CODE>.
+<P>
+
+<LI>currently, multi-arch installations of Singular 4 aere not possible.
+</UL>
+<P>
+
+<A NAME="SEC2412"></A>
+<H4> Library versioning </H4>
+<!--docid::SEC2412::-->
+<P>
+
+Due to switching from Subversion to GIT revision control system for the Singular source code,
+library version variables (displayed when loading a library) have changed.
+</P><P>
+
+<A NAME="SEC2413"></A>
+<H4> New orderings for modules </H4>
+<!--docid::SEC2413::-->
+<P>
+
+The now can assign weights to module components, when defining a monomial ordering. For example
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring R = 0, (x,y,z), (am(1,2,3,   10,20,30,40), dp, C);
+deg(x*gen(1));
+==> 11
+</FONT></pre></td></tr></table></P><P>
+
+will assign weights 1,2,3 to x,y,z respectively, and weights 10,20,30,40,0,0,... to
+components of any free module defined over R. This ordering will first sort
+by this weighted degree, then by dp on the ring monomials and then will give priority
+to the large component index.
+</P><P>
+
+<A NAME="SEC2414"></A>
+<H4> Future benefits of Singular 4 </H4>
+<!--docid::SEC2414::-->
+<P>
+
+The redesign of Singular will allow us to provide new features in the future, for example:
+</P><P>
+
+<UL>
+<LI>Interpreter type for coefficient rings.
+<LI>User defined coefficient rings.
+<LI>Improved syntax for defining polynomial rings.
+</UL>
+<P>
+
+<A NAME="Notes for developers"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2327.htm#SEC2406"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Version schema for Singular" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2329.htm#SEC2415"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Notes for developers" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2325.htm#SEC2400"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: News and changes" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2332.htm#SEC2418"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Download instructions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2326.htm#SEC2405"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singular 3 and Singular 4" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,185 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: paraplanecurves_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: paraplanecurves_lib">
+<META NAME="keywords" CONTENT="Singular Manual: paraplanecurves_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1412"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1338.htm#SEC1413"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: adjointIdeal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1105.htm#SEC1180"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.5.1 paraplanecurves_lib </H3>
+<!--docid::SEC1412::-->
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>paraplanecurves.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD> Rational parametrization of rational plane curves
+<P>
+
+<DT><STRONG>Authors:</STRONG>
+<DD>J. Boehm, j.boehm at mx.uni-saarland.de <BR>
+W. Decker, decker at mathematik.uni-kl.de&gt; <BR>
+S. Laplagne, slaplagn at dm.uba.ar <BR>
+F. Seelisch, seelisch at mathematik.uni-kl.de
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>Suppose C = {f(x,y,z)=0} is a rational plane curve, where f is homogeneous
+of degree n with coefficients in Q and absolutely irreducible (these
+conditions are checked automatically.) <BR>
+After a first step, realized by a projective automorphism in the procedure
+adjointIdeal, C satisfies: <BR>
+- C does not have singularities at infinity z=0. <BR>
+- C does not contain the point (0:1:0) (that is, the dehomogenization of f
+with respect to z is monic as a polynomial in y). <BR>
+Considering C in the chart z&lt;&gt;0, the algorithm regards x as transcendental
+and y as algebraic and computes an integral basis in C(x)[y] of the integral
+closure of C[x] in C(x,y) using the normalization algorithm from
+ <A HREF="sing_1228.htm#SEC1303">normal_lib</A>: see  <A HREF="sing_1169.htm#SEC1244">integralbasis_lib</A>. In a future edition of the
+library, also van Hoeij's algorithm for computing the integral basis will
+be available. <BR>
+From the integral basis, the adjoint ideal is obtained by linear algebra.
+Alternatively, the algorithm starts with a local analysis of the singular
+locus of C. Then, for each primary component of the singular locus which
+does not correspond to ordinary multiple points or cusps, the integral
+basis algorithm is applied separately. The ordinary multiple points and
+cusps, in turn, are addressed by a straightforward direct algorithm. The
+adjoint ideal is obtained by intersecting all ideals obtained locally.
+The local variant of the algorithm is used by default. <BR>
+The linear system corresponding to the adjoint ideal maps the curve
+birationally to a rational normal curve in P^(n-2). <BR>
+Iterating the anticanonical map, the algorithm projects the rational normal
+curve to PP1 for n odd resp. to a conic C2 in PP2 for n even. <BR>
+In case n is even, the algorithm tests whether there is a rational point on
+C2 and if so gives a parametrization of C2 which is defined over Q. Otherwise,
+the parametrization given is defined over a quadratic field extension of Q. <BR>
+By inverting the birational map of C to PP1 resp. to C2, a parametrization
+of C is obtained (defined over Q or the quadratic field extension).
+<P>
+
+<DT><STRONG>References:</STRONG>
+<DD>Janko Boehm: Parametrisierung rationaler Kurven, Diploma Thesis,
+http://www.math.uni-sb.de/ag/schreyer/jb/diplom%20janko%20boehm.pdf
+<P>
+
+Theo de Jong: An algorithm for computing the integral closure,
+Journal of Symbolic Computation 26 (3) (1998), p. 273-277
+</P><P>
+
+Gert-Martin Greuel, Santiago Laplagne, Frank Seelisch: Normalization of Rings,
+Journal of Symbolic Computation 9 (2010), p. 887-901
+</P><P>
+
+Mark van Hoeij: An Algorithm for Computing an Integral Basis in an Algebraic
+Function Field, Journal of Symbolic Computation 18 (1994), p. 353-363,
+http://www.math.fsu.edu/~hoeij/papers/comments/jsc1994.html
+</P><P>
+
+<A NAME="IDX472"></A>
+<A NAME="IDX473"></A>
+<A NAME="IDX474"></A>
+<A NAME="IDX475"></A>
+<A NAME="IDX476"></A>
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1338.htm#SEC1413">D.5.1.1 adjointIdeal</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Adjoint ideal of a plane curve</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1339.htm#SEC1414">D.5.1.2 invertBirMap</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Invert a birational map of algebraic varieties</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1340.htm#SEC1415">D.5.1.3 paraPlaneCurve</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Compute a rational parametrization of a rational plane curve</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1341.htm#SEC1416">D.5.1.4 rncAntiCanonicalMap</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Anticanonical map of a rational normal curve</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1342.htm#SEC1417">D.5.1.5 rationalPointConic</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Finds a point on the conic. This point has either coefficients in Q or in a quadratic extension field of Q</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1343.htm#SEC1418">D.5.1.6 mapToRatNormCurve</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Map a plane rational curve to a rational normal curve (RNC)</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1344.htm#SEC1419">D.5.1.7 rncItProjOdd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Map a RNC via successive anticanonical maps to PP1</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1345.htm#SEC1420">D.5.1.8 rncItProjEven</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Map a RNC via successive anticanonical maps to a conic in PP2</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1346.htm#SEC1421">D.5.1.9 paraConic</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Compute a rational parametrization of a conic</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1347.htm#SEC1422">D.5.1.10 testParametrization</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Checks whether a given curve is parametrized by a given rational map (defined in the given ring)</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1348.htm#SEC1423">D.5.1.11 testPointConic</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Checks whether a given point (defined in the given ring) lies on the given conic.</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="adjointIdeal"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1338.htm#SEC1413"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: adjointIdeal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1105.htm#SEC1180"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

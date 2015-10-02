@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-version="version general.lib 4.0.0.1 Jan_2014 "; // $Id: 799e6da53b4a54ac9436f3816a8a4bd9e1b5d52a $
+version="version general.lib 4.0.0.1 Jan_2014 "; // $Id: f292c0c2ea3d48c0b56ac41ccd83f297c9ee06bd $
 category="General purpose";
 info="
 LIBRARY:  general.lib   Elementary Computations of General Type
@@ -681,6 +681,12 @@ NOTE:    If v is given id may be any simply indexed object (e.g. any list or
 EXAMPLE: example sort; shows an example
 "
 {  int ii,jj,s,n = 0,0,1,0;
+   string id_typ=typeof(id);
+   if ((id_typ!="ideal")
+   and (id_typ!="module")
+   and (id_typ!="matrix")
+   and (id_typ!="list")
+   and (id_typ!="intvec")) { return (id,0); }
    intvec v;
    if ( defined(basering) ) { def P = basering; }
    if ( size(#)==0 and (typeof(id)=="ideal" or typeof(id)=="module"
@@ -923,8 +929,11 @@ NOTE:    * the current basering should not be watchdog_rneu, since
 EXAMPLE: example watchdog; shows an example
 "
 {
-  string rname=nameof(basering);
-  def rsave=basering;
+  if (defined(basering))
+  {
+    string rname=nameof(basering);
+    def rsave=basering;
+  }
   if (defined(watchdog_rneu))
   {
     kill watchdog_rneu;
@@ -941,13 +950,16 @@ EXAMPLE: example watchdog; shows an example
     if (j==1)
     {
       def result = read(l_fork);
-      if (nameof(basering)!=rname)
+      if (defined(rsave))
       {
-        def watchdog_rneu=basering;
-        setring rsave;
-        if (!defined(result))
+        if (nameof(basering)!=rname)
         {
-          def result=fetch(watchdog_rneu,result);
+          def watchdog_rneu=basering;
+          setring rsave;
+          if (!defined(result))
+          {
+            def result=fetch(watchdog_rneu,result);
+          }
         }
       }
       if(defined(watchdog_interrupt))
@@ -974,10 +986,9 @@ EXAMPLE: example watchdog; shows an example
 }
 example
 { "EXAMPLE:"; echo=2;
-  ring r=0,(x,y,z),dp;
-  poly f=x^30+y^30;
-  watchdog(1,"factorize(eval("+string(f)+"))");
-  watchdog(100,"factorize(eval("+string(f)+"))");
+  proc sleep(int s) {return(system("sh","sleep "+string(s)));}
+  watchdog(1,"sleep(5)");
+  watchdog(10,"sleep(5)");
 }
 ///////////////////////////////////////////////////////////////////////////////
 

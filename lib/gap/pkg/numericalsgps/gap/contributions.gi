@@ -3,8 +3,6 @@
 #W  contributions.gi          
 ##
 ##
-#H  @(#)$Id: contributions.gi,v 0.98 $
-##
 #Y  The functions in this file have been implemented by researchers that do 
 #Y  not appear as authors of the package. References to its usage should be 
 #Y made as suggested in the manual
@@ -294,4 +292,275 @@ InstallGlobalFunction(TypeSequenceOfNumericalSemigroup,function(S)
 		t[l]:=t[l]+1;
 	od;
 	return t;
+end);
+
+#############################################################################
+##
+#F  OmegaPrimalityOfElementListInNumericalSemigroup(l,s)
+##
+##  Computes the omega primality of a list of elmenents l in S, 
+##  Implemented by Chris O'Neill.  
+##
+#############################################################################
+InstallGlobalFunction(OmegaPrimalityOfElementListInNumericalSemigroup,function(l,s)
+    local frob, msg, values, bullets, omegas, n, i, j, b, w, toadd, omegaval, bl, bli, getbullets, setbullets, getomega, setomega;
+    
+    # Form of a bullet: (v,l)
+    # v - value of bullet expression
+    # l - sum of the components
+    
+    if not IsNumericalSemigroup(s) then
+        Error("The second argument must be a numerical semigroup");
+    fi;
+    if not IsListOfIntegersNS(l) then 
+        Error("The first argument must be a list of integers");
+    fi;
+    
+    
+    msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+    frob:=FrobeniusNumberOfNumericalSemigroup(s);
+    
+    values := [-frob .. Maximum(l)];
+    bullets := List(values, x->[]);
+    omegas := List(values, x->0);
+    
+    getbullets:=function(n)  #add base case
+        if 0-n in s then
+            return [0];
+        fi;
+        return bullets[n+frob+1];
+    end;
+    
+    getomega:=function(n)
+        if n < -frob then
+            return 0;
+        fi;
+        return omegas[n+frob+1];
+    end;
+    
+    for n in values do
+        bl := [];
+        
+        for i in [1..Length(msg)] do
+            bli:=getbullets(n - msg[i]);
+            for j in [1..Length(bli)] do
+                if IsBound(bli[j]) then
+                    b:=j;
+                    w:=bli[j];
+                    if w <> 0 then
+                        b:=b+(n-msg[i]);
+                    fi;
+                    
+                    if not(b-1-n in s) then
+                        b:=b+msg[i];
+                        w:=w+1;
+                    fi;
+                    if IsBound(bl[b-n]) then
+                        bl[b-n]:=Maximum([w,bl[b-n]]);
+                    else
+                        bl[b-n]:=w;
+                    fi;
+                fi;
+            od;
+        od;
+        
+        bullets[n+frob+1]:=bl;
+        if n-msg[Length(msg)]+frob+1 > 0 then
+            bullets[n-msg[Length(msg)]+frob+1]:=[];
+        fi;
+        
+        omegas[n+frob+1]:=Maximum(bl);
+        
+        # for garbage collection
+        # GASMAN("coillect");
+    od;
+    
+    return List(l,x->getomega(x));
+    
+end);
+
+
+#############################################################################
+##
+#F  FactorizationsElementListWRTNumericalSemigroup(l,s)
+##
+##  Computes the factorizations of a list of elmenents l in S, 
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+InstallGlobalFunction(FactorizationsElementListWRTNumericalSemigroup,function(l,s)
+	local msg, factorizations, n, i, f, facts, toadd;
+	
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	factorizations:=[];
+	
+	for n in [1 .. Maximum(l)] do
+		factorizations[n]:=[];
+		
+		for i in [1 .. Length(msg)] do
+			if n-msg[i] >= 0 then
+				facts:=[List(msg,x->0)];
+				if n-msg[i] > 0 then
+					facts:=factorizations[n-msg[i]];
+				fi;
+				
+				for f in facts do
+					toadd:=List(f);
+					toadd[i]:=toadd[i]+1;
+					Add(factorizations[n],toadd);
+				od;
+			fi;
+		od;
+		
+		factorizations[n]:=Set(factorizations[n]);
+		
+		# allow garbage collection
+		#if n > Maximum(msg) then
+		#	factorizations[n-Maximum(msg)]:=[];
+		#fi;
+	od;
+	
+	return List(l,x->factorizations[x]);
+end);
+
+#############################################################################
+##
+#F  DeltaSetPeriodicityBoundForNumericalSemigroup(s)
+##
+##  Returns a bound on the start of periodic behavior for the delta sets of elements of S.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+InstallGlobalFunction(DeltaSetPeriodicityBoundForNumericalSemigroup,function(s)
+	local msg, d, l, i, g, S, Sp;
+	
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	d:=Gcd(DeltaSetOfSetOfIntegers(msg));
+	#d:=Gcd(List(BettiElementsOfNumericalSemigroup(s),x->Minimum(LengthsOfFactorizationsElementWRTNumericalSemigroup(x,s))));
+	l:=Length(msg);
+	S:=[];
+	Sp:=[];
+	
+	if l <= 2 then
+		return Product(msg);
+	fi;
+	
+	for i in [2 .. l-1] do
+		g:=Gcd([msg[i]-msg[1],msg[1]-msg[l],msg[l]-msg[i]]);
+		S[i]:=CeilingOfRational(-(msg[2]*(msg[1]*d*g + (l-2)*(msg[1]-msg[i])*(msg[1]-msg[l])))/((msg[1]-msg[2])*g));
+		Sp[i]:=CeilingOfRational((msg[l-1]*((l-2)*(msg[1]-msg[l])*(msg[l]-msg[i]) - d*msg[l]*g))/((msg[l-1]-msg[l])*g));
+	od;
+	
+	return Maximum(Union(S,Sp));
+end);
+
+
+#############################################################################
+##
+#F  DeltaSetPeriodicityStartForNumericalSemigroup(n,s)
+##
+##  Returns the exact start of periodicity for the delta sets of elements of S.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+InstallGlobalFunction(DeltaSetPeriodicityStartForNumericalSemigroup,function(s)
+	local msg, period, lengths, m, n, lens, deltas, delta, diss;
+	
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	period:=Lcm(msg[1],msg[Length(msg)]);
+	n:=DeltaSetPeriodicityBoundForNumericalSemigroup(s);
+	
+	lengths:=List([1 .. msg[Length(msg)]],x->[]);
+	lengths[1]:=[0];
+	deltas:=List([1 .. period],x->[]);
+	delta:=[];
+	diss:=1;
+	
+	for m in [1 .. n+period+1] do
+		lens:=Union(List([1 .. Length(msg)],i->List(lengths[Int((m-msg[i]) mod msg[Length(msg)])+1],l->l+1)));
+		if Length(lens) > 1 then 
+			delta:=DeltaSetOfSetOfIntegers(lens);
+			if delta <> deltas[Int(m mod period)+1] then
+				diss:=m-period;
+			fi;
+		fi;
+		
+		lengths[Int(m mod msg[Length(msg)])+1]:=lens;
+		deltas[Int(m mod period)+1]:=delta;
+	od;
+	
+	return diss;
+end);
+
+
+
+#############################################################################
+##
+#F  DeltaSetListUpToElementWRTNumericalSemigroup(n,s)
+##
+##  Computes the delta sets of the elements of S up to and including n.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+InstallGlobalFunction(DeltaSetListUpToElementWRTNumericalSemigroup,function(n,s)
+	local msg, lengths, deltas, m, lens;
+	
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	lengths:=List([1 .. msg[Length(msg)]],x->[]);
+	lengths[1]:=[0];
+	deltas:=List([1 .. n],x->[]);
+	
+	for m in [1 .. n] do
+		lens:=Union(List([1 .. Length(msg)],i->List(lengths[Int((m-msg[i]) mod msg[Length(msg)])+1],l->l+1)));
+		if Length(lens) > 0 then
+			deltas[m]:=DeltaSetOfSetOfIntegers(lens);
+		fi;
+		lengths[Int(m mod msg[Length(msg)])+1]:=lens;
+	od;
+	
+	return deltas;
+end);
+
+
+#############################################################################
+##
+#F  DeltaSetUnionUpToElementWRTNumericalSemigroup(n,s)
+##
+##  Computes the union of the delta sets of the elements of S up to and including n, 
+##  using a ring buffer to conserve memory.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+InstallGlobalFunction(DeltaSetUnionUpToElementWRTNumericalSemigroup,function(n,s)
+	local msg, lengths, delta, m, lens;
+	
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	lengths:=List([1 .. msg[Length(msg)]],x->[]);
+	lengths[1]:=[0];
+	delta:=[];
+	
+	for m in [1 .. n] do
+		lens:=Union(List([1 .. Length(msg)],i->List(lengths[Int((m-msg[i]) mod msg[Length(msg)])+1],l->l+1)));
+		if Length(lens) > 0 then
+			delta:=Union(delta,DeltaSetOfSetOfIntegers(lens));
+		fi;
+		lengths[Int(m mod msg[Length(msg)])+1]:=lens;
+	od;
+	
+	return delta;
+end);
+
+#############################################################################
+##
+#F  DeltaSetOfNumericalSemigroup(s)
+##
+##  Computes the union of the delta sets of the elements of S up to the bound given in [TODO], 
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+InstallGlobalFunction(DeltaSetOfNumericalSemigroup,function(s)
+	local msg;
+	
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	return DeltaSetUnionUpToElementWRTNumericalSemigroup(DeltaSetPeriodicityBoundForNumericalSemigroup(s)+msg[Length(msg)]-1,s);
 end);

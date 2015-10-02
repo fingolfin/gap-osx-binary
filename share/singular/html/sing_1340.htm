@@ -1,0 +1,197 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: paraPlaneCurve</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: paraPlaneCurve">
+<META NAME="keywords" CONTENT="Singular Manual: paraPlaneCurve">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1415"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1339.htm#SEC1414"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: invertBirMap" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1341.htm#SEC1416"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rncAntiCanonicalMap" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.1.3 paraPlaneCurve </H4>
+<!--docid::SEC1415::-->
+Procedure from library <CODE>paraplanecurves.lib</CODE> (see  <A HREF="sing_1337.htm#SEC1412">paraplanecurves_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>paraPlaneCurve(f [, s]); f poly , s optional string<BR>
+optional string s can be: <BR>
+'normal': compute integral basis via normalization. <BR>
+'local': make local analysis of singularities first and apply
+normalization separately. <BR>
+The default is 2. <BR>
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering must be a polynomial ring in three variables, say x,y,z,
+with coefficients in Q. <BR>
+The polynomial f must be homogeneous and absolutely irreducible. <BR>
+The curve C = {f = 0} must be rational, i.e., have geometric genus 0
+(see  <A HREF="sing_1233.htm#SEC1308">genus</A>). <BR>
+These conditions will be checked automatically.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring with an ideal PARA which contains a rational parametrization of
+the rational plane curve given by f; the ground field of the returned
+polynomial ring is either Q or some algebraic extension Q(a); PARA
+consists of three generators that parametrize the three coordinates
+of the rational curve
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>After a first step, realized by a projective automorphism in the
+procedure adjointIdeal, C satisfies: <BR>
+- C does not have singularities at infinity z=0. <BR>
+- C does not contain the point (0:1:0) (that is, the dehomogenization of f
+with respect to z is monic as a polynomial in y). <BR>
+Considering C in the chart z&lt;&gt;0, the algorithm regards x as transcendental
+and y as algebraic and computes an integral basis in C(x)[y] of the integral
+closure of C[x] in C(x,y) using the normalization algorithm from  <A HREF="sing_1228.htm#SEC1303">normal_lib</A>:
+see  <A HREF="sing_1169.htm#SEC1244">integralbasis_lib</A>. In a future edition of the library, also van Hoeij's
+algorithm for computing the integral basis will be available. <BR>
+From the integral basis, the adjoint ideal is obtained by linear algebra.
+Alternatively, the algorithm starts with a local analysis of the singular
+locus of C. Then, for each primary component of the singular locus which
+does not correspond to ordinary multiple points or cusps, the integral
+basis algorithm is applied separately. The ordinary multiple points and
+cusps, in turn, are addressed by a straightforward direct algorithm. The
+adjoint ideal is obtained by intersecting all ideals obtained locally.
+The local variant of the algorithm is used by default. <BR>
+The linear system corresponding to the adjoint ideal maps the curve
+birationally to a rational normal curve in P^(n-2). <BR>
+Iterating the anticanonical map, the algorithm projects the rational normal
+curve to PP1 for n odd resp. to a conic C2 in PP2 for n even. <BR>
+In case n is even, the algorithm tests whether there is a rational point on C2
+and if so gives a parametrization of C2 which is defined over Q. Otherwise the
+parametrization is defined over a quadratic field extension of Q. <BR>
+By inverting the birational map of C to PP1 resp. to C2, a parametrization of
+C is obtained (defined over Q or the quadratic field extension).
+<P>
+
+<A NAME="IDX480"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "paraplanecurves.lib";
+ring R = 0,(x,y,z),dp;
+poly f1 = 1/2*x^5+x^2*y*z^2+x^3*y*z+1/2*x*y^2*z^2-2*x*y^3*z+y^5;
+def Rp1 = paraPlaneCurve(f1);
+==> // 'paraPlaneCurve' created a ring together with an ideal PARA.
+==> // Supposing you typed, say,  def RP1 = paraPlaneCurve(f);
+==> // you may access the ideal by typing
+==> //      setring RP1; PARA;
+setring Rp1;
+PARA;
+==> PARA[1]=-4s4t+2s3t2
+==> PARA[2]=2s2t3-st4
+==> PARA[3]=4s5-t5
+setring R;
+poly f2 = x6+3x4y2+3x2y4+y6-4x4z2-34x3yz2-7x2y2z2+12xy3z2+6y4z2;
+f2 = f2+36x2z4+36xyz4+9y2z4;
+def Rp2 = paraPlaneCurve(f2);
+==> // 'paraPlaneCurve' created a ring together with an ideal PARA.
+==> // Supposing you typed, say,  def RP1 = paraPlaneCurve(f);
+==> // you may access the ideal by typing
+==> //      setring RP1; PARA;
+setring Rp2;
+PARA;
+==> PARA[1]=(-a)*s6+(-3821910a+568836)*s5t+(-17261814423635a-17036342693900)*\
+   s4t2+(-40791433831085325700a-41443502254869224120)*s3t3+(7095798487219992\
+   1706914985a-63670892810117870548425400)*s2t4+(119395301366776391295025433\
+   032250a-70343024051936434031711433716044)*st5+(14536738745802049687386582\
+   3959936915531a+80558165687949544164912330361180107460)*t6
+==> PARA[2]=s6+(568836a+3821910)*s5t+(20661581653300a+24799008638835)*s4t2+(5\
+   7466832045400548680a+45699794797119440900)*s3t3+(-82140322496947054109676\
+   600a+33367675319234688316737815)*s2t4+(-153764457242487188699049348352844\
+   a+37012366361272671947391736404550)*st5+(-1589516820449857995417712398245\
+   02169340a+125264680768653363798746666533010931669)*t6
+==> PARA[3]=(90983469924655936000a+37676837794369664000)*s3t3+(18458128762166\
+   9915274432000a+46121405018308889263872000)*s2t4+(121948097419855203536634\
+   716352000a+11879229621327449840239705728000)*st5+(26268443692822012344779\
+   010112242496000a-1331506747881842263336367321772544000)*t6
+</FONT></pre></td></tr></table><P>
+
+<A NAME="rncAntiCanonicalMap"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1339.htm#SEC1414"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: invertBirMap" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1341.htm#SEC1416"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rncAntiCanonicalMap" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

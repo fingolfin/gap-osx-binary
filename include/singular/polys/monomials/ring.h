@@ -245,10 +245,10 @@ struct ip_sring
   void * ext_ref;   /* libsing GAP object */
 // #ifdef HAVE_RINGS
 //   unsigned int  cf->ringtype;  /* cring = 0 => coefficient field, cring = 1 => coeffs from Z/2^m */
-//   int_number    cf->modBase; /* Z/(ringflag^cf->modExponent)=Z/cf->modNumber*/
+//   mpz_ptr    cf->modBase; /* Z/(ringflag^cf->modExponent)=Z/cf->modNumber*/
 //   unsigned long cf->modExponent;
 //   unsigned long cf->modNumber;  /* Z/cf->modNumber */
-//   int_number    cf->modNumber;
+//   mpz_ptr    cf->modNumber;
 // #endif
 
   unsigned long options; /* ring dependent options */
@@ -747,16 +747,16 @@ inline BOOLEAN rHasLocalOrMixedOrdering(const ring r){ return (r->OrdSgn==-1); }
 #define rHasGlobalOrdering_currRing() rHasGlobalOrdering(currRing)
 #define rHasLocalOrMixedOrdering_currRing() rHasLocalOrMixedOrdering(currRing)
 
-BOOLEAN rOrd_is_Totaldegree_Ordering(ring r );
+BOOLEAN rOrd_is_Totaldegree_Ordering(const ring r);
 
 /// return TRUE if p_SetComp requires p_Setm
-BOOLEAN rOrd_SetCompRequiresSetm(ring r);
+BOOLEAN rOrd_SetCompRequiresSetm(const ring r);
 rOrderType_t    rGetOrderType(ring r);
 
 /// returns TRUE if var(i) belongs to p-block
-BOOLEAN rIsPolyVar(int i, ring r);
+BOOLEAN rIsPolyVar(int i, const ring r);
 
-static inline BOOLEAN rOrd_is_Comp_dp(ring r)
+static inline BOOLEAN rOrd_is_Comp_dp(const ring r)
 {
   assume(r != NULL);
   assume(r->cf != NULL);

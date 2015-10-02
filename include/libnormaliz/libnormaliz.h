@@ -27,6 +27,8 @@
 #include <iostream>
 #include <string>
 
+#include <libnormaliz/version.h>
+
 namespace libnormaliz {
 
 namespace Type {
@@ -48,47 +50,44 @@ enum InputType {
     inhom_congruences,
     lattice_ideal,
     grading,
-    excluded_faces
+    excluded_faces,
+    lattice,
+    saturation,
+    cone,
+    offset,
+    vertices,
+    support_hyperplanes,
+    cone_and_lattice
 };
 } //end namespace Type
 
-/*namespace Mode {
-enum ComputationMode {
-    supportHyperplanes,
-    triangulationSize,
-    triangulation,
-    volumeTriangulation,
-    // volumeLarge,
-    degree1Elements,
-    hilbertBasisTriangulation,
-    hilbertBasisMultiplicity,
-    hilbertBasisLarge,
-    hilbertSeries,
-    // hilbertSeriesLarge,
-    hilbertBasisSeries,
-    // hilbertBasisSeriesLarge,
-    dual
-};
-} //end namespace Mode */
-
 using Type::InputType;
-// using Mode::ComputationMode;
 
 /* converts a string to an InputType
  * throws an BadInputException if the string cannot be converted */
 InputType to_type(const std::string& type_string);
+
+/* gives the difference of the number of columns to the dimension */
+long type_nr_columns_correction(InputType type);
+
+/* returns true if the input of this type is a vector */
+bool type_is_vector(InputType type);
 
 /* this type is used in the entries of keys
  * it has to be able to hold number of generators */
 typedef unsigned int key_t;
 
 extern bool verbose;
+extern size_t GMP_mat, GMP_hyp, GMP_scal_prod;
+extern size_t TotDet;
 
 /* if test_arithmetic_overflow is true, many operations are also done
  * modulo overflow_test_modulus to ensure the correctness of the calculations */
-extern bool test_arithmetic_overflow;
-extern long overflow_test_modulus;
+// extern bool test_arithmetic_overflow;
+// extern long overflow_test_modulus;
 
+/* set the verbose default value */
+bool setVerboseDefault(bool v);
 /* methods to set and use the output streams */
 void setVerboseOutput(std::ostream&);
 void setErrorOutput(std::ostream&);

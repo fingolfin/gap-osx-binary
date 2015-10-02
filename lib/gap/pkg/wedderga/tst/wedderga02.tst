@@ -1,6 +1,6 @@
 # wedderga, chapter 2
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 31, 45 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 31, 45 ]
 
 gap> WedderburnDecomposition( GroupRing( GF(5), DihedralGroup(16) ) );
 [ ( GF(5)^[ 1, 1 ] ), ( GF(5)^[ 1, 1 ] ), ( GF(5)^[ 1, 1 ] ),
@@ -15,7 +15,7 @@ gap> WedderburnDecomposition( GroupRing( CF(5), DihedralGroup(16) ) );
     [ 1, 31 ]), CF(40) ) of a group of size 2> ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 77, 94 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 77, 94 ]
 
 gap> WedderburnDecomposition( GroupRing( Rationals, SmallGroup(48,15) ) );
 [ Rationals, Rationals, Rationals, Rationals, ( Rationals^[ 2, 2 ] ),
@@ -33,7 +33,7 @@ gap> WedderburnDecomposition( GroupRing( CF(3), SmallGroup(48,15) ) );
     12) ) of a group of size 2>^[ 2, 2 ] ) ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 106, 122 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 106, 122 ]
 
 gap> QG:=GroupRing(Rationals,SmallGroup(240,89));
 <algebra-with-one over Rationals, with 2 generators>
@@ -50,7 +50,7 @@ Some of the Wedderburn components displayed are FRACTIONAL MATRIX ALGEBRAS!!!
         [ 1, 7 ]), NF(40,[ 1, 31 ]) ) of a group of size 4> ] ]  
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 191, 200 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 191, 200 ]
 
 gap> WedderburnDecompositionInfo( GroupRing( Rationals, DihedralGroup(16) ) );
 [ [ 1, Rationals ], [ 1, Rationals ], [ 1, Rationals ], [ 1, Rationals ],
@@ -60,7 +60,7 @@ gap> WedderburnDecompositionInfo( GroupRing( CF(5), DihedralGroup(16) ) );
   [ 1, NF(40,[ 1, 31 ]), 8, [ 2, 7, 0 ] ] ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 218, 237 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 218, 237 ]
 
 gap> F:=FreeGroup("a","b");;a:=F.1;;b:=F.2;;rel:=[a^8,a^4*b^2,b^-1*a*b*a];;
 gap> Q16:=F/rel;; QQ16:=GroupRing( Rationals, Q16 );;
@@ -80,13 +80,13 @@ gap> WedderburnDecompositionInfo(QS4);
   [ 1, Rationals, 3, [ 2, 2, 0 ] ] ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 291, 304 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 291, 304 ]
 
 gap> WedderburnDecompositionInfo( GroupRing( Rationals, SmallGroup(48,15) ) );
-[ [ 1, Rationals ], [ 1, Rationals ], [ 1, Rationals ], [ 1, Rationals ],
-  [ 2, Rationals ], [ 1, Rationals, 3, [ 2, 2, 0 ] ], [ 2, CF(3) ],
-  [ 1, Rationals, 6, [ 2, 5, 0 ] ], [ 1, NF(8,[ 1, 7 ]), 8, [ 2, 7, 0 ] ],
-  [ 1, Rationals, 12, [ [ 2, 5, 3 ], [ 2, 7, 0 ] ], [ [ 3 ] ] ] ]  
+[ [ 1, Rationals ], [ 1, Rationals ], [ 1, Rationals ], [ 1, Rationals ], 
+  [ 2, Rationals ], [ 1, Rationals, 3, [ 2, 2, 0 ] ], [ 2, CF(3) ], 
+  [ 1, Rationals, 6, [ 2, 5, 0 ] ], [ 1, NF(8,[ 1, 7 ]), 8, [ 2, 7, 0 ] ], 
+  [ 1, Rationals, 12, [ [ 2, 5, 9 ], [ 2, 7, 0 ] ], [ [ 9 ] ] ] ]
 gap> WedderburnDecompositionInfo( GroupRing( CF(3), SmallGroup(48,15) ) );
 [ [ 1, CF(3) ], [ 1, CF(3) ], [ 1, CF(3) ], [ 1, CF(3) ], [ 2, CF(3) ],
   [ 2, CF(3), 3, [ 1, 1, 0 ] ], [ 2, CF(3) ], [ 2, CF(3) ],
@@ -94,7 +94,7 @@ gap> WedderburnDecompositionInfo( GroupRing( CF(3), SmallGroup(48,15) ) );
   [ 2, CF(3), 12, [ 2, 7, 0 ] ] ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 317, 330 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 317, 330 ]
 
 gap> QG:=GroupRing(Rationals,SmallGroup(240,89));
 <algebra-with-one over Rationals, with 2 generators>
@@ -108,7 +108,7 @@ Some of the Wedderburn components displayed are FRACTIONAL MATRIX ALGEBRAS!!!
   [ 3/2, NF(8,[ 1, 7 ]), 10, [ 4, 3, 5 ] ] ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 387, 401 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 387, 401 ]
 
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
@@ -123,7 +123,7 @@ gap> SimpleAlgebraByCharacter( GroupRing( Rationals , G ) , Irr(G)[19] );
 8) ) of a group of size 2>
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 431, 443 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 431, 443 ]
 
 gap> G:=SmallGroup(144,11);
 <pc group of size 144 with 6 generators>
@@ -136,7 +136,7 @@ gap> SimpleAlgebraByCharacterInfo( QG , Irr(G)[48] );
 [ 1, NF(9,[ 1, 8 ]), 18, [ 2, 17, 9 ] ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 512, 526 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 512, 526 ]
 
 gap> F:=FreeGroup("a","b");; a:=F.1;; b:=F.2;;
 gap> G:=F/[ a^16, b^2*a^8, b^-1*a*b*a^9 ];; a:=G.1;; b:=G.2;;
@@ -151,7 +151,7 @@ gap> SimpleAlgebraByStrongSP( FG, K, H, 1 );
 ( GF(7)^[ 2, 2 ] )
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/decomp.xml", 586, 602 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/decomp.xml", 586, 602 ]
 
 gap> F:=FreeGroup("a","b");; a:=F.1;; b:=F.2;;
 gap> G:=F/[ a^16, b^2*a^8, b^-1*a*b*a^9 ];; a:=G.1;; b:=G.2;;

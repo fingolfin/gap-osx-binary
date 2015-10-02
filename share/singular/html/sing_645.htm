@@ -1,0 +1,157 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: bfctVarIn</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: bfctVarIn">
+<META NAME="keywords" CONTENT="Singular Manual: bfctVarIn">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC696"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_646.htm#SEC697"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: bfctVarAnn" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_649.htm#SEC700"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: fpadim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.6.0. bfctVarIn </H5>
+<!--docid::SEC696::-->
+Procedure from library <CODE>dmodvar.lib</CODE> (see  <A HREF="sing_644.htm#SEC695">dmodvar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>bfctVarIn(I [,a,b,c]); I an ideal, a,b,c optional ints
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list of ideal and intvec
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes the roots of the Bernstein-Sato polynomial and their
+multiplicities for an affine algebraic variety defined by I.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is commutative and over a field of characteristic 0.
+<BR> Varnames of the basering do not include t(1),...,t(r) and
+Dt(1),...,Dt(r), where r is the number of entries of the input ideal.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>In the output list, say L,
+<BR> - L[1] of type ideal contains all the rational roots of a b-function,
+<BR> - L[2] of type intvec contains the multiplicities of above roots,
+<BR> - optional L[3] of type string is the part of b-function without rational roots.
+<BR> Note, that a b-function of degree 0 is encoded via L[1][1]=0, L[2]=0 and
+L[3] is 1 (for nonzero constant) or 0 (for zero b-function).
+<BR> If a&lt;&gt;0, the ideal is used as given. Otherwise, and by default, a
+heuristically better suited generating set is used to reduce computation time.
+<BR> If b&lt;&gt;0, <CODE>std</CODE> is used for GB computations in characteristic 0,
+otherwise, and by default, <CODE>slimgb</CODE> is used.
+<BR> If c&lt;&gt;0, a matrix ordering is used for GB computations, otherwise,
+and by default, a block ordering is used.
+<BR> Further note, that in this proc, the initial ideal of the multivariate Malgrange
+ideal defined by I is computed and then a system of linear equations is solved
+by linear reductions following the ideas by Noro.
+<BR>The result is shifted by 1-codim(Var(F)) following (BMS06).
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If printlevel=1, progress debug messages will be printed,
+<BR> if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodvar.lib";
+ring R = 0,(x,y,z),dp;
+ideal F = x^2+y^3, z;
+list L = bfctVarIn(F);
+L;
+==> [1]:
+==>    _[1]=-5/6
+==>    _[2]=-1
+==>    _[3]=-7/6
+==> [2]:
+==>    1,1,1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="bfctVarAnn"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_646.htm#SEC697"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: bfctVarAnn" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_649.htm#SEC700"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: fpadim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

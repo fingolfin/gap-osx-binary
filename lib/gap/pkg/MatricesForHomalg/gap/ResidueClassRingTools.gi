@@ -564,6 +564,11 @@ InstallValue( CommonHomalgTableForResidueClassRingsTools,
                ##  </ManSection>
                ##  <#/GAPDoc>
                
+               Diff :=
+                 function( D, N )
+                     return HomalgRing( D ) * Diff( Eval( D ), Eval( N ) );
+                 end,
+               
                X_CopyRowToIdentityMatrix :=
                  function( M, i, L, j )
                    
@@ -581,6 +586,17 @@ InstallValue( CommonHomalgTableForResidueClassRingsTools,
                
                X_GetCleanRowsPositions :=
                  function( M, clean_columns )
+                   
+                 end,
+               
+               Pullback := 
+                 function( phi, M )
+                   
+                   if not IsBound( phi!.RingMapToFree ) then
+                       phi!.RingMapToFree := RingMap( ImagesOfRingMap( phi ), Source( phi ), AmbientRing( Range( phi ) ) );
+                   fi;
+                   
+                   return Pullback( phi!.RingMapToFree, M );
                    
                  end,
                

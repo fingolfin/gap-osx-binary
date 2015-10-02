@@ -1,6 +1,6 @@
 # unitlib, chapter 4
 
-# [ "/Users/alexk/gap4r6p1/pkg/unitlib/doc/example.xml", 14, 34 ]
+# [ "/Users/alexk/gap4r7p5/pkg/unitlib/doc/example.xml", 14, 34 ]
 
 gap> IdGroup(DihedralGroup(128));
 [ 128, 161 ]
@@ -21,7 +21,7 @@ gap> gens[8]^f;
 Z(2)^0)*f3*f5*f6*f7+(Z(2)^0)*f4*f5*f6*f7+(Z(2)^0)*f3*f4*f5*f6*f7
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/unitlib/doc/example.xml", 60, 74 ]
+# [ "/Users/alexk/gap4r7p5/pkg/unitlib/doc/example.xml", 60, 74 ]
 
 gap> for n in [ 1 .. NrSmallGroups( 64 ) ] do
 > if not IsAbelian( SmallGroup( 64, n ) ) then
@@ -36,7 +36,7 @@ gap> for n in [ 1 .. NrSmallGroups( 64 ) ] do
 > od;
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/unitlib/doc/example.xml", 83, 95 ]
+# [ "/Users/alexk/gap4r7p5/pkg/unitlib/doc/example.xml", 83, 95 ]
 
 gap> cl := [];;
 gap> for n in [ 1 .. NrSmallGroups( 64 ) ] do

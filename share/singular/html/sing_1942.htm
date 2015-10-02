@@ -1,0 +1,162 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: polymakePolytope</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: polymakePolytope">
+<META NAME="keywords" CONTENT="Singular Manual: polymakePolytope">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2017"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: polymake_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1943.htm#SEC2018"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: newtonPolytopeP" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.1.1 polymakePolytope </H4>
+<!--docid::SEC2017::-->
+Procedure from library <CODE>polymake.lib</CODE> (see  <A HREF="sing_1941.htm#SEC2016">polymake_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>polymakePolytope(points); polytope intmat
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>each row of points gives the coordinates of a lattice point of a
+polytope with their affine coordinates as given by the output of
+secondaryPolytope
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>the procedure calls polymake to compute the vertices of the polytope
+as well as its dimension and information on its facets
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, L with four entries
+<BR> L[1] : an integer matrix whose rows are the coordinates of vertices
+of the polytope
+<BR> L[2] : the dimension of the polytope
+<BR> L[3] : a list whose ith entry explains to which vertices the
+ith vertex of the Newton polytope is connected
+<BR>-- i.e. L[3][i] is an integer vector and an entry k in
+there means that the vertex L[1][i] is connected to the
+vertex L[1][k]
+<BR> L[4] : an matrix of type bigintmat whose rows mulitplied by
+(1,var(1),...,var(nvar)) give a linear system of equations
+describing the affine hull of the polytope,
+<BR>i.e. the smallest affine space containing the polytope
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>- for its computations the procedure calls the program polymake by
+Ewgenij Gawrilow, TU Berlin and Michael Joswig, TU Darmstadt;
+it therefore is necessary that this program is installed in order
+to use this procedure;
+<BR>see http://www.math.tu-berlin.de/polymake/
+<BR> - note that in the vertex edge graph we have changed the polymake
+convention which starts indexing its vertices by zero while we start
+with one !
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "polymake.lib";
+// the lattice points of the unit square in the plane
+list points=intvec(0,0),intvec(0,1),intvec(1,0),intvec(1,1);
+// the secondary polytope of this lattice point configuration is computed
+intmat secpoly=secondaryPolytope(points)[1];
+list np=polymakePolytope(secpoly);
+// the vertices of the secondary polytope are:
+np[1];
+// its dimension is
+np[2];
+// np[3] contains information how the vertices are connected to each other,
+// e.g. the first vertex (number 0) is connected to the second one
+np[3][1];
+// the affine hull has the equation
+ring r=0,x(1..4),dp;
+matrix M[5][1]=1,x(1),x(2),x(3),x(4);
+intmat(np[4])*M;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="newtonPolytopeP"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: polymake_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1943.htm#SEC2018"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: newtonPolytopeP" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

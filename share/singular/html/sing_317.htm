@@ -1,0 +1,149 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: interpolation</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: interpolation">
+<META NAME="keywords" CONTENT="Singular Manual: interpolation">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC356"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_316.htm#SEC355"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: insert" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_318.htm#SEC357"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: interred" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.58 interpolation </H3>
+<!--docid::SEC356::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>interpolation (</CODE> list<CODE>,</CODE> intvec <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>ideal
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD><CODE>interpolation(l,v)</CODE> computes the reduced Groebner basis of the intersection
+of ideals l[1]^v[1], ..., l[N]^v[N] by applying linear algebra methods.
+<DT><CODE><STRONG>Assume:</STRONG></CODE>
+<DD>Every ideal from the list l must be a maximal ideal of a point and should have
+the following form: variable_1-coordinate_1, ..., variable_n-coordinate_n, where n
+is the number of variables in the ring.
+<BR>The ring should be a polynomial ring over Zp or Q with global ordering.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x,y),dp;
+  ideal p_1=x,y;
+  ideal p_2=x+1,y+1;
+  ideal p_3=x+2,y-1;
+  ideal p_4=x-1,y+2;
+  ideal p_5=x-1,y-3;
+  ideal p_6=x,y+3;
+  ideal p_7=x+2,y;
+  list l=p_1,p_2,p_3,p_4,p_5,p_6,p_7;
+  intvec v=2,1,1,1,1,1,1;
+  ideal j=interpolation(l,v);
+  // generator of degree 3 gives the equation of the unique
+  // singular cubic passing
+  // through p_1,...,p_7 with singularity at p_1
+  j;
+==> j[1]=-4x3-4x2y-2xy2+y3-8x2-4xy+3y2
+==> j[2]=-y4+8x2y+6xy2-2y3+10xy+3y2
+==> j[3]=-xy3+2x2y+xy2+4xy
+==> j[4]=-2x2y2-2x2y-2xy2+y3-4xy+3y2
+  // computes values of generators of j at p_4, results should be 0
+  subst(j,x,1,y,-2);
+==> _[1]=0
+==> _[2]=0
+==> _[3]=0
+==> _[4]=0
+  // computes values of derivatives d/dx of generators at (0,0)
+  subst(diff(j,x),x,0,y,0);
+==> _[1]=0
+==> _[2]=0
+==> _[3]=0
+==> _[4]=0
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_281.htm#SEC320">diff</A>;
+ <A HREF="sing_296.htm#SEC335">fglm</A>;
+ <A HREF="sing_319.htm#SEC358">intersect</A>;
+ <A HREF="sing_402.htm#SEC441">std</A>;
+ <A HREF="sing_405.htm#SEC444">subst</A>.
+<A NAME="interred"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_316.htm#SEC355"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: insert" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_318.htm#SEC357"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: interred" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

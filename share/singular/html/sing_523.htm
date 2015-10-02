@@ -1,0 +1,166 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: preimage (plural)</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: preimage (plural)">
+<META NAME="keywords" CONTENT="Singular Manual: preimage (plural)">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC562"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_522.htm#SEC561"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: opposite" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_524.htm#SEC563"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: quotient (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 7.3.21 preimage (plural) </H3>
+<!--docid::SEC562::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>preimage (</CODE> ring_name<CODE>,</CODE> map_name<CODE>,</CODE> ideal_name <CODE>)</CODE>
+<BR><CODE>preimage (</CODE> ring_name<CODE>,</CODE> ideal_expression<CODE>,</CODE> ideal_name <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>ideal
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>returns the preimage of an ideal under a given map.
+The second argument has to be a map from the basering to the given ring
+(or an ideal defining such a map),
+and the ideal has to be an ideal in the given ring.
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>To compute the kernel of a map, the preimage of zero has to be determined.
+Hence there is no special command for computing the kernel of a map in
+P<SMALL>LURAL</SMALL>.
+<DT><CODE><STRONG>Remark:</STRONG></CODE>
+<DD>In the non-commutative case, it is implemented only for maps 
+<IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_187.png"
+ ALT="$A$"> -&gt; 
+<IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_192.png"
+ ALT="$B$">, where 
+<IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_187.png"
+ ALT="$A$"> is  a commutative ring.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ncalg.lib";
+ring   R = 0,a,dp;
+def Usl2 = makeUsl2();
+setring Usl2;
+poly  C = 4*e*f+h^2-2*h;
+// C is a central element of U(sl2)
+ideal I = e^3, f^3, h^3-4*h;
+ideal Z = 0;  // zero
+ideal J = twostd(I); // two-sided GB
+ideal K = std(I);    // left GB
+map Phi = R,C;  // phi maps a (in R) to C (in U(sl2))
+setring R;
+ideal PreJ = preimage(Usl2,Phi,J);
+// the central character of J
+PreJ;
+==> PreJ[1]=a2-8a
+factorize(PreJ[1],1);
+==> _[1]=a
+==> _[2]=a-8
+// hence, there are two simple characters for J
+ideal PreK = preimage(Usl2,Phi,K);
+// the central character of K
+PreK;
+==> PreK[1]=a3-32a2+192a
+factorize(PreK[1],1);
+==> _[1]=a
+==> _[2]=a-8
+==> _[3]=a-24
+// hence, there are three simple characters for K
+preimage(Usl2, Phi, Z);  // kernel pf phi
+==> _[1]=0
+
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_471.htm#SEC510">ideal (plural)</A>;
+ <A HREF="sing_476.htm#SEC515">map (plural)</A>;
+ <A HREF="sing_498.htm#SEC537">ring (plural)</A>.
+<P>
+
+<A NAME="quotient (plural)"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_522.htm#SEC561"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: opposite" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_524.htm#SEC563"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: quotient (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

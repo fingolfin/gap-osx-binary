@@ -1,0 +1,172 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: LinearizeAction</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: LinearizeAction">
+<META NAME="keywords" CONTENT="Singular Manual: LinearizeAction">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1722"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1646.htm#SEC1721"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: InvariantQ" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1648.htm#SEC1723"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: LinearActionQ" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: stratify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1640.htm#SEC1715"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: rinvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.7.3.7 LinearizeAction </H4>
+<!--docid::SEC1722::-->
+Procedure from library <CODE>rinvar.lib</CODE> (see  <A HREF="sing_1640.htm#SEC1715">rinvar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>LinearizeAction(G,action,r); ideal G, action; int r
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>linearize the group action 'action' and find an equivariant embedding
+of K^m where m = size(action).
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>G contains only variables var(1..r) (r = nrs)
+<BR>basering = K[s(1..r),t(1..m)], K = Q or K = Q(a) and minpoly != 0.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>polynomial ring containing the ideals 'actionid', 'embedid', 'groupid'
+- 'actionid' is the ideal defining the linearized action of G
+- 'embedid' is a parameterization of an equivariant embedding (closed)
+- 'groupid' is the ideal of G in the new ring
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>set printlevel &gt; 0 to see a trace
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "rinvar.lib";
+ring B   = 0,(s(1..5), t(1..3)),dp;
+ideal G =  s(3)-s(4), s(2)-s(5), s(4)*s(5), s(1)^2*s(4)+s(1)^2*s(5)-1, s(1)^2*s(5)^2-s(5), s(4)^4-s(5)^4+s(1)^2, s(1)^4+s(4)^3-s(5)^3, s(5)^5-s(1)^2*s(5);
+ideal action = -s(4)*t(1)+s(5)*t(1), -s(4)^2*t(2)+2*s(4)^2*t(3)^2+s(5)^2*t(2), s(4)*t(3)+s(5)*t(3);
+LinearActionQ(action, 5);
+==> 0
+def R = LinearizeAction(G, action, 5);
+==> 
+==> // 'LinearizeAction' created a new ring.
+==> // To see the ring, type (if the name 'R' was assigned to the return valu\
+   e):
+==>      show(R);
+==> // To access the new action and the equivariant embedding, type
+==>      setring R; actionid; embedid; groupid
+==> 
+setring R;
+R;
+==> //   characteristic : 0
+==> //   number of vars : 9
+==> //        block   1 : ordering dp
+==> //                  : names    s(1) s(2) s(3) s(4) s(5) t(1) t(2) t(3) t(\
+   4)
+==> //        block   2 : ordering C
+actionid;
+==> actionid[1]=-s(4)*t(1)+s(5)*t(1)
+==> actionid[2]=-s(4)^2*t(2)+s(5)^2*t(2)+2*s(4)^2*t(4)
+==> actionid[3]=s(4)*t(3)+s(5)*t(3)
+==> actionid[4]=s(4)^2*t(4)+s(5)^2*t(4)
+embedid;
+==> embedid[1]=t(1)
+==> embedid[2]=t(2)
+==> embedid[3]=t(3)
+==> embedid[4]=t(3)^2
+groupid;
+==> groupid[1]=s(3)-s(4)
+==> groupid[2]=s(2)-s(5)
+==> groupid[3]=s(4)*s(5)
+==> groupid[4]=s(1)^2*s(4)+s(1)^2*s(5)-1
+==> groupid[5]=s(1)^2*s(5)^2-s(5)
+==> groupid[6]=s(4)^4-s(5)^4+s(1)^2
+==> groupid[7]=s(1)^4+s(4)^3-s(5)^3
+==> groupid[8]=s(5)^5-s(1)^2*s(5)
+LinearActionQ(actionid, 5);
+==> 1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="LinearActionQ"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1646.htm#SEC1721"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: InvariantQ" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1648.htm#SEC1723"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: LinearActionQ" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: stratify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1640.htm#SEC1715"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: rinvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

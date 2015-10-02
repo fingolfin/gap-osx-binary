@@ -1,0 +1,152 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: triangM</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: triangM">
+<META NAME="keywords" CONTENT="Singular Manual: triangM">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1772"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1696.htm#SEC1771"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: triangLfak" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1698.htm#SEC1773"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: triangMH" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: solve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: triang_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.8.4.3 triangM </H4>
+<!--docid::SEC1772::-->
+Procedure from library <CODE>triang.lib</CODE> (see  <A HREF="sing_1694.htm#SEC1769">triang_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>triangM(G[,i]); G=ideal, i=integer,<BR>
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>G is the reduced lexicographical Groebner basis of the
+zero-dimensional ideal (G), sorted by increasing leading terms.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list of finitely many triangular systems, such that
+the union of their varieties equals the variety of (G).
+If i = 2, then each polynomial of the triangular systems
+is factorized.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Algorithm of Moeller (see: Moeller, H.M.: On decomposing systems of
+polynomial equations with finitely many solutions, Appl. Algebra Eng.
+Commun. Comput. 4, 217 - 230, 1993).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "triang.lib";
+ring rC5 = 0,(e,d,c,b,a),lp;
+triangM(stdfglm(cyclic(5))); //oder: triangM(stdfglm(cyclic(5)),2);
+==> [1]:
+==>    _[1]=a5-1
+==>    _[2]=b-a
+==>    _[3]=c-a
+==>    _[4]=d2+3da+a2
+==>    _[5]=e+d+3a
+==> [2]:
+==>    _[1]=a10+123a5+1
+==>    _[2]=55b2-2ba6-233ba-8a7-987a2
+==>    _[3]=55c+a6+144a
+==>    _[4]=55d+a6+144a
+==>    _[5]=55e+55b-2a6-233a
+==> [3]:
+==>    _[1]=a5-1
+==>    _[2]=b6+4b5a+5b4a2+5b3a3+5b2a4+4b+a
+==>    _[3]=5c+8b5a+30b4a2+30b3a3+25b2a4+30b+22a
+==>    _[4]=5d-2b5a-10b4a2-15b3a3-10b2a4-10b-8a
+==>    _[5]=5e-6b5a-20b4a2-15b3a3-15b2a4-15b-9a
+==> [4]:
+==>    _[1]=a5-1
+==>    _[2]=b-a
+==>    _[3]=c2+3ca+a2
+==>    _[4]=d+c+3a
+==>    _[5]=e-a
+</FONT></pre></td></tr></table><P>
+
+<A NAME="triangMH"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1696.htm#SEC1771"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: triangLfak" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1698.htm#SEC1773"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: triangMH" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: solve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: triang_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

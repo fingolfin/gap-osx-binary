@@ -2,30 +2,34 @@
 
 <Chapter Label="visualisation">
   <Heading>Visualization of the pictures created</Heading>
-  This chapter describes two easy ways to visualize the images created by using the &IntPic; package. Both require &LaTeX; and some &LaTeX; packages, such as <Package>Tikz</Package> and <Package>pgf</Package>, to be installed and working. One of the ways we will describe is almost completely automatic, but requires the &Viz; package. The other is not so automatic but has the advantage of not requiring other packages, besides the &LaTeX; ones.
+  This chapter describes two easy ways to visualize the images created by using the &IntPic; package. Both require &LaTeX; and some &LaTeX; packages, such as <Package>Tikz</Package> and <Package>pgf</Package>, to be installed and working. One of the ways we will describe is almost completely automatic. It makes use of the function <C>Splash</C>, borrowed from the &Viz; package. The other is not so automatic but has the advantage of not requiring other packages, besides the &LaTeX; ones, and should work in any operation system.
   
   <P />
 <!--  <Section>
     <Heading>Visualization</Heading>-->
     <Section>
       <Heading>Viewing using <Package>Viz</Package></Heading>
-      If you have a working copy of the &Viz; package, you may produce and display a picture from a <C>tikz</C> string <A>tkz</A> just by typing the following:
+      Producing and displaying a picture from a <C>tikz</C> string <A>tkz</A> may me achieved in a simple way. (Warning: extenvive tests have only been done with Linux.) One just have to type the following:
     <P />
     <P />
-    <Listing Type="Splash"><![CDATA[
-Splash(tkz);
+    <Listing Type="IP\_Splash"><![CDATA[
+IP_Splash(tkz);
 ]]></Listing>
-    A picture is popped up after this use of the function <Ref Func="Splash" BookName="viz"/>. To see the name of the temporary directory created to perform the computations, and thus being able to copy the files involved to any other place, one should set the info level <C>InfoViz</C> to <M>1</M> or more. The following example illustrates this and the use of some options of the <Ref Func="Splash" BookName="viz"/> function of the &Viz; package. Setting the option <C>papersize</C> to "a0paper" may be convenient for the visualization of large images. The <C>pdf</C> viewer can also be changed.   
+    A picture is popped up after this use of the function <C>IP_Splash</C>.<!--<Ref Func="Splash" BookName="viz"/>-->. To see the name of the temporary directory created to perform the computations, and thus being able to copy the files involved to any other place, one should set the info level <C>InfoViz</C> to <M>1</M> or more. The following example illustrates this and the use of some options of the function  <C>IP_Splash</C>.<!--<Ref Func="Splash" BookName="viz"/> function of the &Viz; package. -->
+<!--
+Setting the option <C>papersize</C> to "a0paper" may be convenient for the visualization of large images. 
+-->
+For instance, the <C>pdf</C> viewer can be changed.   
     
     <Listing Type="infoviz: temporary directory"><![CDATA[
 gap> SetInfoLevel(InfoViz,1);
-gap> Splash(tkz,rec(latexpoints:="10pt",papersize:="a0paper",viewer:="okular")); 
+gap> IP_Splash(tkz,rec(viewer:="okular")); 
 #I  The temporary directory used is: /tmp/tmJcpphI/
 ]]></Listing>
     
-    The temporary directory /tmp/tmJcpphI/ contains the files vizpicture1.tex and 
-    vizpicture.tex. The file vizpicture1.tex contains the tikz code and the file vizpicture.tex is the &LaTeX; document to be processed. Other files, namely the <C>vizpicture.pdf</C> are created by the <C>pdflatex</C> command that is called by the  <Ref Func="Splash" BookName="viz"/>
-     function. 
+    The temporary directory /tmp/tmJcpphI/ contains the file and vizpicture.tex. The file vizpicture.tex is the &LaTeX; document to be processed. Other files, namely the <C>vizpicture.pdf</C> are created by the <C>pdflatex</C> command that is called by the <C>IP_Splash</C><!--<Ref Func="Splash" BookName="viz"/>--> function.
+    <P/>
+<C>Warning:</C> In the case of large pictures, it may happen the &LaTeX; memory being exceeded. In this case, no image is produced and the user is not warned.
    </Section>    
     <Section>
       <Heading>Viewing without using <Package>Viz</Package></Heading>

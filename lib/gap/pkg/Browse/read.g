@@ -12,8 +12,10 @@ ReadPackage("browse", "lib/browse.gi");
 ReadPackage( "browse", "lib/brgrids.g" );
 
 # example applications
-if IsPackageMarkedForLoading( "atlasrep", "1.5.0" ) then
+if IsPackageMarkedForLoading( "atlasrep", "1.6.0" ) then
   ReadPackage( "browse", "app/atlasbrowse.g" );
+elif IsPackageMarkedForLoading( "atlasrep", "1.5.0" ) then
+  ReadPackage( "browse", "app/atlasbrowse_old.g" );
 fi;
 ReadPackage("browse", "app/matdisp.g");
 ReadPackage("browse", "app/ctbldisp.g");

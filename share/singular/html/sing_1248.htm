@@ -1,0 +1,156 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: intclMonIdeal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: intclMonIdeal">
+<META NAME="keywords" CONTENT="Singular Manual: intclMonIdeal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1323"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1247.htm#SEC1322"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ehrhartRing" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1249.htm#SEC1324"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: torusInvariants" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.18.5 intclMonIdeal </H4>
+<!--docid::SEC1323::-->
+Procedure from library <CODE>normaliz.lib</CODE> (see  <A HREF="sing_1243.htm#SEC1318">normaliz_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>intclMonIdeal(ideal I);
+<BR>intclMonIdeal(ideal I, intvec grading);
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>The exponent vectors of the leading monomials of the elements of I
+are considered as generators of a monomial ideal for which the
+normalization of its Rees algebra is computed. For a Definiton of the
+Rees algebra (or Rees ring) see Bruns and Herzog, Cohen-Macaulay
+rings, Cambridge University Press 1998, p. 182.
+<BR>The function returns a list of ideals:
+<BR> (i) If the last ring variable is not used by the monomials, it is treated
+as the auxiliary variable of the Rees algebra. The function returns two
+ideals, the first containing the monomials generating the integral
+closure of the monomial ideal, the second containing the algebra
+generators of the normalization of the Rees algebra.
+<BR> (ii) If the last ring variable is used by the monomials, the list returned
+contains only one ideal, namely the monomials generating the integral
+closure of the ideal.
+<BR> The function returns the a list containing the input ideal I if one
+of the options <CODE>supp</CODE>, <CODE>triang</CODE>, <CODE>volume</CODE>, or
+<CODE>hseries</CODE> has been activated.
+However, in this case some numerical invariants are computed, and
+some other data may be contained in files that you can read into
+Singular (see  <A HREF="sing_1254.htm#SEC1329">showNuminvs</A>,  <A HREF="sing_1255.htm#SEC1330">exportNuminvs</A>).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "normaliz.lib";
+ring R=0,(x,y,z,t),dp;
+ideal I=x^2,y^2,z^3;
+list l=intclMonIdeal(I);
+l[1]; // integral closure of I
+==> _[1]=y2
+==> _[2]=xy
+==> _[3]=x2
+==> _[4]=z3
+==> _[5]=yz2
+==> _[6]=xz2
+l[2];  // monomials generating the integral closure of the Rees algebra
+==> _[1]=z
+==> _[2]=y2t
+==> _[3]=xyt
+==> _[4]=x2t
+==> _[5]=z3t
+==> _[6]=y
+==> _[7]=x
+==> _[8]=yz2t
+==> _[9]=xz2t
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1247.htm#SEC1322">ehrhartRing</A>;
+ <A HREF="sing_1244.htm#SEC1319">intclToricRing</A>;
+ <A HREF="sing_1245.htm#SEC1320">normalToricRing</A>.
+<P>
+
+<A NAME="torusInvariants"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1247.htm#SEC1322"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ehrhartRing" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1249.htm#SEC1324"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: torusInvariants" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

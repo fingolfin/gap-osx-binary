@@ -462,12 +462,12 @@ gap> GeneratorsOfGroup(G);
 gap> G16:=CongruenceSubgroupGamma0(16);;
 gap> FS16:=FareySymbol(G16);;
 gap> gens:=GeneratorsByFareySymbol(FS16);;
-gap> glue_list:=gluing_matrices(FS16);
+gap> glue_list:=__congruence_gluing_matrices(FS16);
 [ 1, 2, -2, 3, -3, 4, -4, 5, -5, -1 ]
 gap> for i in [1..1000] do
 >      g:=Random(G16);
->      w:=FactorizeMat( G16, g );
->      h:=CheckFactorizeMat(gens,w);
+>      w:=__congruence_FactorizeMat( G16, g );
+>      h:=__congruence_CheckFactorizeMat(gens,w);
 >      if g<>h and g<>-h then  
 >        Print("Error:", g, " is not plus/minus ", h , "\n");
 >      fi;

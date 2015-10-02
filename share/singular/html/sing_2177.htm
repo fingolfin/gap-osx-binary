@@ -1,0 +1,183 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: createGradedRingHomomorphism</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: createGradedRingHomomorphism">
+<META NAME="keywords" CONTENT="Singular Manual: createGradedRingHomomorphism">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2252"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2176.htm#SEC2251"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: isGradedRingHomomorphism" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2178.htm#SEC2253"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setModuleGrading" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2163.htm#SEC2238"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: modular_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2217.htm#SEC2292"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: numerAlg_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2165.htm#SEC2240"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: multigrading_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.14.12 createGradedRingHomomorphism </H4>
+<!--docid::SEC2252::-->
+Procedure from library <CODE>multigrading.lib</CODE> (see  <A HREF="sing_2165.htm#SEC2240">multigrading_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>createGradedRingHomomorphism(R, f, A); ring R, ideal f, group homomorphism A
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>create a multigraded group ring homomorphism defined by
+a ring map from R to the current ring, given by generators images f
+and a group homomorphism A between grading groups
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>graded ring homorphism
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "multigrading.lib";
+ring r = 0, (x, y, z), dp;
+intmat S1[3][3] =
+1, 0, 0,
+0, 1, 0,
+0, 0, 1;
+intmat L1[3][1] =
+0,
+0,
+0;
+def G1 = createGroup(S1, L1); // (S1 + L1)/L1
+printGroup(G1);
+==> Generators: 
+==>      1     0     0
+==>      0     1     0
+==>      0     0     1
+==> Relations: 
+==>      0
+==>      0
+==>      0
+setBaseMultigrading(S1, L1); // to change...
+ring R = 0, (a, b, c), dp;
+intmat S2[2][3] =
+1, 0,
+0, 1;
+intmat L2[2][1] =
+0,
+2;
+def G2 = createGroup(S2, L2);
+printGroup(G2);
+==> Generators: 
+==>      1     0     0
+==>      1     0     0
+==> Relations: 
+==>      0
+==>      2
+setBaseMultigrading(S2, L2); // to change...
+map F = r, a, b, c;
+intmat A[nrows(L2)][nrows(L1)] =
+1, 0, 0,
+3, 2, -6;
+// graded ring homomorphism is given by (compatible):
+print(F);
+==> F[1]=a
+==> F[2]=b
+==> F[3]=c
+print(A);
+==>      1     0     0
+==>      3     2    -6
+isGradedRingHomomorphism(r, ideal(F), A);
+==> 1
+def h = createGradedRingHomomorphism(r, ideal(F), A);
+print(h);
+==> [1]:
+==>    //   characteristic : 0
+==> //   number of vars : 3
+==> //        block   1 : ordering dp
+==> //                  : names    x y z
+==> //        block   2 : ordering C
+==> [2]:
+==>    _[1]=a
+==>    _[2]=b
+==>    _[3]=c
+==> [3]:
+==>    1,0,0,
+==>    3,2,-6 
+</FONT></pre></td></tr></table><P>
+
+<A NAME="setModuleGrading"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2176.htm#SEC2251"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: isGradedRingHomomorphism" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2178.htm#SEC2253"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setModuleGrading" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2163.htm#SEC2238"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: modular_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2217.htm#SEC2292"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: numerAlg_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2165.htm#SEC2240"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: multigrading_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

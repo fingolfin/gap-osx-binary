@@ -1,0 +1,295 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Graded commutative algebras (SCA)</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Graded commutative algebras (SCA)">
+<META NAME="keywords" CONTENT="Singular Manual: Graded commutative algebras (SCA)">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC589"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_537.htm#SEC586"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: References (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_539.htm#SEC590"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: LETTERPLACE" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> 7.5 Graded commutative algebras (SCA) </H2>
+<!--docid::SEC589::-->
+<P>
+
+This section describes basic mathematical notions, definition, and a little bit the implementation of
+the experimental non-commutative kernel extension S<SMALL>CA</SMALL> of S<SMALL>INGULAR</SMALL>
+which improves performance of many algorithms in graded commutative algebras.
+</P><P>
+
+In order to improve performance of S<SMALL>INGULAR</SMALL> in specific non-commutative algebras
+one can extend the internal implementation for them in a virtual-method-overloading-like manner.
+At the moment graded commutative algebras (SCA) and in particular exterior algebras are implemented this way.
+</P><P>
+
+Note that grade commutative algebras require no special user actions apart from
+defining an appropriate non-commutative GR-algebra in S<SMALL>INGULAR</SMALL>.
+Upon doing that, the supper-commutative structure will be automatically detected and
+special multiplication will be used.
+Moreover, in most SCA-aware (e.g. <CODE>std</CODE>) algorithms special internal improvements will be used
+(otherwise standard generic non-commutative implementations will be used).
+</P><P>
+
+All considered algebras are assumed to be associative 
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_48.png"
+ ALT="$K$">-algebras for some ground field 
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_48.png"
+ ALT="$K$">.
+</P><P>
+
+<UL>
+<LI>Definition
+<P>
+
+Polynomial graded commutative algebras are factors of tensor products of commutative algebras
+with an exterior algebra over a ground field 
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_48.png"
+ ALT="$K$">.
+</P><P>
+
+These algebras can be naturally endowed with a 
+<IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_291.png"
+ ALT="$Z_2$">-grading, where anti-commutative algebra generators
+have degree 
+<IMG
+ WIDTH="12" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_290.png"
+ ALT="$1$"> and commutative algebra generators (and naturally scalars) have degree 
+<IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_2.png"
+ ALT="$0$">.
+In this particular case they may be considered as super-commutative algebras.
+</P><P>
+
+<LI>GR-algebra representation
+<P>
+
+A graded commutative algebra with 
+<IMG
+ WIDTH="14" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_17.png"
+ ALT="$n$"> commutative and 
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_292.png"
+ ALT="$m$"> anti-commutative algebra generators can be represented
+as factors of the following GR-algebra by some two-sided ideal:
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+K\left\langle x_1, \ldots, x_n; y_1, \ldots, y_m \mid y_j * y_i = - y_i y_j, j > i \right\rangle / \left\langle y_1^2, \ldots, y_m^2  \right\rangle.
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="440" HEIGHT="30" BORDER="0"
+ SRC="sing_293.png"
+ ALT="\begin{displaymath}K\left\langle x_1, \ldots, x_n; y_1, \ldots, y_m \mid y_j * y...
+...right\rangle / \left\langle y_1^2, \ldots, y_m^2 \right\rangle.\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P></P><P>
+
+<LI>Distinctive features
+<P>
+
+Graded commutative algebras have zero divisors iff 
+<IMG
+ WIDTH="48" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_294.png"
+ ALT="$m &gt; 0$">: 
+<IMG
+ WIDTH="75" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_295.png"
+ ALT="$y_i * y_i = 0$">.
+</P><P>
+
+Unlike other non-commutative algebras one may use any monomial ordering
+where only the non-commutative variables are required to be global.
+In particular, commutative variables are allowed to be local.
+This means that one can work in tensor products of any commutative ring with an exterior algebra.
+</P><P>
+
+<LI>Example of defining graded commutative algebras in S<SMALL>INGULAR</SMALL>
+<P>
+
+Given a commutative polynomial ring 
+<IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_296.png"
+ ALT="$r$">, super-commutative structure on it can be introduced as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "nctools.lib";
+ring r = 0,(a, b, x,y,z, Q, W),(lp(2), dp(3), Dp(2));
+// Let us make variables x = var(3), ..., z = var(5) to be anti-commutative
+// and add additionally a quotient ideal:
+def S = superCommutative(3, 5, ideal(a*W + b*Q*x + z) ); setring S; S;
+==> //   characteristic : 0
+==> //   number of vars : 7
+==> //        block   1 : ordering lp
+==> //                  : names    a b
+==> //        block   2 : ordering dp
+==> //                  : names    x y z
+==> //        block   3 : ordering Dp
+==> //                  : names    Q W
+==> //        block   4 : ordering C
+==> //   noncommutative relations:
+==> //    yx=-xy
+==> //    zx=-xz
+==> //    zy=-yz
+==> // quotient ring from ideal
+==> _[1]=xz
+==> _[2]=bxyQ-yz
+==> _[3]=aW+bxQ+z
+==> _[4]=z2
+==> _[5]=y2
+==> _[6]=x2
+ideal I = a*x*y + z*Q + b, y*Q + a; I;
+==> I[1]=axy+b+zQ
+==> I[2]=a+yQ
+std(I); // Groebner basis is used here since &gt; is global
+==> _[1]=yQW-z
+==> _[2]=yz
+==> _[3]=b+zQ
+==> _[4]=a+yQ
+kill r;
+// Let's do the same but this time with some local commutative variables:
+ring r = 0,(a, b, x,y,z, Q, W),(dp(1), ds(1), lp(3), ds(2));
+def S = superCommutative(3, 5, ideal(a*W + b*Q*x + z) ); setring S; S;
+==> // ** redefining S **
+==> //   characteristic : 0
+==> //   number of vars : 7
+==> //        block   1 : ordering lp
+==> //                  : names    a
+==> //        block   2 : ordering ds
+==> //                  : names    b
+==> //        block   3 : ordering lp
+==> //                  : names    x y z
+==> //        block   4 : ordering ds
+==> //                  : names    Q W
+==> //        block   5 : ordering C
+==> //   noncommutative relations:
+==> //    yx=-xy
+==> //    zx=-xz
+==> //    zy=-yz
+==> // quotient ring from ideal
+==> _[1]=xz
+==> _[2]=yz-bxyQ
+==> _[3]=aW+z+bxQ
+==> _[4]=x2
+==> _[5]=y2
+==> _[6]=z2
+ideal I = a*x*y + z*Q + b, y*Q + a; I;
+==> I[1]=axy+zQ+b
+==> I[2]=a+yQ
+std(I);
+==> _[1]=yQW-z-bxQ
+==> _[2]=zQ+b
+==> _[3]=bx
+==> _[4]=by
+==> _[5]=bz
+==> _[6]=b2
+==> _[7]=a+yQ
+</FONT></pre></td></tr></table></UL>
+<P>
+
+See example of <CODE>superCommutative</CODE> from the library <CODE>nctools.lib</CODE>.
+</P><P>
+
+Reference: Ph.D thesis by Oleksandr Motsak (2010).
+</P><P>
+
+<A NAME="LETTERPLACE"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_537.htm#SEC586"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: References (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_539.htm#SEC590"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: LETTERPLACE" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

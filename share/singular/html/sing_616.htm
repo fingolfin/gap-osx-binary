@@ -1,0 +1,154 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: DLoc0</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: DLoc0">
+<META NAME="keywords" CONTENT="Singular Manual: DLoc0">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC667"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_615.htm#SEC666"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: SDLoc" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_617.htm#SEC668"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: GBWeight" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.5.0. DLoc0 </H5>
+<!--docid::SEC667::-->
+Procedure from library <CODE>dmodapp.lib</CODE> (see  <A HREF="sing_611.htm#SEC662">dmodapp_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>DLoc0(I, f); I an ideal, f a poly
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring (a Weyl algebra) containing an ideal 'LD0' and a list 'BS'
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute the presentation of the localization of D/I w.r.t. f^s,
+<BR> where D is a Weyl Algebra, based on the output of procedure SDLoc
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>the basering is similar to the output ring of SDLoc procedure
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>activate the output ring with the <CODE>setring</CODE> command. In this ring,
+<BR> - the ideal LD0 (given as Groebner basis) is the presentation of the
+<BR> localization,
+<BR> - the list BS contains roots and multiplicities of Bernstein
+<BR> polynomial of (D/I)_f.
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If printlevel =1, progress debug messages will be printed,
+<BR> if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodapp.lib";
+ring r = 0,(x,y,Dx,Dy),dp;
+def R = Weyl();    setring R; // Weyl algebra in variables x,y,Dx,Dy
+poly F = x2-y3;
+ideal I = (y^3 - x^2)*Dx - 2*x, (y^3 - x^2)*Dy + 3*y^2; // I = Dx*F, Dy*F;
+// moreover I is not holonomic, since its dimension is not 2 = 4/2
+gkdim(I); // 3
+==> 3
+def W = SDLoc(I,F);  setring W; // creates ideal LD in W = R[s]
+def U = DLoc0(LD, x2-y3);  setring U; // compute in R
+LD0; // Groebner basis of the presentation of localization
+==> LD0[1]=3*x*Dx+2*y*Dy+12
+==> LD0[2]=3*y^2*Dx+2*x*Dy
+==> LD0[3]=y^3*Dy-x^2*Dy+6*y^2
+BS; // description of b-function for localization
+==> [1]:
+==>    _[1]=0
+==>    _[2]=-1/6
+==>    _[3]=1/6
+==> [2]:
+==>    1,1,1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="GBWeight"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_615.htm#SEC666"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: SDLoc" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_617.htm#SEC668"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: GBWeight" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

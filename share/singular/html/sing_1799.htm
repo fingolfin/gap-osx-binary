@@ -1,0 +1,144 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: controlExample</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: controlExample">
+<META NAME="keywords" CONTENT="Singular Manual: controlExample">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1874"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1798.htm#SEC1873"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findTorsion" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1800.htm#SEC1875"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: view" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1784.htm#SEC1859"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Control theory background" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: control_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.2.14 controlExample </H4>
+<!--docid::SEC1874::-->
+Procedure from library <CODE>control.lib</CODE> (see  <A HREF="sing_1785.htm#SEC1860">control_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>controlExample(s); s a string
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>set up an example from the mini database by initalizing a ring and a module in a ring
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>in order to see the list of available examples, execute <CODE>controlExample("show");</CODE>
+<BR> To use an example, one has to do the following. Suppose one calls the ring, where the example will be activated, A. Then, by executing
+<BR> <CODE>def A = controlExample("Antenna");</CODE> and <CODE>setring A;</CODE>,
+<BR> A will become a basering from the example "Antenna" with
+the predefined system module R (transposed).
+After that one can just execute <CODE>control(R);</CODE> respectively
+<CODE>autonom(R);</CODE> to perform the control resp. autonomy analysis of R.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "control.lib";
+controlExample("show");   // let us see all available examples:
+==> The list of examples:
+==> name: Cauchy1,  desc: 1-dimensional Cauchy equation
+==> name: Cauchy2,  desc: 2-dimensional Cauchy equation
+==> name: Control1,  desc: example of a simple noncontrollable system
+==> name: Control2,  desc: example of a simple controllable system
+==> name: Antenna,  desc: antenna
+==> name: Einstein,  desc: Einstein equations in vacuum
+==> name: FlexibleRod,  desc: flexible rod
+==> name: TwoPendula,  desc: two pendula mounted on a cart
+==> name: WindTunnel,  desc: wind tunnel
+==> name: Zerz1,  desc: example from the lecture of Eva Zerz
+def B = controlExample("TwoPendula"); // let us set up a particular example
+setring B;
+print(R);
+==> (m1*L1)*Dt^2,             (m2*L2)*Dt^2,             -1,(m1+m2+M)*Dt^2,
+==> (m1*L1^2)*Dt^2+(-m1*g*L1),0,                        0, (m1*L1)*Dt^2,  
+==> 0,                        (m2*L2^2)*Dt^2+(-m2*g*L2),0, (m2*L2)*Dt^2   
+</FONT></pre></td></tr></table><P>
+
+<A NAME="view"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1798.htm#SEC1873"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findTorsion" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1800.htm#SEC1875"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: view" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1784.htm#SEC1859"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Control theory background" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: control_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

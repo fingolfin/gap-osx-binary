@@ -1,0 +1,163 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: pushForward</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: pushForward">
+<META NAME="keywords" CONTENT="Singular Manual: pushForward">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2286"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2210.htm#SEC2285"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: defineHomogeneous" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2212.htm#SEC2287"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: gradiator" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2163.htm#SEC2238"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: modular_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2217.htm#SEC2292"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: numerAlg_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2165.htm#SEC2240"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: multigrading_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.14.46 pushForward </H4>
+<!--docid::SEC2286::-->
+Procedure from library <CODE>multigrading.lib</CODE> (see  <A HREF="sing_2165.htm#SEC2240">multigrading_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>pushForward(f);
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Computes the finest grading of the image ring which makes the map f
+a map of graded rings. The group map between the two grading groups is given
+by transpose( (Id, 0) ). Pay attention that the group spanned by the columns of
+the grading group matrix may not be a subgroup of the grading group. Still all columns
+are needed to find the correct image of the preimage gradings.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "multigrading.lib";
+ring r = 0,(x,y,z),dp;
+// Setting degrees for preimage ring.;
+intmat grad[3][3] =
+1,0,0,
+0,1,0,
+0,0,1;
+setBaseMultigrading(grad);
+// grading on r:
+getVariableWeights();
+==> 1,0,0,
+==> 0,1,0,
+==> 0,0,1 
+getLattice();
+==> 0,0,0
+// only for the purpose of this example
+if( voice &gt; 1 ){ /*keepring(r);*/ export(r); }
+ring R = 0,(a,b),dp;
+ideal i = a2-b2+a6-b5+ab3,a7b+b15-ab6+a6b6;
+// The quotient ring by this ideal will become our image ring.;
+qring Q = std(i);
+listvar();
+==> // Q                              [0]  *ring
+==> // R                              [0]  ring
+==> // grad                           [0]  intmat 3 x 3
+==> // r                              [0]  ring
+map f = r,-a2b6+b5+a3b+a2+ab,-a2b7-3a2b5+b4+a,a6-b6-b3+a2; f;
+==> f[1]=-a2b6+b5+a3b+a2+ab
+==> f[2]=-a2b7-3a2b5+b4+a
+==> f[3]=a6-b6-b3+a2
+// TODO: Unfortunately this is not a very spectacular example...:
+// Pushing forward f:
+pushForward(f);
+// due to pushForward we have got new grading on Q
+getVariableWeights();
+==> 0,0,
+==> 0,0,
+==> 0,0,
+==> 1,0,
+==> 0,1 
+getLattice();
+==> 1,0,0,0,0,
+==> 0,1,0,0,0,
+==> 0,0,1,0,0,
+==> 1,1,1,1,0,
+==> 1,1,1,1,1 
+// only for the purpose of this example
+if( voice &gt; 1 ){ kill r; }
+</FONT></pre></td></tr></table><P>
+
+<A NAME="gradiator"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2210.htm#SEC2285"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: defineHomogeneous" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2212.htm#SEC2287"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: gradiator" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2163.htm#SEC2238"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: modular_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2217.htm#SEC2292"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: numerAlg_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2165.htm#SEC2240"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: multigrading_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

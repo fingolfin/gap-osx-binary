@@ -1,0 +1,163 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: regularity</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: regularity">
+<META NAME="keywords" CONTENT="Singular Manual: regularity">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC423"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_383.htm#SEC422"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reduce" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_385.htm#SEC424"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: repart" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.125 regularity </H3>
+<!--docid::SEC423::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>regularity (</CODE> list_expression <CODE>)</CODE>
+<BR><CODE>regularity (</CODE> resolution_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>int
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>computes the regularity of a homogeneous ideal, resp. module, from a
+minimal resolution given by the argument.
+<BR>
+
+Let <!-- MATH
+ $0 \rightarrow\ \bigoplus_a K[x]e_{a,n}\ \rightarrow\ \dots
+  \rightarrow\ \bigoplus_a K[x]e_{a,0}\ \rightarrow\
+  I\ \rightarrow\ 0$
+ -->
+<IMG
+ WIDTH="387" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_175.png"
+ ALT="$0 \rightarrow\ \bigoplus_a K[x]e_{a,n}\ \rightarrow\ \dots
+\rightarrow\ \bigoplus_a K[x]e_{a,0}\ \rightarrow\
+I\ \rightarrow\ 0$">
+be a minimal resolution of I considered with homogeneous maps of degree 0.
+The regularity is the smallest number <IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_176.png"
+ ALT="$s$"> with the property deg(<!-- MATH
+ $e_{a,i})
+ \leq s+i$
+ -->
+<IMG
+ WIDTH="88" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_177.png"
+ ALT="$e_{a,i})
+\leq s+i$"> for all <IMG
+ WIDTH="10" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_55.png"
+ ALT="$i$">.<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>If applied to a non minimal resolution only an upper bound is returned.
+<BR>If the input to the commands <CODE>res</CODE> and <CODE>mres</CODE> is homogeneous
+the regularity is computed and used as a degree bound during
+the computation unless <CODE>option(notRegularity);</CODE> is given.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring rh3=32003,(w,x,y,z),(dp,C);
+  poly f=x11+y10+z9+x5y2+x2y2z3+xy3*(y2+x)^2;
+  ideal j=homog(jacob(f),w);
+  def jr=res(j,0);
+  regularity(jr);
+==> 25
+  // example for upper bound behaviour:
+  list jj=jr;
+  regularity(jj);
+==> 25
+  jj=nres(j,0);
+  regularity(jj);
+==> 27
+  jj=minres(jj);
+  regularity(jj);
+==> 25
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_118.htm#SEC157">list</A>;
+ <A HREF="sing_347.htm#SEC386">minres</A>;
+ <A HREF="sing_352.htm#SEC391">mres</A>;
+ <A HREF="sing_364.htm#SEC403">option</A>;
+ <A HREF="sing_386.htm#SEC425">res</A>;
+ <A HREF="sing_156.htm#SEC195">resolution</A>;
+ <A HREF="sing_400.htm#SEC439">sres</A>.
+<A NAME="repart"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_383.htm#SEC422"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reduce" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_385.htm#SEC424"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: repart" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

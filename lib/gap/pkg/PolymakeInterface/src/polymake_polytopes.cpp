@@ -87,10 +87,9 @@ Obj REAL_VERTICES_OF_POLYTOPE( Polymake_Data* data, Obj polytope){
       pm::Matrix<pm::Rational> matr_temp = polyobj->give("VERTICES");
       matr = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   UInt l = 10;
   Obj RETLI = NEW_PLIST( T_PLIST , l );
   SET_LEN_PLIST(RETLI, l );
@@ -133,13 +132,12 @@ Obj REAL_LATTICE_POINTS_OF_POLYTOPE( Polymake_Data* data, Obj polytope){
   data->main_polymake_session->set_application_of(*polyobj);
   pm::Matrix<pm::Rational> matr;
   try{
-      pm::Matrix<pm::Rational> matr_temp = polyobj->give("LATTICE_POINTS");
-      matr = matr_temp;
+      pm::Array<pm::Matrix<pm::Rational> > matr_temp = polyobj->give("LATTICE_POINTS_GENERATORS");
+      matr = matr_temp[ 1 ];
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
@@ -242,10 +240,9 @@ Obj REAL_FACET_INEQUALITIES_OF_POLYTOPE( Polymake_Data* data, Obj polytope){
     pm::Matrix<pm::Rational> matr_temp = polyobj->give("FACETS");
     matr = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
@@ -281,10 +278,9 @@ Obj REAL_EQUALITIES_OF_POLYTOPE( Polymake_Data* data, Obj polytope){
     pm::Matrix<pm::Rational> matr_temp = polyobj->give("AFFINE_HULL");
     matr = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
@@ -320,10 +316,9 @@ Obj REAL_INTERIOR_LATTICE_POINTS( Polymake_Data* data, Obj polytope){
       pm::Matrix<pm::Rational> matr_temp = polyobj->give("INTERIOR_LATTICE_POINTS");
       matr = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
@@ -426,27 +421,20 @@ Obj REAL_HOMOGENEOUS_POINTS_OF_POLYTOPE( Polymake_Data* data, Obj polytope){
       pm::Matrix<pm::Rational> matr_temp = coneobj->give("VERTICES");
       matr = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
   Obj LIZeil;
-  pm::Integer nenner;
-  pm::Integer dentemp;
+  polymake::common::primitive( matr );
   UInt matr_cols = matr.cols();
   for(int i = 0;i<matr.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr.cols());
     SET_LEN_PLIST( LIZeil , matr_cols );
-    nenner = 1;
     for(int j = 0;j<matr.cols();j++){
-      CallPolymakeFunction("denominator",matr(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT((matr(i,j)*nenner).to_int()));
+      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT((matr(i,j)).to_int()));
     }
     SET_ELM_PLIST(RETLI,i+1,LIZeil);
     CHANGED_BAG(RETLI);
@@ -473,10 +461,9 @@ Obj REAL_TAIL_CONE_OF_POLYTOPE( Polymake_Data* data, Obj polytope){
       pm::Matrix<pm::Rational> matr_temp = polyobj->give("VERTICES");
       matr = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   UInt l = 10;
   Obj RETLI = NEW_PLIST( T_PLIST , l );
   SET_LEN_PLIST(RETLI, l );
@@ -521,10 +508,9 @@ Obj REAL_MINKOWSKI_SUM( Polymake_Data* data, Obj polytope1, Obj polytope2 ){
   try{
     CallPolymakeFunction("minkowski_sum",*poly1,*poly2) >> sum;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   perlobj* sumpointer = new perlobj(sum);
   Obj elem = NewPolymakeExternalObject(T_POLYMAKE_EXTERNAL_POLYTOPE);
   POLYMAKEOBJ_SET_PERLOBJ(elem, sumpointer);
@@ -557,10 +543,9 @@ Obj REAL_MINKOWSKI_SUM_WITH_COEFFICIENTS( Polymake_Data* data, Obj fact1, Obj po
   try{
       CallPolymakeFunction("minkowski_sum",INT_INTOBJ(fact1),*poly1,INT_INTOBJ(fact2),*poly2) >> sum;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   perlobj* sumpointer = new perlobj(sum);
   Obj elem = NewPolymakeExternalObject(T_POLYMAKE_EXTERNAL_POLYTOPE);
   POLYMAKEOBJ_SET_PERLOBJ(elem, sumpointer);
@@ -583,10 +568,16 @@ Obj REAL_LATTICE_POINTS_GENERATORS( Polymake_Data* data, Obj polytope ){
       pm::Array<pm::Matrix<pm::Rational> > matr_temp = polyobj->give("LATTICE_POINTS_GENERATORS");
       array = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
+  
+  POLYMAKE_GAP_CATCH
+  
+  pm::Matrix<pm::Rational> matr = array[ 0 ];
+  
+  for(int i=0;i<matr.rows();i++){
+    for(int j=0;j<matr.cols();j++){
+    }
   }
+  
   Obj RET_ARRAY = NEW_PLIST( T_PLIST, 3 );
   SET_LEN_PLIST( RET_ARRAY, (UInt)3 );
   for( int index_of_array=0;index_of_array<3;index_of_array++ ){
@@ -609,5 +600,34 @@ Obj REAL_LATTICE_POINTS_GENERATORS( Polymake_Data* data, Obj polytope ){
     CHANGED_BAG( RET_ARRAY );
   }
   return RET_ARRAY;
+  
+}
+
+
+Obj REAL_INTERSECTION_OF_POLYTOPES( Polymake_Data* data, Obj cone1, Obj cone2){
+
+#ifdef MORE_TESTS
+  if(! IS_POLYMAKE_POLYTOPE(cone1) || ! IS_POLYMAKE_POLYTOPE(cone2) ){
+    ErrorMayQuit(" parameter is not a cone.",0,0);
+    return NULL;
+  }
+#endif
+
+  perlobj* coneobj1 = PERLOBJ_POLYMAKEOBJ( cone1 );
+  perlobj* coneobj2 = PERLOBJ_POLYMAKEOBJ( cone2 );
+
+  data->main_polymake_session->set_application_of( *coneobj1 );
+
+  perlobj intersec;
+
+  CallPolymakeFunction( "intersection", *coneobj1, *coneobj2 ) >> intersec;
+
+  perlobj* returnobj = new perlobj(intersec);
+
+  Obj elem = NewPolymakeExternalObject(T_POLYMAKE_EXTERNAL_POLYTOPE);
+  
+  POLYMAKEOBJ_SET_PERLOBJ( elem, returnobj );
+  
+  return elem;
   
 }

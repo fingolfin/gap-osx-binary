@@ -1,0 +1,183 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: makeQsl3</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: makeQsl3">
+<META NAME="keywords" CONTENT="Singular Manual: makeQsl3">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC783"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_731.htm#SEC782"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: makeQsl2" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_733.htm#SEC784"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Qso3Casimir" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_708.htm#SEC759"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncalg_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.11.0. makeQsl3 </H5>
+<!--docid::SEC783::-->
+Procedure from library <CODE>ncalg.lib</CODE> (see  <A HREF="sing_708.htm#SEC759">ncalg_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>makeQsl3([n]), n an optional int
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>define the U_q(sl_3) as a factor-ring of a ring V_q(sl_3) modulo the ideal <CODE>Qideal</CODE>
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the output consists of a ring, presenting V_q(sl_3) together with the ideal called <CODE>Qideal</CODE> in this ring
+<BR> activate this ring with the <CODE>setring</CODE> command
+<BR> in order to create the U_q(sl_3) from the output, execute the command like <CODE>qring Usl3q = Qideal;</CODE>
+<BR> If n is specified, the quantum parameter q will be specialized at the n-th root of unity
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ncalg.lib";
+def B = makeQsl3(5);
+setring B;
+qring Usl3q = Qideal;
+Usl3q;
+==> //   characteristic : 0
+==> //   1 parameter    : q 
+==> //   minpoly        : (q^4+q^3+q^2+q+1)
+==> //   number of vars : 10
+==> //        block   1 : ordering wp
+==> //                  : names    f12 f13 f23 k1 k2 l1 l2 e12 e13 e23
+==> //                  : weights    2   3   2   1   1   1   1   2   3   2
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    f13f12=(q^3)*f12*f13
+==> //    f23f12=(q^2)*f12*f23+(-q)*f13
+==> //    k1f12=(q^3)*f12*k1
+==> //    k2f12=(q)*f12*k2
+==> //    l1f12=(q^2)*f12*l1
+==> //    l2f12=(-q^3-q^2-q-1)*f12*l2
+==> //    e12f12=f12*e12+(1/5*q^3-3/5*q^2-2/5*q-1/5)*k1^2+(-1/5*q^3+3/5*q^2+2\
+   /5*q+1/5)*l1^2
+==> //    e13f12=f12*e13+(q^3+q^2+q+1)*l1^2*e23
+==> //    f23f13=(q^3)*f13*f23
+==> //    k1f13=(-q^3-q^2-q-1)*f13*k1
+==> //    k2f13=(-q^3-q^2-q-1)*f13*k2
+==> //    l1f13=(q)*f13*l1
+==> //    l2f13=(q)*f13*l2
+==> //    e12f13=f13*e12+(q)*f23*k1^2
+==> //    e13f13=f13*e13+(-1/5*q^3+3/5*q^2+2/5*q+1/5)*k1^2*k2^2+(1/5*q^3-3/5*\
+   q^2-2/5*q-1/5)*l1^2*l2^2
+==> //    e23f13=f13*e23+(q^3+q^2+q+1)*f12*l2^2
+==> //    k1f23=(q)*f23*k1
+==> //    k2f23=(q^3)*f23*k2
+==> //    l1f23=(-q^3-q^2-q-1)*f23*l1
+==> //    l2f23=(q^2)*f23*l2
+==> //    e13f23=f23*e13+(q)*k2^2*e12
+==> //    e23f23=f23*e23+(1/5*q^3-3/5*q^2-2/5*q-1/5)*k2^2+(-1/5*q^3+3/5*q^2+2\
+   /5*q+1/5)*l2^2
+==> //    e12k1=(q^3)*k1*e12
+==> //    e13k1=(-q^3-q^2-q-1)*k1*e13
+==> //    e23k1=(q)*k1*e23
+==> //    e12k2=(q)*k2*e12
+==> //    e13k2=(-q^3-q^2-q-1)*k2*e13
+==> //    e23k2=(q^3)*k2*e23
+==> //    e12l1=(q^2)*l1*e12
+==> //    e13l1=(q)*l1*e13
+==> //    e23l1=(-q^3-q^2-q-1)*l1*e23
+==> //    e12l2=(-q^3-q^2-q-1)*l2*e12
+==> //    e13l2=(q)*l2*e13
+==> //    e23l2=(q^2)*l2*e23
+==> //    e13e12=(q^3)*e12*e13
+==> //    e23e12=(q^2)*e12*e23+(-q)*e13
+==> //    e23e13=(q^3)*e13*e23
+==> // quotient ring from ideal
+==> _[1]=k2*l2-1
+==> _[2]=k1*l1-1
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_731.htm#SEC782">makeQsl2</A>;
+ <A HREF="sing_730.htm#SEC781">makeQso3</A>;
+ <A HREF="sing_710.htm#SEC761">makeUsl</A>.
+<P>
+
+<A NAME="Qso3Casimir"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_731.htm#SEC782"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: makeQsl2" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_733.htm#SEC784"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Qso3Casimir" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_708.htm#SEC759"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncalg_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

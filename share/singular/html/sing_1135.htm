@@ -1,0 +1,143 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: elim1</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: elim1">
+<META NAME="keywords" CONTENT="Singular Manual: elim1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1210"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1134.htm#SEC1209"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: elim" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1136.htm#SEC1211"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: elim2" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1125.htm#SEC1200"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: cisimplicial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1131.htm#SEC1206"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: elim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.5.4 elim1 </H4>
+<!--docid::SEC1210::-->
+Procedure from library <CODE>elim.lib</CODE> (see  <A HREF="sing_1131.htm#SEC1206">elim_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>elim1(id,arg); id ideal/module, arg can be either an intvec v or a
+product p of variables (type poly)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal/module obtained from id by eliminating either the variables
+with indices appearing in v or the variables appearing in p
+<P>
+
+<DT><STRONG>Method:</STRONG>
+<DD>elim1 calls eliminate but in a ring with ordering dp (resp. ls)
+if the first var not to be eliminated belongs to a -p (resp. -s)
+ordering.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>no special monomial ordering is required.
+<BR>This proc uses 'execute' or calls a procedure using 'execute'.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "elim.lib";
+ring r=0,(x,y,t,s,z),dp;
+ideal i=x-t,y-t2,z-t3,s-x+y3;
+elim1(i,ts);
+==> _[1]=y2-xz
+==> _[2]=xy-z
+==> _[3]=x2-y
+module m=i*gen(1)+i*gen(2);
+m=elim1(m,3..4); show(m);
+==> // module, 6 generator(s)
+==> [y2-xz]
+==> [0,y2-xz]
+==> [xy-z]
+==> [0,xy-z]
+==> [x2-y]
+==> [0,x2-y]
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1134.htm#SEC1209">elim</A>;
+ <A HREF="sing_285.htm#SEC324">eliminate</A>.
+<P>
+
+<A NAME="elim2"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1134.htm#SEC1209"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: elim" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1136.htm#SEC1211"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: elim2" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1125.htm#SEC1200"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: cisimplicial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1131.htm#SEC1206"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: elim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

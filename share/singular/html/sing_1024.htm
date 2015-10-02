@@ -1,0 +1,191 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: extendring</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: extendring">
+<META NAME="keywords" CONTENT="Singular Manual: extendring">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1099"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1023.htm#SEC1098"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: defringp" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1025.htm#SEC1100"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: fetchall" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1004.htm#SEC1079"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: random_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Linear algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1017.htm#SEC1092"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ring_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.8.7 extendring </H4>
+<!--docid::SEC1099::-->
+Procedure from library <CODE>ring.lib</CODE> (see  <A HREF="sing_1017.htm#SEC1092">ring_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>extendring(n,va,o[,iv,i,r]); va,o=strings, n,i=integers, r=ring,
+iv=intvec of positive integers or iv=0
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring R, which extends the ring r by adding n new variables in front
+of (resp. after, if i!=0) the old variables.
+<BR>[default: (i,r)=(0,basering)].
+<BR> -- The characteristic is the characteristic of r.
+<BR> -- The new vars are derived from va. If va is a single letter, say
+va="T", and if n&lt;=26 then T and the following n-1 letters from
+T..Z..T (resp. T(1..n) if n&gt;26) are taken as additional variables.
+If va is a single letter followed by a bracket, say va="x(",
+the new variables are x(1),...,x(n).
+<BR> -- The ordering is the product ordering of the ordering of r and of an
+ordering derived from `o` [and iv].
+<BR> - If o contains a 'c' or a 'C' in front resp. at the end, this is
+taken for the whole ordering in front, resp. at the end. If o does
+not contain a 'c' or a 'C' the same rule applies to ordstr(r).
+<BR> - If no intvec iv is given, or if iv=0, o may be any allowed ordstr,
+like "ds" or "dp(2),wp(1,2,3),Ds(2)" or "ds(a),dp(b),ls" if
+a and b are globally (!) defined integers and if a+b+1&lt;=n.
+If, however, a and b are local to a proc calling extendring, the
+intvec iv must be used to let extendring know the values of a and b
+<BR> - If a non-zero intvec iv is given, iv[1],iv[2],... are taken for the
+1st, 2nd,... block of o, if o contains no substring "w" or "W"
+i.e. no weighted ordering (in the above case o="ds,dp,ls"
+and iv=a,b).
+<BR>If o contains a weighted ordering (only one (!) weighted block is
+allowed) iv[1] is taken as size for the weight-vector, the next
+iv[1] values of iv are taken as weights and the remaining values of
+iv as block size for the remaining non-weighted blocks.
+e.g. o="dp,ws,Dp,ds", iv=3,2,3,4,2,5 creates the ordering
+dp(2),ws(2,3,4),Dp(5),ds
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>This proc is useful for adding deformation parameters.
+<BR>This proc uses 'execute' or calls a procedure using 'execute'.
+If you use it in your own proc, it may be advisable to let the local
+names of your proc start with a @
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ring.lib";
+ring r=0,(x,y,z),ds;
+show(r);"";
+==> // ring: (0),(x,y,z),(ds(3),C);
+==> // minpoly = 0
+==> // objects belonging to this ring:
+==> 
+// blocksize is derived from no of vars:
+int t=5;
+def R1=extendring(t,"a","dp");         //t global: "dp" -> "dp(5)"
+show(R1); setring R1; "";
+==> // ring: (0),(a,b,c,d,e,x,y,z),(dp(5),ds(3),C);
+==> // minpoly = 0
+==> // objects belonging to this ring:
+==> 
+def R2=extendring(4,"T(","c,dp",1,r);    //"dp" -> "c,..,dp(4)"
+show(R2); setring R2; "";
+==> // ring: (0),(x,y,z,T(1),T(2),T(3),T(4)),(c,ds(3),dp(4));
+==> // minpoly = 0
+==> // objects belonging to this ring:
+==> 
+// no intvec given, blocksize given: given blocksize is used:
+def R3=extendring(4,"T(","dp(2)",0,r);   // "dp(2)" -> "dp(2)"
+show(R3); setring R3; "";
+==> // ring: (0),(T(1),T(2),T(3),T(4),x,y,z),(dp(2),ds(5),C);
+==> // minpoly = 0
+==> // objects belonging to this ring:
+==> 
+// intvec given: weights and blocksize is derived from given intvec
+// (no specification of a blocksize in the given ordstr is allowed!)
+// if intvec does not cover all given blocks, the last block is used
+// for the remaining variables, if intvec has too many components,
+// the last ones are ignored
+intvec v=3,2,3,4,1,3;
+def R4=extendring(10,"A","ds,ws,Dp,dp",v,0,r);
+// v covers 3 blocks: v[1] (=3) : no of components of ws
+// next v[1] values (=v[2..4]) give weights
+// remaining components of v are used for the remaining blocks
+show(R4);
+==> // ring: (0),(A,B,C,D,E,F,G,H,I,J,x,y,z),(ds(1),ws(2,3,4),Dp(3),dp(3),ds(\
+   3),C);
+==> // minpoly = 0
+==> // objects belonging to this ring:
+kill r,R1,R2,R3,R4;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="fetchall"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1023.htm#SEC1098"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: defringp" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1025.htm#SEC1100"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: fetchall" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1004.htm#SEC1079"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: random_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Linear algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1017.htm#SEC1092"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ring_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,134 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: waitall</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: waitall">
+<META NAME="keywords" CONTENT="Singular Manual: waitall">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC458"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_418.htm#SEC457"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: vdim" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_420.htm#SEC459"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: waitfirst" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.160 waitall </H3>
+<!--docid::SEC458::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>waitall (</CODE> list_expression <CODE>)</CODE>
+<BR><CODE>waitall (</CODE> list_expression <CODE>, </CODE> int_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>int
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>Expects a list of open links (of mode ssi:fork, ssi:tcp)
+and waits until all of them are finished, i.e., are ready to be read.
+<BR>In the first case, the command waits for all links to finish
+(or to crash, see below) and may therefore run forever.
+<BR>In the second case, a timeout in milliseconds can be provided, forcing
+the command to terminate after the specified time.
+If the given timeout is 0, the command checks whether all links are
+finished or not, but does not wait for any link (polling).
+<BR>Return values are:
+<BR>-1: The read state of all links is <CODE>"eof"</CODE>, see  <A HREF="sing_108.htm#SEC147">link</A>,  <A HREF="sing_401.htm#SEC440">status</A>.
+This might happen if all the links crashed.
+<BR>0: timeout (or polling): None of the links is ready.
+<BR>1: All links are ready. (Note: There might be links whose read state
+is <CODE>"eof"</CODE>, but at least one link is ready.)
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  link l1 = "ssi:fork"; open(l1);
+  link l2 = "ssi:fork"; open(l2);
+  link l3 = "ssi:fork"; open(l3);
+  list l = list(l1,l2,l3);
+  write(l1, quote(system("sh", "sleep 15")));
+  write(l2, quote(system("sh", "sleep 10")));
+  write(l3, quote(system("sh", "sleep 11")));
+  waitall(l, 5000); // terminates after 5sec with result 0
+==> 0
+  waitall(l);       // terminates after 10 more sec
+==> 1
+  close(l1);
+  close(l2);
+  close(l3);
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_420.htm#SEC459">waitfirst</A>.
+<A NAME="waitfirst"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_418.htm#SEC457"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: vdim" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_420.htm#SEC459"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: waitfirst" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

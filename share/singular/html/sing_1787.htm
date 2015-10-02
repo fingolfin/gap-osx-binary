@@ -1,0 +1,154 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: controlDim</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: controlDim">
+<META NAME="keywords" CONTENT="Singular Manual: controlDim">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1862"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1786.htm#SEC1861"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: control" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1788.htm#SEC1863"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: autonom" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1784.htm#SEC1859"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Control theory background" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: control_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.2.2 controlDim </H4>
+<!--docid::SEC1862::-->
+Procedure from library <CODE>control.lib</CODE> (see  <A HREF="sing_1785.htm#SEC1860">control_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>controlDim(R); R a module (R is the matrix of the system of equations to be investigated)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes list of all the properties concerning controllability of the system (behavior), represented by the matrix R
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the properties and corresponding data like controllability, flatness, dimension of the system, degree of controllability, kernel and image representations, genericity of parameters, obstructions to controllability, annihilator of torsion submodule and left inverse are investigated.
+<BR> This procedure is analogous to 'control' but uses dimension calculations.
+<BR> The implemented approach works for full row rank matrices only (the check is done automatically).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "control.lib";
+//a WindTunnel example
+ring A = (0,a, omega, zeta, k),(D1, delta),dp;
+module R;
+R = [D1+a, -k*a*delta, 0, 0],
+[0, D1, -1, 0],
+[0, omega^2, D1+2*zeta*omega, -omega^2];
+R=transpose(R);
+view(R);
+==> D1+(a),(-a*k)*delta,0                ,0         ,
+==> 0     ,D1          ,-1               ,0         ,
+==> 0     ,(omega^2)   ,D1+(2*omega*zeta),(-omega^2)
+view(controlDim(R));
+==> number of first nonzero Ext:
+==> 
+==> 2
+==> 
+==> controllable, not reflexive, image representation:
+==> 
+==> (a*omega^2*k)*delta                                               ,
+==> (omega^2)*D1+(a*omega^2)                                          ,
+==> (omega^2)*D1^2+(a*omega^2)*D1                                     ,
+==> D1^3+(a+2*omega*zeta)*D1^2+(2*a*omega*zeta+omega^2)*D1+(a*omega^2)
+==> 
+==> dimension of the system:
+==> 
+==> 2
+==> 
+==> Parameter constellations which might lead to a non-controllable system:
+==> 
+==> a,k,omega
+==> 
+==> 
+</FONT></pre></td></tr></table><P>
+
+<A NAME="autonom"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1786.htm#SEC1861"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: control" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1788.htm#SEC1863"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: autonom" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1784.htm#SEC1859"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Control theory background" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: control_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -12,7 +12,8 @@
 ##
 ## Constructors of congruence subgroups
 
-InstallGlobalFunction( PrincipalCongruenceSubgroup,
+InstallMethod( PrincipalCongruenceSubgroup, "for positive integer",
+    [ IsPosInt ],
     function(n)
     local type, G;
     type := NewType( FamilyObj([[[1,0],[0,1]]]),
@@ -37,7 +38,8 @@ InstallGlobalFunction( PrincipalCongruenceSubgroup,
 	end);
 
 
-InstallGlobalFunction( CongruenceSubgroupGamma0,
+InstallMethod( CongruenceSubgroupGamma0, "for positive integer",
+    [ IsPosInt ],
     function(n)
     local type, G;
     type := NewType( FamilyObj([[[1,0],[0,1]]]),
@@ -61,8 +63,8 @@ InstallGlobalFunction( CongruenceSubgroupGamma0,
     return G;
 	end);
 	
-
-InstallGlobalFunction( CongruenceSubgroupGammaUpper0,
+InstallMethod( CongruenceSubgroupGammaUpper0, "for positive integer",
+    [ IsPosInt ],
     function(n)
     local type, G;
     type := NewType( FamilyObj([[[1,0],[0,1]]]),
@@ -86,8 +88,9 @@ InstallGlobalFunction( CongruenceSubgroupGammaUpper0,
     return G;
 	end);	
 	
-	
-InstallGlobalFunction( CongruenceSubgroupGamma1,
+
+InstallMethod( CongruenceSubgroupGamma1, "for positive integer",
+    [ IsPosInt ],
     function(n)
     local type, G;
     type := NewType( FamilyObj([[[1,0],[0,1]]]),
@@ -111,8 +114,9 @@ InstallGlobalFunction( CongruenceSubgroupGamma1,
     return G;
 	end);
 	
-	
-InstallGlobalFunction( CongruenceSubgroupGammaUpper1,
+
+InstallMethod( CongruenceSubgroupGammaUpper1, "for positive integer",
+    [ IsPosInt ],
     function(n)
     local type, G;
     type := NewType( FamilyObj([[[1,0],[0,1]]]),
@@ -137,7 +141,8 @@ InstallGlobalFunction( CongruenceSubgroupGammaUpper1,
 	end);
 	
 
-InstallGlobalFunction( CongruenceSubgroupGammaMN,
+InstallMethod( CongruenceSubgroupGammaMN, "for two positive integers",
+    [ IsPosInt, IsPosInt ],
     function(m,n)
     local type, G;
     type := NewType( FamilyObj([[[1,0],[0,1]]]),
@@ -262,6 +267,13 @@ InstallGlobalFunction( IntersectionOfCongruenceSubgroups,
     return G;
 	end);
 	
+InstallMethod( DefiningCongruenceSubgroups, "for congruence subgroups",
+    [ IsCongruenceSubgroup ],
+    function(G)
+    if not IsIntersectionOfCongruenceSubgroups(G) then
+      return [G];
+    fi;
+	end);
   		
 #############################################################################
 ##

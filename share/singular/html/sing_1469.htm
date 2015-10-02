@@ -1,0 +1,240 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: CurveRes</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: CurveRes">
+<META NAME="keywords" CONTENT="Singular Manual: CurveRes">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1544"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1468.htm#SEC1543"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: BlowingUp" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1470.htm#SEC1545"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: CurveParam" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1449.htm#SEC1524"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: classify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: deform_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1467.htm#SEC1542"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: curvepar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.4.2 CurveRes </H4>
+<!--docid::SEC1544::-->
+Procedure from library <CODE>curvepar.lib</CODE> (see  <A HREF="sing_1467.htm#SEC1542">curvepar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>CurveRes(I);
+<BR>I ideal
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is r=0,(x(1..n))
+<BR>V(I) is a curve with a singular point 0.
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>Resolution of the curve V(I).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a ring R=basering+k[a]
+<BR>Ring R contains a list Resolve
+<BR>Resolve is a list of charts
+<BR>Each Resolve[i] is a list of size 6
+<BR>Resolve[i][1] is an ideal J of a new curve. J=teta(I).
+Resolve[i][2] ideal which represents the map
+<BR>teta:k[x(1)..x(n),a]--&gt;k[x(1)..x(n),a] from the
+<BR>new curve to the old one.
+<BR>Resolve[i][3] is an irreducible poly g in k[a]. It is a minimal polynomial for the
+new parameter a. deg(g) gives the number of branches in Resolve[i]
+Resolve[i][4] sequence of multiplicities (sum over all branches in Resolve as long as
+they intersect each other !)
+<BR>Resolve[i][5] is a list of integers l. It shows, which standard charts we considered.
+Resolve[i][6] HN matrix
+<BR>Resolve[i][7] (only for plane curves) the development of exceptional divisors
+the entries correspond to the i-th blowing up. The first entry is an
+intvec. The first negative entry gives the splitting of the (over Q
+irreducible) branches. The second entry is a list of the exceptional
+divisors. If the entry is an integer i, it says that the divisor is not
+visible in this chart after the i-th blowing up.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "curvepar.lib";
+ring r=0,(x,y,z),dp;
+ideal i=x2-y3,z2-y5;
+def s=CurveRes(i);
+setring s;
+Resolve;
+==> [1]:
+==>    [1]:
+==>       _[1]=x(1)
+==>       _[2]=x(1)*x(2)-x(3)^2+2*x(3)
+==>    [2]:
+==>       _[1]=x(1)^2*x(2)^5+2*x(1)*x(2)^4+x(2)^3
+==>       _[2]=x(1)*x(2)^3+x(2)^2
+==>       _[3]=x(1)^2*x(2)^7*x(3)-x(1)^2*x(2)^7+2*x(1)*x(2)^6*x(3)-2*x(1)*x(2\
+   )^6+x(2)^5*x(3)-x(2)^5
+==>       _[4]=a
+==>    [3]:
+==>       a
+==>    [4]:
+==>       [1]:
+==>          4
+==>       [2]:
+==>          2
+==>       [3]:
+==>          2
+==>       [4]:
+==>          2
+==>    [5]:
+==>       [1]:
+==>          2
+==>       [2]:
+==>          1
+==>       [3]:
+==>          2
+==>       [4]:
+==>          2
+==>    [6]:
+==>       [1]:
+==>          _[1]=0
+==>          _[2]=1
+==>          _[3]=0
+==>       [2]:
+==>          _[1]=1
+==>          _[2]=0
+==>          _[3]=0
+==>       [3]:
+==>          _[1]=1
+==>          _[2]=1
+==>          _[3]=0
+==>       [4]:
+==>          _[1]=0
+==>          _[2]=1
+==>          _[3]=-1
+==> [2]:
+==>    [1]:
+==>       _[1]=x(1)
+==>       _[2]=x(1)*x(2)-x(3)^2-2*x(3)
+==>    [2]:
+==>       _[1]=x(1)^2*x(2)^5+2*x(1)*x(2)^4+x(2)^3
+==>       _[2]=x(1)*x(2)^3+x(2)^2
+==>       _[3]=x(1)^2*x(2)^7*x(3)+x(1)^2*x(2)^7+2*x(1)*x(2)^6*x(3)+2*x(1)*x(2\
+   )^6+x(2)^5*x(3)+x(2)^5
+==>       _[4]=a
+==>    [3]:
+==>       a
+==>    [4]:
+==>       [1]:
+==>          4
+==>       [2]:
+==>          2
+==>       [3]:
+==>          2
+==>       [4]:
+==>          2
+==>    [5]:
+==>       [1]:
+==>          2
+==>       [2]:
+==>          1
+==>       [3]:
+==>          2
+==>       [4]:
+==>          2
+==>    [6]:
+==>       [1]:
+==>          _[1]=0
+==>          _[2]=1
+==>          _[3]=0
+==>       [2]:
+==>          _[1]=1
+==>          _[2]=0
+==>          _[3]=0
+==>       [3]:
+==>          _[1]=1
+==>          _[2]=1
+==>          _[3]=0
+==>       [4]:
+==>          _[1]=0
+==>          _[2]=1
+==>          _[3]=1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="CurveParam"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1468.htm#SEC1543"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: BlowingUp" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1470.htm#SEC1545"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: CurveParam" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1449.htm#SEC1524"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: classify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: deform_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1467.htm#SEC1542"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: curvepar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,168 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: projectiveDimension</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: projectiveDimension">
+<META NAME="keywords" CONTENT="Singular Manual: projectiveDimension">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC845"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_793.htm#SEC844"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: purityfiltration_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_795.htm#SEC846"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: purityFiltration" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_787.htm#SEC838"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: qmatrix_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_805.htm#SEC856"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: nchomolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_793.htm#SEC844"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: purityfiltration_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.18.0. projectiveDimension </H5>
+<!--docid::SEC845::-->
+Procedure from library <CODE>purityfiltration.lib</CODE> (see  <A HREF="sing_793.htm#SEC844">purityfiltration_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>projectiveDimension(R,i,j), R matrix representing the Modul M=coker(R)
+<BR> int i, with i=0 or i=1, j a natural number
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list T, a projective resolution of M and its projective dimension
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>if i=0 (and by default), T[1] gives a shortest left resolution of M=D^p/D^q(R^t) and T[2] the left projective dimension of M
+<BR> if i=1, T[1] gives a shortest right resolution of M=D^p/RD^q and T[2] the right projective dimension of M
+<BR> in both cases T[1][j] is the (j-1)-th syzygy module of M
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The algorithm is due to A. Quadrat, D. Robertz, Computation of bases of free modules over the Weyl algebras, J.Symb.Comp. 42, 2007.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "purityfiltration.lib";
+// commutative example
+ring D = 0,(x,y,z),dp;
+matrix R[6][4]=
+0,-2*x,z-2*y-x,-1,
+0,z-2*x,2*y-3*x,1,
+z,-6*x,-2*y-5*x,-1,
+0,y-x,y-x,0,
+y,-x,-y-x,0,
+x,-x,-2*x,0;
+// compute a left resolution of M=D^4/D^6*R
+list T=projectiveDimension(transpose(R),0);
+// so we have the left projective dimension
+T[2];
+==> 3
+//we could also compute a right resolution of M=D^6/RD^4
+list T1=projectiveDimension(R,1);
+// and we have right projective dimension
+T1[2];
+==> 1
+// check, that a syzygy matrix of R has left inverse:
+print(leftInverse(syz(R)));
+==> 1,0,0,0
+// so lpd(M) must be 1.
+// Non-commutative example
+ring D1 = 0,(x1,x2,x3,d1,d2,d3),dp;
+def S=Weyl();  setring S;
+matrix R[3][3]=
+1/2*x2*d1, x2*d2+1, x2*d3+1/2*d1,
+-1/2*x2*d2-3/2,0,1/2*d2,
+-d1-1/2*x2*d3,-d2,-1/2*d3;
+list T=projectiveDimension(R,0);
+// left projective dimension of coker(R) is
+T[2];
+==> 1
+list T1=projectiveDimension(R,1);
+// both modules have the same projective dimension, but different resolutions, because D is non-commutative
+print(T[1][1]);
+==> 1/2*x2*d1,   -1/2*x2*d2-3/2,-1/2*x2*d3-d1,
+==> x2*d2+1,     0,             -d2,          
+==> x2*d3+1/2*d1,1/2*d2,        -1/2*d3       
+// not the same as
+print(transpose(T1[1][1]));
+==> 1/2*x2*d1,   -1/2*x2*d2-3/2,-1/2*x2*d3-d1,-1/2*x2,
+==> x2*d2+1,     0,             -d2,          0,      
+==> x2*d3+1/2*d1,1/2*d2,        -1/2*d3,      1/2     
+</FONT></pre></td></tr></table><P>
+
+<A NAME="purityFiltration"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_793.htm#SEC844"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: purityfiltration_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_795.htm#SEC846"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: purityFiltration" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_787.htm#SEC838"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: qmatrix_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_805.htm#SEC856"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: nchomolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_793.htm#SEC844"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: purityfiltration_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

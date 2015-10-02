@@ -1,0 +1,146 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: factmodd</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: factmodd">
+<META NAME="keywords" CONTENT="Singular Manual: factmodd">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC331"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_291.htm#SEC330"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: facstd" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_293.htm#SEC332"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: factorize" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.33 factmodd </H3>
+<!--docid::SEC331::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>factmodd (</CODE> poly_expression, int_expression
+<BR><CODE>[</CODE>, poly_expression, poly_expression <CODE>]</CODE>
+<BR><CODE>[</CODE>, int_expression, int_expression <CODE>]</CODE>
+<BR><CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>list of polys
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>Computes a factorization of a polynomial h(x, y) in K[[x]][y] up to a
+certain degree in x, whenever a factorization of h(0, y) is provided or can
+be computed.
+<BR>The algorithm is based on Hensel's lemma: Let h(x, y) denote a monic
+polynomial in y of degree m + n with coefficients in K[[x]]. Suppose there
+are two monic factors f_0(y) (of degree n) and g_0(y) of degree (m) such
+that
+<BR>h(0, y) = f_0(y) * g_0(y) and &lt;f_0, g_0&gt; = K[y].
+<BR>Fix an integer d &gt;= 0.
+Then there are monic polynomials in y with coefficients in K[[x]], namely
+f(x, y) of degree n and g(x, y) of degree m such that
+<BR>h(x, y) = f(x, y) * g(x, y) modulo &lt;x^(d+1)&gt; (*).
+<BR>The function's six arguments are h, d, f_0, g_0, xIndex, and yIndex, where
+xIndex and yIndex denote indices of ring variables that are to play the roles
+of x and y as above. h must be provided as an element of K[x,y] since all terms
+of h with x-degree larger than d can be ignored due to (*).
+<BR>If f_0 and g_0 are not given, the algorithm computes the factorization of
+h(0, y) and is expected to find exactly two distinct factors (which may appear
+with multiplicities larger than 1) and uses these as f_0 and g_0.
+<BR>If xIndex and yIndex are missing they will be expected to be 1 and 2,
+respectively.
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>The function expects the ground ring to contain at least two variables.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r = 0, (x,y), dp;
+  poly f0 = y240; poly g0 = y102+1;
+  poly h = y342+14x260+7x140y110+2x120y130+y240;
+  int d = 260;
+  list L = factmodd(h, d, f0, g0); L;
+==> [1]:
+==>    -14x260y204-4x240y224-14x260y102-7x140y212-2x120y232+14x260+7x140y110+\
+   2x120y130+y240
+==> [2]:
+==>    42x260y66+8x240y86+7x140y74+2x120y94+y102+1
+  // check result: next output should be zero
+  reduce(h - L[1] * L[2], std(x^(d+1)));
+==> 0
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_293.htm#SEC332">factorize</A>.
+<A NAME="factorize"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_291.htm#SEC330"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: facstd" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_293.htm#SEC332"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: factorize" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

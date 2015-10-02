@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: normaliz</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: normaliz">
+<META NAME="keywords" CONTENT="Singular Manual: normaliz">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1333"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1257.htm#SEC1332"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: showNmzOptions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1259.htm#SEC1334"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setNmzExecPath" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.18.15 normaliz </H4>
+<!--docid::SEC1333::-->
+Procedure from library <CODE>normaliz.lib</CODE> (see  <A HREF="sing_1243.htm#SEC1318">normaliz_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>normaliz(intmat sgr,int nmz_mode);
+<BR>normaliz(intmat sgr, int nmz_mode, intmat sgr2, int nmz_mode2, ...);
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>The function applies Normaliz to the parameter sgr in the mode set
+by nmz_mode. The function returns the intmat defined by the file
+with suffix gen.
+<P>
+
+It is also possible to give more than one pair of matrix and mode. In
+this case all matrices and modes are used. This can be used to
+combine modes 4,5,6.
+<BR>Use nmz_mode=20 to specify a grading.
+</P><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>You will find procedures for many applications of Normaliz in this
+library, so the explicit call of this procedure may not be necessary.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "normaliz.lib";
+ring R=0,(x,y,z),dp;
+intmat M[3][2]=3,1,
+3,2,
+1,3;
+normaliz(M,1);
+==> 1,1,
+==> 2,1,
+==> 1,2,
+==> 3,1,
+==> 1,3 
+intmat Hyperplanes[2][3] = 2,-1,0, // 2x-y &gt;= 0
+1, 1,0; //  x+y &gt;= 0
+intmat Equation[1][3] = 0,1,-1;    // y = z
+intmat Congruence[1][4] = 1,0,0,3;  // x = 0 (3)
+normaliz(Hyperplanes,4,Equation,5,Congruence,6);
+==> 3,-3,-3,
+==> 3,-2,-2,
+==> 3,-1,-1,
+==> 3,0,0,
+==> 3,1,1,
+==> 3,2,2,
+==> 3,3,3,
+==> 3,4,4,
+==> 3,5,5,
+==> 3,6,6 
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1251.htm#SEC1326">diagInvariants</A>;
+ <A HREF="sing_1247.htm#SEC1322">ehrhartRing</A>;
+ <A HREF="sing_1250.htm#SEC1325">finiteDiagInvariants</A>;
+ <A HREF="sing_1248.htm#SEC1323">intclMonIdeal</A>;
+ <A HREF="sing_1244.htm#SEC1319">intclToricRing</A>;
+ <A HREF="sing_1253.htm#SEC1328">intersectionValRingIdeals</A>;
+ <A HREF="sing_1252.htm#SEC1327">intersectionValRings</A>;
+ <A HREF="sing_1245.htm#SEC1320">normalToricRing</A>;
+ <A HREF="sing_1249.htm#SEC1324">torusInvariants</A>.
+<P>
+
+<A NAME="setNmzExecPath"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1257.htm#SEC1332"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: showNmzOptions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1259.htm#SEC1334"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setNmzExecPath" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

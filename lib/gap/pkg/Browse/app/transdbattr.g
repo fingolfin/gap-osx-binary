@@ -48,9 +48,9 @@
 ##  <P/>
 ##  The data in the file <F>app/transdbattr.g</F> are lists of Booleans,
 ##  which are encoded as strings via <C>HexStringBlistEncode</C>,
-##  and these strings are decoded with <C>BlistStringDecode</C>.
-##  Note that for most of the groups in the library are not abelian,
-##  not perfect, not simple, but solvable;
+##  and these strings can be decoded with <C>BlistStringDecode</C>.
+##  Note that most of the groups in the library are not abelian,
+##  not perfect, not simple, but solvable.
 ##  Therefore in fact the inverse values of the solvability info are
 ##  actually stored &ndash;this yields a shorter string.
 ##  <P/>
@@ -67,7 +67,8 @@
 ##  ]]></Example>
 ##  <P/>
 ##  Removing the <C>datafile</C> component from the four database attributes
-##  would yield the situation that attribute values are computed at runtime.
+##  would yield the situation that attribute values must be computed at
+##  runtime.
 ##  Computing the values for all groups in the library
 ##  &ndash;for example by categorizing the Browse table by one of the columns
 ##  that correspond to these database attributes&ndash;

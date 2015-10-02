@@ -26,12 +26,12 @@
 
 #include <bitset>
 #include <iostream>
-#include "libnormaliz.h"
 
 namespace libnormaliz {
 
 /* An enumeration of things, that can be computed for a cone.
  * The namespace prevents interfering with other names.
+ * Remember to change also the string conversion if you change this enum!
  */
 namespace ConeProperty {
     enum Enum {
@@ -43,7 +43,6 @@ namespace ConeProperty {
         TriangulationDetSum,
         Triangulation,
         Multiplicity,
-        Shift,
         RecessionRank,
         AffineDim,
         ModuleRank,
@@ -51,24 +50,27 @@ namespace ConeProperty {
         ModuleGenerators,
         Deg1Elements,
         HilbertSeries,
-        HilbertFunction,
         Grading,
         IsPointed,
-        IsDeg1Generated,
         IsDeg1ExtremeRays,
         IsDeg1HilbertBasis,
         IsIntegrallyClosed,
         OriginalMonoidGenerators,
-        GeneratorsOfToricRing,
-        ReesPrimary,
+        IsReesPrimary,
         ReesPrimaryMultiplicity,
         StanleyDec,
         ExcludedFaces,
         Dehomogenization,
         InclusionExclusionData,
-        DualMode,
-        ApproximateRatPolytope,
+        Sublattice,
+        ClassGroup,
+        ModuleGeneratorsOverOriginalMonoid,
+        // the following are more compute options than real properties of the cone
+        Approximate,
+        BottomDecomposition,
         DefaultMode,
+        DualMode,
+        KeepOrder,
         EnumSize // this has to be the last entry, to get the number of entries in the enum
     }; // remember to change also the string conversion function if you change this enum
 }
@@ -79,16 +81,20 @@ public:
     ConeProperties();
     ConeProperties(ConeProperty::Enum);
     ConeProperties(ConeProperty::Enum, ConeProperty::Enum);
+    ConeProperties(ConeProperty::Enum, ConeProperty::Enum, ConeProperty::Enum);
     ConeProperties(const std::bitset<ConeProperty::EnumSize>&);
 
     /* set properties */
     ConeProperties& set(ConeProperty::Enum, bool value=true);
+    ConeProperties& set(const std::string s, bool value=true);
     ConeProperties& set(ConeProperty::Enum, ConeProperty::Enum);
+    ConeProperties& set(ConeProperty::Enum, ConeProperty::Enum, ConeProperty::Enum);
     ConeProperties& set(const ConeProperties&);
 
     /* reset (=unset) properties */
     ConeProperties& reset(ConeProperty::Enum Property);
     ConeProperties& reset(const ConeProperties&);
+    ConeProperties& reset_compute_options();
 
     /* test which/how many properties are set */
     bool test(ConeProperty::Enum Property) const;
@@ -97,7 +103,7 @@ public:
     size_t count () const;
 
     /* the following methods are used internally */
-    void set_preconditions();    // activate properties which are needed implicitily
+    void set_preconditions();    // activate properties which are needed implicitly
     void prepare_compute_options();
     void check_sanity(bool inhomogeneous);
 
@@ -111,6 +117,7 @@ private:
 };
 
 // conversion to/from strings
+bool isConeProperty(ConeProperty::Enum& cp, const std::string& s);
 ConeProperty::Enum toConeProperty(const std::string&);
 const std::string& toString(ConeProperty::Enum);
 std::ostream& operator<<(std::ostream&, const ConeProperties&);

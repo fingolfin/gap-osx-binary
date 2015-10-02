@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-version="version homolog.lib 4.0.0.0 Jun_2013 "; // $Id: 490b227e6e34e14a582bda9263beced10be4c9d7 $
+version="version homolog.lib 4.0.0.0 Jun_2013 "; // $Id: fb8563dc8613f0e553126c18c0dca01d98ec833a $
 category="Commutative Algebra";
 info="
 LIBRARY:  homolog.lib   Procedures for Homological Algebra
@@ -533,8 +533,7 @@ EXAMPLE: example Ext_R; shows an example
   if( t1==1 )
   { // compute resolution via sres command
     if( attrib(M,"isSB")==0 ) {
-      if (size(M)==0) { attrib(M,"isSB")=1; }
-      else { M=std(M); }
+      M=std(M);
     }
     list resl = sres(M,max+1);
     if (withWeight) {
@@ -1583,7 +1582,7 @@ EXAMPLE: example flatLocus; shows an example
       w++;
       F=fitting(M,w);
    }
-   if(typeof(basering)=="qring")
+   if(size(ideal(basering))>0)
    {
       for(v=w+1;v<=nrows(M);v++)
       {

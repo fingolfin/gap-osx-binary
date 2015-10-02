@@ -1,0 +1,145 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Return type of procedures</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Return type of procedures">
+<META NAME="keywords" CONTENT="Singular Manual: Return type of procedures">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC503"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_463.htm#SEC502"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Behavior of continue" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_465.htm#SEC504"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: First index is 1" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_456.htm#SEC495"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: System dependent limitations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_466.htm#SEC505"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous oddities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_457.htm#SEC496"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Major differences to the C programming language" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 6.3.7 Return type of procedures </H3>
+<!--docid::SEC503::-->
+<P>
+
+Although the S<SMALL>INGULAR</SMALL> language is a strongly typed programming
+language, the type of the
+return value of a procedure does not need to be specified. As a
+consequence, the return type of a procedure may vary, i.e., may, for
+example, depend on the input. However, the return value
+of such a procedure may then only be assigned to a variable of type
+<CODE>def</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>proc type_return (int i)
+{
+  if (i &gt; 0) {return (i);}
+  else {return (list(i));}
+}
+def t1 = type_return(1);
+def t2 = type_return(-1);
+typeof(t1); typeof(t2);
+==> int
+==> list
+</FONT></pre></td></tr></table></P><P>
+
+Furthermore, it is mandatory to assign the return value of a procedure
+to a variable of type <CODE>def</CODE>, if a procedure changes the current
+ring using the <CODE>keepring</CODE> command (see  <A HREF="sing_436.htm#SEC475">keepring</A>) and returns a
+ring-dependent value (like a polynomial or module).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>proc def_return
+{
+  ring r=0,(x,y),dp;
+  poly p = x;
+  keepring r;
+  return (x);
+}
+def p = def_return();
+// poly p = def_return(); would be WRONG!!!
+typeof(p);
+==> poly
+</FONT></pre></td></tr></table></P><P>
+
+On the other hand, more than one value can be returned by a single
+<CODE>return</CODE> statement. For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>proc tworeturn () { return (1,2); }
+int i,j = tworeturn();
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="First index is 1"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_463.htm#SEC502"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Behavior of continue" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_465.htm#SEC504"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: First index is 1" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_456.htm#SEC495"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: System dependent limitations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_466.htm#SEC505"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous oddities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_457.htm#SEC496"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Major differences to the C programming language" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

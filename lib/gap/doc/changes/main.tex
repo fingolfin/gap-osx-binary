@@ -101,7 +101,7 @@
 
 \hypersetup{pdftitle=GAP - Changes from Earlier Versions}
 \markright{\scriptsize \mbox{}\hfill GAP - Changes from Earlier Versions \hfill\mbox{}}
-{\Huge Release 4.7.5, 24-May-2014\mbox{}}\\[1cm]
+{\Huge Release 4.7.8, 09-Jun-2015\mbox{}}\\[1cm]
 \mbox{}\\[2cm]
 {\Large \textbf{The GAP Group   \mbox{}}}\\
 \hypersetup{pdfauthor=The GAP Group   }
@@ -117,7 +117,7 @@
 {\small 
 \section*{Copyright}
 \logpage{[ 0, 0, 1 ]}
- Copyright {\copyright} (1987-2014) for the core part of the \textsf{GAP} system by the \textsf{GAP} Group. 
+ Copyright {\copyright} (1987-2015) for the core part of the \textsf{GAP} system by the \textsf{GAP} Group. 
 
  Most parts of this distribution, including the core part of the \textsf{GAP} system are distributed under the terms of the GNU General Public License, see \href{http://www.gnu.org/licenses/gpl.html} {\texttt{http://www.gnu.org/licenses/gpl.html}} or the file \texttt{GPL} in the \texttt{etc} directory of the \textsf{GAP} installation. 
 
@@ -154,7 +154,7 @@ documentation.
 \logpage{[ 2, 0, 0 ]}
 \hyperdef{L}{X871220D17E7EE651}{}
 {
-  This chapter contains an overview of most important changes introduced in \textsf{GAP} 4.7.2 release (the first public release of \textsf{GAP} 4.7).  
+  This chapter contains an overview of most important changes introduced in \textsf{GAP} 4.7.2 release (the first public release of \textsf{GAP} 4.7). It also contains information about subsequent update releases for \textsf{GAP} 4.7. 
 \section{\textcolor{Chapter }{\textsf{GAP} 4.7.2 (December 2013)}}\label{fix472}
 \logpage{[ 2, 1, 0 ]}
 \hyperdef{L}{X78594AB2871B379E}{}
@@ -433,6 +433,115 @@ deal with permutability in finite groups.
 \end{itemize}
  }
 
+ 
+\section{\textcolor{Chapter }{\textsf{GAP} 4.7.6 (November 2014)}}\label{fix476}
+\logpage{[ 2, 5, 0 ]}
+\hyperdef{L}{X79E45BD2790B76BB}{}
+{
+  Fixed bugs which could lead to incorrect results: 
+\begin{itemize}
+\item  A bug that may cause \texttt{ShortestVectors} (\textbf{Reference: ShortestVectors}) to return an incomplete list. [Reported by Florian Beye] 
+\item  A bug that may lead to incorrect results and infinite loops when \textsf{GAP} is compiled without GMP support using gcc 4.9. 
+\item  A bug that may cause \texttt{OrthogonalEmbeddings} (\textbf{Reference: OrthogonalEmbeddings}) to return an incomplete result. [Reported by Benjamin Sambale] 
+\end{itemize}
+ Fixed bugs that could lead to break loops: 
+\begin{itemize}
+\item  \texttt{ClosureGroup} (\textbf{Reference: ClosureGroup}) should be used instead of \texttt{ClosureSubgroup} (\textbf{Reference: ClosureSubgroup}) in case there is no parent group, otherwise some calculations such as e.g. \texttt{NormalSubgroups} (\textbf{Reference: NormalSubgroups}) may fail. [Reported by Dmitrii Pasechnik] 
+\item  Fixed a line in the code that used a hard-coded identity permutation, not a
+generic identity element of a group. [Reported by Toshio Sumi] 
+\item  Fixed a problem in the new code for calculating maximal subgroups that caused
+a break loop for some groups from the transitive groups library. [Reported by
+Petr Savicky] 
+\item  Fixed a problem in \texttt{ClosureSubgroup} (\textbf{Reference: ClosureSubgroup}) not accepting some groups without \texttt{Parent} (\textbf{Reference: Parent}). [Reported by Inneke van Gelder] 
+\end{itemize}
+ Other fixed bugs: 
+\begin{itemize}
+\item  Eliminated a number of compiler warnings detected with some newer versions of \textsf{C} compilers. 
+\item  Some minor bugs in the transformation and partial permutation code and
+documentation were resolved. 
+\end{itemize}
+ }
+
+ 
+\section{\textcolor{Chapter }{\textsf{GAP} 4.7.7 (February 2015)}}\label{fix477}
+\logpage{[ 2, 6, 0 ]}
+\hyperdef{L}{X86AF9F587D98F31F}{}
+{
+  New features: 
+\begin{itemize}
+\item  Introduced some arithmetic operations for infinity and negative infinity, see  \textbf{Reference: infinity}. 
+\item  Introduced new property \texttt{IsGeneratorsOfSemigroup} (\textbf{Reference: IsGeneratorsOfSemigroup}) which reflects wheter the list or collection generates a semigroup. 
+\end{itemize}
+ Fixed bugs which could lead to incorrect results: 
+\begin{itemize}
+\item  Fixed a bug in \texttt{Union} (\textbf{Reference: Union}) (actually, in the internal library function \texttt{JoinRanges}) caused by downward running ranges. [Reported by Matt Fayers] 
+\item  Fixed a bug where recursive records might be printed with the wrong component
+name, coming from component names being ordered differently in two different
+pieces of code. [Reported by Thomas Breuer] 
+\item  The usage of \texttt{abs} in \texttt{src/gmpints.c} was replaced by \texttt{AbsInt}. The former is defined to operate on 32-bit integers even if \textsf{GAP} is compiled in 64-bit mode. That lead to truncating \textsf{GAP} integers and caused a crash in \texttt{RemInt} (\textbf{Reference: RemInt}), reported by Willem De Graaf and Heiko Dietrich. Using \texttt{AbsInt} fixes the crash, and ensures the correct behaviour on 32-bit and 64-bit
+builds. 
+\end{itemize}
+ Fixed bugs that could lead to break loops: 
+\begin{itemize}
+\item  A problem with \texttt{ProbabilityShapes} (\textbf{Reference: ProbabilityShapes}) not setting frequencies list for small degrees. [Reported by Daniel
+B{\l}a{\.z}ewicz and independently by Mathieu Gagne] 
+\item  An error when generating a free monoid of rank infinity. [Reported by Nick
+Loughlin] 
+\item  Several bugs with the code for Rees matrix semigroups not handling trivial
+cases properly. 
+\item  A bug in \texttt{IsomorphismTypeInfoFiniteSimpleGroup} (\textbf{Reference: IsomorphismTypeInfoFiniteSimpleGroup}) affecting one particular group due to a misformatting in a routine that
+translates between the Chevalley type and the name used in the table (in this
+case, \texttt{"T"} was used instead of \texttt{["T"]}). [Reported by Petr Savicky] 
+\end{itemize}
+ Other fixed bugs: 
+\begin{itemize}
+\item  The \texttt{Basis} (\textbf{Reference: Basis}) method for full homomorphism spaces of linear mappings did not set basis
+vectors which could be obtained by \texttt{GeneratorsOfLeftModule} (\textbf{Reference: GeneratorsOfLeftModule}). 
+\item  A problem with \texttt{GaloisType} (\textbf{Reference: GaloisType}) entering an infinite loop in the routine for approximating a root. [Reported
+by Daniel B{\l}a{\.z}ewicz] 
+\item  Fixed the crash when \textsf{GAP} is called when the environment variables \texttt{HOME} or \texttt{PATH} are unset. [Reported by Bill Allombert] 
+\end{itemize}
+ Furthermore, new packages that have been added to the redistribution since the
+release of \textsf{GAP} 4.7.6 are: 
+\begin{itemize}
+\item  \textsf{json} package by Christopher Jefferson, providing a mapping between the \textsf{JSON} markup language and \textsf{GAP} 
+\item  \textsf{SglPPow} package by Bettina Eick and Michael Vaughan-Lee, providing the database of $p$-groups of order $p^7$ for $p > 11$, and of order $3^8$. 
+\end{itemize}
+ }
+
+ 
+\section{\textcolor{Chapter }{\textsf{GAP} 4.7.8 (June 2015)}}\label{fix478}
+\logpage{[ 2, 7, 0 ]}
+\hyperdef{L}{X7EB1879587C27876}{}
+{
+  }
+
+ Fixed bugs which could lead to incorrect results: 
+\begin{itemize}
+\item  Added two groups of degree 1575 which were missing in the library of first
+primitive groups. [Reported by Gordon Royle] 
+\item  Fixed the error in the code for algebra module elements in packed
+representation caused by the use of \texttt{Objectify} (\textbf{Reference: Objectify}) with the type of the given object instead of \texttt{ObjByExtRep} (\textbf{Reference: ObjByExtRep}) as recommended in  (\textbf{Reference: Further Improvements in Implementing Residue Class Rings}). The problem was that after calculating \texttt{u+v} where one of the summands was known to be zero, this knowledge was wrongly
+passed to the sum via the type. [Reported by Istvan Szollosi] 
+\item  Fixed a bug in \texttt{PowerMod} (\textbf{Reference: PowerMod}) causing wrong results for univariate Laurent polynomials when the two
+polynomial arguments are stored with the same non-zero shift. [Reported by Max
+Horn] 
+\end{itemize}
+ Furthermore, new packages that have been added to the redistribution since the
+release of \textsf{GAP} 4.7.7 are: 
+\begin{itemize}
+\item  \textsf{PatternClass} by Michael Albert, Ruth Hoffmann and Steve Linton, allowing to explore the
+permutation pattern classes build by token passing networks. Amongst other
+things, it can compute the basis of a permutation pattern class, create
+automata from token passing networks and check if the deterministic automaton
+is a possible representative of a token passing network. 
+\item  \textsf{QPA} by Edward Green and {\O}yvind Solberg, providing data structures and
+algorithms for computations with finite dimensional quotients of path
+algebras, and with finitely generated modules over such algebras. It
+implements data structures for quivers, quotients of path algebras, and
+modules, homomorphisms and complexes of modules over quotients of path
+algebras. 
+\end{itemize}
  }
 
     

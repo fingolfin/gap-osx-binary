@@ -1,0 +1,143 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: algemodStd</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: algemodStd">
+<META NAME="keywords" CONTENT="Singular Manual: algemodStd">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2102"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2026.htm#SEC2101"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: chinrempoly" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: arr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.1.2 algemodStd </H4>
+<!--docid::SEC2102::-->
+Procedure from library <CODE>algemodstd.lib</CODE> (see  <A HREF="sing_2025.htm#SEC2100">algemodstd_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>algemodStd(I, #); I ideal, # optional parameters
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>standard basis of I over algebraic number field
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The procedure passes to  <A HREF="sing_1178.htm#SEC1253">modStd</A> if the ground field has no
+parameter. In this case, the optional parameters # (if given)
+are directly passed to  <A HREF="sing_1178.htm#SEC1253">modStd</A>.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "algemodstd.lib";
+ring r1 =(0,a),(x,y),dp;
+minpoly =a^2+1;
+ideal k=(a/2+1)*x^2+2/3y, 3*x-a*y+ a/7+2;
+ideal I=algemodStd(k);
+I;
+==> I[1]=x+(-1/3a)*y+(1/21a+2/3)
+==> I[2]=y2+(32/5a-178/35)*y+(-4/7a-195/49)
+ring r2 =(0,a),(x,y,z),dp;
+minpoly =a^3 +2;
+ideal k=(a^2+a/2)*x^2+(a^2 -2/3*a)*yz, (3*a^2+1)*zx-(a+4/7)*y+ a+2/5;
+ideal IJ=algemodStd(k);
+IJ;
+==> IJ[1]=xz+(138/763a2+65/763a-46/763)*y+(-96/545a2-31/545a+32/545)
+==> IJ[2]=x2+(28/45a2-14/45a+52/45)*yz
+==> IJ[3]=yz2+(-3354/23653a2-6390/23653a-7683/47306)*xy+(993/6758a2+4104/1689\
+   5a+4449/33790)*x
+ring r3=0,(x,y),dp;// ring without parameter
+ideal I = x2 + y, xy - 7y + 2x;
+I=algemodStd(I);
+I;
+==> I[1]=y2-14x+51y
+==> I[2]=xy+2x-7y
+==> I[3]=x2+y
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1178.htm#SEC1253">modStd</A>.
+<P>
+
+<A NAME="arr_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2026.htm#SEC2101"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: chinrempoly" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: arr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

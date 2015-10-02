@@ -1,0 +1,156 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: arrCenter</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: arrCenter">
+<META NAME="keywords" CONTENT="Singular Manual: arrCenter">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2113"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2037.htm#SEC2112"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: arrLastVar" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2039.htm#SEC2114"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: arrCentral" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: arr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.2.10 arrCenter </H4>
+<!--docid::SEC2113::-->
+Procedure from library <CODE>arr.lib</CODE> (see  <A HREF="sing_2028.htm#SEC2103">arr_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>arrCenter(A); arr A
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>[list] L entry 0 if A not centered or entries 1, x, H, where x is
+any particular point of the center and H is a matrix consisting of
+vectors which spanning linear intersection space.
+<BR>If there is exactly one solution, then H = 0.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The intersection of all hyperplanes can be expressed in forms of a
+linear system Ax=b, where (A|b) is the coeff. matrix of the arrange-
+ment, which is then solved using L-U decomposition
+<P>
+
+<A NAME="IDX735"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "arr.lib";
+ring R = 0,(x,y,z),dp;
+arr A= ideal(x,y,x-y+1);    // centerless
+arrCenter(A);
+==> [1]:
+==>    0
+arr B= ideal(x,y,z);        // center is a single point
+arrCenter(B);
+==> [1]:
+==>    1
+==> [2]:
+==>    _[1,1]=0
+==>    _[2,1]=0
+==>    _[3,1]=0
+==> [3]:
+==>    _[1,1]=0
+arr C= ideal(x,z,x+z);      // center is a line
+// here we get a wrong result because the matrix is simplified since A doesn't
+// contain any "y" the matrix (A|b) will be 3x3 only.
+arrCenter(C);
+==> [1]:
+==>    1
+==> [2]:
+==>    _[1,1]=0
+==>    _[2,1]=0
+==>    _[3,1]=0
+==> [3]:
+==>    _[1,1]=0
+==>    _[2,1]=-1
+==>    _[3,1]=0
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_2038.htm#SEC2113">arrCenter</A>;
+ <A HREF="sing_2040.htm#SEC2115">arrCentered</A>;
+ <A HREF="sing_2039.htm#SEC2114">arrCentral</A>;
+ <A HREF="sing_2041.htm#SEC2116">arrCentralize</A>.
+<P>
+
+<A NAME="arrCentral"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2037.htm#SEC2112"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: arrLastVar" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2039.htm#SEC2114"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: arrCentral" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: arr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

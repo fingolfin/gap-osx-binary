@@ -1,0 +1,137 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: nt_solve</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: nt_solve">
+<META NAME="keywords" CONTENT="Singular Manual: nt_solve">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1775"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1701.htm#SEC1776"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: triMNewton" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: triang_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1702.htm#SEC1777"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: zeroset_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.8.5.1 nt_solve </H4>
+<!--docid::SEC1775::-->
+Procedure from library <CODE>ntsolve.lib</CODE> (see  <A HREF="sing_1699.htm#SEC1774">ntsolve_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>nt_solve(gls,ini[,ipar]); gls,ini= ideals, ipar=list/intvec,<BR>
+gls: contains the equations, for which a solution will be computed<BR>
+ini: ideal of initial values (approximate solutions to start with),<BR>
+ipar: control integers (default: ipar = [100, 10])
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif"> ipar[1]: max. number of iterations
+ ipar[2]: accuracy (we have the l_2-norm ||.||): accepts solution <CODE>sol</CODE>
+          if ||gls(sol)|| &lt; eps0*(0.1^ipar[2])
+          where eps0 = ||gls(ini)|| is the initial error
+</pre></td></tr></table><P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>gls is a zerodimensional ideal with nvars(basering) = size(gls) (&gt;1)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal, coordinates of one solution (if found), 0 else
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>if printlevel &gt;0: displays comments (default =0)
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ntsolve.lib";
+ring rsq = (real,40),(x,y,z,w),lp;
+ideal gls =  x2+y2+z2-10, y2+z3+w-8, xy+yz+xz+w5 - 1,w3+y;
+ideal ini = 3.1,2.9,1.1,0.5;
+intvec ipar = 200,0;
+ideal sol = nt_solve(gls,ini,ipar);
+sol;
+==> sol[1]=0.8698104581550055082008024750939710335537
+==> sol[2]=2.8215774457503246008496262517717182369409
+==> sol[3]=1.1323120084664179900060940157112668717318
+==> sol[4]=-1.413071026406678849397999475590194239628
+</FONT></pre></td></tr></table><P>
+
+<A NAME="triMNewton"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1701.htm#SEC1776"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: triMNewton" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: triang_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1702.htm#SEC1777"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: zeroset_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

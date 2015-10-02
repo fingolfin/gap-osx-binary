@@ -1,0 +1,153 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: updatePairs</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: updatePairs">
+<META NAME="keywords" CONTENT="Singular Manual: updatePairs">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1974"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1898.htm#SEC1973"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: pairset" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1900.htm#SEC1975"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: standard" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1874.htm#SEC1949"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: hyperel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1887.htm#SEC1962"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: teachstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.12.5.12 updatePairs </H4>
+<!--docid::SEC1974::-->
+Procedure from library <CODE>teachstd.lib</CODE> (see  <A HREF="sing_1887.htm#SEC1962">teachstd_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>updatePairs(P,S,h); P list, S ideal or module, h poly or vector<BR>
+P a list of pairs of polys or vectors (obtained from pairset)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list Q,
+<BR>Q[1] = the pairset P enlarged by all pairs (f,h), f from S,
+without pairs for which the product or the chain criterion applies<BR>
+Q[2] = intvec v, v[1]= # product criterion, v[2]= # chain criterion
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "teachstd.lib";
+ring R1=0,(x,y,z),(c,dp);
+ideal S = x2y+x2,y3+xyz;
+poly h = x2y+xyz;
+list P = pairset(S)[1];
+P;"";
+==> [1]:
+==>    _[1]=x2y+x2
+==>    _[2]=y3+xyz
+==> 
+updatePairs(P,S,h);"";
+==> [1]:
+==>    [1]:
+==>       _[1]=x2y+x2
+==>       _[2]=y3+xyz
+==>    [2]:
+==>       _[1]=x2y+x2
+==>       _[2]=x2y+xyz
+==> [2]:
+==>    0,1
+==> 
+module T = [x2y3-z2,x2y],[x2y4+z3,x2+y2];
+P = pairset(T)[1];
+P;"";
+==> [1]:
+==>    _[1]=[x2y3-z2,x2y]
+==>    _[2]=[x2y4+z3,x2+y2]
+==> 
+updatePairs(P,T,[x2+x2y,y3+xyz]);
+==> [1]:
+==>    [1]:
+==>       _[1]=[x2y3-z2,x2y]
+==>       _[2]=[x2y4+z3,x2+y2]
+==>    [2]:
+==>       _[1]=[x2y3-z2,x2y]
+==>       _[2]=[x2y+x2,y3+xyz]
+==> [2]:
+==>    0,1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="standard"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1898.htm#SEC1973"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: pairset" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1900.htm#SEC1975"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: standard" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1874.htm#SEC1949"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: hyperel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1887.htm#SEC1962"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: teachstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

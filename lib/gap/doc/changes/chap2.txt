@@ -2,7 +2,8 @@
   [1X2 [33X[0;0YChanges between [5XGAP[105X[101X[1X 4.6 and [5XGAP[105X[101X[1X 4.7[133X[101X
   
   [33X[0;0YThis  chapter  contains  an overview of most important changes introduced in
-  [5XGAP[105X 4.7.2 release (the first public release of [5XGAP[105X 4.7).[133X
+  [5XGAP[105X  4.7.2  release  (the first public release of [5XGAP[105X 4.7). It also contains
+  information about subsequent update releases for [5XGAP[105X 4.7.[133X
   
   
   [1X2.1 [33X[0;0Y[5XGAP[105X[101X[1X 4.7.2 (December 2013)[133X[101X
@@ -405,4 +406,152 @@
   
   [30X    [33X[0;6Y[5Xpermut[105X   package   by   A.Ballester-Bolinches,   E.Cosme-Llópez,   and
         R.Esteban-Romero to deal with permutability in finite groups.[133X
+  
+  
+  [1X2.5 [33X[0;0Y[5XGAP[105X[101X[1X 4.7.6 (November 2014)[133X[101X
+  
+  [33X[0;0YFixed bugs which could lead to incorrect results:[133X
+  
+  [30X    [33X[0;6YA  bug  that may cause [2XShortestVectors[102X ([14XReference: ShortestVectors[114X) to
+        return an incomplete list. [Reported by Florian Beye][133X
+  
+  [30X    [33X[0;6YA  bug  that may lead to incorrect results and infinite loops when [5XGAP[105X
+        is compiled without GMP support using gcc 4.9.[133X
+  
+  [30X    [33X[0;6YA    bug    that    may    cause    [2XOrthogonalEmbeddings[102X   ([14XReference:
+        OrthogonalEmbeddings[114X)  to  return  an  incomplete result. [Reported by
+        Benjamin Sambale][133X
+  
+  [33X[0;0YFixed bugs that could lead to break loops:[133X
+  
+  [30X    [33X[0;6Y[2XClosureGroup[102X  ([14XReference:  ClosureGroup[114X)  should  be  used  instead of
+        [2XClosureSubgroup[102X  ([14XReference:  ClosureSubgroup[114X)  in  case  there  is no
+        parent group, otherwise some calculations such as e.g. [2XNormalSubgroups[102X
+        ([14XReference: NormalSubgroups[114X) may fail. [Reported by Dmitrii Pasechnik][133X
+  
+  [30X    [33X[0;6YFixed  a line in the code that used a hard-coded identity permutation,
+        not a generic identity element of a group. [Reported by Toshio Sumi][133X
+  
+  [30X    [33X[0;6YFixed a problem in the new code for calculating maximal subgroups that
+        caused  a  break  loop  for  some  groups  from  the transitive groups
+        library. [Reported by Petr Savicky][133X
+  
+  [30X    [33X[0;6YFixed  a  problem  in [2XClosureSubgroup[102X ([14XReference: ClosureSubgroup[114X) not
+        accepting some groups without [2XParent[102X ([14XReference: Parent[114X). [Reported by
+        Inneke van Gelder][133X
+  
+  [33X[0;0YOther fixed bugs:[133X
+  
+  [30X    [33X[0;6YEliminated  a  number  of  compiler  warnings detected with some newer
+        versions of [5XC[105X compilers.[133X
+  
+  [30X    [33X[0;6YSome minor bugs in the transformation and partial permutation code and
+        documentation were resolved.[133X
+  
+  
+  [1X2.6 [33X[0;0Y[5XGAP[105X[101X[1X 4.7.7 (February 2015)[133X[101X
+  
+  [33X[0;0YNew features:[133X
+  
+  [30X    [33X[0;6YIntroduced  some  arithmetic  operations  for  infinity  and  negative
+        infinity, see [14XReference: infinity[114X.[133X
+  
+  [30X    [33X[0;6YIntroduced    new    property    [2XIsGeneratorsOfSemigroup[102X   ([14XReference:
+        IsGeneratorsOfSemigroup[114X)  which reflects wheter the list or collection
+        generates a semigroup.[133X
+  
+  [33X[0;0YFixed bugs which could lead to incorrect results:[133X
+  
+  [30X    [33X[0;6YFixed  a  bug  in  [2XUnion[102X ([14XReference: Union[114X) (actually, in the internal
+        library  function  [10XJoinRanges[110X)  caused  by  downward  running  ranges.
+        [Reported by Matt Fayers][133X
+  
+  [30X    [33X[0;6YFixed  a  bug  where recursive records might be printed with the wrong
+        component  name, coming from component names being ordered differently
+        in two different pieces of code. [Reported by Thomas Breuer][133X
+  
+  [30X    [33X[0;6YThe  usage  of [10Xabs[110X in [11Xsrc/gmpints.c[111X was replaced by [10XAbsInt[110X. The former
+        is  defined  to  operate on 32-bit integers even if [5XGAP[105X is compiled in
+        64-bit  mode.  That lead to truncating [5XGAP[105X integers and caused a crash
+        in  [2XRemInt[102X  ([14XReference: RemInt[114X), reported by Willem De Graaf and Heiko
+        Dietrich.  Using  [10XAbsInt[110X  fixes  the  crash,  and  ensures the correct
+        behaviour on 32-bit and 64-bit builds.[133X
+  
+  [33X[0;0YFixed bugs that could lead to break loops:[133X
+  
+  [30X    [33X[0;6YA  problem  with  [2XProbabilityShapes[102X ([14XReference: ProbabilityShapes[114X) not
+        setting  frequencies  list  for  small  degrees.  [Reported  by Daniel
+        Błażewicz and independently by Mathieu Gagne][133X
+  
+  [30X    [33X[0;6YAn  error when generating a free monoid of rank infinity. [Reported by
+        Nick Loughlin][133X
+  
+  [30X    [33X[0;6YSeveral  bugs  with  the  code for Rees matrix semigroups not handling
+        trivial cases properly.[133X
+  
+  [30X    [33X[0;6YA     bug    in    [2XIsomorphismTypeInfoFiniteSimpleGroup[102X    ([14XReference:
+        IsomorphismTypeInfoFiniteSimpleGroup[114X)  affecting  one particular group
+        due  to  a  misformatting  in  a  routine  that translates between the
+        Chevalley  type  and the name used in the table (in this case, [10X"T"[110X was
+        used instead of [10X["T"][110X). [Reported by Petr Savicky][133X
+  
+  [33X[0;0YOther fixed bugs:[133X
+  
+  [30X    [33X[0;6YThe  [2XBasis[102X  ([14XReference:  Basis[114X) method for full homomorphism spaces of
+        linear  mappings  did not set basis vectors which could be obtained by
+        [2XGeneratorsOfLeftModule[102X ([14XReference: GeneratorsOfLeftModule[114X).[133X
+  
+  [30X    [33X[0;6YA problem with [2XGaloisType[102X ([14XReference: GaloisType[114X) entering an infinite
+        loop  in  the  routine  for  approximating a root. [Reported by Daniel
+        Błażewicz][133X
+  
+  [30X    [33X[0;6YFixed the crash when [5XGAP[105X is called when the environment variables [10XHOME[110X
+        or [10XPATH[110X are unset. [Reported by Bill Allombert][133X
+  
+  [33X[0;0YFurthermore,  new  packages that have been added to the redistribution since
+  the release of [5XGAP[105X 4.7.6 are:[133X
+  
+  [30X    [33X[0;6Y[5Xjson[105X package by Christopher Jefferson, providing a mapping between the
+        [5XJSON[105X markup language and [5XGAP[105X[133X
+  
+  [30X    [33X[0;6Y[5XSglPPow[105X package by Bettina Eick and Michael Vaughan-Lee, providing the
+        database of [22Xp[122X-groups of order [22Xp^7[122X for [22Xp > 11[122X, and of order [22X3^8[122X.[133X
+  
+  
+  [1X2.7 [33X[0;0Y[5XGAP[105X[101X[1X 4.7.8 (June 2015)[133X[101X
+  
+  [33X[0;0YFixed bugs which could lead to incorrect results:[133X
+  
+  [30X    [33X[0;6YAdded  two  groups of degree 1575 which were missing in the library of
+        first primitive groups. [Reported by Gordon Royle][133X
+  
+  [30X    [33X[0;6YFixed  the  error  in  the  code for algebra module elements in packed
+        representation  caused  by the use of [2XObjectify[102X ([14XReference: Objectify[114X)
+        with  the  type of the given object instead of [2XObjByExtRep[102X ([14XReference:
+        ObjByExtRep[114X)  as  recommended  in  [14X'Reference: Further Improvements in
+        Implementing   Residue  Class  Rings'[114X.  The  problem  was  that  after
+        calculating  [10Xu+v[110X  where one of the summands was known to be zero, this
+        knowledge  was  wrongly  passed  to the sum via the type. [Reported by
+        Istvan Szollosi][133X
+  
+  [30X    [33X[0;6YFixed  a  bug  in [2XPowerMod[102X ([14XReference: PowerMod[114X) causing wrong results
+        for  univariate  Laurent polynomials when the two polynomial arguments
+        are stored with the same non-zero shift. [Reported by Max Horn][133X
+  
+  [33X[0;0YFurthermore,  new  packages that have been added to the redistribution since
+  the release of [5XGAP[105X 4.7.7 are:[133X
+  
+  [30X    [33X[0;6Y[5XPatternClass[105X  by  Michael  Albert,  Ruth  Hoffmann  and  Steve Linton,
+        allowing  to  explore  the  permutation pattern classes build by token
+        passing  networks. Amongst other things, it can compute the basis of a
+        permutation pattern class, create automata from token passing networks
+        and  check if the deterministic automaton is a possible representative
+        of a token passing network.[133X
+  
+  [30X    [33X[0;6Y[5XQPA[105X  by Edward Green and Øyvind Solberg, providing data structures and
+        algorithms  for computations with finite dimensional quotients of path
+        algebras,  and  with finitely generated modules over such algebras. It
+        implements  data  structures  for quivers, quotients of path algebras,
+        and  modules, homomorphisms and complexes of modules over quotients of
+        path algebras.[133X
   

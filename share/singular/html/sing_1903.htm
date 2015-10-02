@@ -1,0 +1,146 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: weierstrDiv</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: weierstrDiv">
+<META NAME="keywords" CONTENT="Singular Manual: weierstrDiv">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1978"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1904.htm#SEC1979"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: weierstrPrep" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1887.htm#SEC1962"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: teachstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1907.htm#SEC1982"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: rootsmr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.12.6.1 weierstrDiv </H4>
+<!--docid::SEC1978::-->
+Procedure from library <CODE>weierstr.lib</CODE> (see  <A HREF="sing_1902.htm#SEC1977">weierstr_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>weierstrDiv(g,f,d); g,f=poly, d=integer
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f must be general of finite order, say b, in the last ring variable,
+say T; if not use the procedure lastvarGeneral first
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>perform the Weierstrass division of g by f up to order d
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>- a list, say l, of two polynomials and an integer, such that<BR>
+g = l[1]*f + l[2], deg_T(l[2]) &lt; b, up to (including) total degree d<BR>
+- l[3] is the number of iterations used
+<BR>- if f is not T-general, return (0,g)
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the procedure works for any monomial ordering
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>the proof of Grauert-Remmert (Analytische Stellenalgebren) is used
+for the algorithm
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "weierstr.lib";
+ring R = 0,(x,y),ds;
+poly f = y - xy2 + x2;
+poly g = y;
+list l = weierstrDiv(g,f,10); l;"";
+==> [1]:
+==>    1+xy-x3+x2y2-2x4y+2x6+x3y3-3x5y2+5x7y+x4y4-5x9-4x6y3+9x8y2+x5y5
+==> [2]:
+==>    -x2+x5-2x8
+==> [3]:
+==>    5
+==> 
+l[1]*f + l[2];               //g = l[1]*f+l[2] up to degree 10
+==> y-5x11+14x10y2+5x7y5-9x9y4-x6y7
+</FONT></pre></td></tr></table><P>
+
+<A NAME="weierstrPrep"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1904.htm#SEC1979"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: weierstrPrep" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1887.htm#SEC1962"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: teachstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1907.htm#SEC1982"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: rootsmr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

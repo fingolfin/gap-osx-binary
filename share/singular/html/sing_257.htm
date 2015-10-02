@@ -1,0 +1,206 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: reference and shared related functions</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: reference and shared related functions">
+<META NAME="keywords" CONTENT="Singular Manual: reference and shared related functions">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC296"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_256.htm#SEC295"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reference and shared operations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: pyobject" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: countedref" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.26.6 reference and shared related functions </H3>
+<!--docid::SEC296::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE>def</CODE>
+<DD>explicitly type casts to <CODE>reference</CODE> or <CODE>shared</CODE>, respectively.
+(Note: For the <CODE>def</CODE> declaration, see  <A HREF="sing_83.htm#SEC122">def</A>.)
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>system("reference"); system("shared");
+int i =1;
+reference ref = i;
+shared sh = 17;
+list ll = list(ref, ref, ref, sh, sh);
+ll[1] = 2;      // replace only one entry
+ll;
+==> [1]:
+==>    2
+==> [2]:
+==>    1
+==> 
+==> [3]:
+==>    1
+==> 
+==> [4]:
+==>    17
+==> 
+==> [5]:
+==>    17
+==> 
+def(ll[2]) = 3;      // change the others
+ll;
+==> [1]:
+==>    2
+==> [2]:
+==>    3
+==> 
+==> [3]:
+==>    3
+==> 
+==> [4]:
+==>    17
+==> 
+==> [5]:
+==>    17
+==> 
+def(ll[4]) = 19;     // same here
+ll;
+==> [1]:
+==>    2
+==> [2]:
+==>    3
+==> 
+==> [3]:
+==>    3
+==> 
+==> [4]:
+==>    19
+==> 
+==> [5]:
+==>    19
+==> 
+</FONT></pre></td></tr></table></P><P>
+
+<DT><CODE>link</CODE>
+<DD>explicitly dereference a <CODE>reference</CODE> or <CODE>shared</CODE> object.
+(Note: For the <CODE>link</CODE> declaration, see  <A HREF="sing_108.htm#SEC147">link</A>.)
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>system("reference"); system("shared");
+ring r = 0, (x,y,z), dp;
+poly p = x + y + z;
+def x_=x;
+reference xref=x_;
+xref;
+==> x
+==> 
+subst(p, xref,1, y,2, z,3);        // fails
+==>    ? subst(`poly`,`reference`,`int`) failed
+==>    ? expected subst(`poly`,`poly`,`poly`)
+==>    ? expected subst(`poly`,`poly`,`poly`)
+==>    ? expected subst(`matrix`,`poly`,`int`)
+==>    ? error occurred in or before ./examples/reference_and_shared_related_\
+   functions_1.sing line 7: `subst(p, xref,1, y,2, z,3);        // fails`
+subst(p, link(xref),1, y,2, z,3);  // fine
+==> 6
+</FONT></pre></td></tr></table></P><P>
+
+<DT><CODE>system</CODE>
+<DD>The <CODE>reference</CODE> and <CODE>shared</CODE> objects overload the
+<CODE>system</CODE> command to gain extended features, see <CODE>system(ref, "help")</CODE>
+for more details.
+(Note: For the general <CODE>system</CODE> command, see  <A HREF="sing_406.htm#SEC445">system</A>.)
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>system("reference"); system("shared");
+shared sh;
+system(sh, "help");
+==> system(&lt;ref&gt;, ...): extended functionality for reference/shared data &lt;ref\
+   &gt;
+==>   system(&lt;ref&gt;, count)         - number of references pointing to &lt;ref&gt;
+==>   system(&lt;ref&gt;, enumerate)     - unique number for identifying &lt;ref&gt;
+==>   system(&lt;ref&gt;, undefined)     - checks whether &lt;ref&gt; had been assigned
+==>   system(&lt;ref&gt;, "help")        - prints this information message
+==>   system(&lt;ref&gt;, "typeof")      - actual type referenced by &lt;ref&gt;
+==>   system(&lt;ref1&gt;, same, &lt;ref2&gt;) - tests for identic reference objects
+</FONT></pre></td></tr></table></DL>
+<P>
+
+<A NAME="Functions and system variables"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_256.htm#SEC295"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reference and shared operations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: pyobject" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: countedref" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

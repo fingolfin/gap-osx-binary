@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
 // Vi-modeline: vim: filetype=c:syntax:shiftwidth=2:tabstop=8:textwidth=0:expandtab
 /////////////////////////////////////////////////////////////////
-version="version multigrading.lib 4.0.0.0 Jun_2013 "; // $Id: d9c081379ca608d81a15ab3f6770e48368ff5af3 $
+version="version multigrading.lib 4.0.0.0 Jun_2013 "; // $Id: 3d35f5d468962fd1d6533c987901f69f3eac2988 $
 category="Combinatorial Commutative Algebra";
 info="
 LIBRARY:  multigrading.lib          Multigraded Rings
@@ -739,7 +739,7 @@ EXAMPLE: example getVariableWeights; shows an example
 
   if( size(#) > 0 )
   {
-    if(( typeof(#[1]) == "ring" ) || ( typeof(#[1]) == "qring" ))
+    if( typeof(#[1]) == "ring" )
     {
       def R = #[1];
     }
@@ -834,7 +834,7 @@ EXAMPLE: example getGradingGroup; shows an example
 
   if( size(#) >= i )
   {
-    if( ( typeof(#[i]) == "ring" ) or ( typeof(#[i]) == "qring" ) )
+    if( typeof(#[i]) == "ring" )
     {
       def R = #[i];
       i++;
@@ -943,7 +943,7 @@ EXAMPLE: example getLattice; shows an example
   if( size(#) >= i )
   {
     def a = #[i];
-    if( ( typeof(a) == "ring" ) or ( typeof(a) == "qring" ) )
+    if( typeof(a) == "ring" )
     {
       i++;
     }
@@ -1587,10 +1587,10 @@ static proc gcdcomb(int a, int b)
 
 proc lll(def A)
 "
-The lll algorithm of lll.lib only works for lists of vectors.
-Maybe one should rescript it for matrices. This method will
-convert a matrix to a list, plug it into lll and make the result
-a matrix and return it.
+The lll algorithm of NTL only works for intmat/matrix.
+This method will convert the input, call lll and
+return the result in the same format.
+(list of intvec resp. intmat)
 "
 {
   if(typeof(A) == "list")
@@ -1627,14 +1627,13 @@ a matrix and return it.
       }
     }
     m= system ("LLL", m);
-    list result= list();
+    list result;
     intvec buf;
 
-    for (i= 1; i <= sizeA; i++)
+    for (i= sizeA; i >=1 ; i--)
     {
       buf = intvec (m[i , 1..columns]);
-      result= result+ list (buf);
-
+      result[i]= buf;
     }
     return(result);
   }
@@ -2232,7 +2231,8 @@ EXAMPLE: example pushForward; shows an example
   columns=columns+ncols(toadd1);
 
   //If the image ring is a quotient ring by some ideal, we have to coarsen the grading in order to make the ideal homogeneous.
-  if(typeof(basering)=="qring"){
+  if(size(ideal(basering))>0)
+  {
     //"Entering qring";
     ideal a=ideal(basering);
     for(i=1;i<=size(a);i++){

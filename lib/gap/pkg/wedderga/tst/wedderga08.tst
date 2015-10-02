@@ -1,6 +1,6 @@
 # wedderga, chapter 8
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/applications.xml", 26, 39 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/applications.xml", 26, 39 ]
 
 gap> G:=DihedralGroup(8);;
 gap> F:=GF(3);;          
@@ -14,7 +14,7 @@ gap> CodeWordByGroupRingElement(F,S,a);
 [ Z(3)^0, Z(3)^0, Z(3)^0, Z(3)^0, Z(3)^0, 0*Z(3), Z(3)^0, Z(3) ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/applications.xml", 61, 94 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/applications.xml", 61, 94 ]
 
 gap> G:=DihedralGroup(8);;
 gap> F:=GF(3);;          

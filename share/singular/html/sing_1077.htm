@@ -1,0 +1,167 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: symmetricPower</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: symmetricPower">
+<META NAME="keywords" CONTENT="Singular Manual: symmetricPower">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1152"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1076.htm#SEC1151"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: exteriorBasis" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1078.htm#SEC1153"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: exteriorPower" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Linear algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1079.htm#SEC1154"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: linalg_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1046.htm#SEC1121"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: matrix_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.3.1.31 symmetricPower </H4>
+<!--docid::SEC1152::-->
+Procedure from library <CODE>matrix.lib</CODE> (see  <A HREF="sing_1046.htm#SEC1121">matrix_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>symmetricPower(A, k); A module, k int
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>module: the k-th symmetric power of A
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the chosen bases and most of intermediate data will be shown if
+printlevel is big enough
+<P>
+
+<A NAME="IDX432"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "matrix.lib";
+ring r = (0),(a, b, c, d), dp; r;
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    a b c d
+==> //        block   2 : ordering C
+module B = a*gen(1) + c* gen(2), b * gen(1) + d * gen(2); print(B);
+==> a,b,
+==> c,d 
+// symmetric power over a commutative K-algebra:
+print(symmetricPower(B, 2));
+==> d2, cd,   c2, 
+==> 2bd,bc+ad,2ac,
+==> b2, ab,   a2  
+print(symmetricPower(B, 3));
+==> d3,  cd2,     c2d,     c3,  
+==> 3bd2,2bcd+ad2,bc2+2acd,3ac2,
+==> 3b2d,b2c+2abd,2abc+a2d,3a2c,
+==> b3,  ab2,     a2b,     a3   
+// symmetric power over an exterior algebra:
+def g = superCommutative(); setring g; g;
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    a b c d
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    ba=-ab
+==> //    ca=-ac
+==> //    da=-ad
+==> //    cb=-bc
+==> //    db=-bd
+==> //    dc=-cd
+==> // quotient ring from ideal
+==> _[1]=d2
+==> _[2]=c2
+==> _[3]=b2
+==> _[4]=a2
+module B = a*gen(1) + c* gen(2), b * gen(1) + d * gen(2); print(B);
+==> a,b,
+==> c,d 
+print(symmetricPower(B, 2)); // much smaller!
+==> 0,cd,    0,
+==> 0,-bc+ad,0,
+==> 0,ab,    0 
+print(symmetricPower(B, 3)); // zero! (over an exterior algebra!)
+==> 0,0,0,0
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1078.htm#SEC1153">exteriorPower</A>.
+<P>
+
+<A NAME="exteriorPower"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1076.htm#SEC1151"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: exteriorBasis" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1078.htm#SEC1153"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: exteriorPower" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Linear algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1079.htm#SEC1154"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: linalg_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1046.htm#SEC1121"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: matrix_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

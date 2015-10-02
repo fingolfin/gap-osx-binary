@@ -1,0 +1,140 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: changeord</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: changeord">
+<META NAME="keywords" CONTENT="Singular Manual: changeord">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1094"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1018.htm#SEC1093"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: changechar" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1020.htm#SEC1095"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: changevar" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1004.htm#SEC1079"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: random_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Linear algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1017.htm#SEC1092"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ring_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.8.2 changeord </H4>
+<!--docid::SEC1094::-->
+Procedure from library <CODE>ring.lib</CODE> (see  <A HREF="sing_1017.htm#SEC1092">ring_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>changeord(neword[,r]); newordstr=list, r=ring/qring
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring R, obtained from the ring r [default: r=basering], by changing
+order(r) to neword.
+<BR>If, say, neword=list(list("wp",intvec(2,3)),list(list("dp",1:(n-2))));
+and if the ring r exists and has n variables, the ring R will be
+equipped with the monomial ordering wp(2,3),dp.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ring.lib";
+ring r=0,(x,y,u,v),(dp(2),ds);
+def R=changeord(list(list("wp",intvec(2,3)),list("dp",1:2))); R; "";
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering wp
+==> //                  : names    x y
+==> //                  : weights  2 3
+==> //        block   2 : ordering dp
+==> //                  : names    u v
+==> //        block   3 : ordering C
+==> 
+ideal i = x^2,y^2-u^3,v;
+qring Q = std(i);
+def Q'=changeord(list(list("lp",nvars(Q))),Q); setring Q'; Q';
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering lp
+==> //                  : names    x y u v
+==> //        block   2 : ordering C
+==> // quotient ring from ideal
+==> _[1]=v
+==> _[2]=x2
+==> _[3]=y2-u3
+kill R,Q,Q';
+</FONT></pre></td></tr></table><P>
+
+<A NAME="changevar"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1018.htm#SEC1093"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: changechar" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1020.htm#SEC1095"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: changevar" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1004.htm#SEC1079"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: random_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Linear algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1017.htm#SEC1092"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ring_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

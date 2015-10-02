@@ -1,0 +1,172 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: prepMat</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: prepMat">
+<META NAME="keywords" CONTENT="Singular Manual: prepMat">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1731"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: stratify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1657.htm#SEC1732"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: stratify" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1640.htm#SEC1715"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: rinvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1658.htm#SEC1733"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Symbolic-numerical solving" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: stratify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.7.4.1 prepMat </H4>
+<!--docid::SEC1731::-->
+Procedure from library <CODE>stratify.lib</CODE> (see  <A HREF="sing_1655.htm#SEC1730">stratify_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>prepMat(M,wr,ws,step);
+<BR>where M is a matrix, wr is an intvec of size ncols(M),
+ws an intvec of size nrows(M) and step is an integer
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>2 lists of submatrices corresponding to the filtrations
+specified by wr and ws:
+<BR>the first list corresponds to the list for the filtration
+of AdA, i.e. the ranks of these matrices will be the r_i,
+the second one to the list for the filtration of L, i.e.
+the ranks of these matrices will be the s_i
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>* the entries of the matrix M are M_ij=delta_i(x_j),
+<BR>* wr is used to determine what subset of the set of all dx_i is
+generating AdF^l(A):
+<BR>if (k-1)*step &lt;= wr[i] &lt; k*step, then dx_i is in the set of
+generators of AdF^l(A) for all l&gt;=k and the i-th column
+of M appears in each submatrix starting from the k-th
+<BR>* ws is used to determine what subset of the set of all delta_i
+is generating Z_l(L):
+<BR>if (k-1)*step &lt;= ws[i] &lt; k*step, then delta_i is in the set
+of generators of Z_l(A) for l &lt; k and the i-th row of M
+appears in each submatrix up to the (k-1)th
+<BR>* the entries of wr and ws as well as step should be positive
+integers
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "stratify.lib";
+ring r=0,(t(1..3)),dp;
+matrix M[2][3]=0,t(1),3*t(2),0,0,t(1);
+print(M);
+==> 0,t(1),3*t(2),
+==> 0,0,   t(1)   
+intvec wr=1,3,5;
+intvec ws=2,4;
+int step=2;
+prepMat(M,wr,ws,step);
+==> [1]:
+==>    [1]:
+==>       _[1,1]=0
+==>       _[2,1]=0
+==>    [2]:
+==>       _[1,1]=0
+==>       _[1,2]=t(1)
+==>       _[2,1]=0
+==>       _[2,2]=0
+==>    [3]:
+==>       _[1,1]=0
+==>       _[1,2]=t(1)
+==>       _[1,3]=3*t(2)
+==>       _[2,1]=0
+==>       _[2,2]=0
+==>       _[2,3]=t(1)
+==> [2]:
+==>    [1]:
+==>       _[1,1]=0
+==>       _[1,2]=t(1)
+==>       _[1,3]=3*t(2)
+==>       _[2,1]=0
+==>       _[2,2]=0
+==>       _[2,3]=t(1)
+==>    [2]:
+==>       _[1,1]=0
+==>       _[1,2]=0
+==>       _[1,3]=t(1)
+</FONT></pre></td></tr></table><P>
+
+<A NAME="stratify"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: stratify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1657.htm#SEC1732"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: stratify" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1640.htm#SEC1715"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: rinvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1658.htm#SEC1733"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Symbolic-numerical solving" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: stratify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,153 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: splitting</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: splitting">
+<META NAME="keywords" CONTENT="Singular Manual: splitting">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1280"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1204.htm#SEC1279"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: annil" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1206.htm#SEC1281"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primTest" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1179.htm#SEC1254"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: monomialideal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1211.htm#SEC1286"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: mregular_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1196.htm#SEC1271"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: mprimdec_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.14.9 splitting </H4>
+<!--docid::SEC1280::-->
+Procedure from library <CODE>mprimdec.lib</CODE> (see  <A HREF="sing_1196.htm#SEC1271">mprimdec_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>splitting(N[,check[, ann]]); modul N, module check, ideal ann
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>(l, check) list l, module check
+<BR>the elements of l consists of quadruples, where
+<BR>[1] is of type module, [2], [3] and [4] are of type ideal,
+s.th. the intersection of the modules is equal to the
+zero-dimensional module N, furthermore l[j][3]=annil(l[j][1])
+and l[j][4] contains internal ideal data;
+<BR>if l[j][2]!=0 then the module l[j][1] is primary
+<BR>with associated prime l[j][2], and check=intersect(check, l[j][1]) is computed
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>if the parameter check is given, only components not containing
+check are computed; if ann is given, ann is used instead of annil(N)
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "mprimdec.lib";
+ring r=0,z,lp;
+module N=z*gen(1), (z+1)*gen(2);
+N=std(N);
+list l; module check;
+(l, check)=splitting(N);
+l;
+==> [1]:
+==>    [1]:
+==>       _[1]=gen(2)
+==>       _[2]=z*gen(1)
+==>    [2]:
+==>       _[1]=z
+==>    [3]:
+==>       _[1]=z
+==>    [4]:
+==>       _[1]=z
+==> [2]:
+==>    [1]:
+==>       _[1]=gen(1)
+==>       _[2]=z*gen(2)+gen(2)
+==>    [2]:
+==>       _[1]=z+1
+==>    [3]:
+==>       _[1]=z+1
+==>    [4]:
+==>       _[1]=z+1
+check;
+==> check[1]=z*gen(2)+gen(2)
+==> check[2]=z*gen(1)
+</FONT></pre></td></tr></table><P>
+
+<A NAME="primTest"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1204.htm#SEC1279"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: annil" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1206.htm#SEC1281"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primTest" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1179.htm#SEC1254"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: monomialideal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1211.htm#SEC1286"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: mregular_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1196.htm#SEC1271"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: mprimdec_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

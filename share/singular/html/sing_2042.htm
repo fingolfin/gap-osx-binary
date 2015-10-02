@@ -1,0 +1,153 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: arrCoordChange</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: arrCoordChange">
+<META NAME="keywords" CONTENT="Singular Manual: arrCoordChange">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2117"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2041.htm#SEC2116"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: arrCentralize" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2043.htm#SEC2118"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: arrCoordNormalize" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: arr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.2.14 arrCoordChange </H4>
+<!--docid::SEC2117::-->
+Procedure from library <CODE>arr.lib</CODE> (see  <A HREF="sing_2028.htm#SEC2103">arr_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>arrCoordChange(A, T); arr A, (m*n mat) n*n or n*n+1 matrix T
+arrCoordChange(A, T , c); arr A, n*n matrix T, n*1 matrix/vector
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>[arr]: Arrangement A [A|b] after a coordinate change f: x -&gt; Tx + c with T invertible
+i.e. [A|b] =&gt; [AT^-1|b+AT^-1c] since we have
+<BR>f(H) = f(ker(a1*x1 + ... + an*xn - b)) = {f(x) : a'x -b = 0}
+= {y : a'f^-1(y) -b = 0)}
+<BR>= {y : a'(T^-1(y-c)) - b = 0}
+<BR>= {y : a'T^-1y -(b + a'T^-1c) = 0}
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>There are 3 options how you can give the input (in each case n &lt;= nvars(basering))
+1. Just a nxn matrix with
+<BR>=&gt; Will automatically complete T by a unit matrix and perform x -&gt; Tx
+2. A nxn matrix T and a nx1 vector/matrix c with
+<BR>=&gt; Will automatically complete T and c and perform x -&gt; Tx +c
+3. A nxn+1 matrix T with
+<BR>=&gt; will use last column as translation vector c
+<P>
+
+<A NAME="IDX742"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "arr.lib";
+ring r = 0,(x,y,z),lp;
+arr A = x,y,z;
+arrCoordChange(A,1,[0,0,1]); //lifts z-hyperplane by 1 unit
+==> _[1]=x
+==> _[2]=y
+==> _[3]=z-1
+==> 
+matrix T[2][2] = [0,1,1,0];  // swaps x and y
+arrCoordChange(A,T);
+==> _[1]=y
+==> _[2]=x
+==> _[3]=z
+==> 
+matrix c[2][1] = [1,0];
+T = concat(T,c);            // now swap x and y and add 1 to x afterwards
+arrCoordChange(A,T);
+==> _[1]=y
+==> _[2]=x-1
+==> _[3]=z
+==> 
+// Note how T doesn't even need to be a full 3x3 base change matrix.
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_2042.htm#SEC2117">arrCoordChange</A>;
+ <A HREF="sing_2043.htm#SEC2118">arrCoordNormalize</A>.
+<P>
+
+<A NAME="arrCoordNormalize"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2041.htm#SEC2116"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: arrCentralize" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2043.htm#SEC2118"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: arrCoordNormalize" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: arr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

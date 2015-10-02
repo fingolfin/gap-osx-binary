@@ -1,0 +1,138 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: KoszulHomology</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: KoszulHomology">
+<META NAME="keywords" CONTENT="Singular Manual: KoszulHomology">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1241"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1165.htm#SEC1240"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: kontrahom" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1167.htm#SEC1242"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: tensorMod" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.7.18 KoszulHomology </H4>
+<!--docid::SEC1241::-->
+Procedure from library <CODE>homolog.lib</CODE> (see  <A HREF="sing_1148.htm#SEC1223">homolog_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Compute:</STRONG>
+<DD>A presentation of the p-th Koszul homology module H_p(f_1,...,f_k;M'),
+where M'=coker(M) and f_1,...,f_k are the given (ordered list
+of non-zero) generators of the ideal I.
+<BR>The computed presentation is minimized via prune.
+<BR>In particular, if H_p(f_1,...,f_k;M')=0 then the return value is 0.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>module H, s.th. coker(H) = H_p(f_1,...,f_k;M').
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>size of input ideal has to be &lt;= 20.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "homolog.lib";
+ring R=0,x(1..3),dp;
+ideal x=maxideal(1);
+module M=0;
+KoszulHomology(x,M,0);  // H_0(x,R), x=(x_1,x_2,x_3)
+==> _[1]=x(3)*gen(1)
+==> _[2]=x(2)*gen(1)
+==> _[3]=x(1)*gen(1)
+KoszulHomology(x,M,1);  // H_1(x,R), x=(x_1,x_2,x_3)
+==> _[1]=0
+qring S=std(x(1)*x(2));
+module M=0;
+ideal x=maxideal(1);
+KoszulHomology(x,M,1);
+==> _[1]=-x(3)*gen(1)
+==> _[2]=-x(2)*gen(1)
+==> _[3]=-x(1)*gen(1)
+KoszulHomology(x,M,2);
+==> _[1]=0
+</FONT></pre></td></tr></table><P>
+
+<A NAME="tensorMod"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1165.htm#SEC1240"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: kontrahom" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1167.htm#SEC1242"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: tensorMod" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

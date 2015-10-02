@@ -1,0 +1,159 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Evaluation of logical expressions</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Evaluation of logical expressions">
+<META NAME="keywords" CONTENT="Singular Manual: Evaluation of logical expressions">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC498"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_458.htm#SEC497"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: No rvalue of increments and assignments" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_460.htm#SEC499"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: No case or switch statement" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_456.htm#SEC495"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: System dependent limitations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_466.htm#SEC505"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous oddities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_457.htm#SEC496"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Major differences to the C programming language" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 6.3.2 Evaluation of logical expressions </H3>
+<!--docid::SEC498::-->
+<P>
+
+<STRONG>All</STRONG> arguments of a logical expression are first evaluated and
+then the value of the logical expression is determined. For example, the
+logical expressions <CODE>(a || b)</CODE> is evaluated by first evaluating
+<CODE>a</CODE> <EM>and</EM> <CODE>b</CODE>, even though the value of <CODE>b</CODE> has no
+influence on the value of <CODE>(a || b)</CODE>, if <CODE>a</CODE> evaluates to
+true.
+</P><P>
+
+Note, that this evaluation is different from the left-to-right,
+conditional evaluation of logical expressions (as found in most
+programming languages). For example, in these other languages, the value
+of <CODE>(1 || b)</CODE> is determined without ever evaluating <CODE>b</CODE>.  This
+causes some problems with boolean tests on variables, which might not be
+defined at evaluation time. For example, the following results in an
+error, if the variable <CODE>i</CODE> is undefined:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>if (defined(i) &amp;&amp; i &gt; 0) {} // WRONG!!!
+</FONT></pre></td></tr></table></P><P>
+
+This must be written instead as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>if (defined(i))
+{
+  if (i &gt; 0) {}
+}
+</FONT></pre></td></tr></table></P><P>
+
+However, there are several short work-arounds for this problem:
+<OL>
+<LI>
+If a variable (say, <CODE>i</CODE>) is only to be used as a boolean flag, then
+define (value is TRUE) and undefine (value is FALSE) <CODE>i</CODE> instead of
+assigning a value. Using this scheme, it is sufficient to simply write
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>if (defined(i))
+</FONT></pre></td></tr></table></P><P>
+
+in order to check whether <CODE>i</CODE> is TRUE. Use the command <CODE>kill</CODE>
+to undefine a variable, i.e. to assign it a FALSE value (see  <A HREF="sing_325.htm#SEC364">kill</A>).
+<LI>
+If a variable  can have more than two values, then
+define it, if necessary, before it is used for the first time.
+For example, if the following is used within a procedure
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>if (! defined(DEBUG)) { int DEBUG = 1;}
+<small>...</small>
+if (DEBUG == 3)  {<small>...</small>}
+if (DEBUG == 2)  {<small>...</small>}
+<small>...</small>
+</FONT></pre></td></tr></table></P><P>
+
+then a user of this procedure does not need to care about the existence
+of the <CODE>DEBUG</CODE> variable -- this remains hidden from the
+user. However, if <CODE>DEBUG</CODE> exists globally, then its local default
+value is overwritten by its global one.
+</OL>
+<P>
+
+<A NAME="No case or switch statement"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_458.htm#SEC497"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: No rvalue of increments and assignments" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_460.htm#SEC499"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: No case or switch statement" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_456.htm#SEC495"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: System dependent limitations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_466.htm#SEC505"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous oddities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_457.htm#SEC496"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Major differences to the C programming language" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

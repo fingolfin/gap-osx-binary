@@ -1,0 +1,202 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: pyobject operations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: pyobject operations">
+<META NAME="keywords" CONTENT="Singular Manual: pyobject operations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC285"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_245.htm#SEC284"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: pyobject expressions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_247.htm#SEC286"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: pyobject related functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_236.htm#SEC275"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: polytope" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: countedref" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: pyobject" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.25.3 pyobject operations </H3>
+<!--docid::SEC285::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE>+</CODE>
+<DD>addition
+<P>
+
+<DT><CODE>-</CODE>
+<DD>negation or subtraction
+<P>
+
+<DT><CODE>*</CODE>
+<DD>multiplication
+<P>
+
+<DT><CODE>/</CODE>
+<DD>division
+<P>
+
+<DT><CODE>^</CODE>, <CODE>**</CODE>
+<DD>power by a positive integer
+<P>
+
+<DT><CODE>&lt;</CODE>, <CODE>&lt;=</CODE>, <CODE>&gt;</CODE>, <CODE>&gt;=</CODE>, <CODE>==</CODE>, <CODE>&lt;&gt;</CODE>
+<DD>comparators (considering leading monomials w.r.t. monomial ordering)
+<P>
+
+<DT>pyobject_expression <CODE>[</CODE> int_expression <CODE>]</CODE>
+<DD>get the  item from the pyobject by index
+<DT>pyobject_expression <CODE>(</CODE> pyobject_expression_sequence <CODE>)</CODE>
+<DD>call the pyobject with a sequence of python arguments (the latter
+may be empty)
+<P>
+
+<DT>pyobject_expression <CODE>.</CODE> ( string_expression | name ),
+<DD>      pyobject_expression <CODE>::</CODE> ( string_expression | name )
+get attribute (class member) of a python object
+</DL>
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>pyobject two = 2;
+pyobject three = 3;
+
+two + three;
+==> 5
+two - three;
+==> -1
+two * three;
+==> 6
+two / three;
+==> 0
+two ^ three;
+==> 8
+two ** three;
+==> 8
+
+three &lt; two;
+==> 0
+two &lt; three;
+==> 1
+three &lt;= two;
+==> 0
+two &lt;= three;
+==> 1
+two == three;
+==> 0
+two == two;
+==> 1
+three &gt; two;
+==> 1
+two &gt; three;
+==> 0
+three &gt;= two;
+==> 1
+two &gt;= three;
+==> 0
+two != two;
+==> 0
+two != three;
+==> 1
+
+pyobject pystr = "Hello";
+pystr + " World!";
+==> 'Hello World!'
+pystr * 3;
+==> 'HelloHelloHello'
+pystr[1];
+==> 'e'
+
+python_run("def newfunc(*args): return list(args)");
+newfunc();
+==> []
+newfunc(two, three);
+==> [2, 3]
+
+newfunc."__class__";
+==> &lt;type 'function'&gt;
+newfunc::"__class__";
+==> &lt;type 'function'&gt;
+newfunc.func_name;
+==> 'newfunc'
+newfunc::func_name;
+==> 'newfunc'
+
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="pyobject related functions"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_245.htm#SEC284"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: pyobject expressions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_247.htm#SEC286"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: pyobject related functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_236.htm#SEC275"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: polytope" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: countedref" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: pyobject" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

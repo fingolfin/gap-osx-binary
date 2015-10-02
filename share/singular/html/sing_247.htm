@@ -1,0 +1,181 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: pyobject related functions</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: pyobject related functions">
+<META NAME="keywords" CONTENT="Singular Manual: pyobject related functions">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC286"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_246.htm#SEC285"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: pyobject operations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_248.htm#SEC287"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: python_eval" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_236.htm#SEC275"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: polytope" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: countedref" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: pyobject" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.25.4 pyobject related functions </H3>
+<!--docid::SEC286::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE>attrib</CODE>
+<DD>list, get and set attributes (class members) of a pyobject (see  <A HREF="sing_261.htm#SEC300">attrib</A>)
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  pyobject pystr = "Kublai Khan";
+
+  // Additional functionality through attrib
+  attrib(pystr, "__doc__");
+==> "str(object='') -&gt; string\n\nReturn a nice string representation of the o\
+   bject.\nIf the argument is a string, the return value is the same object.\
+   "
+  proc(attrib(pystr, "count"))("K");
+==> 2
+
+  pystr."__doc__";           // &lt;- Short notations
+==> "str(object='') -&gt; string\n\nReturn a nice string representation of the o\
+   bject.\nIf the argument is a string, the return value is the same object.\
+   "
+  pystr.count("a");          // Even shorter (if attribute's name is valid and unused)
+==> 2
+
+  python_run("def func(): return 17");
+  attrib(func);
+==> ['__call__', '__class__', '__closure__', '__code__', '__defaults__', '__d\
+   elattr__', '__dict__', '__doc__', '__format__', '__get__', '__getattribut\
+   e__', '__globals__', '__hash__', '__init__', '__module__', '__name__', '_\
+   _new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__siz\
+   eof__', '__str__', '__subclasshook__', 'func_closure', 'func_code', 'func\
+   _defaults', 'func_dict', 'func_doc', 'func_globals', 'func_name']
+  attrib(func, "func_name");
+==> 'func'
+  attrib(func, "func_name", "byAnyOtherName");
+  attrib(func, "func_name");
+==> 'byAnyOtherName'
+</FONT></pre></td></tr></table></P><P>
+
+<DT><CODE>killattrib</CODE>
+<DD>deletes an attribute from a pyobject (see  <A HREF="sing_326.htm#SEC365">killattrib</A>)
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB("pyobject.so");
+python_run("def new_pyobj(): pass");
+attrib(new_pyobj, "new_attr", "something");
+attrib(new_pyobj, "new_attr");
+==> 'something'
+attrib(new_pyobj);
+==> ['__call__', '__class__', '__closure__', '__code__', '__defaults__', '__d\
+   elattr__', '__dict__', '__doc__', '__format__', '__get__', '__getattribut\
+   e__', '__globals__', '__hash__', '__init__', '__module__', '__name__', '_\
+   _new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__siz\
+   eof__', '__str__', '__subclasshook__', 'func_closure', 'func_code', 'func\
+   _defaults', 'func_dict', 'func_doc', 'func_globals', 'func_name', 'new_at\
+   tr']
+
+killattrib(new_pyobj, "new_attr");
+attrib(new_pyobj);
+==> ['__call__', '__class__', '__closure__', '__code__', '__defaults__', '__d\
+   elattr__', '__dict__', '__doc__', '__format__', '__get__', '__getattribut\
+   e__', '__globals__', '__hash__', '__init__', '__module__', '__name__', '_\
+   _new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__siz\
+   eof__', '__str__', '__subclasshook__', 'func_closure', 'func_code', 'func\
+   _defaults', 'func_dict', 'func_doc', 'func_globals', 'func_name']
+</FONT></pre></td></tr></table></P><P>
+
+<DT><CODE>python_run</CODE>
+<DD>execute string-given <CODE>python</CODE> commands and import new symbols from
+<CODE>python</CODE> to S<SMALL>INGULAR</SMALL>'s context (see  <A HREF="sing_250.htm#SEC289">python_run</A>).
+<DT><CODE>python_eval</CODE>
+<DD>evaluate a string-given <CODE>python</CODE> expression and return the result
+to S<SMALL>INGULAR</SMALL> (see  <A HREF="sing_248.htm#SEC287">python_eval</A>).
+<DT><CODE>python_import</CODE>
+<DD>import <CODE>python</CODE> module into S<SMALL>INGULAR</SMALL>'s context
+(see  <A HREF="sing_249.htm#SEC288">python_import</A>)
+</DL>
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_248.htm#SEC287">4.25.5 python_eval</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_249.htm#SEC288">4.25.6 python_import</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_250.htm#SEC289">4.25.7 python_run</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<A NAME="python_eval"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_246.htm#SEC285"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: pyobject operations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_248.htm#SEC287"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: python_eval" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_236.htm#SEC275"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: polytope" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: countedref" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: pyobject" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

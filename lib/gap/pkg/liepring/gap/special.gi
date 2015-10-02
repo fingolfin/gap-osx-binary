@@ -83,7 +83,10 @@ end;
 ##
 IsValidPrime := function(L, P)
     local c;
-    if not IsPrimeInt(P) or P=2 then return false; fi;
+    if not IsPrimeInt(P) then return false; fi;
+    if not HasLibraryConditions(L) then return true; fi;
+    if P=2 then return false; fi;
+    if P=3 and PClassOfLiePRing(L) > 2 then return false; fi;
     c := L!.LibraryConditions[2];
     if c = "p=1 mod 3" then  
         if (P mod 3) <> 1 then return false; fi;
@@ -108,7 +111,6 @@ IsValidPrime := function(L, P)
     elif c = "p=3 mod 4, p=1 mod 3" then
         if (P mod 4) <> 3 or (P mod 3) <> 1 then return false; fi;
     fi;
-    if P=3 and PClassOfLiePRing(L) > 2 then return false; fi;
     return true;
 end;
 
@@ -156,8 +158,8 @@ end;
 ##
 
 LiePRingsInFamily := function( arg )
-    local L, S, d, P, W, c, para, vals, fals, X, Y, Z,
-          p, w, x, y, z, t, j, k, m, n, r, s, u, v;
+    local L, S, d, P, W, c, para, vals, fals, res, R, i, X, Y, Z,
+          p, w, x, y, z, t, j, k, m, n, r, s, u, v, flag;
 
     # get Lie ring
     L := arg[1];
@@ -165,7 +167,7 @@ LiePRingsInFamily := function( arg )
     d := DimensionOfLiePRing(L);
 
     # get prime
-    if Length(arg) = 2 then 
+    if Length(arg) >= 2 then 
         P := arg[2];
         if IsInt(S.prime) and P <> S.prime then 
             Print("cannot specialise prime to ",P," \n");
@@ -176,15 +178,33 @@ LiePRingsInFamily := function( arg )
     else
         P := S.prime;
     fi;
+
+    # get flag
+    if Length(arg) = 3 then 
+        flag := arg[3];
+    else
+        flag := false; 
+    fi;
+
+    # check
     if not IsInt(P) then 
         Print("need to specify a prime \n");
         return fail;
     fi;
 
     if not IsBound(S.param) and IsInt(S.prime) then 
+        if flag = "group" or flag = "code" then
+            L := PGroupByLiePRing(L); 
+            if flag = "code" then L := CodePcGroup(L); fi;
+        fi;
         return [L]; 
     elif not IsBound(S.param) then
-        return [SpecialiseLiePRingNC( L, P, [], [] )];
+        L := SpecialiseLiePRingNC( L, P, [], [] );
+        if flag = "group" or flag = "code" then
+            L := PGroupByLiePRing(L);
+            if flag = "code" then L := CodePcGroup(L); fi;
+        fi;
+        return [L];
     fi;
 
     # assign variable names
@@ -211,7 +231,12 @@ LiePRingsInFamily := function( arg )
 
     # 0 parameters
     if Length(para) = 0 then 
-        return [SpecialiseLiePRingNC( L, P, [], [] )];
+        L := SpecialiseLiePRingNC( L, P, [], [] );
+        if flag = "group" or flag = "code" then
+            L := PGroupByLiePRing(L);
+            if flag = "code" then L := CodePcGroup(L); fi;
+        fi;
+        return [L];
     fi;
 
     # 1 parameter
@@ -872,7 +897,19 @@ LiePRingsInFamily := function( arg )
         Error("parameters and values do not match");
     fi;
 
+    res := List(vals, x -> true);
+    for i in [1..Length(vals)] do
+        R := SpecialiseLiePRingNC(L, P, para, vals[i]);
+        if flag = "group" or flag = "code" then 
+            R := PGroupByLiePRing(R);
+            if flag = "code" then 
+                R := CodePcGroup(R);
+            fi;
+        fi;
+        res[i] := R;
+    od; 
+
     # got vals and para
-    return List(vals, X -> SpecialiseLiePRingNC( L, P, para, X ));
+    return res;
 end;
 

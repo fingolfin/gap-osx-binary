@@ -9,7 +9,7 @@ end;
 BaseMatT := function(M)
     local j;
     if Length(M)=0 then return M; fi;
-    M := ShallowCopy(M);
+    M := MutableCopyMat(M);
     TriangulizeMat(M);
     j := Position(M, 0*M[1]);
     if IsBool(j) then return M; fi;
@@ -185,7 +185,7 @@ ExtendNQ := function( A, B )
             Q.img[i] := Concatenation(B.img[i], z);
         else
             c := c+1;
-            t := U[c]{[s+1..s+m]};
+            t := -U[c]{[s+1..s+m]};
             v := SolutionMat(Q.bas, t){[Length(V)+1..m]};
             Q.img[i] := Concatenation(B.img[i], v);
         fi;
@@ -230,6 +230,46 @@ NQOfFpAlgebra := function( A )
         Print("step ",i,":  dim = ", B.dim, " -- time: ", StringTime(s),"\n"); 
     od;
     return B;
+end;
+
+CHECK_NQ_QUOT := function( A, NA )
+    local B, b, c, C, a, r, i, v;
+
+    # get algebra
+    B := AlgebraByTable(NA);
+    b := BasisVectors(Basis(B));
+    c := List(NA.img, x -> x*b);
+    C := Subalgebra(B, c);
+    if Dimension(C) < Dimension(B) then return false; fi;
+
+    # check rels
+    a := FreeGeneratorsOfFpAlgebra(A);
+    r := RelatorsOfFpAlgebra(A);
+    for i in [1..Length(r)] do
+        v := MappedExpressionForElementOfFreeAssociativeAlgebra(r[i], a, c);
+        if v <> Zero(B) then return r[i]; fi;
+    od;
+    return true;
+end;
+
+CHECK_EPI := function( A, T, img )
+    local B, b, c, C, a, r, i, v;
+
+    # get algebra
+    B := AlgebraByTable(T);
+    b := BasisVectors(Basis(B));
+    c := List(img, x -> x*b);
+    C := Subalgebra(B, c);
+    if Dimension(C) < Dimension(B) then return false; fi;
+
+    # check rels
+    a := FreeGeneratorsOfFpAlgebra(A);
+    r := RelatorsOfFpAlgebra(A);
+    for i in [1..Length(r)] do
+        v := MappedExpressionForElementOfFreeAssociativeAlgebra(r[i], a, c);
+        if v <> Zero(B) then return r[i]; fi;
+    od;
+    return true;
 end;
 
 

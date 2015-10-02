@@ -1,0 +1,344 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Representation of mathematical objects</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Representation of mathematical objects">
+<META NAME="keywords" CONTENT="Singular Manual: Representation of mathematical objects">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC941"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_889.htm#SEC940"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Polynomial data" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_891.htm#SEC942"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Monomial orderings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_889.htm#SEC940"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Polynomial data" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_900.htm#SEC951"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_889.htm#SEC940"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Polynomial data" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> B.1 Representation of mathematical objects </H2>
+<!--docid::SEC941::-->
+<P>
+
+S<SMALL>INGULAR</SMALL> distinguishes between objects which do not belong to a ring
+and those which belong to a specific ring (see  <A HREF="sing_28.htm#SEC38">Rings and orderings</A>).
+We comment only on the latter ones.
+</P><P>
+
+Internally all ring-dependent objects are polynomials or structures built from
+polynomials (and some additional information).
+Note that S<SMALL>INGULAR</SMALL> stores (and hence prints) a polynomial automatically
+w.r.t. the monomial ordering.
+</P><P>
+
+The definition of ideals and matrices, respectively, is straight forward:
+The user gives a list of polynomials
+which generate the ideal, resp. which are the entries of the matrix.
+(The number of rows and columns need to be provided when creating the matrix.)
+</P><P>
+
+A vector  in S<SMALL>INGULAR</SMALL> is always an element of a free module over the
+basering. It is given as a list of polynomials in one of the following
+formats
+<IMG
+ WIDTH="72" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_421.png"
+ ALT="$[f_1,...,f_n]$"> or <!-- MATH
+ $f_1*gen(1)+...+f_n*gen(n)$
+ -->
+<IMG
+ WIDTH="211" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_422.png"
+ ALT="$f_1*gen(1)+...+f_n*gen(n)$">, where <IMG
+ WIDTH="48" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_423.png"
+ ALT="$gen(i)$">denotes the i-th canonical generator of a free module (with 1 at index i and
+0 everywhere else).
+Both forms are equivalent. A vector is internally represented in
+the second form with the
+<IMG
+ WIDTH="48" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_423.png"
+ ALT="$gen(i)$">being "special" ring variables, ordered accordingly to the monomial ordering.
+Therefore, the form
+<IMG
+ WIDTH="72" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_421.png"
+ ALT="$[f_1,...,f_n]$">serves as output only if the monomial ordering gives priority to the
+component, i.e., is of the form <CODE>(c,...)</CODE> (see  <A HREF="sing_896.htm#SEC947">Module orderings</A>).  However, in any case the procedure <CODE>show</CODE> from the
+library <CODE>inout.lib</CODE> displays the bracket format.
+</P><P>
+
+A vector
+<!-- MATH
+ $v=[f_1,...,f_n]$
+ -->
+<IMG
+ WIDTH="102" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_424.png"
+ ALT="$v=[f_1,...,f_n]$">should always be considered as a column vector in a free module
+of rank equal to
+nrows(<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_311.png"
+ ALT="$v$">)where
+nrows(<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_311.png"
+ ALT="$v$">)is equal to the maximal index
+<IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_296.png"
+ ALT="$r$">such that
+<IMG
+ WIDTH="49" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_425.png"
+ ALT="$f_r \not= 0$">.This is due to the fact, that internally
+<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_311.png"
+ ALT="$v$">is a polynomial in a sparse representation, i.e.,
+<IMG
+ WIDTH="76" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_426.png"
+ ALT="$f_i*gen(i)$">is not stored if
+<IMG
+ WIDTH="47" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_427.png"
+ ALT="$f_i=0$">(for reasons of efficiency), hence the last 0-entries of
+<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_311.png"
+ ALT="$v$">are lost.
+Only more complex structures are able to keep the rank.
+</P><P>
+
+A module
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">in S<SMALL>INGULAR</SMALL> is given by a list of vectors
+<IMG
+ WIDTH="62" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_428.png"
+ ALT="$v_1,...,v_k$">which generate the module as a submodule of the free module of rank
+equal to
+nrows(<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">)which is the maximum of
+nrows(<IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_429.png"
+ ALT="$v_i$">).</P><P>
+
+If one wants to create a module with a larger rank than given by its
+generators, one has to use the command <CODE>attrib(M,"rank",r)</CODE> (see
+ <A HREF="sing_261.htm#SEC300">attrib</A>,  <A HREF="sing_360.htm#SEC399">nrows</A>) or to define a matrix first, then converting it
+into a module.  Modules in S<SMALL>INGULAR</SMALL> are almost the same as
+matrices, they may be considered as sparse representations of matrices.
+A module of a matrix is generated by the columns of the matrix and a
+matrix of a module has as columns the generators of the module.  These
+conversions preserve the rank and the number of generators, resp. the
+number of rows and columns.
+</P><P>
+
+By the above remarks it might appear that S<SMALL>INGULAR</SMALL> is only able to handle
+submodules of a free module. However, this is not true. S<SMALL>INGULAR</SMALL>
+can compute with any finitely generated module over the basering
+<IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_51.png"
+ ALT="$R$">.Such a module, say
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_326.png"
+ ALT="$N$">,is not represented by its generators but by its
+(generators and) relations. This means that
+<IMG
+ WIDTH="85" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_430.png"
+ ALT="$N = R^n/M$"> where <IMG
+ WIDTH="14" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_17.png"
+ ALT="$n$">is the number of generators of
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_326.png"
+ ALT="$N$"> and <!-- MATH
+ $M \subseteq R^n$
+ -->
+<IMG
+ WIDTH="64" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_431.png"
+ ALT="$M \subseteq R^n$">is the module of relations.
+In other words, defining  a module
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">as a submodule of a free module
+<IMG
+ WIDTH="25" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_89.png"
+ ALT="$R^n$">can also be considered as the definition of
+<IMG
+ WIDTH="85" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_430.png"
+ ALT="$N = R^n/M$">.</P><P>
+
+Note that most functions, when applied to a module
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">,really deal with
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">.However, there are some functions which deal with
+<IMG
+ WIDTH="85" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_430.png"
+ ALT="$N = R^n/M$"> instead of <IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">.</P><P>
+
+For example, <CODE>std(M)</CODE> computes a standard basis of
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">(and thus gives another representation of
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_326.png"
+ ALT="$N$"> as <IMG
+ WIDTH="69" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_432.png"
+ ALT="$N = R^n/$">std(<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">)).However, <CODE>dim(M)</CODE>, resp. <CODE>vdim(M)</CODE>, return
+dim<IMG
+ WIDTH="62" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_433.png"
+ ALT="$(R^n/M)$">, resp. dim<IMG
+ WIDTH="70" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_434.png"
+ ALT="$_k(R^n/M)$">(if M is given by a standard basis).
+</P><P>
+
+The function <CODE>syz(M)</CODE>  returns the first syzygy module of
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">,i.e., the module
+of relations of the given generators of
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">which is equal to the second syzygy module of
+<IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_326.png"
+ ALT="$N$">.Refer to the description of each function in
+ <A HREF="sing_259.htm#SEC298">Functions</A> to get information which module the function deals with.
+</P><P>
+
+The numbering in <CODE>res</CODE> and other commands for computing resolutions
+refers to a resolution of
+<IMG
+ WIDTH="85" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_430.png"
+ ALT="$N = R^n/M$">(see  <A HREF="sing_386.htm#SEC425">res</A>;  <A HREF="sing_903.htm#SEC956">Syzygies and resolutions</A>).
+</P><P>
+
+It is possible to compute in any field which is a valid ground field in
+S<SMALL>INGULAR</SMALL>.  For doing so, one has to define a ring with the desired
+ground field and at least one variable. The elements of the field are of
+type number, but may also be considered as polynomials (of degree
+0). Large computations should be faster if the elements of the field are
+defined as numbers.
+</P><P>
+
+The above remarks do also apply to quotient rings. Polynomial data are
+stored internally in the same manner, the only difference is that this
+polynomial representation is in general not unique. <CODE>reduce(f,std(0))</CODE>
+computes a normal form of a polynomial f in a quotient ring (cf.
+ <A HREF="sing_383.htm#SEC422">reduce</A>).
+</P><P>
+
+<A NAME="Monomial orderings"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_889.htm#SEC940"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Polynomial data" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_891.htm#SEC942"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Monomial orderings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_889.htm#SEC940"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Polynomial data" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_900.htm#SEC951"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_889.htm#SEC940"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Polynomial data" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

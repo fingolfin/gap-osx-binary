@@ -1,0 +1,181 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Long coefficients</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Long coefficients">
+<META NAME="keywords" CONTENT="Singular Manual: Long coefficients">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC898"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_846.htm#SEC897"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Rings associated to monomial orderings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_848.htm#SEC899"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Parameters" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.1.4 Long coefficients </H3>
+<!--docid::SEC898::-->
+<P>
+
+The following innocent example produces in its standard basis
+extremely long coefficients in char 0 for the lexicographical
+ordering.
+But a very small deformation does not (the undeformed
+example is degenerated with respect to the Newton boundary).
+This example demonstrates that it might be wise, for complicated
+examples, to do the calculation first in positive char (e.g., 32003).
+It has been shown, that in complicated examples, more than 95 percent of
+the time needed for a standard basis computation is used in the
+computation of the coefficients (in char 0).
+The representation of long integers with real is demonstrated.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>timer = 1;                              // activate the timer
+ring R0 = 0,(x,y),lp;
+poly f = x5+y11+xy9+x3y9;
+ideal i = jacob(f);
+ideal i1 = i,i[1]*i[2];                 // undeformed ideal
+ideal i2 = i,i[1]*i[2]+1/1000000*x5y8;  // deformation of i1
+i1; i2;
+==> i1[1]=5x4+3x2y9+y9
+==> i1[2]=9x3y8+9xy8+11y10
+==> i1[3]=45x7y8+27x5y17+45x5y8+55x4y10+36x3y17+33x2y19+9xy17+11y19
+==> i2[1]=5x4+3x2y9+y9
+==> i2[2]=9x3y8+9xy8+11y10
+==> i2[3]=45x7y8+27x5y17+45000001/1000000x5y8+55x4y10+36x3y17+33x2y19+9xy17+1\
+   1y19
+ideal j = std(i1);
+j;
+==> j[1]=264627y39+26244y35-1323135y30-131220y26+1715175y21+164025y17+1830125\
+   y16
+==> j[2]=12103947791971846719838321886393392913750065060875xy8-28639152114168\
+   3198701331939250003266767738632875y38-31954402206909026926764622877573565\
+   78554430672591y37+57436621420822663849721381265738895282846320y36+1657764\
+   214948799497573918210031067353932439400y35+213018481589308191195677223898\
+   98682697001205500y34+1822194158663066565585991976961565719648069806148y33\
+   -4701709279892816135156972313196394005220175y32-1351872269688192267600786\
+   97600850686824231975y31-3873063305929810816961516976025038053001141375y30\
+   +1325886675843874047990382005421144061861290080000y29+1597720195476063141\
+   9467945895542406089526966887310y28-26270181336309092660633348002625330426\
+   7126525y27-7586082690893335269027136248944859544727953125y26-867853074106\
+   49464602285843351672148965395945625y25-5545808143273594102173252331151835\
+   700278863924745y24+19075563013460437364679153779038394895638325y23+548562\
+   322715501761058348996776922561074021125y22+157465452677648386073957464715\
+   68100780933983125y21-1414279129721176222978654235817359505555191156250y20\
+   -20711190069445893615213399650035715378169943423125y19+272942733337472665\
+   573418092977905322984009750y18+789065115845334505801847294677413365720955\
+   3750y17+63554897038491686787729656061044724651089803125y16-22099251729923\
+   906699732244761028266074350255961625y14+147937139679655904353579489722585\
+   91339027857296625y10
+==> j[3]=5x4+3x2y9+y9
+// Compute average coefficient length (=51) by
+//   - converting j[2] to a string in order to compute the number
+//   of characters
+//   - divide this by the number of monomials:
+size(string(j[2])) div size(j[2]);
+==> 51
+vdim(j);
+==> 63
+// For a better representation normalize the long coefficients
+// of the polynomial j[2] and map it to real:
+poly p=(1/12103947791971846719838321886393392913750065060875)*j[2];
+ring R1=real,(x,y),lp;
+short=0; // force the long output format
+poly p=imap(R0,p);
+p;
+==> x*y^8-(2.366e-02)*y^38-(2.640e-01)*y^37+(4.745e-06)*y^36+(1.370e-04)*y^35\
+   +(1.760e-03)*y^34+(1.505e-01)*y^33-(3.884e-07)*y^32-(1.117e-05)*y^31-(3.2\
+   00e-04)*y^30+(1.095e-01)*y^29+(1.320e+00)*y^28-(2.170e-05)*y^27-(6.267e-0\
+   4)*y^26-(7.170e-03)*y^25-(4.582e-01)*y^24+(1.576e-06)*y^23+(4.532e-05)*y^\
+   22+(1.301e-03)*y^21-(1.168e-01)*y^20-(1.711e+00)*y^19+(2.255e-05)*y^18+(6\
+   .519e-04)*y^17+(5.251e-03)*y^16-(1.826e+00)*y^14+(1.222e+00)*y^10
+// Compute a standard basis for the deformed ideal:
+setring R0; // return to the original ring R0
+j = std(i2);
+j;
+==> j[1]=y16
+==> j[2]=65610xy8+17393508y27+7223337y23+545292y19+6442040y18-119790y14+80190\
+   y10
+==> j[3]=5x4+3x2y9+y9
+vdim(j);
+==> 40
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Parameters"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_846.htm#SEC897"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Rings associated to monomial orderings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_848.htm#SEC899"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Parameters" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

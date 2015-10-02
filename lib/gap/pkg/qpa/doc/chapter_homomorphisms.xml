@@ -1,0 +1,921 @@
+<Chapter Label="Homomorphisms"><Heading>Homomorphisms of Right Modules
+    over Path Algebras</Heading>
+
+This chapter describes the categories, representations, attributes,
+and operations on homomorphisms between representations of
+quivers.<P/>
+
+Given two homorphisms <Math>f\colon L\to M</Math> and <Math>g\colon
+  M\to N</Math>, then the composition is written <Math>f*g</Math>. The
+  elements in the modules or the representations of a quiver are row
+  vectors. Therefore the homomorphisms between two modules are acting
+  on these row vectors, that is, if <Math>m_i</Math> is
+  in <Math>M[i]</Math> and <Math>g_i\colon M[i]\to N[i]</Math>
+  represents the linear map, then the value of <Math>g</Math> applied
+  to <Math>m_i</Math> is the matrix product <Math>m_i*g_i</Math>.<P />
+
+The example used throughout this chapter is the following.
+<Example><![CDATA[
+gap> Q := Quiver(3,[[1,2,"a"],[1,2,"b"],[2,2,"c"],[2,3,"d"],[3,1,"e"]]);;
+gap> KQ := PathAlgebra(Rationals, Q);;
+gap> AssignGeneratorVariables(KQ);;
+gap> rels := [d*e,c^2,a*c*d-b*d,e*a];;
+gap> A := KQ/rels;;
+gap> mat :=[["a",[[1,2],[0,3],[1,5]]],["b",[[2,0],[3,0],[5,0]]],
+> ["c",[[0,0],[1,0]]],["d",[[1,2],[0,1]]],["e",[[0,0,0],[0,0,0]]]];;
+gap> N := RightModuleOverPathAlgebra(A,mat);; ]]>
+</Example>
+
+<Section><Heading>Categories and representation of homomorphisms</Heading>
+
+<ManSection>
+   <Filt Name="IsPathAlgebraModuleHomomorphism" Arg="f" Comm="category"/>
+   <Description>
+     Arguments: <Arg>f</Arg> - any object in GAP.<Br />
+   </Description>
+   <Returns> true or false depending on if <Arg>f</Arg> belongs to the
+     categories <Code>IsPathAlgebraModuleHomomorphism</Code>.
+   </Returns>
+   <Description>
+     This defines the category
+     <Ref Filt="IsPathAlgebraModuleHomomorphism"/>. 
+   </Description>
+</ManSection> 
+
+<ManSection>
+   <Oper Name="RightModuleHomOverAlgebra" Arg="M, N, mats" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>N</Arg> - two modules over the same
+     (quotient of a) path algebra, <Arg>mats</Arg> - a list of
+     matrices, one for each vertex in the quiver of the path
+     algebra.<Br />
+   </Description>
+   <Returns>a homomorphism in the
+   category <C>IsPathAlgebraModuleHomomorphism</C> from the module <Arg>M</Arg> to the
+   module <Arg>N</Arg> given by the matrices <Arg>mats</Arg>.</Returns>
+   <Description>
+     The arguments <Arg>M</Arg> and <Arg>N</Arg> are two modules over
+     the same algebra (this is checked), and <Arg>mats</Arg> is a list
+     of matrices <C>mats[i]</C>, where <C>mats[i]</C> represents the
+     linear map from <C>M[i]</C> to <C>N[i]</C> with <Code>i</Code>
+     running through all the vertices in the same order as when the
+     underlying quiver was created. If
+     both <Code>DimensionVector(M)[i]</Code>
+     and <Code>DimensionVector(N)[i]</Code> are non-zero,
+     then <C>mats[i]</C> is a <Code>DimensionVector(M)[i]</Code>
+     by <Code>DimensionVector(N)[i]</Code> matrix. If
+     <Code>DimensionVector(M)[i]</Code> is zero 
+     and <Code>DimensionVector(N)[i]</Code> is non-zero, then
+     <C>mats[i]</C> must be the zero <Code>1</Code>
+     by <Code>DimensionVector(N)[i]</Code> matrix. Similarly for the 
+     other way around. If both <Code>DimensionVector(M)[i]</Code>
+     and <Code>DimensionVector(N)[i]</Code> are zero,
+     then <C>mats[i]</C> must be the <Code>1</Code> by <Code>1</Code>
+     zero matrix. The function checks if <Arg>mats</Arg> is a
+     homomorphism from the module <Arg>M</Arg> to the
+     module <Arg>N</Arg> by checking that the matrices given
+     in <Arg>mats</Arg> have the correct size and satisfy the
+     appropriate commutativity conditions with the matrices in the
+     modules given by <Arg>M</Arg> and <Arg>N</Arg>. The source (or
+     domain) and the range (or codomain) of the homomorphism
+     constructed can by obtained again by <Ref Oper="Range"/> and by
+     <Ref Oper="Source"/>, respectively.
+   </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> L := RightModuleOverPathAlgebra(A,[["a",[0,1]],["b",[0,1]],
+> ["c",[[0]]],["d",[[1]]],["e",[1,0]]]);
+<[ 0, 1, 1 ]>
+gap> DimensionVector(L);
+[ 0, 1, 1 ]
+gap> f := RightModuleHomOverAlgebra(L,N,[[[0,0,0]], [[1,0]], 
+> [[1,2]]]);
+<<[ 0, 1, 1 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> IsPathAlgebraMatModuleHomomorphism(f);
+true ]]>
+</Example>
+
+</Section>
+
+<Section><Heading>Generalities of homomorphisms</Heading>
+
+<ManSection>
+   <Oper Name="\= (maps)" Arg="f,g " Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg> - two homomorphisms between
+     two modules.<Br />
+   </Description>
+   <Returns>true, if <Code>Source(f) =
+   Source(g)</Code>, <Code>Range(f) = Range(g)</Code>, and the
+   matrices defining the maps <Arg>f</Arg> and <Arg>g</Arg>
+   coincide.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="\+ (maps)" Arg="f,g " Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg> - two homomorphisms between
+     two modules.<Br />
+   </Description>
+   <Returns>the sum <Arg>f+g</Arg> of the maps <Arg>f</Arg>
+   and <Arg>g</Arg>.</Returns>
+   <Description>The function checks if the maps have the same source
+   and the same range, and returns an error message otherwise. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="\* (maps)" Arg="f,g " Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg> - two homomorphisms between
+     two modules, or one scalar and one homomorphism between modules.<Br />
+   </Description>
+   <Returns>the composition <Arg>fg</Arg> of the maps <Arg>f</Arg>
+   and <Arg>g</Arg>, if the input are maps between representations of
+   the same quivers. If <Arg>f</Arg> or <Arg>g</Arg> is a 
+   scalar, it returns the natural action of scalars on the maps
+   between representations.</Returns>
+   <Description>The function checks if the maps are composable, in
+   the first case and in the second case it checks if the scalar is in
+   the correct field, and returns an error message otherwise.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Attr Name="CoKernelOfWhat" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between
+     two modules.<Br />
+   </Description>
+   <Returns>
+     a homomorphism <Arg>g</Arg>, if <Arg>f</Arg> has been computed as the
+     cokernel of the homomorphism <Arg>g</Arg>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="IdentityMapping" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module.<Br />
+   </Description>
+   <Returns>the identity map between <Arg>M</Arg> and <Arg>M</Arg>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="ImageElm" Arg="f, elem" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules, <Arg>elem</Arg> - an element in the source of <Arg>f</Arg>.<Br />
+   </Description>
+   <Returns>the image of the element <Arg>elem</Arg> in the source (or
+   domain) of the homomorphism <Arg>f</Arg>.</Returns>
+   <Description>
+     The function checks if <Arg>elem</Arg> is an element in the
+     source of <Arg>f</Arg>, and it returns an error message
+     otherwise. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="ImagesSet" Arg="f, elts" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules, <Arg>elts</Arg> - an element in the source
+     of <Arg>f</Arg>, or the source of <Arg>f</Arg>.<Br />
+   </Description>
+   <Returns>the non-zero images of a set of elements <Arg>elts</Arg>
+   in the source of the homomorphism <Arg>f</Arg>, or
+   if <Arg>elts</Arg> is  the source of <Arg>f</Arg>, it
+   returns a basis of the image.</Returns>
+   <Description>
+     The function checks if the set of elements <Arg>elts</Arg>
+     consists of elements in the source of <Arg>f</Arg>, and it
+     returns an error message otherwise.
+   </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> B := BasisVectors(Basis(N)); 
+[ [ [ 1, 0, 0 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 1, 0 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 1 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 1, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 1 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 1, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 0, 1 ] ] ]
+gap> PreImagesRepresentative(f,B[4]);     
+[ [ 0 ], [ 1 ], [ 0 ] ]
+gap> PreImagesRepresentative(f,B[5]);
+fail
+gap> BL := BasisVectors(Basis(L));
+[ [ [ 0 ], [ 1 ], [ 0 ] ], [ [ 0 ], [ 0 ], [ 1 ] ] ]
+gap> ImageElm(f,BL[1]);
+[ [ 0, 0, 0 ], [ 1, 0 ], [ 0, 0 ] ]
+gap> ImagesSet(f,L);
+[ [ [ 0, 0, 0 ], [ 1, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 1, 2 ] ] ]
+gap> ImagesSet(f,BL);
+[ [ [ 0, 0, 0 ], [ 1, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 1, 2 ] ] ]
+gap> z := Zero(f);;
+gap> f = z;
+false
+gap> Range(f) = Range(z);
+true
+gap> y := ZeroMapping(L,N);;
+gap> y = z;            
+true
+gap> id := IdentityMapping(N);;
+gap> f*id;;
+gap> #This causes an error!
+gap> id*f;
+Error, codomain of the first argument is not equal to the domain of th\
+e second argument,  called from
+<function>( <arguments> ) called from read-eval-loop
+Entering break read-eval-print loop ...
+you can 'quit;' to quit to outer loop, or
+you can 'return;' to continue
+brk> quit;;
+gap> 2*f + z;
+<<[ 0, 1, 1 ]> ---> <[ 3, 2, 2 ]>> ]]>
+</Example>
+
+
+<ManSection>
+   <Attr Name="ImageOfWhat" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     a homomorphism <Arg>g</Arg>, if <Arg>f</Arg> has been computed as the
+     image projection or the image inclusion of the homomorphism <Arg>g</Arg>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Prop Name="IsInjective" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg> is one-to-one.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="IsIsomorphism" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg> is an isomorphism.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Prop Name="IsLeftMinimal" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg> is left minimal.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Prop Name="IsRightMinimal" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg> is right minimal.
+   </Returns>
+</ManSection>
+
+<Example><![CDATA[
+gap> L := RightModuleOverPathAlgebra(A,[["a",[0,1]],["b",[0,1]],
+> ["c",[[0]]],["d",[[1]]],["e",[1,0]]]);;
+gap> f := RightModuleHomOverAlgebra(L,N,[[[0,0,0]], [[1,0]], 
+> [[1,2]]]);
+<<[ 0, 1, 1 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> g := CoKernelProjection(f);
+<<[ 3, 2, 2 ]> ---> <[ 3, 1, 1 ]>>
+
+gap> CoKernelOfWhat(g) = f;
+true
+gap> h := ImageProjection(f);
+<<[ 0, 1, 1 ]> ---> <[ 0, 1, 1 ]>>
+
+gap> ImageOfWhat(h) = f;
+true
+gap> IsInjective(f); IsSurjective(f); IsIsomorphism(f); 
+true
+false
+false
+gap> IsIsomorphism(h);
+true ]]>
+</Example>
+
+<ManSection>
+   <Prop Name="IsSplitEpimorphism" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg>
+     is a splittable epimorphism, otherwise <Code>false</Code>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Prop Name="IsSplitMonomorphism" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg>
+     is a splittable monomorphism, otherwise <Code>false</Code>.
+   </Returns>
+</ManSection>
+
+<Example><![CDATA[
+gap> S := SimpleModules(A)[1];;
+gap> H := HomOverAlgebra(N,S);; 
+gap> IsSplitMonomorphism(H[1]);  
+false
+gap> IsSplitEpimorphism(H[1]);
+true]]>
+</Example>
+
+<ManSection>
+   <Prop Name="IsSurjective" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg> is onto.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Prop Name="IsZero" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     <Code>true</Code> if the homomorphism <Arg>f</Arg>
+     is a zero homomorphism.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="KernelOfWhat" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     a homomorphism <Arg>g</Arg>, if <Arg>f</Arg> has been computed as the
+     kernel of the homomorphism <Arg>g</Arg>.
+   </Returns>
+</ManSection>
+
+<Example><![CDATA[
+gap> L := RightModuleOverPathAlgebra(A,[["a",[0,1]],["b",[0,1]],
+> ["c",[[0]]],["d",[[1]]],["e",[1,0]]]);
+<[ 0, 1, 1 ]>
+gap> f := RightModuleHomOverAlgebra(L,N,[[[0,0,0]], [[1,0]], 
+> [[1,2]]]);;
+gap> IsZero(0*f);
+true
+gap> g := KernelInclusion(f);
+<<[ 0, 0, 0 ]> ---> <[ 0, 1, 1 ]>>
+
+gap> KnownAttributesOfObject(g);
+[ "Range", "Source", "PathAlgebraOfMatModuleMap", "KernelOfWhat" ]
+gap> KernelOfWhat(g) = f;
+true ]]>
+</Example>
+
+<ManSection>
+   <Attr Name="LeftInverseOfHomomorphism" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns><Code>false</Code> if the homomorphism <Arg>f</Arg> is not
+   a splittable epimorphism, otherwise it returns a splitting of the
+   split epimorphism <Arg>f</Arg>. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="MatricesOfPathAlgebraMatModuleHomomorphism" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>the matrices defining the homomorphism <Arg>f</Arg>.</Returns>
+</ManSection>
+
+<Example><![CDATA[
+gap> MatricesOfPathAlgebraMatModuleHomomorphism(f);
+[ [ [ 0, 0, 0 ] ], [ [ 1, 0 ] ], [ [ 1, 2 ] ] ]
+gap> Range(f);
+<[ 3, 2, 2 ]>
+gap> Source(f);
+<[ 0, 1, 1 ]>
+gap> Source(f) = L;
+true ]]>
+</Example>
+
+<ManSection>
+   <Attr Name="PathAlgebraOfMatModuleMap" Arg="f" Comm=""/>
+   <Description> 
+    Arguments: <Arg>f</Arg> -- a homomorphism between two path algebra modules (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>the algebra over which the range and the source of the
+   homomorphism <Arg>f</Arg> is defined.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="PreImagesRepresentative" Arg="f, elem" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules, <Arg>elem</Arg> - an element in the range of <Arg>f</Arg>.<Br />
+   </Description>
+   <Returns>a preimage of the element <Arg>elem</Arg> in the range (or
+   codomain) the homomorphism <Arg>f</Arg> if a preimage exists,
+   otherwise it returns <C>fail</C>.</Returns>
+   <Description>
+     The function checks if <Arg>elem</Arg> is an element in the
+     range of <Arg>f</Arg> and returns an error message if
+     not. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Attr Name="Range" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>the range (or codomain) the homomorphism <Arg>f</Arg>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="RightInverseOfHomomorphism" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns><Code>false</Code> if the homomorphism <Arg>f</Arg> is not
+   a splittable monomorphism, otherwise it returns a splitting of the
+   split monomorphism <Arg>f</Arg>. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="Source" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>the source (or domain) the homomorphism <Arg>f</Arg>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="Zero" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>the zero map between <Code>Source(f)</Code>
+   and <Code>Range(f)</Code>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="ZeroMapping" Arg="M, N" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>N</Arg> - two modules.<Br />
+   </Description>
+   <Returns>the zero map between <Arg>M</Arg> and <Arg>N</Arg>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="HomomorphismFromImages" Arg="M, N, genImages" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>N</Arg> -- two modules, <Arg>genImages</Arg> -- a list.<Br />
+   </Description>
+   <Returns>A map <M>f</M> between <Arg>M</Arg> and <Arg>N</Arg>, given by <A>genImages</A>.
+   </Returns>
+   <Description>
+     Let <C>B</C> be the basis <C>BasisVectors( Basis( M ) )</C> of
+     <Arg>M</Arg>.  Then the number of elements of <C>genImages</C>
+     should be equal to the number of elements of <C>B</C>, and
+     <C>genImages[i]</C> is an element of <C>N</C> and the image of
+     <C>B[i]</C> under <C>f</C>. The method fails if <C>f</C> is not a
+     homomorphism, or if <C>B[i]</C> and <C>genImages[i]</C> are
+     supported in different vertices.
+   </Description>
+</ManSection>
+
+</Section>
+
+<Section><Heading>Homomorphisms and modules constructed from homomorphisms and modules</Heading>
+
+<ManSection>
+   <Attr Name="CoKernel" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>the cokernel of a homomorphism <Arg>f</Arg> between two
+   modules.</Returns>
+   <Description>
+    This function returns the cokernel of the homomorphism <Arg>f</Arg> as 
+    a module. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Attr Name="CoKernelProjection" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>the cokernel of a homomorphism <Arg>f</Arg> between two
+   modules.</Returns>
+   <Description>
+    This function returns the cokernel of the homomorphism <Arg>f</Arg> as 
+    the projection homomorphism from the range of the homomorphism 
+    <Arg>f</Arg> to the cokernel of the homomorphism <Arg>f</Arg>.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="EndModuloProjOverAlgebra" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module.<Br />
+   </Description>
+   <Returns>the natural homomorphism from the endomorphism ring
+     of <Arg>M</Arg> to the endomorphism ring of <Arg>M</Arg> modulo
+     the ideal generated by those endomorphisms of <Arg>M</Arg> which
+     factor through a projective module.</Returns>
+   <Description>
+     The operation returns an error message if the zero module is
+     entered as an argument. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="EndOfModuleAsQuiverAlgebra" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a PathAlgebraMatModule.<Br />
+   </Description>
+   <Returns> a list of three elements, (i) the endomorphism ring of
+   <Arg>M</Arg>, (ii) the adjacency matrix of the quiver of the endomorphism
+   ring and (iii) the endomorphism ring as a quiver algebra.
+   </Returns>
+   <Description>
+     Suppose <Arg>M</Arg> is a module over a quiver algebra over a
+     field <M>K</M>. The function checks if the endomorphism ring of
+     <Arg>M</Arg> is K-elementary (not necessary for it to be a quiver
+     algebra, but this is a TODO improvement), and returns error
+     message otherwise.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Attr Name="EndOverAlgebra" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module.<Br />
+   </Description>
+   <Returns>the endomorphism ring of <Arg>M</Arg> as a subalgebra of
+   the direct sum of the full matrix rings of <C>DimensionVector(M)[i] x
+   DimensionVector(M)[i]</C>, where <Arg>i</Arg> runs over all
+   vertices where <C>DimensionVector(M)[i]</C> is non-zero.</Returns>
+   <Description>
+    The endomorphism is an algebra with one, and one can apply for
+    example <Code>RadicalOfAlgebra</Code> to find the radical of the
+    endomorphism ring. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="FromEndMToHomMM" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> -- an element in <C>EndOverAlgebra(M)</C>.<Br />
+   </Description>
+   <Returns>the homomorphism from <Arg>M</Arg> to <Arg>M</Arg>
+   corresponding to the element <Arg>f</Arg> in the endomorphism ring
+   <Code>EndOverAlgebra(M)</Code> of <Arg>M</Arg>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="FromHomMMToEndM" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> -- an element in <C>HomOverAlgebra(M,M)</C>.<Br />
+   </Description>
+   <Returns>the element <Arg>f</Arg> in the endomorphism ring
+   <Code>EndOverAlgebra(M)</Code> of <Arg>M</Arg> corresponding to the
+   the homomorphism from <Arg>M</Arg> to <Arg>M</Arg> given by <Arg>f</Arg>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="HomFactoringThroughProjOverAlgebra" Arg="M, N" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>N</Arg> - two modules.<Br />
+   </Description>
+   <Returns>a basis for the vector space of homomorphisms from <Arg>M</Arg>
+   to <Arg>N</Arg> which factors through a projective module.</Returns>
+   <Description>
+    The function checks if <Arg>M</Arg> and <Arg>N</Arg> are modules
+    over the same algebra, and returns an error message otherwise. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="HomFromProjective" Arg="m, M" Comm=""/>
+   <Description>
+     Arguments: <Arg>m</Arg>, <Arg>M</Arg> - an element and a module.<Br />
+   </Description>
+   <Returns>the homomorphism from the indecomposable projective
+   module defined by the support of the element <Arg>m</Arg>
+   to the module <Arg>M</Arg>.</Returns>
+   <Description>
+    The function checks if <Arg>m</Arg> is an elememt in <Arg>M</Arg>
+    and if the element <Arg>m</Arg> is supported in only one
+    vertex. Otherwise it returns fail.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="HomOverAlgebra" Arg="M, N" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>N</Arg> - two modules.<Br />
+   </Description>
+   <Returns>a basis for the vector space of homomorphisms from <Arg>M</Arg>
+   to <Arg>N</Arg>.</Returns>
+   <Description>
+    The function checks if <Arg>M</Arg> and <Arg>N</Arg> are modules
+    over the same algebra, and returns an error message and fail
+    otherwise. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Attr Name="Image" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>the image of a homomorphism <Arg>f</Arg> as a module.</Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="ImageInclusion" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>the inclusion of the image of a homomorphism <Arg>f</Arg> into 
+   the range of <Arg>f</Arg>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="ImageProjection" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>the projection from the source of <Arg>f</Arg> to
+    the image of the homomorphism <Arg>f</Arg>.</Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="ImageProjectionInclusion" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two modules.<Br />
+   </Description>
+   <Returns>both the projection from the source of <Arg>f</Arg> to the image of the 
+   homomorphism <Arg>f</Arg> and the inclusion  of the image of a homomorphism <Arg>f</Arg> into 
+   the range of <Arg>f</Arg> as a list of two elements (first the
+   projection and then the inclusion).</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="IsomorphismOfModules" Arg="M, N" Comm=""/>
+   <Description>
+     Arguments: <Arg>M, N</Arg> - two PathAlgebraMatModules.<Br />
+   </Description>
+   <Returns>false if <Arg>M</Arg> and <Arg>N</Arg> are two
+   non-isomorphic modules, otherwise it returns an isomorphism from 
+   <Arg>M</Arg> to <Arg>N</Arg>.</Returns>
+   <Description>
+    The function checks if <Arg>M</Arg> and <Arg>N</Arg> are modules
+    over the same algebra, and returns an error message otherwise.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Attr Name="Kernel" Arg="f" Comm=""/>
+   <Attr Name="KernelInclusion" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>the kernel of a homomorphism <Arg>f</Arg> between two
+   modules.</Returns>
+   <Description>
+    The first variant <Ref Attr="Kernel"/> returns the kernel of the
+    homomorphism <Arg>f</Arg> as a module, while the latter one
+    returns the inclusion homomorphism of the kernel into the source
+    of the homomorphism <Arg>f</Arg>.
+   </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> hom := HomOverAlgebra(N,N);
+[ <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+     ]
+gap> g := hom[1];
+<<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> M := CoKernel(g);
+<[ 2, 2, 2 ]>
+gap> f := CoKernelProjection(g);
+<<[ 3, 2, 2 ]> ---> <[ 2, 2, 2 ]>>
+
+gap> Range(f) = M;
+true
+gap> endo := EndOverAlgebra(N);
+<algebra-with-one of dimension 5 over Rationals>
+gap> RadicalOfAlgebra(endo);
+<algebra of dimension 3 over Rationals>
+gap> B := BasisVectors(Basis(N));
+[ [ [ 1, 0, 0 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 1, 0 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 1 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 1, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 1 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 1, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 0, 1 ] ] ]
+gap> p := HomFromProjective(B[1],N);
+<<[ 1, 4, 3 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> U := Image(p);
+<[ 1, 2, 2 ]>
+gap> projinc := ImageProjectionInclusion(p);
+[ <<[ 1, 4, 3 ]> ---> <[ 1, 2, 2 ]>>
+    , <<[ 1, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+     ]
+gap> U = Range(projinc[1]);                                      
+true
+gap> Kernel(p);
+<[ 0, 2, 1 ]> ]]>
+</Example>
+
+<ManSection>
+   <Attr Name="LeftMinimalVersion" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     the left minimal version <Arg>f'</Arg> of the
+     homomorphism <Arg>f</Arg> together with the a list <Code>B</Code>
+     of modules such that the direct sum of the
+     modules, <Code>Range(f')</Code> and the modules in the
+     list <Code>B</Code> is isomorphic to <Code>Range(f)</Code>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="RightMinimalVersion" Arg="f" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg> - a homomorphism between two
+     modules.<Br />
+   </Description>
+   <Returns>
+     the right minimal version <Arg>f'</Arg> of the
+     homomorphism <Arg>f</Arg> together with the a list <Code>B</Code>
+     of modules such that the direct sum of the
+     modules, <Code>Source(f')</Code> and the modules on the
+     list <Code>B</Code> is isomorphic to <Code>Source(f)</Code>.
+   </Returns>
+</ManSection>
+
+<Example><![CDATA[
+gap> H:= HomOverAlgebra(N,N);;
+gap> RightMinimalVersion(H[1]);   
+[ <<[ 1, 0, 0 ]> ---> <[ 3, 2, 2 ]>>
+    , [ <[ 2, 2, 2 ]> ] ]
+gap> LeftMinimalVersion(H[1]);             
+[ <<[ 3, 2, 2 ]> ---> <[ 1, 0, 0 ]>>
+    , [ <[ 2, 2, 2 ]> ] ]
+gap> S := SimpleModules(A)[1];;
+gap> MinimalRightApproximation(N,S);
+<<[ 1, 0, 0 ]> ---> <[ 1, 0, 0 ]>>
+
+gap> S := SimpleModules(A)[3];;
+gap> MinimalLeftApproximation(S,N);   
+<<[ 0, 0, 1 ]> ---> <[ 2, 2, 2 ]>> ]]>
+</Example>
+
+<ManSection>
+   <Attr Name="RadicalOfModuleInclusion" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module.<Br />
+   </Description>
+   <Returns>the inclusion of the radical of the module <Arg>M</Arg>
+   into <Arg>M</Arg>.</Returns>
+   <Description>
+    The radical of <Arg>M</Arg> can be accessed
+    using <Code>Source</Code>, or it can be computed directly via the
+    command <Ref Attr="RadicalOfModule"/>. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="SocleOfModuleInclusion" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module.<Br />
+   </Description>
+   <Returns>the inclusion of the socle of the module <Arg>M</Arg>
+   into <Arg>M</Arg>.</Returns>
+   <Description>
+    The socle of <Arg>M</Arg> can be accessed
+    using <Code>Source</Code>, or it can be computed directly via the
+    command <Ref Oper="SocleOfModule"/>.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="SubRepresentationInclusion" Arg="M, gens" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module, <Arg>gens</Arg> - a list of elements in
+     <Arg>M</Arg>.<Br />
+   </Description>
+   <Returns>the inclusion of the submodule generated by the
+   generators <Arg>gens</Arg> into the module <Arg>M</Arg>.</Returns>
+   <Description>
+    The function checks if <Arg>gens</Arg> consists of elements
+    in <Arg>M</Arg>, and returns an error message otherwise. The
+    module given by the submodule generated by the
+    generators <Arg>gens</Arg> can be accessed using <Code>Source</Code>.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="TopOfModuleProjection" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module.<Br />
+   </Description>
+   <Returns>the projection from the module <Arg>M</Arg> to the top of
+   the module <Arg>M</Arg>.</Returns>
+   <Description>
+    The module given by the top of the module <Arg>M</Arg> can
+    be accessed using <Code>Range</Code> of the homomorphism.
+   </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> f := RadicalOfModuleInclusion(N);
+<<[ 0, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> radN := Source(f);
+<[ 0, 2, 2 ]>
+gap> g := SocleOfModuleInclusion(N);
+<<[ 1, 0, 2 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> U := SubRepresentationInclusion(N,[B[5]+B[6],B[7]]);
+<<[ 0, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> h := TopOfModuleProjection(N);
+<<[ 3, 2, 2 ]> ---> <[ 3, 0, 0 ]>> ]]>
+</Example>
+
+<ManSection>
+   <Oper Name="TraceOfModule" Arg="M, N" Comm="for two PahtAlgebraMatModules"/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>C</Arg> -- two path algebra modules
+     (<C>PathAlgebraMatModule</C>).<Br />
+   </Description>
+   <Returns>the trace of the module <Arg>M</Arg> in the module
+   <Arg>N</Arg> as an inclusion homomorhpism from the trace of
+   <Arg>M</Arg> to <Arg>N</Arg>.</Returns>
+</ManSection>
+
+</Section>
+</Chapter>

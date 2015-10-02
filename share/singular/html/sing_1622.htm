@@ -1,0 +1,174 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: secondary_charp</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: secondary_charp">
+<META NAME="keywords" CONTENT="Singular Manual: secondary_charp">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1697"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1621.htm#SEC1696"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: irred_secondary_char0" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1623.htm#SEC1698"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: secondary_no_molien" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.7.1.28 secondary_charp </H4>
+<!--docid::SEC1697::-->
+Procedure from library <CODE>finvar.lib</CODE> (see  <A HREF="sing_1594.htm#SEC1669">finvar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>secondary_charp(P,REY,ringname[,v][,"old"]);
+<BR> P: a 1xn &lt;matrix&gt; with homogeneous primary invariants, where
+n is the number of variables of the basering;
+<BR> REY: a gxn &lt;matrix&gt; representing the Reynolds operator, where
+g the size of the corresponding group;
+<BR> ringname: a &lt;string&gt; giving the name of a ring of characteristic 0
+containing a 1x2 &lt;matrix&gt; M giving numerator and denominator of the Molien
+series;
+<BR> v: an optional &lt;int&gt;;
+<BR> "old": if this string occurs as (optional) parameter, then an
+old version of secondary_char0 is used (for downward
+<BR>compatibility)
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The characteristic of basering is not zero;
+<BR>REY is the 1st return value of group_reynolds(), reynolds_molien() or
+the second one of primary_invariants();
+<BR> `ringname` is the name of a ring of characteristic 0 that has been created
+by molien() or reynolds_molien() or primary_invariants()
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>secondary invariants of the invariant ring (type &lt;matrix&gt;) and
+irreducible secondary invariants (type &lt;matrix&gt;)
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>information if v does not equal 0
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>The secondary invariants are calculated by finding a basis (in terms
+of monomials) of the basering modulo the primary invariants, mapping
+those to invariants with the Reynolds operator. Among these images
+or their power products we pick secondary invariants using Groebner
+basis techniques (see S. King: Fast Computation of Secondary Invariants).
+The size of this set can be read off from the Molien series.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "finvar.lib";
+ring R=3,(x,y,z),dp;
+matrix A[3][3]=0,1,0,-1,0,0,0,0,-1;
+list L=primary_invariants(A);
+matrix S,IS=secondary_charp(L[1..size(L)],1);
+==> 
+==> We need to find
+==> 1 secondary invariant in degree 0
+==> 0 secondary invariants in degree 1
+==> 0 secondary invariants in degree 2
+==> 2 secondary invariants in degree 3
+==> 1 secondary invariant in degree 4
+==> In degree 0 we have: 1
+==> 
+==> Searching in degree  3 , we need to find  2  invariant(s)...
+==>   Looking for Power Products...
+==>   There are  2 irreducible secondary invariants in degree  3
+==>     We found all 2 irreducibles in degree  3
+==> 
+==> Searching in degree  4 , we need to find  1  invariant(s)...
+==>   Looking for Power Products...
+==>   There are  1 irreducible secondary invariants in degree  4
+==>     We found all 1 irreducibles in degree  4
+==> 
+==>   We're done!
+==> 
+print(S);
+==> 1,xyz,x2z-y2z,x3y-xy3
+print(IS);
+==> xyz,x2z-y2z,x3y-xy3
+</FONT></pre></td></tr></table><P>
+
+<A NAME="secondary_no_molien"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1621.htm#SEC1696"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: irred_secondary_char0" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1623.htm#SEC1698"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: secondary_no_molien" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

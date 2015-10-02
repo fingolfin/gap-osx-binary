@@ -1,0 +1,148 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: NoetherPosition</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: NoetherPosition">
+<META NAME="keywords" CONTENT="Singular Manual: NoetherPosition">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1291"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1215.htm#SEC1290"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: regMonCurve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1217.htm#SEC1292"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_NP" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1196.htm#SEC1271"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: mprimdec_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: noether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1211.htm#SEC1286"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: mregular_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.15.5 NoetherPosition </H4>
+<!--docid::SEC1291::-->
+Procedure from library <CODE>mregular.lib</CODE> (see  <A HREF="sing_1211.htm#SEC1286">mregular_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>NoetherPosition (i); i ideal
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal such that, for the homogeneous linear transformation
+map phi=S,NoetherPosition(i);
+<BR>one has that K[x(n-d+1),...,x(n)] is a Noether normalization of
+S/phi(i) where S=K[x(0),...x(n)] is the basering and d=dim(S/i).
+(returns -1 if i = (0) or (1)).
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The field K is infinite and i is a nonzero proper ideal.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>1. It works also if K is a finite field if it terminates, but
+may result in an infinite loop. If the procedure enters more
+than 30 loops, -1 is returned and a warning message is displayed.<BR>
+2. If printlevel &gt; 0 (default = 0), additional info is displayed:
+dim(S/i) and K[x(n-d+1),...,x(n)] are given.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "mregular.lib";
+ring r=0,(x,y,z,t,u),dp;
+ideal i1=y,z,t,u; ideal i2=x,z,t,u; ideal i3=x,y,t,u; ideal i4=x,y,z,u;
+ideal i5=x,y,z,t; ideal i=intersect(i1,i2,i3,i4,i5);
+map phi=r,NoetherPosition(i);
+phi;
+==> phi[1]=x
+==> phi[2]=y
+==> phi[3]=z
+==> phi[4]=t
+==> phi[5]=53x+27y-75z+45t+u
+ring r5=5,(x,y,z,t,u),dp;
+ideal i=imap(r,i);
+map phi=r5,NoetherPosition(i);
+phi;
+==> phi[1]=x
+==> phi[2]=y
+==> phi[3]=z
+==> phi[4]=t
+==> phi[5]=x-y+z-t+u
+// Additional information is displayed if you change printlevel (=1);
+</FONT></pre></td></tr></table><P>
+
+<A NAME="is_NP"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1215.htm#SEC1290"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: regMonCurve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1217.htm#SEC1292"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_NP" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1196.htm#SEC1271"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: mprimdec_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: noether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1211.htm#SEC1286"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: mregular_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

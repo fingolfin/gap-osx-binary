@@ -2780,7 +2780,7 @@ InstallMethod( Coefficients,
     
     if IsZero( poly ) then
         coeffs := HomalgZeroMatrix( 1, 0, R );
-        coeffs!.monomials := [ ];
+        coeffs!.monomials := MakeImmutable( [ ] );
         return coeffs;
     fi;
     
@@ -2791,7 +2791,7 @@ InstallMethod( Coefficients,
         monomials := HomalgMatrix( both[1], R );
         monomials := EntriesOfHomalgMatrix( monomials );
         coeffs := HomalgMatrix( both[2], Length( monomials ), 1, R );
-        coeffs!.monomials := monomials;
+        coeffs!.monomials := MakeImmutable( monomials );
         return coeffs;
     fi;
     
@@ -2830,14 +2830,14 @@ InstallMethod( Coefficients,
     fi;
     
     if HasRelativeIndeterminatesOfPolynomialRing( R ) then
-        indets := RelativeIndeterminatesOfPolynomialRing( R );
+        indets := ProductOfIndeterminatesOverBaseRing( R );
     elif HasIndeterminatesOfPolynomialRing( R ) then
-        indets := IndeterminatesOfPolynomialRing( R );
+        indets := ProductOfIndeterminates( R );
     else
         TryNextMethod( );
     fi;
     
-    coeffs := Coefficients( poly, Product( indets ) );
+    coeffs := Coefficients( poly, indets );
     
     poly!.Coefficients := coeffs;
     
@@ -4241,5 +4241,47 @@ InstallMethod( NoetherNormalization,
     until not m = fail;
     
     return [ M, m, rand_mat, rand_inv ];
+    
+end );
+
+##
+InstallMethod( Inequalities,
+        "for a homalg ring",
+        [ IsHomalgRing ],
+        
+  function( R )
+    local r, RP, J;
+    
+    r := R;
+    
+    RP := homalgTable( R );
+    
+    if not IsBound(RP!.Inequalities) then
+        Error( "could not find a procedure called ZeroSets in the homalgTable\n" );
+    fi;
+    
+    J := RP!.Inequalities( R );
+    
+    J := DuplicateFreeList( J );
+    
+    if HasIsFieldForHomalg( R ) and IsFieldForHomalg( R ) then
+        r := R;
+    else
+        r := CoefficientsRing( R );
+    fi;
+    
+    r := AssociatedPolynomialRing( r );
+    
+    J := List( J, a -> a / r );
+    
+    if IsBound( R!.Inequalities ) then
+        Append( J, R!.Inequalities );
+    fi;
+    
+    J := DuplicateFreeList( J );
+    
+    R!.Inequalities := J;
+    
+    return J;
     
 end );

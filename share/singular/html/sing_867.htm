@@ -1,0 +1,178 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Normalization</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Normalization">
+<META NAME="keywords" CONTENT="Singular Manual: Normalization">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC918"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_866.htm#SEC917"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Primary decomposition" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_868.htm#SEC919"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Kernel of module homomorphisms" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.3.10 Normalization </H3>
+<!--docid::SEC918::-->
+<P>
+
+The normalization will be computed for a reduced ring 
+<IMG
+ WIDTH="33" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_374.png"
+ ALT="$R/I$">. The
+result is a list of rings; ideals are always called <CODE>norid</CODE> in the
+rings of this list. The normalization of 
+<IMG
+ WIDTH="33" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_374.png"
+ ALT="$R/I$"> is the product of
+the factor rings of the rings in the list divided out by the ideals
+<CODE>norid</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  LIB "normal.lib";
+  // ----- first example: rational quadruple point -----
+  ring R=32003,(x,y,z),wp(3,5,15);
+  ideal I=z*(y3-x5)+x10;
+  list pr=normal(I);
+==> 
+==> // 'normal' created a list, say nor, of two elements.
+==> // To see the list type
+==>       nor;
+==> 
+==> // * nor[1] is a list of 1 ring(s).
+==> // To access the i-th ring nor[1][i], give it a name, say Ri, and type
+==>      def R1 = nor[1][1]; setring R1; norid; normap;
+==> // For the other rings type first (if R is the name of your base ring)
+==>      setring R;
+==> // and then continue as for R1.
+==> // Ri/norid is the affine algebra of the normalization of R/P_i where
+==> // P_i is the i-th component of a decomposition of the input ideal id
+==> // and normap the normalization map from R to Ri/norid.
+==> 
+==> // * nor[2] is a list of 1 ideal(s). Let ci be the last generator
+==> // of the ideal nor[2][i]. Then the integral closure of R/P_i is
+==> // generated as R-submodule of the total ring of fractions by
+==> // 1/ci * nor[2][i].
+  def S=pr[1][1];
+  setring S;
+  norid;
+==> norid[1]=T(2)*x+y*z
+==> norid[2]=T(1)*x^2-T(2)*y
+==> norid[3]=-T(1)*y+x^7-x^2*z
+==> norid[4]=T(1)*y^2*z+T(2)*x^8-T(2)*x^3*z
+==> norid[5]=T(1)^2+T(2)*z+x^4*y*z
+==> norid[6]=T(1)*T(2)+x^6*z-x*z^2
+==> norid[7]=T(2)^2+T(1)*x*z
+==> norid[8]=x^10-x^5*z+y^3*z
+  // ----- second example: union of straight lines -----
+  ring R1=0,(x,y,z),dp;
+  ideal I=(x-y)*(x-z)*(y-z);
+  list qr=normal(I);
+==> 
+==> // 'normal' created a list, say nor, of two elements.
+==> // To see the list type
+==>       nor;
+==> 
+==> // * nor[1] is a list of 2 ring(s).
+==> // To access the i-th ring nor[1][i], give it a name, say Ri, and type
+==>      def R1 = nor[1][1]; setring R1; norid; normap;
+==> // For the other rings type first (if R is the name of your base ring)
+==>      setring R;
+==> // and then continue as for R1.
+==> // Ri/norid is the affine algebra of the normalization of R/P_i where
+==> // P_i is the i-th component of a decomposition of the input ideal id
+==> // and normap the normalization map from R to Ri/norid.
+==> 
+==> // * nor[2] is a list of 2 ideal(s). Let ci be the last generator
+==> // of the ideal nor[2][i]. Then the integral closure of R/P_i is
+==> // generated as R-submodule of the total ring of fractions by
+==> // 1/ci * nor[2][i].
+  def S1=qr[1][1]; def S2=qr[1][2];
+  setring S1; norid;
+==> norid[1]=-T(1)*y+T(1)*z+x-z
+==> norid[2]=T(1)*x-T(1)*y
+==> norid[3]=T(1)^2-T(1)
+==> norid[4]=x^2-x*y-x*z+y*z
+  setring S2; norid;
+==> norid[1]=y-z
+</FONT></pre></td></tr></table><A NAME="Kernel of module homomorphisms"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_866.htm#SEC917"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Primary decomposition" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_868.htm#SEC919"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Kernel of module homomorphisms" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -5,8 +5,6 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: basics.gd,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado,
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the
@@ -75,8 +73,9 @@ DeclareGlobalFunction( "GeneratorsOfNumericalSemigroup");
 ##  Returns a set of generators of the numerical
 ##  semigroup S.
 ##
+#####From version 0.980 is just a synonym of the check version of the function
 #############################################################################
-DeclareGlobalFunction( "GeneratorsOfNumericalSemigroupNC");
+DeclareSynonym( "GeneratorsOfNumericalSemigroupNC","GeneratorsOfNumericalSemigroup");
 
 
 #############################################################################
@@ -88,15 +87,27 @@ DeclareGlobalFunction( "GeneratorsOfNumericalSemigroupNC");
 ##
 #############################################################################
 DeclareAttribute( "MinimalGeneratingSystemOfNumericalSemigroup", IsNumericalSemigroup);
+#############################################################################
+#############################################################################
+##
+#F  MinimalGeneratingSystem(S)
+##
+##  If S is a numerical semigroup, then this function just passes the task of computing the minimal generating system to MinimalGeneratingSystemOfNumericalSemigroup
+## If S is an ideal of numerical semigroup, then this function just passes the task of computing the minimal generating system to MinimalGeneratingSystemOfIdealOfNumericalSemigroup
+##
+#############################################################################
+DeclareGlobalFunction("MinimalGeneratingSystem");
 
 #############################################################################
 ##
 #F  ReducedSetOfGeneratorsOfNumericalSemigroup(arg)
+####From version 0.980 is a synonym of MinimalGenerating...
 ##
 ##  Returns a set with possibly fewer generators than those recorded in <C>S!.generators</C>. It changes <C>S!.generators</C> to the set returned.
 ##The function has 1 to 3 arguments. One of them a numerical semigroup. Then an argument is a boolean (<E>true</E> means that all the elements not belonging to the Apery set with respect to the multiplicity are removed; the default is "false") and another argument is a positive integer <M>n</M> (meaning that generators that can be written as the sum of <n> or less generators are removed; the default is "2"). The boolean or the integer may not be present. If a minimal generating set for <M>S</M> is known or no generating set is known, then the minimal generating system is returned.
 ##  
-DeclareGlobalFunction("ReducedSetOfGeneratorsOfNumericalSemigroup");
+#DeclareGlobalFunction("ReducedSetOfGeneratorsOfNumericalSemigroup");
+DeclareSynonym("ReducedSetOfGeneratorsOfNumericalSemigroup",MinimalGeneratingSystemOfNumericalSemigroup);
 #############################################################################
 ##
 #F  EmbeddingDimensionOfNumericalSemigroup(S)
@@ -160,6 +171,15 @@ DeclareOperation( "BelongsToNumericalSemigroup", [IsInt, IsNumericalSemigroup]);
 #############################################################################
 DeclareOperation( "AperyListOfNumericalSemigroupWRTElement",[IsNumericalSemigroup,IsInt]);
 
+#############################################################################
+##
+#F  AperyListOfNumericalSemigroup(S)
+##
+##  Returns the Apery list of the numerical
+##  semigroup S with respect to the multiplicity.
+##
+#############################################################################
+DeclareGlobalFunction("AperyListOfNumericalSemigroup");
 
 #############################################################################
 ##
@@ -194,3 +214,25 @@ DeclareGlobalFunction("AperyListOfNumericalSemigroupAsGraph");
 ##
 #############################################################################
 DeclareGlobalFunction("FirstElementsOfNumericalSemigroup");
+
+#############################################################################
+##
+#F KunzCoordinatesOfNumericalSemigroup(arg)
+##
+## If two argumets are given, the first is a semigroup s and the second an 
+## element m in s. If one argument is given, then it is the semigroup, and 
+## m is set to the multiplicity.
+## Then the Apéry set of m in s has the form [0,k_1m+1,...,k_{m-1}m+m-1], and
+## the output is the (m-1)-uple [k_1,k_2,...,k_{m-1}]
+#############################################################################
+DeclareGlobalFunction("KunzCoordinatesOfNumericalSemigroup");
+
+#############################################################################
+##
+#F KunzPolytope(m)
+## For a fixed multiplicity, the Kunz coordinates of the semigroups 
+## with that multiplicity are solutions of a system of inequalities Ax\ge b 
+## (see [R-GS-GG-B]). The output is the matrix (A|-b)
+##
+#############################################################################
+DeclareGlobalFunction("KunzPolytope");

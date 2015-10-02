@@ -1,0 +1,151 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Parameters</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Parameters">
+<META NAME="keywords" CONTENT="Singular Manual: Parameters">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC899"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_847.htm#SEC898"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Long coefficients" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_849.htm#SEC900"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Formatting output" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.1.5 Parameters </H3>
+<!--docid::SEC899::-->
+<P>
+
+Let us deform the ideal in  <A HREF="sing_847.htm#SEC898">Long coefficients</A> by
+introducing a parameter t and compute over the ground field Q(t).
+We compute the dimension at the generic point,
+i.e.,
+<!-- MATH
+ $dim_{Q(t)}Q(t)[x,y]/j$
+ -->
+<IMG
+ WIDTH="137" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_332.png"
+ ALT="$dim_{Q(t)}Q(t)[x,y]/j$">.(This gives the
+same result as for the deformed ideal above. Hence, the above small
+deformation was "generic".)
+</P><P>
+
+For almost all
+<IMG
+ WIDTH="45" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_333.png"
+ ALT="$a \in Q$">this is the same as
+<!-- MATH
+ $dim_Q Q[x,y]/j_0$
+ -->
+<IMG
+ WIDTH="111" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_334.png"
+ ALT="$dim_Q Q[x,y]/j_0$">,where
+<IMG
+ WIDTH="74" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_335.png"
+ ALT="$j_0=j\vert _{t=a}$">.</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring Rt = (0,t),(x,y),lp;
+  Rt;
+==> //   characteristic : 0
+==> //   1 parameter    : t 
+==> //   minpoly        : 0
+==> //   number of vars : 2
+==> //        block   1 : ordering lp
+==> //                  : names    x y
+==> //        block   2 : ordering C
+  poly f = x5+y11+xy9+x3y9;
+  ideal i = jacob(f);
+  ideal j = i,i[1]*i[2]+t*x5y8;  // deformed ideal, parameter t
+  vdim(std(j));
+==> 40
+  ring R=0,(x,y),lp;
+  ideal i=imap(Rt,i);
+  int a=random(1,30000);
+  ideal j=i,i[1]*i[2]+a*x5y8;  // deformed ideal, fixed integer a
+  vdim(std(j));
+==> 40
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Formatting output"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_847.htm#SEC898"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Long coefficients" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_849.htm#SEC900"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Formatting output" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

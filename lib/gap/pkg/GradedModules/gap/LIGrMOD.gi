@@ -78,6 +78,8 @@ InstallValue( LIGrMOD,
             intrinsic_attributes_specific_shared_with_subobjects_and_ideals :=
             [ 
               "BettiTable",
+              "LinearRegularityInterval",
+              "LinearRegularity",
               "CastelnuovoMumfordRegularity",
               "CastelnuovoMumfordRegularityOfSheafification",
               ],
@@ -294,7 +296,20 @@ InstallImmediateMethod( IsModuleOfGlobalSectionsTruncatedAtCertainDegree,
   function( M )
     local UM;
     
-    return -999999;
+    return true;
+    
+end );
+
+##
+InstallImmediateMethod( LinearRegularity,
+        IsGradedModuleRep and HasLinearRegularityInterval, 0,
+        
+  function( M )
+    local linreg;
+    
+    linreg := LinearRegularityInterval( M );
+    
+    return linreg[Length( linreg )];
     
 end );
 
@@ -483,25 +498,16 @@ InstallMethod( CastelnuovoMumfordRegularity,
         [ IsGradedModuleRep ],
         
   function( M )
-    local S, betti, degrees, B, nS, nB, max, B_S, B2, l;
+    local S, B, nS, nB, max, B_S, B2, l;
     
     S := HomalgRing( M );
-    
-    if not HasBaseRing( S ) or IsIdenticalObj( BaseRing( S ), CoefficientsRing( S ) ) then
-        
-        betti := BettiTable( Resolution( M ) );
-        
-        degrees := RowDegreesOfBettiTable( betti );
-        
-        return degrees[Length(degrees)];
-    
-    fi;
     
     B := BaseRing( S );
     
     nS := Length( Indeterminates( S ) );
     nB := Length( Indeterminates( B ) );
     
+    ## FIXME: use IrrelevantIdeal( M )
     if IsHomalgLeftObjectOrMorphismOfLeftObjects( M ) then
         max := CertainRows( MaximalIdealAsColumnMatrix( S ), [ nB+1 .. nS ] );
         B_S := LeftPresentationWithDegrees( max );
@@ -511,7 +517,6 @@ InstallMethod( CastelnuovoMumfordRegularity,
     fi;
     
     # Computations with the residue class rings are inefficient
-    # a method working more fast and in general should be implemented after the graduations module is a module and not a list
     B2 := S / max;
     SetWeightsOfIndeterminates( B2, WeightsOfIndeterminates( B ) );
     
@@ -523,18 +528,52 @@ end );
 
 ##
 InstallMethod( CastelnuovoMumfordRegularity,
+        "LIGrMOD: for homalg graded modules",
+        [ IsGradedModuleRep ],
+        
+  function( M )
+    local S, minus_infinity, betti, degrees, B, nS, nB, max, B_S, B2, l;
+    
+    S := HomalgRing( M );
+    
+    minus_infinity := HOMALG_TOOLS.minus_infinity;
+    
+    ## TODO: Every ring should have a base ring
+    if HasBaseRing( S ) and not IsIdenticalObj( BaseRing( S ), CoefficientsRing( S ) ) then
+        TryNextMethod( );
+    fi;
+    
+    if IsZero( M ) then
+        return minus_infinity;
+    ## do not use IsQuasiZero unless it does not fall back to CastelnuovoMumfordRegularity
+    elif AffineDimension( M ) = 0 then
+        return Degree( HilbertPoincareSeries( M ) );
+    fi;
+    
+    betti := BettiTable( Resolution( M ) );
+    
+    degrees := RowDegreesOfBettiTable( betti );
+    
+    return degrees[Length(degrees)];
+    
+end );
+
+## FIXME: knowledge propagation suggests the use of IsFree in the list of conditions
+InstallMethod( CastelnuovoMumfordRegularity,
         "LIGrMOD: for homalg graded free modules",
         [ IsGradedModuleRep ],10,
         
   function( M )
-    local UM, deg;
+    local UM, minus_infinity, deg;
     
     UM := UnderlyingModule( M );
+    
+    minus_infinity := HOMALG_TOOLS.minus_infinity;
     
     if HasIsFree( UM ) and IsFree( UM ) then
         if HasIsZero( M ) and IsZero( M ) then
             # todo: -infinity
-            return -999999;
+            return minus_infinity;
         fi;
         deg := DegreesOfGenerators( M );
         if IsList( deg ) and ( IsInt( deg[1] ) or IsHomalgElement( deg[ 1 ] ) ) then
@@ -571,13 +610,169 @@ InstallMethod( CastelnuovoMumfordRegularityOfSheafification,
 end );
 
 ##
+InstallGlobalFunction( LinearRegularityIntervalViaMinimalResolution,
+  function( M )
+    local S, minus_infinity, dim, betti, cols, degrees, col0, col1, mat, rows, d, d0, d1;
+    
+    S := HomalgRing( M );
+    
+    ## TODO: Every ring should have a base ring
+    if HasBaseRing( S ) and not IsIdenticalObj( BaseRing( S ), CoefficientsRing( S ) ) then
+        TryNextMethod( );
+    fi;
+    
+    minus_infinity := HOMALG_TOOLS.minus_infinity;
+    
+    if IsZero( M ) then
+        return [ minus_infinity ];
+    ## do not use IsQuasiZero unless it does not fall back to CastelnuovoMumfordRegularity
+    elif AffineDimension( M ) = 0 then
+        return [ Degree( HilbertPoincareSeries( M ) ) ];
+    fi;
+    
+    if HasRelativeIndeterminatesOfPolynomialRing( S ) then
+        dim := Length( RelativeIndeterminatesOfPolynomialRing( S ) );
+    else
+        dim := Length( IndeterminatesOfPolynomialRing( S ) );
+    fi;
+    
+    betti := BettiTable( Resolution( M ) );
+    
+    cols := ColumnDegreesOfBettiTable( betti );
+    cols := Intersection2( cols, [ dim - 1, dim ] );
+    
+    if IsEmpty( cols ) then
+        return [ minus_infinity ];
+    fi;
+    
+    degrees := RowDegreesOfBettiTable( betti );
+    
+    ## 0 stands for Ext^0
+    col0 := Intersection2( cols, [ dim ] );
+    col0 := col0 + 1;
+    
+    d0 := minus_infinity;
+    
+    if not IsEmpty( col0 ) then
+        
+        mat := List( betti!.matrix, b -> b{col0} );
+        
+        rows := Filtered( [ 1 .. Length( mat ) ], a -> not IsZero( mat[a] ) );
+        
+        if not IsEmpty( rows ) then
+            
+            d := degrees{rows};
+            
+            d0 := d[Length( rows )];
+            
+        fi;
+        
+    fi;
+    
+    ## 1 stand for Ext^1
+    col1 := Intersection2( cols, [ dim - 1 ] );
+    col1 := col1 + 1;
+    
+    d1 := minus_infinity;
+    
+    if not IsEmpty( col1 ) then
+        
+        mat := List( betti!.matrix, b -> b{col1} );
+        
+        rows := Filtered( [ 1 .. Length( mat ) ], a -> not IsZero( mat[a] ) );
+        
+        if not IsEmpty( rows ) then
+            
+            d := degrees{rows};
+            
+            d1 := d[Length( rows )] - 1;
+            
+        fi;
+        
+    fi;
+    
+    return [ d0 .. Maximum( d0, d1 ) ];
+    
+end );
+
+##
+InstallGlobalFunction( LinearRegularityIntervalViaExt01OverBaseField,
+  function( M )
+    local S, minus_infinity, m, k, d0, d1, linreg;
+    
+    S := HomalgRing( M );
+    
+        ## TODO: Every ring should have a base ring
+    if HasBaseRing( S ) and not IsIdenticalObj( BaseRing( S ), CoefficientsRing( S ) ) then
+        TryNextMethod( );
+    fi;
+    
+    minus_infinity := HOMALG_TOOLS.minus_infinity;
+    
+    if IsZero( M ) then
+        return [ minus_infinity ];
+        ## do not use IsQuasiZero unless it does not fall back to CastelnuovoMumfordRegularity
+    elif AffineDimension( M ) = 0 then
+        return [ Degree( HilbertPoincareSeries( M ) ) ];
+    fi;
+    
+    if IsHomalgLeftObjectOrMorphismOfLeftObjects( M ) then
+        m := MaximalGradedLeftIdeal( S );
+    else
+        m := MaximalGradedRightIdeal( S );
+    fi;
+    
+    k := FactorObject( m );
+    
+    d0 := Degree( HilbertPoincareSeries( GradedHom( k, M ) ) );
+    d1 := Degree( HilbertPoincareSeries( GradedExt( 1, k, M ) ) );
+    
+    ## FIXME
+    if d0 = -infinity then
+        d0 := minus_infinity;
+    fi;
+    if d1 = -infinity then
+        d1 := minus_infinity;
+    fi;
+    
+    linreg := [ d0 .. Maximum( d0, d1 ) ];
+    
+    SetLinearRegularityInterval( M, linreg );
+    
+    return linreg;
+    
+end );
+
+##
+InstallMethod( LinearRegularityInterval,
+        "LIGrMOD: for homalg graded modules",
+        [ IsGradedModuleRep ],
+        
+  LinearRegularityIntervalViaMinimalResolution );
+
+##
+InstallMethod( LinearRegularity,
+        "LIGrMOD: for homalg graded modules",
+        [ IsGradedModuleRep ],
+        
+  function( M )
+    local linreg;
+    
+    linreg := LinearRegularityInterval( M );
+    
+    return linreg[Length( linreg )];
+    
+end );
+
+##
 InstallMethod( Depth,
         "LIMOD: for two homalg modules",
         [ IsGradedModuleRep, IsGradedModuleRep ],
+        
   function( M, N )
-  
+    
     return Depth( UnderlyingModule( M ), UnderlyingModule( N ) );
-
+    
 end );
 
 ##
@@ -1469,5 +1664,75 @@ InstallMethod( ExteriorPower,
     phi := GradedMap( phi, "free", T );
     
     return Cokernel( phi );
+    
+end );
+
+##
+InstallMethod( GradedTorsionFreeFactor,
+        "for graded modules",
+        [ IsGradedModuleRep ],
+        
+  function( M )
+    local S, m, k, N, pi;
+    
+    S := HomalgRing( M );
+    
+    if IsHomalgLeftObjectOrMorphismOfLeftObjects( M ) then
+        m := MaximalGradedLeftIdeal( S );
+    else
+        m := MaximalGradedRightIdeal( S );
+    fi;
+    
+    k := FactorObject( m );
+    
+    N := GradedHom( k, M );
+    
+    if IsZero( N ) then
+        return M;
+    fi;
+    
+    pi := CokernelEpi( EmbeddingInSuperObject( m ) );
+    
+    while not IsZero( N ) do
+        
+        M := Cokernel( GradedHom( S, GradedHom( pi, M ) ) );
+        
+        N := GradedHom( k, M );
+        
+    od;
+    
+    return M;
+    
+end );
+
+##
+InstallMethod( SaturateToDegreeZero,
+        "for graded modules",
+        [ IsGradedModuleRep ],
+        
+  function( M )
+    local S, m, iota, phi;
+    
+    S := HomalgRing( M );
+    
+    if IsHomalgLeftObjectOrMorphismOfLeftObjects( M ) then
+        m := MaximalGradedLeftIdeal( S );
+    else
+        m := MaximalGradedRightIdeal( S );
+    fi;
+    
+    M := GradedTorsionFreeFactor( M );
+    
+    iota := EmbeddingInSuperObject( m );
+    
+    while LinearRegularity( M ) >= 0 do
+        
+        phi := GradedHom( S, GradedHom( iota, M ) );
+        
+        M := Range( phi );
+        
+    od;
+    
+    return M;
     
 end );

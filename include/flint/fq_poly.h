@@ -28,6 +28,14 @@
 #ifndef FQ_POLY_H
 #define FQ_POLY_H
 
+#ifdef FQ_POLY_INLINES_C
+#define FQ_POLY_INLINE FLINT_DLL
+#define FQ_POLY_TEMPLATES_INLINE FLINT_DLL
+#else
+#define FQ_POLY_INLINE static __inline__
+#define FQ_POLY_TEMPLATES_INLINE static __inline__
+#endif
+
 #include "fq.h"
 #include "fq_mat.h"
 
@@ -37,6 +45,10 @@
 #define FQ_MUL_CLASSICAL_CUTOFF 6
 #define FQ_MULLOW_CLASSICAL_CUTOFF 6
 #define FQ_SQR_CLASSICAL_CUTOFF 6
+
+#define FQ_POLY_HGCD_CUTOFF 30
+#define FQ_POLY_SMALL_GCD_CUTOFF 80
+#define FQ_POLY_GCD_CUTOFF 90
 
 #ifdef T
 #undef T

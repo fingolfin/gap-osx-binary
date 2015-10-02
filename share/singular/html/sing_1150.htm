@@ -1,0 +1,202 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: cup</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: cup">
+<META NAME="keywords" CONTENT="Singular Manual: cup">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1225"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1149.htm#SEC1224"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: canonMap" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1151.htm#SEC1226"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: cupproduct" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.7.2 cup </H4>
+<!--docid::SEC1225::-->
+Procedure from library <CODE>homolog.lib</CODE> (see  <A HREF="sing_1148.htm#SEC1223">homolog_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>cup(M,[,any,any]); M=module
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>cup-product Ext^1(M',M') x Ext^1(M',M') ---&gt; Ext^2(M',M'), where
+M':=R^m/M, if M in R^m, R basering (i.e. M':=coker(matrix(M))).
+<BR> If called with &gt;= 2 arguments: compute symmetrized cup-product
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>all Ext's are finite dimensional
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>- if called with 1 argument: matrix, the columns of the output present
+the coordinates of b_i&amp;b_j with respect to a kbase of Ext^2, where
+b_1,b_2,... is a kbase of Ext^1 and &amp; denotes cup product;<BR>
+- if called with 2 arguments: matrix, the columns of the output
+present the coordinates of (1/2)(b_i&amp;b_j + b_j&amp;b_i) with respect to
+a kbase of Ext^2;
+<BR>- if called with 3 arguments: list,
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">      L[1] = matrix see above (symmetric case, for &gt;=2 arguments)
+      L[2] = matrix of kbase of Ext^1
+      L[3] = matrix of kbase of Ext^2
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>printlevel &gt;=1; shows what is going on.
+<BR>printlevel &gt;=2; shows result in another representation.
+<BR> For computing cupproduct of M itself, apply proc to syz(M)!
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "homolog.lib";
+int p      = printlevel;
+ring  rr   = 32003,(x,y,z),(dp,C);
+ideal  I   = x4+y3+z2;
+qring  o   = std(I);
+module M   = [x,y,0,z],[y2,-x3,z,0],[z,0,-y,-x3],[0,z,x,-y2];
+print(cup(M));
+==> 0,1,0, 0, 0,0,0,0,0,0,0, 0,0,0,0,0,0,
+==> 0,0,-1,0, 0,1,0,0,0,0,0, 0,0,0,0,0,0,
+==> 0,0,0, -1,0,0,0,0,0,1,0, 0,0,0,0,0,0,
+==> 0,0,0, 0, 1,0,0,1,0,0,-1,0,0,1,0,0,0 
+print(cup(M,1));
+==> 0,1,0,0,0,0,0,0,0,0,0,
+==> 0,0,0,0,0,0,0,0,0,0,0,
+==> 0,0,0,0,0,0,0,0,0,0,0,
+==> 0,0,0,0,1,0,0,0,0,0,0 
+// 2nd EXAMPLE  (shows what is going on)
+printlevel = 3;
+ring   r   = 0,(x,y),(dp,C);
+ideal  i   = x2-y3;
+qring  q   = std(i);
+module M   = [-x,y],[-y2,x];
+print(cup(M));
+==> // vdim (Ext^1) = 2
+==> // kbase of Ext^1(M,M)
+==> //  - the columns present the kbase elements in Hom(F(1),F(0))
+==> //  - F(*) a free resolution of M
+==> -1,0,
+==> 0, y,
+==> 0, 1,
+==> -1,0 
+==> // lift kbase of Ext^1:
+==> //  - the columns present liftings of kbase elements into Hom(F(2),F(1))
+==> //  - F(*) a free resolution of M 
+==> 1,0,
+==> 0,y,
+==> 0,1,
+==> 1,0 
+==> // vdim (Ext^2) = 2
+==> // kbase of Ext^2(M,M)
+==> //  - the columns present the kbase elements in Hom(F(2),F(0))
+==> //  - F(*) is a free resolution of M 
+==> -1,0,
+==> 0, y,
+==> 0, 1,
+==> -1,0 
+==> // matrix of cup-products (in Ext^2)
+==> 0,-1,0, 0,y,
+==> 0,0, -y,y,0,
+==> 0,0, -1,1,0,
+==> 0,-1,0, 0,y 
+==> ////// end level 2 //////
+==> // the associated matrices of the bilinear mapping 'cup' 
+==> // corresponding to the kbase elements of Ext^2(M,M) are shown,
+==> //  i.e. the rows of the final matrix are written as matrix of
+==> //  a bilinear form on Ext^1 x Ext^1
+==> //-----component 1:
+==> 0,1,
+==> 0,0 
+==> //-----component 2:
+==> 0, 0,
+==> -1,1 
+==> ////// end level 3 //////
+==> 0,1,0, 0,0,
+==> 0,0,-1,1,0 
+printlevel = p;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="cupproduct"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1149.htm#SEC1224"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: canonMap" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1151.htm#SEC1226"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: cupproduct" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

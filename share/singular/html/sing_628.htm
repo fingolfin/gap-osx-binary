@@ -1,0 +1,195 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: charInfo</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: charInfo">
+<META NAME="keywords" CONTENT="Singular Manual: charInfo">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC679"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_627.htm#SEC678"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: charVariety" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_629.htm#SEC680"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: isFsat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.5.0. charInfo </H5>
+<!--docid::SEC679::-->
+Procedure from library <CODE>dmodapp.lib</CODE> (see  <A HREF="sing_611.htm#SEC662">dmodapp_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>charInfo(I); I an ideal
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring (commut.) containing ideals 'charVar','singLoc' and list 'primDec'
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes characteristic variety of I (in the sense of D-module theory),
+<BR> its singular locus and primary decomposition
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is the n-th Weyl algebra over a field of characteristic 0
+<BR> and for all 1&lt;=i&lt;=n the identity var(i+n)*var(i)=var(i)*var(i+1)+1
+<BR> holds, i.e. the sequence of variables is given by
+<BR> x(1),...,x(n),D(1),...,D(n), where D(i) is the differential operator
+<BR> belonging to x(i).
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>In the output ring, which is commutative:
+<BR> - the ideal 'charVar' is the characteristic variety char(I),
+<BR> - the ideal 'SingLoc' is the singular locus of char(I),
+<BR> - the list 'primDec' is the primary decomposition of char(I).
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If <CODE>printlevel</CODE>=1, progress debug messages will be printed,
+<BR> if <CODE>printlevel</CODE>&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodapp.lib";
+ring r = 0,(x,y),Dp;
+poly F = x3-y2;
+printlevel = 0;
+def A  = annfs(F);
+setring A;      // Weyl algebra
+LD;             // the annihilator of F
+==> LD[1]=2*x*Dx+3*y*Dy+6
+==> LD[2]=3*x^2*Dy+2*y*Dx
+==> LD[3]=9*x*y*Dy^2-4*y*Dx^2+15*x*Dy
+==> LD[4]=27*y^2*Dy^3+8*y*Dx^3+135*y*Dy^2+105*Dy
+def CA = charInfo(LD);
+setring CA; CA; // commutative ring
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    x y Dx Dy
+==> //        block   2 : ordering C
+charVar;        // characteristic variety
+==> charVar[1]=2*x*Dx+3*y*Dy
+==> charVar[2]=3*x^2*Dy+2*y*Dx
+==> charVar[3]=9*x*y*Dy^2-4*y*Dx^2
+==> charVar[4]=27*y^2*Dy^3+8*y*Dx^3
+singLoc;        // singular locus
+==> singLoc[1]=y*Dy
+==> singLoc[2]=y*Dx
+==> singLoc[3]=2*x*Dx-3*y*Dy
+==> singLoc[4]=9*x*Dy^2-2*Dx^2
+==> singLoc[5]=3*x^2*Dy-y*Dx
+==> singLoc[6]=Dx^3
+==> singLoc[7]=x^3-y^2
+primDec;        // primary decomposition
+==> [1]:
+==>    [1]:
+==>       _[1]=Dy
+==>       _[2]=Dx
+==>    [2]:
+==>       _[1]=Dy
+==>       _[2]=Dx
+==> [2]:
+==>    [1]:
+==>       _[1]=27*y*Dy^3+8*Dx^3
+==>       _[2]=9*x*Dy^2-4*Dx^2
+==>       _[3]=2*x*Dx+3*y*Dy
+==>       _[4]=3*x^2*Dy+2*y*Dx
+==>       _[5]=x^3-y^2
+==>    [2]:
+==>       _[1]=27*y*Dy^3+8*Dx^3
+==>       _[2]=9*x*Dy^2-4*Dx^2
+==>       _[3]=2*x*Dx+3*y*Dy
+==>       _[4]=3*x^2*Dy+2*y*Dx
+==>       _[5]=x^3-y^2
+==> [3]:
+==>    [1]:
+==>       _[1]=y
+==>       _[2]=x
+==>    [2]:
+==>       _[1]=y
+==>       _[2]=x
+</FONT></pre></td></tr></table><P>
+
+<A NAME="isFsat"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_627.htm#SEC678"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: charVariety" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_629.htm#SEC680"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: isFsat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

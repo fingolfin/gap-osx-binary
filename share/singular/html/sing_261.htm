@@ -1,0 +1,185 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: attrib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: attrib">
+<META NAME="keywords" CONTENT="Singular Manual: attrib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC300"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_260.htm#SEC299"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: align" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_262.htm#SEC301"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: bareiss" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.2 attrib </H3>
+<!--docid::SEC300::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>attrib (</CODE> name <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>none
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>displays the attribute list of the object called name.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x,y,z),dp;
+  ideal I=std(maxideal(2));
+  attrib(I);
+==> attr:isSB, type int
+</FONT></pre></td></tr></table><DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>attrib (</CODE> name <CODE>,</CODE> string_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>any
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>returns the value of the attribute string_expression of the
+variable name. If the attribute is not defined for this variable,
+<CODE>attrib</CODE> returns the empty string.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x,y,z),dp;
+  ideal I=std(maxideal(2));
+  attrib(I,"isSB");
+==> 1
+  // maxideal(2) is a standard basis,
+  // SINGULAR does know it for maxideal:
+  attrib(maxideal(2), "isSB");
+==> 1
+</FONT></pre></td></tr></table><DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>attrib (</CODE> name<CODE>,</CODE> string_expression<CODE>,</CODE> expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>none
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>sets the attribute string_expression of the variable name
+to the value expression.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x,y,z),dp;
+  ideal I=maxideal(2); // the attribute "isSB" is not set
+  vdim(I);
+==> 4
+  attrib(I,"isSB",0);  // the standard basis attribute is reset here
+  vdim(I);
+==> // ** I is no standard basis
+==> 4
+</FONT></pre></td></tr></table><DT><CODE><STRONG>Remark:</STRONG></CODE>
+<DD>An attribute may be described by any string_expression. Some of these are
+used by the kernel of S<SMALL>INGULAR</SMALL> and referred to as reserved attributes.
+Non-reserved attributes may be used, however, in procedures and can
+considerably speed up computations.
+<DT><CODE><STRONG>Reserved attributes:</STRONG></CODE>
+<DD><A NAME="IDX132"></A>
+<A NAME="IDX133"></A>
+<A NAME="IDX134"></A>
+<A NAME="IDX135"></A>
+<A NAME="IDX136"></A>
+<A NAME="IDX137"></A>
+<A NAME="IDX138"></A>
+<A NAME="IDX139"></A>
+<A NAME="IDX140"></A>
+<A NAME="IDX141"></A>
+(isSB, isHomog, rank are used by the kernel, the other are used by libraries)
+<DL COMPACT>
+<DT><CODE>isSB</CODE>
+<DD>the standard basis property is set by all commands computing a standard
+basis like
+<CODE>groebner</CODE>, <CODE>std</CODE>, <CODE>stdhilb</CODE> etc.; used by <CODE>lift</CODE>, <CODE>dim</CODE>,
+<CODE>degree</CODE>, <CODE>mult</CODE>, <CODE>hilb</CODE>, <CODE>vdim</CODE>, <CODE>kbase</CODE>
+<DT><CODE>isHomog</CODE>
+<DD>the weight vector for homogeneous or quasihomogeneous ideals/modules
+<DT><CODE>isCI</CODE>
+<DD>complete intersection property
+<DT><CODE>isCM</CODE>
+<DD>Cohen-Macaulay property
+<DT><CODE>rank</CODE>
+<DD>set/get the rank of a module (see  <A HREF="sing_360.htm#SEC399">nrows</A>)
+<DT><CODE>withSB</CODE>
+<DD>value of type ideal, resp. module, is std
+<DT><CODE>withHilb</CODE>
+<DD>value of type intvec is hilb(_,1) (see  <A HREF="sing_310.htm#SEC349">hilb</A>)
+<DT><CODE>withRes</CODE>
+<DD>value of type list is a free resolution
+<DT><CODE>withDim</CODE>
+<DD>value of type int is the dimension (see  <A HREF="sing_282.htm#SEC321">dim</A>)
+<DT><CODE>withMult</CODE>
+<DD>value of type int is the multiplicity (see  <A HREF="sing_354.htm#SEC393">mult</A>)
+</DL>
+</DL>
+See
+ <A HREF="sing_326.htm#SEC365">killattrib</A>.
+<A NAME="bareiss"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_260.htm#SEC299"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: align" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_262.htm#SEC301"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: bareiss" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

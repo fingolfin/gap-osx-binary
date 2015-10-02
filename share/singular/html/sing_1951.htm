@@ -1,0 +1,149 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: splitPolygon</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: splitPolygon">
+<META NAME="keywords" CONTENT="Singular Manual: splitPolygon">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2026"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1950.htm#SEC2025"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: cycleLength" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1952.htm#SEC2027"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: eta" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.1.10 splitPolygon </H4>
+<!--docid::SEC2026::-->
+Procedure from library <CODE>polymake.lib</CODE> (see  <A HREF="sing_1941.htm#SEC2016">polymake_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>splitPolygon (markings); markings list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>markings is a list of integer vectors representing lattice points in
+the plane which we consider as the marked points of the convex lattice
+polytope spanned by them
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>split the marked points in the vertices, the points on the facets
+which are not vertices, and the interior points
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, L consisting of three lists
+<BR> L[1] : represents the vertices the polygon ordered clockwise
+<BR> L[1][i][1] = intvec, the coordinates of the ith vertex
+<BR> L[1][i][2] = int, the position of L[1][i][1] in markings
+<BR> L[2][i] : represents the lattice points on the facet of the
+polygon with endpoints L[1][i] and L[1][i+1]
+<BR>(i considered modulo size(L[1]))
+<BR> L[2][i][j][1] = intvec, the coordinates of the jth
+lattice point on that facet
+<BR> L[2][i][j][2] = int, the position of L[2][i][j][1]
+in markings
+<BR> L[3] : represents the interior lattice points of the polygon
+<BR> L[3][i][1] = intvec, coordinates of ith interior point
+<BR> L[3][i][2] = int, the position of L[3][i][1] in markings
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "polymake.lib";
+// the lattice polygon spanned by the points (0,0), (3,0) and (0,3)
+// with all integer points as markings
+list polygon=intvec(1,1),intvec(3,0),intvec(2,0),intvec(1,0),
+intvec(0,0),intvec(2,1),intvec(0,1),intvec(1,2),
+intvec(0,2),intvec(0,3);
+// split the polygon in its vertices, its facets and its interior points
+list sp=splitPolygon(polygon);
+// the vertices
+sp[1];
+// the points on facets which are not vertices
+sp[2];
+// the interior points
+sp[3];
+</FONT></pre></td></tr></table><P>
+
+<A NAME="eta"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1950.htm#SEC2025"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: cycleLength" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1952.htm#SEC2027"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: eta" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

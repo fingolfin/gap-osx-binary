@@ -1,0 +1,263 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: truncateFast</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: truncateFast">
+<META NAME="keywords" CONTENT="Singular Manual: truncateFast">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1489"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1413.htm#SEC1488"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: truncate" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1415.htm#SEC1490"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: CM_regularity" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1402.htm#SEC1477"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: reszeta_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1422.htm#SEC1497"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: JMBTest_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1412.htm#SEC1487"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sheafcoh_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.7.2 truncateFast </H4>
+<!--docid::SEC1489::-->
+Procedure from library <CODE>sheafcoh.lib</CODE> (see  <A HREF="sing_1412.htm#SEC1487">sheafcoh_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>truncateFast(M,d); M module, d int
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD><CODE>M</CODE> is graded, and it comes assigned with an admissible degree
+vector as an attribute 'isHomog'
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>module
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Output is a presentation matrix for the truncation of coker(M)
+at d.
+<BR>Fast + experimental version. M shoud be a SB!
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If <CODE>printlevel</CODE>&gt;=1, step-by step timings will be printed.
+If <CODE>printlevel</CODE>&gt;=2 we add progress debug messages
+if <CODE>printlevel</CODE>&gt;=3, even all intermediate results...
+<P>
+
+<A NAME="IDX490"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "sheafcoh.lib";
+ring R=0,(x,y,z,u,v),dp;
+module M=maxideal(3);
+homog(M);
+==> 1
+// compute presentation matrix for truncated module (R/&lt;x,y,z,u&gt;^3)_(&gt;=2)
+int t=timer;
+module M2t=truncate(M,2);
+t = timer - t;
+"// Simple truncate: ", t;
+==> // Simple truncate:  0
+t=timer;
+module M2=truncateFast(std(M),2);
+t = timer - t;
+"// Fast truncate: ", t;
+==> // Fast truncate:  0
+print(M2);
+==> v,0,0,0,0,0,0,0,0,0,0,0,0,0,0,u, 0, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,z, 0, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0,0,0,0,0,0,y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,x, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0,v,0,0,0,0,0,0,0,0,0,0,0,0,0,-v,u, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0, z, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0,0,0,0,0,0,0, y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0, x,\
+    0, 0, 
+==>   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0,0,v,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, u, 0, 0, 0,0,0,0,0,0,0,0,0,0,-v,0, z,\
+    0, 0, 
+==>   0, 0, 0, 0, 0,0,0,0,0,0,0, 0, y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0, 0,\
+    x, 0, 
+==>   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0,0,0,v,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, u, 0, 0,0,0,0,0,0,0,0,0,0,0, 0, 0,\
+    z, 0, 
+==>   0, 0, 0, 0, 0,0,0,0,0,0,-v,0, 0, y, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0, 0,\
+    0, x, 
+==>   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0,0,0,0,v,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, u, 0,0,0,0,0,0,0,0,0,0,0, 0, 0,\
+    0, z, 
+==>   0, 0, 0, 0, 0,0,0,0,0,0,0, 0, 0, 0, y, 0, 0, 0, 0, 0, 0, 0, 0,0,0,-v,0,\
+    0, 0, 
+==>   x, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0,0,0,0,0,v,0,0,0,0,0,0,0,0,0,0, -v,0, 0, 0, u,0,0,0,0,0,0,0,0,0,0, 0, 0,\
+    0, 0, 
+==>   z, 0, 0, 0, 0,0,0,0,0,0,0, 0, 0, 0, 0, y, 0, 0, 0, 0, 0, 0, 0,0,0,0, 0,\
+    0, 0, 
+==>   0, x, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0,0,0,0,0,0,v,0,0,0,0,0,0,0,0,0, 0, -v,0, 0, 0,u,0,0,0,0,0,0,0,0,0, -v,0,\
+    0, 0, 
+==>   -u,z, 0, 0, 0,0,0,0,0,0,0, 0, 0, 0, 0, 0, y, 0, 0, 0, 0, 0, 0,0,0,0, 0,\
+    0, 0, 
+==>   0, 0, x, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0,0,0,0,0,0,0,v,0,0,0,0,0,0,0,0, 0, 0, -v,0, 0,0,u,0,0,0,0,0,0,0,0, 0, 0,\
+    0, 0, 
+==>   0, 0, z, 0, 0,0,0,0,0,0,0, -v,0, 0, 0, -u,0, y, 0, 0, 0, 0, 0,0,0,0, 0,\
+    0, 0, 
+==>   0, 0, 0, x, 0, 0, 0, 0, 0, 0, 0,
+==> 0,0,0,0,0,0,0,0,v,0,0,0,0,0,0,0, 0, 0, 0, -v,0,0,0,u,0,0,0,0,0,0,0, 0, 0,\
+    0, 0, 
+==>   0, 0, 0, z, 0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, y, 0, 0, 0, 0,0,0,0, -v\
+   ,0, 0, 
+==>   0, -u,0, 0, x, 0, 0, 0, 0, 0, 0,
+==> 0,0,0,0,0,0,0,0,0,v,0,0,0,0,0,0, 0, 0, 0, 0, 0,0,0,0,u,0,0,0,0,0,0, 0, -v\
+   ,0, 0, 
+==>   0, -u,0, 0, z,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, y, 0, 0, 0,0,0,0, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0, x, 0, 0, 0, 0, 0,
+==> 0,0,0,0,0,0,0,0,0,0,v,0,0,0,0,0, 0, 0, 0, 0, 0,0,0,0,0,u,0,0,0,0,0, 0, 0,\
+    -v,0, 
+==>   0, 0, -u,0, 0,z,0,0,0,0,0, 0, -v,0, 0, 0, -u,0, 0, -z,y, 0, 0,0,0,0, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0, 0, x, 0, 0, 0, 0,
+==> 0,0,0,0,0,0,0,0,0,0,0,v,0,0,0,0, 0, 0, 0, 0, 0,0,0,0,0,0,u,0,0,0,0, 0, 0,\
+    0, -v,
+==>   0, 0, 0, -u,0,0,z,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, y, 0,0,0,0, 0,\
+    -v,0, 
+==>   0, 0, -u,0, 0, -z,0, x, 0, 0, 0,
+==> 0,0,0,0,0,0,0,0,0,0,0,0,v,0,0,0, 0, 0, 0, 0, 0,0,0,0,0,0,0,u,0,0,0, 0, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0,0,0,z,0,0,0, 0, 0, -v,0, 0, 0, -u,0, 0, -z,0, y,0,0,0, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0, 0, 0, 0, x, 0, 0,
+==> 0,0,0,0,0,0,0,0,0,0,0,0,0,v,0,0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0,u,0,0, 0, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0,0,0,0,z,0,0, 0, 0, 0, -v,0, 0, 0, -u,0, 0, -z,0,y,0,0, 0,\
+    0, -v,
+==>   0, 0, 0, -u,0, 0, -z,0, -y,x, 0,
+==> 0,0,0,0,0,0,0,0,0,0,0,0,0,0,v,0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0,0,u,0, 0, 0,\
+    0, 0, 
+==>   0, 0, 0, 0, 0,0,0,0,0,z,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,y,0, 0,\
+    0, 0, 
+==>   -v,0, 0, 0, -u,0, 0, -z,0, -y,x 
+"// Check: M2t == M2?: ", size(NF(M2, std(M2t))) + size(NF(M2t, std(M2)));
+==> // Check: M2t == M2?:  0
+dimGradedPart(M2,1);
+==> 0
+dimGradedPart(M2,2);
+==> 15
+// this should coincide with:
+dimGradedPart(M,2);
+==> 15
+// shift grading by 1:
+intvec v=1;
+attrib(M,"isHomog",v);
+t=timer;
+M2t=truncate(M,2);
+t = timer - t;
+"// Simple truncate: ", t;
+==> // Simple truncate:  0
+t=timer;
+M2=truncateFast(std(M),2);
+t = timer - t;
+"// Fast truncate: ", t;
+==> // Fast truncate:  0
+print(M2);
+==> u, z, 0, y, 0, 0, x, 0, 0, 0, v2,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0\
+   , 0, 
+==>   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> -v,0, z, 0, y, 0, 0, x, 0, 0, 0, v2,0, 0, 0, uv,0, 0, 0, 0, 0, 0, 0, 0, 0\
+   , u2,
+==>   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0, -v,-u,0, 0, y, 0, 0, x, 0, 0, 0, v2,0, 0, 0, uv,0, 0, zv,0, 0, 0, 0, 0\
+   , 0, 
+==>   u2,0, 0, zu,0, 0, 0, 0, 0, z2,0, 0, 0, 0, 0, 0, 0, 0, 0,
+==> 0, 0, 0, -v,-u,-z,0, 0, 0, x, 0, 0, 0, v2,0, 0, 0, uv,0, 0, zv,0, yv,0, 0\
+   , 0, 
+==>   0, u2,0, 0, zu,0, yu,0, 0, 0, z2,0, yz,0, 0, y2,0, 0, 0,
+==> 0, 0, 0, 0, 0, 0, -v,-u,-z,-y,0, 0, 0, 0, v2,0, 0, 0, uv,0, 0, zv,0, yv,x\
+   v,0, 
+==>   0, 0, u2,0, 0, zu,0, yu,xu,0, 0, z2,0, yz,xz,0, y2,xy,x2
+"// Check: M2t == M2?: ", size(NF(M2, std(M2t))) + size(NF(M2t, std(M2))); //?
+==> // Check: M2t == M2?:  20
+dimGradedPart(M2,3);
+==> 15
+</FONT></pre></td></tr></table><P>
+
+<A NAME="CM_regularity"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1413.htm#SEC1488"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: truncate" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1415.htm#SEC1490"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: CM_regularity" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1402.htm#SEC1477"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: reszeta_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1422.htm#SEC1497"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: JMBTest_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1412.htm#SEC1487"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sheafcoh_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,171 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: intersectZ</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: intersectZ">
+<META NAME="keywords" CONTENT="Singular Manual: intersectZ">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1379"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1303.htm#SEC1378"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: equidimZ" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1274.htm#SEC1349"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: primdec_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1297.htm#SEC1372"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: primdecint_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.21.7 intersectZ </H4>
+<!--docid::SEC1379::-->
+Procedure from library <CODE>primdecint.lib</CODE> (see  <A HREF="sing_1297.htm#SEC1372">primdecint_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Return:</STRONG>
+<DD>the intersection of the input ideals
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>this is an alternative to intersect(I,J) over integers,
+is faster for some examples and should be kept for debug purposes.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "primdecint.lib";
+ring R=integer,(a,b,c,d),dp;
+ideal I1=9,a,b;
+ideal I2=3,c;
+ideal I3=11,2a,7b;
+ideal I4=13a2,17b4;
+ideal I5=9c5,6d5;
+ideal I6=17,a15,b15,c15,d15;
+ideal I=intersectZ(I1,I2); I;
+==> I[1]=9
+==> I[2]=3b
+==> I[3]=3a
+==> I[4]=bc
+==> I[5]=ac
+I=intersectZ(I,I3); I;
+==> I[1]=99
+==> I[2]=3b
+==> I[3]=3a
+==> I[4]=bc
+==> I[5]=ac
+I=intersectZ(I,I4); I;
+==> I[1]=39a2
+==> I[2]=13a2c
+==> I[3]=51b4
+==> I[4]=17b4c
+==> I[5]=3a2b4
+==> I[6]=a2b4c
+I=intersectZ(I,I5); I;
+==> I[1]=78a2d5
+==> I[2]=117a2c5
+==> I[3]=102b4d5
+==> I[4]=153b4c5
+==> I[5]=6a2b4d5
+==> I[6]=9a2b4c5
+==> I[7]=39a2c5d5
+==> I[8]=51b4c5d5
+==> I[9]=3a2b4c5d5
+I=intersectZ(I,I6); I;
+==> I[1]=1326a2d5
+==> I[2]=1989a2c5
+==> I[3]=102b4d5
+==> I[4]=153b4c5
+==> I[5]=663a2c5d5
+==> I[6]=51b4c5d5
+==> I[7]=78a2d15
+==> I[8]=117a2c15
+==> I[9]=78a15d5
+==> I[10]=117a15c5
+==> I[11]=6a2b4d15
+==> I[12]=9a2b4c15
+==> I[13]=39a2c5d15
+==> I[14]=39a2c15d5
+==> I[15]=6a2b15d5
+==> I[16]=9a2b15c5
+==> I[17]=6a15b4d5
+==> I[18]=9a15b4c5
+==> I[19]=39a15c5d5
+==> I[20]=3a2b4c5d15
+==> I[21]=3a2b4c15d5
+==> I[22]=3a2b15c5d5
+==> I[23]=3a15b4c5d5
+</FONT></pre></td></tr></table><A NAME="primitiv_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1303.htm#SEC1378"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: equidimZ" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1274.htm#SEC1349"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: primdec_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1297.htm#SEC1372"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: primdecint_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

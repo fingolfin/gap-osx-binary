@@ -1,10 +1,10 @@
 #ifndef AE_H
 #define AE_H
 
+#include <misc/auxiliary.h>
+#include "si_gmp.h"
 
-#include <gmp.h>
-#include <omalloc/omalloc.h>
-
+#ifdef SINGULAR_4_1
 
 class int_poly // Klasse von int_polynomen mit Typ (Grad, Koeffizienten ganzzahlig)
 {
@@ -106,6 +106,7 @@ public:
     void poly_print();                        //Ausgabe von int_polynom
 };
 
+#endif
 #endif
 
 

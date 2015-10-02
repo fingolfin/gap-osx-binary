@@ -1,0 +1,153 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: displayHNE</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: displayHNE">
+<META NAME="keywords" CONTENT="Singular Manual: displayHNE">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1594"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1518.htm#SEC1593"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: param" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1520.htm#SEC1595"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: invariants" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.9.5 displayHNE </H4>
+<!--docid::SEC1594::-->
+Procedure from library <CODE>hnoether.lib</CODE> (see  <A HREF="sing_1514.htm#SEC1589">hnoether_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>displayHNE(L[,n]); L list, n int
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>L is the output of <CODE>develop(f)</CODE>, or of <CODE>exdevelop(f,n)</CODE>,
+or of <CODE>hnexpansion(f[,"ess"])</CODE>, or (one entry in) the list
+<CODE>hne</CODE> in the ring created by <CODE>hnexpansion(f[,"ess"])</CODE>.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>- if only one argument is given and if the input are the HN data
+of an irreducible plane curve singularity, no return value, but
+display an ideal HNE of the following form:
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>       y = []*x^1+[]*x^2   +...+x^&lt;&gt;*z(1)
+       x =        []*z(1)^2+...+z(1)^&lt;&gt;*z(2)
+       z(1) =     []*z(2)^2+...+z(2)^&lt;&gt;*z(3)
+       .......             ..........................
+       z(r-1) =   []*z(r)^2+[]*z(r)^3+......
+</FONT></pre></td></tr></table>where <CODE>x</CODE>,<CODE>y</CODE> are the first 2 variables of the basering.
+The values of <CODE>[]</CODE> are the coefficients of the Hamburger-Noether
+matrix, the values of <CODE>&lt;&gt;</CODE> are represented by <CODE>x</CODE> in the
+HN matrix.<BR>
+- if a second argument is given and if the input are the HN data
+of an irreducible plane curve singularity, return a ring containing
+an ideal <CODE>HNE</CODE> as described above.<BR>
+- if L corresponds to the output of <CODE>hnexpansion(f)</CODE>
+or to the list of HN data computed by <CODE>hnexpansion(f[,"ess"])</CODE>,
+<CODE>displayHNE(L[,n])</CODE> shows the HNE's of all branches of f in the
+format described above. The optional parameter is then ignored.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The 1st line of the above ideal (i.e., <CODE>HNE[1]</CODE>) means that
+<CODE>y=[]*z(0)^1+...</CODE>, the 2nd line (<CODE>HNE[2]</CODE>) means that
+<CODE>x=[]*z(1)^2+...</CODE>, so you can see which indeterminate
+corresponds to which line (it's also possible that <CODE>x</CODE> corresponds
+to the 1st line and <CODE>y</CODE> to the 2nd).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "hnoether.lib";
+ring r=0,(x,y),dp;
+poly f=x3+2xy2+y2;
+list hn=develop(f);
+displayHNE(hn);
+==>   y = z(1)*x
+==>   x = -z(1)^2 + ..... (terms of degree &gt;=3)
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1516.htm#SEC1591">develop</A>;
+ <A HREF="sing_1515.htm#SEC1590">hnexpansion</A>.
+<P>
+
+<A NAME="invariants"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1518.htm#SEC1593"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: param" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1520.htm#SEC1595"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: invariants" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,167 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: jet</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: jet">
+<META NAME="keywords" CONTENT="Singular Manual: jet">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC361"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_321.htm#SEC360"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: janet" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_323.htm#SEC362"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: kbase" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.63 jet </H3>
+<!--docid::SEC361::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>jet (</CODE> poly_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> vector_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> ideal_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> module_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> poly_expression<CODE>,</CODE> int_expression<CODE>,</CODE> intvec_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> vector_expression<CODE>,</CODE> int_expression<CODE>,</CODE> intvec_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> ideal_expression<CODE>,</CODE> int_expression<CODE>,</CODE> intvec_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> module_expression<CODE>,</CODE> int_expression<CODE>,</CODE> intvec_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> poly_expression<CODE>,</CODE> poly_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> vector_expression<CODE>,</CODE> poly_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> ideal_expression<CODE>,</CODE> matrix_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>jet (</CODE> module_expression<CODE>,</CODE> matrix_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>the same as the type of the first argument
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>deletes from the first argument all terms of degree bigger than the second argument.
+<BR>If a third argument <CODE>w</CODE> of type intvec is given, the degree is replaced by the weighted degree defined by <CODE>w</CODE>.
+<BR>If a second argument <CODE>u</CODE> of type poly or matrix is given, the first argument <CODE>p</CODE> is replaced by <CODE>p/u</CODE>.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=32003,(x,y,z),(c,dp);
+  jet(1+x+x2+x3+x4,3);
+==> x3+x2+x+1
+  poly f=1+x+x2+xz+y2+x3+y3+x2y2+z4;
+  jet(f,3);
+==> x3+y3+x2+y2+xz+x+1
+  intvec iv=2,1,1;
+  jet(f,3,iv);
+==> y3+y2+xz+x+1
+  // the part of f with (total) degree &gt;3:
+  f-jet(f,3);
+==> x2y2+z4
+  // the homogeneous part of f of degree 2:
+  jet(f,2)-jet(f,1);
+==> x2+y2+xz
+  // the part of maximal degree:
+  jet(f,deg(f))-jet(f,deg(f)-1);
+==> x2y2+z4
+  // the absolute term of f:
+  jet(f,0);
+==> 1
+  // now for other types:
+  ideal i=f,x,f*f;
+  jet(i,2);
+==> _[1]=x2+y2+xz+x+1
+==> _[2]=x
+==> _[3]=3x2+2y2+2xz+2x+1
+  vector v=[f,1,x];
+  jet(v,1);
+==> [x+1,1,x]
+  jet(v,0);
+==> [1,1]
+  v=[f,1,0];
+  module m=v,v,[1,x2,z3,0,1];
+  jet(m,2);
+==> _[1]=[x2+y2+xz+x+1,1]
+==> _[2]=[x2+y2+xz+x+1,1]
+==> _[3]=[1,x2,0,0,1]
+  ring rs=0,x,ds;
+  // 1/(1+x) till degree 5
+  jet(1,1+x,5);
+==> 1-x+x2-x3+x4-x5
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_276.htm#SEC315">deg</A>;
+ <A HREF="sing_85.htm#SEC124">ideal</A>;
+ <A HREF="sing_90.htm#SEC129">int</A>;
+ <A HREF="sing_103.htm#SEC142">intvec</A>;
+ <A HREF="sing_134.htm#SEC173">module</A>;
+ <A HREF="sing_147.htm#SEC186">poly</A>;
+ <A HREF="sing_172.htm#SEC211">vector</A>.
+<A NAME="kbase"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_321.htm#SEC360"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: janet" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_323.htm#SEC362"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: kbase" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

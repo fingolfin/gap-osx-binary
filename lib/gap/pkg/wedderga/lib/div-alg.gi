@@ -34,7 +34,7 @@ end);
 
 ######################################### 
 # Cyclotomic reciprocity functions for the extension
-# F(E(n))/F at the primie p.  These calculate the 
+# F(E(n))/F at the prime p.  These calculate the 
 # splitting degree g(F(E(n))/F,p), 
 # residue degree f(F(E(n))/F,p), and 
 # ramification index e(F(E(n))/F,p).  Using 
@@ -56,8 +56,8 @@ od;
 n1:=PDashPartOfN(n,p);
 f:=1;
 if n1>1 then
-while not(p^f mod n1 = 1) do 
-f:=f+1;
+while not(PowerMod(p,f,n1)= 1) do 
+f:=f+1; 
 od;
 fi;
 
@@ -68,7 +68,7 @@ if GaloisCyc(E(n1),b)=E(n1) then
 AddSet(L1,b); 
 else
 for i in [1..f] do 
-if b mod n1 = p^i mod n1 then 
+if b mod n1 = PowerMod(p,i,n1) then 
 AddSet(L1,b);
 fi;
 od; 
@@ -96,19 +96,9 @@ local K,a,n1,L,f;
 
 K:=PSplitSubextension(F,n,p);
 a:=PrimitiveElement(K);
-#n0:=Conductor([a,E(n)]);
 n1:=PDashPartOfN(n,p);
 L:=Field([a,E(n1)]);
 f:=Trace(L,K,1);
-#K:=PSplitSubextension(F,n,p);
-#b:=PrimitiveElement(K);
-#U:=[];
-#for i in [1..n1] do 
-#  if Gcd(i,n1)=1 and GaloisCyc(b,i)=b then 
-#    Add(U,i);
-#  fi;
-#od; 
-#f:=Size(U);
 
 return f;
 end);
@@ -144,52 +134,20 @@ end);
 # and 2.    
 ################################
 InstallGlobalFunction( LocalIndexAtOddP, function(A,q)
-local m,n,a,b,c,n1,n2,g,U,i,U1,u,h,e,f,f1,e1,k;
+local m,F,n,a,b,c,n1,e,f,h,f1,e1,k;
 
 m:=1; 
+F:=A[2];
 a:=A[4][1];
 b:=A[4][2];
 c:=A[4][3];
-n:=Lcm(Conductor(A[2]),A[3]);
+n:=Lcm(Conductor(F),A[3]);
 n1:=PDashPartOfN(n,q);
-####################################
-# Cyclotomic reciprocity calculation:
-U:=[1];
-if n1 > 1 then 
-i:=1;
-while not(q^i mod n1 = 1) do 
-Add(U,q^i mod n1);
-i:=i+1;
-od;
-fi;
-U1:=[];
-n2:=PDashPartOfN(A[3],q);
-for u in U do 
-Add(U1,u mod n2);
-od;
-g:=1; 
-while not((b^g mod n2) in U1) do 
-g:=g+1;
-od; 
-h:=OrderMod(b^g,n2);
-e:=OrderMod(b^g,A[3])/h;
-#####################################
-# Now g, h, and e are the splitting, 
-# residue degree and ramification of 
-# Q(E(n))/F at q.
-#####################################
+##########################
+e:=RamificationIndexAtP(F,n,q);
 if e>1 and c>0 and A[3]/q in PositiveIntegers then 
-#####################################
-# Compute residue degree f of CF(n) at q
-f:=1; 
-while not((q^f-1)/n1 in PositiveIntegers) do 
-f:=f+1;
-od;
-#########################
-# Now F_q contains E(q^(f/h)-1).  We find the least 
-# power m of E(A[3])^c that lies in the group generated 
-# by E(q^(f/h)-1)^e.
-#########################
+f:=ResidueDegreeAtP(Rationals,n,q);
+h:=ResidueDegreeAtP(F,n,q);
 f1:=f/h;
 e1:=Gcd(q^f1-1,e);
 k:=(q^f1-1)/e1;
@@ -200,6 +158,58 @@ fi;
 
 return m;
 end);
+
+
+
+
+####################################
+# Cyclotomic reciprocity calculation:
+#U:=[1];
+#if n1 > 1 then 
+#i:=1;
+#while not(PowerMod(q,i,n1)=1) do 
+#Add(U,PowerMod(q,i,n1));
+#i:=i+1;
+#od;
+#fi;
+#U1:=[];
+#n2:=PDashPartOfN(A[3],q);
+#for u in U do 
+#Add(U1,u mod n2);
+#od;
+#g:=1; 
+#while not(PowerMod(b,g,n2) in U1) do 
+#g:=g+1;
+#od; 
+#h:=OrderMod(b^g,n2);
+#e:=OrderMod(b^g,A[3])/h;
+#####################################
+# Now g, h, and e are the splitting, 
+# residue degree and ramification of 
+# Q(E(n))/F at q.
+#####################################
+#if e>1 and c>0 and A[3]/q in PositiveIntegers then 
+#####################################
+# Compute residue degree f of CF(n) at q
+#f:=1; 
+#while not(n1=1 or PowerMod(q,f,n1)=1) do 
+#f:=f+1;
+#od;
+#########################
+# Now F_q contains E(q^(f/h)-1).  We find the least 
+# power m of E(A[3])^c that lies in the group generated 
+# by E(q^(f/h)-1)^e.
+#########################
+#f1:=f/h;
+#e1:=Gcd(q^f1-1,e);
+#k:=(q^f1-1)/e1;
+#while not(k/(Order(E(A[3])^(c*m))) in PositiveIntegers) do 
+#  m:=m+1;
+#od; 
+#fi;
+
+#return m;
+#end);
 
 
 ###############################
@@ -231,48 +241,67 @@ end);
 # over the 2-adics
 ###############################
 InstallGlobalFunction( LocalIndexAtTwo, function(A)
-local n,m,b,c,n1,f,h,g,n2,n3,n4,e,e1,i,u,U,U1; 
+local n,m,a,K,b,c,f1,f,e1,e,h,g,n2,n3,n4,i,u,U,U1; 
 
 m:=1;
-if A[3]/4 in PositiveIntegers then 
+a:=A[4][1];
+if A[3]/4 in PositiveIntegers and IsEvenInt(a) then 
 n:=Lcm(Conductor(A[2]),A[3]);
+f1:=ResidueDegreeAtP(A[2],n,2);
+f:=ResidueDegreeAtP(Rationals,n,2);
+e1:=RamificationIndexAtP(A[2],n,2);
+e:=RamificationIndexAtP(Rationals,n,2);
+if IsOddInt(f/f1) and IsOddInt(e/e1) then 
+#K:=PSplitSubextension(A[2],n,2);
+#if IsOddInt(Trace(K,A[2],1)) then 
 b:=A[4][2];
 c:=A[4][3];
-n1:=PDashPartOfN(n,2); 
-f:=OrderMod(2,n1);
 n2:=PPartOfN(n,2);
-e:=Phi(n2);
-
-U:=[1];
-i:=1;
-while not((2^i mod n1) in U) do 
-Add(U,2^i mod n1);
-i:=i+1;
-od;
-U1:=[];
-n3:=PDashPartOfN(A[3],2);
-n4:=PPartOfN(A[3],2);
-for u in U do 
-Add(U1,u mod n3);
-od;
-
-g:=1; 
-while not((b^g mod n3) in U1) do 
-g:=g+1;
-od; 
-h:=OrderMod(b^g,n3);
-e1:=OrderMod(b^g,A[3])/OrderMod(b^g,n3);
- if e1>1 and IsOddInt(e*f/e1*h) then 
- n2:=PPartOfN(n,2);
-  if E(n2)^(b^g)=E(n2)^(-1) and E(n4)^c=-1 then 
+n4:=PPartOfN(A[3],2); 
+  if E(n2)^b=E(n2)^(-1) and E(n4)^c=-1 then 
    m:=2;
   fi;
- fi;
-fi;
+fi; 
+fi; 
 
-return m;
-end);
+return m; 
+end); 
 
+#################################
+#n1:=PDashPartOfN(n,2); 
+#f:=OrderMod(2,n1);
+#n2:=PPartOfN(n,2);
+#e:=Phi(n2);
+
+#U:=[1];
+#i:=1;
+#while not(PowerMod(2,i,n1) in U) do 
+#Add(U,PowerMod(2,i,n1));
+#i:=i+1;
+#od;
+#U1:=[];
+#n3:=PDashPartOfN(A[3],2);
+#n4:=PPartOfN(A[3],2);
+#for u in U do 
+#Add(U1,u mod n3);
+#od;
+
+#g:=1; 
+#while not(PowerMod(b,g,n3) in U1) do 
+#g:=g+1;
+#od; 
+#h:=OrderMod(b^g,n3);
+#e1:=OrderMod(b^g,A[3])/OrderMod(b^g,n3);
+# if e1>1 and IsOddInt(e*f/e1*h) then 
+# n2:=PPartOfN(n,2);
+#  if E(n2)^(b^g)=E(n2)^(-1) and E(n4)^c=-1 then 
+#   m:=2;
+#  fi;
+# fi;
+#fi;
+#
+#return m;
+#end);
 ##############################
 # Given a group G and a simple component A whose 
 # WedderburnDecompositionInfo in wedderga has length 4,
@@ -325,6 +354,81 @@ end);
 # Finds group over which cyclotomic algebra of length 4 or 5 
 # is faithfully represented.
 #######################################################
+InstallGlobalFunction( DefiningGroupAndCharacterOfCyclotAlg, function(A)
+local l,f,a,b,c,d,g,I,g1,S,m,n,i,chi,F,u,V,U,F1;;
+
+l:=Length(A);
+g1:="fail";
+
+if (l=5 and Length(A[4])=2) then 
+f:=FreeGroup("a","b","c");
+a:=f.1;
+b:=f.2;
+c:=f.3;
+g:=f/[a^A[3],b^A[4][1][1]*a^(-A[4][1][3]),c^A[4][2][1]*a^(-A[4][2][3]),b^(-1)*a*b*a^(-A[4][1][2]),c^(-1)*a*c*a^(-A[4][2][2]),c^(-1)*b^(-1)*c*b*a^(-A[5][1][1])];
+fi;
+
+if (l=5 and Length(A[4])=3) then 
+f:=FreeGroup("a","b","c","d");
+a:=f.1;
+b:=f.2;
+c:=f.3;
+d:=f.4;
+g:=f/[a^A[3],b^A[4][1][1]*a^(-A[4][1][3]),c^A[4][2][1]*a^(-A[4][2][3]),d^A[4][3][1]*a^(-A[4][3][3]), b^(-1)*a*b*a^(-A[4][1][2]),c^(-1)*a*c*a^(-A[4][2][2]), d^(-1)*a*d*a^(-A[4][3][2]),    c^(-1)*b^(-1)*c*b*a^(-A[5][1][1]), d^(-1)*b^(-1)*d*b*a^(-A[5][1][2]),d^(-1)*c^(-1)*d*c*a^(-A[5][2][1])];
+fi;
+
+if (l=4) then 
+f:=FreeGroup("a","b");
+a:=f.1;
+b:=f.2;
+g:=f/[a^A[3],b^A[4][1]*a^(-A[4][3]),b^(-1)*a*b*a^(-A[4][2])];
+fi;
+
+I:=IsomorphismSpecialPcGroup(g);
+g1:=Image(I);
+
+S:=[];
+S[1]:=g1;
+
+if Length(A)=2 then d:=1; fi;
+if Length(A)=4 then d:=A[4][1]; F1:=NF(A[3],[A[4][2]]); fi; 
+if (Length(A)=5 and Length(A[4])=2) then 
+   d:=A[4][1][1]*A[4][2][1]; 
+   F1:=NF(A[3],[A[4][1][2],A[4][2][2]]); 
+fi;
+if (Length(A)=5 and Length(A[4])=3) then 
+   d:=A[4][1][1]*A[4][2][1]*A[4][3][1]; 
+   F1:=NF(A[3],[A[4][1][2],A[4][2][2],A[4][3][2]]); 
+fi;
+
+n:=Size(Irr(g1)) ;
+m:=Trace(F1,Rationals,1);
+U:=[];
+for i in [1..n] do 
+chi:=Irr(g1)[n-i+1];
+V:=ValuesOfClassFunction(chi); 
+F:=FieldByGenerators(V);
+if V[1]/d in PositiveIntegers then 
+if Size(KernelOfCharacter(chi))=1 then 
+if FieldByGenerators(V)=F1 then 
+	Add(U,n-i+1); 
+fi; 
+fi;
+fi;
+od;
+if Size(U)=m then 
+u:=U[1];
+chi:=Irr(g1)[u];
+else
+chi:=U;
+fi;
+
+S[2]:=chi;
+
+return S;
+end);
+
+#######################################################
 InstallGlobalFunction( DefiningGroupOfCyclotomicAlgebra, function(A)
 local l,f,a,b,c,d,g,I,g1;
 
@@ -363,15 +467,22 @@ end);
 
 #################################################
 InstallGlobalFunction( DefiningCharacterOfCyclotomicAlgebra, function(A)
-local g1,d,m,n,i,chi,F,u,V,U;
+local g1,d,m,n,i,chi,F,u,V,U,F1;
 
 g1:=DefiningGroupOfCyclotomicAlgebra(A);
 if Length(A)=2 then d:=1; fi;
-if Length(A)=4 then d:=A[4][1]; fi; 
-if (Length(A)=5 and Length(A[4])=2) then d:=A[4][1][1]*A[4][2][1]; fi;
-if (Length(A)=5 and Length(A[4])=3) then d:=A[4][1][1]*A[4][2][1]*A[4][3][1]; fi;
+if Length(A)=4 then d:=A[4][1]; F1:=NF(A[3],[A[4][2]]); fi; 
+if (Length(A)=5 and Length(A[4])=2) then 
+   d:=A[4][1][1]*A[4][2][1]; 
+   F1:=NF(A[3],[A[4][1][2],A[4][2][2]]); 
+fi;
+if (Length(A)=5 and Length(A[4])=3) then 
+   d:=A[4][1][1]*A[4][2][1]*A[4][3][1]; 
+   F1:=NF(A[3],[A[4][1][2],A[4][2][2],A[4][3][2]]); 
+fi;
+
 n:=Size(Irr(g1)) ;
-m:=Trace(A[2],Rationals,1);
+m:=Trace(F1,Rationals,1);
 U:=[];
 for i in [1..n] do 
 chi:=Irr(g1)[n-i+1];
@@ -379,7 +490,7 @@ V:=ValuesOfClassFunction(chi);
 F:=FieldByGenerators(V);
 if V[1]/d in PositiveIntegers then 
 if Size(KernelOfCharacter(chi))=1 then 
-if FieldByGenerators(V)=A[2] then 
+if FieldByGenerators(V)=F1 then 
 	Add(U,n-i+1); 
 fi; 
 fi;
@@ -402,7 +513,17 @@ InstallGlobalFunction( SimpleComponentOfGroupRingByCharacter, function(F,G,n)
 local R,chi,B;
 
 R:=GroupRing(F,G);
-chi:=Irr(G)[n];
+if IsPosInt(n) then
+  if HasOrdinaryCharacterTable(G) then
+    chi:=Irr(G)[n];
+  else
+    Error("The group has no ordinary character table yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n) then
+  chi:=n;
+else
+  Error("The third argument must be a character or its number\n");
+fi;      
 B:=SimpleAlgebraByCharacterInfo(R,chi);
 
 return B;
@@ -449,11 +570,23 @@ end);
 
 ##########################################
 InstallGlobalFunction( LocalIndexAtInftyByCharacter, function(F,G,n)
-local m,T,v2,a;
+local m,T,v2,a,pos;
+
+if IsPosInt(n) then
+  if HasOrdinaryCharacterTable(G) then
+    pos:=n;
+  else
+    Error("The group has no ordinary character table yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n) then
+  pos := Position( Irr(G), n );
+else
+  Error("The fourth argument must be a character or its number\n");
+fi;
 
 m:=1;
 T:=CharacterTable(G);
-v2:=Indicator(T,2)[n];
+v2:=Indicator(T,2)[pos];
 a:=PrimitiveElement(F);
 if GaloisCyc(a,-1)=a then 
 if v2=-1 then 
@@ -466,16 +599,38 @@ end);
 
 ###########################################
 InstallGlobalFunction( FinFieldExt, function(F,G,p,n,n1)
-local T,chi,V,Y,h,a,m1,d1,L,i,z,l,m,K,B,d,M,C,D,b,j,F1,M1,M2,T1,psi,U,k,F2,t;
+local chi,V,Y,h,a,m1,d1,L,i,z,l,m,K,B,d,M,C,D,b,j,F1,M1,M2,psi,U,k,F2,t;
 
-T:=CharacterTable(G);
-chi:=Irr(G)[n];
+if IsPosInt(n) then
+  if HasOrdinaryCharacterTable(G) then
+    chi:=Irr(G)[n];
+  else
+    Error("The group has no ordinary character table yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n) then
+  chi:=n;
+else
+  Error("The fourth argument must be a character or its number\n");
+fi;
+
+if IsPosInt(n1) then
+  if HasOrdinaryCharacterTable(G) and IsBound( ComputedBrauerTables( CharacterTable(G) )[p] ) then
+    psi:=Irr( BrauerTable(G,p) )[n1];
+  else
+    Error("The group has no Brauer character table for p=", p, " yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n1) and n1 in Irr( BrauerTable(G,p) ) then
+  psi:=n1;
+else
+  Error("The fifth argument must be a Brauer character at ", p, " or its number\n");
+fi;
+
 V:=ValuesOfClassFunction(chi);
-Y:=OrdersClassRepresentatives(T);
+Y:=OrdersClassRepresentatives( CharacterTable(G) );
 h:=Size(Y);
 a:=PrimitiveElement(F);
 m1:=PDashPartOfN(Conductor(a),p);
-for i in [1..m1] do if (p^i-1)/m1 in Integers then d1:=i; break; fi; od; 
+for i in [1..m1] do if (m1=1 or PowerMod(p,i,m1)=1) then d1:=i; break; fi; od; 
 
 L:=[];
 for i in [1..h] do if Gcd(Y[i],p) = 1 then Add(L,V[i]); fi; od; 
@@ -483,7 +638,7 @@ l:=Size(L);
 m:=Conductor(L);
 K:=CF(m);
 B:=Basis(K);
-for i in [1..m] do if (p^i-1)/m in Integers then d:=i; break; fi; od; 
+for i in [1..m] do if (m=1 or PowerMod(p,i,m)=1) then d:=i; break; fi; od; 
 z:=Z(p^d)^((p^d-1)/m);
 M:=[];
 D:=[];
@@ -506,13 +661,11 @@ od;
 M1:=UnionSet(M,[Z(p^d1)]);
 F1:=FieldByGenerators(M1);
 
-T1:=T mod p; 
-psi:=IBr(G,p)[n1];
 U:=ValuesOfClassFunction(psi);
 m:=Conductor(U);
 K:=CF(m);
 B:=Basis(K);
-for i in [1..m] do if (p^i-1)/m in Integers then d:=i; break; fi; od; 
+for i in [1..m] do if (m=1 or PowerMod(p,i,m)=1) then d:=i; break; fi; od; 
 z:=Z(p^d)^((p^d-1)/m);
 M:=[];
 D:=[];
@@ -542,51 +695,151 @@ return t;
 end);
 
 ##############################################
-InstallGlobalFunction( PossibleDefectGroups, function(G,n,p)
-local S,U,U0,U1,Q,Q1,Q2,i,j,I,T,b,k,d,H,a;
+# Oct 2014 New Defect Group Functions
+##############################################
+InstallGlobalFunction( DefectGroupOfConjugacyClassAtP, function(G,c,p)
+local C,g1,H,D;
+
+C:=ConjugacyClasses(G);
+g1:=Representative(C[c]);
+H:=Centralizer(G,g1);
+D:=SylowSubgroup(H,p);
+
+return D; 
+end);
+#############################
+InstallGlobalFunction( DefectGroupsOfPBlock, function(G,n,p)
+local D1,D2,r,U,U1,T,chi,C,c,i,m,h1,a1,a2,b1,A1,D; 
+
+if IsPosInt(n) then
+  if HasOrdinaryCharacterTable(G) then
+    chi:=Irr(G)[n];
+  else
+    Error("The group has no ordinary character table yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n) then
+  chi:=n;
+else
+  Error("The third argument must be a character or its number\n");
+fi;      
 
 T:=CharacterTable(G);
-S:=T mod p; 
-b:=BlocksInfo(S);
-for j in [1..Size(b)] do 
-if n in b[j].ordchars then 
-  k:=b[j].modchars[1];
-  d:=b[j].defect;
-  break;
-fi;
-od;
-Q:=SylowSubgroup(G,p);
+C:=ConjugacyClasses(G);
+c:=Size(C);
 U:=[];
-U0:=[];
 U1:=[];
-if Size(Q)>p^d then 
-H:=ConjugacyClasses(G);
-for j in [2..Size(H)] do 
-  if Gcd(OrdersClassRepresentatives(T)[j],p)=1 then 
-     a:=Elements(H[j])[1];
-     Q1:=Intersection(Q,Q^a);
-     if Size(Q1)=p^d then 
-        AddSet(U0,ConjugacyClassSubgroups(G,Q1)); 
-     fi; 
-     Q2:=SylowSubgroup(Centralizer(G,a),p); 
-     if Size(Q2)=p^d then 
-        AddSet(U1,ConjugacyClassSubgroups(G,Q2));
-     fi; 
+for i in [1..c] do 
+  m:=OrdersClassRepresentatives(T)[i]; 
+  if not(m mod p = 0 mod p) then 
+    AddSet(U,i);
+    AddSet(U1,i);
   fi;
-od;
-U:=Intersection(U0,U1);
+od; 
+
+for i in U1 do 
+  h1:=Size(C[i]);
+  a1:=chi[i];
+  b1:=chi[1];
+  A1:=(h1*a1)/b1; 
+  r:=PDashPartOfN(Size(G),p);
+  a2:=Norm(r*A1);
+  if not(a2 in Integers) or (a2/p in Integers) then  
+     RemoveSet(U,i); 
+  fi;  
+od; 
+
+D2:=[];
+for i in U do 
+  D:=DefectGroupOfConjugacyClassAtP(G,i,p);
+  AddSet(D2,D);
+od; 
+
+if Length(D2)>1 then 
+  D1:=D2[1];
+for i in [2..Size(D2)] do 
+  if Size(D2[i])<Size(D1) then 
+    D1:=D2[i]; 
+  fi; 
+od; 
 else
-AddSet(U,ConjugacyClassSubgroups(G,Q));
+D1:=D2[1];
 fi;
 
-return U;
+D:=ConjugacyClassSubgroups(G,D1);
+
+return D;
+end); 
+####################  
+InstallGlobalFunction( DefectOfCharacterAtP, function(G,n,p)
+local D1,D,q,d;
+
+D1:=DefectGroupsOfPBlock(G,n,p);
+D:=Representative(D1); 
+q:=Size(D);
+d:=LogInt(q,p);
+
+return d;
 end);
+
+###################################################
+#InstallGlobalFunction( PossibleDefectGroups, function(G,n,p)
+#local S,U,U0,U1,Q,Q1,Q2,i,j,I,T,b,k,d,H,a;
+#
+#T:=CharacterTable(G);
+#S:=T mod p; 
+#b:=BlocksInfo(S);
+#for j in [1..Size(b)] do 
+#if n in b[j].ordchars then 
+#  k:=b[j].modchars[1];
+#  d:=b[j].defect;
+#  break;
+#fi;
+#od;
+#Q:=SylowSubgroup(G,p);
+#U:=[];
+#U0:=[];
+#U1:=[];
+#if Size(Q)>p^d then 
+#H:=ConjugacyClasses(G);
+#for j in [2..Size(H)] do 
+#  if Gcd(OrdersClassRepresentatives(T)[j],p)=1 then 
+#     a:=Elements(H[j])[1];
+#     Q1:=Intersection(Q,Q^a);
+#     if Size(Q1)=p^d then 
+#        AddSet(U0,ConjugacyClassSubgroups(G,Q1)); 
+#     fi; 
+#     Q2:=SylowSubgroup(Centralizer(G,a),p); 
+#     if Size(Q2)=p^d then 
+#        AddSet(U1,ConjugacyClassSubgroups(G,Q2));
+#     fi; 
+#  fi;
+#od;
+#U:=Intersection(U0,U1);
+#else
+#AddSet(U,ConjugacyClassSubgroups(G,Q));
+#fi;
+#
+#return U;
+#end);
 
 ##########################################
 InstallGlobalFunction( LocalIndexAtPByBrauerCharacter, function(F,G,n,p)
-local chi,V,a,V1,C,m1,b,j,k,u,t,T,S,U,f,m2,n0,K0,d0,F1,K1,d1;
+local chi,n1,V,a,V1,C,m1,b,j,k,u,t,T,S,U,f,m2,n0,K0,d0,F1,K1,d1;
 
-chi:=Irr(G)[n];
+if IsPosInt(n) then
+  if HasOrdinaryCharacterTable(G) then
+    chi:=Irr(G)[n];
+    n1:=n;
+  else
+    Error("The group has no ordinary character table yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n) then
+  chi:=n;
+  n1:=Position(Irr(G),chi);
+else
+  Error("The third argument must be a character or its number\n");
+fi;      
+
 V:=ValuesOfClassFunction(chi);
 a:=PrimitiveElement(F);
 V1:=Union(V,[a]);
@@ -599,26 +852,34 @@ T:=CharacterTable(G);
 S:=T mod p; 
 b:=BlocksInfo(S);
 for j in [1..Size(b)] do 
-if n in b[j].ordchars then 
+if n1 in b[j].ordchars then 
   k:=b[j].modchars[1];
   break;
 fi;
 od;
-
-U:=PossibleDefectGroups(G,n,p);
-f:=0;
-for u in [1..Size(U)] do 
- if not(IsCyclic(Elements(U[u])[1])) then 
-   f:=f+1;
- fi;
-od; 
-if not(f=0) then
-  if f<Size(U) then  
-   m1[2]:="DGmaybeCyclic";
-  else 
-   m1[2]:="DGnotCyclic";
-  fi;
+#####################
+# Adapted to new defect group function
+#####################
+#U:=PossibleDefectGroups(G,n,p);
+#f:=0;
+#for u in [1..Size(U)] do 
+# if not(IsCyclic(Elements(U[u])[1])) then 
+#   f:=f+1;
+# fi;
+#od; 
+#if not(f=0) then
+#  if f<Size(U) then  
+#   m1[2]:="DGmaybeCyclic";
+#  else 
+#   m1[2]:="DGnotCyclic";
+#  fi;
+#fi;
+U:=DefectGroupsOfPBlock(G,n,p);
+if not(IsCyclic(Representative(U))) then 
+  m1[2]:="DGnotCyclic";
 fi;
+
+####################################
    
 t:=FinFieldExt(C,G,p,n,k);
 if t>1 then 
@@ -659,9 +920,11 @@ fi;
 if Length(B)=5 then
 K:=PSplitSubextension(F,B[3],p);
 B1:=SimpleComponentOfGroupRingByCharacter(K,G,n);
-g:=DefiningGroupOfCyclotomicAlgebra(B1);
-n1:=DefiningCharacterOfCyclotomicAlgebra(B1);
-m:=LocalIndexAtPByBrauerCharacter(K,g,n1,p);
+g:=DefiningGroupAndCharacterOfCyclotAlg(B1);
+m:=LocalIndexAtPByBrauerCharacter(K,g[1],g[2],p);
+#g:=DefiningGroupOfCyclotomicAlgebra(B1);
+#n1:=DefiningCharacterOfCyclotomicAlgebra(B1);
+#m:=LocalIndexAtPByBrauerCharacter(K,g,n1,p);
 fi;
 
 return m;
@@ -669,7 +932,19 @@ end);
 
 ###########################################
 InstallGlobalFunction( LocalIndexAtTwoByCharacter, function(F,G,n)
-local m,chi,g,g1,chi1,B1,W,i,a,B,K,V,V1,a1,F0,F1,n0,n1,n01,n02,n11,n12,f,f0,f1,m2;
+local m,chi,g,g1,B1,W,i,a,B,K,V,V1,a1,F0,F1,n0,n1,n01,n02,n11,n12,f,f0,f1,m2;
+
+if IsPosInt(n) then
+  if HasOrdinaryCharacterTable(G) then
+    chi:=Irr(G)[n];
+  else
+    Error("The group has no ordinary character table yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n) then
+  chi:=n;
+else
+  Error("The third argument must be a character or its number\n");
+fi;      
 
 m2:=1;
 m:=0;
@@ -685,14 +960,16 @@ fi;
 if Length(B)=5 then
 K:=PSplitSubextension(F,B[3],2);
 B1:=SimpleComponentOfGroupRingByCharacter(K,G,n);
-g:=DefiningGroupOfCyclotomicAlgebra(B1);
-n1:=DefiningCharacterOfCyclotomicAlgebra(B1);
-m2:=LocalIndexAtPByBrauerCharacter(F,g,n1,2);
+g:=DefiningGroupAndCharacterOfCyclotAlg(B1);
+m2:=LocalIndexAtPByBrauerCharacter(K,g[1],g[2],2); 
+#g:=DefiningGroupOfCyclotomicAlgebra(B1);
+#n1:=DefiningCharacterOfCyclotomicAlgebra(B1);
+#m2:=LocalIndexAtPByBrauerCharacter(F,g,n1,2);
 if not(m2 in Integers) then 
 m:=1;
-  if IsDyadicSchurGroup(g) then 
+  if IsDyadicSchurGroup(g[1]) then 
   m:=2;
-  V:=ValuesOfClassFunction(Irr(G)[n]);
+  V:=ValuesOfClassFunction(chi);
   F0:=FieldByGenerators(V);
   F1:=B1[2];
     if not(F0=F1) then 
@@ -728,7 +1005,7 @@ end);
 
 #############################################
 InstallGlobalFunction( LocalIndicesOfCyclotomicAlgebra, function(A)
-local L,F,l,G,n,m0,m2,m,P,p,l1,i,L1;
+local L,F,l,d,G,n,m0,m2,m,P,p,l1,i,L1;
 
 L:=[];
 L1:=[];
@@ -736,8 +1013,11 @@ F:=A[2];
 l:=Length(A);
 
 if l=5 then 
-G:=DefiningGroupOfCyclotomicAlgebra(A);
-n:=DefiningCharacterOfCyclotomicAlgebra(A);
+d:=DefiningGroupAndCharacterOfCyclotAlg(A); 
+G:=d[1];
+n:=d[2];
+#G:=DefiningGroupOfCyclotomicAlgebra(A);
+#n:=DefiningCharacterOfCyclotomicAlgebra(A);
 m0:=LocalIndexAtInftyByCharacter(F,G,n);
 Add(L1,[infinity,m0]);
 
@@ -1379,4 +1659,72 @@ m:=SchurIndex(A);
 
 return m;
 end);
+#############################################
+InstallGlobalFunction( SimpleComponentByCharacterAsSCAlgebra, function(F,G,n)
+local chi,F0,y0,y,F1,I,g,a,A;
 
+if IsPosInt(n) then
+  if HasOrdinaryCharacterTable(G) then
+    chi:=Irr(G)[n];
+  else
+    Error("The group has no ordinary character table yet. To avoid randomisation errors, you should compute it first\n");
+  fi;
+elif IsCharacter(n) then
+  chi:=n;
+else
+  Error("The third argument must be a character or its number\n");
+fi;      
+
+F0:=Field(chi);
+y0:=PrimitiveElement(F0);
+y:=PrimitiveElement(F);
+F1:=Field([y,y0]);
+I:=IrreducibleRepresentationsDixon(G,chi);
+g:=Image(I);
+a:=Algebra(F1,GeneratorsOfGroup(g));
+A:=Image(IsomorphismSCAlgebra(a));
+
+return A;
+end);
+############################
+InstallGlobalFunction( CyclotomicAlgebraAsSCAlgebra, function(A)
+local g,m,F,a;
+
+g:=DefiningGroupAndCharacterOfCyclotAlg(A);
+#g:=DefiningGroupOfCyclotomicAlgebra(A);
+#m:=DefiningCharacterOfCyclotomicAlgebra(A);
+F:=A[2];
+a:=SimpleComponentByCharacterAsSCAlgebra(F,g[1],g[2]);
+#a:=SimpleComponentByCharacterAsSCAlgebra(F,g,m);
+
+return a; 
+end);
+###########################
+InstallGlobalFunction( WedderburnDecompositionAsSCAlgebras, function(R)
+local W,l,W1,A,i;
+
+W:=WedderburnDecompositionInfo(R);
+l:=Size(W);
+W1:=[];
+for i in [1..l] do 
+  if Size(W[i])=2 then   
+  if W[i][1]=1 then 
+     W1[i]:=W[i][2];
+  else
+     W1[i]:=MatrixAlgebra(W[i][2],W[i][1]); 
+  fi; 
+  fi; 
+  if Size(W[i])>2 then 
+  if W[i][1]=1 then  
+    W1[i]:=CyclotomicAlgebraAsSCAlgebra(W[i]);
+  else
+    A:=CyclotomicAlgebraAsSCAlgebra(W[i]);
+    W1[i]:=MatrixAlgebra(A,W[i][1]); 
+  fi; 
+  fi;
+od; 
+
+return W1; 
+end); 
+
+##########################

@@ -1,0 +1,162 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: extcurve</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: extcurve">
+<META NAME="keywords" CONTENT="Singular Manual: extcurve">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1830"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1754.htm#SEC1829"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Weierstrass" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1756.htm#SEC1831"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: AGcode_L" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.1.5 extcurve </H4>
+<!--docid::SEC1830::-->
+Procedure from library <CODE>brnoeth.lib</CODE> (see  <A HREF="sing_1750.htm#SEC1825">brnoeth_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>extcurve( d, CURVE ); d an integer, CURVE a list
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list L which is the update of the list CURVE with additional entries
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">   L[1][3]: ring (p,a),(x,y),lp (affine),
+   L[1][4]: ring (p,a),(x,y,z),lp (projective),
+   L[1][5]: ring (p,a),(x,y,t),ls (local),
+   L[2][3]: int  (the number of rational places),
+</pre></td></tr></table>the rings being defined over a field extension of degree d. <BR>
+If d&lt;2 then <CODE>extcurve(d,CURVE);</CODE> creates a list L which
+is the update of the list CURVE with additional entries
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">   L[1][5]: ring p,(x,y,t),ls,
+   L[2][3]: int  (the number of computed places over the base field).
+</pre></td></tr></table>In both cases, in the ring L[1][5] lists with the data for all the
+computed rational places (after a field extension of degree d) are
+created (see  <A HREF="sing_1751.htm#SEC1826">Adj_div</A>):
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">   lists POINTS, LOC_EQS, BRANCHES, PARAMETRIZATIONS.
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The list CURVE should be the output of <CODE>NSplaces</CODE>,
+and must contain (at least) one place of degree d. <BR>
+You actually need all the places with degree dividing d.
+Otherwise, not all the places are computed, but only part of them. <BR>
+This procedure must be executed before constructing AG codes,
+even if no extension is needed. The ring L[1][4] must be active
+when constructing codes over the field extension.<BR>
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "brnoeth.lib";
+int plevel=printlevel;
+printlevel=-1;
+ring s=2,(x,y),lp;
+list C=Adj_div(x5+y2+y);
+==> The genus of the curve is 2
+C=NSplaces(1..4,C);
+// since we have all points up to degree 4, we can extend the curve
+// to that extension, in order to get rational points over F_16;
+C=extcurve(4,C);
+==> Total number of rational places : NrRatPl = 33
+// e.g., display the basepoint of place no. 32:
+def R=C[1][5];
+setring R;
+POINTS[32];
+==> [1]:
+==>    (a3+a2+1)
+==> [2]:
+==>    (a+1)
+==> [3]:
+==>    1
+printlevel=plevel;
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1756.htm#SEC1831">AGcode_L</A>;
+ <A HREF="sing_1757.htm#SEC1832">AGcode_Omega</A>;
+ <A HREF="sing_1751.htm#SEC1826">Adj_div</A>;
+ <A HREF="sing_1752.htm#SEC1827">NSplaces</A>;
+ <A HREF="sing_1760.htm#SEC1835">closed_points</A>.
+<P>
+
+<A NAME="AGcode_L"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1754.htm#SEC1829"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Weierstrass" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1756.htm#SEC1831"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: AGcode_L" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

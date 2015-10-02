@@ -1,0 +1,148 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: liftenvelope</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: liftenvelope">
+<META NAME="keywords" CONTENT="Singular Manual: liftenvelope">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC600"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_548.htm#SEC599"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bitrinity" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_550.htm#SEC601"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: CompDecomp" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_539.htm#SEC590"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: LETTERPLACE" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_553.htm#SEC604"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: bfun_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_546.htm#SEC597"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bimodules_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.1.0. liftenvelope </H5>
+<!--docid::SEC600::-->
+Procedure from library <CODE>bimodules.lib</CODE> (see  <A HREF="sing_546.htm#SEC597">bimodules_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>liftenvelope(M,g); M ideal/module, g poly
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring, the enveloping algebra of the basering R.
+<BR>Given a two-sided ideal M in R and a polynomial g in R this procedure returns the enveloping algebra of R.
+Additionally it exports a list l = C, B; where B is the left Groebner basis of the left-syzygies of M \otimes 1 and C is a vector of coefficients in the enveloping algebra
+of R such that psi_s(C^T *(f_1 \dots f_n)) = g.
+<BR> psi_s is an epimorphism of left R (X) R^{opp} modules:
+<BR> psi_s (s (X)_K t) = smt := (s_1 m t_1, ... , s_s m t_s) = (\psi(s_1 (X) t_1) , \dots , psi(s_s (X) t_s)) in R^s.
+<BR> Then psi_s(A) := (psi_s(a_{ij})) for every matrix A in Mat(n x m, R)$.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The second component has to be an element of the first component.
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>This procedure is used for computing total divisors. Let {f_1, ..., f_n} be the generators of the first component and let the second component be called g. Then
+the returned list l = C, B = (b_1, ..., b_n); defines an affine set A = C + sum_i a_i b_i with (a_1,..,a_n) in the enveloping algebra of the basering R such that
+psi_s(a^T * (f_1 ... f_n)) = g for all a in A. For certain rings R, we csn find pure tensors within this set A,
+and if we do, liftenvelope() helps us to decide whether f is a total divisor of g.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>To get list l = C, B. we set: def G = liftenvelope(); setring G; l; or l[1]; l[2];.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "bimodules.lib";
+ring r = 0,(x,s),dp;
+def R = nc_algebra(1,s); setring R;
+ideal I = x*s;
+poly p = s*x*s*x;  // = (s (x) x) * x*s = (sX) * x*s
+p;
+==> x2s2+3xs2+2s2
+def J = liftenvelope(I,p);
+setring J;
+print(l[1]);
+==> 0
+//2s+SX = (2s (x) 1) + (1 (x) sx)
+print(l[2]);
+==> sX-2s-SX,x-X+1,s2-2sS+S2
+// Groebnerbasis of BiSyz(I) as LeftSyz in R^{env}
+// We get : 2s+SX + ( sX - 2s -SX) = sX  - a pure tensor!!!!
+</FONT></pre></td></tr></table><P>
+
+<A NAME="CompDecomp"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_548.htm#SEC599"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bitrinity" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_550.htm#SEC601"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: CompDecomp" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_539.htm#SEC590"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: LETTERPLACE" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_553.htm#SEC604"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: bfun_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_546.htm#SEC597"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bimodules_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,183 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Parallelization with ssi links</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Parallelization with ssi links">
+<META NAME="keywords" CONTENT="Singular Manual: Parallelization with ssi links">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC902"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_850.htm#SEC901"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Cyclic roots" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_852.htm#SEC903"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Dynamic modules" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.1.8 Parallelization with ssi links </H3>
+<!--docid::SEC902::-->
+<P>
+
+In this example, we demonstrate how ssi links can be used to
+parallelize computations.
+</P><P>
+
+To compute a standard basis for a zero-dimensional ideal in the
+lexicographical ordering, one of the two powerful routines
+<CODE>stdhilb</CODE>
+(see  <A HREF="sing_404.htm#SEC443">stdhilb</A>)
+and <CODE>stdfglm</CODE>
+(see  <A HREF="sing_403.htm#SEC442">stdfglm</A>)
+should be used. However, in general one cannot predict
+which one of the two commands is faster. This very much depends on the
+(input) example. Therefore, we use ssi links to let both commands
+work on the problem independently and in parallel, so that the one which
+finishes first delivers the result.
+</P><P>
+
+The example we use is the so-called "omndi example". See <I>Tim
+Wichmann; Der FGLM-Algorithmus: verallgemeinert und implementiert in
+Singular; Diplomarbeit Fachbereich Mathematik, Universitaet
+Kaiserslautern; 1997</I> for more details.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r=0,(a,b,c,u,v,w,x,y,z),lp;
+ideal i=a+c+v+2x-1, ab+cu+2vw+2xy+2xz-2/3,  ab2+cu2+2vw2+2xy2+2xz2-2/5,
+ab3+cu3+2vw3+2xy3+2xz3-2/7, ab4+cu4+2vw4+2xy4+2xz4-2/9, vw2+2xyz-1/9,
+vw4+2xy2z2-1/25, vw3+xyz2+xy2z-1/15, vw4+xyz3+xy3z-1/21;
+
+link l_hilb,l_fglm = "ssi:fork","ssi:fork";         // 1.
+
+open(l_fglm); open(l_hilb);
+
+write(l_hilb, quote(stdhilb(i)));                       // 2.
+write(l_fglm, quote(stdfglm(eval(i))));
+
+list L=list(l_hilb,l_fglm);                             // 3.
+int l_index=waitfirst(L);
+
+if (l_index==1)
+{
+  "stdhilb won !!!!"; size(read(L[1]));
+  close(L[1]); close(L[2]);
+}
+else                                                    // 4.
+{
+  "stdfglm won !!!!"; size(read(L[2]));
+  close(L[1]); close(L[2]);
+}
+==> stdfglm won !!!!
+==> 9
+</FONT></pre></td></tr></table>Some explainatory remarks are in order:
+<OL>
+<LI>
+Instead of using links of the type <CODE>ssi:fork</CODE>, we alternatively
+could use <CODE>ssi:tcp</CODE> links such that the two "competing"
+S<SMALL>INGULAR</SMALL> processes run on different machines. This has the
+advantage of "true" parallel computing since no resource sharing is
+involved (as it usually is with forked processes).
+<P>
+
+<LI>
+Notice how quoting is used in order to prevent local evaluation
+(i.e., local computation of results). Since we "forked" the two
+competing processes, the identifier <CODE>i</CODE> is defined and has
+identical values in both child processes. Therefore, the innermost
+<CODE>eval</CODE> can be omitted (as is done for the <CODE>l_hilb</CODE> link),
+and only the identifier <CODE>i</CODE> needs to be communicated to the
+children. However, when <CODE>ssi:tcp</CODE> links are used, the inner
+evaluation must be applied so that actual values, and not the
+identifiers are communicated (as is done for the <CODE>l_fglm</CODE> link
+in our example).
+<P>
+
+<LI>
+We wait until one of the two children
+finished the computation. The main process sleeps
+(i.e., suspends its execution) in the intermediate time.
+<P>
+
+<LI>
+The child which has won delivers the result and is terminated with the usual
+<CODE>close</CODE> command. The other child which is still computing needs to
+be terminated by an explicit (i.e., system) kill command if running on a different computer. For ssi:fork a <CODE>close</CODE> is sufficient.
+</OL>
+<P>
+
+<A NAME="Dynamic modules"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_850.htm#SEC901"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Cyclic roots" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_852.htm#SEC903"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Dynamic modules" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

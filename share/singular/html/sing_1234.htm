@@ -1,0 +1,185 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: primeClosure</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: primeClosure">
+<META NAME="keywords" CONTENT="Singular Manual: primeClosure">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1309"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1233.htm#SEC1308"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: genus" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1235.htm#SEC1310"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: closureFrac" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: noether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.17.6 primeClosure </H4>
+<!--docid::SEC1309::-->
+Procedure from library <CODE>normal.lib</CODE> (see  <A HREF="sing_1228.htm#SEC1303">normal_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>primeClosure(L [,c]); L a list of a ring containing a prime ideal
+ker, c an optional integer
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list L (of size n+1) consisting of rings L[1],...,L[n] such that
+- L[1] is a copy of (not a reference to!) the input ring L[1]
+- all rings L[i] contain ideals ker, L[2],...,L[n] contain ideals phi
+such that
+<BR>L[1]/ker --&gt; ... --&gt; L[n]/ker
+<BR>are injections given by the corresponding ideals phi, and L[n]/ker
+is the integral closure of L[1]/ker in its quotient field.
+- all rings L[i] contain a polynomial nzd such that elements of
+L[i]/ker are quotients of elements of L[i-1]/ker with denominator
+nzd via the injection phi.
+<BR>L[n+1] is the delta invariant
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>- L is constructed by recursive calls of primeClosure itself.
+- c determines the choice of nzd:
+<BR>- c not given or equal to 0: first generator of the ideal SL,
+the singular locus of Spec(L[i]/ker)
+<BR>- c&lt;&gt;0: the generator of SL with least number of monomials.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "normal.lib";
+ring R=0,(x,y),dp;
+ideal I=x4,y4;
+def K=ReesAlgebra(I)[1];        // K contains ker such that K/ker=R[It]
+list L=primeClosure(K);
+def R(1)=L[1];                  // L[4] contains ker, L[4]/ker is the
+def R(4)=L[4];                  // integral closure of L[1]/ker
+setring R(1);
+R(1);
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    x y U(1) U(2)
+==> //        block   2 : ordering C
+ker;
+==> ker[1]=y^4*U(1)-x^4*U(2)
+setring R(4);
+R(4);
+==> //   characteristic : 0
+==> //   number of vars : 10
+==> //        block   1 : ordering a
+==> //                  : names    X(1) X(2) X(3) X(4) X(5) X(6) X(7) T(2) T(\
+   3) T(4)
+==> //                  : weights     1    1    1    1    3    2    2    1   \
+    1    1
+==> //        block   2 : ordering dp
+==> //                  : names    X(1) X(2) X(3) X(4) X(5) X(6) X(7) T(2) T(\
+   3) T(4)
+==> //        block   3 : ordering C
+ker;
+==> ker[1]=X(2)*X(7)-X(5)
+==> ker[2]=X(1)*X(6)-X(5)
+==> ker[3]=X(1)^2*X(4)-X(2)*X(6)
+==> ker[4]=X(2)^2*X(3)-X(1)*X(7)
+==> ker[5]=X(1)*X(4)*X(7)-X(6)^2
+==> ker[6]=X(1)*X(2)*X(3)*X(4)-X(6)*X(7)
+==> ker[7]=X(2)*X(3)*X(6)-X(7)^2
+==> ker[8]=X(1)*T(3)-X(2)*T(4)
+==> ker[9]=-X(2)*T(2)+X(1)*T(4)
+==> ker[10]=-X(2)*T(2)+X(7)
+==> ker[11]=-X(2)*T(4)+X(6)
+==> ker[12]=X(6)*T(2)-X(7)*T(4)
+==> ker[13]=-X(7)*T(3)+X(6)*T(4)
+==> ker[14]=X(2)*X(4)*T(2)-X(6)*T(3)
+==> ker[15]=X(1)*X(4)-X(2)*T(3)
+==> ker[16]=X(1)*X(4)*T(2)-X(6)*T(4)
+==> ker[17]=X(2)*X(3)-X(1)*T(2)
+==> ker[18]=X(2)*X(3)*T(3)-X(6)*T(2)
+==> ker[19]=X(2)*X(3)*T(4)-X(7)*T(2)
+==> ker[20]=T(2)^2-X(3)*T(4)
+==> ker[21]=-X(3)*X(4)+T(2)*T(3)
+==> ker[22]=T(3)^2-X(4)*T(4)
+==> ker[23]=-X(3)*T(3)+T(2)*T(4)
+==> ker[24]=-X(4)*T(2)+T(3)*T(4)
+==> ker[25]=-X(3)*X(4)+T(4)^2
+</FONT></pre></td></tr></table><P>
+
+<A NAME="closureFrac"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1233.htm#SEC1308"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: genus" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1235.htm#SEC1310"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: closureFrac" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: noether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

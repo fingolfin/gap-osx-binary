@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: write</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: write">
+<META NAME="keywords" CONTENT="Singular Manual: write">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC463"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_423.htm#SEC462"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: weightKB" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.165 write </H3>
+<!--docid::SEC463::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>write (</CODE> link_expression<CODE>,</CODE> expression_list <CODE>)</CODE>
+<BR>for DBM links:
+<BR><CODE>write (</CODE> link<CODE>,</CODE> string_expression<CODE>,</CODE> string_expression <CODE>)</CODE>
+<BR><CODE>write (</CODE> link<CODE>,</CODE> string_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>none
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>writes data to a link.
+<BR>If the link is of type <CODE>ASCII</CODE>, all expressions are converted to
+strings (and separated by a newline character) before they are
+written. As a consequence, only such values which can be converted to a
+string can be written to an <CODE>ASCII</CODE> link.
+<BR>For ssi links,
+ring-dependent expressions are written together with a ring
+description. To prevent an evaluation of the expression before it is
+written, the <CODE>quote</CODE> command (possibly together with <CODE>eval</CODE>)
+can be used. A <CODE>write</CODE> blocks (i.e., does not return to the prompt),
+as long as a ssi link is not ready for writing.
+<BR>For DBM links, <CODE>write</CODE> with three arguments inserts the first
+string as key and the second string as value into the dbm data
+base.
+<BR>Called with two arguments, it deletes the entry with the key
+specified by the string from the data base.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>// write the values of the variables f and i as strings into
+// the file "outfile" (overwrite it, if it exists)
+write(":w outfile",f,i);
+
+// now append the string "that was f,i" (without the quotes)
+// at the end of the file "outfile"
+write(":a outfile","that was f,i");
+// alternatively, links could be used:
+link l=":a outfile"; l;
+// type : ASCII
+// mode : a
+// name : outfile
+// open : no
+// read : not ready
+// write: not ready
+write(l," that was f,i");
+// saving and retrieving data (ASCII format):
+ring r=32003,(x,y,z),dp;
+ideal i=x+y,z3+22y;
+write(":w save_i",i);// this writes x+y,z3+22y to the file save_i
+ring r=32003,(x,y,z),dp;
+string s=read("save_i");   //creates the string x+y,z3+22y
+execute("ideal k="+s+";"); // this defines an ideal k which
+                           // is equal to i.
+// for large objects, the ssi format and ssi links are better:
+write("ssi:w save_i.ssi",i);
+def j=read("ssi:r save_i.ssi");
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_72.htm#SEC111">Data types</A>;
+ <A HREF="sing_284.htm#SEC323">dump</A>;
+ <A HREF="sing_286.htm#SEC325">eval</A>;
+ <A HREF="sing_108.htm#SEC147">link</A>;
+ <A HREF="sing_373.htm#SEC412">print</A>;
+ <A HREF="sing_374.htm#SEC413">printf</A>;
+ <A HREF="sing_378.htm#SEC417">quote</A>;
+ <A HREF="sing_382.htm#SEC421">read</A>;
+ <A HREF="sing_449.htm#SEC488">short</A>.
+<P>
+
+<A NAME="Control structures"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_423.htm#SEC462"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: weightKB" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

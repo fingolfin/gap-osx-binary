@@ -4,9 +4,6 @@
 #W                          Pedro A. Garcia-Sanchez <pedro@ugr.es>
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
-##
-#H  @(#)$Id: irreducibles.gi,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado, 
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the 
@@ -512,7 +509,7 @@ InstallGlobalFunction(AsGluingOfNumericalSemigroups,function(s)
 		s1:=NumericalSemigroup(l1/d1);
 		s2:=NumericalSemigroup(l2/d2);
 
-		return (not(d1 in l2) and not(d2 in l1)) and ((d1 in s2) and (d2 in s1));
+		return (not(d1 in l2/d2) and not(d2 in l1/d1)) and ((d1 in s2) and (d2 in s1));
 	end;
 
 
@@ -761,9 +758,7 @@ InstallGlobalFunction(NumericalSemigroupsAssociatedIrreduciblePlanarCurveSingula
 
 	out:=[];
 	for i in pcs(f) do #from the construction we know that the sets of generators are minimal
-		s:=NumericalSemigroup(i);
-		Setter(IsNumericalSemigroupByMinimalGenerators)(s,true);
-		Setter(IsNumericalSemigroupByGenerators)(s,true);
+		s:=NumericalSemigroupByMinimalGenerators(i);
 		Add(out,s);
 	od;
 	return out;
@@ -816,9 +811,7 @@ InstallGlobalFunction(TelescopicNumericalSemigroupsWithFrobeniusNumber,function(
 
 	out:=[];
 	for i in tel(f) do #from the construction we know that the sets of generators are minimal
-		s:=NumericalSemigroup(i);
-		Setter(IsNumericalSemigroupByMinimalGenerators)(s,true);
-		Setter(IsNumericalSemigroupByGenerators)(s,true);
+		s:=NumericalSemigroupByMinimalGenerators(i);
 		Add(out,s);
 	od;
 	return out;
@@ -871,9 +864,7 @@ InstallGlobalFunction(FreeNumericalSemigroupsWithFrobeniusNumber,function(f)
 
 	out:=[];
 	for i in free(f) do #from the construction we know that the sets of generators are minimal
-		s:=NumericalSemigroup(i);
-		Setter(IsNumericalSemigroupByMinimalGenerators)(s,true);
-		Setter(IsNumericalSemigroupByGenerators)(s,true);
+		s:=NumericalSemigroupByMinimalGenerators(i);
 		Add(out,s);
 	od;
 	return out;
@@ -946,9 +937,7 @@ InstallGlobalFunction(CompleteIntersectionNumericalSemigroupsWithFrobeniusNumber
 
 	out:=[];
 	for i in ci(f) do #from the construction we know that the sets of generators are minimal
-		s:=NumericalSemigroup(i);
-		Setter(IsNumericalSemigroupByMinimalGenerators)(s,true);
-		Setter(IsNumericalSemigroupByGenerators)(s,true);
+		s:=NumericalSemigroupByMinimalGenerators(i);
 		Add(out,s);
 	od;
 	return out;

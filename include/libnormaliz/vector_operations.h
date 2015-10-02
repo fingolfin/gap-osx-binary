@@ -27,9 +27,11 @@
 
 #include <vector>
 #include <ostream>
-#include<list>
+#include <list>
 
-#include "libnormaliz.h"
+#include <libnormaliz/libnormaliz.h>
+#include <libnormaliz/integer.h>
+#include <libnormaliz/convert.h>
 
 namespace libnormaliz {
 using std::vector;
@@ -42,7 +44,7 @@ using std::ostream;
 template <typename T>
 ostream& operator<< (ostream& out, const vector<T>& vec) {
     for (size_t i=0; i<vec.size(); ++i) {
-        out << vec[i]<<" ";
+        out << vec[i] << " ";
     }
     out << std::endl;
     return out;
@@ -64,7 +66,7 @@ vector<Integer> v_add(const vector<Integer>& a,const vector<Integer>& b);
 template<typename Integer>
 vector<Integer> v_add_overflow_check(const vector<Integer>& a,const vector<Integer>& b);
 template<typename Integer>
-void v_add_result(vector<Integer>& result, const vector<Integer>& a,const vector<Integer>& b);
+void v_add_result(vector<Integer>& result, const size_t length, const vector<Integer>& a,const vector<Integer>& b);
 
 //adds b to a reduces the result modulo m, a and b must be reduced modulo m!
 template<typename Integer>
@@ -74,9 +76,13 @@ vector<Integer>& v_add_to_mod(vector<Integer>& a, const vector<Integer>& b, cons
 //							abs, gcd and lcm
 //---------------------------------------------------------------------------
 
-//takes the absolute value of the elements and returns a reference to the changed vector
+// takes the absolute value of the elements and returns a reference to the changed vector
 template<typename Integer>
 vector<Integer>& v_abs(vector<Integer>& v);
+
+// returns the vector of absolute values, does not change the argument
+template<typename Integer>
+vector<Integer> v_abs_value(vector<Integer>& v);
 
 //returns gcd of the elements of v
 template<typename Integer>
@@ -104,9 +110,9 @@ void v_scalar_multiplication(vector<Integer>& v, const Integer& scalar){
     }
 }
 
-//returns v * scalar
+//returns v * scalar mod modulus
 template<typename Integer>
-vector<Integer> v_scalar_multiplication_two(const vector<Integer>& v, const Integer& scalar);
+vector<Integer> v_scalar_mult_mod(const vector<Integer>& v, const Integer& scalar, const Integer& modulus, bool& success);
 
 template<typename Integer>
 void v_scalar_division(vector<Integer>& v, const Integer& scalar);
@@ -161,11 +167,24 @@ vector<key_t> v_non_zero_pos(const vector<Integer>& v);
 template<typename Integer>
 bool v_is_zero(const vector<Integer>& v);
 
+
+template<typename Integer>
+Integer v_max_abs(const vector<Integer>& v){
+	Integer tmp = 0;
+	for (size_t i=0; i<v.size(); i++){
+		if (Iabs(v[i])>tmp) tmp=Iabs(v[i]);
+	}
+	return tmp;
+}
+
 //---------------------------------------------------------------------------
 //							   bool vector operations
 //---------------------------------------------------------------------------
 
 vector<bool> v_bool_andnot(const vector<bool>& a, const vector<bool>& b);
+
+// swaps entry i and j of the vector<bool> v
+void v_bool_entry_swap(vector<bool>& v, size_t i, size_t j);
 
 //---------------------------------------------------------------------------
 //							  Special
@@ -173,10 +192,18 @@ vector<bool> v_bool_andnot(const vector<bool>& a, const vector<bool>& b);
 
 // computes integral simplex containing a rational vector
 template<typename Integer>
-void approx_simplex(const vector<Integer>& q, std::list<vector<Integer> >& approx);
+void approx_simplex(const vector<Integer>& q, std::list<vector<Integer> >& approx,const long k);
 
-}
+vector<key_t> identity_key(size_t n);
 
+//---------------------------------------------------------------------------
+//                            Sorting
+//---------------------------------------------------------------------------
+
+template <typename T>
+void order_by_perm(vector<T>& v, const vector<key_t>& permfix);
+
+} // namespace
 
 //---------------------------------------------------------------------------
 #endif

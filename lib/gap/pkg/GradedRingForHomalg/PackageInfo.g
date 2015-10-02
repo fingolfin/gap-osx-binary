@@ -32,9 +32,9 @@ Subtitle := "Endow Commutative Rings with an Abelian Grading",
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
 Version := Maximum( [
-  "2011.09.12", ## Markus' version
+  "2014.08.27", ## Markus' version
 ## this line prevents merge conflicts
-  "2014.02.04", ## Mohamed's version
+  "2014.08.27", ## Mohamed's version
 ## this line prevents merge conflicts
   "2011.05.05", ## Sebastian's version
 ## this line prevents merge conflicts
@@ -59,7 +59,7 @@ Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1
 ##  directory containing the package (in our "example" probably:
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 # 
-ArchiveURL := Concatenation( "http://homalg.math.rwth-aachen.de/~markus/GradedRingForHomalg/GradedRingForHomalg-", ~.Version ),
+ArchiveURL := Concatenation( "http://homalg.math.rwth-aachen.de/~barakat/homalg-project/GradedRingForHomalg/GradedRingForHomalg-", ~.Version ),
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -262,9 +262,9 @@ Status := "deposited",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := 
-  "http://homalg.math.rwth-aachen.de/~markus/GradedRingForHomalg/README.GradedRingForHomalg",
+  "http://homalg.math.rwth-aachen.de/~barakat/homalg-project/GradedRingForHomalg/README.GradedRingForHomalg",
 PackageInfoURL := 
-  "http://homalg.math.rwth-aachen.de/~markus/GradedRingForHomalg/PackageInfo.g",
+  "http://homalg.math.rwth-aachen.de/~barakat/homalg-project/GradedRingForHomalg/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -342,7 +342,7 @@ Dependencies := rec(
   # insensitive, least version denoted with '>=' prepended to version string.
   # without these, the package will not load
   NeededOtherPackages := [
-                   [ "MatricesForHomalg", ">= 2013.07.14" ],
+                   [ "MatricesForHomalg", ">= 2014.08.26" ],
                    [ "HomalgToCAS", ">= 2013.07.14" ],
                    [ "RingsForHomalg", ">= 2013.07.14" ],
                    [ "Modules", ">= 2011.09.20" ],

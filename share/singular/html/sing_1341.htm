@@ -1,0 +1,163 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: rncAntiCanonicalMap</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: rncAntiCanonicalMap">
+<META NAME="keywords" CONTENT="Singular Manual: rncAntiCanonicalMap">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1416"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1340.htm#SEC1415"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: paraPlaneCurve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1342.htm#SEC1417"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rationalPointConic" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.1.4 rncAntiCanonicalMap </H4>
+<!--docid::SEC1416::-->
+Procedure from library <CODE>paraplanecurves.lib</CODE> (see  <A HREF="sing_1337.htm#SEC1412">paraplanecurves_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>rncAntiCanonicalMap(I); I ideal
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>I is a homogeneous ideal in the basering
+<BR>defining a rational normal curve C in PP^n.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The procedure will fail or give a wrong output if I is not the
+ideal of a rational normal curve.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal defining the anticanonical map C --&gt; PP^(n-2). <BR>
+Note that the entries of the ideal should be considered as
+representatives of elements in R/I, where R is the basering.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>The anti-canonical map of a rational normal curve
+<BR>maps C isomorpically to a rational normal curve in PP^(n-2).
+<P>
+
+<A NAME="IDX481"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "paraplanecurves.lib";
+ring R = 0,(x,y,z),dp;
+poly f = y^8-x^3*(z+x)^5;
+ideal adj = adjointIdeal(f);
+def Rn = mapToRatNormCurve(f,adj);
+==> //'mapToRatNorm' created a ring together with an ideal RNC.
+==> // Supposing you typed, say,  def RPn = mapToRatNorm(f,AI);
+==> // you may access the ideal by typing
+==> //      setring RPn; RNC;
+setring(Rn);
+RNC;
+==> RNC[1]=y(5)*y(6)-y(4)*y(7)
+==> RNC[2]=y(4)*y(6)-y(3)*y(7)
+==> RNC[3]=y(2)*y(6)-y(1)*y(7)
+==> RNC[4]=y(4)*y(5)-y(2)*y(7)
+==> RNC[5]=y(3)*y(5)-y(1)*y(7)
+==> RNC[6]=y(1)*y(5)-y(7)^2
+==> RNC[7]=y(4)^2-y(1)*y(7)
+==> RNC[8]=y(3)*y(4)-y(1)*y(6)
+==> RNC[9]=y(2)*y(4)-y(1)*y(5)
+==> RNC[10]=y(1)*y(4)-y(6)*y(7)
+==> RNC[11]=y(2)*y(3)-y(6)*y(7)
+==> RNC[12]=y(1)*y(3)-y(6)^2
+==> RNC[13]=y(2)^2-y(5)*y(7)
+==> RNC[14]=y(1)*y(2)-y(4)*y(7)
+==> RNC[15]=y(1)^2-y(3)*y(7)
+==> RNC[16]=y(1)*y(6)^2-y(3)^2*y(7)
+==> RNC[17]=y(6)^4-y(3)^3*y(7)
+rncAntiCanonicalMap(RNC);
+==> _[1]=y(1)
+==> _[2]=-y(2)
+==> _[3]=-y(5)
+==> _[4]=-y(4)
+==> _[5]=-y(7)
+</FONT></pre></td></tr></table><P>
+
+<A NAME="rationalPointConic"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1340.htm#SEC1415"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: paraPlaneCurve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1342.htm#SEC1417"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rationalPointConic" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

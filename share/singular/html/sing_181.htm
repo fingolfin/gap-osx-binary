@@ -1,0 +1,181 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Commands for user defined types</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Commands for user defined types">
+<META NAME="keywords" CONTENT="Singular Manual: Commands for user defined types">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC220"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_180.htm#SEC219"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Access to elements of a user defined type" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_182.htm#SEC221"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Assignments for user defined types" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_172.htm#SEC211"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: vector" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_183.htm#SEC222"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: cone" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_177.htm#SEC216"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: User defined types" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.21.4 Commands for user defined types </H3>
+<!--docid::SEC220::-->
+<P>
+
+User defined types are normal data types (which do not belong to a ring,
+even if they have ring dependent parts), so they can be passed as argument
+to procedures, and recieved as result from procedures.
+</P><P>
+
+In order to apply kernel commands to these types (like <CODE>string</CODE>, <CODE>+</CODE>),
+provide a usual procedure (say <CODE>proc p</CODE>..) for that task and
+install it via <CODE>system("install",</CODE> user_type <CODE>,</CODE> kernel_command <CODE>,p,</CODE> number_of_args <CODE>);</CODE>.
+The user_type and kernel_command have to be given as strings.
+For kernel_command having a variable number of arguments (internal <CODE>CMD_M</CODE>)
+use 4 independ of the number of really supplied arguments.
+</P><P>
+
+List of available kernel commands and the required number_of_args,
+some accept several variants and appear therefor at several places:
+<UL>
+<LI>inplace binary operands: <CODE>+,-,*,/,div,%,&amp;,|, [</CODE>, number_of_args:2
+<LI>unary functions:
+<CODE>attrib, bareiss, betti, char, char_series, charstr, cleardenom, close, convhull,
+defined, deg, degree, denominator, det, dim, dump, ERROR, envelope, execute, facstd,
+factorize, finduni, gen, getdump, hilb, impart, indepSet, interred, jacob, janet,
+kbase, killattrib, lead, leadcoef, leadexp, leadmonom, load, ludecomp, maxideal,
+memory, minbase, minres, monitor, monomial, mult, mstd, nameof, ncols, npars, nrows,
+numerator, nvars, open, opposite, ord, ordstr, par, pardeg, parstr, preimage, prime,
+primefactors, prune, qhweight, rank, read, regularity, repart, ringlist, rvar, sba,
+size, slimgb, sortvec, sqrfree, syz, trace, transpose, twostd, typeof, univariate,
+var, variables, varstr, vdim, waitfirst, waitall, weight</CODE>
+<P>
+
+<LI>functions with 2 arguments:
+<CODE>attrib, betti, bracket, chinrem, coeffs, contract, deg, delete, diff, dim, extgcd,
+eliminate, exportto, facstd, factorize, farey, fetch, fglm, fglmquot, find, frwalk, gcd,
+hilb, homog, hres, imap, importfrom, indepSet, insert, interpolation, janet, kbase, kernel,
+killattrib, koszul, lift, liftstd, load, lres, modulo, mpresmat, mres, newstruct, nc_algebra,
+nres, oppose, parstr, primefactors, quotient, random, rank, read, sba, simplify, sqrfree,
+sres, varstr, waitfirst, waitall, wedge</CODE>
+<P>
+
+<LI>functions with 3 arguments:
+<CODE>attrib, bareiss, coeffs, eliminate, find, frwalk, hilb, homog, insert, koszul,
+laguerre, lift, liftstd, newstruct, preimage, random, resultant, sba, vandermonde</CODE>
+<P>
+
+<LI>functions with  variable number of arguments arguments (number_of_args:4):
+<CODE>breakpoint, coef, dbprint, division, factmodd, intersect, jet, luinverse, lusolve,
+minor, names, option, qrds, reduce, reservedName, simplex, status, std, subst, system,
+test, uressolve, write</CODE>
+<P>
+
+</UL>
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  newstruct("nt","int a,poly b,string c");
+  nt A;
+  A;
+==> c=
+==> b=??
+==> a=0
+  ring r;
+  // a pretty print routine for nt:
+  proc pretty_print(nt A)
+  {
+    "nt with string c:"+A.c+" and poly:"+string(A.b);
+  }
+  system("install","nt","print",pretty_print,1); // default printing uses print
+  A;
+==> nt with string c: and poly:0
+==> 
+  // a custem add for nt:
+  proc nt_add(nt A,nt B)
+  {
+    nt C;
+    C.a=A.a+B.a; C.b=A.b+B.b; C.c=A.c+B.c;
+    return(C);
+  }
+  system("install","nt","+",nt_add,2);
+  A.b=x;
+  nt B; B.c="B"; B.b=y;
+  A+B;
+==> nt with string c:B and poly:x+y
+==> 
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Assignments for user defined types"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_180.htm#SEC219"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Access to elements of a user defined type" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_182.htm#SEC221"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Assignments for user defined types" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_172.htm#SEC211"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: vector" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_183.htm#SEC222"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: cone" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_177.htm#SEC216"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: User defined types" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

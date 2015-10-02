@@ -1,0 +1,152 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: sagbiSPoly</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: sagbiSPoly">
+<META NAME="keywords" CONTENT="Singular Manual: sagbiSPoly">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1392"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1316.htm#SEC1391"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: sagbi_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1318.htm#SEC1393"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: sagbiReduce" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1313.htm#SEC1388"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: reesclos_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1322.htm#SEC1397"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sing4ti2_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1316.htm#SEC1391"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sagbi_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.25.1 sagbiSPoly </H4>
+<!--docid::SEC1392::-->
+Procedure from library <CODE>sagbi.lib</CODE> (see  <A HREF="sing_1316.htm#SEC1391">sagbi_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>sagbiSPoly(A[, returnRing, meth]); A is an ideal, returnRing and meth are integers.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal or ring
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>basering is not a qring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Returns SAGBI S-polynomials of the leading terms of a given ideal A if returnRing=0.
+<BR> Otherwise returns a new ring containing the ideals algebraicRelations
+<BR> and spolynomials, where these objects are explained by their name.
+<BR> See the example on how to access these objects.
+@format The other optional argument meth determines which method is
+used for computing the algebraic relations.
+<BR>- If meth=0 (default), the procedure std is used.
+<BR>- If meth=1, the procedure slimgb is used.
+<BR>- If meth=2, the prodecure uses toric_ideal.
+<BR>@end format
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "sagbi.lib";
+ring r= 0,(x,y),dp;
+ideal A=x*y+x,x*y^2,y^2+y,x^2+x;
+//------------------ Compute the SAGBI S-polynomials only
+sagbiSPoly(A);
+==> _[1]=x2y-xy2+x2-xy
+==> _[2]=x2y3+1/2xy4+1/2x2y2+xy3+1/2xy2
+//------------------ Extended ring is to be returned, which contains
+// the ideal of algebraic relations and the ideal of the S-polynomials
+def rNew=sagbiSPoly(A,1);  setring rNew;
+spolynomials;
+==> spolynomials[1]=x^2*y-x*y^2+x^2-x*y
+==> spolynomials[2]=x^2*y^3+1/2*x*y^4+1/2*x^2*y^2+x*y^3+1/2*x*y^2
+algebraicRelations;
+==> algebraicRelations[1]=@y(1)^2-@y(3)*@y(4)
+==> algebraicRelations[2]=@y(3)^2*@y(4)-@y(2)^2
+//----------------- Now we verify that the substitution of A[i] into @y(i)
+// results in the spolynomials listed above
+ideal A=fetch(r,A);
+map phi=rNew,x,y,A;
+ideal spolynomials2=simplify(phi(algebraicRelations),1);
+spolynomials2;
+==> spolynomials2[1]=x^2*y-x*y^2+x^2-x*y
+==> spolynomials2[2]=x^2*y^3+1/2*x*y^4+1/2*x^2*y^2+x*y^3+1/2*x*y^2
+</FONT></pre></td></tr></table><P>
+
+<A NAME="sagbiReduce"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1316.htm#SEC1391"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: sagbi_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1318.htm#SEC1393"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: sagbiReduce" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1313.htm#SEC1388"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: reesclos_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1322.htm#SEC1397"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sing4ti2_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1316.htm#SEC1391"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sagbi_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

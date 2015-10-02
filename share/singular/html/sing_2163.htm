@@ -1,0 +1,150 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: modular_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: modular_lib">
+<META NAME="keywords" CONTENT="Singular Manual: modular_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2238"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2162.htm#SEC2237"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: maxZeros" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2164.htm#SEC2239"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: modular" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2165.htm#SEC2240"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: multigrading_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.15.13 modular_lib </H3>
+<!--docid::SEC2238::-->
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>modular.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>  An abstraction layer for modular techniques
+<DT><STRONG>Author:</STRONG>
+<DD>Andreas Steenpass, e-mail: steenpass@mathematik.uni-kl.de
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>This library is an abstraction layer for modular techniques which are
+well-known to speed up many computations and to be easy parallelizable.
+<BR> The basic idea is to execute some computation modulo several primes and then
+to lift the result back to characteristic zero via the farey rational map and
+chinese remaindering. It is thus possible to overcome the often problematic
+coefficient swell and to run the modular computations in parallel.
+<BR> In Singular, modular techniques have been quite successfully employed for
+several applications. A first implementation was done for Groebner bases in
+Singular's  <A HREF="sing_1177.htm#SEC1252">modstd_lib</A>, a pioneering work by Stefan Steidel. Since the
+algorithm is basically the same for all applications, this library aims at
+preventing library authors from writing the same code over and over again by
+providing an appropriate abstraction layer. It also offers one-line commands
+for ordinary Singular users who want to take advantage of modular techniques
+for their own calculations. Thus modular techniques can be regarded as
+a parallel skeleton of their own.
+<BR> The terminology (such as 'pTest' and 'finalTest') follows Singular's
+ <A HREF="sing_1177.htm#SEC1252">modstd_lib</A> and [1].
+<P>
+
+<DT><STRONG>References:</STRONG>
+<DD>[1] Nazeran Idrees, Gerhard Pfister, Stefan Steidel: Parallelization of
+Modular Algorithms. Journal of Symbolic Computation 46, 672-684 (2011).
+http://arxiv.org/abs/1005.5663
+<P>
+
+<A NAME="IDX871"></A>
+<A NAME="IDX872"></A>
+<A NAME="IDX873"></A>
+<A NAME="IDX874"></A>
+<A NAME="IDX875"></A>
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2164.htm#SEC2239">D.15.13.1 modular</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">execute a command modulo several primes and lift the result back to characteristic zero</TD></TR>
+</TABLE></BLOCKQUOTE>
+See also:
+ <A HREF="sing_1122.htm#SEC1197">assprimeszerodim_lib</A>;
+ <A HREF="sing_108.htm#SEC147">link</A>;
+ <A HREF="sing_1177.htm#SEC1252">modstd_lib</A>;
+ <A HREF="sing_2235.htm#SEC2310">parallel_lib</A>;
+ <A HREF="sing_2251.htm#SEC2326">tasks_lib</A>.
+<P>
+
+<A NAME="modular"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2162.htm#SEC2237"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: maxZeros" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2164.htm#SEC2239"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: modular" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2165.htm#SEC2240"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: multigrading_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

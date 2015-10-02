@@ -1,0 +1,152 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Atkin</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Atkin">
+<META NAME="keywords" CONTENT="Singular Manual: Atkin">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1914"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1838.htm#SEC1913"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: wUnit" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1840.htm#SEC1915"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: crypto_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1816.htm#SEC1891"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: aksaka_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1840.htm#SEC1915"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: crypto_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1825.htm#SEC1900"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: atkins_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.12.2.14 Atkin </H4>
+<!--docid::SEC1914::-->
+Procedure from library <CODE>atkins.lib</CODE> (see  <A HREF="sing_1825.htm#SEC1900">atkins_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Return:</STRONG>
+<DD>1, if N is prime,
+<BR>-1, if N is not prime,
+<BR>0, if the algorithm is not applicable, since there are too few discriminants
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>N is coprime to 6 and different from 1
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>K/2 is input for the procedure "disc",<BR>
+K is input for the procedure "HilbertClassPoly",<BR>
+B describes the number of recursions being calculated.<BR>
+The basis of the algorithm is the following theorem:
+<BR>Let N be an integer coprime to 6 and different from 1 and E be an
+ellipic curve modulo N.<BR> Assume that we know an integer m and a
+point P of E(Z/NZ) satisfying the following conditions.<BR>
+(1) There exists a prime divisor q of m such that q &gt; (4-th root(N)+1)^2.<BR>
+(2) m*P = O(E) = (0:1:0).<BR>
+(3) (m/q)*P = (x:y:t) with t element of (Z/NZ)*.<BR>
+Then N is prime.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "atkins.lib";
+ring R = 0,x,dp;
+Atkin(7691,100,5);
+==> -1
+Atkin(3473,10,2);
+==> -1
+printlevel=1;
+Atkin(10000079,100,2);
+==> Set i = 0, n = 0 and N(i) = N(0)= 10000079.
+==> pause&gt;
+==> List H of possibly suitable discriminants will be calculated.
+==> H = -3,-4,-7,-8,-11,-12,-15,-16,-19,-20,-23,-24,-27,-28,-31,-32,-35,-36,-\
+   39,-40,-43,-44,-47,-48,-51,-52,-55,-56,-59,-60,-63,-64,-67,-68,-71,-72,-7\
+   5,-76,-79,-80,-83,-84,-87,-88,-91,-92,-95,-96,-99,-100,-103,-104,-107,-10\
+   8,-111,-112,-115,-116,-119,-120,-123,-124,-127,-128,-131,-132,-135,-136,-\
+   139,-140,-143,-144,-147,-148,-151,-152,-155,-156,-159,-160,-163,-164,-167\
+   ,-168,-171,-172,-175,-176,-179,-180,-183,-184,-187,-188,-191,-192,-195,-1\
+   96,-199,-200
+==> pause&gt;
+==> N(0) = 10000079 is divisible by 5.
+==> pause&gt;
+==> N(0) = N = 10000079 and therefore N is not prime.
+==> pause&gt;
+==> -1
+==> &gt; 
+</FONT></pre></td></tr></table><P>
+
+<A NAME="crypto_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1838.htm#SEC1913"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: wUnit" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1840.htm#SEC1915"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: crypto_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1816.htm#SEC1891"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: aksaka_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1840.htm#SEC1915"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: crypto_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1825.htm#SEC1900"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: atkins_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,306 @@
+
+\documentclass[12pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\addtolength{\textheight}{30pt}
+\addtolength{\textwidth}{175pt}
+\addtolength{\oddsidemargin}{-1.2 in}
+\addtolength{\evensidemargin}{-1.2 in}
+
+\begin{document}
+
+\title{The SglPPow package}
+\author{Bettina Eick and Michael Vaughan-Lee}
+\date{November 2014}
+\maketitle
+
+\section{Introduction}
+
+SglPPow is a \textsf{GAP} package which extends the \textsf{GAP} small
+groups library. Currently the small groups library gives access to the
+following groups:
+
+\begin{itemize}
+\item Those of order at most 2000 except 1024 (423,164,062 groups);
+
+\item Those of cubefree order at most 50,000 (395,703 groups);
+
+\item Those of order $p^{7}$ for the primes $p=3,5,7,11$ (907,489 groups);
+
+\item Those of order $p^{n}$ for $n\leq 6$ and all primes $p$;
+
+\item Those of order $pq^{n}$ where $q^{n}$ divides 28, 36, 55 or 74 and $p$
+is an arbitrary prime not equal to $q$;
+
+\item Those of squarefree order;
+
+\item Those whose order factorizes into at most 3 primes.
+\end{itemize}
+
+This package gives access to the groups of order $p^{7}$ for $p>11$, and to
+the groups of order $3^{8}$.
+
+To access the groups of order $p^{7}$ for $p>11$ you need Bettina Eick and
+Michael Vaughan-Lee's \textsf{GAP} package LiePRing, and Willem de Graaf's 
+\textsf{GAP} package LieRing. Once these packages are installed in \textsf{%
+GAP}, they are automatically loaded when SglPPow is loaded. To load SglPPow
+you need to enter the following \textsf{GAP} command:
+RequirePackage("sglppow").
+
+The groups of order $3^{8}$ are then available via Michael Vaughan-Lee's
+database of the groups of order $3^{8}$, and the groups of order $p^{7}$ for 
+$p>11$ are available via Bettina Eick and Michael Vaughan-Lee's database of
+the nilpotent Lie rings of order $p^{k}$ ($k\leq 7$, $p>3$). The groups are
+obtained from the Lie rings using Willem de Graaf's implementation of the
+Baker-Campbell-Hausdorff formula.
+
+\section{Accessing the data}
+
+When this package is loaded, then the groups of order $3^8$ and $p^7$ for $p
+> 11$ are additionally available via the SmallGroups library. As a result,
+all groups of order $p^n$ with $p=2$ and $n \leq 9$ and $p=3$ and $n \leq 8$
+and $p$ arbitrary and $n \leq 7$ are then available via the small groups
+library.
+
+SmallGroup(size, number)
+
+NumberSmallGroups(size)
+
+SmallGroupsInformation(size)
+
+\noindent yield the corresponding information.
+
+There is no IdGroup function available for this extension of the small
+groups library.
+
+However the user should be aware that there are there are 1,396,077 groups
+of order $3^{8}$, 1,600,573 groups of order $13^{7}$, and 5,546,909 groups
+of order $17^{7}$. For general $p$ the number of groups of order \thinspace $%
+p^{7}$ is of order $3p^{5}$. Furthermore as $p$ increases, the time taken to
+generate a complete list of the groups of order $p^{7}$ grows rapidly.
+Experimentally the time seems to be proportional to $p^{6.2}$. For $p=13$ it
+takes several hours to generate the complete list. (For $p\leq 11$ the
+groups are precomputed, and their SmallGroup codes are stored in the
+SmallGroups database. For $p>11$ the Lie rings have to be generated from
+4773 parametrized presentations in the LiePRing database, and then converted
+into groups using the Baker-Campbell-Hausdorff formula.) To save space the
+groups are stored in a compact form using SmallGroup coding; a similar
+coding is used for the Lie rings. A complete list of power commutator
+presentations for the groups of order $13^{7}$ takes over 11 gb of memory.
+In view of the sizes of these databases, it may be helpful for the user to
+have some understanding of how they are organized, and so in the following
+sections we attempt to give a brief overview of the databases.
+
+\section{The $p$-group generation algorithm}
+
+The $p$-group generation algorithm was developed and implemented by Eamonn
+O'Brien, and we refer the reader to \cite{OBrien90} for a detailed
+description of the algorithm. Briefly, let $P$ be a $p$-group. The algorithm
+uses the lower $p$-central series, defined recursively by ${\mathcal{P}}%
+_{1}(P)=P$ and ${\mathcal{P}}_{i+1}(P)=[{\mathcal{P}}_{i}(P),P]{\mathcal{P}}%
+_{i}(P)^{p}$ for $i\geq 1$. The $p$-class of $P$ is the length of this
+series. Each $p$-group $P$, apart from the elementary abelian ones, is an 
+\emph{immediate descendant} of the quotient $P/R$ where $R$ is the last
+non-trivial term of the lower $p$-central series of $P$. Thus all the groups
+with order $3^{8}$, except the elementary abelian one, are immediate
+descendants of groups with order $3^{k}$ for $k<8$. All of the immediate
+descendants of a $p$-group $Q$ are quotients of a certain extension of $Q$;
+the isomorphism problem for these descendants is equivalent to the problem
+of determining orbits of certain subgroups of this extension under an action
+of the automorphism group of $Q$. Not all $p$-groups have immediate
+descendants, those that do are called \emph{capable}, and those which do not
+are called \emph{terminal}. O'Brien and Vaughan-Lee's classification of the
+groups of order $p^{7}$ \cite{obrienvl2} is based on a classification of the
+nilpotent Lie rings of order $p^{7}$, and the groups of order $p^{7}$ are
+obtained from the Lie rings using the Baker-Campbell-Hausdorff formula.
+O'Brien and Vaughan-Lee classified the nilpotent Lie rings of order $p^{7}$
+using the nilpotent Lie ring generation algorithm, which is a direct
+analogue of the $p$-group generation algorithm. Thus the databases of
+nilpotent Lie rings of order $p^{7}$ and of the groups of order $3^{8}$ are
+organized according to these algorithms: the immediate descendants of order $%
+p^{7}$ of each nilpotent Lie ring of order less that $p^{7}$ are grouped
+together in the database of nilpotent Lie rings, and the immediate
+descendants of order $3^{8}$ of each group of order less than $3^{8}$ are
+grouped together in the database of groups of order $3^{8}$.
+
+\section{The groups of order $3^{8}$}
+
+The database of groups of order $3^{8}$ is organized according to rank and $%
+p $-class. Here rank is the rank of the Frattini quotient, i.e. the size of
+a minimal generating set, and $p$-class is as defined in the previous
+section. The following table gives the number of groups of order $3^{8}$ of
+each rank and $p$-class, with the $(i,j)$ entry corresponding to rank $i$
+and $p$-class $j$.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ \hline
+0 & 0 & 58 & 486 & 1343 & 330 & 9 & 0 \\ \hline
+0 & 4 & 216747 & 40521 & 2163 & 24 & 0 & 0 \\ \hline
+0 & 23361 & 494666 & 22343 & 51 & 0 & 0 & 0 \\ \hline
+0 & 578478 & 14796 & 80 & 0 & 0 & 0 & 0 \\ \hline
+0 & 566 & 39 & 0 & 0 & 0 & 0 & 0 \\ \hline
+0 & 10 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+\end{tabular}
+\end{center}
+
+The following table gives the range of numbers used to access the groups of
+order $3^{8}$ of a given rank and class.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+&  &  &  &  &  &  & {\small 1} \\ \hline
+&  & {\small 2--59} & {\small 60--545} & {\small 546--1888} & {\small %
+1889--2218} & {\small 2219-2227} &  \\ \hline
+& {\small 2228--2231} & {\small 2232--218978} & {\small 218979--259499} & 
+{\small 259500--261662} & {\small 261663--261686} &  &  \\ \hline
+& {\small 261687--285047} & {\small 285048--779713} & {\small 779714--802056}
+& {\small 802057--802107} &  &  &  \\ \hline
+& {\small 802108--1380585} & {\small 1380586--1395381} & {\small %
+1395382--1395461} &  &  &  &  \\ \hline
+& {\small 1395462--1396027} & {\small 1396028--1396066} &  &  &  &  &  \\ 
+\hline
+& {\small 1396067--1396076} &  &  &  &  &  &  \\ \hline
+{\small 1396077} &  &  &  &  &  &  &  \\ \hline
+\end{tabular}
+\end{center}
+
+As mentioned above, the database is organized according to the $p$-group
+generation algorithm. For example, the 9 groups of rank 2, $p$-class 7, and
+order $3^{8}$ are numbered from 2219--2227. The groups numbered 2219 and
+2220 are descendants of SmallGroup($3^{7},384$), and the groups numbered
+2221--2227 are descendants of SmallGroup($3^{7},386$). Similarly, the 24
+groups of rank 3, $p$-class 6, and order $3^{8}$ are numbered from
+261663--261686. The first four of these groups are descendants of SmallGroup(%
+$3^{7},5841$), the next 17 are descendants of SmallGroup($3^{7},5844$), and
+the last 4 are descendants of SmallGroup($3^{7},5849$).
+
+\section{The groups of order $p^{7}$ ($p>11$)}
+
+The groups of order $p^{7}$ for $p>11$ are obtained from the LiePRing
+database of nilpotent Lie rings of order $p^{7}$ using Willem de Graaf's
+implementation of the Baker-Campbell-Hausdorff formula. The LiePRing
+database is organized according to the output from the nilpotent Lie ring
+generation algorithm. For any given $p$ the first Lie ring in the database
+is the cyclic Lie ring of order $p^{7}$. Next come the two generator Lie
+rings, then the three generator Lie rings, and so on, ending with the six
+generator Lie rings, and then finally the elementary abelian Lie ring of
+rank 7. The first four of the two generator nilpotent Lie rings of order $%
+p^{7}$ are immediate descendants of the Lie ring%
+\[
+\langle a,b\,|\,pb,\,\text{class }3\rangle 
+\]%
+of order $p^{4}$. The next $p^{2}+8p+25$ are immediate descendants of the
+Lie ring%
+\[
+\langle a,b\,|\,baa,bab,pba,\,\text{class }3\rangle 
+\]%
+of order $p^{5}$, and the next $p+6+(p^{2}+3p+10)\gcd (p-1,3)$ are immediate
+descendants of%
+\[
+\langle a,b\,|\,babb,pa,pb,\,\text{class }4\rangle . 
+\]%
+And so on. The nine rank 6 Lie rings in the database are the rank 6, $p$%
+-class 2 Lie rings. These are the immediate descendants of the elementary
+abelian Lie ring of rank 6.
+
+There is a complete list of presentations for the nilpotent Lie rings of
+order $p^{k}$ for $k\leq 7$ valid for all $p>3$ in the document p567.pdf
+supplied with the documentation for the LiePRing package. The presentations
+are grouped as described above, with each group of presentations giving the
+immediate descendants of a Lie ring of smaller order.
+
+In a few cases the descendants of a parametrized family of Lie rings are
+grouped together. For example there is a family of $p(p-1)$ distinct Lie
+rings with presentations of the form%
+\[
+\langle a,b,c\,|\,ca-baa,\,cb,\,pa-\lambda baa-\mu bab,\,pb+\nu baa+\xi
+bab,\,pc,\,\text{class }3\rangle 
+\]%
+with $\lambda ,\mu ,\nu ,\xi \neq 0$. Most of these algebras are terminal,
+but $\frac{5}{2}p-\frac{9}{2}+\frac{1}{2}\gcd (p-1,4)$ of them are capable,
+and they have a total of $\frac{1}{2}p^{3}+2p^{2}-5p+\frac{1}{2}+\frac{p}{2}%
+\gcd (p-1,4)$ descendants of order $p^{7}$ and $p$-class 4. These
+descendants have presentations
+
+\[
+\langle a,b,c\,|\,ca-baa,\,cb,\,pa-baa-\mu bab-ybaaa,\,pb+\nu
+baa+bab-zbaaa,\,pc-tbaaa,\,\text{class }4\rangle , 
+\]
+
+\[
+\langle a,b,c\,|\,ca-baa,\,cb,\,pa-baa-\mu bab-ybaaa,\,pb+\nu baa+\mu \nu
+bab-zbaaa,\,pc-tbaaa,\,\text{class }4\rangle 
+\]%
+for various choices of the parameters $\mu ,\nu ,y,z,t$. For any given value
+of $p$ the $\frac{1}{2}p^{3}+2p^{2}-5p+\frac{1}{2}+\frac{p}{2}\gcd (p-1,4)$
+distinct Lie algebras with presentations of this form are grouped together,
+with consecutive numbering.
+
+There is no easy way to determine the numbering of (say) the three generator
+Lie rings of $p$-class 4 since the numbers depend on $p$ in a very
+complicated way, and generally there is no easy efficient way of searching
+the database for a group with particular properties. In view of the numbers
+of groups of order $p^{7}$ and the time needed to generate a complete list,
+this means that the database will be of limited use for most people. A user
+who wants to access a particular batch of descendants as described in
+p567.pdf is advised to use the LiePRing package directly, as this package
+also has an option to obtain the corresponding groups via Willem de Graaf's
+implementation of the Baker-Campbell-Hausdorff formula. On the other hand,
+there are only 
+\begin{eqnarray*}
+&&2p^{3}+13p^{2}+64p+145+(p^{2}+10p+56)\gcd (p-1,3)+(4p+28)\gcd (p-1,4) \\
+&&+(2p+12)\gcd (p-1,5)+\gcd (p-1,7)+4\gcd (p-1,8)+\gcd (p-1,9)
+\end{eqnarray*}
+two generator groups of order $p^{7}$ for $p>5$ and a complete list of them
+can be generated quite quickly for moderate values of $p$. The table below
+gives the number of $d$ generator groups of order $p^{7}$ valid for all $p>5$%
+, and the user can use the table to compute the range of numbers needed to
+access the $d$ generator groups of order $p^{7}$ for any given $p$.%
+\[
+\begin{tabular}{|c|c|}
+\hline
+1 & $1$ \\ \hline
+2 & $2p^{3}+13p^{2}+64p+145+(p^{2}+10p+56)\gcd (p-1,3)+(4p+28)\gcd (p-1,4)$
+\\ \hline
+& $+(2p+12)\gcd (p-1,5)+\gcd (p-1,7)+4\gcd (p-1,8)+\gcd (p-1,9)$ \\ \hline
+3 & $2p^{5}+9p^{4}+29p^{3}+99p^{2}+380p+1100+(3p^{2}+28p+189)\gcd (p-1,3)$
+\\ \hline
+& $+(p^{2}+13p+84)\gcd (p-1,4)+(p+17)\gcd (p-1,5)+\gcd (p-1,8)+3\gcd (p-1,7)$
+\\ \hline
+4 & $p^{5}+3p^{4}+13p^{3}+57p^{2}+248p+1044+(6p+46)\gcd (p-1,3)$ \\ \hline
+& $+(2p+23)\gcd (p-1,4)+2\gcd (p-1,5)$ \\ \hline
+5 & $p^{2}+15p+155$ \\ \hline
+6 & $9$ \\ \hline
+7 & $1$ \\ \hline
+\end{tabular}%
+\]
+
+The total number of groups of order $p^{7}$ is
+
+\begin{eqnarray*}
+&&\allowbreak 3p^{5}+12p^{4}+44p^{3}+\allowbreak 170p^{2}+707p+2455 \\
+&&+(4p^{2}+44p+291)\gcd (p-1,3)+\allowbreak (p^{2}+19p+135)\gcd (p-1,4) \\
+&&+(3p+31)\gcd (p-1,5)+4\gcd (p-1,7)+5\gcd (p-1,8)+\gcd (p-1,9)
+\end{eqnarray*}%
+for all $p>5$.
+
+\begin{thebibliography}{1}
+
+\bibitem{OBrien90}
+E.A. O'{B}rien, {\em The $p$-group generation algorithm}, J.Symbolic
+  Computation {\bf 9} (1990), 677--698.
+
+\bibitem{obrienvl2}
+E.A. O'Brien and M.R. Vaughan-Lee, {\em The groups with order $p^7$ for odd
+  prime $p$}, J. Algebra {\bf 292} (2005), 243--358.
+
+\end{thebibliography}
+
+
+\end{document}

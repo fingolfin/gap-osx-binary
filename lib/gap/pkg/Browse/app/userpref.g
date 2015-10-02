@@ -9,7 +9,6 @@
 ##    because we cannot catch all syntax and runtime errors.
 ##  - What shall happen if several user preferences are declared together,
 ##    and at least one of them provides a values list?
-##  - What shall happen if one edits a value that does not fit into one line?
 ##  - In case of a list of choices, if the defaults are not a subset of the
 ##    current choices then opening the selection and keeping the current
 ##    choices yields another list than the initial value.
@@ -18,11 +17,8 @@
 ##  - Should lists of choices be sorted in the selection box?
 ##    (If yes then should the result revert this sorting, in order to achieve
 ##    stable values if nothing was changed?)
-##  - How can we achieve to offer a list of symbolic values,
-##    as for 'InfoPackageLoadingLevel'?
-##    (Users should choose the textual value, and the numerical value gets
-##    assigned.)
 ##
+
 
 #############################################################################
 ##
@@ -80,7 +76,7 @@ end;
 #F  BrowseData.FormattedUserPreferenceDescription( <data>, <values>, <width> )
 ##
 BrowseData.FormattedUserPreferenceDescription:= function( data, values, width )
-    local string, paragraph, suff, default, len, i, line;
+    local string, suff, paragraph, values_eval, default, len, i, line;
 
     string:= "";
 
@@ -93,6 +89,15 @@ BrowseData.FormattedUserPreferenceDescription:= function( data, values, width )
       for paragraph in data.description do
         Append( string, FormatParagraph( paragraph, width, "left" ) );
       od;
+
+      if IsBound( data.values_strings ) then
+        values_eval:= List( data.values_strings, BrowseData.TryEval );
+        if ForAny( values_eval, x -> x.success = false ) then
+          Unbind( values_eval );
+        else
+          values_eval:= List( values_eval, x -> x.value );
+        fi;
+      fi;
 
       # Show the default value(s), with indent 2.
       if IsString( data.name ) then
@@ -116,11 +121,25 @@ BrowseData.FormattedUserPreferenceDescription:= function( data, values, width )
 
       len:= Length( default );
       for i in [ 1 .. len ] do
-        line:= default[i];
-        if IsStringRep( line ) then
-          line:= Concatenation( "\"", line, "\"" );
+        if IsBound( values_eval ) then
+          line:= Position( values_eval, default[i] );
+          if line = fail then
+            line:= default[i];
+            if IsStringRep( line ) then
+              line:= Concatenation( "\"", line, "\"" );
+            else
+              line:= String( line, 0 );
+            fi;
+          else
+            line:= data.values_strings[ line ];
+          fi;
         else
-          line:= String( line, 0 );
+          line:= default[i];
+          if IsStringRep( line ) then
+            line:= Concatenation( "\"", line, "\"" );
+          else
+            line:= String( line, 0 );
+          fi;
         fi;
         if i < len then
           Add( line, ',' );
@@ -141,11 +160,25 @@ BrowseData.FormattedUserPreferenceDescription:= function( data, values, width )
     else
       len:= Length( values );
       for i in [ 1 .. len ] do
-        line:= values[i];
-        if IsStringRep( line ) then
-          line:= Concatenation( "\"", line, "\"" );
+        if IsBound( values_eval ) then
+          line:= Position( values_eval, values[i] );
+          if line = fail then
+            line:= values[i];
+            if IsStringRep( line ) then
+              line:= Concatenation( "\"", line, "\"" );
+            else
+              line:= String( line, 0 );
+            fi;
+          else
+            line:= data.values_strings[ line ];
+          fi;
         else
-          line:= String( line, 0 );
+          line:= values[i];
+          if IsStringRep( line ) then
+            line:= Concatenation( "\"", line, "\"" );
+          else
+            line:= String( line, 0 );
+          fi;
         fi;
         if i < len then
           Add( line, ',' );
@@ -273,6 +306,10 @@ BindGlobal( "BrowseUserPreferences", function( arg )
       fi;
     od;
 
+    if IsEmpty( preflist ) then
+      return;
+    fi;
+
     for entry in preflist do
       entry[5]:= entry[4];
     od;
@@ -324,7 +361,11 @@ BindGlobal( "BrowseUserPreferences", function( arg )
           if IsFunction( admissible ) then
             admissible:= admissible();
           fi;
-          values:= List( admissible, String );
+          if IsBound( data.values_strings ) then
+            values:= data.values_strings;
+          else
+            values:= List( admissible, String );
+          fi;
           pref:= rec(
             items:= values,
             single:= not data.multi,
@@ -335,11 +376,10 @@ BindGlobal( "BrowseUserPreferences", function( arg )
           );
           if preflist[i][5][1] <> fail then
             if pref.single then
-              pref.select:= [ Position( values,
-                                        String( preflist[i][5][1] ) ) ];
+              pref.select:= [ Position( admissible, preflist[i][5][1] ) ];
             else
               pref.select:= List( preflist[i][5][1],
-                                  x -> Position( values, String(x) ) );
+                                  x -> Position( admissible, x ) );
             fi;
           fi;
           index:= NCurses.Select( pref );

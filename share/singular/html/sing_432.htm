@@ -1,0 +1,227 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: exportto</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: exportto">
+<META NAME="keywords" CONTENT="Singular Manual: exportto">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC471"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_431.htm#SEC470"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: export" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_433.htm#SEC472"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: for" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_442.htm#SEC481"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.2.7 exportto </H3>
+<!--docid::SEC471::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>exportto(</CODE> package_name <CODE>, </CODE>name <CODE>);</CODE>
+<BR><CODE>exportto(</CODE> package_name <CODE>,</CODE> list_of_names <CODE>);</CODE>
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>transfers an identifier in the current package into the one specified by
+package_name. package_name can be <CODE>Current</CODE>, <CODE>Top</CODE>
+or any other identifier of type package.
+<P>
+
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>Objects defined in a ring are not automatically exported
+when exporting the ring.
+<P>
+
+<DT><CODE><STRONG>Warning:</STRONG></CODE>
+<DD>The identifier is transfered to the other package. It does no longer
+exist in the current package. If the identifier should only be copied,
+ <A HREF="sing_435.htm#SEC474">importfrom</A> should be used instead.
+<P>
+
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>proc p1
+{
+  int i,j;
+  exportto(Current,i);
+  intmat m;
+  listvar(Current);
+  exportto(Top,m);
+}
+p1();
+==> // Top                            [0]  package Top (N)
+==> // ::m                            [1]  intmat 1 x 1
+==> // ::i                            [0]  int 0
+==> // ::j                            [1]  int 0
+==> // ::#                            [1]  list, size: 0
+==> // ::p1                           [0]  proc
+==> // ::min                          [0]  proc from standard.lib
+==> // ::max                          [0]  proc from standard.lib
+==> // ::datetime                     [0]  proc from standard.lib
+==> // ::weightKB                     [0]  proc from standard.lib
+==> // ::fprintf                      [0]  proc from standard.lib
+==> // ::printf                       [0]  proc from standard.lib
+==> // ::sprintf                      [0]  proc from standard.lib
+==> // ::quotient4                    [0]  proc from standard.lib
+==> // ::quotient5                    [0]  proc from standard.lib
+==> // ::quotient3                    [0]  proc from standard.lib
+==> // ::quotient2                    [0]  proc from standard.lib
+==> // ::quotient1                    [0]  proc from standard.lib
+==> // ::quot                         [0]  proc from standard.lib
+==> // ::res                          [0]  proc from standard.lib
+==> // ::groebner                     [0]  proc from standard.lib
+==> // ::qslimgb                      [0]  proc from standard.lib
+==> // ::hilbRing                     [0]  proc from standard.lib
+==> // ::par2varRing                  [0]  proc from standard.lib
+==> // ::quotientList                 [0]  proc from standard.lib
+==> // ::stdhilb                      [0]  proc from standard.lib
+==> // ::stdfglm                      [0]  proc from standard.lib
+package Test1;
+exportto(Test1,p1);
+listvar(Top);
+==> // Top                            [0]  package Top (N)
+==> // ::m                            [0]  intmat 1 x 1
+==> // ::i                            [0]  int 0
+==> // ::min                          [0]  proc from standard.lib
+==> // ::max                          [0]  proc from standard.lib
+==> // ::datetime                     [0]  proc from standard.lib
+==> // ::weightKB                     [0]  proc from standard.lib
+==> // ::fprintf                      [0]  proc from standard.lib
+==> // ::printf                       [0]  proc from standard.lib
+==> // ::sprintf                      [0]  proc from standard.lib
+==> // ::quotient4                    [0]  proc from standard.lib
+==> // ::quotient5                    [0]  proc from standard.lib
+==> // ::quotient3                    [0]  proc from standard.lib
+==> // ::quotient2                    [0]  proc from standard.lib
+==> // ::quotient1                    [0]  proc from standard.lib
+==> // ::quot                         [0]  proc from standard.lib
+==> // ::res                          [0]  proc from standard.lib
+==> // ::groebner                     [0]  proc from standard.lib
+==> // ::qslimgb                      [0]  proc from standard.lib
+==> // ::hilbRing                     [0]  proc from standard.lib
+==> // ::par2varRing                  [0]  proc from standard.lib
+==> // ::quotientList                 [0]  proc from standard.lib
+==> // ::stdhilb                      [0]  proc from standard.lib
+==> // ::stdfglm                      [0]  proc from standard.lib
+listvar(Test1);
+==> // Test1                          [0]  package Test1 (N)
+==> // ::p1                           [0]  proc
+Test1::p1();
+==> // Test1                          [0]  package Test1 (N)
+==> // ::m                            [1]  intmat 1 x 1
+==> // ::i                            [0]  int 0
+==> // ::j                            [1]  int 0
+==> // ::#                            [1]  list, size: 0
+==> // ::p1                           [0]  proc
+==> // ** redefining m
+listvar(Top);
+==> // Top                            [0]  package Top (N)
+==> // ::m                            [0]  intmat 1 x 1
+==> // ::i                            [0]  int 0
+==> // ::min                          [0]  proc from standard.lib
+==> // ::max                          [0]  proc from standard.lib
+==> // ::datetime                     [0]  proc from standard.lib
+==> // ::weightKB                     [0]  proc from standard.lib
+==> // ::fprintf                      [0]  proc from standard.lib
+==> // ::printf                       [0]  proc from standard.lib
+==> // ::sprintf                      [0]  proc from standard.lib
+==> // ::quotient4                    [0]  proc from standard.lib
+==> // ::quotient5                    [0]  proc from standard.lib
+==> // ::quotient3                    [0]  proc from standard.lib
+==> // ::quotient2                    [0]  proc from standard.lib
+==> // ::quotient1                    [0]  proc from standard.lib
+==> // ::quot                         [0]  proc from standard.lib
+==> // ::res                          [0]  proc from standard.lib
+==> // ::groebner                     [0]  proc from standard.lib
+==> // ::qslimgb                      [0]  proc from standard.lib
+==> // ::hilbRing                     [0]  proc from standard.lib
+==> // ::par2varRing                  [0]  proc from standard.lib
+==> // ::quotientList                 [0]  proc from standard.lib
+==> // ::stdhilb                      [0]  proc from standard.lib
+==> // ::stdfglm                      [0]  proc from standard.lib
+listvar(Test1);
+==> // Test1                          [0]  package Test1 (N)
+==> // ::i                            [0]  int 0
+==> // ::p1                           [0]  proc
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_431.htm#SEC470">export</A>;
+ <A HREF="sing_435.htm#SEC474">importfrom</A>;
+ <A HREF="sing_436.htm#SEC475">keepring</A>.
+<A NAME="for"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_431.htm#SEC470"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: export" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_433.htm#SEC472"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: for" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_442.htm#SEC481"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

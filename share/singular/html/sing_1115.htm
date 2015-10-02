@@ -1,0 +1,156 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: is_injective</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: is_injective">
+<META NAME="keywords" CONTENT="Singular Manual: is_injective">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1190"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1114.htm#SEC1189"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: alg_kernel" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1116.htm#SEC1191"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_surjective" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.2.6 is_injective </H4>
+<!--docid::SEC1190::-->
+Procedure from library <CODE>algebra.lib</CODE> (see  <A HREF="sing_1109.htm#SEC1184">algebra_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>is_injective(phi,pr[,c,s]); phi map, pr preimage ring, c int, s string
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD><TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">         - 1 (type int) if phi is injective, 0 if not (if s is not given).
+         - If s is given, return a list l of size 2, l[1] int, l[2] ring:
+           l[1] is 1 if phi is injective, 0 if not
+           l[2] is a ring with variables x(1),...,x(n),y(1),...,y(m) if the
+           basering has n variables and the map m components, it contains the
+           ideal 'ker', depending only on the y(i), the kernel of the given map
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Three differnt algorithms are used depending on c = 1,2,3.
+If c is not given or c=0, a heuristically best method is chosen.
+The basering may be a quotient ring. However, if the preimage ring is
+a quotient ring, say pr = P/I, consider phi as a map from P and then
+the algorithm returns 1 if the kernel of phi is 0 mod I.
+To access to the ring l[2] and see ker you must give the ring a name,
+e.g. def S=l[2]; setring S; ker;
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>The above comment is displayed if printlevel &gt;= 0 (default).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "algebra.lib";
+int p = printlevel;
+ring r = 0,(a,b,c),ds;
+ring s = 0,(x,y,z,u,v,w),dp;
+ideal I = x-w,u2w+1,yz-v;
+map phi = r,I;                    // a map from r to s:
+is_injective(phi,r);              // a,b,c ---&gt; x-w,u2w+1,yz-v
+==> 1
+ring R = 0,(x,y,z),dp;
+ideal i = x, y, x2-y3;
+map phi = R,i;                    // a map from R to itself, z --&gt; x2-y3
+list l = is_injective(phi,R,"");
+==> 
+==> // The 2nd element of the list is a ring with variables x(1),...,x(n),
+==> // y(1),...,y(m) if the basering has n variables and the map is
+==> // F[1],...,F[m].
+==> // It contains the ideal ker, the kernel of the given map y(i) --&gt; F[i].
+==> // To access to the ring and see ker you must give the ring a name,
+==> // e.g.:
+==>      def S = l[2]; setring S; ker;
+==>         
+l[1];
+==> 0
+def S = l[2]; setring S;
+ker;
+==> ker[1]=y(2)^3-y(1)^2+y(3)
+</FONT></pre></td></tr></table><P>
+
+<A NAME="is_surjective"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1114.htm#SEC1189"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: alg_kernel" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1116.htm#SEC1191"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_surjective" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

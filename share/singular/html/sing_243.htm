@@ -1,0 +1,152 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: pyobject</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: pyobject">
+<META NAME="keywords" CONTENT="Singular Manual: pyobject">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC282"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_242.htm#SEC281"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: vertices" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_244.htm#SEC283"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: pyobject declarations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_236.htm#SEC275"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: polytope" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: countedref" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_72.htm#SEC111"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Data types" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> 4.25 pyobject </H2>
+<!--docid::SEC282::-->
+<P>
+
+The pyobject is a black box data type in S<SMALL>INGULAR</SMALL>
+for handling objects from the programming language <CODE>python</CODE>. It
+needs the <CODE>python</CODE> support of S<SMALL>INGULAR</SMALL> to be installed.
+</P><P>
+
+Together with some basic operations and funtions, pyobject instances
+access <CODE>python</CODE> functionality from within S<SMALL>INGULAR</SMALL> and store
+the results for re-use:
+</P><P>
+
+Note that this feature is automatically loaded on demand when initializing
+an object of type <CODE>pyobject</CODE>. For accessing <CODE>pyobject</CODE>-related
+functions before using any <CODE>python</CODE> object, please type
+<CODE>LIB("pyobject.so");</CODE> at the S<SMALL>INGULAR</SMALL> prompt.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>pyobject pystr = "Hello";
+pyobject pyint = 2;
+string singstr = string(pystr + " World!");
+singstr;
+==> 'Hello World!'
+pystr + pyint;  // Error: not possible
+==>    ? pyobject error occured
+==>    ? cannot concatenate 'str' and 'int' objects
+==>    ? error occurred in or before ./examples/pyobject.sing line 5: `pystr \
+   + pyint;  // Error: not possible`
+pystr * pyint;  // But this is allowed,
+==> 'HelloHello'
+pystr * 3;      // as well as this;
+==> 'HelloHelloHello'
+
+python_run("def newfunc(*args): return list(args)");  // syncs contexts!
+newfunc(1, 2, 3);          // newfunc also knowd to SINGULAR
+==> [1, 2, 3]
+
+def pylst = python_eval("[3, 7, 1]");
+proc(attrib(pylst, "sort"))(); // Access python member routines as attributes
+pylst.sort();             // &lt;- equivalent short-notation
+pylst."sort"();           // &lt;- alternative short-notation
+pylst;
+==> [1, 3, 7]
+
+python_import("os");       // Gets stuff from python module 'os'
+name;                      // The identifier of the operating system
+==> 'posix'
+</FONT></pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_244.htm#SEC283">4.25.1 pyobject declarations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_245.htm#SEC284">4.25.2 pyobject expressions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_246.htm#SEC285">4.25.3 pyobject operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_247.htm#SEC286">4.25.4 pyobject related functions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="pyobject declarations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_242.htm#SEC281"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: vertices" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_244.htm#SEC283"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: pyobject declarations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_236.htm#SEC275"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: polytope" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: countedref" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_72.htm#SEC111"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Data types" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

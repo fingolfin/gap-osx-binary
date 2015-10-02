@@ -143,7 +143,7 @@
 
 /* Define to the full name and version of this package. */
 #ifndef PACKAGE_STRING
-#define PACKAGE_STRING "resources 4.0.1"
+#define PACKAGE_STRING "resources 4.0.2"
 #endif
 
 /* Define to the one symbol short name of this package. */
@@ -158,7 +158,7 @@
 
 /* Define to the version of this package. */
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.0.1"
+#define PACKAGE_VERSION "4.0.2"
 #endif
 
 /* SINGULAR_CFLAGS */
@@ -178,7 +178,7 @@
 
 /* Version number of package */
 #ifndef VERSION
-#define VERSION "4.0.1"
+#define VERSION "4.0.2"
 #endif
 
 /* Define to empty if `const' does not conform to ANSI C. */

@@ -85,7 +85,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     
     item_rec := current_item;
     
-    if type = "DeclareCategory" then
+    if PositionSublist( type, "DeclareCategory" ) <> fail then
         
         entries := [ "Filt", "categories" ];
         
@@ -93,7 +93,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := 1;
         
-    elif type = "DeclareRepresentation" then
+    elif PositionSublist( type, "DeclareRepresentation" ) <> fail then
         
         entries := [ "Filt", "categories" ];
         
@@ -101,13 +101,13 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := 1;
         
-    elif type = "DeclareAttribute" then
+    elif PositionSublist( type, "DeclareAttribute" ) <> fail then
         
         entries := [ "Attr", "attributes" ];
         
         has_filters := 1;
         
-    elif type = "DeclareProperty" then
+    elif PositionSublist( type, "DeclareProperty" ) <> fail then
         
         entries := [ "Prop", "properties" ];
         
@@ -115,13 +115,13 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := 1;
         
-    elif type = "DeclareOperation" then
+    elif PositionSublist( type, "DeclareOperation" ) <> fail then
         
         entries := [ "Oper", "methods" ];
         
         has_filters := "List";
         
-    elif type = "DeclareGlobalFunction" then
+    elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
         
         entries := [ "Func", "global_functions" ];
         
@@ -133,7 +133,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
             
         fi;
         
-    elif type = "DeclareGlobalVariable" then
+    elif PositionSublist( type, "DeclareGlobalVariable" ) <> fail then
         
         entries := [ "Var", "global_variables" ];
         
@@ -141,7 +141,19 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.arguments := fail;
         
-    elif type = "DeclareInfoClass" then
+        item_rec!.return_value := false;
+        
+    elif PositionSublist( type, "DeclareFilter" ) <> fail then
+        
+        entries := [ "Filt", "properties" ];
+        
+        has_filters := "No";
+        
+        item_rec!.arguments := fail;
+        
+        item_rec!.return_value := false;
+        
+    elif PositionSublist( type, "DeclareInfoClass" ) <> fail then
         
         entries := [ "InfoClass", "info_classes" ];
         
@@ -151,7 +163,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.return_value := false;
         
-    elif type = "KeyDependentOperation" then
+    elif PositionSublist( type, "KeyDependentOperation" ) <> fail then
         
         entries := [ "Oper", "methods" ];
         
@@ -437,7 +449,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         fi;
         
-        declare_position := PositionSublist( current_line, "InstallMethod" );
+        declare_position := Minimum( [ PositionSublist( current_line, "InstallMethod" ), PositionSublist( current_line, "InstallOtherMethod" ) ] );
+                            ## Fail is larger than every integer.
         
         if declare_position <> fail then
             
@@ -700,11 +713,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @AutoDoc := function()
+        @BeginAutoDoc := function()
             
             autodoc_read_line := fail;
             
         end,
+        
+        @AutoDoc := ~.@BeginAutoDoc,
         
         @EndAutoDoc := function()
             
@@ -892,13 +907,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @InsertSystem := function()
+        @InsertChunk := function()
             
             Add( current_item, DocumentationDummy( tree, current_command[ 2 ] ) );
             
         end,
         
-        @System := function()
+        @InsertSystem := ~.@InsertChunk,
+        
+        @BeginChunk := function()
             
             if IsBound( current_item ) then
                 
@@ -910,7 +927,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Code := function()
+        @Chunk := ~.@BeginChunk,
+        
+        @System := ~.@BeginChunk,
+        
+        @BeginSystem := ~.@BeginChunk,
+        
+        @BeginCode := function()
             local tmp_system;
             
             tmp_system := DocumentationDummy( tree, current_command[ 2 ] );
@@ -919,9 +942,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
+        @Code := ~.@BeginCode,
+        
         @InsertCode := ~.@InsertSystem,
         
-        @EndSystem := function()
+        @EndChunk := function()
             
             if autodoc_read_line = true then
                 
@@ -941,7 +966,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Example := function()
+        @EndSystem := ~.@EndChunk,
+        
+        @BeginExample := function()
             local example_node;
             
             example_node := read_example( true );
@@ -950,7 +977,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Log := function()
+        @Example := ~.@BeginExample,
+        
+        @BeginLog := function()
             local example_node;
             
             example_node := read_example( false );
@@ -958,6 +987,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, example_node );
             
         end,
+        
+        @Log := ~.@BeginLog,
         
         STRING := function()
             local comment_pos;
@@ -979,12 +1010,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, current_line_unedited );
             
         end,
-        
-        @Chunk := ~.@System,
-        
-        @EndChunk := ~.@EndSystem,
-        
-        @InsertChunk := ~.@InsertSystem,
         
         @BeginLatexOnly := function()
             
@@ -1034,11 +1059,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @AutoDocPlainText := function()
+        @BeginAutoDocPlainText := function()
             
             plain_text_mode := true;
             
         end,
+        
+        @AutoDocPlainText := ~.@BeginAutoDocPlainText,
         
         @EndAutoDocPlainText := function()
             

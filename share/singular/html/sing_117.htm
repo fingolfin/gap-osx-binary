@@ -1,0 +1,171 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: DBM links</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: DBM links">
+<META NAME="keywords" CONTENT="Singular Manual: DBM links">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC156"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Pipe links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_118.htm#SEC157"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: list" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_103.htm#SEC142"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: intvec" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_118.htm#SEC157"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: list" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_108.htm#SEC147"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: link" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.8.7 DBM links </H3>
+<!--docid::SEC156::-->
+<P>
+
+DBM links provide access to data stored in a data base.
+Each entry in the data base consists of a (key_string,
+value_string) pair. Such a pair can be inserted with the command
+<CODE>write(</CODE>link<CODE>,</CODE> key_string<CODE>,</CODE> value_string<CODE>)</CODE>.  By
+calling <CODE>write(</CODE>link<CODE>,</CODE> key_string<CODE>)</CODE>, the entry with key
+key_string is deleted from the data base. The value of an entry is
+returned by the command <CODE>read(</CODE>link<CODE>,</CODE>
+key_string<CODE>)</CODE>. With only one argument, <CODE>read(</CODE>link<CODE>)</CODE>
+returns the next key in the data base. Using this feature a
+data base can be scanned in order to access all entries of the data base.
+</P><P>
+
+If a data base with name <CODE>name</CODE> is opened for writing for the first
+time, two files (<CODE>name.pag</CODE> and <CODE>name.dir</CODE>), which contain the
+data base, are automatically created.
+</P><P>
+
+The DBM link describing string has to be one of the following:
+</P><P>
+
+<OL>
+<LI><CODE>"DBM: "</CODE> + name
+<BR>opens the data base for reading (default mode).
+<P>
+
+<LI><CODE>"DBM:r "</CODE> + name
+<BR>opens the data base for reading.
+<P>
+
+<LI><CODE>"DBM:rw "</CODE> + name
+<BR>opens the data base for reading and writing.
+</OL>
+<P>
+
+Note that <CODE>name</CODE> must be given without the suffix <CODE>.pag</CODE> or
+<CODE>.dir</CODE>. The name may contain an (absolute) path.
+</P><P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  link l="DBM:rw example";
+  write(l,"1","abc");
+  write(l,"3","XYZ");
+  write(l,"2","ABC");
+  l;
+==> // type : DBM
+==> // mode : rw
+==> // name : example
+==> // open : yes
+==> // read : ready
+==> // write: ready
+  close(l);
+  // read all keys (till empty string):
+  read(l);
+==> 1
+  read(l);
+==> 3
+  read(l);
+==> 2
+  read(l);
+==> 
+  // read data corresponding to key "1"
+  read(l,"1");
+==> abc
+  // read all data:
+  read(l,read(l));
+==> abc
+  read(l,read(l));
+==> XYZ
+  read(l,read(l));
+==> ABC
+  // close
+  close(l);
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="list"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Pipe links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_118.htm#SEC157"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: list" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_103.htm#SEC142"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: intvec" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_118.htm#SEC157"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: list" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_108.htm#SEC147"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: link" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

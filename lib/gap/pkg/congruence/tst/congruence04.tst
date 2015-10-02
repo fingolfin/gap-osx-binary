@@ -1,6 +1,6 @@
 # congruence, chapter 4
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/gens.xml", 30, 47 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/gens.xml", 30, 47 ]
 
 gap> FareySymbol(PrincipalCongruenceSubgroup(8));
 [ infinity, 0, 1/4, 1/3, 3/8, 2/5, 1/2, 3/5, 5/8, 2/3, 3/4, 1, 5/4, 4/3, 
@@ -18,7 +18,7 @@ gap> FareySymbol(CongruenceSubgroupGamma0(20));
 [ 1, 3, 4, 6, 7, 7, 5, 2, 2, 3, 6, 4, 5, 1 ]  
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/gens.xml", 128, 140 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/gens.xml", 128, 140 ]
 
 gap> H:=CongruenceSubgroupGamma0(5); 
 <congruence subgroup CongruenceSubgroupGamma_0(5) in SL_2(Z)>
@@ -31,7 +31,7 @@ gap> MatrixByEvenInterval(gfs,2);
 [ [ 2, -1 ], [ 5, -2 ] ]
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/gens.xml", 152, 160 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/gens.xml", 152, 160 ]
 
 gap> fs_oo:=FareySymbolByData([infinity,0,infinity],["odd","odd"]);;
 gap> gfs_oo:=GeneralizedFareySequence(fs_oo);
@@ -40,7 +40,7 @@ gap> MatrixByOddInterval(gfs_oo,1);
 [ [ -1, -1 ], [ 1, 0 ] ]
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/gens.xml", 172, 179 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/gens.xml", 172, 179 ]
 
 gap> fs_free:=FareySymbolByData([infinity,0,1,2,infinity],[1,2,2,1]);;
 gap> gfs_free:=GeneralizedFareySequence(fs_free);;
@@ -48,7 +48,7 @@ gap> MatrixByFreePairOfIntervals(gfs_free,2,3);
 [ [ 3, -2 ], [ 2, -1 ] ]
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/gens.xml", 191, 203 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/gens.xml", 191, 203 ]
 
 gap> fs_eo:=FareySymbolByData([infinity,0,infinity],["even","odd"]);;
 gap> GeneratorsByFareySymbol(last);                                  
@@ -61,7 +61,7 @@ gap> GeneratorsByFareySymbol(fs_free);
 [ [ [ 1, 2 ], [ 0, 1 ] ], [ [ 3, -2 ], [ 2, -1 ] ] ]
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/gens.xml", 215, 241 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/gens.xml", 215, 241 ]
 
 gap> G:=PrincipalCongruenceSubgroup(2);
 <principal congruence subgroup of level 2 in SL_2(Z)>
@@ -88,7 +88,7 @@ gap> GeneratorsOfGroup(I);
   [ [ 7, -6 ], [ 6, -5 ] ] ]
 
 
-# [ "/Users/alexk/gap4r6p1/pkg/congruence/doc/gens.xml", 262, 271 ]
+# [ "/Users/alexk/gap4r7p5/pkg/congruence/doc/gens.xml", 262, 271 ]
 
 gap> IndexInPSL2ZByFareySymbol(fs);
 6

@@ -1,0 +1,143 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: is_bijective</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: is_bijective">
+<META NAME="keywords" CONTENT="Singular Manual: is_bijective">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1192"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1116.htm#SEC1191"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: is_surjective" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1118.htm#SEC1193"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: noetherNormal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.2.8 is_bijective </H4>
+<!--docid::SEC1192::-->
+Procedure from library <CODE>algebra.lib</CODE> (see  <A HREF="sing_1109.htm#SEC1184">algebra_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>is_bijective(phi,pr); phi map to basering, pr preimage ring
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>an integer, 1 if phi is bijective, 0 if not
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The algorithm checks first injectivity and then surjectivity.
+To interprete this for local/mixed orderings, or for quotient rings
+type help is_surjective; and help is_injective;
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>A comment if printlevel &gt;= voice-1 (default)
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "algebra.lib";
+int p = printlevel;  printlevel = 1;
+ring R = 0,(x,y,z),dp;
+ideal i = x, y, x2-y3;
+map phi = R,i;                      // a map from R to itself, z-&gt;x2-y3
+is_bijective(phi,R);
+==> // map not injective
+==> 0
+qring Q = std(z-x2+y3);
+is_bijective(ideal(x,y,x2-y3),Q);
+==> 1
+ring S = 0,(a,b,c,d),dp;
+map psi = R,ideal(a,a+b,c-a2+b3,0); // a map from R to S,
+is_bijective(psi,R);                // x-&gt;a, y-&gt;a+b, z-&gt;c-a2+b3
+==> // map injective, but not surjective
+==> 0
+qring T = std(d,c-a2+b3);
+==> // ** _ is no standard basis
+map chi = Q,a,b,a2-b3;              // amap between two quotient rings
+is_bijective(chi,Q);
+==> 1
+printlevel = p;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="noetherNormal"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1116.htm#SEC1191"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: is_surjective" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1118.htm#SEC1193"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: noetherNormal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

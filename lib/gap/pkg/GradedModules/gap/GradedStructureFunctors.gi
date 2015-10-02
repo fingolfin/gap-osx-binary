@@ -17,7 +17,7 @@
 ##      The resulting &homalg; matrix consists of a generating set (over <M>R</M>) of the <A>d</A>-th homogeneous part
 ##      of the finitely generated &homalg; <M>S</M>-module <A>M</A>, where <M>R</M> is the coefficients ring
 ##      of the graded ring <M>S</M> with <M>S_0=R</M>.
-##      <#Include Label="BasisOfHomogeneousPart:example">
+##      <#Include Label="GeneratorsOfHomogeneousPart:example">
 ##  Compare with <Ref Oper="MonomialMap"/>.
 ##    </Description>
 ##  </ManSection>
@@ -103,6 +103,12 @@ InstallMethod( GeneratorsOfHomogeneousPart,
             ## the matrix of generating monomials of degree d
             M_d := MatrixOfMap( M_d );
             
+            # M_d is already a generating set.
+            # In the case of fields as coefficients, the following trick is used to find a minimal set of generators.
+            # In the case of general rings of coefficients, this is only a heuristical approach that removed superfluous generators.
+            # The trick is the following:
+            # If a generator can be reduced, than it is superfluous.
+
             ## the generating monomials are not altered by reduction
             diff := M_d - DecideZero( M_d, M );
             
@@ -124,13 +130,13 @@ InstallMethod( GeneratorsOfHomogeneousPart,
     
 end );
 
-InstallMethod( BasisOfHomogeneousPart,
+InstallMethod( GeneratorsOfHomogeneousPart,
         "for homalg modules",
         [ IsHomalgElement, IsHomalgModule ],
         
   function( d, M )
     
-    return BasisOfHomogeneousPart( HomalgElementToInteger( d ), M );
+    return GeneratorsOfHomogeneousPart( HomalgElementToInteger( d ), M );
     
 end );
 
@@ -154,7 +160,7 @@ end );
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
-InstallGlobalFunction( _Functor_RepresentationMapOfRingElement_OnGradedModules , ### defines: RepresentationMapOfRingElement (object part)
+InstallGlobalFunction( _Functor_RepresentationMapOfRingElement_OnGradedModules, ### defines: RepresentationMapOfRingElement (object part)
         [ IsList, IsHomalgModule ],
         
   function( l, M )
@@ -253,7 +259,7 @@ InstallFunctor( Functor_RepresentationMapOfRingElement_ForGradedModules );
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
-InstallGlobalFunction( _Functor_SubmoduleGeneratedByHomogeneousPart_OnGradedModules , ### defines: SubmoduleGeneratedByHomogeneousPart (object part)
+InstallGlobalFunction( _Functor_SubmoduleGeneratedByHomogeneousPart_OnGradedModules, ### defines: SubmoduleGeneratedByHomogeneousPart (object part)
         [ IsInt, IsHomalgModule ],
         
   function( d, M )
@@ -372,7 +378,7 @@ end );
 ##
 
 ##
-InstallGlobalFunction( _Functor_TruncatedSubmodule_OnGradedModules ,
+InstallGlobalFunction( _Functor_TruncatedSubmodule_OnGradedModules,
         [ IsInt, IsHomalgModule ],
         
   function( d, M )
@@ -390,7 +396,7 @@ InstallGlobalFunction( _Functor_TruncatedSubmodule_OnGradedModules ,
     elif Filtered( [ 1 .. Length( deg ) ], a -> deg[a] > d ) = [ ] then
         
         phi := ImageObjectEmb( SubmoduleGeneratedByHomogeneousPartEmbed( d, M ) );
-
+        
     else
         
         certain_deg2 := Filtered( [ 1 .. Length( deg ) ], a -> deg[a] < d );
@@ -421,6 +427,19 @@ InstallGlobalFunction( _Functor_TruncatedSubmodule_OnGradedModules ,
     
 end );
 
+##
+InstallGlobalFunction( _Functor_TruncatedSubmodule_OnGradedMaps,
+  function( F_source, F_target, arg_before_pos, phi, arg_behind_pos )
+    local truncated_source_embedding, truncated_range_embedding;
+    
+    truncated_source_embedding := F_source!.map_having_subobject_as_its_image;
+    
+    truncated_range_embedding := F_target!.map_having_subobject_as_its_image;
+    
+    return CompleteImageSquare( truncated_source_embedding, phi, truncated_range_embedding );
+
+end );
+
 InstallValue( Functor_TruncatedSubmodule_ForGradedModules,
         CreateHomalgFunctor(
                 [ "name", "TruncatedSubmodule" ],
@@ -431,6 +450,7 @@ InstallValue( Functor_TruncatedSubmodule_ForGradedModules,
                 [ "1", [ [ "covariant", "left adjoint", "distinguished" ], HOMALG_GRADED_MODULES.FunctorOn ] ],
                 [ "natural_transformations", [ [ "TruncatedSubmoduleEmbed", 2 ] ] ],
                 [ "OnObjects", _Functor_TruncatedSubmodule_OnGradedModules ],
+                [ "OnMorphisms", _Functor_TruncatedSubmodule_OnGradedMaps ],
                 [ "MorphismConstructor", HOMALG_MODULES.category.MorphismConstructor ]
                 )
         );
@@ -466,7 +486,7 @@ end );
 ##
 
 ##
-InstallGlobalFunction( _Functor_TruncatedModule_OnGradedModules ,
+InstallGlobalFunction( _Functor_TruncatedModule_OnGradedModules,
         [ IsInt, IsHomalgModule ],
         
   function( d, M )
@@ -509,7 +529,7 @@ end );
 ##
 
 ##
-InstallGlobalFunction( _Functor_TruncatedSubmoduleRecursiveEmbed_OnGradedModules , ### defines: TruncatedSubmoduleRecursiveEmbed (object part)
+InstallGlobalFunction( _Functor_TruncatedSubmoduleRecursiveEmbed_OnGradedModules, ### defines: TruncatedSubmoduleRecursiveEmbed (object part)
         [ IsInt, IsHomalgModule ],
         
   function( d, M )
@@ -602,7 +622,7 @@ InstallMethod( RepresentationOfMorphismOnHomogeneousParts,
     
 end );
 
-InstallGlobalFunction( _Functor_HomogeneousPartOverCoefficientsRing_OnGradedModules , ### defines: HomogeneousPartOverCoefficientsRing (object part)
+InstallGlobalFunction( _Functor_HomogeneousPartOverCoefficientsRing_OnGradedModules, ### defines: HomogeneousPartOverCoefficientsRing (object part)
         [ IsInt, IsGradedModuleOrGradedSubmoduleRep ],
         
   function( d, M )
@@ -668,20 +688,25 @@ InstallGlobalFunction( _Functor_HomogeneousPartOverCoefficientsRing_OnGradedModu
             fi;
         
         else
-        
-            rel := PresentationMorphism( UnderlyingObject( N ) );
             
-            deg := DegreesOfGenerators( Source( rel ) );
+            ## Corresponds to Algorithm 3.1 in arXiv:1409.6100
+            rel := MatrixOfRelations( UnderlyingObject( N ) );
+            
+            if IsHomalgLeftObjectOrMorphismOfLeftObjects( M ) then
+                deg := NonTrivialDegreePerRow( rel, DegreesOfGenerators( N ) );
+            else
+                deg := NonTrivialDegreePerColumn( rel, DegreesOfGenerators( N ) );
+            fi;
             
             deg := List( deg, HomalgElementToInteger );
             
             pos := Filtered( [ 1 .. Length( deg ) ], p -> deg[p] = d );
             
             if IsHomalgLeftObjectOrMorphismOfLeftObjects( M ) then
-                rel := k * CertainRows( MatrixOfMap( rel ), pos );
+                rel := k * CertainRows( rel, pos );
                 rel := HomalgRelationsForLeftModule( rel );
             else
-                rel := k * CertainColumns( MatrixOfMap( rel ), pos );
+                rel := k * CertainColumns( rel, pos );
                 rel := HomalgRelationsForRightModule( rel );
             fi;
         
@@ -796,7 +821,7 @@ end );
 ## HomogeneousPartOfDegreeZeroOverCoefficientsRing
 ##
 
-InstallGlobalFunction( _Functor_HomogeneousPartOfDegreeZeroOverCoefficientsRing_OnGradedModules , ### defines: HomogeneousPartOfDegreeZeroOverCoefficientsRing (object part)
+InstallGlobalFunction( _Functor_HomogeneousPartOfDegreeZeroOverCoefficientsRing_OnGradedModules, ### defines: HomogeneousPartOfDegreeZeroOverCoefficientsRing (object part)
         [ IsGradedModuleOrGradedSubmoduleRep ],
         
   function( M )

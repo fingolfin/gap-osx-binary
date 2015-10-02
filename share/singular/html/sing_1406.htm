@@ -1,0 +1,150 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: zetaDL</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: zetaDL">
+<META NAME="keywords" CONTENT="Singular Manual: zetaDL">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1481"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1405.htm#SEC1480"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: discrepancy" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1407.htm#SEC1482"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: collectDiv" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1389.htm#SEC1464"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: resolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1412.htm#SEC1487"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sheafcoh_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1402.htm#SEC1477"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: reszeta_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.6.4 zetaDL </H4>
+<!--docid::SEC1481::-->
+Procedure from library <CODE>reszeta.lib</CODE> (see  <A HREF="sing_1402.htm#SEC1477">reszeta_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Assume:</STRONG>
+<DD>L is the output of resolution of singularities
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>local Denef-Loeser zeta function, if string s1 is present and
+has the value 'local'; global Denef-Loeser zeta function
+otherwise
+<BR>if string s1 or s2 has the value "A", additionally the
+characteristic polynomial of the monodromy is computed
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list l
+<BR>if a is not present:
+<BR>l[1]: string specifying the top. zeta function
+<BR>l[2]: string specifying characteristic polynomial of monodromy,
+if "A" was specified
+<BR>if a is present:
+<BR>l[1]: string specifying the top. zeta function
+<BR>l[2]: list ast,
+<BR>ast[1]=chi(Ei^*)
+<BR>ast[2]=chi(Eij^*)
+<BR>ast[3]=chi(Eijk^*)
+<BR>l[3]: intvec nu of multiplicites as needed in computation of zeta
+function
+<BR>l[4]: intvec N of multiplicities as needed in compuation of zeta
+function
+<BR>l[5]: string specifying characteristic polynomial of monodromy,
+if "A" was specified
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "reszeta.lib";
+ring R=0,(x,y,z),dp;
+ideal I=x2+y2+z3;
+list re=resolve(I,"K");
+zetaDL(re,1);
+==> [1]:
+==>    (s+4)/(3s2+7s+4)
+I=(xz+y2)*(xz+y2+x2)+z5;
+list L=resolve(I,"K");
+zetaDL(L,1);
+==> [1]:
+==>    (20s2+130s+87)/(160s3+396s2+323s+87)
+//===== expected zeta function =========
+// (20s^2+130s+87)/((1+s)*(3+4s)*(29+40s))
+//======================================
+</FONT></pre></td></tr></table><P>
+
+<A NAME="collectDiv"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1405.htm#SEC1480"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: discrepancy" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1407.htm#SEC1482"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: collectDiv" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1389.htm#SEC1464"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: resolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1412.htm#SEC1487"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sheafcoh_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1402.htm#SEC1477"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: reszeta_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

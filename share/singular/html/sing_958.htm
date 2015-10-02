@@ -1,0 +1,180 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: cgsdr</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: cgsdr">
+<META NAME="keywords" CONTENT="Singular Manual: cgsdr">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1033"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_957.htm#SEC1032"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: grobcov" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_959.htm#SEC1034"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setglobalrings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.4.2 cgsdr </H4>
+<!--docid::SEC1033::-->
+Procedure from library <CODE>grobcov.lib</CODE> (see  <A HREF="sing_956.htm#SEC1031">grobcov_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Return:</STRONG>
+<DD>Returns a list T describing a reduced and disjoint
+<BR>Comprehensive Groebner System (CGS),
+<BR>With option ("out",0)
+<BR>the segments are grouped by
+<BR>leading power products (lpp) of the reduced Groebner
+<BR>basis and given in P-representation.
+<BR>The returned list is of the form:
+(
+(lpp, (num,basis,segment),...,(num,basis,segment),lpp),
+..,,
+(lpp, (num,basis,segment),...,(num,basis,segment),lpp)
+)
+The bases are the reduced Groebner bases (after normalization)
+for each point of the corresponding segment.
+<P>
+
+The third element of each lpp segment is the lpp of the
+used ideal in the CGS as a string:
+<BR>with option ("can",0) the homogenized basis is used
+<BR>with option ("can",1) the homogenized ideal is used
+<BR>with option ("can",2) the given basis is used
+</P><P>
+
+With option ("out",1) (default)
+<BR>only KSW is applied and segments are given as
+<BR>difference of varieties and are not grouped
+<BR>The returned list is of the form:
+(
+(E,N,B),..(E,N,B)
+)
+E is the null variety
+<BR>N is the nonnull variety
+<BR>segment = V(E) \ V(N)
+<BR>B is the reduced Groebner basis
+</P><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The basering R, must be of the form Q[a][x], (a=parameters,
+x=variables), and should be defined previously, and the ideal
+defined on R.
+<P>
+
+<A NAME="IDX411"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "grobcov.lib";
+// Casas conjecture for degree 4:
+ring R=(0,a0,a1,a2,a3,a4),(x1,x2,x3),dp;
+short=0;
+ideal F=x1^4+(4*a3)*x1^3+(6*a2)*x1^2+(4*a1)*x1+(a0),
+x1^3+(3*a3)*x1^2+(3*a2)*x1+(a1),
+x2^4+(4*a3)*x2^3+(6*a2)*x2^2+(4*a1)*x2+(a0),
+x2^2+(2*a3)*x2+(a2),
+x3^4+(4*a3)*x3^3+(6*a2)*x3^2+(4*a1)*x3+(a0),
+x3+(a3);
+cgsdr(F);
+==> [1]:
+==>    [1]:
+==>       _[1]=0
+==>    [2]:
+==>       _[1]=(-a2+a3^2)
+==>       _[2]=(-a1*a2+a1*a3^2+3*a2^2*a3-5*a2*a3^3+2*a3^5)
+==>       _[3]=(23*a1^2-138*a1*a2*a3+92*a1*a3^3+25*a2^3+132*a2^2*a3^2-201*a2*\
+   a3^4+67*a3^6)
+==>       _[4]=(a0-4*a1*a3+6*a2*a3^2-3*a3^4)
+==>    [3]:
+==>       _[1]=1
+==> [2]:
+==>    [1]:
+==>       _[1]=(a2-a3^2)
+==>       _[2]=(a1-a3^3)
+==>       _[3]=(a0-a3^4)
+==>    [2]:
+==>       _[1]=1
+==>    [3]:
+==>       _[1]=x3+(a3)
+==>       _[2]=x2^2+(2*a3)*x2+(a3^2)
+==>       _[3]=x1^3+(3*a3)*x1^2+(3*a3^2)*x1+(a3^3)
+</FONT></pre></td></tr></table><P>
+
+<A NAME="setglobalrings"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_957.htm#SEC1032"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: grobcov" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_959.htm#SEC1034"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setglobalrings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

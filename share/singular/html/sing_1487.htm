@@ -1,0 +1,151 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: isEquising</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: isEquising">
+<META NAME="keywords" CONTENT="Singular Manual: isEquising">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1562"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1486.htm#SEC1561"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: esStratum" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1488.htm#SEC1563"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: control_Matrix" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: deform_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: equising_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.6.4 isEquising </H4>
+<!--docid::SEC1562::-->
+Procedure from library <CODE>equising.lib</CODE> (see  <A HREF="sing_1483.htm#SEC1558">equising_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>isEquising(F[,m,L]); F poly, m int, L list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>F defines a deformation of a reduced bivariate polynomial f
+and the characteristic of the basering does not divide mult(f). <BR>
+If nv is the number of variables of the basering, then the first
+nv-2 variables are the deformation parameters. <BR>
+If the basering is a qring, ideal(basering) must only depend
+on the deformation parameters.
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>tests if the given family is equisingular along the trivial
+section.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>int: 1 if the family is equisingular, 0 otherwise.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>L is supposed to be the output of hnexpansion (with the given ordering
+of the variables appearing in f). <BR>
+If m is given, the family is considered over A/maxideal(m). <BR>
+This procedure uses <CODE>execute</CODE> or calls a procedure using
+<CODE>execute</CODE>.
+printlevel&gt;=2 displays additional information.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "equising.lib";
+ring r = 0,(a,b,x,y),ds;
+poly F = (x2+2xy+y2+x5)+ay3+bx5;
+isEquising(F);
+==> 0
+ideal I = ideal(a);
+qring q = std(I);
+poly F = imap(r,F);
+isEquising(F);
+==> 1
+ring rr=0,(A,B,C,x,y),ls;
+poly f=x7+y7+(x-y)^2*x2y2;
+poly F=f+A*y*diff(f,x)+B*x*diff(f,x);
+isEquising(F);
+==> 0
+isEquising(F,2);    // computation over  Q[a,b] / &lt;a,b&gt;^2
+==> 1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="control_Matrix"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1486.htm#SEC1561"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: esStratum" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1488.htm#SEC1563"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: control_Matrix" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: deform_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: equising_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

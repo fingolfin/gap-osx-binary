@@ -1,0 +1,348 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: decodeRandom</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: decodeRandom">
+<META NAME="keywords" CONTENT="Singular Manual: decodeRandom">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1853"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1777.htm#SEC1852"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: decode" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1779.htm#SEC1854"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: decodeCode" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.2.14 decodeRandom </H4>
+<!--docid::SEC1853::-->
+Procedure from library <CODE>decodegb.lib</CODE> (see  <A HREF="sing_1764.htm#SEC1839">decodegb_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>decodeRandom(redun,q,ncodes,ntrials,[e]); all parameters int
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">          - redun is a redundabcy of a (random) code,
+          - q is the field size,
+          - ncodes is the number of random codes to be processed,
+          - ntrials is the number of received vectors per code to be corrected
+          - If e is given it sets the correction capacity explicitly. It
+          should be used in case one expects some lower bound,
+          otherwise the procedure tries to compute the real minimum distance
+          to find out the error-correction capacity
+</pre></td></tr></table><P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>nothing;
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "decodegb.lib";
+int q=32; int n=25; int redun=n-11; int t=redun+1;
+ring r=(q,a),x,dp;
+// correct 2 errors in 2 random binary codes, 3 trials each
+decodeRandom(n,redun,2,3,2);
+==> check matrix:
+==> 0,1,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+==> 1,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+==> 1,1,1,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+==> 1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
+==> 0,0,0,1,1,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,
+==> 0,0,1,0,1,1,1,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+==> 0,1,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+==> 0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+==> 1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+==> 0,1,1,1,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+==> 0,0,1,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+==> 0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+==> 0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+==> 1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 
+==> The system is generated
+==> Codeword:
+==> 1,0,0,1,0,1,0,1,1,1,0,1,0,1,0,0,1,0,1,0,0,1,1,1,0
+==> Received word:
+==> 1,0,0,1,0,1,0,0,1,1,0,1,0,1,0,0,1,1,1,0,0,1,1,1,0
+==> The Groebenr basis of the QE system:
+==> U(25)+a^25,
+==> U(24)+a^20,
+==> U(23)+a^28,
+==> U(22)+a^7,
+==> U(21)+a^29,
+==> U(20)+a^19,
+==> U(19)+a^23,
+==> U(18)+a^19,
+==> U(17)+a^21,
+==> U(16)+a^9,
+==> U(15)+a^14,
+==> U(14)+a^25,
+==> U(13)+a^28,
+==> U(12)+a^14,
+==> U(11)+a^30,
+==> U(10)+a^27,
+==> U(9)+a^26,
+==> U(8)+a^7,
+==> U(7)+a^14,
+==> U(6)+a^15,
+==> U(5)+a^13,
+==> U(4)+a^7,
+==> U(3)+a^22,
+==> U(2)+a^11,
+==> U(1),
+==> V(2)+a^11,
+==> V(1)+a^24
+==> Codeword:
+==> 0,0,1,1,1,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,0,1,0,0
+==> Received word:
+==> 0,0,0,1,1,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,0,1,1,0
+==> The Groebenr basis of the QE system:
+==> U(25)+a^6,
+==> U(24)+a^16,
+==> U(23)+a^8,
+==> U(22)+a^2,
+==> U(21)+a^8,
+==> U(20)+a^13,
+==> U(19)+a,
+==> U(18)+a^12,
+==> U(17)+a^29,
+==> U(16)+a,
+==> U(15)+a^21,
+==> U(14)+a^16,
+==> U(13)+a^3,
+==> U(12)+a^4,
+==> U(11)+a^4,
+==> U(10)+a^16,
+==> U(9)+a^30,
+==> U(8)+a^26,
+==> U(7)+a^17,
+==> U(6)+a^2,
+==> U(5)+a^15,
+==> U(4)+a^24,
+==> U(3)+a^23,
+==> U(2)+a^27,
+==> U(1),
+==> V(2)+a^27,
+==> V(1)+a^25
+==> Codeword:
+==> 0,0,0,1,0,1,0,0,0,1,1,1,1,0,0,1,1,0,0,0,0,0,1,0,1
+==> Received word:
+==> 0,0,0,1,1,1,0,1,0,1,1,1,1,0,0,1,1,0,0,0,0,0,1,0,1
+==> The Groebenr basis of the QE system:
+==> U(25)+a^7,
+==> U(24)+a^21,
+==> U(23)+a^5,
+==> U(22)+a^9,
+==> U(21)+a^21,
+==> U(20)+a^11,
+==> U(19)+a^22,
+==> U(18)+a^14,
+==> U(17)+a,
+==> U(16)+a^11,
+==> U(15)+a^13,
+==> U(14)+a^10,
+==> U(13)+a^19,
+==> U(12)+a^18,
+==> U(11)+a^26,
+==> U(10)+a^11,
+==> U(9)+a^16,
+==> U(8)+a^22,
+==> U(7)+a^25,
+==> U(6)+a^13,
+==> U(5)+a^8,
+==> U(4)+a^28,
+==> U(3)+a^4,
+==> U(2)+a^2,
+==> U(1),
+==> V(2)+a^2,
+==> V(1)+a^11
+==> check matrix:
+==> 0,1,0,1,1,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+==> 0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+==> 0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+==> 0,0,1,0,0,1,1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
+==> 1,1,0,0,1,1,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,
+==> 1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+==> 1,1,1,0,1,1,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+==> 0,1,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,
+==> 1,0,0,1,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+==> 0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+==> 1,0,1,0,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+==> 1,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+==> 1,0,0,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+==> 1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1 
+==> The system is generated
+==> Codeword:
+==> 0,0,1,0,1,0,1,0,1,0,0,1,1,0,0,0,0,0,1,1,0,0,0,1,0
+==> Received word:
+==> 0,0,1,0,1,1,1,0,1,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,0
+==> The Groebenr basis of the QE system:
+==> U(25)+a^4,
+==> U(24)+a^4,
+==> U(23)+a^6,
+==> U(22)+a^17,
+==> U(21)+a^13,
+==> U(20)+a^27,
+==> U(19)+a^21,
+==> U(18)+a^8,
+==> U(17)+a^16,
+==> U(16)+a^8,
+==> U(15)+a^15,
+==> U(14)+a^12,
+==> U(13)+a^2,
+==> U(12)+a^3,
+==> U(11)+a^22,
+==> U(10)+a^26,
+==> U(9)+a^8,
+==> U(8)+a^23,
+==> U(7)+a,
+==> U(6)+a^11,
+==> U(5)+a^4,
+==> U(4)+a^16,
+==> U(3)+a^2,
+==> U(2)+a,
+==> U(1),
+==> V(2)+a,
+==> V(1)+a^16
+==> Codeword:
+==> 1,0,0,1,1,1,1,1,0,0,0,0,0,1,1,0,1,0,1,0,1,1,0,0,0
+==> Received word:
+==> 0,0,0,1,1,0,1,1,0,0,0,0,0,1,1,0,1,0,1,0,1,1,0,0,0
+==> The Groebenr basis of the QE system:
+==> U(25)+a^6,
+==> U(24)+a^7,
+==> U(23)+a^30,
+==> U(22)+a^23,
+==> U(21)+a^22,
+==> U(20)+a^5,
+==> U(19)+a^26,
+==> U(18)+a^12,
+==> U(17)+a,
+==> U(16)+a^14,
+==> U(15)+a^20,
+==> U(14)+a^29,
+==> U(13)+a^3,
+==> U(12)+a^15,
+==> U(11)+a^11,
+==> U(10)+a^13,
+==> U(9)+a^16,
+==> U(8)+a^10,
+==> U(7)+a^17,
+==> U(6)+a^21,
+==> U(5)+a^8,
+==> U(4)+a^24,
+==> U(3)+a^4,
+==> U(2)+a^2,
+==> U(1),
+==> V(2)+a^2,
+==> V(1)+a^5
+==> Codeword:
+==> 1,0,1,1,1,1,0,0,0,1,1,1,1,0,1,0,0,1,0,0,0,0,0,1,1
+==> Received word:
+==> 1,0,1,1,0,1,0,0,0,1,1,1,0,0,1,0,0,1,0,0,0,0,0,1,1
+==> The Groebenr basis of the QE system:
+==> U(25)+a^30,
+==> U(24)+a^2,
+==> U(23)+a^20,
+==> U(22)+a^5,
+==> U(21)+a^20,
+==> U(20)+a^9,
+==> U(19)+a^18,
+==> U(18)+a^29,
+==> U(17)+a^12,
+==> U(16)+a^4,
+==> U(15)+a^5,
+==> U(14)+a^9,
+==> U(13)+a^15,
+==> U(12)+a^10,
+==> U(11)+a^10,
+==> U(10)+a^9,
+==> U(9)+a^6,
+==> U(8)+a^18,
+==> U(7)+a^23,
+==> U(6)+a^5,
+==> U(5)+a^3,
+==> U(4)+a^27,
+==> U(3)+a^17,
+==> U(2)+a^24,
+==> U(1),
+==> V(2)+a^24,
+==> V(1)+a^16
+</FONT></pre></td></tr></table><P>
+
+<A NAME="decodeCode"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1777.htm#SEC1852"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: decode" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1779.htm#SEC1854"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: decodeCode" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

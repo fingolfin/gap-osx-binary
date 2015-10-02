@@ -1,0 +1,171 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: integralBasis</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: integralBasis">
+<META NAME="keywords" CONTENT="Singular Manual: integralBasis">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1245"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1171.htm#SEC1246"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intprog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1171.htm#SEC1246"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: intprog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.8.1 integralBasis </H4>
+<!--docid::SEC1245::-->
+Procedure from library <CODE>integralbasis.lib</CODE> (see  <A HREF="sing_1169.htm#SEC1244">integralbasis_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>integralBasis(f, intVar); f irreducible polynomial in two variables,
+intVar integer indicating that the intVar-th variable of the ring is the
+integral element.<BR>
+The base ring must be a ring in two variables, and the polynomial f
+must be monic as polynomial in the intVar-th variable.<BR>
+Optional parameters in list choose (can be entered in any order):<BR>
+Parameters for selecting the algorithm:<BR>
+- "global" -&gt; computes the integral basis by computing the
+normalization of R/&lt;f&gt;, where R is the base ring.<BR>
+- "local" -&gt; computes the integral basis by computing the
+normalization of R/&lt;f&gt; localized at each component of the singular
+locus of R/&lt;f&gt;, and then putting everything together.
+<BR>This is the default option.<BR>
+Other parameters:<BR>
+- "isIrred" -&gt; assumes that the input polynomial f is irreducible,
+and therefore will not check this. If this option is given but f is not
+irreducible, the output might be wrong.<BR>
+- list("inputJ", ideal inputJ) -&gt; takes as initial test ideal the
+ideal inputJ. This option is only for use in other procedures. Using
+this option, the result might not be the integral basis.<BR>
+(When this option is given, the global option will be used.)<BR>
+- list("inputC", ideal inputC) -&gt; takes as initial conductor the
+ideal inputC. This option is only for use in other procedures. Using
+this option, the result might not be the integral basis.<BR>
+(When this option is given, the global option will be used.)<BR>
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list, say l, of size 2.
+<BR>l[1] is an ideal I and l[2] is a polynomial D such that the integral
+basis is b_0 = I[1] / D, b_1 = I[2] / D, ..., b_{n-1} = I[n] / D.<BR>
+That is, the integral closure of k[x] in the algebraic function
+field k(x,y) is <BR>
+k[x] b_0 + k[x] b_1 + ... + k[x] b_{n-1},<BR>
+where we assume that x is the transcendental variable, y is the integral
+element (indicated by intVar), f gives the integral equation and n is
+the degree of f as a polynomial in y.<BR>
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>We compute the integral basis of the integral closure of k[x] in k(x,y)
+by computing the normalization of the affine ring k[x,y]/&lt;f&gt; and
+converting the k[x,y]-module generators into a k[x]-basis.<BR>
+<P>
+
+<A NAME="IDX443"></A>
+<A NAME="IDX444"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "integralbasis.lib";
+printlevel = printlevel+1;
+ring s = 0,(x,y),dp;
+poly f = y5-y4x+4y2x2-x4;
+list l = integralBasis(f, 2);
+==> The number of components of the Singular Locus is  1
+l;
+==> [1]:
+==>    _[1]=x3
+==>    _[2]=x3y
+==>    _[3]=x2y2
+==>    _[4]=xy3
+==>    _[5]=y4+4x2y
+==> [2]:
+==>    x3
+// The integral basis of the integral closure of Q[x] in Q(x,y) consists
+// of the elements of l[1] divided by the polynomial l[2].
+printlevel = printlevel-1;
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1229.htm#SEC1304">normal</A>.
+<P>
+
+<A NAME="intprog_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1171.htm#SEC1246"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intprog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1171.htm#SEC1246"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: intprog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

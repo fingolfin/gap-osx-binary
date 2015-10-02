@@ -38,14 +38,19 @@
     #include <gmpxx.h>
 #endif
 
-
-#include "libnormaliz.h"
-#include "normaliz_exception.h"
-#include "cone_property.h"
+// in the serial version there is no need to catch-rethrow
+#ifndef _OPENMP
+    #define NCATCH
+#endif
 
 namespace libnormaliz {
 
+typedef long long MachineInteger;
 
 } /* end namespace libnormaliz */
+
+#include <libnormaliz/libnormaliz.h>
+#include <libnormaliz/normaliz_exception.h>
+#include <libnormaliz/cone_property.h>
 
 #endif /* GENERAL_H_ */

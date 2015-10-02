@@ -1,0 +1,156 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: stdfglm</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: stdfglm">
+<META NAME="keywords" CONTENT="Singular Manual: stdfglm">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC442"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_402.htm#SEC441"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: std" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_404.htm#SEC443"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: stdhilb" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.144 stdfglm </H3>
+<!--docid::SEC442::-->
+Procedure from library <CODE>standard.lib</CODE> (see  <A HREF="sing_927.htm#SEC1002">standard_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>stdfglm (</CODE> ideal_expression <CODE>)</CODE> <BR>
+<CODE>stdfglm (</CODE> ideal_expression<CODE>,</CODE> string_expression <CODE>)</CODE>
+<P>
+
+<DT><STRONG>Type:</STRONG>
+<DD>ideal
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes the standard basis of the ideal in the basering
+via <CODE>fglm</CODE> from the ordering given as the second argument
+to the ordering of the basering. If no second argument is given,
+"dp" is used. The standard basis for the given ordering (resp. for
+"dp") is computed via the command groebner except if a further
+argument "std" or "slimgb" is given in which case std resp.
+slimgb is used.
+<P>
+
+<A NAME="IDX183"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>   ring r  = 0,(x,y,z),lp;
+ideal i = y3+x2,x2y+x2,x3-x2,z4-x2-y;
+stdfglm(i);                   //uses fglm from "dp" (with groebner) to "lp"
+==> _[1]=z12
+==> _[2]=yz4-z8
+==> _[3]=y2+y-z8-z4
+==> _[4]=xy-xz4-y+z4
+==> _[5]=x2+y-z4
+stdfglm(i,"std");             //uses fglm from "dp" (with std) to "lp"
+==> _[1]=z12
+==> _[2]=yz4-z8
+==> _[3]=y2+y-z8-z4
+==> _[4]=xy-xz4-y+z4
+==> _[5]=x2+y-z4
+ring s  = (0,x),(y,z,u,v),lp;
+minpoly = x2+1;
+ideal i = u5-v4,zv-u2,zu3-v3,z2u-v2,z3-uv,yv-zu,yu-z2,yz-v,y2-u,u-xy2;
+weight(i);
+==> 2,3,4,5
+stdfglm(i,"(a(2,3,4,5),dp)"); //uses fglm from "(a(2,3,4,5),dp)" to "lp"
+==> _[1]=v2
+==> _[2]=u
+==> _[3]=zv
+==> _[4]=z2
+==> _[5]=yv
+==> _[6]=yz-v
+==> _[7]=y2
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_296.htm#SEC335">fglm</A>;
+ <A HREF="sing_307.htm#SEC346">groebner</A>;
+ <A HREF="sing_396.htm#SEC435">slimgb</A>;
+ <A HREF="sing_402.htm#SEC441">std</A>;
+ <A HREF="sing_404.htm#SEC443">stdhilb</A>.
+<P>
+
+<A NAME="stdhilb"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_402.htm#SEC441"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: std" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_404.htm#SEC443"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: stdhilb" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

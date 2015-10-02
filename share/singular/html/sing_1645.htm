@@ -1,0 +1,155 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: InvariantRing</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: InvariantRing">
+<META NAME="keywords" CONTENT="Singular Manual: InvariantRing">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1720"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1644.htm#SEC1719"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ImageGroup" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1646.htm#SEC1721"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: InvariantQ" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: stratify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1640.htm#SEC1715"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: rinvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.7.3.5 InvariantRing </H4>
+<!--docid::SEC1720::-->
+Procedure from library <CODE>rinvar.lib</CODE> (see  <A HREF="sing_1640.htm#SEC1715">rinvar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>InvariantRing(G, Gact [, opt]); ideal G, Gact; int opt
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute generators of the invariant ring of G w.r.t. the action 'Gact'
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>G is a finite group and 'Gact' is a linear action.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring R; this ring comes with the ideals 'invars' and 'groupid' and
+with the poly 'newA':
+<BR>- 'invars' contains the algebra generators of the invariant ring
+- 'groupid' is the ideal of G in the new ring
+<BR>- 'newA' is the new representation of the primitive root of the
+minimal polynomial of the ring which was active when calling the
+procedure (if the minpoly did not change, 'newA' is set to 'a').
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the minimal polynomial of the output ring depends on some random
+choices
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "rinvar.lib";
+ring B = 0, (s(1..2), t(1..2)), dp;
+ideal G = -s(1)+s(2)^3, s(1)^4-1;
+ideal action = s(1)*t(1), s(2)*t(2);
+def R = InvariantRing(std(G), action);
+==> 
+==> // 'InvariantRing' created a new ring.
+==> // To see the ring, type (if the name 'R' was assigned to the return valu\
+   e):
+==>      show(R);
+==> // To access the generators of the invariant ring type
+==>      setring R; invars;
+==> // Note that the input group G is stored in R as the ideal 'groupid'; to
+==> // see it, type
+==>     groupid;
+==> // Note that 'InvariantRing' might change the minimal polynomial
+==> // The representation of the algebraic number is given by 'newA'
+==> 
+setring R;
+invars;
+==> invars[1]=t(1)^4
+==> invars[2]=t(1)^3*t(2)^3
+==> invars[3]=t(1)^2*t(2)^6
+==> invars[4]=t(1)*t(2)^9
+==> invars[5]=t(2)^12
+</FONT></pre></td></tr></table><P>
+
+<A NAME="InvariantQ"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1644.htm#SEC1719"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ImageGroup" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1646.htm#SEC1721"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: InvariantQ" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1655.htm#SEC1730"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: stratify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1640.htm#SEC1715"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: rinvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

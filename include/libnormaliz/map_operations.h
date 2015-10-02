@@ -27,7 +27,7 @@
 #define MAP_OPERATIONS_H
 
 //---------------------------------------------------------------------------
-                  
+
 #include <map>
 #include <ostream>
 
@@ -47,6 +47,13 @@ ostream& operator<< (ostream& out, const map<key, T> M) {
 //---------------------------------------------------------------------------
 
 template<typename key, typename T>
+bool exists_element(const map<key, T>& m, const key& k){
+    return (m.find(k) != m.end());
+}
+
+//---------------------------------------------------------------------------
+
+template<typename key, typename T>
 map<key, T> count_in_map (const vector<key> v) {
     map<key, T> m;
     T size = v.size();
@@ -61,7 +68,7 @@ vector<key> to_vector (const map<key, T> M) {
     vector<key> v;
     typename map<key, T>::const_iterator it;
     for (it = M.begin(); it != M.end(); ++it) {
-        for (T i = 0; i < it-> second; i++) {
+        for (T i = 0; i < it->second; i++) {
             v.push_back(it->first);
         }
     }

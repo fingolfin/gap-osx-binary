@@ -1,0 +1,273 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Free resolution</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Free resolution">
+<META NAME="keywords" CONTENT="Singular Manual: Free resolution">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC912"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_860.htm#SEC911"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Elimination" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_862.htm#SEC913"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Handling graded modules" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.3.4 Free resolution </H3>
+<!--docid::SEC912::-->
+<P>
+
+In S<SMALL>INGULAR</SMALL> a free resolution of a module or ideal has its own type:
+<CODE>resolution</CODE>. It is a structure that stores all information related to
+free resolutions. This allows partial computations of resolutions via
+the command <CODE>res</CODE>. After applying <CODE>res</CODE>, only a pre-format of the
+resolution is computed which allows to determine invariants like
+Betti-numbers or homological dimension. To see the differentials
+of the complex, a resolution must be converted into the type list which
+yields a list of modules: the k-th module in this
+list is the first syzygy-module (module of relations) of the (k-1)st module.
+There are the following commands to compute a resolution:
+<DL COMPACT>
+<DT><CODE>res</CODE>
+<DD> <A HREF="sing_386.htm#SEC425">res</A><BR>
+computes a free resolution of an ideal or module using a heuristically
+chosen method.
+This is the preferred method to compute free resolutions of ideals or
+modules.
+<DT><CODE>lres</CODE>
+<DD> <A HREF="sing_337.htm#SEC376">lres</A><BR>
+computes a free resolution of an ideal or module with LaScala's
+method. The input needs to be homogeneous.
+<DT><CODE>mres</CODE>
+<DD> <A HREF="sing_352.htm#SEC391">mres</A><BR>
+computes a minimal free resolution of an ideal or module with the syzygy
+method.
+<DT><CODE>sres</CODE>
+<DD> <A HREF="sing_400.htm#SEC439">sres</A><BR>
+computes a free resolution of an ideal or module with Schreyer's
+method. The input has to be a standard basis.
+<DT><CODE>nres</CODE>
+<DD> <A HREF="sing_359.htm#SEC398">nres</A><BR>
+computes a free resolution of an ideal or module with the standard basis
+method.
+<DT><CODE>minres</CODE>
+<DD> <A HREF="sing_347.htm#SEC386">minres</A><BR>
+minimizes a free resolution of an ideal or module.
+<DT><CODE>syz</CODE>
+<DD> <A HREF="sing_407.htm#SEC446">syz</A><BR>
+computes the first syzygy module.
+</DL>
+<CODE>res(i,r)</CODE>, <CODE>lres(i,r)</CODE>, <CODE>sres(i,r)</CODE>, <CODE>mres(i,r)</CODE>,
+<CODE>nres(i,r)</CODE> compute the first r modules of the resolution
+of i, resp. the full resolution if r=0 and the basering is not a qring.
+See the manual for a precise description of these commands.
+<BR>Note: The command <CODE>betti</CODE> does not require a minimal
+resolution for the minimal Betti numbers.
+<P>
+
+Now let us take a look at an example which uses resolutions: The Hilbert-Burch
+theorem says that the ideal i of a reduced curve in
+<IMG
+ WIDTH="26" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_353.png"
+ ALT="$K^3$">has a free resolution of length 2 and that i is given by the 2x2 minors
+of the 2nd matrix in the resolution.
+We test this for two transversal cusps in
+<IMG
+ WIDTH="26" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_353.png"
+ ALT="$K^3$">.Afterwards we compute the resolution of the ideal j of the tangent developable
+of the rational normal curve in
+<IMG
+ WIDTH="24" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_352.png"
+ ALT="$P^4$">from above.
+Finally we demonstrate the use of the type <CODE>resolution</CODE> in connection with
+the <CODE>lres</CODE> command.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  // Two transversal cusps in (k^3,0):
+  ring r2 =0,(x,y,z),ds;
+  ideal i =z2-1y3+x3y,xz,-1xy2+x4,x3z;
+  resolution rs=mres(i,0);   // computes a minimal resolution
+  rs;                        // the standard representation of complexes
+==>   1       3       2       
+==> r2 &lt;--  r2 &lt;--  r2
+==> 
+==> 0       1       2       
+==> 
+    list resi=rs;            // convertion to a list
+  print(resi[1]);            // the 1st module is i minimized
+==> xz,
+==> z2-y3+x3y,
+==> xy2-x4
+  print(resi[2]);            // the 1st syzygy module of i
+==> -z,-y2+x3,
+==> x, 0,     
+==> y, z      
+  resi[3];                   // the 2nd syzygy module of i
+==> _[1]=0
+  ideal j=minor(resi[2],2);
+  reduce(j,std(i));          // check whether j is contained in i
+==> _[1]=0
+==> _[2]=0
+==> _[3]=0
+  size(reduce(i,std(j)));    // check whether i is contained in j
+==> 0
+  // size(&lt;ideal&gt;) counts the non-zero generators
+  // ---------------------------------------------
+  // The tangent developable of the rational normal curve in P^4:
+  ring P = 0,(a,b,c,d,e),dp;
+  ideal j= 3c2-4bd+ae, -2bcd+3ad2+3b2e-4ace,
+           8b2d2-9acd2-9b2ce+9ac2e+2abde-1a2e2;
+  resolution rs=mres(j,0);
+  rs;
+==>  1      2      1      
+==> P &lt;--  P &lt;--  P
+==> 
+==> 0      1      2      
+==> 
+  list L=rs;
+  print(L[2]);
+==> 2bcd-3ad2-3b2e+4ace,
+==> -3c2+4bd-ae         
+  // create an intmat with graded Betti numbers
+  intmat B=betti(rs);
+  // this gives a nice output of Betti numbers
+  print(B,"betti");
+==>            0     1     2
+==> ------------------------
+==>     0:     1     -     -
+==>     1:     -     1     -
+==>     2:     -     1     -
+==>     3:     -     -     1
+==> ------------------------
+==> total:     1     2     1
+==> 
+  // the user has access to all Betti numbers
+  // the 2-nd column of B:
+  B[1..4,2];
+==> 0 1 1 0
+  ring cyc5=32003,(a,b,c,d,e,h),dp;
+  ideal i=
+  a+b+c+d+e,
+  ab+bc+cd+de+ea,
+  abc+bcd+cde+dea+eab,
+  abcd+bcde+cdea+deab+eabc,
+  h5-abcde;
+  resolution rs=lres(i,0);   //computes the resolution according LaScala
+  rs;                        //the shape of the minimal resolution
+==>     1         5         10         10         5         1         
+==> cyc5 &lt;--  cyc5 &lt;--  cyc5 &lt;--   cyc5 &lt;--   cyc5 &lt;--  cyc5
+==> 
+==> 0         1         2          3          4         5         
+==> 
+  print(betti(rs),"betti");  //shows the Betti-numbers of cyclic 5
+==>            0     1     2     3     4     5
+==> ------------------------------------------
+==>     0:     1     1     -     -     -     -
+==>     1:     -     1     1     -     -     -
+==>     2:     -     1     1     -     -     -
+==>     3:     -     1     2     1     -     -
+==>     4:     -     1     2     1     -     -
+==>     5:     -     -     2     2     -     -
+==>     6:     -     -     1     2     1     -
+==>     7:     -     -     1     2     1     -
+==>     8:     -     -     -     1     1     -
+==>     9:     -     -     -     1     1     -
+==>    10:     -     -     -     -     1     1
+==> ------------------------------------------
+==> total:     1     5    10    10     5     1
+==> 
+  dim(rs);                   //the homological dimension
+==> 4
+  size(list(rs));            //gets the full (non-reduced) resolution
+==> 6
+  minres(rs);                //minimizes the resolution
+==>     1         5         10         10         5         1         
+==> cyc5 &lt;--  cyc5 &lt;--  cyc5 &lt;--   cyc5 &lt;--   cyc5 &lt;--  cyc5
+==> 
+==> 0         1         2          3          4         5         
+==> 
+  size(list(rs));            //gets the minimized resolution
+==> 6
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Handling graded modules"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_860.htm#SEC911"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Elimination" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_862.htm#SEC913"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Handling graded modules" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

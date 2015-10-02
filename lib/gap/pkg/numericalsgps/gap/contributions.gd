@@ -3,8 +3,6 @@
 #W  contributions.gd          
 ##
 ##
-#H  @(#)$Id: contributions.gd,v 0.98 $
-##
 #Y  The functions in this file have been implemented by researchers that do 
 #Y  not appear as authors of the package. References to its usage should be 
 #Y made as suggested in the manual
@@ -126,3 +124,76 @@ DeclareGlobalFunction("IsAperySetAlphaRectangular");
 ##
 ##############################################################################################################
 DeclareGlobalFunction("TypeSequenceOfNumericalSemigroup");
+
+#############################################################################
+##
+#F  OmegaPrimalityOfElementListInNumericalSemigroup(l,s)
+##
+##  Computes the omega primality of a list of elmenents l in S, 
+##  Implemented by Chris O'Neill.  
+##
+#############################################################################
+DeclareGlobalFunction("OmegaPrimalityOfElementListInNumericalSemigroup");
+
+#############################################################################
+##
+#F  FactorizationsElementListWRTNumericalSemigroup(l,s)
+##
+##  Computes the factorizations of a list of elmenents l in S, 
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+DeclareGlobalFunction("FactorizationsElementListWRTNumericalSemigroup");
+
+
+#############################################################################
+##
+#F  DeltaSetPeriodicityBoundForNumericalSemigroup(s)
+##
+##  Returns a bound on the start of periodic behavior for the delta sets of elements of S.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+DeclareGlobalFunction("DeltaSetPeriodicityBoundForNumericalSemigroup");
+
+#############################################################################
+##
+#F  DeltaSetPeriodicityStartForNumericalSemigroup(n,s)
+##
+##  Returns the exact start of periodicity for the delta sets of elements of S.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+DeclareGlobalFunction("DeltaSetPeriodicityStartForNumericalSemigroup");
+
+#############################################################################
+##
+#F  DeltaSetListUpToElementWRTNumericalSemigroup(n,s)
+##
+##  Computes the delta sets of the elements of S up to and including n.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+DeclareGlobalFunction("DeltaSetListUpToElementWRTNumericalSemigroup");
+
+#############################################################################
+##
+#F  DeltaSetUnionUpToElementWRTNumericalSemigroup(n,s)
+##
+##  Computes the union of the delta sets of the elements of S up to and including n, 
+##  using a ring buffer to conserve memory.  
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+DeclareGlobalFunction("DeltaSetUnionUpToElementWRTNumericalSemigroup");
+
+#############################################################################
+##
+#F  DeltaSetOfNumericalSemigroup(s)
+##
+##  Computes the union of the delta sets of the elements of S up to the bound given in [TODO], 
+##  Implemented by Chris O'Neill
+##
+#############################################################################
+DeclareGlobalFunction("DeltaSetOfNumericalSemigroup");
+        

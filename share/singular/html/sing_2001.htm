@@ -1,0 +1,139 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: signatureL</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: signatureL">
+<META NAME="keywords" CONTENT="Singular Manual: signatureL">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2076"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: phindex_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2002.htm#SEC2077"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: signatureLqf" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2005.htm#SEC2080"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: polybori_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: phindex_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.14.1.1 signatureL </H4>
+<!--docid::SEC2076::-->
+Procedure from library <CODE>phindex.lib</CODE> (see  <A HREF="sing_2000.htm#SEC2075">phindex_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>signatureL(M[,r]); M symmetric matrix, r int (optional).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>the signature of M of type int or if r is given and !=0 then
+intvec with (signature, nr. of +, nr. of -) is returned.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Given the matrix M, we construct the quadratic form associated. Afterwards
+we use the method of Lagrange to compute the signature. The law of
+inertia for a real quadratic form A(x,x) says that in a
+representation of A(x,x) as a sum of independent squares
+A(x,x)=sum_{i=1}^r a_iX_i^2.
+<BR>The number of positive and the number of negative squares are
+independent of the choice of representation. The signature -s- of
+A(x,x) is the difference between the number -pi- of positive squares
+and the number -nu- of negative squares in the representation of
+A(x,x). The rank -r- of M (or A(x,x)) and the signature -s-
+determine the numbers -pi- and -nu- uniquely, since
+<BR>r=pi+nu, s=pi-nu.
+<BR>The method of Lagrange is a procedure to reduce any real quadratic
+form to a sum of squares.
+<BR>Ref. Gantmacher, The theory of matrices, Vol. I, Chelsea Publishing
+Company, NY 1960, page 299.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "phindex.lib";
+ring r=0,(x),ds;
+matrix M[5][5]=0,0,0,1,0,0,1,0,0,-1,0,0,1,0,0,1,0,0,3,0,0,-1,0,0,1;
+signatureL(M,1); //The rank of M is 3+1=4
+==> 2,3,1
+matrix H[5][5]=0,-7,0,1,0,-7,1,0,0,-1,0,0,1,0,0,1,0,0,-3,5,0,-1,0,5,1;
+signatureL(H);
+==> 1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="signatureLqf"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: phindex_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2002.htm#SEC2077"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: signatureLqf" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2005.htm#SEC2080"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: polybori_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: phindex_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,9 +1,9 @@
 SetPackageInfo( rec(
 PackageName := "Browse",
-Version := "1.8.5",
-Date := "20/02/2014",
+Version := "1.8.6",
+Date := "15/08/2014",
 Subtitle := "browsing applications and ncurses interface",
-ArchiveURL := "http://www.math.rwth-aachen.de/~Browse/Browse-1.8.5",
+ArchiveURL := "http://www.math.rwth-aachen.de/~Browse/Browse-1.8.6",
 ArchiveFormats := ".tar.bz2",
 Persons := [
   rec(
@@ -13,7 +13,7 @@ Persons := [
   IsMaintainer := true,
   Email := "Thomas.Breuer@Math.RWTH-Aachen.De",
   WWWHome := "http://www.math.rwth-aachen.de/~Thomas.Breuer",
-  PostalAddress := "Thomas Breuer\nLehrstuhl D für Mathematik\nRWTH Aachen\nTemplergraben 64\n52062 Aachen\nGERMANY\n",
+  PostalAddress := "Thomas Breuer\nLehrstuhl D für Mathematik\nRWTH Aachen\nPontdriesch 14/16\n52062 Aachen\nGERMANY\n",
   Place := "Aachen",
   Institution := "Lehrstuhl D für Mathematik, RWTH Aachen"
   ),
@@ -24,7 +24,7 @@ Persons := [
   IsMaintainer := true,
   Email := "Frank.Luebeck@Math.RWTH-Aachen.De",
   WWWHome := "http://www.math.rwth-aachen.de/~Frank.Luebeck",
-  PostalAddress := "Frank Lübeck\nLehrstuhl D für Mathematik\nRWTH Aachen\nTemplergraben 64\n52062 Aachen\nGERMANY\n",
+  PostalAddress := "Frank Lübeck\nLehrstuhl D für Mathematik\nRWTH Aachen\nPontdriesch 14/16\n52062 Aachen\nGERMANY\n",
   Place := "Aachen",
   Institution := "Lehrstuhl D für Mathematik, RWTH Aachen"
   )

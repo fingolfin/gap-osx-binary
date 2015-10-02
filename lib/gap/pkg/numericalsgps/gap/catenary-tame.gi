@@ -5,8 +5,6 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: catenary-tame.gi,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado,
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the
@@ -597,38 +595,13 @@ end);
 ##  V. Blanco, P. A. Garc\'{\i}a-S\'anchez, A. Geroldinger, 
 ##  Semigroup-theoretical characterizations of arithmetical invariants with 
 ##  applications to numerical monoids and Krull monoids, {arXiv}:1006.4222v1.
-##
+##  Current implementation optimized by C. O'Neill based on a work in progress 
+##  by O'Neill, Pelayo and Thomas and uses 
+##  OmegaPrimalityOfElemtListInNumericalSemgiroup
 #############################################################################
 InstallGlobalFunction(OmegaPrimalityOfElementInNumericalSemigroup, function(n,s)
-
-	local candidates,msg,fact,c, le,sum;
-
-    if not IsNumericalSemigroup(s) then
-        Error("The second argument must be a numerical semigroup.\n");
-    fi;
-
-
-    if not ( n in s ) then
-        Error("The first argument must be an element of the second.\n");
-    fi;
-
-        le:=function(a,b)  #ordinary partial order
-            return ForAll(b-a,x-> x>=0);
-        end;
-
-        msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
-
-        candidates:=Union(List(msg, x-> n + AperyListOfNumericalSemigroupWRTElement(s,x)));
-        fact:=[];
-
-        for c in candidates do
-            fact:=Union(fact,FactorizationsIntegerWRTList(c,msg));
-        od;
-
-        fact:=Filtered(fact, f-> ForAll(fact, z-> not(le(z,f)) or z=f));
-        sum:=Set(fact,Sum);
-
-        return Maximum(sum);
+    return OmegaPrimalityOfElementListInNumericalSemigroup([n],s)[1];
+    
 end);
 
 #############################################################################
@@ -665,6 +638,10 @@ InstallGlobalFunction(FactorizationsIntegerWRTList,function(n,ls)
 
 	if not(IsListOfIntegersNS(ls) and ForAll(ls, x->IsPosInt(x))) then
 		Error("The list must be a list of positive integers.\n");
+	fi;
+
+	if Length(ls)<>Length(Set(ls)) then #repeated elements
+		return NSGPfactorizationsNC(n,ls);
 	fi;
 	
 	translate:=function(l) 
@@ -913,5 +890,631 @@ InstallGlobalFunction(RClassesOfSetOfFactorizations, function(l)
 
     return(current);
 
+end);
+
+########################################################
+#  MaximalDenumerantOfElementInNumericalSemigroup(x,s)
+#  returns the number of factorizations of maximal length of x in 
+#  the numerical semigroup s
+########################################################
+InstallGlobalFunction(MaximalDenumerantOfElementInNumericalSemigroup, 
+function(x,s)
+	local max, fact;
+
+    if not IsNumericalSemigroup(s) then
+        Error("The second argument must be a numerical semigroup.\n");
+    fi;
+
+    if not ( x in s ) then
+        Error("The first argument must be an element of the second.\n");
+    fi;
+	
+	fact:=FactorizationsElementWRTNumericalSemigroup(x,s);
+	max:=Maximum(Set(fact,Sum));
+	
+	return Length(Filtered(fact, x->Sum(x)=max));
+end);
+
+########################################################
+#  MaximalDenumerantOfSetOfFactorizations(ls)
+#  returns the number of factorizations of maximal length in ls
+########################################################
+InstallGlobalFunction(MaximalDenumerantOfSetOfFactorizations,
+function(ls)
+	local max;
+	
+	if not(IsRectangularTable(ls) and IsListOfIntegersNS(ls[1])) then
+		Error("The argument is not a list of factorizations.\n");
+	fi;
+	if Minimum(Flat(ls))<0 then 
+		Error("Coefficients must be nonnegative integers.\n");
+	fi;
+
+	max:=Maximum(Set(ls,Sum));
+	
+	return Length(Filtered(ls, x->Sum(x)=max));
+end);
+
+
+########################################################
+# MaximalDenumerantOfNumericalSemigroup(s)
+# computes the maximal denumerant of a numerical semigroup
+# by using de algorithm given by Bryant and Hamblin 
+# Semigroup Forum 86 (2013), 571-582
+########################################################
+InstallGlobalFunction(MaximalDenumerantOfNumericalSemigroup, function(s)
+	local adj, ord, minord, msg, bmsg, p, m, ap, adjSi, i, Si, apb, bi, b, x, md, j, lr, bj;
+	
+	if(not(IsNumericalSemigroup(s)))then
+		Error("The argument must be anumerical semigroup.\n");
+	fi;
+
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	m:=MultiplicityOfNumericalSemigroup(s);
+	ap:=AperyListOfNumericalSemigroupWRTElement(s,m);
+	b:=BlowUpOfNumericalSemigroup(s);
+	apb:=AperyListOfNumericalSemigroupWRTElement(b,m);
+
+	bmsg:=ShallowCopy(msg-m);
+	bmsg[1]:=m;
+
+	ord:=function(x)
+		return Maximum(LengthsOfFactorizationsIntegerWRTList(x,msg));
+	end;
+
+	adj:=function(x)
+		return x-ord(x)*m;
+	end;
+
+	md:=0;
+
+	for i in [0..m-1] do
+		x:=ap[i+1];
+		Si:=[x];
+		bi:=apb[i+1]+m*Minimum(LengthsOfFactorizationsIntegerWRTList(apb[i+1],bmsg));
+		while x<= bi do
+			x:=x+m;
+			if x in s then 
+				Add(Si,x);
+			fi;
+		od;
+		adjSi:=Set(Si,adj);
+		#Print(adjSi," ");
+		lr:=[];
+		lr[1]:=Length(FactorizationsIntegerWRTList(adjSi[1],bmsg));
+		for j in [2..Length(adjSi)] do
+			bj:=Minimum(LengthsOfFactorizationsIntegerWRTList(adjSi[j-1],bmsg))-(adjSi[j]-adjSi[j-1])/m;
+			lr[j]:=Length(Filtered(FactorizationsIntegerWRTList(adjSi[j],bmsg), x->Sum(x)<bj)); 
+			#Print(lr[j]," ");
+		od;
+		#Print(Maximum(lr),"\n");
+		md:=Maximum(md,Maximum(lr));
+	od;
+	return md;
+end);
+
+########################################################
+# AdjustmentOfNumericalSemigroup(s)
+# computes the adjustment a numerical semigroup
+# by using de algorithm given by Bryant and Hamblin 
+# Semigroup Forum 86 (2013), 571-582
+########################################################
+InstallGlobalFunction(AdjustmentOfNumericalSemigroup,function(s)
+	local adj, ord, minord, msg, bmsg, p, m, ap, adjSi, i, Si, apb, bi, b, x, j, bj, adjust;
+	
+	if(not(IsNumericalSemigroup(s)))then
+		Error("The argument must be anumerical semigroup.\n");
+	fi;
+
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	m:=MultiplicityOfNumericalSemigroup(s);
+	ap:=AperyListOfNumericalSemigroupWRTElement(s,m);
+	b:=BlowUpOfNumericalSemigroup(s);
+	apb:=AperyListOfNumericalSemigroupWRTElement(b,m);
+
+	bmsg:=ShallowCopy(msg-m);
+	bmsg[1]:=m;
+
+	ord:=function(x)
+		return Maximum(LengthsOfFactorizationsIntegerWRTList(x,msg));
+	end;
+
+	adj:=function(x)
+		return x-ord(x)*m;
+	end;
+
+	adjust:=[];
+	for i in [0..m-1] do
+		x:=ap[i+1];
+		Si:=[x];
+		bi:=apb[i+1]+m*Minimum(LengthsOfFactorizationsIntegerWRTList(apb[i+1],bmsg));
+		while x<= bi do
+			x:=x+m;
+			if x in s then 
+				Add(Si,x);
+			fi;
+		od;
+		adjSi:=Set(Si,adj);
+		#Print(adjSi," ");
+		adjust:=Union(adjust,adjSi);
+	od;
+	return adjust;
+end);
+
+##############################################################
+# IsAdditiveNumericalSemigroup(s)
+# Detects if s is an additive numerical semigroup, that is, 
+# ord(m+x)=ord(x)+1 for all x in s. For these semigroups gr_m(K[[s]]) is 
+# Cohen-Macaulay.	
+# We use Proposition 4.7 in  Semigroup Forum 86 (2013), 571-582
+##############################################################
+InstallGlobalFunction(IsAdditiveNumericalSemigroup, function(s)
+	local b,m;
+
+	if(not(IsNumericalSemigroup(s)))then
+		Error("The argument must be anumerical semigroup.\n");
+	fi;
+
+	m:=MultiplicityOfNumericalSemigroup(s);
+	b:=BlowUpOfNumericalSemigroup(s);
+	return AdjustmentOfNumericalSemigroup(s)
+				=AperyListOfNumericalSemigroupWRTElement(b,m);
+end);
+
+
+##############################################################
+# IsSuperSymmetricNumericalSemigroup(s)
+# Detects if s is a numerical semigroup is supersymmetric, that is, 
+# it is symmetric, additive and whenever w+w'=f+m 
+# (with m the multiplicity and f the Frobenius number) we have 
+# ord(w+w')=ord(w)+ord(w')
+##############################################################
+InstallGlobalFunction(IsSuperSymmetricNumericalSemigroup,function(s)
+	local ap,m, ord, msg, f, om;
+
+	if(not(IsNumericalSemigroup(s)))then
+		Error("The argument must be anumerical semigroup.\n");
+	fi;
+
+	if not(IsSymmetricNumericalSemigroup(s)) then
+		return false;
+	fi;
+
+	if not(IsAdditiveNumericalSemigroup(s)) then
+		return false;
+	fi;
+
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	m:=MultiplicityOfNumericalSemigroup(s);
+	ap:=AperyListOfNumericalSemigroupWRTElement(s,m);
+	f:=FrobeniusNumberOfNumericalSemigroup(s);
+
+	ord:=function(x)
+		return Maximum(LengthsOfFactorizationsIntegerWRTList(x,msg));
+	end;
+	
+	ap:=Filtered(ap, x-> x<=(f+m)/2);
+	om:=ord(f+m);
+	return ForAll(ap, x-> om=ord(x)+ord(f+m-x));
+end);
+
+#######################################################################
+# BelongsToHomogenizationOfNumericalSemigroup(n,s)
+# checks if the pair n belongs to the homogenization of s
+#######################################################################
+InstallGlobalFunction(BelongsToHomogenizationOfNumericalSemigroup, function(n,s)
+	local msg;
+
+    if not IsNumericalSemigroup(s) then
+        Error("The second argument must be a numerical semigroup.\n");
+    fi;
+	
+	if not IsListOfIntegersNS(n) then 
+		Error("The first argument must be a list of integers");
+	fi;
+
+	if n[1]<0 or n[2]<0 then 
+		return false;
+	fi;
+
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	return First(FactorizationsIntegerWRTList(n[2],msg), x-> Sum(x)<= n[1])<>fail;	
+end);
+
+#######################################################################
+# FactorizationsInHomogenizationOfNumericalSemigroup(n,s)
+# computes the set of factorizations of  n with respect to generators of  
+# the homogenization of s
+#######################################################################
+InstallGlobalFunction(FactorizationsInHomogenizationOfNumericalSemigroup, function(n,s)
+	local msg, fact, facthom, x, xhom;
+
+    if not IsNumericalSemigroup(s) then
+        Error("The second argument must be a numerical semigroup.\n");
+    fi;
+	
+	if not IsListOfIntegersNS(n) then 
+		Error("The first argument must be a list of integers");
+	fi;
+
+	if n[1]<0 or n[2]<0 then 
+		return [];
+	fi;
+
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+	fact:=Filtered(FactorizationsIntegerWRTList(n[2],msg), x-> Sum(x)<= n[1]);	
+	facthom:=[];
+	for x in fact do
+		xhom:=Concatenation([n[1]-Sum(x)],x);
+		Add(facthom,xhom);
+	od;
+	return facthom;
+end);
+
+#######################################################################
+# HomogeneousBettiElementsOfNumericalSemigroup(s) 
+#  Computes the Betti elements of the Homogenization of s 
+#  uses Cox-Little-O'Shea, Chapter 8, Theorem 4  [CLOS] for finding 
+#  a system of generators of the ideal of S^h
+#######################################################################
+InstallGlobalFunction(HomogeneousBettiElementsOfNumericalSemigroup,function( s )
+    local i, p, rel, rgb, msg, pol, ed,  sdegree, monomial,  candidates, mp;
+    
+    msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+    ed:=Length(msg);
+    if NumSgpsCanUseSI or NumSgpsCanUseSingular or NumSgpsCanUse4ti2 then
+        msg:=List(msg, m->[1,m]);
+        msg:=Concatenation([[1,0]],msg);
+        return BettiElementsOfAffineSemigroup(
+                       AffineSemigroup(msg));      
+    fi;
+    
+    mp:=MinimalPresentationOfNumericalSemigroup(s);
+    p := [];
+	# list of exponents to monomial	
+	monomial:=function(l)
+		local i;
+		pol:=1;
+		for i in [1..ed] do
+			pol:=pol*Indeterminate(Rationals,i)^l[i];
+		od;
+		return pol;
+	end;
+
+    for rel in mp do
+        Add( p, monomial(rel[1])-monomial(rel[2])); 
+    od;
+
+    rgb := ReducedGroebnerBasis( p, MonomialGrevlexOrdering() );
+    ## the homogenization of this is a system of genetators of the ideal of S^h
+
+	 ##computes the s^h degree of a pol in the semigroup ideal 
+    sdegree:=function(r) 
+		local mon;
+		mon:=LeadingMonomialOfPolynomial(r,MonomialGrlexOrdering() );
+		return [Sum(List([1..ed],i->DegreeIndeterminate(mon,i))),Sum(List([1..ed],i-> msg[i]*DegreeIndeterminate(mon,i)))];
+    end;
+
+    candidates:=List(rgb, g-> sdegree(g));    
+
+    candidates:=Filtered(candidates, x-> Length(RClassesOfSetOfFactorizations(
+		FactorizationsInHomogenizationOfNumericalSemigroup(x,s)))>1);
+    return Set(candidates);
+end);
+
+####################################################################
+#F HomogeneousCatenaryDegreeOfNumericalSemigroup(s) computes the 
+##  homogeneous catenary degree of the numerical semigroup s ([GSOSN])
+####################################################################
+InstallGlobalFunction(HomogeneousCatenaryDegreeOfNumericalSemigroup,function( s )
+	local betti;
+
+    if not IsNumericalSemigroup(s) then
+        Error("The argument must be a numerical semigroup.\n");
+    fi;
+	betti:=HomogeneousBettiElementsOfNumericalSemigroup(s);
+	
+	return Maximum(Set(betti,b-> CatenaryDegreeOfSetOfFactorizations(
+		FactorizationsInHomogenizationOfNumericalSemigroup(b,s))));
+end);
+
+########################################
+#F DenumerantElementInNumericalSemigroup(n,s)
+## returns the denumerant
+########################################
+InstallGlobalFunction(DenumerantOfElementInNumericalSemigroup, function(x,s)
+	
+    if not IsNumericalSemigroup(s) then
+        Error("The second argument must be a numerical semigroup.\n");
+    fi;
+
+    if not ( x in s ) then
+		return 0;
+    fi;
+	
+	return Length(FactorizationsElementWRTNumericalSemigroup(x,s));
+end);
+
+####################################################################
+#F MoebiusFunctionAssociatedToNumericalSemigroup(s,x)
+## Computes the value in x of  Moebius function of the poset 
+## associated to a numerial semigroup s 
+## -Chappelon and Ramirez Alfonsin, Semigroup Forum 87 (2013), 313-330
+####################################################################
+InstallGlobalFunction(MoebiusFunctionAssociatedToNumericalSemigroup,function(s,x)
+	local small, mu, msg, m, ap;
+
+	if not(IsNumericalSemigroup(s)) then
+		Error("The first argument must be a numerical semigroup.\n");
+	fi;	
+
+
+	if not(IsInt(x)) then
+		Error("The second argument must be an integer.\n");
+	fi;	
+
+	if x<0 then return 0;	fi;
+
+	if x=0 then return 1; fi;
+
+	if not(x in s) then return 0; fi;
+
+
+	msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+
+	if x in msg then return -1; fi;
+
+	m:=MultiplicityOfNumericalSemigroup(s);
+	ap:=Difference(AperyListOfNumericalSemigroupWRTElement(s,m),[0]);
+	small:=Filtered(ap, y->y<=x);
+
+	#Print(small,"\n");
+	mu:=function(y)
+		local sm;
+		if y=0 then return 1; fi;
+		if y in msg then return -1; fi;
+		if not(y in s) then return 0;fi;
+		sm:=Filtered(ap,z->z<=y);
+		return -Sum(List(y-sm,mu));
+	end;
+	
+
+	return -Sum(List(x-small,mu));
+	
+end);
+
+###################################################################
+#F  AdjacentCatenaryDegreeOfSetOfFactorizations(ls)
+## computes the adjacent catenary degree of the set of factorizations ls
+###################################################################
+InstallGlobalFunction(AdjacentCatenaryDegreeOfSetOfFactorizations,function(ls)
+    local distance, Fn, lenset, Zi, facti, i;
+
+
+	if not(IsRectangularTable(ls) and IsListOfIntegersNS(ls[1])) then
+		Error("The argument is not a list of factorizations.\n");
+	fi;
+
+    # distance between two factorizations
+    distance:=function(x,y)
+        local p,n,i,z;
+
+        p:=0; n:=0;
+        z:=x-y;
+        for i in [1..Length(z)] do
+            if z[i]>0 then
+                p:=p+z[i];
+            else
+                n:=n+z[i];
+            fi;
+        od;
+
+        return Maximum(p,-n);
+    end;    
+
+	Fn:=Set(ShallowCopy(ls));
+    lenset:=Set( ls, Sum );
+    if Length(lenset)=1 then 
+	return 0;
+    fi;
+    Zi:=[];
+    for i in lenset do
+        facti:=Filtered( Fn, x->Sum(x)=i );
+        SubtractSet( Fn, facti );
+        Add( Zi, facti );
+    od;
+    return Maximum( List( [2..Length( Zi )], t->Minimum( List( Zi[t-1], x->Minimum( List( Zi[t], y->distance( x, y ) ) ) ) ) ) );
+end);
+
+###################################################################
+#F EqualCatenaryDegreeOfSetOfFactorizations(ls) 
+## computes the equal catenary degree of of the set of factorizations
+###################################################################
+InstallGlobalFunction(EqualCatenaryDegreeOfSetOfFactorizations,function(ls)
+    local distance, lFni;
+
+	if not(IsRectangularTable(ls) and IsListOfIntegersNS(ls[1])) then
+		Error("The argument is not a list of factorizations.\n");
+	fi;
+
+ 
+   # distance between two factorizations
+    distance:=function(x,y)
+        local p,n,i,z;
+
+        p:=0; n:=0;
+        z:=x-y;
+        for i in [1..Length(z)] do
+            if z[i]>0 then
+                p:=p+z[i];
+            else
+                n:=n+z[i];
+            fi;
+        od;
+
+        return Maximum(p,-n);
+    end;    
+
+
+    lFni:=Set( ls, t->Sum( t ) );
+    return Maximum( List( lFni, y->CatenaryDegreeOfSetOfFactorizations( Filtered( ls, x->Sum( x )=y ) ) ) );
+end);
+
+
+###################################################################
+#F MonotoneCatenaryDegreeOfSetOfFactorizations(ls) 
+## computes the equal catenary degree of of the set of factorizations
+###################################################################
+InstallGlobalFunction(MonotoneCatenaryDegreeOfSetOfFactorizations,function(ls)
+    return Maximum(AdjacentCatenaryDegreeOfSetOfFactorizations(ls), 
+		EqualCatenaryDegreeOfSetOfFactorizations( ls ));
+end);
+
+
+############################################################
+#F LShapesOfNumericalSemigroup(s)
+## computes the set of LShapes associated to S (see [AG-GS])
+##########################################################
+InstallGlobalFunction(LShapesOfNumericalSemigroup,function(s)
+	local ap, facts, total, totalfact,  new, w, z, n, ones,l, leq ;
+
+	leq:=function(x,y)
+		return ForAll(y-x, t->t>=0);
+	end;
+
+	l:=MinimalGeneratingSystemOfNumericalSemigroup(s);	
+	n:=Length(l);
+	ap:=Set(AperyListOfNumericalSemigroupWRTElement(s, l[n])) ;
+	ones:=List([1..n-1],_->1);
+
+	total:=[[]];
+	for w in ap do
+		facts:=FactorizationsIntegerWRTList(w,l{[1..n-1]});
+		totalfact:=[];
+		for z in facts do
+			new:=Filtered(total, ll->Length(Filtered(ll, x->leq(x,z)))=Product(z+ones)-1);
+			new:=List(new, ll->Concatenation(ll,[z]));
+			totalfact:=Union(totalfact,new);
+		od;
+		total:=(totalfact);
+	od;
+
+	return total;
+end);
+
+
+###########################################################################
+#F  MonotonePrimitiveElementsOfNumericalSemigroup(s)
+##
+## Computes the sets of elements in s, such that there exists a minimal 
+## solution to msg*x-msg*y = 0, |x|<=|y| such that x,y are factorizations of s
+## Used to compute the monotone catenary degree of the semigroup s
+##
+#############################################################################
+InstallGlobalFunction(MonotonePrimitiveElementsOfNumericalSemigroup,function(s)
+	local l, n, facs, mat, ones, ncone, nmzcone,nmzconeproperty;
+
+    if not IsNumericalSemigroup(s) then
+        Error("The argument must be a numerical semigroup.\n");
+    fi;
+
+    # if not IsPackageMarkedForLoading("NormalizInterface","0.0") then
+    #     Error("The package NormalizInterface is not loaded.\n");
+    # fi;
+
+    l:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+    n:=Length(l);
+    ones:=List([1..n],_->1);
+    mat:=[];
+    mat[1]:=Concatenation(l,-l,[0]);
+    mat[2]:=Concatenation(ones,-ones,[1]);
+    # nmzcone:=ValueGlobal("NmzCone");#Display(mat);
+    # ncone:=nmzcone(["equations",mat]); 
+    # nmzconeproperty:=ValueGlobal("NmzConeProperty");
+    # facs:=nmzconeproperty(ncone,"HilbertBasis");
+    facs:=HilbertBasisOfSystemOfHomogeneousEquations(mat,[]);    
+    facs:=Set(facs,m->m{[1..n]});
+    return Set(facs, f-> f*l);
+end);
+
+###########################################################################
+#F  EqualPrimitiveElementsOfNumericalSemigroup(s)
+##
+## Computes the sets of elements in s, such that there exists a minimal 
+## solution to msg*x-msg*y = 0, |x|=|y| such that x,y are factorizations of s
+## Used to compute the equal catenary degree of the semigroup
+##
+#############################################################################
+InstallGlobalFunction(EqualPrimitiveElementsOfNumericalSemigroup,function(s)
+	local l, n, facs, mat, ones, ncone, nmzcone,nmzconeproperty;
+
+    if not IsNumericalSemigroup(s) then
+        Error("The argument must be a numerical semigroup.\n");
+    fi;
+
+    # if not IsPackageMarkedForLoading("NormalizInterface","0.0") then
+    # 	Error("The package NormalizInterface is not loaded.\n");
+    # fi;
+
+    l:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+    n:=Length(l);
+    ones:=List([1..n],_->1);
+    mat:=[];
+    mat[1]:=Concatenation(l,-l);
+    mat[2]:=Concatenation(ones,-ones);
+    # nmzcone:=ValueGlobal("NmzCone");#Display(mat);
+    # ncone:=nmzcone(["equations",mat]); 
+    # nmzconeproperty:=ValueGlobal("NmzConeProperty");
+    # facs:=nmzconeproperty(ncone,"HilbertBasis");
+    facs:=HilbertBasisOfSystemOfHomogeneousEquations(mat,[]);    
+    facs:=Set(facs,m->m{[1..n]});
+    return Set(facs, f-> f*l);
+end);
+
+
+####################################################################
+#F EqualCatenaryDegreeOfNumericalSemigroup(s) computes the 
+##  adjacent catenary degree of the numerical semigroup s
+##  the equal catenary degree is reached in the set of primitive
+##  elements of s (see [PH])
+####################################################################
+InstallGlobalFunction(EqualCatenaryDegreeOfNumericalSemigroup,function(s)
+	local prim, msg;
+    if not IsNumericalSemigroup(s) then
+        Error("The argument must be a numerical semigroup.\n");
+    fi;
+
+    # if not IsPackageMarkedForLoading("NormalizInterface","0.0") then
+    # 	Error("The package NormalizInterface is not loaded.\n");
+    # fi;
+
+    msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+    prim:=EqualPrimitiveElementsOfNumericalSemigroup(s);
+
+    return Maximum(Set(prim, n-> EqualCatenaryDegreeOfSetOfFactorizations(
+                   FactorizationsIntegerWRTList(n,msg))));
+end);
+
+####################################################################
+#F MonotoneCatenaryDegreeOfNumericalSemigroup(s) computes the 
+##  adjacent catenary degree of the numerical semigroup s
+##  the monotone catenary degree is reached in the set of primitive
+##  elements of s (see [PH])
+####################################################################
+InstallGlobalFunction(MonotoneCatenaryDegreeOfNumericalSemigroup,function(s)
+	local prim, msg;
+    if not IsNumericalSemigroup(s) then
+        Error("The argument must be a numerical semigroup.\n");
+    fi;
+
+    # if not IsPackageMarkedForLoading("NormalizInterface","0.0") then
+    #     Error("The package NormalizInterface is not loaded.\n");
+    # fi;
+
+    msg:=MinimalGeneratingSystemOfNumericalSemigroup(s);
+    prim:=MonotonePrimitiveElementsOfNumericalSemigroup(s);
+
+    return Maximum(Set(prim, n-> MonotoneCatenaryDegreeOfSetOfFactorizations(
+                   FactorizationsIntegerWRTList(n,msg))));
 end);
 

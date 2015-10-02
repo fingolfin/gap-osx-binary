@@ -1,0 +1,167 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: printf</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: printf">
+<META NAME="keywords" CONTENT="Singular Manual: printf">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC413"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_373.htm#SEC412"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: print" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_375.htm#SEC414"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: prune" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.115 printf </H3>
+<!--docid::SEC413::-->
+Procedure from library <CODE>standard.lib</CODE> (see  <A HREF="sing_927.htm#SEC1002">standard_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>printf (</CODE> string_expression <CODE>[,</CODE> any_expressions<CODE>] )</CODE>
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>none
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD><CODE>printf(fmt,...);</CODE> performs output formatting. The first
+argument is a format control string. Additional arguments may be
+required, depending on the content of the control string. A series
+of output characters is generated as directed by the control string;
+these characters are displayed (i.e., printed to standard out). <BR>
+The control string <CODE>fmt</CODE> is simply text to be copied, except
+that the string may contain conversion specifications. <BR>
+Type <CODE>help print;</CODE> for a listing of valid conversion
+specifications. As an addition to the conversions of <CODE>print</CODE>,
+the <CODE>%n</CODE> and <CODE>%2</CODE> conversion specification does not
+consume an additional argument, but simply generates a newline
+character.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>If one of the additional arguments is a list, then it should be
+enclosed once more into a <CODE>list()</CODE> command, since passing a
+list as an argument flattens the list by one level.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x,y,z),dp;
+module m=[1,y],[0,x+z];
+intmat M=betti(mres(m,0));
+list l=r,m,matrix(M);
+printf("s:%s,l:%l",1,2);
+==> s:1,l:int(2)
+printf("s:%s",l);
+==> s:(0),(x,y,z),(dp(3),C)
+printf("s:%s",list(l));
+==> s:(0),(x,y,z),(dp(3),C),y*gen(2)+gen(1),x*gen(2)+z*gen(2),1,1
+printf("2l:%2l",list(l));
+==> 2l:list("(0),(x,y,z),(dp(3),C)",
+==> module(y*gen(2)+gen(1),
+==> x*gen(2)+z*gen(2)),
+==> matrix(ideal(1,
+==> 1),1,2))
+==> 
+printf("%p",matrix(M));
+==> 1,1
+printf("%;",matrix(M));
+==> _[1,1]=1
+==> _[1,2]=1
+==> 
+printf("%b",M);
+==>            0     1
+==> ------------------
+==>     0:     1     1
+==> ------------------
+==> total:     1     1
+==> 
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_301.htm#SEC340">fprintf</A>;
+ <A HREF="sing_373.htm#SEC412">print</A>;
+ <A HREF="sing_399.htm#SEC438">sprintf</A>;
+ <A HREF="sing_166.htm#SEC205">string</A>.
+<P>
+
+<A NAME="prune"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_373.htm#SEC412"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: print" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_375.htm#SEC414"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: prune" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

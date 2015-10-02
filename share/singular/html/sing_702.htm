@@ -1,0 +1,149 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ncdetection</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ncdetection">
+<META NAME="keywords" CONTENT="Singular Manual: ncdetection">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC753"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_701.htm#SEC752"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findAuto" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_703.htm#SEC754"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: involution" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: freegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: involut_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.9.0. ncdetection </H5>
+<!--docid::SEC753::-->
+Procedure from library <CODE>involut.lib</CODE> (see  <A HREF="sing_698.htm#SEC749">involut_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>ncdetection();
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal, representing an involution map
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute classical involutions (i.e. acting rather on operators than on variables) for some particular noncommutative algebras
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>the procedure is aimed at non-commutative algebras with differential, shift or advance operators arising in Control Theory.
+It has to be executed in a ring.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "involut.lib";
+ring R = 0,(x,y,z,D(1..3)),dp;
+matrix D[6][6];
+D[1,4]=1; D[2,5]=1;  D[3,6]=1;
+def r = nc_algebra(1,D); setring r;
+ncdetection();
+==> _[1]=x
+==> _[2]=y
+==> _[3]=z
+==> _[4]=-D(1)
+==> _[5]=-D(2)
+==> _[6]=-D(3)
+kill r, R;
+//----------------------------------------
+ring R=0,(x,S),dp;
+def r = nc_algebra(1,-S); setring r;
+ncdetection();
+==> _[1]=-x
+==> _[2]=S
+kill r, R;
+//----------------------------------------
+ring R=0,(x,D(1),S),dp;
+matrix D[3][3];
+D[1,2]=1;  D[1,3]=-S;
+def r = nc_algebra(1,D); setring r;
+ncdetection();
+==> _[1]=-x
+==> _[2]=D(1)
+==> _[3]=S
+</FONT></pre></td></tr></table><P>
+
+<A NAME="involution"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_701.htm#SEC752"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findAuto" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_703.htm#SEC754"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: involution" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: freegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: involut_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

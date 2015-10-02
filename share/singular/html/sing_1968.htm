@@ -1,0 +1,186 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: tropicalCurve</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: tropicalCurve">
+<META NAME="keywords" CONTENT="Singular Manual: tropicalCurve">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2043"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1967.htm#SEC2042"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayPuiseuxExpansion" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1969.htm#SEC2044"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: drawTropicalCurve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.3.5 tropicalCurve </H4>
+<!--docid::SEC2043::-->
+Procedure from library <CODE>tropical.lib</CODE> (see  <A HREF="sing_1963.htm#SEC2038">tropical_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>tropicalCurve(tp[,#]); tp list, # optional list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>tp is list of linear polynomials of the form ax+by+c
+<BR>with integers a, b and a rational number c representing
+a tropical Laurent polynomial defining a tropical plane curve;
+alternatively tp can be a polynomial in Q(t)[x,y] defining a
+tropical plane curve via the valuation map;
+<BR>the basering must have a global monomial ordering,
+<BR>two variables and up to one parameter!
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, each entry i=1,...,size(l)-1 corresponds to a vertex
+in the tropical plane curve defined by tp
+<BR>l[i][1] = x-coordinate of the ith vertex
+<BR>l[i][2] = y-coordinate of the ith vertex
+<BR>l[i][3] = intmat, if j is an entry in the first row
+<BR>of intmat then the ith vertex of
+<BR>the tropical curve is connected to the
+<BR>jth vertex with multiplicity given
+<BR>by the corresponding entry in the second row
+<BR>l[i][4] = list of lists, the first entry of a list is
+a primitive integer vector defining the direction
+<BR>of an unbounded edge emerging from the ith vertex
+<BR>of the graph, the corresponding second entry in
+<BR>the list is the multiplicity of the unbounded edge
+<BR>l[i][5] = a polynomial whose monomials mark the vertices
+in the Newton polygon corresponding to the entries
+<BR>in tp which take the common minimum at the ith
+<BR>vertex -- if some coefficient a or b of the
+<BR>linear polynomials in the input was negative,
+<BR>then each monomial has to be shifted by
+<BR>the values in l[size(l)][3]
+<BR>l[size(l)][1] = list, the entries describe the boundary
+points of the Newton subdivision
+<BR>l[size(l)][2] = list, the entries are pairs of integer
+vectors defining an interior
+<BR>edge of the Newton subdivision
+<BR>l[size(l)][3] = intvec, the monmials occuring in l[i][5]
+have to be shifted by this vector
+<BR>in order to represent marked
+<BR>vertices in the Newton polygon
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>here the tropical polynomial is supposed to be the MINIMUM
+of the linear forms in tp, unless the optional input #[1]
+is the string 'max'
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "tropical.lib";
+ring r=(0,t),(x,y),dp;
+poly f=t*(x7+y7+1)+1/t*(x4+y4+x2+y2+x3y+xy3)+1/t7*x2y2;
+list graph=tropicalCurve(f);
+// the tropical curve has size(graph)-1 vertices
+size(graph)-1;
+// the coordinates of the first vertex are graph[1][1],graph[1][2];
+graph[1][1],graph[1][2];
+// the first vertex is connected to the vertices
+//     graph[1][3][1,1..ncols(graph[1][3])]
+intmat M=graph[1][3];
+M[1,1..ncols(graph[1][3])];
+// the weights of the edges to these vertices are
+//     graph[1][3][2,1..ncols(graph[1][3])]
+M[2,1..ncols(graph[1][3])];
+// from the first vertex emerge size(graph[1][4]) unbounded edges
+size(graph[1][4]);
+// the primitive integral direction vector of the first unbounded edge
+//     of the first vertex
+graph[1][4][1][1];
+// the weight of the first unbounded edge of the first vertex
+graph[1][4][1][2];
+// the monomials which are part of the Newton subdivision of the first vertex
+graph[1][5];
+// connecting the points in graph[size(graph)][1] we get
+//     the boundary of the Newton polytope
+graph[size(graph)][1];
+// an entry in graph[size(graph)][2] is a pair of points
+//     in the Newton polytope bounding an inner edge
+graph[size(graph)][2][1];
+</FONT></pre></td></tr></table><P>
+
+<A NAME="drawTropicalCurve"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1967.htm#SEC2042"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayPuiseuxExpansion" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1969.htm#SEC2044"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: drawTropicalCurve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

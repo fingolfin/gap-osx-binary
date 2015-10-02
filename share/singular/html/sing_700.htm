@@ -1,0 +1,179 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: findInvoDiag</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: findInvoDiag">
+<META NAME="keywords" CONTENT="Singular Manual: findInvoDiag">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC751"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_699.htm#SEC750"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findInvo" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_701.htm#SEC752"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: findAuto" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: freegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: involut_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.9.0. findInvoDiag </H5>
+<!--docid::SEC751::-->
+Procedure from library <CODE>involut.lib</CODE> (see  <A HREF="sing_698.htm#SEC749">involut_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>findInvoDiag();
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a ring together with a list of pairs L, where
+<BR> L[i][1] = ideal; a Groebner Basis of an i-th associated prime,
+<BR> L[i][2] = matrix, defining a linear map, with entries, reduced with respect to L[i][1]
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute homothetic (diagonal) involutions of the basering
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>the relations on the algebra are of the form YX = XY + D, that is
+the current ring is a G-algebra of Lie type.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>for convenience, the full ideal of relations <CODE>idJ</CODE>
+and the initial matrix with indeterminates <CODE>matD</CODE> are exported in the output ring
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "involut.lib";
+def a = makeWeyl(1);
+setring a; // this algebra is a first Weyl algebra
+a;
+==> //   characteristic : 0
+==> //   number of vars : 2
+==> //        block   1 : ordering dp
+==> //                  : names    x D
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    Dx=xD+1
+def X = findInvoDiag();
+setring X; // ring with new variables, corresponding to unknown coefficients
+X;
+==> //   characteristic : 0
+==> //   number of vars : 2
+==> //        block   1 : ordering dp
+==> //                  : names    a11 a22
+==> //        block   2 : ordering C
+// print matrices, defining linear involutions
+print(L[1][2]);  // a first matrix: we see it is constant
+==> -1,0,
+==> 0, 1 
+print(L[2][2]);  // and a second possible matrix; it is constant too
+==> 1,0,
+==> 0,-1
+L; // let us take a look on the whole list
+==> [1]:
+==>    [1]:
+==>       _[1]=a22-1
+==>       _[2]=a11+1
+==>    [2]:
+==>       _[1,1]=-1
+==>       _[1,2]=0
+==>       _[2,1]=0
+==>       _[2,2]=1
+==> [2]:
+==>    [1]:
+==>       _[1]=a22+1
+==>       _[2]=a11-1
+==>    [2]:
+==>       _[1,1]=1
+==>       _[1,2]=0
+==>       _[2,1]=0
+==>       _[2,2]=-1
+idJ;
+==> idJ[1]=a11*a22+1
+==> idJ[2]=a11^2-1
+==> idJ[3]=a22^2-1
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_699.htm#SEC750">findInvo</A>;
+ <A HREF="sing_703.htm#SEC754">involution</A>.
+<P>
+
+<A NAME="findAuto"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_699.htm#SEC750"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findInvo" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_701.htm#SEC752"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: findAuto" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: freegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: involut_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

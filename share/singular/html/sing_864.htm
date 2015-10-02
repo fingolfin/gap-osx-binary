@@ -1,0 +1,168 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Depth</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Depth">
+<META NAME="keywords" CONTENT="Singular Manual: Depth">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC915"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_863.htm#SEC914"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Computation of Ext" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_865.htm#SEC916"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Factorization" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.3.7 Depth </H3>
+<!--docid::SEC915::-->
+<P>
+
+We compute the depth of the module of Kaehler differentials
+D<IMG
+ WIDTH="12" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_370.png"
+ ALT="$_k$">(R)of the variety defined by the 
+<IMG
+ WIDTH="58" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_371.png"
+ ALT="$(m+1)$">-minors of a generic symmetric
+<IMG
+ WIDTH="55" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_372.png"
+ ALT="$(n \times n)$">-matrix.We do this by computing the resolution over the polynomial
+ring.  Then, by the Auslander-Buchsbaum formula, the depth is equal to
+the number of variables minus the length of a minimal resolution.  This
+example was suggested by U. Vetter in order to check whether his bound
+<!-- MATH
+ $\hbox{depth}(\hbox{D}_k(R))\geq m(m+1)/2 + m-1$
+ -->
+<IMG
+ WIDTH="267" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_373.png"
+ ALT="$\hbox{depth}(\hbox{D}_k(R))\geq m(m+1)/2 + m-1$">could be improved.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  LIB "matrix.lib"; LIB "sing.lib";
+  int n = 4;
+  int m = 3;
+  int N = n*(n+1) div 2;       // will become number of variables
+  ring R = 32003,x(1..N),dp;
+  matrix X = symmat(n);        // proc from matrix.lib
+                               // creates the symmetric generic nxn matrix
+  print(X);
+==> x(1),x(2),x(3),x(4),
+==> x(2),x(5),x(6),x(7),
+==> x(3),x(6),x(8),x(9),
+==> x(4),x(7),x(9),x(10)
+  ideal J = minor(X,m);
+  J=std(J);
+  // Kaehler differentials D_k(R)
+  // of R=k[x1..xn]/J:
+  module D = J*freemodule(N)+transpose(jacob(J));
+  ncols(D);
+==> 110
+  nrows(D);
+==> 10
+  //
+  // Note: D is a submodule with 110 generators of a free module
+  // of rank 10 over a polynomial ring in 10 variables.
+  // Compute a full resolution of D with sres.
+  // This takes about 17 sec on a Mac PB 520c and 2 sec an a HP 735
+  int time = timer;
+  module sD = std(D);
+  list Dres = sres(sD,0);                // the full resolution
+  timer-time;                            // time used for std + sres
+==> 0
+  intmat B = betti(Dres);
+  print(B,"betti");
+==>            0     1     2     3     4     5     6
+==> ------------------------------------------------
+==>     0:    10     -     -     -     -     -     -
+==>     1:     -    10     -     -     -     -     -
+==>     2:     -    84   144    60     -     -     -
+==>     3:     -     -    35    80    60    16     1
+==> ------------------------------------------------
+==> total:    10    94   179   140    60    16     1
+==> 
+  N-ncols(B)+1;                          // the desired depth
+==> 4
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Factorization"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_863.htm#SEC914"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Computation of Ext" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_865.htm#SEC916"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Factorization" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

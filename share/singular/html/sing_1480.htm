@@ -1,0 +1,187 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: mod_versal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: mod_versal">
+<META NAME="keywords" CONTENT="Singular Manual: mod_versal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1555"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1479.htm#SEC1554"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: versal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1481.htm#SEC1556"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: lift_kbase" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1467.htm#SEC1542"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: curvepar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: equising_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: deform_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.5.2 mod_versal </H4>
+<!--docid::SEC1555::-->
+Procedure from library <CODE>deform.lib</CODE> (see  <A HREF="sing_1478.htm#SEC1553">deform_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>mod_versal(Mo,Io[,d,any]); Io=ideal, Mo=module, d=int, any =list
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>miniversal deformation of coker(Mo) over Qo=Po/Io, Po=basering;
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list L of 4 rings:
+<BR>L[1] extending the basering Po by new variables given by
+"A,B,.." (deformation parameters); the new variables precede
+the old ones, the ordering is the product of "ls" and "ord(Po)" <BR>
+L[2] = L[1]/Io extending Qo, <BR>
+L[3] = the embedding ring of the versal base space, <BR>
+L[4] = L[1]/(Io+Js) ring of the versal deformation of coker(Ms). <BR>
+In the ring L[1] the following matrices are stored:
+<BR>Js = giving the versal base space (obstructions),
+<BR>Fs = giving the versal family of Mo,
+<BR>Rs = giving the lifting of syzygies Lo=syz(Mo).
+If d is defined (!=0), it computes up to degree d.
+<BR>If 'any' is defined and any[1] is no string, interactive version.
+<BR>Otherwise 'any' is interpreted as a list of predefined strings:
+"my","param","order","out": <BR>
+("my" internal prefix, "param" is a letter (e.g. "A") for the
+name of the first parameter or (e.g. "A(") for index parameter
+variables, "order" ordering string for ring extension), "out" name
+of output file).
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>printlevel &lt; 0 no additional output,
+<BR>printlevel &gt;=0,1,2,.. informs you, what is going on,
+<BR>this proc uses 'execute'.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "deform.lib";
+int p = printlevel;
+printlevel = 1;
+ring  Ro = 0,(x,y),wp(3,4);
+ideal Io = x4+y3;
+matrix Mo[2][2] = x2,y,-y2,x2;
+list L = mod_versal(Mo,Io);
+==> // vdim (Ext^2) = 4
+==> // vdim (Ext^1) = 4
+==> // ready: Ext1 and Ext2
+==> // Ext1 is quasi-homogeneous represented: 3,6,1,4
+==> // infinitesimal extension
+==> x2-Ax-B,   y+Cx+D,
+==> -y2+Cxy+Dy,x2+Ax+B
+==> // start deg = 2
+==> // start deg = 3
+==> // start deg = 4
+==> // start deg = 5
+==> // finished in degree 
+==> 5
+==> // quasi-homogeneous weights of miniversal base
+==> 3,
+==> 6,
+==> 1,
+==> 4 
+==> 
+==> // 'mod_versal' returned a list, say L, of four rings. In L[2] are stored\
+   :
+==> //   as matrix Ms: presentation matrix of the deformed module,
+==> //   as matrix Ls: lifted syzygies,
+==> //   as matrix Js:  Equations of total space of miniversal deformation
+==> // To access these data, type
+==>      def Qx=L[2]; setring Qx; print(Ms); print(Ls); print(Js);
+==> 
+def Qx=L[2]; setring Qx;
+print(Ms);
+==> x2-Ax-B+A2-C3x-3C2D+AC3,y+Cx+D,
+==> -y2+Cxy+Dy-C2x2-2CDx-D2,x2+Ax+B
+print(Ls);
+==> -y-Cx-D,                x2+Ax+B,              
+==> x2-Ax-B+A2-C3x-3C2D+AC3,y2-Cxy-Dy+C2x2+2CDx+D2
+print(Js);
+==> -2AB+A3+3CD2-BC3-3AC2D+A2C3,
+==> -B2+A2B+D3-3BC2D+ABC3,      
+==> 0,                          
+==> 0                           
+printlevel = p;
+if (defined(Px)) {kill Px,Qx,So;}
+</FONT></pre></td></tr></table><P>
+
+<A NAME="lift_kbase"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1479.htm#SEC1554"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: versal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1481.htm#SEC1556"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: lift_kbase" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1467.htm#SEC1542"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: curvepar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: equising_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: deform_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

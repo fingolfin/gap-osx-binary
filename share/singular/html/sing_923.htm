@@ -1,0 +1,626 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Decoding method based on quadratic equations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Decoding method based on quadratic equations">
+<META NAME="keywords" CONTENT="Singular Manual: Decoding method based on quadratic equations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC992"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_922.htm#SEC989"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Fitzgerald-Lax method" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_924.htm#SEC997"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: References for decoding with Groebner bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_917.htm#SEC973"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Non-commutative algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_925.htm#SEC998"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: References" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_918.htm#SEC974"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Decoding codes with Groebner bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> C.8.5 Decoding method based on quadratic equations </H3>
+<!--docid::SEC992::-->
+<P>
+
+<A NAME="SEC993"></A>
+<H4> Preliminary definitions </H4>
+<!--docid::SEC993::-->
+<P>
+
+  Let <!-- MATH
+ ${\bf b}_1,\dots,{\bf b}_n$
+ -->
+<IMG
+ WIDTH="76" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_997.png"
+ ALT="${\bf b}_1,\dots,{\bf b}_n$"> be a basis of <IMG
+ WIDTH="26" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_998.png"
+ ALT="$F_q^n$"> and let <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_999.png"
+ ALT="$B$"> be the <IMG
+ WIDTH="43" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1000.png"
+ ALT="$n \times n$"> matrix with
+  <!-- MATH
+ ${\bf b}_1,\dots,{\bf b}_n$
+ -->
+<IMG
+ WIDTH="76" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_997.png"
+ ALT="${\bf b}_1,\dots,{\bf b}_n$"> as rows. The <B>unknown syndrome</B> <!-- MATH
+ ${\bf u}(B,{\bf e})$
+ -->
+<IMG
+ WIDTH="55" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1001.png"
+ ALT="${\bf u}(B,{\bf e})$"> of a word <IMG
+ WIDTH="13" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_920.png"
+ ALT="${\bf e}$"> w.r.t <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_999.png"
+ ALT="$B$">
+  is the column vector <!-- MATH
+ ${\bf u}(B,{\bf e})=B{\bf e}^T$
+ -->
+<IMG
+ WIDTH="108" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1002.png"
+ ALT="${\bf u}(B,{\bf e})=B{\bf e}^T$"> with entries <!-- MATH
+ $u_i(B,{\bf e})={\bf b}_i\cdot {\bf e}$
+ -->
+<IMG
+ WIDTH="116" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1003.png"
+ ALT="$u_i(B,{\bf e})={\bf b}_i\cdot {\bf e}$"> for <IMG
+ WIDTH="84" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1004.png"
+ ALT="$i=1,\dots,n$">.
+
+<P>
+For two vectors <!-- MATH
+ ${\bf x,y} \in F_q^n$
+ -->
+<IMG
+ WIDTH="72" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1005.png"
+ ALT="${\bf x,y} \in F_q^n$"> define
+  <!-- MATH
+ ${\bf x*y}=(x_1y_1,\dots,x_ny_n)$
+ -->
+<IMG
+ WIDTH="173" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1006.png"
+ ALT="${\bf x*y}=(x_1y_1,\dots,x_ny_n)$">. Then <!-- MATH
+ ${\bf b}_i*{\bf b_j}$
+ -->
+<IMG
+ WIDTH="50" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1007.png"
+ ALT="${\bf b}_i*{\bf b_j}$"> is a linear combination of
+  <!-- MATH
+ ${\bf b}_1,\dots,{\bf b}_n$
+ -->
+<IMG
+ WIDTH="76" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_997.png"
+ ALT="${\bf b}_1,\dots,{\bf b}_n$">, so there are constants <!-- MATH
+ $\mu^{ij}_l\in F_q$
+ -->
+<IMG
+ WIDTH="62" HEIGHT="38" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1008.png"
+ ALT="$\mu^{ij}_l\in F_q $"> such that
+  <!-- MATH
+ ${\bf b}_i*{\bf b}_j = \sum_{l=1}^n \mu^{ij}_l{\bf b}_l.$
+ -->
+<IMG
+ WIDTH="154" HEIGHT="38" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1009.png"
+ ALT="${\bf b}_i*{\bf b}_j = \sum_{l=1}^n \mu^{ij}_l{\bf b}_l.$">
+  The elements <!-- MATH
+ $\mu^{ij}_l\in F_q$
+ -->
+<IMG
+ WIDTH="62" HEIGHT="38" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1008.png"
+ ALT="$\mu^{ij}_l\in F_q $"> are the <B>structure constants</B> of the basis <!-- MATH
+ ${\bf b}_1,\dots,{\bf b}_n$
+ -->
+<IMG
+ WIDTH="76" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_997.png"
+ ALT="${\bf b}_1,\dots,{\bf b}_n$">.
+
+<P>
+Let <IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1010.png"
+ ALT="$B_s$"> be the <IMG
+ WIDTH="41" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1011.png"
+ ALT="$s \times n$"> matrix with <!-- MATH
+ ${\bf b}_1,\dots,{\bf b}_s$
+ -->
+<IMG
+ WIDTH="74" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1012.png"
+ ALT="${\bf b}_1,\dots,{\bf b}_s$"> as rows (<IMG
+ WIDTH="59" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1013.png"
+ ALT="$B=B_n$">).
+  Then <!-- MATH
+ ${\bf b}_1,\dots,{\bf b}_n$
+ -->
+<IMG
+ WIDTH="76" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_997.png"
+ ALT="${\bf b}_1,\dots,{\bf b}_n$"> is an <B>ordered MDS basis</B> and <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_999.png"
+ ALT="$B$"> an <B>MDS matrix</B> if all
+  the <IMG
+ WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1014.png"
+ ALT="$s\times s$"> submatrices of <IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1010.png"
+ ALT="$B_s$"> have rank <IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_1015.png"
+ ALT="$s$"> for all <IMG
+ WIDTH="86" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1016.png"
+ ALT="$s=1 ,\dots ,n$">.</P><P>
+
+<A NAME="SEC994"></A>
+<H4> Expressing known syndromes </H4>
+<!--docid::SEC994::-->
+  Let <IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_77.png"
+ ALT="$C$"> be an <IMG
+ WIDTH="22" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_697.png"
+ ALT="$F_q$">-linear code with parameters <IMG
+ WIDTH="54" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_702.png"
+ ALT="$[n,k,d]$">. W.l.o.g <IMG
+ WIDTH="43" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_856.png"
+ ALT="$n\le q$">. <IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_703.png"
+ ALT="$H$"> is a check matrix of <IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_77.png"
+ ALT="$C$">.
+  Let <!-- MATH
+ ${\bf h}_1,\dots,{\bf h}_{n-k}$
+ -->
+<IMG
+ WIDTH="93" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_857.png"
+ ALT="${\bf h}_1,\dots,{\bf h}_{n-k}$"> be the rows of <IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_703.png"
+ ALT="$H$">.
+  One can express <!-- MATH
+ ${\bf h}_i = \sum _{j=1}^n a_{ij}{\bf b}_j$
+ -->
+<IMG
+ WIDTH="120" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_858.png"
+ ALT="${\bf h}_i = \sum _{j=1}^n a_{ij}{\bf b}_j$"> with some <IMG
+ WIDTH="61" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_859.png"
+ ALT="$a_{ij}\in F_q$">.
+  In other words <IMG
+ WIDTH="65" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_860.png"
+ ALT="$H=AB$"> where <IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_187.png"
+ ALT="$A$"> is the <!-- MATH
+ $(n-k) \times n$
+ -->
+<IMG
+ WIDTH="84" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_861.png"
+ ALT="$(n-k) \times n$"> matrix with entries <IMG
+ WIDTH="24" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_862.png"
+ ALT="$a_{ij}$">.
+
+<P>
+Let <!-- MATH
+ ${\bf r}={\bf c}+{\bf e}$
+ -->
+<IMG
+ WIDTH="69" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_731.png"
+ ALT="${\bf r}={\bf c}+{\bf e}$"> be a received word with <IMG
+ WIDTH="45" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_732.png"
+ ALT="${\bf c}\in C$"> and <IMG
+ WIDTH="13" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_733.png"
+ ALT="${\bf e}$"> an error vector.
+  The syndromes of <IMG
+ WIDTH="12" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_725.png"
+ ALT="${\bf r}$"> and <IMG
+ WIDTH="13" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_733.png"
+ ALT="${\bf e}$"> w.r.t <IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_703.png"
+ ALT="$H$"> are equal and known:
+  <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+s_i({\bf r}):={\bf h}_i \cdot {\bf r}={\bf h}_i\cdot {\bf e}=s_i({\bf e}).
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="207" HEIGHT="28" BORDER="0"
+ SRC="sing_863.png"
+ ALT="\begin{displaymath}
+s_i({\bf r}):={\bf h}_i \cdot {\bf r}={\bf h}_i\cdot {\bf e}=s_i({\bf e}).
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+They can be expressed in the unknown syndromes of <IMG
+ WIDTH="13" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_733.png"
+ ALT="${\bf e}$"> w.r.t <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_192.png"
+ ALT="$B$">:
+  <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+s_i({\bf r})=s_i({\bf e}) =\sum _{j=1}^n a_{ij}u_j({\bf e})
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="189" HEIGHT="55" BORDER="0"
+ SRC="sing_864.png"
+ ALT="\begin{displaymath}
+s_i({\bf r})=s_i({\bf e}) =\sum _{j=1}^n a_{ij}u_j({\bf e})
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+since <!-- MATH
+ ${\bf h}_i = \sum _{j=1}^n a_{ij}{\bf b}_j$
+ -->
+<IMG
+ WIDTH="120" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_858.png"
+ ALT="${\bf h}_i = \sum _{j=1}^n a_{ij}{\bf b}_j$"> and <!-- MATH
+ ${\bf b}_j \cdot {\bf e}=u_j({\bf e})$
+ -->
+<IMG
+ WIDTH="99" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_865.png"
+ ALT="${\bf b}_j \cdot {\bf e}=u_j({\bf e})$">.<P>
+
+<A NAME="SEC995"></A>
+<H4> Contructing the system </H4>
+<!--docid::SEC995::-->
+<P>
+
+  Let <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_999.png"
+ ALT="$B$"> be an MDS matrix with structure constants <IMG
+ WIDTH="25" HEIGHT="38" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1017.png"
+ ALT="$\mu^{ij}_l$">.
+  Define <IMG
+ WIDTH="27" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1018.png"
+ ALT="$U_{ij}$"> in the variables <!-- MATH
+ $U_1, \dots ,U_n$
+ -->
+<IMG
+ WIDTH="77" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1019.png"
+ ALT="$U_1, \dots ,U_n$"> by
+  <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+U_{ij}=\sum _{l=1}^n \mu^{ij}_lU_l.
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="107" HEIGHT="54" BORDER="0"
+ SRC="sing_1020.png"
+ ALT="\begin{displaymath}
+U_{ij}=\sum _{l=1}^n \mu^{ij}_lU_l.
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+The ideal <IMG
+ WIDTH="35" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1021.png"
+ ALT="$J({\bf r})$"> in <!-- MATH
+ $F_q[U_1,\dots,U_n]$
+ -->
+<IMG
+ WIDTH="104" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1022.png"
+ ALT="$F_q[U_1,\dots,U_n]$"> is generated by
+  <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+\sum_{l=1}^n a_{jl}U_l-s_j({\bf r})  \hbox{ for }   j=1,\dots,n-k.
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="255" HEIGHT="54" BORDER="0"
+ SRC="sing_1023.png"
+ ALT="\begin{displaymath}
+\sum_{l=1}^n a_{jl}U_l-s_j({\bf r}) \hbox{ for } j=1,\dots,n-k.
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+The ideal <IMG
+ WIDTH="69" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1024.png"
+ ALT="$I(t,U,V)$"> in <!-- MATH
+ $F_q[U_1,\dots,U_n,V_1,\dots,V_t]$
+ -->
+<IMG
+ WIDTH="177" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1025.png"
+ ALT="$F_q[U_1,\dots,U_n,V_1,\dots,V_t]$">
+  is generated by
+  <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+\sum_{j=1}^t U_{ij}V_j-U_{i,t+1} \hbox{ for } i=1,\dots,n
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="232" HEIGHT="57" BORDER="0"
+ SRC="sing_1026.png"
+ ALT="\begin{displaymath}
+\sum_{j=1}^t U_{ij}V_j-U_{i,t+1} \hbox{ for } i=1,\dots,n
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+Let <IMG
+ WIDTH="48" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1027.png"
+ ALT="$J(t,{\bf r})$"> be the ideal in <!-- MATH
+ $F_q[U_1,\dots,U_n,V_1,\dots,V_t]$
+ -->
+<IMG
+ WIDTH="177" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1025.png"
+ ALT="$F_q[U_1,\dots,U_n,V_1,\dots,V_t]$">
+  generated by <IMG
+ WIDTH="35" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1021.png"
+ ALT="$J({\bf r})$"> and <IMG
+ WIDTH="69" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1024.png"
+ ALT="$I(t,U,V)$">.</P><P>
+
+<A NAME="SEC996"></A>
+<H4> Main theorem </H4>
+<!--docid::SEC996::-->
+<P>
+
+  Let <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_192.png"
+ ALT="$B$"> be an MDS matrix with structure constants <IMG
+ WIDTH="25" HEIGHT="38" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_866.png"
+ ALT="$\mu^{ij}_l$">.  Let <IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_703.png"
+ ALT="$H$"> be a check matrix of the code <IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_77.png"
+ ALT="$C$"> such that <IMG
+ WIDTH="65" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_860.png"
+ ALT="$H=AB$"> as above.
+  Let <!-- MATH
+ ${\bf r}={\bf c}+{\bf e}$
+ -->
+<IMG
+ WIDTH="69" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_731.png"
+ ALT="${\bf r}={\bf c}+{\bf e}$"> be a received word with <IMG
+ WIDTH="45" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_732.png"
+ ALT="${\bf c}\in C$"> the codeword sent
+  and <IMG
+ WIDTH="13" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_733.png"
+ ALT="${\bf e}$"> the error vector. Suppose that  <!-- MATH
+ $wt({\bf e})\ne 0$
+ -->
+<IMG
+ WIDTH="72" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_877.png"
+ ALT="$wt({\bf e})\ne 0$"> and <!-- MATH
+ $wt({\bf e})\le\lfloor (d(C)-1)/2\rfloor$
+ -->
+<IMG
+ WIDTH="167" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_878.png"
+ ALT="$wt({\bf e})\le\lfloor (d(C)-1)/2\rfloor$">.
+  Let <IMG
+ WIDTH="10" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_400.png"
+ ALT="$t$"> be the smallest positive integer such that <IMG
+ WIDTH="48" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_876.png"
+ ALT="$J(t,{\bf r})$"> has a solution <IMG
+ WIDTH="44" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_879.png"
+ ALT="$({\bf u,v})$"> over the algebraic closure of
+  <IMG
+ WIDTH="22" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_697.png"
+ ALT="$F_q$">. Then<UL>
+<LI>
+  <IMG
+ WIDTH="70" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_880.png"
+ ALT="$wt({\bf e})=t$"> and the solution is unique and of multiplicity one satisfying <!-- MATH
+ ${\bf u}={\bf u}({\bf e})$
+ -->
+<IMG
+ WIDTH="67" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_881.png"
+ ALT="${\bf u}={\bf u}({\bf e})$">.<LI>
+  the reduced Gr&#246;bner basis <IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_1028.png"
+ ALT="$G$"> for the ideal <IMG
+ WIDTH="48" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1027.png"
+ ALT="$J(t,{\bf r})$"> w.r.t any
+  monomial ordering is
+  <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+U_i-u_i({\bf e}), i=1,\dots,n,
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="160" HEIGHT="28" BORDER="0"
+ SRC="sing_1029.png"
+ ALT="\begin{displaymath}
+U_i-u_i({\bf e}), i=1,\dots,n,
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+  <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+V_j-v_j, j=1,\dots,t,
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="138" HEIGHT="29" BORDER="0"
+ SRC="sing_1030.png"
+ ALT="\begin{displaymath}
+V_j-v_j, j=1,\dots,t,
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+where <!-- MATH
+ $({\bf u}({\bf e}),{\bf v})$
+ -->
+<IMG
+ WIDTH="65" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_1031.png"
+ ALT="$({\bf u}({\bf e}),{\bf v})$"> is the unique solution.</UL>
+<P>
+
+For an example see <CODE>sysQE</CODE> in  <A HREF="sing_1764.htm#SEC1839">decodegb_lib</A>. More on this method can be found in  <A HREF="sing_924.htm#[BP2008a]">[BP2008a]</A>.
+</P><P>
+
+<A NAME="References for decoding with Groebner bases"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_922.htm#SEC989"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Fitzgerald-Lax method" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_924.htm#SEC997"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: References for decoding with Groebner bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_917.htm#SEC973"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Non-commutative algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_925.htm#SEC998"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: References" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_918.htm#SEC974"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Decoding codes with Groebner bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

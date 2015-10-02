@@ -1,0 +1,168 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: module_containment</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: module_containment">
+<META NAME="keywords" CONTENT="Singular Manual: module_containment">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1186"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1110.htm#SEC1185"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: algebra_containment" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1112.htm#SEC1187"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: inSubring" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.2.2 module_containment </H4>
+<!--docid::SEC1186::-->
+Procedure from library <CODE>algebra.lib</CODE> (see  <A HREF="sing_1109.htm#SEC1184">algebra_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>module_containment(p,P,M[,k]); p poly, P ideal, M ideal, k int
+<BR> P = P[1],...,P[n] generators of a subalgebra of the basering,
+<BR> M = M[1],...,M[m] generators of a module over the subalgebra K[P]
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>ncols(P) = nvars(basering), the P[i] are algebraically independent
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD><TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">         - k=0 (or if k is not given), an integer:
+           1    : if p is contained in the module &lt;M[1],...,M[m]&gt; over K[P]
+           0    : if p is not contained in &lt;M[1],...,M[m]&gt;
+         - k=1, a list, say l, of size 2, l[1] integer, l[2] ring:
+           l[1]=1 : if p is in &lt;M[1],...,M[m]&gt; and then the ring l[2] contains
+             the polynomial check = h(y(1),...,y(m),z(1),...,z(n)) if
+             p = h(M[1],...,M[m],P[1],...,P[n])
+           l[1]=0 : if p is in not in &lt;M[1],...,M[m]&gt;, then l[2] contains the
+             poly check = h(x,y(1),...,y(m),z(1),...,z(n)) if p satisfies
+             the nonlinear relation p = h(x,M[1],...,M[m],P[1],...,P[n]) where
+             x = x(1),...,x(n) denote the variables of the basering
+</pre></td></tr></table><P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>the polynomial h(y(1),...,y(m),z(1),...,z(n)) if k=0, resp.
+a comment how to access the relation check if k=1, provided
+printlevel &gt;= voice+1 (default).
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>The ideal of algebraic relations of all the generators p1,...,pn,
+s1,...,st given by P and S is computed introducing new variables y(j),
+z(i) and the product order: x^a*y^b*z^c &gt; x^d*y^e*z^f if x^a &gt; x^d
+with respect to the lp ordering or else if z^c &gt; z^f with respect to
+the dp ordering or else if y^b &gt; y^e with respect to the lp ordering
+again. p reduces to a polynomial only in the y(j) and z(i), linear in
+the z(i) &lt;=&gt; p is contained in the module.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "algebra.lib";
+int p = printlevel; printlevel = 1;
+ring R=0,(x,y,z),dp;
+ideal P = x2+y2,z2,x4+y4;           //algebra generators
+ideal M = 1,x2z-1y2z,xyz,x3y-1xy3;  //module generators
+poly p1=
+x10z3-x8y2z3+2x6y4z3-2x4y6z3+x2y8z3-y10z3+x6z4+3x4y2z4+3x2y4z4+y6z4;
+module_containment(p1,P,M);
+==> // y(2)*z(2)*z(3)^2+z(1)^3*z(2)^2
+==> 1
+poly p2=z;
+list l = module_containment(p2,P,M,1);
+==> 
+==> // 'module_containment' created a ring as 2nd element of the list. The
+==> // ring contains the polynomial check which defines the algebraic relatio\
+   n
+==> // for p. To access to the ring and see check you must give the ring
+==> // a name, e.g.:
+==>      def S = l[2]; setring S; check;
+==>       
+l[1];
+==> 0
+def S = l[2]; setring S; check;
+==> x(3)
+printlevel=p;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="inSubring"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1110.htm#SEC1185"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: algebra_containment" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1112.htm#SEC1187"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: inSubring" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

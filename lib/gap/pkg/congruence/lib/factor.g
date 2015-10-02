@@ -9,7 +9,7 @@
 # though if space is not a problem, this could just return
 # the Length of the labels.
 
-max_label:= function(L)
+__congruence_max_label:= function(L)
   local s, i;
   s:=1;
   for i in [1..Length(L)] do
@@ -31,10 +31,10 @@ end;;
 
 # assume L is a list of integers, or "odd" or "even".
 
-edgepairs := function(L)
+__congruence_edgepairs := function(L)
   local max, pairs, i;
   pairs:=[];
-  max:=max_label(L);
+  max:=__congruence_max_label(L);
   for i in [1..max+2] do
       pairs[i] := [];
   od;
@@ -71,7 +71,7 @@ end;;
 # then it would not have to be recomputed
 #
 
-gluing_matrices := function(FS)
+__congruence_gluing_matrices := function(FS)
    local cusps, gens, label_list, glue_list, l, i, index, gfs, labels, matrix;
    # the following is a list of the cusps of the sequence,
    # and other data extracted from the FareySymbol
@@ -79,7 +79,7 @@ gluing_matrices := function(FS)
    labels := LabelsOfFareySymbol(FS);
    gens := GeneratorsByFareySymbol( FS );
    # make a list of which edges have a given label:
-   label_list := edgepairs(labels);
+   label_list := __congruence_edgepairs(labels);
    # the following list will be what is finally returned, 
    # a list of integers as described above.
    glue_list := [];
@@ -126,7 +126,7 @@ end;;
 # which is a number between 1 and #L-1,
 # or it returns "overlap" meaning that there is overlap, but not equality.
 
-longest_edge := function(ImL)
+__congruence_longest_edge := function(ImL)
    local i, minImL, maxImL, maxindex, minindex;
    for i in [1..Length(ImL)] do
       if ImL[i] = infinity then
@@ -141,7 +141,7 @@ end;;
 
 # Need to be able to apply action of matrices to cusps
 
-fractionallineartransformation:= function(g,c)
+__congruence_fractionallineartransformation:= function(g,c)
   local den, num;
   if c = infinity then
     if g[2][1] = 0 then
@@ -160,11 +160,11 @@ fractionallineartransformation:= function(g,c)
   fi;
 end;;
 
-PSL2multiply := function(g,L)
+__congruence_PSL2multiply := function(g,L)
   local imL, i;
   imL := [];
   for i in [1..Length(L)] do
-    Add(imL,fractionallineartransformation(g,L[i]));
+    Add(imL,__congruence_fractionallineartransformation(g,L[i]));
   od;
   return imL;
 end;;
@@ -176,12 +176,12 @@ find_word_ver2 := function(FS,glue_list,g)
    local gens, L, ImL, done, word,letter,i, edge, h, maybesame, inf;
    gens := GeneratorsByFareySymbol( FS );
    L := GeneralizedFareySequence( FS );
-   ImL := PSL2multiply(g,L);
+   ImL := __congruence_PSL2multiply(g,L);
    word:=[];
    h := g;
    done := false;
    while not done do;      
-      edge := longest_edge(ImL);
+      edge := __congruence_longest_edge(ImL);
       if edge = "infinity" then
          # check equality of L and ImL:
          maybesame := true;
@@ -217,13 +217,13 @@ find_word_ver2 := function(FS,glue_list,g)
          fi;
          Add(word,letter);
          h:=h*gens[AbsoluteValue(letter)]^(-SignInt(letter));
-         ImL := PSL2multiply(h,L);
+         ImL := __congruence_PSL2multiply(h,L);
       else
          # get next "letter" in the word for the matrix:
          letter := glue_list[edge];
          Add(word,letter);
       h:=h*gens[AbsoluteValue(letter)]^(-SignInt(letter));
-      ImL := PSL2multiply(h,L);
+      ImL := __congruence_PSL2multiply(h,L);
       fi;
    od;
    return Reversed(word);
@@ -234,9 +234,9 @@ end;;
 #
 # FactorizeMat( G, g )
 #
-FactorizeMat := function( G, g )
+__congruence_FactorizeMat := function( G, g )
 return find_word_ver2( FareySymbol(G), 
-                       gluing_matrices(FareySymbol(G)),
+                       __congruence_gluing_matrices(FareySymbol(G)),
                        g );
 end;
 
@@ -249,7 +249,7 @@ end;
 # of which is bigger than the size of the list of generators.  
 # a word [4,6,-3] will return the product gens[4]*gens[6]*gens[3]^(-1)
 #
-CheckFactorizeMat := function(gens,word)
+__congruence_CheckFactorizeMat := function(gens,word)
 local g, i;
 g := [[1,0],[0,1]];
 for i in word do

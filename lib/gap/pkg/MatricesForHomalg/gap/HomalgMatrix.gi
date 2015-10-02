@@ -1663,6 +1663,40 @@ InstallMethod( Iterator,
     
 end );
 
+##
+InstallMethod( Select,
+        "for a matrix and a list",
+        [ IsHomalgMatrix, IsList ],
+        
+  function( M, L )
+    local R, indets, zero, map, N;
+    
+    R := HomalgRing( M );
+    
+    if HasRelativeIndeterminatesOfPolynomialRing( R ) then
+        indets := RelativeIndeterminatesOfPolynomialRing( R );
+    elif HasIndeterminatesOfPolynomialRing( R ) then
+        indets := IndeterminatesOfPolynomialRing( R );
+    else
+        TryNextMethod( );
+    fi;
+    
+    if not IsSubset( indets, L ) then
+        Error( "the second argument is not a subset of the list of indeterminates\n" );
+    fi;
+    
+    zero := Zero( R );
+    
+    map := List( indets, function( a ) if a in L then return a; else return zero; fi; end );
+    
+    map := RingMap( map, R, R );
+    
+    N := Pullback( map, M );
+    
+    return CertainRows( M, ZeroRows( M - N ) );
+    
+end );
+
 ####################################
 #
 # constructor functions and methods:

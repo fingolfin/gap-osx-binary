@@ -1,0 +1,221 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Tor</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Tor">
+<META NAME="keywords" CONTENT="Singular Manual: Tor">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1243"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1167.htm#SEC1242"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tensorMod" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.7.20 Tor </H4>
+<!--docid::SEC1243::-->
+Procedure from library <CODE>homolog.lib</CODE> (see  <A HREF="sing_1148.htm#SEC1223">homolog_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Compute:</STRONG>
+<DD>a presentation of Tor_k(M',N'), for k=v[1],v[2],... , where
+M'=coker(M) and N'=coker(N): let
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>       0 &lt;-- M' &lt;-- G0 &lt;-M-- G1
+       0 &lt;-- N' &lt;-- F0 &lt;--N- F1 &lt;-- F2 &lt;--...
+</FONT></pre></td></tr></table>be a presentation of M', resp. a free resolution of N', and consider
+the commutative diagram
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>          0                    0                    0
+          |^                   |^                   |^
+  Tensor(M',Fk+1) -Ak+1-&gt; Tensor(M',Fk) -Ak-&gt; Tensor(M',Fk-1)
+          |^                   |^                   |^
+  Tensor(G0,Fk+1) -Ak+1-&gt; Tensor(G0,Fk) -Ak-&gt; Tensor(G0,Fk-1)
+                               |^                   |^
+                               |C                   |B
+                          Tensor(G1,Fk) ----&gt; Tensor(G1,Fk-1)
+
+       (Ak,Ak+1 induced by N and B,C induced by M).
+</FONT></pre></td></tr></table>Let K=modulo(Ak,B), J=module(C)+module(Ak+1) and Tor=modulo(K,J),
+then we have exact sequences
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>    R^p  --K-&gt; Tensor(G0,Fk) --Ak-&gt; Tensor(G0,Fk-1)/im(B),
+
+    R^q -Tor-&gt; R^p --K-&gt; Tensor(G0,Fk)/(im(C)+im(Ak+1)).
+</FONT></pre></td></tr></table>Hence, Tor presents Tor_k(M',N').
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>- if v is of type int: module Tor, a presentation of Tor_k(M',N');<BR>
+- if v is of type intvec: a list of Tor_k(M',N') (k=v[1],v[2],...);<BR>
+- in case of a third argument of any type: list l with
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">     l[1] = module Tor/list of Tor_k(M',N'),
+     l[2] = SB of Tor/list of SB of Tor_k(M',N'),
+     l[3] = matrix/list of matrices, each representing a kbase of Tor_k(M',N')
+                (if finite dimensional), or 0.
+</pre></td></tr></table><P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>printlevel &gt;=0: (affine) dimension of Tor_k for each k (default).
+<BR> printlevel &gt;=1: matrices Ak, Ak+1 and kbase of Tor_k in Tensor(G0,Fk)
+(if finite dimensional).
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>In order to compute Tor_k(M,N) use the command Tor(k,syz(M),syz(N));
+or: list P=mres(M,2); list Q=mres(N,2); Tor(k,P[2],Q[2]);
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "homolog.lib";
+int p      = printlevel;
+printlevel = 1;
+ring r     = 0,(x,y),dp;
+ideal i    = x2,y;
+ideal j    = x;
+list E     = Tor(0..2,i,j);    // Tor_k(r/i,r/j) for k=0,1,2 over r
+==> // dimension of Tor_0:  0
+==> // vdim of Tor_0:       1
+==> 
+==> // Computing Tor_1 (help Tor; gives an explanation):
+==> // Let 0 &lt;- coker(M) &lt;- G0 &lt;-M- G1 be the present. of coker(M),
+==> // and 0 &lt;- coker(N) &lt;- F0 &lt;-N- F1 &lt;- F2 &lt;- ... a resolution of
+==> // coker(N), then Tensor(G0,F1)--&gt;Tensor(G0,F0) is given by:
+==> x
+==> // and Tensor(G0,F2) + Tensor(G1,F1)--&gt;Tensor(G0,F1) is given by:
+==> 0,x2,y
+==> 
+==> // dimension of Tor_1:  0
+==> // vdim of Tor_1:       1
+==> 
+==> // Computing Tor_2 (help Tor; gives an explanation):
+==> // Let 0 &lt;- coker(M) &lt;- G0 &lt;-M- G1 be the present. of coker(M),
+==> // and 0 &lt;- coker(N) &lt;- F0 &lt;-N- F1 &lt;- F2 &lt;- ... a resolution of
+==> // coker(N), then Tensor(G0,F2)--&gt;Tensor(G0,F1) is given by:
+==> 0
+==> // and Tensor(G0,F3) + Tensor(G1,F2)--&gt;Tensor(G0,F2) is given by:
+==> 1,x2,y
+==> 
+==> // dimension of Tor_2:  -1
+==> 
+qring R    = std(i);
+ideal j    = fetch(r,j);
+module M   = [x,0],[0,x];
+printlevel = 2;
+module E1  = Tor(1,M,j);       // Tor_1(R^2/M,R/j) over R=r/i
+==> // Computing Tor_1 (help Tor; gives an explanation):
+==> // Let 0 &lt;- coker(M) &lt;- G0 &lt;-M- G1 be the present. of coker(M),
+==> // and 0 &lt;- coker(N) &lt;- F0 &lt;-N- F1 &lt;- F2 &lt;- ... a resolution of
+==> // coker(N), then Tensor(G0,F1)--&gt;Tensor(G0,F0) is given by:
+==> x,0,
+==> 0,x 
+==> // and Tensor(G0,F2) + Tensor(G1,F1)--&gt;Tensor(G0,F1) is given by:
+==> x,0,x,0,
+==> 0,x,0,x 
+==> 
+==> // dimension of Tor_1:  0
+==> // vdim of Tor_1:       2
+==> 
+list l     = Tor(3,M,M,1);     // Tor_3(R^2/M,R^2/M) over R=r/i
+==> // Computing Tor_3 (help Tor; gives an explanation):
+==> // Let 0 &lt;- coker(M) &lt;- G0 &lt;-M- G1 be the present. of coker(M),
+==> // and 0 &lt;- coker(N) &lt;- F0 &lt;-N- F1 &lt;- F2 &lt;- ... a resolution of
+==> // coker(N), then Tensor(G0,F3)--&gt;Tensor(G0,F2) is given by:
+==> x,0,0,0,
+==> 0,x,0,0,
+==> 0,0,x,0,
+==> 0,0,0,x 
+==> // and Tensor(G0,F4) + Tensor(G1,F3)--&gt;Tensor(G0,F3) is given by:
+==> x,0,0,0,x,0,0,0,
+==> 0,x,0,0,0,x,0,0,
+==> 0,0,x,0,0,0,x,0,
+==> 0,0,0,x,0,0,0,x 
+==> 
+==> // dimension of Tor_3:  0
+==> // vdim of Tor_3:       4
+==> 
+==> // columns of matrix are kbase of Tor_3 in Tensor(G0,F3)
+==> 1,0,0,0,
+==> 0,1,0,0,
+==> 0,0,1,0,
+==> 0,0,0,1 
+==> 
+printlevel = p;
+</FONT></pre></td></tr></table><A NAME="integralbasis_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1167.htm#SEC1242"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tensorMod" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

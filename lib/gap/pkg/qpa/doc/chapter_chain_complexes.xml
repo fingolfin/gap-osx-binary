@@ -1,0 +1,1844 @@
+<Chapter>
+<Heading>Chain complexes</Heading>
+
+<Section>
+<Heading>Introduction</Heading> If <M>\mathcal{A}</M> is an abelian
+category, then a chain complex of objects of <M>\mathcal A</M> is a
+sequence 
+<Display>
+  \cdots \longrightarrow C_{i+1} \stackrel{d_{i+1}}{\longrightarrow}
+  C_i \stackrel{d_i}{\longrightarrow} C_{i-1}
+  \stackrel{d_{i-1}}{\longrightarrow} \cdots
+</Display>
+where <M>C_i</M> is an object of <M>\mathcal A</M> for all <M>i</M>,
+and <M>d_i</M> is a morphism of <M>\mathcal A</M> for all <M>i</M>
+such that the composition of two consecutive maps of the complex is
+zero.  The maps are called the differentials of the complex.  A
+complex is called <E>bounded above</E> (resp. below) if there is a
+bound <M>b</M> such that <M>C_i = 0</M> for all <M>i&gt;b</M>
+(resp. <M>i&lt;b</M>). A complex is <E>bounded</E> if it is both
+bounded below and bounded above.
+<P />
+The challenge when representing chain complexes in software is to
+handle their infinite nature.  If a complex is not bounded, or not
+known to be bounded, how can we represent it in an immutable way?  Our
+solution is to use a category called <C>InfList</C> (for ``infinite
+list'') to store the differentials of the complex.  The properties of
+the <C>IsInfList</C> category is described in <Ref Sect="InfLists"/>.
+An <C>IsQPAComplex</C> object consists of one <C>IsInfList</C> for the
+differentials, and it also has an <C>IsCat</C> object as an attribute.
+The <C>IsCat</C> category is a representation of an abelian category,
+see <Ref Sect="Cats" />.
+<P />
+To work with bounded complexes one does not need to know much about
+the <C>IsInfList</C> category.  A bounded complex can be created by
+simply giving a list of the differentials and the degree of the first
+differential as input (see <Ref Func="FiniteComplex"/>), and to create
+a stalk complex the stalk object and its degree suffice as input (see
+<Ref Func="StalkComplex"/>).  In both cases an <C>IsCat</C> object is
+also needed.
+
+<Example><![CDATA[
+gap> C := FiniteComplex(cat, 1, [g,f]);
+0 -> 2:(1,0) -> 1:(2,2) -> 0:(1,1) -> 0 
+gap> Ms := StalkComplex(cat, M, 3);
+0 -> 3:(2,2) -> 0 ]]>
+</Example>
+</Section>
+
+<Section Label="InfLists">
+<Heading>Infinite lists</Heading> 
+
+In this section we give documentation for the <C>IsInfList</C>
+category.  We start by giving a representation of <M>\pm \infty</M>.
+Then we quickly describe the <C>IsInfList</C> category, before we turn
+to the underlying structure of the infinite lists -- the half infinite
+lists (<C>IsHalfInfList</C>).  Most of the functionality of the
+infinite lists come from this category.  Finally, we give the
+constructors for infinite lists, and some methods for manipulating
+such objects.
+
+<ManSection>
+  <Filt Type="Category" Name="IsInfiniteNumber"/>
+  <Description>
+    A category for infinite numbers.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Filt Type="Var" Name="PositiveInfinity"/>
+  <Description>
+    A global variable representing the number <M>\infty</M>. It is
+    greater than any integer, but it can not be compared to numbers which
+    are not integers. It belongs to the <C>IsInfiniteNumber</C> category.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Filt Type="Var" Name="NegativeInfinity"/>
+  <Description>
+    A global variable representing the number <M>-\infty</M>. It is
+    smaller than any integer, but it can not be compared to numbers which
+    are not integers.  It belongs to the <C>IsInfiniteNumber</C> category.
+  </Description>
+</ManSection>
+
+<ManSection>
+<Filt Type="Category" Name="IsInfList"/>
+<Description>
+  An infinite list is an immutable representation of a list with
+  possibly infinite range of indeces.  It consists of three parts: The
+  ``middle part'' is finite and covers some range <M>[a,b]</M> of
+  indices, the ``positive part'' covers the range <M>[b+1,\infty)</M> of
+  indices, and the ``negative part'' convers the range
+  <M>(-\infty,a-1]</M> of indices.  Note that none of the three parts
+  are mandatory: The middle part may be an empty list, and the
+  positive part may be set to <C>fail</C> to achieve index range
+  ending at <M>b &lt; \infty</M>.  Similary, if the index range has
+  lower bound <M>a &lt; \infty</M>, put the negative part to be
+  <C>fail</C>.
+  <P />
+  Each of the two infinite parts are described in one of the following
+  ways: (1) A finite list which is repeated indefinitely; (2) A
+  function which takes an index in the list as argument and returns
+  the corresponding list item; (3) A function which takes an item from
+  the list as argument and returns the next item.
+  <P />
+  The two infinite parts are represented as ``half infinite lists'', see
+  <Ref Subsect="IsHalfInfList" />.  An infinite list can be
+  constructed in the following ways:
+  <List>
+    <Item> From two half infinite lists and a middle part, <Ref
+    Func="MakeInfListFromHalfInfLists"/>.</Item>
+    <Item> Directly, by
+    giving the same input as when constructing the above, <Ref
+    Func="MakeInfList" />.</Item>
+    <Item> If all values of the infinite
+    list are the image of the index under a function <M>f</M>, one
+    can use <Ref Func="FunctionInfList" />.</Item>
+    <Item> If all
+    values of the infinite list are the same, one can use <Ref
+    Func="ConstantInfList" />.</Item>
+    <Item> If the infinite list has
+    a finite range, one can use <Ref Func="FiniteInfList" />.</Item>
+  </List>
+  In addition, new infinite lists can be constructed from others by
+  shift, splice, concatenation, extracting parts or applying a
+  function to the elements.
+</Description>
+</ManSection>
+
+<ManSection Label="IsHalfInfList">
+<Filt Type="Category" Name="IsHalfInfList" />
+<Description>
+  A half infinite list is a representation of a list with indeces in
+  the range <M>[a,\infty)</M> or <M>(-\infty,b]</M>.  An infinite list
+  is typically made from two half infinite lists, and half infinite
+  lists can be extracted from an infinite list.  Hence, the half
+  infinite list stores much of the information about an infinite
+  list.  One main difference between an infinite list and a half
+  infinite list is that the half infinite list does not have any
+  finite part, as the ``middle'' part of an infinite list.
+</Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="\^" Arg="list, pos" />
+  <Description>
+  Arguments: <A>list</A> -- either an infinite list or a half infinite
+  list, <A>pos</A> -- a valid index for <A>list</A>.
+  </Description>
+  <Returns> The value at position <A>pos</A> of <A>list</A>.</Returns>
+</ManSection>
+
+<ManSection Label="MakeHalfInfList">
+  <Func Name="MakeHalfInfList" Arg="start,direction,typeWithArgs,callback"/>
+  <Description>Arguments: <A>start</A> -- an integer, <A>direction</A>
+  -- either <M>1</M> or <M>-1</M>, <A>typeWithArgs</A> -- a list which
+  may have different formats, <A>callback</A> -- a function.
+  <Br />
+  </Description>
+  <Returns>A newly created half infinite list with index range from
+  <A>start</A> to <M>\infty</M>, or from <M>-\infty</M> to
+  <A>start</A>.</Returns>
+  <Description>
+    If the range should be <M>[\mathtt{start},\infty)</M> then the value of
+    <A>direction</A> is <M>1</M>.  if the range should be
+    <M>(-\infty,\mathtt{start}]</M>, then the value of <A>direction</A> is
+    <M>-1</M>.  The argument <A>typeWithArgs</A> can take one of the
+    following forms:
+    <List>
+      <Item><C>[ "repeat", repeatList ]</C></Item>
+      <Item><C>[ "next", nextFunction, initialValue ]</C></Item>
+      <Item><C>[ "pos", posFunction ]</C></Item>
+      <Item><C>[ "pos", posFunction, storeValues ]</C></Item>
+    </List>
+    <C>repeatList</C> is a list of values that should be repeated in
+    the half infinite list. <C>nextFunction</C> returns the value at
+    position <M>i</M>, given the value at the previous position as
+    argument.  Here <C>initialValue</C> is the value at position
+    <C>start</C>.  Similarly, <C>posFunction</C> returns the value at
+    any position <M>i</M>, and it may or may not store the values
+    between the previous computed indeces and the newly computed
+    index.  The default value of <C>storeValues</C> is <C>true</C> for
+    <C>"next"</C> and <C>"pos"</C>, and <C>false</C> for
+    <C>"repeat"</C>.  The argument <C>callback</C> is a function that
+    is called whenever a new value of the list is computed.  It takes
+    three arguments: The current position, the direction and the type
+    (that is, <C>typeWithArgs[1]</C>).  If no callback function is
+    needed, use <C>false</C>.
+    <P />
+    All the information given to create the list is stored, and can be
+    retrieved later by the operations listed in <Ref
+    Subsect="StartPosition" />--<Ref Subsect="HighestKnownValue" />.
+  </Description>
+
+</ManSection>
+  
+
+<Example><![CDATA[
+gap> # make a HalfInfList from 0 to inf which repeats the list [ 2, 4, 6 ]
+gap> list1 := MakeHalfInfList( 0, 1, [ "repeat", [ 2, 4, 6 ] ], false );
+<object>
+gap> list1^0;
+2
+gap> list1^5;
+6
+gap> # make a HalfInfList from 0 to inf with x^2 in position x
+gap> f := function(x) return x^2; end;;
+gap> list2 := MakeHalfInfList( 0, 1, [ "pos", f, false ], false );
+<object>
+gap> list2^0;
+0
+gap> list2^10;
+100 
+gap> # make a HalfInfList from 0 to -inf where each new value adds 3
+gap> # to the previous and the value in position 0 is 10
+gap> g := function(x) return x+3; end;;
+gap> list3 := MakeHalfInfList( 0, -1, [ "next", g, 7 ], false );
+<object>
+gap> list3^0;
+10
+gap> list3^-10;
+40 ]]>
+</Example>
+
+<ManSection Label="StartPosition">
+  <Oper Name="StartPosition" Arg="list"/>
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The start position of <A>list</A>.</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="Direction" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The direction of <A>list</A> (either <M>1</M> or <M>-1</M>).</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="InfListType" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The type of <A>list</A> (either <C>"pos"</C>,
+  <C>"repeat"</C> or <C>"next"</C>).</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="RepeatingList" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The repeating list of <A>list</A> if <A>list</A> is of type
+  <C>"repeat"</C>, and <C>fail</C> otherwise.</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="ElementFunction" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The element function of <A>list</A> if <A>list</A> is of type
+  <C>"next"</C> or <C>"pos"</C>, and <C>fail</C> otherwise.</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="IsStoringValues" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns><C>true</C> if all elements of the list are stored,
+  <C>false</C> otherwise.</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="NewValueCallback" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The callback function of the list.</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="IsRepeating" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns><C>true</C> if the type of the list is <C>"repeat"</C>.</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="InitialValue" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>If the list is of type <C>"next"</C> then the initial value
+  is returned, otherwise it fails.</Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="LowestKnownPosition" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The lowest index <M>i</M> such that the value at position
+  <M>i</M> is known without computation (that is, it is either stored,
+  or the list has type <C>"repeat"</C>).</Returns>
+</ManSection>
+
+<ManSection Label="HighestKnownPosition">
+  <Oper Name="HighestKnownValue" Arg="list" />
+  <Description><A>list</A> -- a half infinite list.<Br />
+  </Description>
+  <Returns>The highest index <M>i</M> such that the value at position
+  <M>i</M> is known without computation (that is, it is either stored,
+  or the list has type <C>"repeat"</C>).</Returns>
+</ManSection>
+
+<Example><![CDATA[
+gap> # we reuse the IsHalfInfLists from the previous example
+gap> HighestKnownPosition(list1);
++inf
+gap> HighestKnownPosition(list2);
+"none"
+gap> HighestKnownPosition(list3);
+0 ]]>
+</Example>
+
+<ManSection>
+<Oper Name="Shift" Arg="list, shift" />
+  <Description>
+    Arguments: <A>list</A> -- a half infinite list, <A>shift</A> -- an
+    integer.<Br />
+  </Description>
+  <Returns>A new half infinite list which is <A>list</A> with all values
+  shifted <A>shift</A> positions to the right if <A>shift</A> is
+  positive, and to the left if <A>shift</A> is negative.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Cut" Arg="list, pos" />
+  <Description>
+    Arguments: <A>list</A> -- a half infinite list, <A>pos</A> -- an
+    integer within the range of <A>list</A>.<Br />
+  </Description>
+  <Returns>A new half infinite list which is <A>list</A> with some
+  part cut off.
+  </Returns>
+  <Description>If the direction of <A>list</A> is positive, then the
+  new list has range from <C>cut</C> to <M>\infty</M>.  If the
+  direction of <A>list</A> is negative, then the new list has range
+  from <M>-\infty</M> to <C>cut</C>.  The values at position <M>i</M>
+  of the new half infinite list is the same as the value at position
+  <M>i</M> of <A>list</A>.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="HalfInfList" Arg="list, func" />
+    <Description>
+      Arguments: <A>list</A> -- a half infinite list, <A>func</A> -- a
+      function which takes an element of the list as argument. <Br />
+    </Description>
+    <Returns>A half infinite list with the same range as <A>list</A>,
+    where the value at position <M>i</M> is the image of the value at
+    position <M>i</M> of <A>list</A> under <A>func</A>.
+    </Returns>
+</ManSection>
+
+<ManSection>
+  <Func Name="MakeInfListFromHalfInfLists" Arg="basePosition,middle,positive,negative" />
+  <Description>
+    Arguments: <A>basePosition</A> -- an integer, <A>middle</A> -- a
+    list, <A>positive</A> -- a half infinite list, <A>negative</A> --
+    a half infinite list. <Br />
+  </Description>
+  <Returns>An infinite list with <A>middle</A> as is middle part,
+  <A>positive</A> as its positive part and <A>negative</A> as its
+  negative part.</Returns>
+  <Description>
+    The starting position of <A>positive</A> must be <C>basePosition +
+    Length( middle )</C>, and the starting position of <A>negative</A>
+    must be <C>basePosition - 1</C>.  The returned list has
+    <C>middle[1]</C> in position <A>basePosition</A>, <C>middle[2]</C>
+    in position <A>basePosition + 1</A> and so on.  Note that one
+    probably wants the <A>positive</A> half infinite list to have
+    direction <M>1</M>, and the <A>negative</A> half infinite list to
+    have direction <M>-1</M>.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> # we want to construct an infinite list with 0 in position
+gap> # 0 to 5, and x^2 in position x where x goes from 6 to inf, 
+gap> # and alternatingly 1 and -1 in position -1 to -inf.
+gap> #
+gap> basePosition := 0;;
+gap> middle := [0,0,0,0,0,0];;
+gap> f := function(x) return x^2; end;;
+gap> positive := MakeHalfInfList( 6, 1, [ "pos", f, false ], false );
+<object>
+gap> altList := [ 1, -1 ];;
+gap> negative := MakeHalfInfList( -1, -1, [ "repeat", altList ], false );
+<object>
+gap> inflist := MakeInfListFromHalfInfLists( basePosition, middle,
+>                                            positive, negative );
+<object>
+gap> inflist^0; inflist^5; inflist^6; inflist^-1; inflist^-4;
+0
+0
+36
+1
+-1 ]]>
+</Example>
+
+<ManSection>
+  <Func Name="MakeInfList" Arg="basePosition, middle, positive, negative, callback" />
+  <Description>
+    Argments: <A>basePosition</A> -- an integer, <A>middle</A> -- a
+    list, <A>positive</A> -- a list describing the positive part, <A>negative</A> --
+    a list describing the negative part. <Br />
+  </Description>
+  <Returns> An infinite list with <A>middle</A> as is middle part,
+  <A>positive</A> as its positive part and <A>negative</A> as its
+  negative part.</Returns>
+  <Description>
+    The major difference between this construction and the previous is
+    that here the half infinite lists that will make the positive and
+    negative parts are not entered directly as arguments.  Instead,
+    one enters ``description lists'', which are of the same format as
+    the argument <A>typeWithArgs</A> of <Ref Func="MakeHalfInfList"
+    />.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> # we construct the same infinite list as in the previous example
+gap> basePosition := 0;;
+gap> middle := [0,0,0,0,0,0];;
+gap> f := function(x) return x^2; end;;
+gap> altList := [ 1, -1 ];;
+gap> inflist2 := MakeInfList( 0, middle, [ "pos", f, false ], [ "repeat", 
+>                             altList ], false );
+<object>
+gap> inflist2^0; inflist2^5; inflist2^6; inflist2^-1; inflist2^-4;
+0
+0
+36
+1
+-1 ]]>
+</Example>
+
+<ManSection>
+  <Func Name="FunctionInfList" Arg="func" />
+  <Description>
+    Arguments: <A>func</A> -- a function that takes an integer as
+    argument.<Br />
+  </Description>
+  <Returns>An infinite list where the value at position <M>i</M> is
+  the function <A>func</A> applied to <M>i</M>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Func Name="ConstantInfList" Arg="value" />
+  <Description>
+    Arguments: <A>value</A> -- an object.<Br />
+  </Description>
+  <Returns>An infinite list which has the object <A>value</A> in every
+  position.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Func Name="FiniteInfList" Arg="basePosition, list" />
+  <Description>
+    Arguments: <A>basePosition</A> -- an integer, <A>list</A> -- a
+    list of length <M>n</M>.<Br />
+  </Description>
+  <Returns>An infinite list with <M>\mathtt{list[1]},\ldots,\mathtt{list[n]}</M> in
+  positions <M>\mathtt{basePosition},\ldots,</M> <M>\mathtt{basePosition + n}</M>.
+  </Returns>
+  <Description>The range of this list is <M>[\mathtt{basePosition}, \mathtt{basePosition + n}]</M>.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="MiddleStart" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The starting position of the "middle" part of <A>list</A>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="MiddleEnd" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The ending position of the middle part of <A>list</A>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="MiddlePart" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The middle part (as a list) of <A>list</A>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="PositivePart" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The positive part (as a half infinite list) of <A>list</A>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="NegativePart" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The negative part (as a halft infinite list) of <A>list</A>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="HighestKnownPosition" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The highest index <M>i</M> such that the value at position
+  <M>i</M> is known withouth computation.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="LowestKnownPosition" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The lowest index <M>i</M> such that the value at position
+  <M>i</M> is known withouth computation.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="UpperBound" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The highest index in the range of the list.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="LowerBound" Arg="list" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list. <Br />
+  </Description>
+  <Returns>The lowest index in the range of the list.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="FinitePartAsList" Arg="list, startPos, endPos" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list, <A>startPos</A> -- an
+    integer, <A>endPos</A> -- an integer.<Br />
+  </Description>
+  <Returns>A list containing the values of <A>list</A> in positions
+  <M>\mathtt{endPos},\ldots,\mathtt{startPos}</M>.
+  </Returns>
+  <Description>Note that both integers in the input must be within the
+  index range of <A>list</A>.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="PositivePartFrom" Arg="list,pos" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list, <A>pos</A> -- an integer.<Br />
+  </Description>
+  <Returns>An infinite list (<E>not</E> a half infinite list) with
+  index range from <C>pos</C> to <C>UpperBound(list)</C>.
+  </Returns>
+  <Description>The value at position <M>i</M> of the new infinite list
+  is the same as the value at position <M>i</M> of <A>list</A>.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="NegativePartFrom" Arg="list,pos" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list, <A>pos</A> -- an integer.<Br />
+  </Description>  
+  <Returns>An infinite list (<E>not</E> a half infinite list) with
+  index range from <C>LowerBound(list)</C> to <C>pos</C>.
+  </Returns>
+  <Description>The value at position <M>i</M> of the new infinite list
+  is the same as the value at position <M>i</M> of <A>list</A>.
+  </Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Shift" Arg="list, shift" />
+  <Description>
+    Arguments: <A>list</A> -- an infinite list, <A>shift</A> -- an
+    integer.<Br />
+  </Description>
+  <Returns>A new infinite list which is <A>list</A> with all values
+  shifted <A>shift</A> positions to the right if <A>shift</A> is
+  positive, and to the left if <A>shift</A> is negative.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Splice" Arg="positiveList, negativeList, joinPosition" />
+  <Description>
+    Arguments: <A>positiveList</A> -- an infinite list,
+    <A>negativeList</A> -- an infinite list, <A>joinPosition</A> -- an
+    integer.<Br />
+  </Description>
+  <Returns>A new infinite list which is identical to <A>positiveList</A>
+  for indeces greater than <A>joinPosition</A> and identical to
+  <A>negativeList</A> for indeces smaller than or equal to <A>joinPosition</A>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Func Name="InfConcatenation" Arg="arg" />
+  <Description>
+    Arguments: <A>arg</A> -- a number of infinite lists. <Br />
+  </Description>
+  <Returns>A new infinite list.</Returns>
+  <Description>
+    If the length of <A>arg</A> is greater than or equal to <M>2</M>,
+    then the new infinite list consists of the following parts: It has
+    the positive part of <C>arg[1]</C>, and the middle part is the
+    concatenation of the middle parts of all lists in <A>arg</A>, such
+    that <C>MiddleEnd</C> of the new list is the same as <C>MiddleEnd(
+    arg[1] )</C>.  The negative part of the new list is the negative
+    part of <C>arg[Length(arg)]</C>, although shiftet so that it
+    starts in the correct position.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> # we do an InfConcatenation of three lists.
+gap> f := function(x) return x; end;;
+gap> g := function(x) return x+1; end;;
+gap> h := function(x) return x^2; end;;
+gap> InfList1 := MakeInfList( 0, [ 10 ], [ "pos", f, false ], 
+>                             [ "repeat", [ 10, 15 ] ], false );
+<object>
+gap> InfList2 := MakeInfList( 0, [ 20 ], [ "pos", g, false ], 
+>                             [ "repeat", [ 20, 25 ] ], false );
+<object>
+gap> InfList3 := MakeInfList( 0, [ 30 ], [ "pos", h, false ], 
+>                             [ "repeat", [ 30, 35 ] ], false );
+<object>
+gap> concList := InfConcatenation( InfList1, InfList2, InfList3 );
+<object> 
+gap> MiddlePart(concList);
+[ 30, 20, 10 ] ]]>
+</Example>
+
+The newly created <C>concList</C> looks as follows around the middle part:
+<Display>
+  \begin{array}{lrrrrrrrrrrr}
+  \text{position} &amp; \cdots &amp; 3
+  &amp; 2 &amp; 1 &amp; 0 &amp; -1 &amp; -2 &amp; -3 &amp; -4 &amp; -5
+  &amp; \cdots \\
+  \text{value} &amp; \cdots &amp; 3
+  &amp; 2 &amp; 1 &amp; 10 &amp; 20 &amp; 30 &amp; 30 &amp; 35 &amp; 30
+  &amp; \cdots \\
+  \end{array}
+</Display>
+
+<ManSection>
+  <Oper Name="InfList" Arg="list, func" />
+    <Description>
+      Arguments: <A>list</A> -- an infinite list, <A>func</A> -- a
+      function which takes an element of the list as argument. <Br />
+    </Description>
+    <Returns>An infinite list with the same range as <A>list</A>,
+    where the value at position <M>i</M> is the image of the value at
+    position <M>i</M> of <A>list</A> under <A>func</A>.
+    </Returns>
+</ManSection>
+
+<ManSection>
+  <Var Name="IntegersList" />
+  <Description>
+    An infinite list with range <M>(-\infty,\infty)</M> where the
+    value at position <M>i</M> is the number <M>i</M> (that is, a
+    representation of the integers).
+  </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Cats">
+<Heading>Representation of categories</Heading>
+
+A chain complex consists of objects and morphisms from some category.
+In QPA, this category will usually be the category of right modules
+over some quotient of a path algebra.
+
+<ManSection>
+<Filt Type="Category" Name="IsCat"/>
+<Description>
+The category for categories. A category is a record, storing a number
+of properties that is specified within each category. Two categories can
+be compared using <C>=</C>. Currently, the only implemented category
+is the one of right modules over a (quotient of a) path algebra.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="CatOfRightAlgebraModules" Arg="A"/>
+  <Description>Arguments: <Arg>A</Arg> -- a (quotient of a) path
+  algebra.<Br />
+  </Description>
+  <Returns>The category mod <Math>A</Math>.
+  </Returns>
+  <Description>
+    mod <Math>A</Math> has several properties, which can be accessed
+    using the <C>.</C> mark. Some of the properties store
+    functions. All properties are demonstrated in the following
+    example.
+    <List>
+      <Item><C>zeroObj</C> -- returns the zero module of
+      mod <Math>A</Math>.</Item>
+      <Item><C>isZeroObj</C> -- returns true if the given module is zero.</Item>
+      <Item><C>zeroMap</C> -- returns the ZeroMapping function.</Item>
+      <Item><C>isZeroMapping</C> -- returns the IsZero test.</Item>
+      <Item><C>composeMaps</C> -- returns the composition of the two
+      given maps.</Item>
+      <Item><C>ker</C> -- returns the Kernel function.</Item>
+      <Item><C>im</C> -- returns the Image function.</Item>
+      <Item><C>isExact</C> -- returns true if two consecutive maps
+      are exact. </Item>
+    </List>
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> alg;
+<algebra-with-one over Rationals, with 7 generators>
+gap> # L, M, and N are alg-modules
+gap> # f: L --> M and g: M --> N are non-zero morphisms
+gap> cat := CatOfRightAlgebraModules(alg);
+<cat: right modules over algebra>
+gap> cat.zeroObj;
+<right-module over <algebra-with-one over Rationals, with 7 generators>>
+gap> cat.isZeroObj(M);
+false
+gap> cat.zeroMap(M,N);
+<mapping: <3-dimensional right-module over AlgebraWithOne( Rationals, 
+[ [(1)*v1], [(1)*v2], [(1)*v3], [(1)*v4], [(1)*a], [(1)*b], [(1)*c] ])> -> 
+  <1-dimensional right-module over AlgebraWithOne( Rationals,
+  [ [(1)*v1], [(1)*v2], [(1)*v3], [(1)*v4], [(1)*a], [(1)*b], [(1)*c] ] )> >
+gap> cat.composeMaps(g,f);
+<mapping: <1-dimensional right-module over AlgebraWithOne( Rationals, 
+  [ [(1)*v1], [(1)*v2], [(1)*v3], [(1)*v4], [(1)*a], [(1)*b], [(1)*c]]
+  -> <1-dimensional right-module over AlgebraWithOne( Rationals,
+  [ [(1)*v1], [(1)*v2], [(1)*v3], [(1)*v4], [(1)*a], [(1)*b], [(1)*c] ] )> >
+gap> cat.ker(g);
+<2-dimensional right-module over <algebra-with-one over Rationals,
+  with 7 generators>>
+gap> cat.isExact(g,f);
+false ]]>
+</Example>
+
+</Section>
+
+
+<Section>
+<Heading>Making a complex</Heading>
+
+The most general constructor for complexes is the function
+<Ref Func="Complex"/>.  In addition to this, there are constructors
+for common special cases:
+<List>
+<Item><Ref Func="ZeroComplex"/></Item>
+<Item><Ref Func="StalkComplex"/></Item>
+<Item><Ref Func="FiniteComplex"/></Item>
+<Item><Ref Func="ShortExactSequence"/></Item>
+</List>
+<!-- TODO: ComplexByDifferentialList -->
+
+<ManSection>
+<Filt Type="Category" Name="IsQPAComplex"/>
+<Description>
+The category for chain complexes.
+</Description>
+</ManSection>
+
+<ManSection>
+<Filt Type="Category" Name="IsZeroComplex"/>
+<Description>
+Category for zero complexes, subcategory of <Ref Filt="IsQPAComplex"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="Complex"
+      Arg="cat, baseDegree, middle, positive, negative"/>
+<Returns>A newly created chain complex</Returns>
+<Description>
+The first argument, <Arg>cat</Arg> is an <Ref Filt="IsCat"/> object
+describing the category to create a chain complex over.<P/>
+
+The rest of the arguments describe the differentials of the complex.
+These are divided into three parts: one finite (<Q>middle</Q>) and two
+infinite (<Q>positive</Q> and <Q>negative</Q>).  The positive part
+contains all differentials in degrees higher than those in the middle
+part, and the negative part contains all differentials in degrees
+lower than those in the middle part.  (The middle part may be placed
+anywhere, so the positive part can -- despite its name -- contain some
+differentials of negative degree.  Conversely, the negative part can
+contain some differentials of positive degree.)<P/>
+
+The argument <Arg>middle</Arg> is a list containing the differentials
+for the middle part.  The argument <Arg>baseDegree</Arg> gives the
+degree of the first differential in this list.  The second
+differential is placed in degree <M><Arg>baseDegree</Arg>+1</M>, and
+so on.  Thus, the middle part consists of the degrees
+<Display>
+<Arg>baseDegree</Arg>,\quad
+<Arg>baseDegree</Arg> + 1,\quad
+\ldots\quad
+<Arg>baseDegree</Arg> + \text{Length}(<Arg>middle</Arg>).
+</Display>
+
+Each of the arguments <Arg>positive</Arg> and <Arg>negative</Arg> can
+be one of the following:
+<List>
+<Item>The string <Code>"zero"</Code>, meaning that the part contains
+  only zero objects and zero morphisms.</Item>
+<Item>A list of the form <Code>[ "repeat", L ]</Code>,
+  where <Code>L</Code> is a list of morphisms.  The part will contain
+  the differentials in <Code>L</Code> repeated infinitely many times.
+  The convention for the order of elements in <Code>L</Code> is
+  that <Code>L[1]</Code> is the differential which is closest to the
+  middle part, and <Code>L[Length(L)]</Code> is farthest away from the
+  middle part.</Item>
+<Item>A list of the form <Code>[ "pos", f ]</Code> or <Code>[ "pos",
+  f, store ]</Code>, where <Code>f</Code> is a function of two
+  arguments, and <Code>store</Code> (if included) is a boolean.  The
+  function <Code>f</Code> is used to compute the differentials in this
+  part.  The function <Code>f</Code> is not called immediately by
+  the <Code>Complex</Code> constructor, but will be called later as
+  the differentials in this part are needed.  The function
+  call <Code>f(C,i)</Code> (where <Code>C</Code> is the complex
+  and <Code>i</Code> an integer) should produce the differential in
+  degree <Code>i</Code>.  The function may use <Code>C</Code> to look
+  up other differentials in the complex, as long as this does not
+  cause an infinite loop.  If <Code>store</Code> is <Code>true</Code>
+  (or not specified), each computed differential is stored, and they
+  are computed in order from the one closest to the middle part,
+  regardless of which order they are requested in.</Item>
+<Item>A list of the form <Code>[ "next", f, init ]</Code>,
+  where <Code>f</Code> is a function of one argument,
+  and <Code>init</Code> is a morphism.  The function <Code>f</Code> is
+  used to compute the differentials in this part.  For the first
+  differential in the part (that is, the one closest to the middle
+  part), <Code>f</Code> is called with <Code>init</Code> as
+  argument.  For the next differential, <Code>f</Code> is called with
+  the first differential as argument, and so on.  Thus, the
+  differentials are
+  <Display>
+    f(\text{init}),\quad
+    f^2(\text{init}),\quad
+    f^3(\text{init}),\quad \ldots
+  </Display>
+  Each differential is stored when it has been computed.
+</Item>
+</List>
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="ZeroComplex" Arg="cat"/>
+<Returns>A newly created zero complex</Returns>
+<Description>
+This function creates a zero complex (a complex consisting of only
+zero objects and zero morphisms) over the category described by the
+<Ref Filt="IsCat"/> object <Arg>cat</Arg>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="FiniteComplex" Arg="cat, baseDegree, differentials"/>
+<Returns>A newly created complex</Returns>
+<Description>
+This function creates a complex where all but finitely many objects
+are the zero object.<P/>
+
+The argument <Arg>cat</Arg> is an <Ref Filt="IsCat"/> object
+describing the category to create a chain complex over.<P/>
+
+The argument <Arg>differentials</Arg> is a list of morphisms.  The
+argument <Arg>baseDegree</Arg> gives the degree for the first
+differential in this list.  The subsequent differentials are placed in
+degrees <M><Arg>baseDegree</Arg>+1</M>, and so on.<P/>
+
+This means that the <Arg>differentials</Arg> argument specifies the
+differentials in degrees
+<Display>
+<Arg>baseDegree</Arg>,\quad
+<Arg>baseDegree</Arg> + 1,\quad
+\ldots \quad
+<Arg>baseDegree</Arg> + \text{Length}(<Arg>differentials</Arg>);
+</Display>
+and thus implicitly the objects in degrees
+<Display>
+<Arg>baseDegree</Arg> - 1,\quad
+<Arg>baseDegree</Arg>,\quad
+\ldots \quad
+<Arg>baseDegree</Arg> + \text{Length}(<Arg>differentials</Arg>).
+</Display>
+All other objects in the complex are zero.
+</Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> # L, M and N are modules over the same algebra A
+gap> # cat is the category mod A
+gap> # f: L --> M and g: M --> N maps
+gap> C := FiniteComplex(cat, 1, [g,f]);
+0 -> 2:(1,0) -> 1:(2,2) -> 0:(1,1) -> 0 ]]>
+</Example>
+
+<ManSection>
+  <Func Name="StalkComplex" Arg="cat, obj, degree" />
+  <Description>
+    Arguments: <Arg>cat</Arg> -- a category, <Arg>obj</Arg> -- an
+    object in <Arg>cat</Arg>, <Arg>degree</Arg> -- the
+    degree <Arg>obj</Arg> should be placed in.<Br />
+  </Description>
+  <Returns>a newly created complex.
+  </Returns>
+  <Description>
+    The new complex is a stalk complex with <Arg>obj</Arg> in
+    position <Arg>degree</Arg>, and zero elsewhere.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> Ms := StalkComplex(cat, M, 3);
+0 -> 3:(2,2) -> 0 ]]>
+</Example>
+
+<ManSection>
+  <Func Name="ShortExactSequence" Arg="cat, f, g" />
+  <Description>
+    Arguments: <Arg>cat</Arg> -- a category, <Arg>f</Arg>
+    and <Arg>g</Arg> -- maps in <Arg>cat</Arg>,
+    where <Arg>f</Arg>: <Math>A \rightarrow B</Math>
+    and <Arg>g</Arg>: <Math>B \rightarrow C</Math>.<Br />
+  </Description>
+  <Returns>a newly created complex.
+  </Returns>
+  <Description>If the sequence <Math>0 \rightarrow A \rightarrow B \rightarrow
+  C \rightarrow 0</Math> is exact, this complex  (with <Math>B</Math>
+  in degree 0) is returned.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> ses := ShortExactSequence(cat, f, g);
+0 -> 1:(0,0,1,0) -> 0:(0,1,1,1) -> -1:(0,1,0,1) -> 0 ]]>
+</Example>
+
+
+
+</Section>
+
+
+<Section>
+<Heading>Information about a complex</Heading>
+
+<ManSection>
+  <Attr Name="CatOfComplex" Arg="C"/>
+  <Returns>
+    The category the objects of the complex <Arg>C</Arg> live in.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="ObjectOfComplex" Arg="C, i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>
+    The object at position <Arg>i</Arg> in the complex.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="DifferentialOfComplex" Arg="C, i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>
+    The map in <Arg>C</Arg> between objects at
+    positions <Math>i</Math> and <Math>i-1</Math>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Name="DifferentialsOfComplex" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex<Br />
+  </Description>
+  <Returns>
+    The differentials of the complex, stored as an <C>IsInfList</C>
+    object.
+  </Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="CyclesOfComplex" Arg="C, i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer. <Br />
+  </Description>
+  <Returns>The <Math>i</Math>-cycle of the complex, that is the
+  subobject <Math>Ker(d_i)</Math> of <C>ObjectOfComplex(C,i)</C>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="BoundariesOfComplex" Arg="C,i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer. <Br />
+  </Description>
+  <Returns> The <Math>i</Math>-boundary of the complex, that is the
+  subobject <Math>Im(d_{i+1})</Math> of <C>ObjectOfComplex(C,i)</C>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="HomologyOfComplex" Arg="C,i" />
+  <Description>
+    Arguments:  <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns> The <Math>i</Math>th homology of the complex, that
+  is, <Math>Ker(d_i)/Im(d_{i+1})</Math>.
+  </Returns>
+  <Description>Note: this operation is currently not available. When
+  working in the category of right <Math>kQ/I</Math>-modules, it is
+  possible to "cheat" and use the following procedure to compute the
+  homology of a complex:
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> C;                     
+0 -> 4:(0,1) -> 3:(1,0) -> 2:(2,2) -> 1:(1,1) -> 0:(2,2) -> 0
+gap> # Want to compute the homology in degree 2
+gap> f := DifferentialOfComplex(C,3);
+<mapping: <1-dimensional right-module over AlgebraWithOne( Rationals, 
+  [ [(1)*v1], [(1)*v2], [(1)*a], [(1)*b] ] )> ->
+  < 4-dimensional right-module over AlgebraWithOne( Rationals, 
+  [ [(1)*v1], [(1)*v2], [(1)*a], [(1)*b] ] )> >
+gap> g := KernelInclusion(DifferentialOfComplex(C,2));
+  <mapping: <2-dimensional right-module over AlgebraWithOne( Rationals, 
+  [ [(1)*v1], [(1)*v2], [(1)*a], [(1)*b] ] )> ->
+  < 4-dimensional right-module over AlgebraWithOne( Rationals, 
+  [ [(1)*v1], [(1)*v2], [(1)*a], [(1)*b] ] )> >
+gap> # We know that Im f is included in Ker g, so can find the
+gap> # lifting morphism h from C_3 to Ker g.
+gap> h := LiftingInclusionMorphisms(g,f);
+  <mapping: <1-dimensional right-module over AlgebraWithOne( Rationals, 
+  [ [(1)*v1], [(1)*v2], [(1)*a], [(1)*b] ] )> ->
+  < 2-dimensional right-module over AlgebraWithOne( Rationals, 
+  [ [(1)*v1], [(1)*v2], [(1)*a], [(1)*b] ] )> >
+gap> # The cokernel of h is Ker g / Im f 
+gap> Homology := CoKernel(h);
+<1-dimensional right-module over <algebra-with-one over Rationals, with 
+  4 generators>> ]]>
+</Example>
+
+<ManSection>
+  <Oper Name="IsFiniteComplex" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>true if <Arg>C</Arg> is a finite complex, false otherwise.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="UpperBound" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>If it exists: The smallest integer <Math>i</Math> such that
+  the object at position <Math>i</Math> is non-zero, but for
+  all <Math>j &gt; i</Math> the object at position <Math>j</Math> is zero.
+  </Returns>
+  <Description>If <Arg>C</Arg> is not a finite complex, the operation
+  will return fail or infinity, depending on how <Arg>C</Arg> was defined.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="LowerBound" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>If it exists: The greatest integer <Math>i</Math> such that
+  the object at position <Math>i</Math> is non-zero, but for
+  all <Math>j &lt; i</Math> the object at position <Math>j</Math> is zero.
+  </Returns>
+  <Description>If <Arg>C</Arg> is not a finite complex, the operation
+  will return fail or negative infinity, depending on how <Arg>C</Arg>
+  was defined.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="LengthOfComplex" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>the length of the complex.
+  </Returns>
+  <Description>The length is defined as follows: If <Arg>C</Arg> is a
+  zero complex, the length is zero. If <Arg>C</Arg> is a finite
+  complex, the lenght is the upper bound -- the lower bound +
+  1. If <Arg>C</Arg> is an inifinite complex, the lenght is infinity.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="HighestKnownDegree" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>The greatest integer <Math>i</Math> such that the object at
+  position <Math>i</Math> is known (or computed).
+  </Returns>
+  <Description>For a finite complex, this will be infinity.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="LowestKnownDegree" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>The smallest integer <Math>i</Math> such that the object at
+  position <Math>i</Math> is known (or computed).
+  </Returns>
+  <Description>For a finite complex, this will be negative infinity.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> C;
+0 -> 4:(0,1) -> 3:(1,0) -> 2:(2,2) -> 1:(1,1) -> 0:(2,2) -> 0
+gap> IsFiniteComplex(C);
+true
+gap> UpperBound(C);
+4
+gap> LowerBound(C);
+0
+gap> LengthOfComplex(C);
+5
+gap> HighestKnownDegree(C);
++inf
+gap> LowestKnownDegree(C);
+-inf ]]>
+</Example>
+
+<ManSection>
+  <Prop Name="IsExactSequence" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>true if <Arg>C</Arg> is exact at every position.
+  </Returns>
+  <Description>If the complex is not finite and not repeating, the
+  function fails.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="IsExactInDegree" Arg="C,i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>true if <Arg>C</Arg> is exact at position <Arg>i</Arg>.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Prop Name="IsShortExactSequence" Arg="C" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex.<Br />
+  </Description>
+  <Returns>true if <Arg>C</Arg> is exact and of the form 
+    <Display>
+      \ldots \rightarrow 0 \rightarrow A \rightarrow B \rightarrow C
+      \rightarrow 0 \rightarrow \ldots
+    </Display>
+    This could be positioned in any degree (as opposed to the
+    construction of a short exact sequence, where <Math>B</Math> will
+    be put in degree zero).
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> C;                
+0 -> 4:(0,1) -> 3:(1,0) -> 2:(2,2) -> 1:(1,1) -> 0:(2,2) -> 0
+gap> IsExactSequence(C);
+false
+gap> IsExactInDegree(C,1);
+true
+gap> IsExactInDegree(C,2);
+false ]]>
+</Example>
+
+<ManSection>
+  <Oper Name="ForEveryDegree" Arg="C,func" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>func</Arg> -- a
+    function operating on two consecutive maps.<Br />
+  </Description>
+  <Returns>true if <Arg>func</Arg> returns true for any two
+  consecutive differentials, fail if this can not be decided, false
+  otherwise.
+  </Returns>
+</ManSection>
+
+</Section>
+
+
+<Section>
+<Heading>Transforming and combining complexes</Heading>
+
+<ManSection>
+  <Oper Name="Shift" Arg="C, i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>A new complex, which is a shift of <Arg>C</Arg>.
+  </Returns>
+  <Description>If <Arg>i</Arg> &gt; 0, the complex is shifted to the
+  left. If <Arg>i</Arg> &lt; 0, the complex is shifted to the
+  right. Note that shifting might change the differentials: In the
+  shifted complex, <Math>d_{new}</Math> is defined to
+  be <Math>(-1)^i d_{old}</Math>.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> C;
+0 -> 4:(0,1) -> 3:(1,0) -> 2:(2,2) -> 1:(1,1) -> 0:(2,2) -> 0
+gap> Shift(C,1);
+0 -> 3:(0,1) -> 2:(1,0) -> 1:(2,2) -> 0:(1,1) -> -1:(2,2) -> 0
+gap> D := Shift(C,-1);
+0 -> 5:(0,1) -> 4:(1,0) -> 3:(2,2) -> 2:(1,1) -> 1:(2,2) -> 0
+gap> dc := DifferentialOfComplex(C,3)!.maps;
+[ [ [ 1, 0 ] ], [ [ 0, 0 ] ] ]
+gap> dd := DifferentialOfComplex(D,4)!.maps;
+[ [ [ -1, 0 ] ], [ [ 0, 0 ] ] ]
+gap> MatricesOfPathAlgebraMatModuleHomomorphism(dc);
+[ [ [ 1, 0 ] ], [ [ 0, 0 ] ] ]
+gap> MatricesOfPathAlgebraMatModuleHomomorphism(dd);
+[ [ [ -1, 0 ] ], [ [ 0, 0 ] ] ] ]]>
+</Example>
+
+<ManSection>
+  <Oper Name="ShiftUnsigned" Arg="C, i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>A new complex, which is a shift of <Arg>C</Arg>.
+  </Returns>
+  <Description>Does the same as <C>Shift</C>, except it does not
+  change the sign of the differential. Although this is a
+  non-mathematical definition of shift, it is still useful for
+  technical purposes, when manipulating and creating complexes.
+  </Description>
+</ManSection>
+
+
+<ManSection>
+  <Oper Name="YonedaProduct" Arg="C, D" />
+  <Description>
+    Arguments: <Arg>C</Arg>, <Arg>D</Arg> -- complexes.<Br />
+  </Description>
+  <Returns>The Yoneda product of the two complexes, which is a complex.
+  </Returns>
+  <Description>To compute the Yoneda product, <Arg>C</Arg>
+  and <Arg>D</Arg> must be such that the object in
+  degree <C>LowerBound(C)</C> equals the object in
+  degree <C>UpperBound(D)</C>, that is
+    <Display>
+      \ldots \rightarrow C_{i+1} \rightarrow C_{i} \rightarrow A
+      \rightarrow 0 \rightarrow \ldots
+    </Display>
+    <Display>
+      \ldots \rightarrow 0 \rightarrow A \rightarrow D_{j} \rightarrow D_{j-1}
+      \rightarrow \ldots
+    </Display>
+    The product is of this form:
+    <Display>
+      \ldots \rightarrow C_{i+1} \rightarrow C_{i} \rightarrow D_{j}
+      \rightarrow D_{j-1} \rightarrow \ldots
+    </Display>
+    where the map <Math>C_{i} \rightarrow D_{j}</Math> is the
+    composition of the maps <Math>C_{i} \rightarrow A</Math>
+    and <Math>A \rightarrow D_{j}</Math>. Also, the
+    object <Math>D_{j}</Math> is in degree <Math>j</Math>.
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> C2;
+0 -> 4:(0,1) -> 3:(1,0) -> 2:(2,2) -> 1:(1,1) -> 0:(0,0) -> 0
+gap> C3;
+0 -> -1:(1,1) -> -2:(2,2) -> -3:(1,1) -> 0
+gap> YonedaProduct(C2,C3);
+0 -> 1:(0,1) -> 0:(1,0) -> -1:(2,2) -> -2:(2,2) -> -3:(1,1) -> 0 ]]>
+</Example>
+
+<ManSection>
+  <Oper Name="BrutalTruncationBelow" Arg="C,i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>A newly created complex.
+  </Returns>
+  <Description>Replace all objects with degree <Math>j</Math>
+  &lt; <Math>i</Math> with zero. The differentials affected will
+  also become zero.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="BrutalTruncationAbove" Arg="C,i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>A newly created complex.
+  </Returns>
+  <Description>Replace all objects with degree <Math>j</Math>
+  &gt; <Math>i</Math> with zero. The differentials affected will also
+  become zero.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="BrutalTruncation" Arg="C,i,j" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i, j</Arg> -- integers.<Br />
+  </Description>
+  <Returns>A newly created complex.
+  </Returns>
+  <Description>Brutally truncates in both ends. The integer arguments
+  must be ordered such that <Arg>i</Arg> &gt; <Arg>j</Arg>.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="SyzygyTruncation" Arg="C,i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>A newly created complex.
+  </Returns>
+  <Description>Replace the object in degree <Math>i</Math> with the
+  kernel of <Math>d_i</Math>, and <M>d_{i+1}</M> with the natural
+  inclusion. All objects in degree <M>j &gt; i+1</M> are replaced with
+  zero.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="CosyzygyTruncation" Arg="C,i" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>A newly created complex.
+  </Returns>
+  <Description>Replace the object in degree <Math>i-2</Math> with the
+  cokernel of <Math>d_i</Math>, and <M>d_{i-1}</M> with the natural
+  projection. All objects in degree <M>j &lt; i-2</M> are replaced with
+  zero.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="SyzygyCosyzygyTruncation" Arg="C,i,j" />
+  <Description>
+    Arguments: <Arg>C</Arg> -- a complex, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>A newly created complex.
+  </Returns>
+  <Description>Performs both the above truncations. The integer
+  arguments must be ordered such that <Arg>i</Arg> &gt; <Arg>j</Arg>.
+  </Description>
+</ManSection>
+
+
+
+</Section>
+
+
+<Section>
+<Heading>Chain maps</Heading>
+
+An <Ref Filt="IsChainMap"/> object represents a chain map between two
+complexes over the same category.
+
+<ManSection>
+<Filt Type="Category" Name="IsChainMap"/>
+<Description>
+The category for chain maps.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="ChainMap"
+      Arg="source, range, basePosition, middle, positive, negative"/>
+  <Description>
+    Arguments:
+    <Arg>source</Arg>, <Arg>range</Arg> -- complexes,
+    <Arg>basePosition</Arg> -- an integer,
+    <Arg>middle</Arg> -- a list of morphisms,
+    <Arg>positive</Arg> -- a list or the string <Code>"zero"</Code>,
+    <Arg>negative</Arg> -- a list or the string <Code>"zero"</Code>.
+    <Br />
+  </Description>
+<Returns>A newly created chain map</Returns>
+<Description>
+The arguments <Arg>source</Arg> and <Arg>range</Arg> are the complexes
+which the new chain map should map between.<P/>
+
+The rest of the arguments describe the individual morphisms which
+constitute the chain map, in a similar way to the last four arguments
+to the <Ref Func="Complex"/> function.<P/>
+
+The morphisms of the chain map are divided into three parts: one
+finite (<Q>middle</Q>) and two infinite (<Q>positive</Q>
+and <Q>negative</Q>).  The positive part contains all morphisms in
+degrees higher than those in the middle part, and the negative part
+contains all morphisms in degrees lower than those in the middle
+part.  (The middle part may be placed anywhere, so the positive part
+can -- despite its name -- contain some morphisms of negative
+degree.  Conversely, the negative part can contain some morphisms
+of positive degree.)<P/>
+
+The argument <Arg>middle</Arg> is a list containing the morphisms
+for the middle part.  The argument <Arg>baseDegree</Arg> gives the
+degree of the first morphism in this list.  The second
+morphism is placed in degree <M><Arg>baseDegree</Arg>+1</M>, and
+so on.  Thus, the middle part consists of the degrees
+<Display>
+<Arg>baseDegree</Arg>,\quad
+<Arg>baseDegree</Arg> + 1,\quad
+\ldots\quad
+<Arg>baseDegree</Arg> + \text{Length}(<Arg>middle</Arg>) - 1.
+</Display>
+
+Each of the arguments <Arg>positive</Arg> and <Arg>negative</Arg> can
+be one of the following:
+<List>
+<Item>The string <Code>"zero"</Code>, meaning that the part contains
+  only zero morphisms.</Item>
+<Item>A list of the form <Code>[ "repeat", L ]</Code>,
+  where <Code>L</Code> is a list of morphisms.  The part will contain
+  the morphisms in <Code>L</Code> repeated infinitely many times.  The
+  convention for the order of elements in <Code>L</Code> is
+  that <Code>L[1]</Code> is the morphism which is closest to the
+  middle part, and <Code>L[Length(L)]</Code> is farthest away from the
+  middle part.  (Using this only makes sense if the objects of both
+  the source and range complex repeat in a compatible way.)</Item>
+<Item>A list of the form <Code>[ "pos", f ]</Code> or <Code>[ "pos",
+  f, store ]</Code>, where <Code>f</Code> is a function of two
+  arguments, and <Code>store</Code> (if included) is a boolean.  The
+  function <Code>f</Code> is used to compute the morphisms in this
+  part.  The function <Code>f</Code> is not called immediately by
+  the <Code>ChainMap</Code> constructor, but will be called later as
+  the morphisms in this part are needed.  The function
+  call <Code>f(M,i)</Code> (where <Code>M</Code> is the chain map
+  and <Code>i</Code> an integer) should produce the morphism in
+  degree <Code>i</Code>.  The function may use <Code>M</Code> to look
+  up other morphisms in the chain map (and to access the source and
+  range complexes), as long as this does not cause an infinite loop.
+  If <Code>store</Code> is <Code>true</Code> (or not specified), each
+  computed morphism is stored, and they are computed in order from the
+  one closest to the middle part, regardless of which order they are
+  requested in.</Item>
+<Item>A list of the form <Code>[ "next", f, init ]</Code>,
+  where <Code>f</Code> is a function of one argument,
+  and <Code>init</Code> is a morphism.  The function <Code>f</Code> is
+  used to compute the morphisms in this part.  For the first
+  morphism in the part (that is, the one closest to the middle
+  part), <Code>f</Code> is called with <Code>init</Code> as
+  argument.  For the next morphism, <Code>f</Code> is called with
+  the first morphism as argument, and so on.  Thus, the
+  morphisms are
+  <Display>
+    f(\text{init}),\quad
+    f^2(\text{init}),\quad
+    f^3(\text{init}),\quad \ldots
+  </Display>
+  Each morphism is stored when it has been computed.
+</Item>
+</List>
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="ZeroChainMap" Arg="source, range"/>
+<Returns>A newly created zero chain map</Returns>
+<Description>
+This function creates a zero chain map (a chain map in which every
+morphism is zero) from the complex <Arg>source</Arg> to the
+complex <Arg>range</Arg>.<P/>
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="FiniteChainMap" Arg="source, range, baseDegree, morphisms"/>
+<Returns>A newly created chain map</Returns>
+<Description>
+This function creates a complex where all but finitely many morphisms
+are zero.<P/>
+
+The arguments <Arg>source</Arg> and <Arg>range</Arg> are the complexes
+which the new chain map should map between.<P/>
+
+The argument <Arg>morphisms</Arg> is a list of morphisms.  The
+argument <Arg>baseDegree</Arg> gives the degree for the first morphism
+in this list.  The subsequent morphisms are placed in
+degrees <M><Arg>baseDegree</Arg>+1</M>, and so on.<P/>
+
+This means that the <Arg>morphisms</Arg> argument specifies the
+morphisms in degrees
+<Display>
+<Arg>baseDegree</Arg>,\quad
+<Arg>baseDegree</Arg> + 1,\quad
+\ldots \quad
+<Arg>baseDegree</Arg> + \text{Length}(<Arg>morphisms</Arg>) - 1.
+</Display>
+All other morphisms in the chain map are zero.<P/>
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="ComplexAndChainMaps"
+      Arg="sourceComplexes, rangeComplexes, basePosition, middle, positive, negative"/>
+  <Description>
+    Arguments:
+    <Arg>sourceComplexes</Arg> -- a list of complexes,
+    <Arg>rangeComplexes</Arg> -- a list of complexes,
+    <Arg>basePosition</Arg> -- an integer,
+    <Arg>middle</Arg> -- a list of morphisms,
+    <Arg>positive</Arg> -- a list or the string <Code>"zero"</Code>,
+    <Arg>negative</Arg> -- a list or the string <Code>"zero"</Code>.
+    <Br />
+  </Description>
+<Returns>A list consisting of a newly created complex, and one or
+  more newly created chain maps.</Returns>
+<Description>
+This is a combined constructor to make one complex and a set of chain
+maps at the same time.  All the chain maps will have the new complex
+as either source or range.<P/>
+
+The argument <Arg>sourceComplexes</Arg> is a list of the complexes
+to be sources of the chain maps which have the new complex as range.
+The argument <Arg>rangeComplexes</Arg> is a list of the complexes
+to be ranges of the chain maps which have the new complex as source.<P/>
+
+Let <M>S</M> and <M>R</M> stand for the lengths of the
+lists <Arg>sourceComplexes</Arg> and <Arg>rangeComplexes</Arg>,
+respectively.  Then the number of new chain maps which are created
+is <M>S+R</M>.<P/>
+
+The last four arguments describe the individual differentials of the
+new complex, as well as the inidividual morphisms which constitute
+each of the new chain maps.  These arguments are treated in a similar
+way to the last four arguments to the <Ref Func="Complex"/> and
+<Ref Func="ChainMap"/> constructors.  In those constructors, the last
+four arguments describe, for each degree, how to get the differential
+or morphism for that degree.  Here, we for each degree need both a
+differential for the complex, and one morphism for each chain map.  So
+for each degree <M>i</M>, we will have a list
+<Display>
+L_i =
+[ d_i,
+  m_i^1, \ldots, m_i^S,
+  n_i^1, \ldots, n_i^R ],
+</Display>
+where <M>d_i</M> is the differential for the new complex in
+degree <M>i</M>, <M>m_i^j</M> is the morphism in degree <M>i</M> of
+the chain map from <Code>sourceComplexes[j]</Code> to the new complex,
+and <M>n_i^j</M> is the morphism in degree <M>i</M> of the chain map
+from the new complex to <Code>rangeComplexes[j]</Code>.<P/>
+
+The degrees of the new complex and chain maps are divided into three
+parts: one finite (<Q>middle</Q>) and two infinite (<Q>positive</Q>
+and <Q>negative</Q>).  The positive part contains all degrees higher
+than those in the middle part, and the negative part contains all
+degrees lower than those in the middle part.<P/>
+
+The argument <Arg>middle</Arg> is a list containing the
+lists <M>L_i</M> for the middle part.  The
+argument <Arg>baseDegree</Arg> gives the degree of the first morphism
+in this list.  The second morphism is placed in
+degree <M><Arg>baseDegree</Arg>+1</M>, and so on.  Thus, the middle
+part consists of the degrees
+<Display>
+<Arg>baseDegree</Arg>,\quad
+<Arg>baseDegree</Arg> + 1,\quad
+\ldots\quad
+<Arg>baseDegree</Arg> + \text{Length}(<Arg>middle</Arg>) - 1.
+</Display>
+
+Each of the arguments <Arg>positive</Arg> and <Arg>negative</Arg> can
+be one of the following:
+<List>
+<Item>The string <Code>"zero"</Code>, meaning that the part contains
+  only zero morphisms.</Item>
+<Item>A list of the form <Code>[ "repeat", L ]</Code>,
+  where <Code>L</Code> is a list of morphisms.  The part will contain
+  the morphisms in <Code>L</Code> repeated infinitely many times.  The
+  convention for the order of elements in <Code>L</Code> is
+  that <Code>L[1]</Code> is the morphism which is closest to the
+  middle part, and <Code>L[Length(L)]</Code> is farthest away from the
+  middle part.  (Using this only makes sense if the objects of both
+  the source and range complex repeat in a compatible way.)</Item>
+<Item>A list of the form <Code>[ "pos", f ]</Code> or <Code>[ "pos",
+  f, store ]</Code>, where <Code>f</Code> is a function of two
+  arguments, and <Code>store</Code> (if included) is a boolean.  The
+  function <Code>f</Code> is used to compute the morphisms in this
+  part.  The function <Code>f</Code> is not called immediately by
+  the <Code>ChainMap</Code> constructor, but will be called later as
+  the morphisms in this part are needed.  The function
+  call <Code>f(M,i)</Code> (where <Code>M</Code> is the chain map
+  and <Code>i</Code> an integer) should produce the morphism in
+  degree <Code>i</Code>.  The function may use <Code>M</Code> to look
+  up other morphisms in the chain map (and to access the source and
+  range complexes), as long as this does not cause an infinite loop.
+  If <Code>store</Code> is <Code>true</Code> (or not specified), each
+  computed morphism is stored, and they are computed in order from the
+  one closest to the middle part, regardless of which order they are
+  requested in.</Item>
+<Item>A list of the form <Code>[ "next", f, init ]</Code>,
+  where <Code>f</Code> is a function of one argument,
+  and <Code>init</Code> is a morphism.  The function <Code>f</Code> is
+  used to compute the morphisms in this part.  For the first
+  morphism in the part (that is, the one closest to the middle
+  part), <Code>f</Code> is called with <Code>init</Code> as
+  argument.  For the next morphism, <Code>f</Code> is called with
+  the first morphism as argument, and so on.  Thus, the
+  morphisms are
+  <Display>
+    f(\text{init}),\quad
+    f^2(\text{init}),\quad
+    f^3(\text{init}),\quad \ldots
+  </Display>
+  Each morphism is stored when it has been computed.
+</Item>
+</List>
+
+The return value of the <Code>ComplexAndChainMaps</Code> constructor
+is a list
+<Display>
+[ C,
+  M_1, \ldots, M_S,
+  N_1, \ldots, N_R ],
+</Display>
+where <M>C</M> is the new complex, <M>M_1,\ldots,M_S</M> are the new
+chain maps with <M>C</M> as range, and <M>N_1,\ldots,N_R</M> are the
+new chain maps with <M>C</M> as source.
+</Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="MorphismOfChainMap" Arg="M, i" />
+  <Description>
+    Arguments: <Arg>M</Arg> -- a chain map, <Arg>i</Arg> -- an integer.<Br />
+  </Description>
+  <Returns>
+    The morphism at position <Arg>i</Arg> in the chain map.
+  </Returns>
+  <Description>
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Name="MorphismsOfChainMap" Arg="M" />
+  <Description>
+    Arguments: <Arg>M</Arg> -- a chain map.<Br />
+  </Description>
+  <Returns>
+    The morphisms of the chain map, stored as an <Ref Filt="IsInfList"/>
+    object.
+  </Returns>
+</ManSection>
+
+<ManSection>
+  <Oper Name="ComparisonLifting" Arg="f,PC,EC" />
+  <Description>
+    Arguments: <A>f</A> -- a map between modules <M>M</M> and
+    <M>N</M>, <A>PC</A> -- a chain complex, <A>EC</A> -- a chain
+    complex.<Br />
+  </Description>
+  <Returns>
+    The map <A>f</A> lifted to a chain map from <A>PC</A> to <A>EC</A>.
+  </Returns>
+  <Description>
+    The complex <A>PC</A> must have <M>M</M> in some fixed degree
+    <M>i</M>, it should be bounded with only zero objects in degrees
+    smaller than <M>i</M>, and it should have only projective objects
+    in degrees greater than <M>i</M> (or projective objects in degrees
+    <M>[i+1,j]</M> and zero in degrees greater than <M>j</M>).  The
+    complex <A>EC</A> should also have zero in degrees smaller than
+    <M>i</M>, it should have <M>N</M> in degree <M>i</M> and it should
+    be exact for all degrees.  The returned chain map has <A>f</A> in
+    degree <M>i</M>.
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="ComparisonLiftingToProjectiveResolution" Arg="f" />
+  <Description>
+    Arguments: <A>f</A> -- a map between modules <M>M</M> and
+    <M>N</M>.<Br />
+  </Description>
+  <Returns>
+    The map <A>f</A> lifted to a chain map from the projective
+    resolution of <M>M</M> to the projective resolution of <M>N</M>.
+  </Returns>
+  <Description>
+    The returned chain map has <A>f</A> in degree <M>-1</M> (the
+    projective resolution of a module includes the module itself in
+    degree <M>-1</M>).
+  </Description>
+</ManSection>
+
+<ManSection>
+  <Oper Name="MappingCone" Arg="f" />
+  <Description>
+    Arguments: <A>f</A> -- a chain map between chain complexes <M>A</M> and <M>B</M>. <Br />
+  </Description>
+  <Returns>
+    A list with the mapping cone of <A>f</A> and the inclusion of
+    <M>B</M> into the cone, and the projection of the cone onto
+    <M>A[-1]</M>.
+  </Returns>
+  <Description>
+    
+  </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> # Constructs a quiver and a quotient of a path algebra
+gap> Q := Quiver( 4, [ [1,2,"a"], [2,3,"b"], [3,4,"c"] ] );;
+gap> PA := PathAlgebra( Rationals, Q );;
+gap> rels := [ PA.a*PA.b ];;
+gap> gb := GBNPGroebnerBasis( rels, PA );;
+gap> I := Ideal( PA, gb );;
+gap> grb := GroebnerBasis( I, gb );;
+gap> alg := PA/I;;
+gap> 
+gap> # Two modules M and N, and a map between them
+gap> M := RightModuleOverPathAlgebra( alg, [0,1,1,0], [["b", [[1]] ]] );;
+gap> N := RightModuleOverPathAlgebra( alg, [0,1,0,0], [] );;
+gap> f := RightModuleHomOverAlgebra(M, N, [ [[0]],[[1]],[[0]],[[0]] ]);;
+gap> 
+gap> # Lifts f to a map between the projective resolutions of M and N
+gap> lf := ComparisonLiftingToProjectiveResolution(f);
+<chain map>
+gap> 
+gap> # Computes the mapping cone of the chain map
+gap> H := MappingCone(lf);
+[ --- -> -1:(0,1,0,0) -> ---, <chain map>, <chain map> ]
+gap> cone := H[1];
+--- -> -1:(0,1,0,0) -> ---
+gap> ObjectOfComplex(Source(lf),0);
+<[ 0, 1, 1, 1 ]>
+gap> ObjectOfComplex(Range(lf),1);
+<[ 0, 0, 1, 1 ]>
+gap> ObjectOfComplex(cone,1);
+<[ 0, 1, 2, 2 ]> 
+gap> Source(H[2]) = Range(lf);
+true]]>
+</Example>
+
+</Section>
+
+</Chapter>

@@ -1,0 +1,203 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: fpadim_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: fpadim_lib">
+<META NAME="keywords" CONTENT="Singular Manual: fpadim_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC700"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_648.htm#SEC699"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: makeMalgrange" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_650.htm#SEC701"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ivDHilbert" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: freegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_545.htm#SEC596"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Non-commutative libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 7.7.7 fpadim_lib </H3>
+<!--docid::SEC700::-->
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>fpadim.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>     Algorithms for quotient algebras in the letterplace case
+<DT><STRONG>Authors:</STRONG>
+<DD>Grischa Studzinski, grischa.studzinski@rwth-aachen.de
+<P>
+
+Support: Joint projects LE 2697/2-1 and KR 1907/3-1 of the Priority Programme SPP 1489:
+<BR> 'Algorithmische und Experimentelle Methoden in Algebra, Geometrie und Zahlentheorie'
+<BR> of the German DFG
+</P><P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>Given the free algebra A = K&lt;x_1,...,x_n&gt; and a (finite) Groebner basis
+GB = {g_1,..,g_w}, one is interested in the K-dimension and in the
+explicit K-basis of A/&lt;GB&gt;.
+<BR>Therefore one is interested in the following data:
+<BR> - the Ufnarovskij graph induced by GB
+<BR> - the mistletoes of A/&lt;GB&gt;
+<BR> - the K-dimension of A/&lt;GB&gt;
+<BR> - the Hilbert series of A/&lt;GB&gt;
+<P>
+
+The Ufnarovskij graph is used to determine whether A/&lt;GB&gt; has finite
+K-dimension. One has to check if the graph contains cycles.
+For the whole theory we refer to [ufna]. Given a
+<BR>reduced set of monomials GB one can define the basis tree, whose vertex
+set V consists of all normal monomials w.r.t. GB. For every two
+monomials m_1, m_2 in V there is a direct edge from m_1 to m_2, if and
+only if there exists x_k in {x_1,..,x_n}, such that m_1*x_k = m_2. The
+set M = {m in V | there is no edge from m to another monomial in V} is
+called the set of mistletoes. As one can easily see it consists of
+the endpoints of the graph. Since there is a unique path to every
+monomial in V the whole graph can be described only from the knowledge
+of the mistletoes. Note that V corresponds to a basis of A/&lt;GB&gt;, so
+knowing the mistletoes we know a K-basis. The name mistletoes was given
+to those points because of these miraculous value and the algorithm is
+named sickle, because a sickle is the tool to harvest mistletoes.
+For more details see [studzins]. This package uses the Letterplace
+format introduced by [lls]. The algebra can either be represented as a
+Letterplace ring or via integer vectors: Every variable will only be
+represented by its number, so variable one is represented as 1,
+variable two as 2 and so on. The monomial x_1*x_3*x_2 for example will
+be stored as (1,3,2). Multiplication is concatenation. Note that there
+is no algorithm for computing the normal form needed for our case.
+Note that the name fpadim.lib is short for dimensions of finite
+presented algebras.
+</P><P>
+
+<DT><STRONG>References:</STRONG>
+<DD><BR> [ufna] Ufnarovskij: Combinatorical and asymptotic methods in algebra, 1990
+<BR> [lls] Levandovskyy, La Scala: Letterplace ideals and non-commutative
+Groebner bases, 2009
+<BR> [studzins] Studzinski: Dimension computations in non-commutative,
+associative algebras, Diploma thesis, RWTH Aachen, 2010
+<P>
+
+Assumptions:
+<BR> - basering is always a Letterplace ring
+<BR> - all intvecs correspond to Letterplace monomials
+<BR> - if you specify a different degree bound d,
+d &lt;= attrib(basering,uptodeg) should hold.
+<BR> In the procedures below, 'iv' stands for intvec representation
+and 'lp' for the letterplace representation of monomials
+</P><P>
+
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_650.htm#SEC701">7.7.7.0. ivDHilbert</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the K-dimension and the Hilbert series</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_651.htm#SEC702">7.7.7.0. ivDHilbertSickle</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes mistletoes, K-dimension and Hilbert series</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_652.htm#SEC703">7.7.7.0. ivDimCheck</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">checks if the K-dimension of A/&lt;L&gt; is infinite</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_653.htm#SEC704">7.7.7.0. ivHilbert</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the Hilbert series of A/&lt;L&gt; in intvec format</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_654.htm#SEC705">7.7.7.0. ivKDim</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the K-dimension of A/&lt;L&gt; in intvec format</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_655.htm#SEC706">7.7.7.0. ivMis2Base</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes a K-basis of the factor algebra</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_656.htm#SEC707">7.7.7.0. ivMis2Dim</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the K-dimension of the factor algebra</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_657.htm#SEC708">7.7.7.0. ivOrdMisLex</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">orders a list of intvecs lexicographically</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_658.htm#SEC709">7.7.7.0. ivSickle</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the mistletoes of A/&lt;L&gt; in intvec format</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_659.htm#SEC710">7.7.7.0. ivSickleHil</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the mistletoes and Hilbert series of A/&lt;L&gt;</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_660.htm#SEC711">7.7.7.0. ivSickleDim</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the mistletoes and the K-dimension of A/&lt;L&gt;</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_661.htm#SEC712">7.7.7.0. lpDHilbert</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the K-dimension and Hilbert series of A/&lt;G&gt;</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_662.htm#SEC713">7.7.7.0. lpDHilbertSickle</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes mistletoes, K-dimension and Hilbert series</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_663.htm#SEC714">7.7.7.0. lpHilbert</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the Hilbert series of A/&lt;G&gt; in lp format</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_664.htm#SEC715">7.7.7.0. lpDimCheck</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">checks if the K-dimension of A/&lt;G&gt; is infinite</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_665.htm#SEC716">7.7.7.0. lpKDim</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the K-dimension of A/&lt;G&gt; in lp format</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_666.htm#SEC717">7.7.7.0. lpMis2Base</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes a K-basis of the factor algebra</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_667.htm#SEC718">7.7.7.0. lpMis2Dim</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the K-dimension of the factor algebra</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_668.htm#SEC719">7.7.7.0. lpOrdMisLex</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">orders an ideal of lp-monomials lexicographically</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_669.htm#SEC720">7.7.7.0. lpSickle</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the mistletoes of A/&lt;G&gt; in lp format</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_670.htm#SEC721">7.7.7.0. lpSickleHil</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the mistletoes and Hilbert series of A/&lt;G&gt;</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_671.htm#SEC722">7.7.7.0. lpSickleDim</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the mistletoes and the K-dimension of A/&lt;G&gt;</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_672.htm#SEC723">7.7.7.0. sickle</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">can be used to access all lp main procedures</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_673.htm#SEC724">7.7.7.0. ivL2lpI</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">transforms a list of intvecs into an ideal of lp monomials</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_674.htm#SEC725">7.7.7.0. iv2lp</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">transforms an intvec into the corresponding monomial</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_675.htm#SEC726">7.7.7.0. iv2lpList</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">transforms a list of intmats into an ideal of lp monomials</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_676.htm#SEC727">7.7.7.0. iv2lpMat</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">transforms an intmat into an ideal of lp monomials</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_677.htm#SEC728">7.7.7.0. lp2iv</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">transforms a polynomial into the corresponding intvec</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_678.htm#SEC729">7.7.7.0. lp2ivId</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">transforms an ideal into the corresponding list of intmats</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_679.htm#SEC730">7.7.7.0. lpId2ivLi</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">transforms a lp-ideal into the corresponding list of intvecs</TD></TR>
+</TABLE></BLOCKQUOTE>
+See also:
+ <A HREF="sing_680.htm#SEC731">freegb_lib</A>.
+<P>
+
+<A NAME="ivDHilbert"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_648.htm#SEC699"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: makeMalgrange" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_650.htm#SEC701"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ivDHilbert" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: freegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_545.htm#SEC596"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Non-commutative libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

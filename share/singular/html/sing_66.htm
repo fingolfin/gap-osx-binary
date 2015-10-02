@@ -1,0 +1,153 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Source code debugger</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Source code debugger">
+<META NAME="keywords" CONTENT="Singular Manual: Source code debugger">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC102"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_65.htm#SEC101"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Tracing of procedures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_67.htm#SEC106"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Break points" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_71.htm#SEC110"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Dynamic loading" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.9.3 Source code debugger </H3>
+<!--docid::SEC102::-->
+<P>
+
+The source code debugger (sdb) is an experimental feature, its
+interface may change in future versions of S<SMALL>INGULAR</SMALL>.  <BR>To enable the
+use of the source code debugger S<SMALL>INGULAR</SMALL> has to be started with the
+option <CODE>-d</CODE> or <CODE>--sdb</CODE> (see  <A HREF="sing_19.htm#SEC26">Command line options</A>).
+</P><P>
+
+<A NAME="SEC103"></A>
+<H4> sdb commands </H4>
+<!--docid::SEC103::-->
+Each sdb command consists of one character which may be followed by
+a parameter.
+<DL COMPACT>
+<DT><CODE>b</CODE>
+<DD>print backtrace of calling stack
+<DT><CODE>c</CODE>
+<DD>continue
+<DT><CODE>e</CODE>
+<DD>edit the current procedure and reload it (current call will be aborted)
+<BR> only available on UNIX systems
+<DT><CODE>h</CODE>,<CODE>?</CODE>
+<DD>display help screen
+<DT><CODE>n</CODE>
+<DD>execute current line, sdb break at next line
+<DT><CODE>p</CODE> &lt;identifier&gt;
+<DD>display type and value of the variable given by &lt;identifier&gt;
+<DT><CODE>Q</CODE>
+<DD>quit this S<SMALL>INGULAR</SMALL> session
+<DT><CODE>q</CODE> &lt;flags&gt;
+<DD>quit debugger, set debugger flags(0,1,2)
+<BR> 0: continue, disable the debugger
+<BR> 1: continue
+<BR> 2: throw an error, return to toplevel
+</DL>
+<P>
+
+<A NAME="SEC104"></A>
+<H4> Syntactical errors in procedures </H4>
+<!--docid::SEC104::-->
+If S<SMALL>INGULAR</SMALL> was started using the command line option <CODE>-d</CODE> or
+<CODE>--sdb</CODE>, a syntactical error in a procedure will start the
+source code debugger instead of returning to the top level with an
+error message. The commands <CODE>q 1</CODE> and <CODE>q 2</CODE> are equivalent in this
+case.
+<P>
+
+<A NAME="SEC105"></A>
+<H4> SDB breakpoints in procedures </H4>
+<!--docid::SEC105::-->
+Up to seven SDB breakpoints can be set.
+To set a breakpoint at a procedure use
+<CODE>breakpoint</CODE>. (See  <A HREF="sing_428.htm#SEC467">breakpoint</A>).
+<BR>These breakpoints can be cleared with the command <CODE>d breakpoint_no</CODE>
+from within the debugger or with
+<CODE>breakpoint(</CODE> proc_name <CODE>,-1);</CODE>.
+<P>
+
+<A NAME="Break points"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_65.htm#SEC101"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Tracing of procedures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_67.htm#SEC106"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Break points" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_71.htm#SEC110"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Dynamic loading" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

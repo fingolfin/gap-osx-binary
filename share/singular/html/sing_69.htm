@@ -1,0 +1,176 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: libparse</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: libparse">
+<META NAME="keywords" CONTENT="Singular Manual: libparse">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC108"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_68.htm#SEC107"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Printing of data" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_70.htm#SEC109"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: option(warn)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_71.htm#SEC110"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Dynamic loading" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.9.6 libparse </H3>
+<!--docid::SEC108::-->
+<P>
+
+<CODE>libparse</CODE> is a stand-alone program contained in the S<SMALL>INGULAR</SMALL>
+distribution (at the place where the S<SMALL>INGULAR</SMALL> executable program
+resides), which cannot be called inside S<SMALL>INGULAR</SMALL>. It is a
+debugging tool for libraries which performs exactly the same checks as
+the <CODE>load</CODE> command in S<SMALL>INGULAR</SMALL>, but generates more output during
+parsing.  <CODE>libparse</CODE> is useful if an error
+occurs while loading the library, but the whole block around the line
+specified seems to be correct. In these situations the real error might
+have occured hundreds of lines earlier in the library.
+</P><P>
+
+<STRONG>Usage:</STRONG>
+<BR><CODE>libparse [options] singular-library</CODE>
+<BR><STRONG>Options:</STRONG>
+<DL COMPACT>
+<DT><CODE>-d</CODE> Debuglevel
+<DD>increases the amount of output during parsing, where Debuglevel is an integer
+between 0 and 4. Default is 0.
+<DT><CODE>-s</CODE>
+<DD>turns on reporting about violations of unenforced syntax rules
+</DL>
+<P>
+
+The following syntax checks are performed in any case:
+<UL>
+<LI>counting of pairs of brackets {,} , [,] and (,)
+    (number of { has to match number of }, same for [,] and (,) ).
+<LI>counting of "
+    ( number of " must be even ).
+<LI>general library syntax
+    ( only LIB, static, proc (with parameters, help, body and example)
+and comments, i.e // and <CODE>/* ... */</CODE>, are allowed).
+</UL>
+Its output lists all procedures that have been parsed successfully:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>$ libparse sample.lib
+Checking library 'sample.lib'
+  Library         function      line,start-eod line,body-eob  line,example-eoe
+Version:0.0.0;
+g Sample               tab line    9,  149-165   13,  271-298   14,  300-402
+l Sample      internal_tab line   24,  450-475   25,  476-496    0,    0-496
+</FONT></pre></td></tr></table></P><P>
+
+where the following abbreviations are used:
+<UL>
+<LI>g: global procedure (default)
+<LI>l: static procedure, i.e., local to the library.
+</UL>
+<P>
+
+each of the following is the position of the byte in the library.
+<UL>
+<LI>start: begin of 'proc'
+<LI>eod: end of parameters
+<LI>body: start of procedurebody '{'
+<LI>eob:  end of procedurebody '}'
+<LI>example: position of 'example'
+<LI>eoe: end of example '}'
+</UL>
+<P>
+
+Hence in the above example, the first procedure of the library
+sample.lib is user-accessible and its name is tab. The procedure
+starts in line 9, at character 149. The head of the procedure
+ends at character 165, the body starts in line 13 at character 271
+and ends at character 298. The example section extends from line 14
+character 300 to character 402.
+</P><P>
+
+The following example shows the result of a missing close-bracket } in
+line 26 of the library <CODE>sample.lib</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "sample.lib";
+==>    ? Library sample.lib: ERROR occurred: in line 26, 497.
+==>    ? missing close bracket '}' at end of library in line 26.
+==>    ? Cannot load library,... aborting.
+==>    ? error occurred in STDIN line 1: `LIB "sample.lib";`
+</FONT></pre></td></tr></table><A NAME="option(warn)"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_68.htm#SEC107"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Printing of data" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_70.htm#SEC109"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: option(warn)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_71.htm#SEC110"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Dynamic loading" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,130 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: triMNewton</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: triMNewton">
+<META NAME="keywords" CONTENT="Singular Manual: triMNewton">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1776"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1700.htm#SEC1775"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: nt_solve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1702.htm#SEC1777"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: zeroset_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: triang_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1702.htm#SEC1777"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: zeroset_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.8.5.2 triMNewton </H4>
+<!--docid::SEC1776::-->
+Procedure from library <CODE>ntsolve.lib</CODE> (see  <A HREF="sing_1699.htm#SEC1774">ntsolve_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>triMNewton(G,a[,ipar]); G,a= ideals, ipar=list/intvec
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>G: g1,..,gn, a triangular system of n equations in n vars, i.e.
+gi=gi(var(n-i+1),..,var(n)),<BR>
+a: ideal of numbers, coordinates of an approximation of a common
+zero of G to start with (with a[i] to be substituted in var(i)),<BR>
+ipar: control integer vector (default: ipar = [100, 10])
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">  ipar[1]: max. number of iterations
+  ipar[2]: accuracy (we have as norm |.| absolute value ):
+           accepts solution <CODE>sol</CODE> if |G(sol)| &lt; |G(a)|*(0.1^ipar[2]).
+</pre></td></tr></table><P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>an ideal, coordinates of a better approximation of a zero of G
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ntsolve.lib";
+ring r = (real,30),(z,y,x),(lp);
+ideal i = x^2-1,y^2+x4-3,z2-y4+x-1;
+ideal a = 2,3,4;
+intvec e = 20,10;
+ideal l = triMNewton(i,a,e);
+l;
+==> l[1]=-2.000000000042265738880279143423
+==> l[2]=1.41421356237309504880168872421
+==> l[3]=1
+</FONT></pre></td></tr></table><A NAME="zeroset_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1700.htm#SEC1775"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: nt_solve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1702.htm#SEC1777"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: zeroset_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: triang_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1702.htm#SEC1777"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: zeroset_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1699.htm#SEC1774"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ntsolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

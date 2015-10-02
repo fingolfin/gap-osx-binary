@@ -1,0 +1,170 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: sysQE</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: sysQE">
+<META NAME="keywords" CONTENT="Singular Manual: sysQE">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1846"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1770.htm#SEC1845"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: syndrome" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1772.htm#SEC1847"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: errorInsert" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.2.7 sysQE </H4>
+<!--docid::SEC1846::-->
+Procedure from library <CODE>decodegb.lib</CODE> (see  <A HREF="sing_1764.htm#SEC1839">decodegb_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>sysQE(check,y,t,[fieldeq,formal]);check,y matrix;t,fieldeq,formal int
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">        - check is a parity check matrix of the code
+        - y is a received word,
+        - t the number of errors to be corrected,
+        - if fieldeq=1, then field equations are added,
+        - if formal=0, field equations on (known) syndrome variables
+          are not added, in order to add them (note that the exponent should
+          be equal to the number of elements in the INITIAL alphabet) one
+          needs to set formal&gt;0 for the exponent
+</pre></td></tr></table><P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>the ring to work with together with the resulting system called 'qe'
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Based on 'check' of the given linear code, the procedure constructs
+the corresponding ideal that gives an opportunity to compute
+unknown syndrome of the received word y. After computing the unknown
+syndromes one is able to solve the decoding problem.
+For basics of the method  <A HREF="sing_923.htm#SEC992">Decoding method based on quadratic equations</A>.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "decodegb.lib";
+intvec v = option(get);
+//correct 2 errors in [7,3] 8-ary code RS code
+int t=2; int q=8; int n=7; int redun=4;
+ring r=(q,a),x,dp;
+matrix h_full=genMDSMat(n,a);
+matrix h=submat(h_full,1..redun,1..n);
+matrix g=dual_code(h);
+matrix x[1][3]=0,0,1,0;
+matrix y[1][7]=encode(x,g);
+//disturb with 2 errors
+matrix rec[1][7]=errorInsert(y,list(2,4),list(1,a));
+//generate the system
+def A=sysQE(h,rec,t);
+setring A;
+print(qe);
+==> U(1)+a^3,
+==> U(2)+a^2,
+==> U(3)+a^6,
+==> U(4),
+==> V(1)*U(1)+V(2)*U(2)+U(3),
+==> V(1)*U(2)+V(2)*U(3)+U(4),
+==> V(1)*U(3)+V(2)*U(4)+U(5),
+==> V(1)*U(4)+V(2)*U(5)+U(6),
+==> V(1)*U(5)+V(2)*U(6)+U(7),
+==> V(1)*U(6)+V(2)*U(7)+U(1),
+==> V(2)*U(1)+V(1)*U(7)+U(2)
+//let us decode
+option(redSB);
+ideal sys_qe=std(qe);
+print(sys_qe);
+==> U(7)+a,
+==> U(6)+a^3,
+==> U(5)+a^3,
+==> U(4),
+==> U(3)+a^6,
+==> U(2)+a^2,
+==> U(1)+a^3,
+==> V(2)+1,
+==> V(1)+a^4
+option(set,v);
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1781.htm#SEC1856">sysFL</A>.
+<P>
+
+<A NAME="errorInsert"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1770.htm#SEC1845"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: syndrome" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1772.htm#SEC1847"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: errorInsert" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,151 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: poly expressions</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: poly expressions">
+<META NAME="keywords" CONTENT="Singular Manual: poly expressions">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC188"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_148.htm#SEC187"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: poly declarations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_150.htm#SEC189"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: poly operations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_144.htm#SEC183"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: package" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_152.htm#SEC191"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: proc" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_147.htm#SEC186"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: poly" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.15.2 poly expressions </H3>
+<!--docid::SEC188::-->
+<P>
+
+A polynomial expression is (optional parts in square brackets):
+<OL>
+<LI>
+a monomial (there are NO spaces allowed inside a monomial)
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  [coefficient] ring_variable [ exponent] [ring_variable [exponent] <small>...</small>].
+</FONT></pre></td></tr></table>Monomials which contain an indexed ring variable
+must be built from <CODE>ring_variable</CODE> and <CODE>coefficient</CODE>
+with the operations <CODE>*</CODE> and <CODE>^</CODE>
+<LI>
+an identifier of type poly
+<LI>
+a function returning poly
+<LI>
+polynomial expressions combined by the arithmetic operations
+<CODE>+</CODE>, <CODE>-</CODE>, <CODE>*</CODE>, <CODE>/</CODE>, or <CODE>^</CODE>
+<LI>
+an int expression (see  <A HREF="sing_39.htm#SEC66">Type conversion and casting</A>)
+<LI>
+a type cast to poly
+</OL>
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring S=0,(x,y,z,a(1)),dp;
+2x, x3, 2x2y3, xyz, 2xy2; //  are monomials
+2*x, x^3, 2*x^2*y^3, x*y*z, 2*x*y^2; // are poly expressions
+2*a(1); // is a valid polynomial expression (a(1) is a name of a variable),
+        // but not 2a(1) (is a syntax error)
+2*x^3;  // is a valid polynomial expression equal to 2x3 (a valid monomial)
+        // but not equal to 2x^3 which will be interpreted as (2x)^3
+        // since 2x is a monomial
+  ring r=0,(x,y),dp;
+  poly f = 10x2y3 +2x2y2-2xy+y -x+2;
+  lead(f);
+==> 10x2y3
+  leadmonom(f);
+==> x2y3
+  simplify(f,1);     // normalize leading coefficient
+==> x2y3+1/5x2y2-1/5xy-1/10x+1/10y+1/5
+  poly g = 1/2x2 + 1/3y;
+  cleardenom(g);
+==> 3x2+2y
+  int i = 102;
+  poly(i);
+==> 102
+  typeof(_);
+==> poly
+</FONT></pre></td></tr></table></P><P>
+
+See 
+ <A HREF="sing_39.htm#SEC66">Type conversion and casting</A>;
+ <A HREF="sing_160.htm#SEC199">ring</A>.
+</P><P>
+
+<A NAME="poly operations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_148.htm#SEC187"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: poly declarations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_150.htm#SEC189"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: poly operations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_144.htm#SEC183"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: package" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_152.htm#SEC191"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: proc" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_147.htm#SEC186"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: poly" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

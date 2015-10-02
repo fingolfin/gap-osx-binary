@@ -1,0 +1,144 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: dmodoublext</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: dmodoublext">
+<META NAME="keywords" CONTENT="Singular Manual: dmodoublext">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC861"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_809.htm#SEC860"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: contraHom" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_811.htm#SEC862"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_cenBimodule" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_793.htm#SEC844"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: purityfiltration_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_813.htm#SEC864"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ratgb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_805.htm#SEC856"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: nchomolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.19.0. dmodoublext </H5>
+<!--docid::SEC861::-->
+Procedure from library <CODE>nchomolog.lib</CODE> (see  <A HREF="sing_805.htm#SEC856">nchomolog_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>dmodoublext(M [,i]); M module, i optional int
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>a presentation of Ext^i(Ext^i(M,D),D) for basering D
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>left module
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>by default, i is set to the integer part of the half of number of variables of D
+<BR> for holonomic modules over Weyl algebra, the double ext is known to be holonomic left module
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "nchomolog.lib";
+ring R   = 0,(x,y),dp;
+poly F   = x3-y2;
+def A    = annfs(F);
+setring A;
+dmodoublext(LD);
+==> _[1]=2*x*Dx+3*y*Dy+6
+==> _[2]=3*x^2*Dy+2*y*Dx
+==> _[3]=9*x*y*Dy^2-4*y*Dx^2+15*x*Dy
+==> _[4]=27*y^2*Dy^3+8*y*Dx^3+135*y*Dy^2+105*Dy
+LD;
+==> LD[1]=2*x*Dx+3*y*Dy+6
+==> LD[2]=3*x^2*Dy+2*y*Dx
+==> LD[3]=9*x*y*Dy^2-4*y*Dx^2+15*x*Dy
+==> LD[4]=27*y^2*Dy^3+8*y*Dx^3+135*y*Dy^2+105*Dy
+// fancier example:
+setring A;
+ideal I = Dx*(x2-y3),Dy*(x2-y3);
+I = groebner(I);
+print(dmodoublext(I,1));
+==> y^3-x^2
+print(dmodoublext(I,2));
+==> Dy,
+==> Dx
+</FONT></pre></td></tr></table><P>
+
+<A NAME="is_cenBimodule"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_809.htm#SEC860"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: contraHom" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_811.htm#SEC862"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_cenBimodule" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_793.htm#SEC844"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: purityfiltration_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_813.htm#SEC864"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ratgb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_805.htm#SEC856"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: nchomolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

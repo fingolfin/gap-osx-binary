@@ -1,0 +1,143 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: partial_molien</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: partial_molien">
+<META NAME="keywords" CONTENT="Singular Manual: partial_molien">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1680"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1604.htm#SEC1679"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reynolds_molien" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1606.htm#SEC1681"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: evaluate_reynolds" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.7.1.11 partial_molien </H4>
+<!--docid::SEC1680::-->
+Procedure from library <CODE>finvar.lib</CODE> (see  <A HREF="sing_1594.htm#SEC1669">finvar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>partial_molien(M,n[,p]);
+<BR>M: a 1x2 &lt;matrix&gt;, n: an &lt;int&gt; indicating number of terms in the
+expansion, p: an optional &lt;poly&gt;
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>M is the return value of molien or the second return value of
+reynolds_molien, p ought to be the second return value of a previous
+run of partial_molien and avoids recalculating known terms
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>n terms (type &lt;poly&gt;) of the partial expansion of the Molien series
+(first n if there is no third parameter given, otherwise the next n
+terms depending on a previous calculation) and an intermediate result
+(type &lt;poly&gt;) of the calculation to be used as third parameter in a
+next run of partial_molien
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>The following calculation is implemented:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">(1+a1x+a2x^2+...+anx^n)/(1+b1x+b2x^2+...+bmx^m)=(1+(a1-b1)x+...
+(1+b1x+b2x^2+...+bmx^m)
+-----------------------
+   (a1-b1)x+(a2-b2)x^2+...
+   (a1-b1)x+b1(a1-b1)x^2+...
+</pre></td></tr></table><P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "finvar.lib";
+ring R=0,(x,y,z),dp;
+matrix A[3][3]=0,1,0,-1,0,0,0,0,-1;
+matrix REY,M=reynolds_molien(A);
+poly p(1..2);
+p(1..2)=partial_molien(M,5);
+p(1);
+==> 4x5+5x4+2x3+2x2+1
+p(1..2)=partial_molien(M,5,p(2));
+p(1);
+==> 18x10+12x9+13x8+8x7+8x6
+</FONT></pre></td></tr></table><P>
+
+<A NAME="evaluate_reynolds"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1604.htm#SEC1679"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reynolds_molien" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1606.htm#SEC1681"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: evaluate_reynolds" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

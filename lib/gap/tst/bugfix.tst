@@ -1238,12 +1238,21 @@ gap> "IsBlistRep" in NamesFilter(TypeObj(BlistList([1,2],[2]))![2]);
 true
 
 # 2006/08/28 (FL)
-gap> l:=List([1..100000],i->[i]);;
-gap> for i in [1..100000] do a := PositionSorted(l,[i]); od; time1 := time;;
-gap> l := Immutable(l);;
-gap> for i in [1..100000] do a := PositionSorted(l,[i]); od; time2 := time;;
-gap> time1 < 2*time2; # time1 and time2 should be about the same
-true
+gap> time1 := 0;;
+gap> for j in [1..10] do
+> l:=List([1..100000],i->[i]);
+> t1:=Runtime(); for i in [1..100000] do a := PositionSorted(l,[i]); od; t2:=Runtime();
+> time1 := time1 + (t2-t1);
+> od;
+gap> time2 := 0;;
+gap> for j in [1..10] do
+> l := Immutable( List([1..100000],i->[i]) );
+> t1:=Runtime(); for i in [1..100000] do a := PositionSorted(l,[i]); od; t2:=Runtime();
+> time2 := time2 + (t2-t1);
+> od;
+gap> if time1 >= 2*time2 then
+> Print("Bad timings for bugfix 2006/08/28 (FL): ", time1, " >= 2*", time2, "\n"); 
+> fi; # time1 and time2 should be about the same
 
 # 2006/08/29 (FL (and AH))
 gap> IsBound(ITER_POLY_WARN);
@@ -2646,6 +2655,154 @@ gap> Size(F);
 infinity
 
 #############################################################################
+##
+## Changes 4.7.5 -> 4.7.6
+
+## For bugfixes
+
+# 2014/08/11 (AH)
+gap> eij:=function(i,j)
+> local I;
+> I:=Z(2)*IdentityMat(5);
+> I[i][j]:=Z(2);
+> return I;
+> end;;
+gap> G2:=Group([eij(1,2),eij(2,3),eij(3,4),eij(4,5),eij(2,1),eij(4,3)]);;
+gap> Length(NormalSubgroups(G2));
+16
+
+# 2014/08/13 (TB, AK). A bug that may cause ShortestVectors 
+# to return an incomplete list (reported by Florian Beye).
+gap> M:=[[4,-1,-2,1,2,-1,0,0,0,0,1,-1,2,-2,0,0,0,-2,2,-3,3,0],
+> [-1,4,1,0,-1,2,0,3,3,-1,1,1,1,1,-1,1,3,1,-3,2,1,0],
+> [-2,1,4,-1,-2,1,0,1,1,0,1,0,0,2,0,0,0,2,-2,4,-2,0],
+> [1,0,-1,2,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+> [2,-1,-2,-1,6,-2,0,0,0,1,0,0,2,-2,0,0,0,-3,4,-4,4,-1],
+> [-1,2,1,0,-2,4,0,2,2,0,0,0,1,2,-1,2,4,0,-1,2,-2,1],
+> [0,0,0,0,0,0,2,0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+> [0,3,1,0,0,2,0,6,4,-1,2,0,3,1,-1,2,4,0,-2,2,2,-1],
+> [0,3,1,0,0,2,-1,4,6,-1,2,0,3,1,-1,2,4,0,-2,2,2,-1],
+> [0,-1,0,0,1,0,0,-1,-1,2,-1,0,1,0,0,0,0,-1,3,0,-1,0],
+> [1,1,1,0,0,0,0,2,2,-1,4,-1,1,1,0,0,0,1,-2,2,2,-1],
+> [-1,1,0,0,0,0,0,0,0,0,-1,2,-1,0,0,0,0,0,0,0,0,0],
+> [2,1,0,0,2,1,0,3,3,1,1,-1,6,-1,-1,2,4,-2,2,0,2,-1],
+> [-2,1,2,0,-2,2,0,1,1,0,1,0,-1,4,0,0,0,2,-2,4,-2,0],
+> [0,-1,0,0,0,-1,0,-1,-1,0,0,0,-1,0,2,-1,-2,0,0,0,0,0],
+> [0,1,0,0,0,2,0,2,2,0,0,0,2,0,-1,4,4,-2,0,0,0,0],
+> [0,3,0,0,0,4,0,4,4,0,0,0,4,0,-2,4,8,-2,0,0,0,0],
+> [-2,1,2,0,-3,0,0,0,0,-1,1,0,-2,2,0,-2,-2,4,-4,4,-2,0],
+> [2,-3,-2,0,4,-1,0,-2,-2,3,-2,0,2,-2,0,0,0,-4,8,-4,0,0],
+> [-3,2,4,0,-4,2,0,2,2,0,2,0,0,4,0,0,0,4,-4,8,-4,0],
+> [3,1,-2,0,4,-2,0,2,2,-1,2,0,2,-2,0,0,0,-2,0,-4,8,-2],
+> [0,0,0,0,-1,1,0,-1,-1,0,-1,0,-1,0,0,0,0,0,0,0,-2,2]];;
+gap> IsZero(M - TransposedMat(M));
+true
+gap> sv := ShortestVectors(M, 2).vectors;;
+gap> s2 := Set(Concatenation(sv, -sv));;
+gap> v := [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,1,0,1,1];;
+gap> v * M * v - 2 = 0;
+true
+gap> v in s2;
+true
+
+# 2014/08/21 (AK, CJ)
+gap> (13*10^18) + (-3*10^18) = (10^19);
+true
+
+# 2014/09/05 (TB, reported by Benjamin Sambale)
+gap> OrthogonalEmbeddings([[4]]);
+rec( norms := [ 1, 1/4 ], solutions := [ [ 1 ], [ 2, 2, 2, 2 ] ], 
+  vectors := [ [ 2 ], [ 1 ] ] )
+
+# 2014/10/22 (CJ)
+gap> Stabilizer(SymmetricGroup(5), [1,2,1,2,1], OnTuples) = Group([(3,5),(4,5)]);
+true
+
+#############################################################################
+##
+## Changes 4.7.6 -> 4.7.7
+
+## For bugfixes
+# 2014/12/05 (CJ, reported by Matt Fayers; see also tst/union.tst)
+gap> Union([2],[3],[5,1..1]);
+[ 1, 2, 3, 5 ]
+
+# 2014/12/31 (AH, reported by Daniel Błażewicz)
+gap> x := Indeterminate( Rationals, "x" );;
+gap> ProbabilityShapes(x^5+5*x^2+3);
+[ 2 ]
+gap> GaloisType(x^12+63*x-450); # this was causing an infinite loop
+301
+
+# 2015/01/11 (CJ, reported by TB)
+gap> x:= rec( qq:= "unused", r:= rec() );;
+gap> y:= x.r;;
+gap> y.entries:= rec( parent:= y );;
+gap> x;
+rec( qq := "unused", r := rec( entries := rec( parent := ~.r ) ) )
+
+# 2015/01/08 (JM, reported by Nick Loughlin)
+gap> FreeMonoid( infinity, "m", [  ] );
+<free monoid with infinity generators>
+
+# 2015/02/01 (MP, reported by WdG and HD )
+gap> a:= 1494186269970473680896;
+1494186269970473680896
+gap> b:= 72057594037927936;
+72057594037927936
+gap> RemInt(a,b);
+0
+
+# 2015/02/02 (AH, reported by Petr Savicky)
+gap> it := SimpleGroupsIterator(17971200);
+<iterator>
+gap> G := NextIterator(it); # 2F(4,2)'
+2F(4,2)'
+gap> ClassicalIsomorphismTypeFiniteSimpleGroup(G);
+rec( parameter := [ "T" ], series := "Spor" )
+
+# 2015/02/16 (CJ, Reported by TB)
+gap> a:= rec();; a.( "" ):= 1;; a; Print( a,"\n" );
+rec( ("") := 1 )
+rec(
+  ("") := 1 )
+
+#2015/02/16 (CJ, reported by TB)
+gap> f1:= function( x, l ) return ( not x ) in l; end;;
+gap> f2:= function( x, l ) return not ( x in l ); end;;
+gap> f3:= function( x, l ) return not x in l;     end;;
+gap> [f1(true,[]), f2(true,[]), f3(true,[])];
+[ false, true, true ]
+gap> Print([f1,f2,f3],"\n");
+[ function ( x, l )
+        return (not x) in l;
+    end, function ( x, l )
+        return not x in l;
+    end, function ( x, l )
+        return not x in l;
+    end ]
+
+#############################################################################
+##
+## Changes 4.7.7 -> 4.7.8
+
+#2015/05/12 (WdG, reported by Istvan Szollosi)
+gap> L:= SimpleLieAlgebra("A",1,Rationals);
+<Lie algebra of dimension 3 over Rationals>
+gap> V:= HighestWeightModule(L,[2]);
+<3-dimensional left-module over <Lie algebra of dimension 3 over Rationals>>
+gap> v:= Basis(V)[1];
+1*v0
+gap> z:= Zero(V);
+0*v0
+gap> IsZero(z);
+true
+gap> w:= z+v;
+1*v0
+gap> -w+w;
+0*v0
+
+#############################################################################
 #
 # Tests requiring loading some packages must be performed at the end.
 # Do not put tests that do not need any packages below this line.
@@ -2785,6 +2942,11 @@ gap> if LoadPackage("cvec",false) <> fail then mat := [[Z(2)]];
 # 2012/06/18 (MH)
 gap> if LoadPackage("anupq",false) <> fail then
 > for i in [1..192] do Q:=Pq( FreeGroup(2) : Prime:=3, ClassBound:=1 ); od; fi;
+
+# 2015/04/01 (SL)
+gap> p := 227;; x := X(GF(p), "x");; f := x^(7^2) - x;;
+gap> PowerMod(x, p, f);
+x^35
 
 #############################################################################
 gap> STOP_TEST( "bugfix.tst", 15319000000*10 );

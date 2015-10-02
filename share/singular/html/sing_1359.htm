@@ -1,0 +1,455 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ECoef</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ECoef">
+<META NAME="keywords" CONTENT="Singular Manual: ECoef">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1434"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1358.htm#SEC1433"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: maxEord" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1360.htm#SEC1435"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: elimrep" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1381.htm#SEC1456"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resgraph_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.2.10 ECoef </H4>
+<!--docid::SEC1434::-->
+Procedure from library <CODE>resbinomial.lib</CODE> (see  <A HREF="sing_1349.htm#SEC1424">resbinomial_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>ECoef(Coef,expP,sP,V,auxc,n,flaglist);
+<BR>Coef, expP, flaglist lists, sP, V, n integers, auxc number
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>The ideal E-Coeff_V(P), where V is a permissible hypersurface which belongs to the center
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list of exponents, list of coefficients and classification of the ideal E-Coeff_V(P)
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "resbinomial.lib";
+ring r = 0,(x(1),y(2),x(3),y(4),x(5..7)),dp;
+list flag=identifyvar();
+ideal P=x(1)^2*x(3)^5-x(5)^7*y(4),x(6)^3*y(2)^5-x(7)^5,x(5)^3*x(6)-y(4)^3*x(1)^5;
+list L=data(P,3,7);
+list L2=ECoef(L[1],L[2],3,1,3,7,flag);
+L2[1];  // exponents of the E-Coefficient ideal respect to x(1)
+==> [1]:
+==>    [1]:
+==>       [1]:
+==>          0
+==>       [2]:
+==>          0
+==>       [3]:
+==>          0
+==>       [4]:
+==>          0
+==>       [5]:
+==>          7
+==>       [6]:
+==>          0
+==>       [7]:
+==>          0
+==> [2]:
+==>    [1]:
+==>       [1]:
+==>          0
+==>       [2]:
+==>          0
+==>       [3]:
+==>          15
+==>       [4]:
+==>          0
+==>       [5]:
+==>          0
+==>       [6]:
+==>          0
+==>       [7]:
+==>          0
+==> [3]:
+==>    [1]:
+==>       [1]:
+==>          0
+==>       [2]:
+==>          5
+==>       [3]:
+==>          0
+==>       [4]:
+==>          0
+==>       [5]:
+==>          0
+==>       [6]:
+==>          3
+==>       [7]:
+==>          0
+==>    [2]:
+==>       [1]:
+==>          0
+==>       [2]:
+==>          0
+==>       [3]:
+==>          0
+==>       [4]:
+==>          0
+==>       [5]:
+==>          0
+==>       [6]:
+==>          0
+==>       [7]:
+==>          5
+==> [4]:
+==>    [1]:
+==>       [1]:
+==>          0
+==>       [2]:
+==>          0
+==>       [3]:
+==>          0
+==>       [4]:
+==>          0
+==>       [5]:
+==>          3
+==>       [6]:
+==>          1
+==>       [7]:
+==>          0
+L2[2];  // its coefficients
+==> [1]:
+==>    -1
+==> [2]:
+==>    1
+==> [3]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       -1
+==> [4]:
+==>    1
+L2[3];  // classify the type of ideal obtained
+==> 0
+ring r = 0,(x(1),y(2),x(3),y(4)),dp;
+==> // ** redefining r **
+list flag=identifyvar();
+==> // ** redefining flag **
+ideal J=x(1)^3*(1-2*y(2)*y(4)^2);  // Bold regular case
+list L=data(J,1,4);
+list L2=ECoef(L[1],L[2],1,1,3,4,flag);
+L2;
+==> [1]:
+==>    empty list
+==> [2]:
+==>    empty list
+==> [3]:
+==>    1
+ring r = 0,(x(1),y(2),x(3),y(4),x(5..7)),dp;
+==> // ** redefining r **
+list flag=identifyvar();
+==> // ** redefining flag **
+ideal J=x(1)^3-x(3)^2*y(4)^2,x(1)*x(7)*y(2)-x(6)^3*x(5)*y(4)^3,x(5)^3-x(5)^3*y(2)^2;
+list L=data(J,3,7);
+list L2=ECoef(L[1],L[2],3,1,2,7,flag);
+==> // ** redefining L2 **
+L2;
+==> [1]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             2
+==>          [4]:
+==>             0
+==>          [5]:
+==>             0
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==>    [2]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             1
+==>          [6]:
+==>             3
+==>          [7]:
+==>             0
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             0
+==>          [6]:
+==>             0
+==>          [7]:
+==>             2
+==>    [4]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             2
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             3
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==>       [2]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             3
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==> [2]:
+==>    [1]:
+==>       -1
+==>    [2]:
+==>       -1
+==>    [3]:
+==>       1
+==>    [4]:
+==>       [1]:
+==>          -1
+==>       [2]:
+==>          1
+==> [3]:
+==>    0
+ring r = 3,(x(1),y(2),x(3),y(4),x(5..7)),dp;
+==> // ** redefining r **
+list flag=identifyvar();
+==> // ** redefining flag **
+ideal J=x(1)^3-x(3)^2*y(4)^2,x(1)*x(7)*y(2)-x(6)^3*x(5)*y(4)^3,x(5)^3-x(5)^3*y(2)^2;
+list L=data(J,3,7);
+list L2=ECoef(L[1],L[2],3,1,2,7,flag);
+==> E-order zero!
+L2; // THE COMPUTATIONS ARE NOT CORRECT IN CHARACTERISTIC p&gt;0
+==> [1]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             -1
+==>          [4]:
+==>             0
+==>          [5]:
+==>             0
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==>    [2]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             0
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             1
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==>    [4]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             0
+==>          [6]:
+==>             0
+==>          [7]:
+==>             -1
+==>    [5]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             -1
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             0
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==>       [2]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>          [5]:
+==>             0
+==>          [6]:
+==>             0
+==>          [7]:
+==>             0
+==> [2]:
+==>    [1]:
+==>       -1
+==>    [2]:
+==>       1
+==>    [3]:
+==>       -1
+==>    [4]:
+==>       1
+==>    [5]:
+==>       [1]:
+==>          -1
+==>       [2]:
+==>          1
+==> [3]:
+==>    2
+// because numbers are treated as 0 in assignments
+</FONT></pre></td></tr></table><P>
+
+<A NAME="elimrep"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1358.htm#SEC1433"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: maxEord" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1360.htm#SEC1435"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: elimrep" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1381.htm#SEC1456"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resgraph_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////
 
-version="version tst.lib 4.0.0.0 Jun_2013 "; // $Id: 360f517564135e0afdfe134a69b061c90511f2fe $
+version="version tst.lib 4.0.0.0 Jun_2013 "; // $Id: f7662d74f2d5d7c7e908fbe2830304edb0d07779 $
 category="Utilities";
 info="
 LIBRARY:  tst.lib      Procedures for running automatic tst Tests
@@ -234,7 +234,7 @@ SEE ALSO: tst_init
 
     if (!defined(prefix))
     {
-      def prefix = tst_status_counter;
+      int prefix = tst_status_counter;
     }
     tst_status_out(prefix, "tst_memory_0", memory(0));
     tst_status_out(prefix, "tst_memory_1", memory(1));
@@ -805,7 +805,7 @@ proc tst_rgen_init()
   if (! defined(tst_rgen_comp_orderings))
   {
     list tst_rgen_comp_orderings;
-    exportto(Top,tst_rgen_comp_orderings);
+    export(tst_rgen_comp_orderings);
     tst_rgen_comp_orderings = list("", "C", "c", "CC", "cc");
   }
   if (! defined(tst_rgen_products))
@@ -831,12 +831,12 @@ proc tst_rgen_init()
   {
     int tst_rgen_char_index, tst_rgen_var_index, tst_rgen_comp_index, tst_rgen_ordering_index, tst_rgen_exp_bounds_index;
     list tst_rgen_orderings;
-    exportto(Top, tst_rgen_char_index);
-    exportto(Top, tst_rgen_var_index);
-    exportto(Top, tst_rgen_comp_index);
-    exportto(Top, tst_rgen_ordering_index);
-    exportto(Top, tst_rgen_orderings);
-    exportto(Top, tst_rgen_exp_bounds_index);
+    export(tst_rgen_char_index);
+    export(tst_rgen_var_index);
+    export(tst_rgen_comp_index);
+    export(tst_rgen_ordering_index);
+    export(tst_rgen_orderings);
+    export(tst_rgen_exp_bounds_index);
   }
   tst_rgen_char_index = 1;
   tst_rgen_var_index = 1;
@@ -918,7 +918,7 @@ proc tst_next_ring()
     if (! defined(tst_rgen_Lring))
     {
       string tst_rgen_Lring;
-      exportto(Top,tst_rgen_Lring);
+      export(tst_rgen_Lring);
     }
     tst_rgen_Lring = rs + ",L(" + string(tst_rgen_exp_bounds[tst_rgen_exp_bounds_index]) + "))";
     if (system("version") >= 1309)

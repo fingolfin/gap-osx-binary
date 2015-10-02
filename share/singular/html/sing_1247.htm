@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ehrhartRing</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ehrhartRing">
+<META NAME="keywords" CONTENT="Singular Manual: ehrhartRing">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1322"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1246.htm#SEC1321"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: normalToricRingFromBinomials" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1248.htm#SEC1323"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intclMonIdeal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.18.4 ehrhartRing </H4>
+<!--docid::SEC1322::-->
+Procedure from library <CODE>normaliz.lib</CODE> (see  <A HREF="sing_1243.htm#SEC1318">normaliz_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>ehrhartRing(ideal I);
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>The exponent vectors of the leading monomials of the elements of I
+are considered as points of a lattice polytope P.
+<BR>The Ehrhart ring of a (lattice) polytope P is the monoid algebra
+defined by the monoid of lattice points in the cone over the
+polytope P; see Bruns and Gubeladze, Polytopes, Rings, and K-theory,
+Springer 2009, pp. 228, 229.
+<BR>The function returns a list of ideals:
+<BR> (i) If the last ring variable is not used by the monomials, it is
+treated as the auxiliary variable of the Ehrhart ring. The
+function returns two ideals, the first containing the monomials
+representing all the lattice points of the polytope, the second
+containing the algebra generators of the Ehrhart ring over the
+coefficient field.
+<BR> (ii) If the last ring variable is used by the monomials, the list
+returned contains only one ideal, namely the monomials
+representing the lattice points of the polytope.
+<BR>
+<BR> The function returns the a list containing the input ideal I if one
+of the options <CODE>supp</CODE>, <CODE>triang</CODE>, <CODE>volume</CODE>, or
+<CODE>hseries</CODE> has been activated.
+However, in this case some numerical invariants are computed, and
+some other data may be contained in files that you can read into
+Singular (see  <A HREF="sing_1254.htm#SEC1329">showNuminvs</A>,  <A HREF="sing_1255.htm#SEC1330">exportNuminvs</A>).
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>A mathematical remark: the Ehrhart ring depends on the list of
+monomials given, and not only on the ideal they generate!
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "normaliz.lib";
+ring R=37,(x,y,t),dp;
+ideal J=x3,x2y,y3,xy2t7;
+ehrhartRing(J);
+==> [1]:
+==>    _[1]=x3
+==>    _[2]=x2y
+==>    _[3]=x2yt
+==>    _[4]=x2yt2
+==>    _[5]=x2yt3
+==>    _[6]=xy2
+==>    _[7]=xy2t
+==>    _[8]=xy2t2
+==>    _[9]=xy2t3
+==>    _[10]=xy2t4
+==>    _[11]=xy2t5
+==>    _[12]=xy2t6
+==>    _[13]=xy2t7
+==>    _[14]=y3
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1248.htm#SEC1323">intclMonIdeal</A>;
+ <A HREF="sing_1244.htm#SEC1319">intclToricRing</A>;
+ <A HREF="sing_1245.htm#SEC1320">normalToricRing</A>.
+<P>
+
+<A NAME="intclMonIdeal"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1246.htm#SEC1321"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: normalToricRingFromBinomials" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1248.htm#SEC1323"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intclMonIdeal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

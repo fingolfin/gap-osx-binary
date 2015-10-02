@@ -540,40 +540,38 @@ rec( B := [ 4, 4, 75/16, 168/25, 32/7 ],
 <h5>25.6-1 OrthogonalEmbeddings</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OrthogonalEmbeddings</code>( <var class="Arg">gram</var>[, <var class="Arg">"positive"</var>][, <var class="Arg">maxdim</var>] )</td><td class="tdright">( function )</td></tr></table></div>
-<p>computes all possible orthogonal embeddings of a lattice given by its Gram matrix <var class="Arg">gram</var>, which must be a regular matrix. In other words, all solutions <span class="SimpleMath">X</span> of the problem</p>
+<p>computes all possible orthogonal embeddings of a lattice given by its Gram matrix <var class="Arg">gram</var>, which must be a regular symmetric matrix of integers. In other words, all integral solutions <span class="SimpleMath">X</span> of the equation <span class="SimpleMath">X^tr ⋅ X =</span><var class="Arg">gram</var> are calculated. The implementation follows the description in <a href="chapBib.html#biBPle90">[Ple95]</a>.</p>
 
-<p class="pcenter">X^tr ⋅ X = gram</p>
-
-<p>are calculated (see <a href="chapBib.html#biBPle90">[Ple95]</a>). Usually there are many solutions <span class="SimpleMath">X</span> but all their rows are chosen from a small set of vectors, so <code class="func">OrthogonalEmbeddings</code> returns the solutions in an encoded form, namely as a record with the following components.</p>
+<p>Usually there are many solutions <span class="SimpleMath">X</span> but all their rows belong to a small set of vectors, so <code class="func">OrthogonalEmbeddings</code> returns the solutions encoded by a record with the following components.</p>
 
 
 <dl>
 <dt><strong class="Mark"><code class="code">vectors</code></strong></dt>
-<dd><p>the list <span class="SimpleMath">L = [ x_1, x_2, ..., x_n ]</span> of vectors that may be rows of a solution; these are exactly those vectors that fulfill the condition <span class="SimpleMath">x_i ⋅ <var class="Arg">gram</var>^{-1} ⋅ x_i^tr ≤ 1</span> (see <code class="func">ShortestVectors</code> (<a href="chap25.html#X79A692B6819353D4"><span class="RefLink">25.6-2</span></a>)), and we have <span class="SimpleMath"><var class="Arg">gram</var> = ∑_{i = 1}^n x_i^tr ⋅ x_i</span>,</p>
+<dd><p>the list <span class="SimpleMath">L = [ x_1, x_2, ..., x_n ]</span> of vectors that may be rows of a solution, up to sign; these are exactly the vectors with the property <span class="SimpleMath">x_i ⋅</span><var class="Arg">gram</var><span class="SimpleMath">^{-1} ⋅ x_i^tr ≤ 1</span>, see <code class="func">ShortestVectors</code> (<a href="chap25.html#X79A692B6819353D4"><span class="RefLink">25.6-2</span></a>),</p>
 
 </dd>
 <dt><strong class="Mark"><code class="code">norms</code></strong></dt>
-<dd><p>the list of values <span class="SimpleMath">x_i ⋅ <var class="Arg">gram</var>^{-1} ⋅ x_i^tr</span>, and</p>
+<dd><p>the list of values <span class="SimpleMath">x_i ⋅</span><var class="Arg">gram</var><span class="SimpleMath">^{-1} ⋅ x_i^tr</span>, and</p>
 
 </dd>
 <dt><strong class="Mark"><code class="code">solutions</code></strong></dt>
-<dd><p>a list <var class="Arg">S</var> of lists; the <var class="Arg">i</var>-th solution matrix is <code class="code"><var class="Arg">L</var>{ <var class="Arg">S</var>[<var class="Arg">i</var>] }</code>, so the dimension of the <var class="Arg">i</var>-th solution is the length of <code class="code"><var class="Arg">S</var>[<var class="Arg">i</var>]</code>.</p>
+<dd><p>a list <span class="SimpleMath">S</span> of index lists; the <span class="SimpleMath">i</span>-th solution matrix is <span class="SimpleMath">L</span><code class="code">{ </code><span class="SimpleMath">S[i]</span><code class="code"> }</code>, so the dimension of the <var class="Arg">i</var>-th solution is the length of <span class="SimpleMath">S[i]</span>, and we have <var class="Arg">gram</var><span class="SimpleMath">= ∑_{j ∈ S[i]} x_j^tr ⋅ x_j</span>,</p>
 
 </dd>
 </dl>
 <p>The optional argument <code class="code">"positive"</code> will cause <code class="func">OrthogonalEmbeddings</code> to compute only vectors <span class="SimpleMath">x_i</span> with nonnegative entries. In the context of characters this is allowed (and useful) if <var class="Arg">gram</var> is the matrix of scalar products of ordinary characters.</p>
 
-<p>When <code class="func">OrthogonalEmbeddings</code> is called with the optional argument <var class="Arg">maxdim</var> (a positive integer), only solutions up to dimension <var class="Arg">maxdim</var> are computed; this will accelerate the algorithm in some cases.</p>
+<p>When <code class="func">OrthogonalEmbeddings</code> is called with the optional argument <var class="Arg">maxdim</var> (a positive integer), only solutions up to dimension <var class="Arg">maxdim</var> are computed; this may accelerate the algorithm.</p>
 
 
 <div class="example"><pre>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">b:= [ [ 3, -1, -1 ], [ -1, 3, -1 ], [ -1, -1, 3 ] ];;</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">c:=OrthogonalEmbeddings( b );</span>
-rec( norms := [ 1, 1, 1, 1/2, 1/2, 1/2, 1/2, 1/2, 1/2 ], 
-  solutions := [ [ 1, 2, 3 ], [ 1, 6, 6, 7, 7 ], [ 2, 5, 5, 8, 8 ], 
-      [ 3, 4, 4, 9, 9 ], [ 4, 5, 6, 7, 8, 9 ] ], 
-  vectors := [ [ -1, 1, 1 ], [ 1, -1, 1 ], [ -1, -1, 1 ], 
-      [ -1, 1, 0 ], [ -1, 0, 1 ], [ 1, 0, 0 ], [ 0, -1, 1 ], 
+rec( norms := [ 1, 1, 1, 1/2, 1/2, 1/2, 1/2, 1/2, 1/2 ],
+  solutions := [ [ 1, 2, 3 ], [ 1, 6, 6, 7, 7 ], [ 2, 5, 5, 8, 8 ],
+      [ 3, 4, 4, 9, 9 ], [ 4, 5, 6, 7, 8, 9 ] ],
+  vectors := [ [ -1, 1, 1 ], [ 1, -1, 1 ], [ -1, -1, 1 ],
+      [ -1, 1, 0 ], [ -1, 0, 1 ], [ 1, 0, 0 ], [ 0, -1, 1 ],
       [ 0, 1, 0 ], [ 0, 0, 1 ] ] )
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">c.vectors{ c.solutions[1] };</span>
 [ [ -1, 1, 1 ], [ 1, -1, 1 ], [ -1, -1, 1 ] ]

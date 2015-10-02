@@ -1,0 +1,215 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: groebner and std</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: groebner and std">
+<META NAME="keywords" CONTENT="Singular Manual: groebner and std">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC905"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_855.htm#SEC906"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Groebner basis conversion" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_852.htm#SEC903"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Dynamic modules" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.2.1 groebner and std </H3>
+<!--docid::SEC905::-->
+<P>
+
+The basic version of Buchberger's algorithm leaves a lot
+of freedom in carrying out the computational process. Considerable
+improvements are obtained by implementing criteria
+for reducing the number of S-polynomials to be actually considered
+(e.g., by applying the product criterion or the chain criterion).
+We refer to Cox, Little, and O'Shea [1997], Chapter 2 for more details
+and references on these criteria and on further strategies for improving the
+performance of Buchberger's algorithm (see also Greuel, Pfister [2002]).
+</P><P>
+
+S<SMALL>INGULAR</SMALL>'s implementation of Buchberger's algorithm is available via
+the <CODE>std</CODE> command ('std' referring to <CODE>st</CODE>an<CODE>d</CODE>ard basis). The
+computation of reduced Groebner and standard bases may be forced by setting
+<CODE>option(redSB)</CODE> (see  <A HREF="sing_364.htm#SEC403">option</A>).
+</P><P>
+
+However, depending on the monomial ordering of the active basering, it may be
+advisable to use the <CODE>groebner</CODE> command instead. This command is
+provided by the S<SMALL>INGULAR</SMALL> library <CODE>standard.lib</CODE> which
+is automatically loaded when starting a S<SMALL>INGULAR</SMALL> session. Depending
+on some heuristics, <CODE>groebner</CODE> either refers to the <CODE>std</CODE>
+command (e.g., for rings with ordering <CODE>dp</CODE>), or to one of the
+algorithms described in the sections  <A HREF="sing_855.htm#SEC906">Groebner basis conversion</A>,
+ <A HREF="sing_856.htm#SEC907">slim Groebner bases</A>.
+For information on the heuristics behind <CODE>groebner</CODE>, see the
+library file <CODE>standard.lib</CODE> (see also  <A HREF="sing_8.htm#SEC14">Procedures and libraries</A>).
+</P><P>
+
+We apply the commands <CODE>std</CODE> and <CODE>groebner</CODE> to compute a
+lexicographic Groebner basis for the ideal of cyclic roots over the
+basering with 6 variables (see  <A HREF="sing_850.htm#SEC901">Cyclic roots</A>). We set
+<CODE>option(prot)</CODE> to make S<SMALL>INGULAR</SMALL> display some information on
+the performed computations (see  <A HREF="sing_364.htm#SEC403">option</A> for an interpretation of
+the displayed symbols). For long running computations, it is always
+recommended to set this option.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "poly.lib";
+ring r=32003,(a,b,c,d,e,f),lp;
+ideal I=cyclic(6);
+option(prot);
+int t=timer;
+system("--ticks-per-sec", 100);         // give time in 1/100 sec
+ideal sI=std(I);
+==> [31:1]1(5)s2(4)s3(3)s4s(4)s5(6)s(9)s(11)s(14)s(17)-s6s(19)s(21)s(24)s(27)\
+   s(30)s(33)s(35)s(38)s(41)ss(42)-s----s7(41)s(43)s(46)s(48)s(51)s(54)s(56)\
+   s(59)s(62)s(63)s(65)s(66)s(68)s(70)s(73)s(75)s(78)---ss(81)-----------s(7\
+   3)--------8-s(66)s(69)s(72)s(75)s(77)s(80)s(81)s(83)s(85)s(88)s(91)s(93)s\
+   (96)s(99)s(102)s(105)s(107)s(110)s(113)-------------(100)-----------s(101\
+   )s(108)s(110)----------(100)--------9-s(94)s(97)s(99)s(84)s(74)s(77)s(80)\
+   ---ss(83)s(86)s(73)s(76)s10(78)s(81)s(82)s(84)s(86)s(89)s(92)s(94)s(97)s(\
+   100)s(103)s(82)s(84)s(86)s(89)s(92)s(95)s11(98)s(87)s(90)s(93)s(95)s(98)s\
+   (101)s(104)----(100)---12-s(99)s(90)s(93)s(92)---------s(86)-----------13\
+   -s(74)s(77)s(79)s(82)s(85)s(88)------------------14-s(64)s(67)ss(70)s(73)\
+   s(77)s(81)-----------------------15-s(57)s(65)s(68)ss(71)----------------\
+   -s(57)----16-s(55)ss(56)------------------------17-s(34)s(32)--------18-s\
+   (26)s(28)s-----19-s(25)s(28)s(31)------20-s(27)s(30)s(35)-------21-s(23)s\
+   (26)------22-s(22)------23-s(15)24-s(17)-s(19)--25-s(18)s(19)s26-s(21)---\
+   ------27-s(11)28-s(13)--29-s(12)-30--s--31-s(11)---32-s33(7)s(10)---34-s-\
+   35----[1023:2]36-s37(6)s38s39s40---42-s43(5)s44s45--48-s49s50s51---54-s55\
+   (4)--67-86-
+==> product criterion:664 chain criterion:2844
+timer-t;                                // used time (in 1/100 secs)
+==> 21
+size(sI);
+==> 17
+t=timer;
+sI=groebner(I);
+==> compute hilbert series with std in ring (32003),(a,b,c,d,e,f,@),(dp(7),C)
+==> weights used for hilbert series: 1,1,1,1,1,1,1
+==> [15:1]1(5)s2(4)s3(3)s4ss5(4)s(5)s(7)-s6(8)s(9)s(11)s(13)s(16)s(18)s(21)--\
+   s7(22)s(23)s(24)s(27)s(29)s(31)s(32)s(35)-s(37)s(40)s(42)s(44)s(45)--s(46\
+   )s(48)-----8-s(44)s(47)s(50)s(52)s(55)s(57)s(59)s(61)-s(63)----s(62)----s\
+   (61)s(64)-s(66)-----------s(58)-------9-s(53)s(56)s(59)s(62)s(65)s(68)s(7\
+   1)s(74)s(77)s(80)s(83)s(86)s(90)s(95)s(102)s(108)--------(100)-----------\
+   -----------s(81)---10-s(83)s(88)s(90)s(94)s(99)s(104)s(109)s(114)-s(116)s\
+   (121)s(126)s(128)s(132)--------------------------------(100)-------------\
+   -11-s(87)---------------------------------------12-s(50)--------13-s(44)s\
+   (47)s(51)s(55)-------------14-s(45)s(48)s(51)s(55)s(58)s(61)s(64)s(67)s(7\
+   0)--------------------15-s(52)s(55)s(58)s(61)s(64)s(67)s(70)s(73)s(76)s(7\
+   9)s(82)-------------------------------------16---------------------------\
+   -----------------17-
+==> product criterion:284 chain criterion:4184
+==> std with hilb in (32003),(a,b,c,d,e,f,@),(lp(6),dp(1),C)
+==> [15:1]1(98)s2(97)s3(96)s4s(97)-s5(98)s(101)s(103)s(106)s(109)---s6(107)s(\
+   109)s(111)s(114)s(117)s(120)s(123)s(125)s(128)s(131)ss(132)-s----------s7\
+   (125)s(127)s(130)s(132)s(135)s(138)s(140)s(143)s(146)s(147)s(149)s(150)s(\
+   152)s(154)s(157)s(159)s(162)---ss(165)-----------shhhhhhhhhhhhhhhhhhhhhhh\
+   8(134)s(136)s(139)s(142)s(145)s(147)s(150)s(151)s(153)s(155)s(158)s(161)s\
+   (163)s(166)s(169)s(172)s(175)s(177)s(180)s(183)------------------------s(\
+   171)s(178)shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh9(147)s(150)s(153)s(155)s(181\
+   )s(184)s(187)s(190)s(203)s(208)s(213)s(217)s(218)s(220)s(222)s(225)---s-s\
+   (226)-----------s(219)---------shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\
+   hhhhhhhh10(163)s(166)s(168)s(171)s(177)s(180)s(183)s(186)shhhhhhhhhhhhhhh\
+   hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh11(125)s(128)s(130)s\
+   (133)s(136)shhhhhhhhhhhhhhhhhhhhhhhhhhhhh12(110)s(113)s(120)s(123)s(127)-\
+   ------------shhhhhhhhhhhhhhh13(102)s(106)s(109)s(111)s(114)s(117)----shhh\
+   hhhhhhhhhhhhhhhhhhhhhhhhhhhh14(85)s(90)s(93)s(97)s(100)s(103)---(100)-s(1\
+   03)shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh15(68)s(72)s(75)s(79)s(85)----\
+   shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh16(42)s(45)s(49)shhhhhhhhhhhh\
+   hhhhhhhhhh17(34)s(37)shhhhhhhhhhhhhh18(27)s(30)s(32)[255:2]-shhhhhhhhh19(\
+   26)s(29)s(32)shhhhhhhhhhhhh20(22)s(25)s(28)shhhhhhhhhhhhh21(20)s(26)shhhh\
+   hhhhhhhh22(18)shhhhhhhhh23(12)shhhhh24(11)s(14)-shhhh25(13)s(18)-s(21)shh\
+   hhhhh26(18)shhhhhhhhhhhh27(9)shhhhh28(8)shhhh29(7)shhhh30(8)-shhh31shhhhh\
+   32(7)shhhh33shhhh34(6)shhhhhhhh36(2)s37(6)shhhh38shhhh39shhhhhhhh42(2)s43\
+   (5)shhhh44shhhhhhhh48s49shhhh50shhhhhhhh54shhhhh
+==> product criterion:720 chain criterion:11620
+==> hilbert series criterion:532
+==> dehomogenization
+==> simplification
+==> imap to ring (32003),(a,b,c,d,e,f),(lp(6),C)
+timer-t;                                // used time (in 1/100 secs)
+==> 7
+size(sI);
+==> 17
+option(noprot);
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Groebner basis conversion"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_855.htm#SEC906"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Groebner basis conversion" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_852.htm#SEC903"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Dynamic modules" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

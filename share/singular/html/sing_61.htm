@@ -1,0 +1,315 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Typesetting of help and info strings</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Typesetting of help and info strings">
+<META NAME="keywords" CONTENT="Singular Manual: Typesetting of help and info strings">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC97"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_60.htm#SEC96"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Documentation Tool" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_62.htm#SEC98"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Loading a library" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Procedures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.8.10 Typesetting of help and info strings </H3>
+<!--docid::SEC97::-->
+<P>
+
+The info strings of the libraries which are included in the distribution
+of S<SMALL>INGULAR</SMALL> and the help strings of the corresponding procedures
+are parsed and automatically converted into the <CODE>texinfo</CODE> format
+(the typesetting language in which the documentation  of S<SMALL>INGULAR</SMALL>
+is written).
+</P><P>
+
+The illustrative example given in  <A HREF="sing_55.htm#SEC91">template_lib</A> should provide
+sufficient information on how this works. For more details, check the
+following items:
+</P><P>
+
+<UL>
+<LI>
+Users familiar with <CODE>texinfo</CODE> may write help and info strings
+directly in the <CODE>texinfo</CODE> format. The string should, then,
+start with the <CODE>@</CODE> sign. In this case, no parsing will be done.
+<LI>
+Help and info strings are typeset within a <CODE>@table @asis</CODE> environment
+(which is similar to the <CODE>latex</CODE> <CODE>description</CODE> environment).
+<LI>
+If a line starts with uppercase words up to a colon, then the text up to
+the colon is taken to be the description-string of an item, and the
+text following the colon is taken to be the content of the item.
+<LI>
+If the description-string of an item matches
+<DL COMPACT>
+<DT><CODE>SEE ALSO</CODE>
+<DD>then the
+content of the item is assumed to consist of comma-separated words
+which are valid references to other <CODE>texinfo</CODE>  nodes of the manual
+(e.g., all procedure and command names are also <CODE>texinfo</CODE>  nodes).
+<DT><CODE>KEYWORDS</CODE>
+<DD>then the content of the item is assumed to be a
+semicolon-separated list of phrases which are taken as keys for the
+index of the manual (the name of a procedure/library is
+automatically added to the index keys).
+</DL>
+<LI>
+If the description-string of an item in the <STRONG>info string of a
+library</STRONG> matches
+<DL COMPACT>
+<DT><CODE>LIBRARY</CODE>
+<DD>then the content of the item is assumed to be a one-line description of
+the library. If this one-line description consists of uppercase characters
+only, then it is typeset in lowercase characters (otherwise it is left as is).
+<DT><CODE>PROCEDURES</CODE>
+<DD>then the content of the item is assumed to consist of lines of type
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>&lt;proc_name&gt;();     &lt;one line description of the purpose&gt;
+</FONT></pre></td></tr></table>Separate <CODE>texinfo</CODE> nodes (subsections in printed documents)
+are created precisely for those  procedures of the library appearing
+here (that is, for some if not all non-static procedures of the library).
+</DL>
+</UL>
+<P>
+
+With respect to the content of an item, the following <CODE>texinfo</CODE>
+markup elements are recognized:
+</P><P>
+
+<UL>
+<LI><CODE>@*</CODE>
+Enforces a line-break.
+<DL COMPACT>
+<DT>Example:
+<DD><CODE>old line @* new line</CODE>
+<BR> ==>
+<BR> old line <BR> new line
+</DL>
+<P>
+
+<LI><CODE>@ref{...}</CODE>
+For references to other parts of the S<SMALL>INGULAR</SMALL> manual, use one of
+the following <CODE>@ref{node}</CODE> constructs. Here, <CODE>node</CODE>
+must be the name of a section of the S<SMALL>IGNULAR</SMALL> manual. In
+particular,  it may be the name of a function, library or procedure
+in a library.
+<P>
+
+<DL COMPACT>
+<DT><CODE>@xref{node}</CODE>
+<DD>for a reference to the node <CODE>node</CODE> at the beginning of a sentence.
+<DT><CODE>@ref{node}</CODE>
+<DD>for a reference to the node <CODE>node</CODE> at the end of a sentence.
+<DT><CODE>@pxref{node}</CODE>
+<DD>for a reference to the node <CODE>node</CODE> within parentheses.
+<P>
+
+<DT>Example:
+<DD><CODE>@xref{Hurricanes}, for more info.</CODE>
+<BR>==>*Note Hurricanes::, for more info.
+<BR>==>See Section 3.1 [Hurricanes], page 24, for more info.
+<P>
+
+<CODE>For more information, see @ref{Hurricanes}.</CODE>
+<BR>==>For more information, see *Note Hurricanes::.
+<BR>==>For more information, see Section 3.1 [Hurricanes], page 24.
+</P><P>
+
+<CODE>... storms cause flooding (@pxref{Hurricanes}) ...</CODE>
+<BR>==>... storms cause flooding (*Note Hurricanes::) ...
+<BR>==>... storms cause flooding (see Section 3.1 [Hurricanes],
+page 24)
+</DL>
+<P>
+
+<LI><CODE>@math{..}</CODE>
+Typeset short mathematical expressions  in LaTeX math-mode
+syntax (short: does not cause expansion over multiple lines).
+<DL COMPACT>
+<DT>Example:
+<DD><CODE>@math{\alpha}</CODE>
+<BR>==>
+<BR>
+<IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_72.png"
+ ALT="$\alpha$"><P>
+
+<DT>Note:
+<DD>The mathematical expressions inside <CODE>@math{..}</CODE> must
+not contain the characters <CODE>{</CODE>,<CODE>}</CODE>, and <CODE>@</CODE>.
+</DL>
+<P>
+
+<LI><CODE>@code{..}</CODE>
+Typeset short strings in typewriter font (short: does not cause
+expansion over multiple lines).
+<DL COMPACT>
+<DT>Example:
+<DD><CODE>@code{typewriter font}</CODE>
+<BR>==>
+<BR><CODE>typewriter font</CODE>
+<DT>Note:
+<DD>The string inside <CODE>@code{..}</CODE> must not contain the
+characters <CODE>{</CODE>,<CODE>}</CODE>, and <CODE>@</CODE>.
+</DL>
+<P>
+
+<LI>
+Typeset pre-formatted text in typewriter font.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@example
+ ...
+@end example
+</pre></td></tr></table><DL COMPACT>
+<DT>Example:
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>before example
+@example
+in example
+notice escape of special characters like @{,@},@@
+@end example
+after example
+</pre></td></tr></table>==>
+<BR>before example
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>in example
+notice escape of special characters like {,},@
+</pre></td></tr></table>after example
+<DT>Note:
+<DD>Inside an @example environment, the characters {,},@ have
+to be escaped by an @ sign.
+</DL>
+<P>
+
+<LI>
+Typeset pre-formatted text in normal font.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@format
+ ...
+@end format
+</pre></td></tr></table><DL COMPACT>
+<DT>Example:
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>before format
+@format
+in format
+notice escape of special characters like @{,@},@@
+@end format
+after format
+</pre></td></tr></table>==>
+<BR>before format
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">in format
+escape of special characters like {,},@
+</pre></td></tr></table>after format
+<DT>Note:
+<DD>Inside an @format environment, the characters {,},@ have
+to be escaped by an @ sign.
+</DL>
+<P>
+
+<LI>
+Write text in pure <CODE>texinfo</CODE>.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@texinfo
+ ...
+@end texinfo
+</pre></td></tr></table><DL COMPACT>
+<DT>Example:
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>@texinfo
+Among others, within a texinfo environment,
+one can use the tex environment to typeset
+more complex mathematical items like
+@tex
+$i_{1,1} $
+@tex
+@end texinfo
+</pre></td></tr></table><BR>==>
+<BR>Among others, within a texinfo environment, one can use the tex environment
+to typeset more complex mathematical items like
+<IMG
+ WIDTH="27" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_71.png"
+ ALT="$i_{1,1}$"></DL>
+<P>
+
+Furthermore, a line-break is inserted before each line
+whose previous line is shorter than 60
+characters and does not contain any of the above described recognized
+texinfo markup elements.
+</UL>
+<P>
+
+<A NAME="Loading a library"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_60.htm#SEC96"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Documentation Tool" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_62.htm#SEC98"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Loading a library" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Procedures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,150 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: primary_invariants</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: primary_invariants">
+<META NAME="keywords" CONTENT="Singular Manual: primary_invariants">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1672"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1596.htm#SEC1671"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: invariant_ring_random" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1598.htm#SEC1673"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primary_invariants_random" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.7.1.3 primary_invariants </H4>
+<!--docid::SEC1672::-->
+Procedure from library <CODE>finvar.lib</CODE> (see  <A HREF="sing_1594.htm#SEC1669">finvar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>primary_invariants(G1,G2,...[,flags]);
+<BR>G1,G2,...: &lt;matrices&gt; generating a finite matrix group, flags: an
+optional &lt;intvec&gt; with three entries, if the first one equals 0 (also
+the default), the programme attempts to compute the Molien series and
+Reynolds operator, if it equals 1, the programme is told that the
+Molien series should not be computed, if it equals -1 characteristic 0
+is simulated, i.e. the Molien series is computed as if the base field
+were characteristic 0 (the user must choose a field of large prime
+characteristic, e.g. 32003) and if the first one is anything else, it
+means that the characteristic of the base field divides the group
+order, the second component should give the size of intervals between
+canceling common factors in the expansion of the Molien series, 0 (the
+default) means only once after generating all terms, in prime
+characteristic also a negative number can be given to indicate that
+common factors should always be canceled when the expansion is simple
+(the root of the extension field occurs not among the coefficients)
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>information about the various stages of the programme if the third
+flag does not equal 0
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>primary invariants (type &lt;matrix&gt;) of the invariant ring and if
+computable Reynolds operator (type &lt;matrix&gt;) and Molien series (type
+&lt;matrix&gt;) or ring name (type string) where the Molien series
+can be found in the char p case; if the first flag is 1 and we are in
+the non-modular case then an &lt;intvec&gt; is returned giving some of the
+degrees where no non-trivial homogeneous invariants can be found
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Bases of homogeneous invariants are generated successively and those
+are chosen as primary invariants that lower the dimension of the ideal
+generated by the previously found invariants (see paper "Generating a
+Noetherian Normalization of the Invariant Ring of a Finite Group" by
+Decker, Heydtmann, Schreyer (1998)).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "finvar.lib";
+ring R=0,(x,y,z),dp;
+matrix A[3][3]=0,1,0,-1,0,0,0,0,-1;
+list L=primary_invariants(A);
+print(L[1]);
+==> z2,x2+y2,x2y2
+</FONT></pre></td></tr></table><P>
+
+<A NAME="primary_invariants_random"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1596.htm#SEC1671"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: invariant_ring_random" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1598.htm#SEC1673"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primary_invariants_random" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

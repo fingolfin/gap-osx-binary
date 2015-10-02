@@ -1,0 +1,145 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: weierstrassForm</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: weierstrassForm">
+<META NAME="keywords" CONTENT="Singular Manual: weierstrassForm">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2047"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1971.htm#SEC2046"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tropicalJInvariant" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1973.htm#SEC2048"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: jInvariant" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.3.9 weierstrassForm </H4>
+<!--docid::SEC2047::-->
+Procedure from library <CODE>tropical.lib</CODE> (see  <A HREF="sing_1963.htm#SEC2038">tropical_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>weierstrassForm(wf[,#]); wf poly, # list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>wf is a a polynomial whose Newton polygon has precisely one
+interior lattice point, so that it defines an elliptic curve
+on the toric surface corresponding to the Newton polygon
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>poly, the Weierstrass normal form of the polynomial
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>- the algorithm for the coefficients of the Weierstrass form is due
+to Fernando Rodriguez Villegas, villegas@math.utexas.edu
+<BR> - the characteristic of the base field should not be 2 or 3
+<BR> - if an additional argument # is given, a simplified Weierstrass
+form is computed
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "tropical.lib";
+ring r=(0,t),(x,y),lp;
+// f is already in Weierstrass form
+poly f=y2+yx+3y-x3-2x2-4x-6;
+weierstrassForm(f);
+// g is not, but wg is
+poly g=x+y+x2y+xy2+1/t*xy;
+poly wg=weierstrassForm(g);
+wg;
+// but it is not yet simple, since it still has an xy-term, unlike swg
+poly swg=weierstrassForm(g,1);
+swg;
+// the j-invariants of all three polynomials coincide
+jInvariant(g);
+jInvariant(wg);
+jInvariant(swg);
+// the following curve is elliptic as well
+poly h=x22y11+x19y10+x17y9+x16y9+x12y7+x9y6+x7y5+x2y3;
+// its Weierstrass form is
+weierstrassForm(h);
+</FONT></pre></td></tr></table><P>
+
+<A NAME="jInvariant"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1971.htm#SEC2046"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tropicalJInvariant" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1973.htm#SEC2048"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: jInvariant" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

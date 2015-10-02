@@ -1,0 +1,158 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: groebnerFanP</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: groebnerFanP">
+<META NAME="keywords" CONTENT="Singular Manual: groebnerFanP">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2021"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1945.htm#SEC2020"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: normalFanL" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1947.htm#SEC2022"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: triangulations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.1.5 groebnerFanP </H4>
+<!--docid::SEC2021::-->
+Procedure from library <CODE>polymake.lib</CODE> (see  <A HREF="sing_1941.htm#SEC2016">polymake_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>groebnerFanP(f); f poly
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, the ith entry of L[1] contains information about the ith cone
+in the Groebner fan dual to the ith vertex in the Newton
+polytope of the f
+<BR> L[1][i][1] = integer matrix representing the inequalities
+which describe the cone
+<BR> L[1][i][2] = a list which contains the inequalities represented
+by L[1][i][1] as a list of strings
+<BR> L[1][i][3] = an interger matrix whose rows are the extreme rays
+of the cone
+<BR> L[2] = is an integer matrix whose rows span the linearity space
+of the fan, i.e. the linear space which is contained
+<BR>in each cone
+<BR> L[3] = the Newton polytope of f in the format of the procedure
+newtonPolytopeP
+<BR> L[4] = integer matrix where each row represents the exponent
+vector of one monomial occuring in the input polynomial
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>- if you have already computed the Newton polytope of f then you might want
+to use the procedure normalFanL instead in order to avoid doing costly
+computation twice
+<BR> - the procedure calls for its computation polymake by Ewgenij Gawrilow,
+TU Berlin and Michael Joswig, so it only works if polymake is installed;
+see http://www.math.tu-berlin.de/polymake/
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "polymake.lib";
+ring r=0,(x,y,z),dp;
+matrix M[4][1]=1,x,y,z;
+poly f=y3+x2+xy+2xz+yz+z2+1;
+// the Newton polytope of f is
+list gf=groebnerFanP(f);
+// the exponent vectors of f are ordered as follows
+gf[4];
+// the first cone of the groebner fan has the inequalities
+gf[1][1][1];
+// as a string they look like
+gf[1][1][2];
+// and it has the extreme rays
+print(gf[1][1][3]);
+// the linearity space is spanned by
+print(gf[2]);
+// the vertices of the Newton polytope are:
+gf[3][1];
+// its dimension is
+gf[3][2];
+// np[3] contains information how the vertices are connected to each other,
+// e.g. the 1st vertex is connected to the 2nd, 3rd and 4th vertex
+gf[3][3][1];
+</FONT></pre></td></tr></table><P>
+
+<A NAME="triangulations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1945.htm#SEC2020"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: normalFanL" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1947.htm#SEC2022"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: triangulations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

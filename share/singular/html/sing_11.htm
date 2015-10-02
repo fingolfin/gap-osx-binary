@@ -1,0 +1,198 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Resolution</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Resolution">
+<META NAME="keywords" CONTENT="Singular Manual: Resolution">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC17"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_10.htm#SEC16"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Modules and their annihilator" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: General concepts" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_4.htm#SEC6"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: How to use this manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General concepts" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_5.htm#SEC11"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Getting started" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 2.3.6 Resolution </H3>
+<!--docid::SEC17::-->
+<P>
+
+There are several commands in S<SMALL>INGULAR</SMALL> for computing free resolutions.
+The most general command is <CODE>res(... ,n)</CODE> which determines heuristically
+what method to use for the given problem. It computes the free resolution
+up to the length 
+<IMG
+ WIDTH="14" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_17.png"
+ ALT="$n$">, where 
+<IMG
+ WIDTH="43" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_18.png"
+ ALT="$n=0$"> corresponds to the full resolution.
+</P><P>
+
+Here we use the possibility to inspect the calculation process using the
+option <CODE>prot</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring R;      // the default ring in char 32003
+R;
+==> //   characteristic : 32003
+==> //   number of vars : 3
+==> //        block   1 : ordering dp
+==> //                  : names    x y z
+==> //        block   2 : ordering C
+ideal I = x4+x3y+x2yz,x2y2+xy2z+y2z2,x2z2+2xz3,2x2z2+xyz2;
+option(prot);
+resolution rs = res(I,0);
+==> using lres
+==> 4(m0)4(m1).5(m1)g.g6(m1)...6(m2)..
+</FONT></pre></td></tr></table></P><P>
+
+Disable this protocol with
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>option(noprot);
+</FONT></pre></td></tr></table></P><P>
+
+When we enter the name of the calculated resolution, we get a pictorial
+description of the minimized resolution where the exponents denote the rank of the
+free modules. Note that the calculated resolution itself may not yet be minimal.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>rs;
+==> 1      4      5      2      0
+==>R  &lt;-- R  &lt;-- R  &lt;-- R  &lt;-- R
+==>
+==>0      1      2      3      4
+print(betti(rs),"betti");
+==>            0     1     2     3
+==> ------------------------------
+==>     0:     1     -     -     -
+==>     1:     -     -     -     -
+==>     2:     -     -     -     -
+==>     3:     -     4     1     -
+==>     4:     -     -     1     -
+==>     5:     -     -     3     2
+==> ------------------------------
+==> total:     1     4     5     2
+</FONT></pre></td></tr></table></P><P>
+
+In order to minimize the resolution, that is to calculate the maps of the minimal
+free resolution, we use the command <CODE>minres</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>rs=minres(rs);
+</FONT></pre></td></tr></table></P><P>
+
+A single module in this resolution is obtained (as usual) with the
+brackets <CODE>[</CODE> and <CODE>]</CODE>. The <CODE>print</CODE> command can be used to
+display a module in a more readable format:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>print(rs[3]);
+==> z3,   -xyz-y2z-4xz2+16z3,
+==> 0,    -y2,
+==> -y+4z,48z,
+==> x+2z, 48z,
+==> 0,    x+y-z
+</FONT></pre></td></tr></table></P><P>
+
+In this case, the output is to be interpreted as follows: the 3rd syzygy
+module of R/I, <CODE>rs[3]</CODE>, is the rank-2-submodule of
+<IMG
+ WIDTH="24" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_19.png"
+ ALT="$R^5$">generated by the vectors
+<!-- MATH
+ $(z^3,0,-y+4z,x+2z,0)$
+ -->
+<IMG
+ WIDTH="177" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_20.png"
+ ALT="$(z^3,0,-y+4z,x+2z,0)$"> and <!-- MATH
+ $(-xyz-y^2z-4xz^2+16z^3,-y^2,48z,48z,x+y-z)$
+ -->
+<IMG
+ WIDTH="369" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_21.png"
+ ALT="$(-xyz-y^2z-4xz^2+16z^3,-y^2,48z,48z,x+y-z)$">.</P><P>
+
+<A NAME="General concepts"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_10.htm#SEC16"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Modules and their annihilator" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: General concepts" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_4.htm#SEC6"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: How to use this manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General concepts" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_5.htm#SEC11"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Getting started" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

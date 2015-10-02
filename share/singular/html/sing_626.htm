@@ -1,0 +1,193 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: deRhamCohomIdeal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: deRhamCohomIdeal">
+<META NAME="keywords" CONTENT="Singular Manual: deRhamCohomIdeal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC677"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_625.htm#SEC676"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: deRhamCohom" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_627.htm#SEC678"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: charVariety" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.5.0. deRhamCohomIdeal </H5>
+<!--docid::SEC677::-->
+Procedure from library <CODE>dmodapp.lib</CODE> (see  <A HREF="sing_611.htm#SEC662">dmodapp_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>deRhamCohomIdeal (I[,w,eng,k,G]);
+<BR> I ideal, w optional intvec, eng and k optional ints, G optional ideal
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is the n-th Weyl algebra D over a field of characteristic
+<BR> zero and for all 1&lt;=i&lt;=n the identity var(i+n)*var(i)=var(i)*var(i+1)+1
+<BR> holds, i.e. the sequence of variables is given by
+<BR> x(1),...,x(n),D(1),...,D(n), where D(i) is the differential operator
+<BR> belonging to x(i).
+<BR> Further, assume that I is of special kind, namely let f in K[x] and
+<BR> consider the module K[x,1/f]f^m, where m is smaller than or equal to
+<BR> the minimal integer root of the Bernstein-Sato polynomial of f.
+<BR> Since this module is known to be a holonomic D-module, it has a cyclic
+<BR> presentation D/I.
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes a basis of the n-th de Rham cohomology group of the complement
+<BR> of the hypersurface defined by f
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The elements of the basis are of the form f^m*p, where p runs over the
+<BR> entries of the returned ideal.
+<BR> If I does not satisfy the assumptions described above, the result might
+<BR> have no meaning. Note that I can be computed with <CODE>annfs</CODE>.
+<BR> If w is an intvec with exactly n strictly positive entries, w is used
+<BR> in the computation. Otherwise, and by default, w is set to (1,...,1).
+<BR> If eng&lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations,
+<BR> otherwise, and by default, <CODE>slimgb</CODE> is used.
+<BR> Let F(I) denote the Fourier transform of I wrt w.
+<BR> An integer smaller than or equal to the minimal integer root of the
+<BR> b-function of F(I) wrt the weight (-w,w) can be specified via the
+<BR> optional argument k.
+<BR> The optional argument G is used for specifying a Groebner Basis of F(I)
+<BR> wrt the weight (-w,w), that is, the initial form of G generates the
+<BR> initial ideal of F(I) wrt the weight (-w,w).
+<BR> Further note, that the assumptions on I, k and G (if given) are not
+<BR> checked.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>(SST) pp. 232-235
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If printlevel=1, progress debug messages will be printed,
+<BR> if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodapp.lib";
+ring r = 0,(x,y,z),dp;
+poly F = x^3+y^3+z^3;
+bfctAnn(F);            // Bernstein-Sato poly of F has minimal integer root -2
+==> [1]:
+==>    _[1]=-1
+==>    _[2]=-4/3
+==>    _[3]=-5/3
+==>    _[4]=-2
+==> [2]:
+==>    2,1,1,1
+def W = annRat(1,F^2); // so we compute the annihilator of 1/F^2
+setring W; W;          // Weyl algebra, contains LD = Ann(1/F^2)
+==> //   characteristic : 0
+==> //   number of vars : 6
+==> //        block   1 : ordering dp
+==> //                  : names    x y z Dx Dy Dz
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    Dxx=x*Dx+1
+==> //    Dyy=y*Dy+1
+==> //    Dzz=z*Dz+1
+LD;                    // K[x,y,z,1/F]F^(-2) is isomorphic to W/LD as W-module
+==> LD[1]=x*Dx+y*Dy+z*Dz+6
+==> LD[2]=z^2*Dy-y^2*Dz
+==> LD[3]=z^2*Dx-x^2*Dz
+==> LD[4]=y^2*Dx-x^2*Dy
+==> LD[5]=x^3*Dz+y^3*Dz+z^3*Dz+6*z^2
+==> LD[6]=x^3*Dy+y^3*Dy+y^2*z*Dz+6*y^2
+deRhamCohomIdeal(LD);  // we see that the K-dim is 2
+==> _[1]=-x^3*Dx*Dy*Dz
+==> _[2]=-x*y*z*Dx*Dy*Dz
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_625.htm#SEC676">deRhamCohom</A>.
+<P>
+
+<A NAME="charVariety"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_625.htm#SEC676"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: deRhamCohom" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_627.htm#SEC678"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: charVariety" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

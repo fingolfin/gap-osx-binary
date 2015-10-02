@@ -1,0 +1,201 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Loading a library</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Loading a library">
+<META NAME="keywords" CONTENT="Singular Manual: Loading a library">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC98"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_61.htm#SEC97"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Typesetting of help and info strings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Procedures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.8.11 Loading a library </H3>
+<!--docid::SEC98::-->
+<P>
+
+Libraries can be loaded with the <CODE>LIB</CODE>  or the <CODE>load</CODE>  command
+(see  <A HREF="sing_333.htm#SEC372">LIB</A> and see  <A HREF="sing_437.htm#SEC476">load</A>).
+</P><P>
+
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>LIB</CODE> string_expression <CODE>;</CODE>
+<BR><CODE>load</CODE> string_expression <CODE>;</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>none
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>Reads a library from a file. If the given filename does not start with
+<KBD>.</KBD> or <KBD>/</KBD>  and if the file cannot be located in the current
+directory,  the <CODE>SearchPath</CODE> is checked for a  directory containing
+a file with this name.
+<DT><CODE><STRONG>Note on SearchPath:</STRONG></CODE>
+<DD>The <CODE>SearchPath</CODE> for a library is constructed at S<SMALL>INGULAR</SMALL>
+start-up time as follows:
+<OL>
+<LI>
+the directories contained in the environment variable
+<CODE>SINGULARPATH</CODE> are appended.
+<P>
+
+<LI>
+the directories <CODE>$BinDir/LIB</CODE>, <CODE>$RootDir/LIB</CODE>,
+<CODE>$RootDir/../LIB</CODE>, <CODE>$DefaultDir/LIB</CODE>, <CODE>$DefaultDir/../LIB</CODE>
+are appended, where
+<UL>
+<LI><CODE>$BinDir</CODE>
+is the value of the environment variable
+<CODE>SINGULAR_BIN_DIR</CODE>, if set, or, if not set, the directory in which the
+S<SMALL>INGULAR</SMALL> program
+resides
+<LI><CODE>$RootDir</CODE>
+is the value of the environment variable
+<CODE>SINGULAR_ROOT_DIR</CODE>, if set, or, if not set, <CODE>$BinDir/../</CODE>.
+<LI><CODE>$DefaultDir</CODE>
+is the value of the environment variable
+<CODE>SINGULAR_DEFAULT_DIR</CODE>, if set, or <CODE>/usr/local/Singular/</CODE> on a
+Unix platform, <CODE>\Singular\</CODE> on a Windows 95/98/NT/XP/Vista platform.
+</UL>
+<P>
+
+<LI>
+all directories which do not exist are removed from the <CODE>SearchPath</CODE>.
+</OL>
+<P>
+
+For setting environment variables, see  <A HREF="sing_406.htm#SEC445">system</A>, or consult the manual of
+your shell.
+</P><P>
+
+The library <CODE>SearchPath</CODE> can be examined  by starting up
+S<SMALL>INGULAR</SMALL> with the option <CODE>-v</CODE>, or by issuing the command
+<CODE>system("--version");</CODE>.
+</P><P>
+
+<DT><CODE><STRONG>Note on standard.lib:</STRONG></CODE>
+<DD>Unless  S<SMALL>INGULAR</SMALL> is started with the <CODE>--no-stdlib</CODE> option, the
+library <CODE>standard.lib</CODE> is automatically loaded at start-up time.
+<P>
+
+</DL>
+<P>
+
+Following a <CODE>LIB</CODE>  or <CODE>load</CODE>  command, only the names
+of the procedures in the library are loaded. The body of a particular
+procedure is only read upon the first call of the procedure. This
+minimizes memory consumption by unused procedures. Starting
+a S<SMALL>INGULAR</SMALL>  session with the <CODE>-q</CODE> or <CODE>--quiet</CODE>
+<CODE>option</CODE> unsets the <CODE>option</CODE> <CODE>loadLib</CODE> and
+inhibits, thus, the monitoring of library loading (see <CODE>option</CODE>).
+</P><P>
+
+All libraries loaded in a S<SMALL>INGULAR</SMALL>  session are displayed upon
+entering <CODE>listvar(package);</CODE> :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre> option(loadLib);   // show loading of libraries;
+                    // standard.lib is loaded
+ listvar(package);
+==> // Standard                       [0]  package Standard (S,standard.lib)
+==> // Top                            [0]  package Top (N)
+                    // the names of the procedures of inout.lib
+ LIB "inout.lib";   // are now known to Singular
+==> // ** loaded inout.lib (4.0.0.0,Jun_2013)
+ listvar(package);
+==> // Inout                          [0]  package Inout (S,Inout)
+==> // Standard                       [0]  package Standard (S,standard.lib)
+==> // Top                            [0]  package Top (N)
+</FONT></pre></td></tr></table></P><P>
+
+See
+ <A HREF="sing_19.htm#SEC26">Command line options</A>;
+ <A HREF="sing_333.htm#SEC372">LIB</A>;
+ <A HREF="sing_8.htm#SEC14">Procedures and libraries</A>;
+ <A HREF="sing_926.htm#SEC1001">SINGULAR libraries</A>;
+ <A HREF="sing_152.htm#SEC191">proc</A>;
+ <A HREF="sing_927.htm#SEC1002">standard_lib</A>;
+ <A HREF="sing_166.htm#SEC205">string</A>;
+ <A HREF="sing_406.htm#SEC445">system</A>.
+</P><P>
+
+<A NAME="Debugging tools"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_61.htm#SEC97"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Typesetting of help and info strings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Procedures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

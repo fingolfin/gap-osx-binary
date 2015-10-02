@@ -1,0 +1,462 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: extend</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: extend">
+<META NAME="keywords" CONTENT="Singular Manual: extend">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1040"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_964.htm#SEC1039"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: PtoCrep" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_966.htm#SEC1041"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: locus" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.4.9 extend </H4>
+<!--docid::SEC1040::-->
+Procedure from library <CODE>grobcov.lib</CODE> (see  <A HREF="sing_956.htm#SEC1031">grobcov_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Return:</STRONG>
+<DD>When calling extend(grobcov(S,"rep",2)) the result is of the form
+(
+(lpp_1,basis_1,segment_1,lpph_1),
+...
+(lpp_s,basis_s,segment_s,lpph_s)
+)
+where each function of the basis can be given by an ideal
+of representants.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The basering R, must be of the form Q[a][x], (a=parameters,
+x=variables), and should be defined previously. The ideal must
+be defined on R.
+<P>
+
+<A NAME="IDX415"></A>
+          parametric ideal, full representation.
+</P><P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "grobcov.lib";
+ring R=(0,a0,b0,c0,a1,b1,c1),(x), dp;
+short=0;
+ideal S=a0*x^2+b0*x+c0,
+a1*x^2+b1*x+c1;
+def GCS=grobcov(S,"rep",2);
+GCS;
+==> [1]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=1
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=0
+==>          [2]:
+==>             [1]:
+==>                _[1]=(a0^2*c1^2-a0*b0*b1*c1-2*a0*c0*a1*c1+a0*c0*b1^2+b0^2*\
+   a1*c1-b0*c0*a1*b1+c0^2*a1^2)
+==>    [4]:
+==>       [1]:
+==>          _[1]=0
+==>       [2]:
+==>          _[1]=(a0^2*c1^2-a0*b0*b1*c1-2*a0*c0*a1*c1+a0*c0*b1^2+b0^2*a1*c1-\
+   b0*c0*a1*b1+c0^2*a1^2)
+==>    [5]:
+==>       1
+==> [2]:
+==>    [1]:
+==>       _[1]=x
+==>    [2]:
+==>       _[1]=(b0*a1*c1-c0*a1*b1)*x+(-a0*c1^2+b0*b1*c1+c0*a1*c1-c0*b1^2)
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(a0^2*c1^2-a0*b0*b1*c1-2*a0*c0*a1*c1+a0*c0*b1^2+b0^2*a1*\
+   c1-b0*c0*a1*b1+c0^2*a1^2)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(b0*c1-c0*b1)
+==>                _[2]=(a0*c1-c0*a1)
+==>                _[3]=(a0*b1-b0*a1)
+==>             [2]:
+==>                _[1]=(a1)
+==>                _[2]=(a0)
+==>    [4]:
+==>       [1]:
+==>          _[1]=(a0^2*c1^2-a0*b0*b1*c1-2*a0*c0*a1*c1+a0*c0*b1^2+b0^2*a1*c1-\
+   b0*c0*a1*b1+c0^2*a1^2)
+==>       [2]:
+==>          _[1]=(-a0*c1+c0*a1)
+==>          _[2]=(-a0*b1+b0*a1)
+==>          _[3]=(-a0*b0*c1+a0*c0*b1)
+==>    [5]:
+==>       x
+==> [3]:
+==>    [1]:
+==>       _[1]=x
+==>    [2]:
+==>       _[1]=(b1)*x+(c1)
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(a1)
+==>             _[2]=(b0*c1-c0*b1)
+==>             _[3]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(b1)
+==>                _[2]=(a1)
+==>                _[3]=(b0)
+==>                _[4]=(a0)
+==>    [4]:
+==>       [1]:
+==>          _[1]=(a1)
+==>          _[2]=(a0)
+==>          _[3]=(-b0*c1+c0*b1)
+==>       [2]:
+==>          _[1]=(b1)
+==>          _[2]=(a1)
+==>          _[3]=(b0)
+==>          _[4]=(a0)
+==>    [5]:
+==>       x*@t
+==> [4]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=1
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(b1)
+==>             _[2]=(a1)
+==>             _[3]=(b0)
+==>             _[4]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(c1)
+==>                _[2]=(b1)
+==>                _[3]=(a1)
+==>                _[4]=(c0)
+==>                _[5]=(b0)
+==>                _[6]=(a0)
+==>    [4]:
+==>       [1]:
+==>          _[1]=(b1)
+==>          _[2]=(a1)
+==>          _[3]=(b0)
+==>          _[4]=(a0)
+==>       [2]:
+==>          _[1]=(c1)
+==>          _[2]=(b1)
+==>          _[3]=(a1)
+==>          _[4]=(c0)
+==>          _[5]=(b0)
+==>          _[6]=(a0)
+==>    [5]:
+==>       @t^2
+==> [5]:
+==>    [1]:
+==>       _[1]=0
+==>    [2]:
+==>       _[1]=0
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(c1)
+==>             _[2]=(b1)
+==>             _[3]=(a1)
+==>             _[4]=(c0)
+==>             _[5]=(b0)
+==>             _[6]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=1
+==>    [4]:
+==>       [1]:
+==>          _[1]=(c1)
+==>          _[2]=(b1)
+==>          _[3]=(a1)
+==>          _[4]=(c0)
+==>          _[5]=(b0)
+==>          _[6]=(a0)
+==>       [2]:
+==>          _[1]=1
+==>    [5]:
+==>       0
+==> [6]:
+==>    [1]:
+==>       _[1]=x^2
+==>    [2]:
+==>       _[1]=(a1)*x^2+(b1)*x+(c1)
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(b0*c1-c0*b1)
+==>             _[2]=(a0*c1-c0*a1)
+==>             _[3]=(a0*b1-b0*a1)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(a1)
+==>                _[2]=(b0*c1-c0*b1)
+==>                _[3]=(a0)
+==>    [4]:
+==>       [1]:
+==>          _[1]=(-b0*c1+c0*b1)
+==>          _[2]=(-a0*c1+c0*a1)
+==>          _[3]=(-a0*b1+b0*a1)
+==>       [2]:
+==>          _[1]=(a1)
+==>          _[2]=(a0)
+==>          _[3]=(-b0*c1+c0*b1)
+==>    [5]:
+==>       x^2
+==> [7]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=1
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(a1)
+==>             _[2]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(a1)
+==>                _[2]=(b0*c1-c0*b1)
+==>                _[3]=(a0)
+==>    [4]:
+==>       [1]:
+==>          _[1]=(a1)
+==>          _[2]=(a0)
+==>       [2]:
+==>          _[1]=(a1)
+==>          _[2]=(a0)
+==>          _[3]=(-b0*c1+c0*b1)
+==>    [5]:
+==>       @t
+def FGC=extend(GCS,"rep",0);
+// Full representation=
+FGC;
+==> [1]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=1
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=0
+==>          [2]:
+==>             [1]:
+==>                _[1]=(a0^2*c1^2-a0*b0*b1*c1-2*a0*c0*a1*c1+a0*c0*b1^2+b0^2*\
+   a1*c1-b0*c0*a1*b1+c0^2*a1^2)
+==>    [4]:
+==>       1
+==> [2]:
+==>    [1]:
+==>       _[1]=x
+==>    [2]:
+==>       _[1]=(a0*b1-b0*a1)*x+(a0*c1-c0*a1)
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(a0^2*c1^2-a0*b0*b1*c1-2*a0*c0*a1*c1+a0*c0*b1^2+b0^2*a1*\
+   c1-b0*c0*a1*b1+c0^2*a1^2)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(b0*c1-c0*b1)
+==>                _[2]=(a0*c1-c0*a1)
+==>                _[3]=(a0*b1-b0*a1)
+==>             [2]:
+==>                _[1]=(a1)
+==>                _[2]=(a0)
+==>    [4]:
+==>       x
+==> [3]:
+==>    [1]:
+==>       _[1]=x
+==>    [2]:
+==>       [1]:
+==>          _[1]=(b1)*x+(c1)
+==>          _[2]=(b0)*x+(c0)
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(a1)
+==>             _[2]=(b0*c1-c0*b1)
+==>             _[3]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(b1)
+==>                _[2]=(a1)
+==>                _[3]=(b0)
+==>                _[4]=(a0)
+==>    [4]:
+==>       x*@t
+==> [4]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=1
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(b1)
+==>             _[2]=(a1)
+==>             _[3]=(b0)
+==>             _[4]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(c1)
+==>                _[2]=(b1)
+==>                _[3]=(a1)
+==>                _[4]=(c0)
+==>                _[5]=(b0)
+==>                _[6]=(a0)
+==>    [4]:
+==>       @t^2
+==> [5]:
+==>    [1]:
+==>       _[1]=0
+==>    [2]:
+==>       _[1]=0
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(c1)
+==>             _[2]=(b1)
+==>             _[3]=(a1)
+==>             _[4]=(c0)
+==>             _[5]=(b0)
+==>             _[6]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=1
+==>    [4]:
+==>       0
+==> [6]:
+==>    [1]:
+==>       _[1]=x^2
+==>    [2]:
+==>       [1]:
+==>          _[1]=(a1)*x^2+(b1)*x+(c1)
+==>          _[2]=(a0)*x^2+(b0)*x+(c0)
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(b0*c1-c0*b1)
+==>             _[2]=(a0*c1-c0*a1)
+==>             _[3]=(a0*b1-b0*a1)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(a1)
+==>                _[2]=(b0*c1-c0*b1)
+==>                _[3]=(a0)
+==>    [4]:
+==>       x^2
+==> [7]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=1
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             _[1]=(a1)
+==>             _[2]=(a0)
+==>          [2]:
+==>             [1]:
+==>                _[1]=(a1)
+==>                _[2]=(b0*c1-c0*b1)
+==>                _[3]=(a0)
+==>    [4]:
+==>       @t
+</FONT></pre></td></tr></table><P>
+
+<A NAME="locus"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_964.htm#SEC1039"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: PtoCrep" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_966.htm#SEC1041"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: locus" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

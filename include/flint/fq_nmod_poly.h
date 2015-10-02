@@ -28,6 +28,14 @@
 #ifndef FQ_NMOD_POLY_H
 #define FQ_NMOD_POLY_H
 
+#ifdef FQ_NMOD_POLY_INLINES_C
+#define FQ_POLY_TEMPLATES_INLINE FLINT_DLL
+#define FQ_NMOD_POLY_INLINE FLINT_DLL
+#else
+#define FQ_POLY_TEMPLATES_INLINE static __inline__
+#define FQ_NMOD_POLY_INLINE static __inline__
+#endif
+
 #include "fq_nmod.h"
 #include "fq_nmod_mat.h"
 
@@ -37,6 +45,11 @@
 #define FQ_NMOD_MUL_CLASSICAL_CUTOFF 6
 #define FQ_NMOD_SQR_CLASSICAL_CUTOFF 6
 #define FQ_NMOD_MULLOW_CLASSICAL_CUTOFF 6
+
+#define FQ_NMOD_POLY_HGCD_CUTOFF 25
+#define FQ_NMOD_POLY_SMALL_GCD_CUTOFF 110
+#define FQ_NMOD_POLY_GCD_CUTOFF 120
+
 
 #ifdef T
 #undef T

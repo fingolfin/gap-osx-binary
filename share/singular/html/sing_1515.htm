@@ -1,0 +1,248 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: hnexpansion</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: hnexpansion">
+<META NAME="keywords" CONTENT="Singular Manual: hnexpansion">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1590"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1516.htm#SEC1591"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: develop" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.9.1 hnexpansion </H4>
+<!--docid::SEC1590::-->
+Procedure from library <CODE>hnoether.lib</CODE> (see  <A HREF="sing_1514.htm#SEC1589">hnoether_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>hnexpansion(f[,"ess"]); f poly
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f is a bivariate polynomial (in the first 2 ring variables)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list <CODE>L</CODE>, containing Hamburger-Noether data of <CODE>f</CODE>:
+If the computation of the HNE required no field extension, <CODE>L</CODE>
+is a list of lists <CODE>L[i]</CODE> (corresponding to the output of
+<CODE>develop</CODE>, applied to a branch of <CODE>f</CODE>, but the last entry
+being omitted):
+<P>
+
+<DL COMPACT>
+<DT><CODE>L[i][1]</CODE>; matrix:
+<DD>         Each row contains the coefficients of the corresponding line of the
+         Hamburger-Noether expansion (HNE) for the i-th branch. The end of
+         the line is marked in the matrix by the first ring variable
+         (usually x).
+<DT><CODE>L[i][2]</CODE>; intvec:
+<DD>         indicating the length of lines of the HNE
+<DT><CODE>L[i][3]</CODE>; int:
+<DD>         0  if the 1st ring variable was transversal (with respect to the
+            i-th branch), <BR>
+         1  if the variables were changed at the beginning of the
+            computation, <BR>
+        -1  if an error has occurred.
+<DT><CODE>L[i][4]</CODE>; poly:
+<DD>         the transformed equation of the i-th branch to make it possible
+         to extend the Hamburger-Noether data a posteriori without having
+         to do all the previous calculation once again (0 if not needed).
+</DL>
+<P>
+
+If the computation of the HNE required a field extension, the first
+entry <CODE>L[1]</CODE> of the list is a ring, in which a list <CODE>hne</CODE>
+of lists (the HN data, as above) and a polynomial <CODE>f</CODE> (image of
+<CODE>f</CODE> over the new field) are stored.
+<BR>
+If called with an additional input parameter, <CODE>hnexpansion</CODE>
+computes only one representative for each class of conjugate
+branches (over the ground field active when calling the procedure).
+In this case, the returned list <CODE>L</CODE> always has only two
+entries: <CODE>L[1]</CODE> is either a list of lists (the HN data) or a
+ring (as above), and <CODE>L[2]</CODE> is an integer vector (the number
+of branches in the respective conjugacy classes).
+</P><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>If f is known to be irreducible as a power series, <CODE>develop(f)</CODE>
+could be chosen instead to avoid a change of basering during the
+computations. <BR>
+Increasing <CODE>printlevel</CODE> leads to more and more comments. <BR>
+Having defined a variable <CODE>HNDebugOn</CODE> leads to a maximum
+number of comments.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "hnoether.lib";
+ring r=0,(x,y),dp;
+// First, an example which requires no field extension:
+list Hne=hnexpansion(x4-y6);
+==> // No change of ring necessary, return value is HN expansion.
+size(Hne);           // number of branches
+==> 2
+displayHNE(Hne);     // HN expansion of branches
+==> // Hamburger-Noether development of branch nr.1:
+==>   x = z(1)*y
+==>   y = z(1)^2
+==> 
+==> // Hamburger-Noether development of branch nr.2:
+==>   x = z(1)*y
+==>   y = -z(1)^2
+==> 
+param(Hne[1]);       // parametrization of 1st branch
+==> _[1]=x3
+==> _[2]=x2
+param(Hne[2]);       // parametrization of 2nd branch
+==> _[1]=-x3
+==> _[2]=-x2
+// An example which requires a field extension:
+list L=hnexpansion((x4-y6)*(y2+x4));
+==> 
+==> // 'hnexpansion' created a list of one ring.
+==> // To see the ring and the data stored in the ring, type (if you assigned
+==> // the name L to the list):
+==>      show(L);
+==> // To display the computed HN expansion, type
+==>      def HNring = L[1]; setring HNring;  displayHNE(hne); 
+def R=L[1]; setring R; displayHNE(hne);
+==> // Hamburger-Noether development of branch nr.1:
+==>   y = (a)*x^2
+==> 
+==> // Hamburger-Noether development of branch nr.2:
+==>   y = (-a)*x^2
+==> 
+==> // Hamburger-Noether development of branch nr.3:
+==>   x = z(1)*y
+==>   y = z(1)^2
+==> 
+==> // Hamburger-Noether development of branch nr.4:
+==>   x = z(1)*y
+==>   y = -z(1)^2
+==> 
+basering;
+==> //   characteristic : 0
+==> //   1 parameter    : a 
+==> //   minpoly        : (a2+1)
+==> //   number of vars : 2
+==> //        block   1 : ordering ls
+==> //                  : names    x y
+==> //        block   2 : ordering C
+setring r; kill R;
+// Computing only one representative per conjugacy class:
+L=hnexpansion((x4-y6)*(y2+x4),"ess");
+==> 
+==> // 'hnexpansion' created a list of one ring.
+==> // To see the ring and the data stored in the ring, type (if you assigned
+==> // the name L to the list):
+==>      show(L);
+==> // To display the computed HN expansion, type
+==>      def HNring = L[1]; setring HNring;  displayHNE(hne); 
+==> // As second entry of the returned list L, you obtain an integer vector,
+==> // indicating the number of conjugates for each of the computed branches.
+def R=L[1]; setring R; displayHNE(hne);
+==> // Hamburger-Noether development of branch nr.1:
+==>   y = (a)*x^2
+==> 
+==> // Hamburger-Noether development of branch nr.2:
+==>   x = z(1)*y
+==>   y = z(1)^2
+==> 
+==> // Hamburger-Noether development of branch nr.3:
+==>   x = z(1)*y
+==>   y = -z(1)^2
+==> 
+L[2];     // number of branches in respective conjugacy classes
+==> 2,1,1
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1516.htm#SEC1591">develop</A>;
+ <A HREF="sing_1519.htm#SEC1594">displayHNE</A>;
+ <A HREF="sing_1517.htm#SEC1592">extdevelop</A>;
+ <A HREF="sing_1518.htm#SEC1593">param</A>.
+<P>
+
+<A NAME="develop"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1516.htm#SEC1591"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: develop" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

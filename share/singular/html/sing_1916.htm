@@ -1,0 +1,157 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: randcharpoly</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: randcharpoly">
+<META NAME="keywords" CONTENT="Singular Manual: randcharpoly">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1991"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1915.htm#SEC1990"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: coords" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1917.htm#SEC1992"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: verify" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1923.htm#SEC1998"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: rootsur_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1907.htm#SEC1982"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: rootsmr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.12.7.9 randcharpoly </H4>
+<!--docid::SEC1991::-->
+Procedure from library <CODE>rootsmr.lib</CODE> (see  <A HREF="sing_1907.htm#SEC1982">rootsmr_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>randcharpoly(b,i); randcharpoly(b,i,n); b,i ideal; n int
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>poly: the characteristic polynomial of a pseudorandom
+rational univariate projection having one zero per zero of i.
+If n&lt;10 is given, it is the number of digits being used for the
+pseudorandom coefficients (default: n=5)
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>i is a Groebner basis and b is an ordered monomial basis of r/i,
+r = basering
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>shows a warning if printlevel&gt;0 (default: printlevel=0)
+<P>
+
+<A NAME="IDX663"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "rootsmr.lib";
+ring r = 0,(x,y,z),dp;
+ideal i = (x-1)*(x-2),(y-1),(z-1)*(z-2)*(z-3)^2;
+i = std(i);
+ideal b = qbase(i);
+poly p = randcharpoly(b,i);
+p;
+==> z8-1989306z7+1720335326522z6-844575738768293508z5+25739857498506957597394\
+   5z4-49855396253842786126599566442z3+5991506449298102407845582886576172z2-\
+   408335865183407651473343362162998177144z+12078261759575784323866334900781\
+   464660123776
+nrroots(p); // See nrroots in urrcount.lib
+==> 6
+int pr = printlevel;
+printlevel = pr+2;
+p = randcharpoly(b,i,5);
+==> // poly, 9 monomial(s)
+==> z8-2923964*z7+3712323518934*z6-2671920147197312780*z5+1191863249059288760\
+   005489*z4-337242235263204293461543939056*z3+59079952041382728808956425746\
+   100736*z2-5855367303472484622963975143953858560000*z+25120629313761950033\
+   6395930918610534400000000
+==> *********************************************************************
+==> * WARNING: This polynomial was obtained using  pseudorandom numbers.*
+==> * If you want to verify the result, please use the command          *
+==> *                                                                   *
+==> * verify(p,b,i)                                                     *
+==> *                                                                   *
+==> * where p is the polynomial I returned, b is the monomial basis     *
+==> * used, and i the Groebner basis of the ideal                       *
+==> *********************************************************************
+nrroots(p);
+==> 6
+printlevel = pr;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="verify"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1915.htm#SEC1990"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: coords" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1917.htm#SEC1992"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: verify" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1902.htm#SEC1977"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: weierstr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1923.htm#SEC1998"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: rootsur_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1907.htm#SEC1982"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: rootsmr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

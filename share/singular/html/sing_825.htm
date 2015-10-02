@@ -1,0 +1,180 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: annRatSyz</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: annRatSyz">
+<META NAME="keywords" CONTENT="Singular Manual: annRatSyz">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC876"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_824.htm#SEC875"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bfctBound" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_826.htm#SEC877"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: dmodGeneralAssumptionCheck" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_813.htm#SEC864"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ratgb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.21.0. annRatSyz </H5>
+<!--docid::SEC876::-->
+Procedure from library <CODE>dmodloc.lib</CODE> (see  <A HREF="sing_815.htm#SEC866">dmodloc_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>annRatSyz(f,g[,db,eng]); f, g polynomials, db,eng optional integers
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is commutative and over a field of characteristic 0.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring (a Weyl algebra) containing an ideal `LD', which is (part of)
+the annihilator of the rational function g/f in the corresponding
+Weyl algebra
+<P>
+
+<DT><STRONG>Remarks:</STRONG>
+<DD>This procedure uses the computation of certain syzygies.
+One can obtain the full annihilator by computing the Weyl closure of
+the ideal LD.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Activate the output ring with the <CODE>setring</CODE> command.
+In the output ring, the ideal `LD' (in Groebner basis) is (part of)
+the annihilator of g/f.
+<BR> If db&gt;0 is given, operators of order up to db are considered,
+otherwise, and by default, a minimal holonomic solution is computed.
+<BR> If eng&lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations,
+otherwise, and by default, <CODE>slimgb</CODE> is used.
+<BR> If printlevel =1, progress debug messages will be printed,
+if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodloc.lib";
+// printlevel = 3;
+ring r = 0,(x,y),dp;
+poly f = 2*x*y; poly g = x^2 - y^3;
+def A = annRatSyz(f,g);   // compute a holonomic solution
+setring A; A;
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    x y Dx Dy
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    Dxx=x*Dx+1
+==> //    Dyy=y*Dy+1
+LD;
+==> LD[1]=3*x*Dx+2*y*Dy+1
+==> LD[2]=y^4*Dy-x^2*y*Dy+2*y^3+x^2
+setring r;
+def B = annRatSyz(f,g,5); // compute a solution up to degree 5
+setring B;
+LD; // this is the full annihilator as we will check below
+==> LD[1]=29223*y^2*Dx^2*Dy+2286*x*Dx*Dy^2-11464*y*Dy^3+87669*y*Dx^2+10304*Dy\
+   ^2
+==> LD[2]=111*y^3*Dx^2+2760*x^2*Dx^2+1470*x*y*Dx*Dy-296*y^2*Dy^2+4050*x*Dx
+==> LD[3]=3*x*Dx+2*y*Dy+1
+==> LD[4]=y^3*Dy^2-x^2*Dy^2+6*y^2*Dy+6*y
+==> LD[5]=y^4*Dy-x^2*y*Dy+2*y^3+x^2
+setring r;
+def C = annRat(f,g); setring C;
+LD; // the full annihilator
+==> LD[1]=3*y^2*Dx^2*Dy+2*x*Dx*Dy^2+9*y*Dx^2+4*Dy^2
+==> LD[2]=3*y^3*Dx^2-10*x*y*Dx*Dy-8*y^2*Dy^2+10*x*Dx
+==> LD[3]=y^3*Dy^2-x^2*Dy^2-6*x*y*Dx+2*y^2*Dy+4*y
+==> LD[4]=3*x*Dx+2*y*Dy+1
+==> LD[5]=y^4*Dy-x^2*y*Dy+2*y^3+x^2
+ideal BLD = imap(B,LD);
+NF(LD,std(BLD));
+==> _[1]=0
+==> _[2]=0
+==> _[3]=0
+==> _[4]=0
+==> _[5]=0
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_612.htm#SEC663">annPoly</A>;
+ <A HREF="sing_613.htm#SEC664">annRat</A>.
+<P>
+
+<A NAME="dmodGeneralAssumptionCheck"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_824.htm#SEC875"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bfctBound" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_826.htm#SEC877"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: dmodGeneralAssumptionCheck" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_813.htm#SEC864"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ratgb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

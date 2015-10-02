@@ -1,0 +1,155 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: resolutiongraph</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: resolutiongraph">
+<META NAME="keywords" CONTENT="Singular Manual: resolutiongraph">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1507"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1431.htm#SEC1506"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: alexpoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1433.htm#SEC1508"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: totalmultiplicities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1430.htm#SEC1505"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Singularities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1444.htm#SEC1519"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arcpoint_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1431.htm#SEC1506"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: alexpoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.1.1 resolutiongraph </H4>
+<!--docid::SEC1507::-->
+Procedure from library <CODE>alexpoly.lib</CODE> (see  <A HREF="sing_1431.htm#SEC1506">alexpoly_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>resolutiongraph(INPUT); INPUT poly or list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>INPUT is either a REDUCED bivariate polynomial defining a plane curve singularity,
+or the output of <CODE>hnexpansion(f[,"ess"])</CODE>, or the list <CODE>hne</CODE> in
+the ring created by <CODE>hnexpansion(f[,"ess"])</CODE>, or the output of
+<CODE>develop(f)</CODE> resp. of <CODE>extdevelop(f,n)</CODE>, or a list containing
+the contact matrix and a list of integer vectors with the characteristic exponents
+of the branches of a plane curve singularity, or an integer vector containing the
+characteristic exponents of an irreducible plane curve singularity.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>intmat, the incidence matrix of the resolution graph of the plane curve
+defined by INPUT, where the entries on the diagonal are the weights of the
+vertices of the graph and a negative entry corresponds to the strict transform
+of a branch of the curve.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>In case the Hamburger-Noether expansion of the curve f is needed
+for other purposes as well it is better to calculate this first
+with the aid of <CODE>hnexpansion</CODE> and use it as input instead of
+the polynomial itself.
+<BR>
+If you are not sure whether the INPUT polynomial is reduced or not, use
+<CODE>squarefree(INPUT)</CODE> as input instead.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "alexpoly.lib";
+ring r=0,(x,y),ls;
+poly f1=(y2-x3)^2-4x5y-x7;
+poly f2=y2-x3;
+poly f3=y3-x2;
+resolutiongraph(f1*f2*f3);
+==> 1,0,1,0,0,0,0,0,1,0,
+==> 0,2,1,0,0,0,0,0,0,0,
+==> 1,1,3,0,1,0,0,0,0,0,
+==> 0,0,0,4,1,0,1,0,0,0,
+==> 0,0,1,1,5,1,0,0,0,0,
+==> 0,0,0,0,1,-2,0,0,0,0,
+==> 0,0,0,1,0,0,-1,0,0,0,
+==> 0,0,0,0,0,0,0,2,1,0,
+==> 1,0,0,0,0,0,0,1,3,1,
+==> 0,0,0,0,0,0,0,0,1,-3 
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1434.htm#SEC1509">alexanderpolynomial</A>;
+ <A HREF="sing_1516.htm#SEC1591">develop</A>;
+ <A HREF="sing_1515.htm#SEC1590">hnexpansion</A>;
+ <A HREF="sing_1433.htm#SEC1508">totalmultiplicities</A>.
+<P>
+
+<A NAME="totalmultiplicities"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1431.htm#SEC1506"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: alexpoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1433.htm#SEC1508"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: totalmultiplicities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1430.htm#SEC1505"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Singularities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1444.htm#SEC1519"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arcpoint_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1431.htm#SEC1506"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: alexpoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

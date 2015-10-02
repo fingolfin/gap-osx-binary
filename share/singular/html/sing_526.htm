@@ -1,0 +1,201 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ringlist (plural)</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ringlist (plural)">
+<META NAME="keywords" CONTENT="Singular Manual: ringlist (plural)">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC565"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_525.htm#SEC564"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reduce (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_527.htm#SEC566"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: slimgb (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 7.3.24 ringlist (plural) </H3>
+<!--docid::SEC565::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>ringlist (</CODE> ring_expression <CODE>)</CODE>
+<BR><CODE>ringlist (</CODE> qring_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>list
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>decomposes a ring/qring into a list of 6 (or 4 in the commutative case)
+components.
+<BR> The first 4 components are common both for the commutative and for the
+non-commutative cases, the 5th and the 6th appear only in the non-commutative case.
+<P>
+
+<OL>
+<LI>upper triangle square matrix with nonzero upper triangle, containing
+structural coefficients of a G-algebra (this corresponds to the
+matrix C from the definition of  <A HREF="sing_534.htm#SEC573">G-algebras</A>)
+<LI>square matrix, containing structural polynomials of a G-algebra
+(this corresponds to the matrix D from the definition of  <A HREF="sing_534.htm#SEC573">G-algebras</A>)
+</OL>
+<DT><CODE><STRONG>Note:</STRONG> After modifying a list aquired with <CODE>ringlist</CODE>, one can construct a corresponding ring with <CODE>ring(list)</CODE>.</CODE>
+<DD><DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>// consider the quantized Weyl algebra
+ring r = (0,q),(x,d),Dp;
+def RS=nc_algebra(q,1);
+setring RS; RS;
+==> //   characteristic : 0
+==> //   1 parameter    : q 
+==> //   minpoly        : 0
+==> //   number of vars : 2
+==> //        block   1 : ordering Dp
+==> //                  : names    x d
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    dx=(q)*xd+1
+list l = ringlist(RS);
+l;
+==> [1]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       [1]:
+==>          q
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             lp
+==>          [2]:
+==>             1
+==>    [4]:
+==>       _[1]=0
+==> [2]:
+==>    [1]:
+==>       x
+==>    [2]:
+==>       d
+==> [3]:
+==>    [1]:
+==>       [1]:
+==>          Dp
+==>       [2]:
+==>          1,1
+==>    [2]:
+==>       [1]:
+==>          C
+==>       [2]:
+==>          0
+==> [4]:
+==>    _[1]=0
+==> [5]:
+==>    _[1,1]=0
+==>    _[1,2]=(q)
+==>    _[2,1]=0
+==>    _[2,2]=0
+==> [6]:
+==>    _[1,1]=0
+==>    _[1,2]=1
+==>    _[2,1]=0
+==>    _[2,2]=0
+// now, change the relation d*x = q*x*d +1
+// into the relation d*x=(q2+1)*x*d + q*d + 1
+matrix S = l[5]; // matrix of coefficients
+S[1,2] = q^2+1;
+l[5] = S;
+matrix T = l[6]; // matrix of polynomials
+T[1,2] = q*d+1;
+l[6] = T;
+def rr = ring(l);
+setring rr; rr;
+==> //   characteristic : 0
+==> //   1 parameter    : q 
+==> //   minpoly        : 0
+==> //   number of vars : 2
+==> //        block   1 : ordering Dp
+==> //                  : names    x d
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    dx=(q2+1)*xd+(q)*d+1
+</FONT></pre></td></tr></table></DL>
+<P>
+
+See also
+ <A HREF="sing_498.htm#SEC537">ring (plural)</A>;
+ <A HREF="sing_389.htm#SEC428">ringlist</A>.
+</P><P>
+
+<A NAME="slimgb (plural)"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_525.htm#SEC564"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reduce (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_527.htm#SEC566"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: slimgb (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

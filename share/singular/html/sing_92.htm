@@ -1,0 +1,187 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: int expressions</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: int expressions">
+<META NAME="keywords" CONTENT="Singular Manual: int expressions">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC131"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_91.htm#SEC130"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: int declarations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_93.htm#SEC132"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: int operations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_85.htm#SEC124"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ideal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_97.htm#SEC136"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: intmat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_90.htm#SEC129"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: int" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.5.2 int expressions </H3>
+<!--docid::SEC131::-->
+<P>
+
+An int expression is:
+<OL>
+<LI>
+a sequence of digits (if the number represented by this sequence is too
+large to fit into the range of integers it is automatically
+converted to the type number, if a basering is defined)
+<LI>
+an identifier of type int
+<LI>
+a function returning int
+<LI>
+an expression involving ints and the arithmetic operations
+<CODE>+</CODE>, <CODE>-</CODE>, <CODE>*</CODE>, <CODE>div</CODE> (<CODE>/</CODE>),
+<CODE>%</CODE> (<CODE>mod</CODE>), or <CODE>^</CODE>
+<LI>a boolean expression
+<LI>
+a type cast to int
+</OL>
+<P>
+
+<STRONG>Note:</STRONG>
+Variables of type int represent the compiler integers  and are, therefore,
+limited  in their range (see  <A HREF="sing_455.htm#SEC494">Limitations</A>). If this range is too small
+the expression must be converted to the type number over a ring with
+characteristic 0.
+</P><P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>12345678901; // too large
+==> 12345678901
+typeof(_);
+==> bigint
+ring r=0,x,dp;
+12345678901;
+==> 12345678901
+typeof(_);
+==> bigint
+// Note: 11*13*17*100*200*2000*503*1111*222222
+// returns a machine integer:
+11*13*17*100*200*2000*503*1111*222222;
+==> // ** int overflow(*), result may be wrong
+==> // ** int overflow(*), result may be wrong
+==> // ** int overflow(*), result may be wrong
+==> // ** int overflow(*), result may be wrong
+==> -1875651584
+// using the type cast number for a greater allowed range
+number(11)*13*17*100*200*2000*503*1111*222222;
+==> 12075748128684240000000
+ring rp=32003,x,dp;
+12345678901;
+==> 12345678901
+typeof(_);
+==> bigint
+intmat m[2][2] = 1,2,3,4;
+m;
+==> 1,2,
+==> 3,4 
+m[2,2];
+==> 4
+typeof(_);
+==> int
+det(m);
+==> -2
+m[1,1] + m[2,1] == trace(m);
+==> 0
+! 0;
+==> 1
+1 and 2;
+==> 1
+intvec v = 1,2,3;
+def d =transpose(v)*v;    // scalarproduct gives an 1x1 intvec
+typeof(d);
+==> intvec
+int i = d[1];             // access the first (the only) entry in the intvec
+ring rr=31,(x,y,z),dp;
+poly f = 1;
+i = int(f);               // cast to int
+// Integers may be converted to constant  polynomials by an assignment,
+poly g=37;
+// define the constant polynomial g equal to the image of
+// the integer 37 in the actual coefficient field, here it equals 6
+g;
+==> 6
+</FONT></pre></td></tr></table></P><P>
+
+See
+ <A HREF="sing_39.htm#SEC66">Type conversion and casting</A>;
+ <A HREF="sing_139.htm#SEC178">number</A>.
+</P><P>
+
+<A NAME="int operations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_91.htm#SEC130"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: int declarations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_93.htm#SEC132"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: int operations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_85.htm#SEC124"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ideal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_97.htm#SEC136"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: intmat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_90.htm#SEC129"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: int" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

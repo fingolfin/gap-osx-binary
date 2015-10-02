@@ -1,0 +1,184 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: rel_orbit_variety</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: rel_orbit_variety">
+<META NAME="keywords" CONTENT="Singular Manual: rel_orbit_variety">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1703"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1627.htm#SEC1702"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: orbit_variety" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1629.htm#SEC1704"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: relative_orbit_variety" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.7.1.34 rel_orbit_variety </H4>
+<!--docid::SEC1703::-->
+Procedure from library <CODE>finvar.lib</CODE> (see  <A HREF="sing_1594.htm#SEC1669">finvar_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>rel_orbit_variety(I,F[,s]);
+<BR> I: an &lt;ideal&gt; invariant under the action of a group,
+<BR> F: a 1xm &lt;matrix&gt; defining the invariant ring of this group.
+<BR> s: optional &lt;string&gt;; if s is present then (for downward
+compatibility) the old procedure &lt;relative_orbit_variety&gt;
+is called, and in this case s gives the name of a new &lt;ring&gt;.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>Without optional string s, a list L of two rings is returned.
+<BR> The ring L[1] carries a weighted degree order with variables
+y(1..m), the weight of y(k) equal to the degree of the
+k-th generators F[1,k] of the invariant ring.
+<BR>L[1] contains a Groebner basis (type &lt;ideal&gt;, named G) of the
+ideal defining the relative orbit variety with respect to I.
+<BR> The ring L[2] has the variables of the basering together with y(1..m)
+and carries a block order: The first block is the order of the
+basering, the second is the weighted degree order occuring in L[1].
+L[2] contains G and a Groebner basis (type &lt;ideal&gt;, named Conv)
+such that if p is any invariant polynomial expressed in the
+variables of the basering then reduce(p,Conv) is a polynomial in
+the new variables y(1..m) such that evaluation at the generators
+of the invariant ring yields p. This can be used to avoid the
+application of &lt;algebra_containment&gt;
+(see  <A HREF="sing_1110.htm#SEC1185">algebra_containment</A>).
+<BR> For the case of optional string s, the function is equivalent to
+ <A HREF="sing_1629.htm#SEC1704">relative_orbit_variety</A>.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>A Groebner basis of the ideal of algebraic relations of the invariant
+ring generators is calculated, then one of the basis elements plus
+the ideal generators. The variables of the original ring are
+eliminated and the polynomials that are left define the relative
+orbit variety with respect to I. The elimination is done by a
+weighted blockorder that has the advantage of dealing with
+quasi-homogeneous ideals.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>We provide the ring L[1] for the sake of downward compatibility,
+since it is closer to the ring returned by relative_orbit_variety
+than L[2]. However, L[1] carries a weighted degree order, whereas
+the ring returned by relative_orbit_variety is lexicographically
+ordered.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "finvar.lib";
+ring R=0,(x,y,z),dp;
+matrix F[1][3]=x+y+z,xy+xz+yz,xyz;
+ideal I=x2+y2+z2-1,x2y+y2z+z2x-2x-2y-2z,xy2+yz2+zx2-2x-2y-2z;
+list L = rel_orbit_variety(I,F);
+==> 
+==> // 'rel_orbit_variety' created a list of two rings.
+==> // If L is the name of that list, you can access
+==> // the first ring by
+==> //   def R = L[1]; setring R;
+==> // (similarly for the second ring)
+def AllR = L[2];
+setring(AllR);
+print(G);
+==> y(1)^2-2*y(2)-1,
+==> y(1)*y(2)-3*y(3)-4*y(1),
+==> 2*y(2)^2-3*y(1)*y(3)-7*y(2)-4,
+==> 6*y(3)^2-15*y(1)*y(3)+25*y(2)+12
+print(Conv);
+==> x+y+z-y(1),
+==> y^2+y*z+z^2-y*y(1)-z*y(1)+y(2),
+==> z^3-z^2*y(1)+z*y(2)-y(3)
+basering;
+==> //   characteristic : 0
+==> //   number of vars : 6
+==> //        block   1 : ordering dp
+==> //                  : names    x y z
+==> //        block   2 : ordering wp
+==> //                  : names    y(1) y(2) y(3)
+==> //                  : weights     1    2    3
+==> //        block   3 : ordering C
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1629.htm#SEC1704">relative_orbit_variety</A>.
+<P>
+
+<A NAME="relative_orbit_variety"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1627.htm#SEC1702"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: orbit_variety" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1629.htm#SEC1704"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: relative_orbit_variety" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1593.htm#SEC1668"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Invariant theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1631.htm#SEC1706"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ainvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1594.htm#SEC1669"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: finvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W  idempot.gi            The Wedderga package                   Allen Herman
+#W  div-alg.gi            The Wedderga package                   Allen Herman
 ##
 #############################################################################
 
@@ -16,13 +16,21 @@ DeclareGlobalFunction("LocalIndexAtOddP");
 DeclareGlobalFunction("LocalIndexAtInfty");
 DeclareGlobalFunction("LocalIndexAtTwo");
 DeclareGlobalFunction("LocalIndicesOfCyclicCyclotomicAlgebra");
+DeclareGlobalFunction("DefiningGroupAndCharacterOfCyclotAlg");
 DeclareGlobalFunction("DefiningGroupOfCyclotomicAlgebra");
 DeclareGlobalFunction("DefiningCharacterOfCyclotomicAlgebra");
 DeclareGlobalFunction("SimpleComponentOfGroupRingByCharacter");
 DeclareGlobalFunction("IsDyadicSchurGroup");
 DeclareGlobalFunction("LocalIndexAtInftyByCharacter");
+#############################
+# Oct 2014: New DefectGroups functions
+#############################
 DeclareGlobalFunction("FinFieldExt");
-DeclareGlobalFunction("PossibleDefectGroups");
+#DeclareGlobalFunction("PossibleDefectGroups");
+DeclareGlobalFunction("DefectGroupOfConjugacyClassAtP");
+DeclareGlobalFunction("DefectGroupsOfPBlock");
+DeclareGlobalFunction("DefectOfCharacterAtP");
+##############################
 DeclareGlobalFunction("LocalIndexAtPByBrauerCharacter");
 DeclareGlobalFunction("LocalIndexAtOddPByCharacter");
 DeclareGlobalFunction("LocalIndexAtTwoByCharacter");
@@ -42,4 +50,7 @@ DeclareGlobalFunction("LocalIndicesOfRationalQuaternionAlgebra");
 DeclareGlobalFunction("IsRationalQuaternionAlgebraADivisionRing");
 DeclareGlobalFunction("SchurIndex");
 DeclareGlobalFunction("SchurIndexByCharacter");
+DeclareGlobalFunction("SimpleComponentByCharacterAsSCAlgebra");
+DeclareGlobalFunction("CyclotomicAlgebraAsSCAlgebra");
+DeclareGlobalFunction("WedderburnDecompositionAsSCAlgebras");
 

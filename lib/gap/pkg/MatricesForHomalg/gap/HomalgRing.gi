@@ -199,6 +199,28 @@ InstallMethod( MinusOneMutable,
     
 end );
 
+##
+InstallMethod( AssociatedPolynomialRing,
+        "for homalg ring elements",
+        [ IsHomalgRing and IsFieldForHomalg ],
+        
+  function( R )
+    local a, r;
+    
+    if not HasRationalParameters( R ) then
+        Error( "the field has no rational parameters" );
+    elif not HasCoefficientsRing( R ) then
+        Error( "the field has no subfield of coefficients" );
+    fi;
+    
+    r := CoefficientsRing( R );
+    
+    a := RationalParameters( R );
+    
+    return r * List( a, String );
+    
+end );
+
 ####################################
 #
 # methods for operations:
@@ -462,6 +484,28 @@ InstallMethod( ProductOfIndeterminates,
   function( R )
     
     return Product( Indeterminates( R ) );
+    
+end );
+
+##
+InstallMethod( ProductOfIndeterminatesOverBaseRing,
+        "for homalg rings",
+        [ IsHomalgRing and HasIndeterminatesOfPolynomialRing ],
+        
+  function( R )
+    
+    return Product( IndeterminatesOfPolynomialRing( R ) );
+    
+end );
+
+##
+InstallMethod( ProductOfIndeterminatesOverBaseRing,
+        "for homalg rings",
+        [ IsHomalgRing and HasRelativeIndeterminatesOfPolynomialRing ], 100, ## otherwise the above method is triggered :(
+        
+  function( R )
+    
+    return Product( RelativeIndeterminatesOfPolynomialRing( R ) );
     
 end );
 

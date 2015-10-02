@@ -58,8 +58,9 @@ BrowseData.AtlasInfoActionShowOverview:= [
 ##  which is shown via a second level `Browse' call.
 ##
 BrowseData.AtlasInfoGroupTable:= function( conditions, log, replay, t )
-    local gapname, cats, labelsRow, info, inforeps, name, infoprgs, entry,
-          sel_action, header, footer, showTables, modes, mode, table;
+    local gapname, cats, labelsRow, info, inforeps, name, infoprgs, prgslist,
+          i, entry, sel_action, header, footer, showTables, modes, mode,
+          table;
 
     gapname:= AGR.GAPName( conditions[1] );
     cats:= [];
@@ -97,22 +98,32 @@ BrowseData.AtlasInfoGroupTable:= function( conditions, log, replay, t )
                       isUnderCollapsedCategory:= false,
                       isRejectedCategory:= false ) );
 
-      for entry in infoprgs.list do
-        if   Length( entry ) = 1 then
-          Add( info, [ rec( rows:= entry, align:= "l" ) ] );
-          Add( labelsRow, [ "" ] );
-        elif 1 < Length( entry ) then
-          Add( cats, rec( pos:= 2 * Length( info ) + 2,
-                          level:= 2,
-                          value:= entry[1],
-                          separator:= "",
-                          isUnderCollapsedCategory:= false,
-                          isRejectedCategory:= false ) );
-          Append( info,
-              List( entry{ [ 2 .. Length( entry ) ] },
-                    x -> [ rec( rows:= [ x ], align:= "l" ) ] ) );
-          Append( labelsRow,
-              List( [ 2 .. Length( entry ) ], x -> [ "" ] ) );
+      prgslist:= [];
+
+      for i in [ 1 .. Length( infoprgs.list ) ] do
+        entry:= infoprgs.list[i];
+        if not IsEmpty( entry ) then
+          if   IsString( entry[2] ) then
+            Add( info, List( entry{ [ 1, 2 ] },
+                             x -> rec( rows:= [ x ], align:= "l" ) ) );
+            Add( labelsRow, [ "" ] );
+            Add( prgslist, [ i, entry ] );
+          else
+            Add( cats, rec( pos:= 2 * Length( info ) + 2,
+                            level:= 2,
+                            value:= entry[1],
+                            separator:= "",
+                            isUnderCollapsedCategory:= false,
+                            isRejectedCategory:= false ) );
+            Append( info,
+                List( entry{ [ 2 .. Length( entry ) ] },
+                      x -> List( x{ [ 1, 2 ] },
+                                 y -> rec( rows:= [ y ], align:= "l" ) ) ) );
+            Append( labelsRow,
+                List( [ 2 .. Length( entry ) ], x -> [ "" ] ) );
+            Append( prgslist,
+                List( entry{ [ 2 .. Length( entry ) ] }, x -> [ i, x ] ) );
+          fi;
         fi;
       od;
     fi;
@@ -122,7 +133,7 @@ BrowseData.AtlasInfoGroupTable:= function( conditions, log, replay, t )
     sel_action:= rec(
       helplines:= [ "add the selected entry to the result" ],
       action:= function( t )
-        local info, pos, line, choice, i;
+        local info, pos, line, i, data, choice;
 
         if t.dynamic.selectedEntry <> [ 0, 0 ] then
           # Set the return value and close the window.
@@ -140,29 +151,19 @@ BrowseData.AtlasInfoGroupTable:= function( conditions, log, replay, t )
             choice:= [ gapname, Int( pos ) ];
           else
             pos:= pos - Length( inforeps.list );
-            for i in [ 1 .. Length( infoprgs.list ) ] do
-              if Length( infoprgs.list[i] ) = 1 then
-                if pos = 1 then
-                  line:= infoprgs.list[i][1];
-                  choice:= [ gapname, infoprgs.nams[i] ];
-                  break;
-                fi;
-                pos:= pos - 1;
-              elif 1 < Length( infoprgs.list[i] ) then
-                if pos < Length( infoprgs.list[i] ) then
-                  if infoprgs.nams[i] = "maxes" then
-                    line:= Concatenation( "max. no. ",
-                               infoprgs.list[i][ pos+1 ] );
-                  else
-                    line:= infoprgs.list[i][ pos+1 ];
-                  fi;
-                  choice:= [ gapname, infoprgs.nams[i],
-                             infoprgs.list[i][ pos+1 ] ];
-                  break;
-                fi;
-                pos:= pos - Length( infoprgs.list[i] ) + 1;
-              fi;
-            od;
+            i:= prgslist[ pos ][1];
+            data:= prgslist[ pos ][2];
+            choice:= data[3];
+            if ForAll( infoprgs.list[i], IsString ) then
+              line:= JoinStringsWithSeparator(
+                         Filtered( data{ [ 1, 2 ] }, x -> x <> "" ),
+                         "  " );
+            elif infoprgs.nams[i] = "maxes" then
+              line:= NormalizedWhitespace( Concatenation( "max. no. ",
+                         data[1] ) );
+            else
+              line:= data[1];
+            fi;
           fi;
           if choice in t.dynamic.Return then
             t.dynamic.currentFooterRow:= Concatenation( line,
@@ -266,7 +267,8 @@ BrowseData.AtlasInfoGroupTable:= function( conditions, log, replay, t )
 ##  Part of the code is analogous to `AGR.DisplayAtlasInfoOverview'.
 ##
 BrowseData.AtlasInfoOverview:= function( gapnames, conditions, log, replay )
-    local tocs, columns, type, i, sel_action, header, modes, mode, table;
+    local tocs, columns, type, choice, i, sel_action, header, modes, mode,
+          table;
 
     tocs:= AGR.TablesOfContents( conditions );
 
@@ -281,7 +283,7 @@ BrowseData.AtlasInfoOverview:= function( gapnames, conditions, log, replay )
     gapnames:= Filtered( gapnames,
                    x -> ForAny( tocs, toc -> IsBound( toc.( x[2] ) ) ) );
     if IsEmpty( gapnames ) then
-      return;
+      return [];
     fi;
 
     # Compute the data of the columns.
@@ -297,13 +299,24 @@ BrowseData.AtlasInfoOverview:= function( gapnames, conditions, log, replay )
       fi;
     od;
 
-    # Evaluate the privacy flag.
+    # Restrict the lists to the nonempty rows.
+    choice:= [];
     for i in [ 1 .. Length( gapnames ) ] do
-      if ForAny( columns, x -> x[3][i][2] ) then
-        columns[1][3][i][1]:= Concatenation( columns[1][3][i][1],
-            AtlasOfGroupRepresentationsInfo.markprivate );
+      if ForAny( [ 2 .. Length( columns ) ],
+                 c -> columns[c][3][i][1] <> "" ) then
+        Add( choice, i );
+
+        # Evaluate the privacy flag.
+        if ForAny( columns, x -> x[3][i][2] ) then
+          columns[1][3][i][1]:= Concatenation( columns[1][3][i][1],
+              AtlasOfGroupRepresentationsInfo.markprivate );
+        fi;
       fi;
     od;
+
+    if IsEmpty( choice ) then
+      return [];
+    fi;
 
     sel_action:= function( t )
       local name, tt;
@@ -361,7 +374,7 @@ BrowseData.AtlasInfoOverview:= function( gapnames, conditions, log, replay )
         header:= t -> BrowseData.HeaderWithRowCounter( t, header,
                           Length( gapnames ) ),
         availableModes:= modes,
-        main:= List( [ 1 .. Length( gapnames ) ], i ->  List( columns,
+        main:= List( choice, i ->  List( columns,
                     col -> rec( rows:= [ col[3][i][1] ], align:= col[2] ) ) ),
         labelsCol:= [ List( columns,
                         col -> rec( rows:= [ col[1] ], align:= col[2] ) ) ],
@@ -594,32 +607,12 @@ BindGlobal( "BrowseAtlasInfo", function( arg )
     # Evaluate the return value.
     for i in [ 1 .. Length( result ) ] do
       if IsInt( result[i][2] ) then
-        # a representation
+        # a representation, identified by its number
         result[i]:= OneAtlasGeneratingSetInfo( result[i][1], Position,
                         result[i][2] );
       else
-        # a program; turn the display values into inputs.
-        if   result[i][2] = "maxes" then
-          # perhaps standard generators of the subgroup
-          pos:= PositionSublist( result[i][3], "(std. " );
-          if pos <> fail then
-            pos2:= Position( result[i][3], ')', pos );
-            result[i][4]:= Int( result[i][3]{ [ pos+6 .. pos2-1 ] } );
-          fi;
-          pos:= Position( result[i][3], ':' );
-          if pos <> fail then
-            result[i][3]:= result[i][3]{ [ 1 .. pos-1 ] };
-          fi;
-          result[i][3]:= Int( NormalizedWhitespace( result[i][3] ) );
-        elif result[i][2] = "out" then
-          result[i][2]:= "automorphism";
-        elif result[i][2] = "pres" then
-          result[i][2]:= "presentation";
-        elif result[i][2] = "kernel" then
-          pos:= PositionSublist( result[i][3], " -> " );
-          result[i][3]:= result[i][3]{ [ pos+4 .. Length( result[i][3] ) ] };
-        fi;
-        result[i]:= CallFuncList( AtlasProgramInfo, result[i] );
+        # a program, identified by its identifier list
+        result[i]:= AtlasProgramInfo( result[i] );
       fi;
     od;
 

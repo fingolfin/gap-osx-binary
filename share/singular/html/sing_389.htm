@@ -1,0 +1,209 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ringlist</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ringlist">
+<META NAME="keywords" CONTENT="Singular Manual: ringlist">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC428"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_388.htm#SEC427"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: resultant" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_390.htm#SEC429"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rvar" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.130 ringlist </H3>
+<!--docid::SEC428::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>ringlist (</CODE> ring_expression <CODE>)</CODE>
+<BR><CODE>ringlist (</CODE> qring_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>list
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>decomposes a ring/qring into a list of 4 (or 6 in the non-commutative case,
+see  <A HREF="sing_526.htm#SEC565">ringlist (plural)</A>) components:
+<OL>
+<LI>
+the field description in the following format:
+<UL>
+<LI>for Q, Z/p:
+  the characteristic, type int (0 or prime number)
+<LI>for real, complex:
+  a list of:<BR>
+  the characteristic, type int (always 0)<BR>
+  the precision, type list (2 integers: external, internal precision)<BR>
+  the name of the imaginary unit, type string
+<LI>for transcendental or algebraic extensions:
+  described as a ringlist (that is, as list L with 4 entries:
+  L[1] the characteristic, L[2] the names of the parameters, L[3] the monomial
+  ordering for the ring of parameters (default: lp), L[4] the minimal
+  polynomial (as ideal))
+<LI>for Z, Z/n, Z/n^m a list ["integer", [n, m]] with:<BR>
+  the base n is of type int or bigint (if not given n = 0, Z/0 = Z)<BR>
+  the exponent m is of type int (if not given m = 1)<BR>
+</UL>
+<LI>
+the names of the variables (a list L of strings: L[i] is the name of the i-th
+variable)
+<LI>
+the monomial ordering (a list L of lists): each block L[i] consists of
+<UL>
+<LI>
+the name of the ordering ( string )
+<LI>
+parameters specifying the ordering and the size of the block ( intvec : typically the weights for the variables [default: 1] )
+</UL>
+<LI>
+the quotient ideal.
+</OL>
+From a list of such structure, a new ring may be defined by the command <CODE>ring</CODE>
+( see the following example ).
+<DT><CODE><STRONG>Note:</STRONG> All data which depends on a ring belong to the current ring,</CODE>
+<DD>not to a ring which can be contructed fron a modified list.
+These data will be mapped via fetch to the ring to be constructed.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre> ring r = 0,(x(1..3)),dp;
+ list l = ringlist(r);
+ l;
+==> [1]:
+==>    0
+==> [2]:
+==>    [1]:
+==>       x(1)
+==>    [2]:
+==>       x(2)
+==>    [3]:
+==>       x(3)
+==> [3]:
+==>    [1]:
+==>       [1]:
+==>          dp
+==>       [2]:
+==>          1,1,1
+==>    [2]:
+==>       [1]:
+==>          C
+==>       [2]:
+==>          0
+==> [4]:
+==>    _[1]=0
+ //  Now change l and create a new ring, by
+ //- changing the base field to the function field with parameter a,
+ //- introducing one extra variable y,
+ //- defining the block ordering (dp(2),wp(3,4)).
+ //- define the minpoly after creating the function field
+ l[1]=list(0,list("a"),list(list("lp",1)),ideal(0));
+ l[2][size(l[2])+1]="y";
+ l[3][3]=l[3][2]; // save the module ordering
+ l[3][1]=list("dp",intvec(1,1));
+ l[3][2]=list("wp",intvec(3,4));
+ def ra = ring(l);     //creates the newring
+ ra; setring ra;
+==> //   characteristic : 0
+==> //   1 parameter    : a 
+==> //   minpoly        : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    x(1) x(2)
+==> //        block   2 : ordering wp
+==> //                  : names    x(3) y
+==> //                  : weights  3 4
+==> //        block   3 : ordering C
+ list lra = ringlist(ra);
+ lra[1][4]=ideal(a2+1);
+ def Ra = ring(lra);
+ setring Ra; Ra;
+==> //   characteristic : 0
+==> //   1 parameter    : a 
+==> //   minpoly        : (a^2+1)
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    x(1) x(2)
+==> //        block   2 : ordering wp
+==> //                  : names    x(3) y
+==> //                  : weights  3 4
+==> //        block   3 : ordering C
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_161.htm#SEC200">qring</A>;
+ <A HREF="sing_160.htm#SEC199">ring</A>.
+<A NAME="rvar"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_388.htm#SEC427"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: resultant" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_390.htm#SEC429"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rvar" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

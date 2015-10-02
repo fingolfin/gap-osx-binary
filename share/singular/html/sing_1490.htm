@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: gmsring</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: gmsring">
+<META NAME="keywords" CONTENT="Singular Manual: gmsring">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1565"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1491.htm#SEC1566"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: gmsnf" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: equising_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.7.1 gmsring </H4>
+<!--docid::SEC1565::-->
+Procedure from library <CODE>gmssing.lib</CODE> (see  <A HREF="sing_1489.htm#SEC1564">gmssing_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>gmsring(t,s); poly t, string s
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>characteristic 0; local degree ordering;
+<BR>isolated critical point 0 of t
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD><TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">ring G;  Gauss-Manin system of t with variable s
+  poly gmspoly=t;
+  ideal gmsjacob;  Jacobian ideal of t
+  ideal gmsstd;  standard basis of Jacobian ideal
+  matrix gmsmatrix;  matrix(gmsjacob)*gmsmatrix==matrix(gmsstd)
+  ideal gmsbasis;  monomial vector space basis of Jacobian algebra
+  int Gmssing::gmsmaxdeg;  maximal weight of variables
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>gmsbasis is a C[[s]]-basis of H" and [t,s]=s^2
+<P>
+
+<A NAME="IDX531"></A>
+<A NAME="IDX532"></A>
+<A NAME="IDX533"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "gmssing.lib";
+ring @R=0,(x,y),ds;
+poly t=x5+x2y2+y5;
+def G=gmsring(t,"s");
+setring(G);
+gmspoly;
+==> x2y2+x5+y5
+print(gmsjacob);
+==> 2xy2+5x4,
+==> 2x2y+5y4
+print(gmsstd);
+==> 2x2y+5y4,
+==> 5x5-5y5,
+==> 2xy2+5x4,
+==> 10y6+25x3y4
+print(gmsmatrix);
+==> 0,x, 1,-2xy,  
+==> 1,-y,0,2y2+5x3
+print(gmsbasis);
+==> y5,
+==> y4,
+==> y3,
+==> y2,
+==> xy,
+==> y,
+==> x4,
+==> x3,
+==> x2,
+==> x,
+==> 1
+Gmssing::gmsmaxdeg;
+==> 1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="gmsnf"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1491.htm#SEC1566"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: gmsnf" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: equising_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

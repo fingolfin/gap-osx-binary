@@ -1,0 +1,151 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: pointid_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: pointid_lib">
+<META NAME="keywords" CONTENT="Singular Manual: pointid_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1345"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1269.htm#SEC1344"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: binomials2intmat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1271.htm#SEC1346"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: nonMonomials" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1274.htm#SEC1349"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: primdec_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1105.htm#SEC1180"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.4.19 pointid_lib </H3>
+<!--docid::SEC1345::-->
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>pointid.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>     Procedures for computing a factorized lex GB of
+                          the vanishing ideal of a set of points via the
+                          Axis-of-Evil Theorem (M.G. Marinari, T. Mora)
+<P>
+
+<DT><STRONG>Author:</STRONG>
+<DD>Stefan Steidel, steidel@mathematik.uni-kl.de
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>The algorithm of Cerlienco-Mureddu [Marinari M.G., Mora T., A remark on a
+remark by Macaulay or Enhancing Lazard Structural Theorem. Bull. of the
+Iranian Math. Soc., 29 (2003), 103-145] associates to each ordered set of
+points A:={a1,...,as} in K^n, ai:=(ai1,...,ain)<BR>
+- a set of monomials N and<BR>
+- a bijection phi: A --&gt; N.
+<BR>Here I(A):={f in K[x(1),...,x(n)] | f(ai)=0, for all 1&lt;=i&lt;=s} denotes the
+vanishing ideal of A and N = Mon(x(1),...,x(n)) {LM(f)|f in I(A)} is the
+set of monomials which do not lie in the leading ideal of I(A) (w.r.t. the
+lexicographical ordering with x(n)&gt;...&gt;x(1)). N is also called the set of
+non-monomials of I(A). NOTE: #A = #N and N is a monomial basis of
+K[x(1..n)]/I(A). In particular, this allows to deduce the set of
+corner-monomials, i.e. the minimal basis M:={m1,...,mr}, m1&lt;...&lt;mr, of its
+associated monomial ideal M(I(A)), such that<BR>
+M(I(A))= {k*mi | k in Mon(x(1),...,x(n)), mi in M},<BR>
+and (by interpolation) the unique reduced lexicographical Groebner basis
+G := {f1,...,fr} such that LM(fi)=mi for each i, that is, I(A)=&lt;G&gt;.
+Moreover, a variation of this algorithm allows to deduce a canonical linear
+factorization of each element of such a Groebner basis in the sense ot the
+Axis-of-Evil Theorem by M.G. Marinari and T. Mora. More precisely, a
+combinatorial algorithm and interpolation allow to deduce polynomials
+<BR>
+<BR> y_mdi = x(m) - g_mdi(x(1),...,x(m-1)),
+<BR>
+i=1,...,r; m=1,...,n; d in a finite index-set F, satisfying
+<BR>
+<BR> fi = (product of y_mdi) modulo (f1,...,f(i-1))
+<BR>
+where the product runs over all m=1,...,n; and all d in F.
+<P>
+
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1271.htm#SEC1346">D.4.19.1 nonMonomials</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">non-monomials of the vanishing ideal id of a set of points</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1272.htm#SEC1347">D.4.19.2 cornerMonomials</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">corner-monomials of the set of non-monomials N</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1273.htm#SEC1348">D.4.19.3 facGBIdeal</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">GB G of id and linear factors of each element of G</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="nonMonomials"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1269.htm#SEC1344"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: binomials2intmat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1271.htm#SEC1346"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: nonMonomials" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1274.htm#SEC1349"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: primdec_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1105.htm#SEC1180"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

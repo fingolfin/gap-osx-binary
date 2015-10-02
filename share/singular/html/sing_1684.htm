@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ures_solve</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ures_solve">
+<META NAME="keywords" CONTENT="Singular Manual: ures_solve">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1759"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1683.htm#SEC1758"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: solve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1685.htm#SEC1760"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: mp_res_mat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1666.htm#SEC1741"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: presolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: triang_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: solve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.8.3.3 ures_solve </H4>
+<!--docid::SEC1759::-->
+Procedure from library <CODE>solve.lib</CODE> (see  <A HREF="sing_1681.htm#SEC1756">solve_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>ures_solve(i [, k, p] ); i = ideal, k, p = integers
+<BR>k=0: use sparse resultant matrix of Gelfand, Kapranov and Zelevinsky, <BR>
+k=1: use resultant matrix of Macaulay which works only for
+homogeneous ideals,<BR>
+p&gt;0: defines precision of the long floats for internal computation
+if the basering is not complex (in decimal digits),
+<BR>(default: k=0, p=30)
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>i is a zerodimensional ideal given by a quadratic system, that is,<BR>
+nvars(basering) = ncols(i) = number of vars actually occurring in i,
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>If the ground field is the field of complex numbers: list of numbers
+(the complex roots of the polynomial system i=0). <BR>
+Otherwise: ring <CODE>R</CODE> with the same number of variables but with
+complex coefficients (and precision p). <CODE>R</CODE> comes with a list
+<CODE>SOL</CODE> of numbers, in which complex roots of the polynomial
+system i are stored: <BR>
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "solve.lib";
+// compute the intersection points of two curves
+ring rsq = 0,(x,y),lp;
+ideal gls=  x2 + y2 - 10, x2 + xy + 2y2 - 16;
+def R=ures_solve(gls,0,16);
+==> 
+==> // 'ures_solve' created a ring, in which a list SOL of numbers (the compl\
+   ex
+==> // solutions) is stored.
+==> // To access the list of complex solutions, type (if the name R was assig\
+   ned
+==> // to the return value):
+==>         setring R; SOL; 
+setring R; SOL;
+==> [1]:
+==>    [1]:
+==>       -2.82842712474619
+==>    [2]:
+==>       -1.414213562373095
+==> [2]:
+==>    [1]:
+==>       -1
+==>    [2]:
+==>       3
+==> [3]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       -3
+==> [4]:
+==>    [1]:
+==>       2.82842712474619
+==>    [2]:
+==>       1.414213562373095
+</FONT></pre></td></tr></table><P>
+
+<A NAME="mp_res_mat"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1683.htm#SEC1758"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: solve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1685.htm#SEC1760"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: mp_res_mat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1666.htm#SEC1741"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: presolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: triang_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: solve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

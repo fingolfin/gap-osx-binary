@@ -1,0 +1,195 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: invariants</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: invariants">
+<META NAME="keywords" CONTENT="Singular Manual: invariants">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1595"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1519.htm#SEC1594"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayHNE" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1521.htm#SEC1596"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayInvariants" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.9.6 invariants </H4>
+<!--docid::SEC1595::-->
+Procedure from library <CODE>hnoether.lib</CODE> (see  <A HREF="sing_1514.htm#SEC1589">hnoether_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>invariants(INPUT); INPUT list or poly
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD><CODE>INPUT</CODE> is the output of <CODE>develop(f)</CODE>, or of
+<CODE>extdevelop(develop(f),n)</CODE>, or one entry of the list of HN data
+computed by <CODE>hnexpansion(f[,"ess"])</CODE>.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list <CODE>INV</CODE> of the following format:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">    INV[1]:  intvec    (characteristic exponents)
+    INV[2]:  intvec    (generators of the semigroup)
+    INV[3]:  intvec    (Puiseux pairs, 1st components)
+    INV[4]:  intvec    (Puiseux pairs, 2nd components)
+    INV[5]:  int       (degree of the conductor)
+    INV[6]:  intvec    (sequence of multiplicities)
+</pre></td></tr></table>If <CODE>INPUT</CODE> contains no valid HN expansion, the empty list is
+returned.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD><CODE>INPUT</CODE> is a bivariate polynomial f, or the output of
+<CODE>hnexpansion(f)</CODE>, or the list of HN data computed by
+<CODE>hnexpansion(f [,"ess"])</CODE>.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list <CODE>INV</CODE>, such that <CODE>INV[i]</CODE> coincides with the output of
+<CODE>invariants(develop(f[i]))</CODE>, where f[i] is the i-th branch of
+f, and the last entry of <CODE>INV</CODE> contains further invariants of
+f in the format:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">    INV[last][1] : intmat    (contact matrix of the branches)
+    INV[last][2] : intmat    (intersection multiplicities of the branches)
+    INV[last][3] : int       (delta invariant of f)
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>In case the Hamburger-Noether expansion of the curve f is needed
+for other purposes as well it is better to calculate this first
+with the aid of <CODE>hnexpansion</CODE> and use it as input instead of
+the polynomial itself.
+<P>
+
+<A NAME="IDX617"></A>
+<A NAME="IDX618"></A>
+<A NAME="IDX619"></A>
+<A NAME="IDX620"></A>
+<A NAME="IDX621"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "hnoether.lib";
+ring exring=0,(x,y),dp;
+list Hne=develop(y4+2x3y2+x6+x5y);
+list INV=invariants(Hne);
+INV[1];                   // the characteristic exponents
+==> 4,6,7
+INV[2];                   // the generators of the semigroup of values
+==> 4,6,13
+INV[3],INV[4];            // the Puiseux pairs in packed form
+==> 3,7 2,2
+INV[5] div 2;             // the delta-invariant
+==> 8
+INV[6];                   // the sequence of multiplicities
+==> 4,2,2,1,1
+// To display the invariants more 'nicely':
+displayInvariants(Hne);
+==>  characteristic exponents  : 4,6,7
+==>  generators of semigroup   : 4,6,13
+==>  Puiseux pairs             : (3,2)(7,2)
+==>  degree of the conductor   : 16
+==>  delta invariant           : 8
+==>  sequence of multiplicities: 4,2,2,1,1
+/////////////////////////////
+INV=invariants((x2-y3)*(x3-y5));
+INV[1][1];                // the characteristic exponents of the first branch
+==> 2,3
+INV[2][6];                // the sequence of multiplicities of the second branch
+==> 3,2,1,1
+print(INV[size(INV)][1]);         // the contact matrix of the branches
+==>      0     3
+==>      3     0
+print(INV[size(INV)][2]);         // the intersection numbers of the branches
+==>      0     9
+==>      9     0
+INV[size(INV)][3];                // the delta invariant of the curve
+==> 14
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1516.htm#SEC1591">develop</A>;
+ <A HREF="sing_1521.htm#SEC1596">displayInvariants</A>;
+ <A HREF="sing_1515.htm#SEC1590">hnexpansion</A>;
+ <A HREF="sing_1524.htm#SEC1599">intersection</A>;
+ <A HREF="sing_1522.htm#SEC1597">multsequence</A>.
+<P>
+
+<A NAME="displayInvariants"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1519.htm#SEC1594"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayHNE" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1521.htm#SEC1596"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayInvariants" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

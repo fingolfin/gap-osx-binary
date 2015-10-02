@@ -5,9 +5,7 @@ targets: default
 
 # this target creates a bin-directory
 bindir:
-	if test ! -d bin;  then mkdir bin;  fi
-	if test ! -d bin/@GAPARCH@;  then mkdir bin/@GAPARCH@;  fi
-
+	mkdir -p bin/@GAPARCH@
 
 default: bindir bin/@GAPARCH@/polymake_main.so
 	
@@ -45,11 +43,10 @@ clean:
 
 doc: doc/manual.six
 
-doc/manual.six: makedoc.g ListOfDocFiles.g \
+doc/manual.six: makedoc.g \
 		PackageInfo.g \
 		doc/*.xml doc/*.css \
 		gap/*.gd gap/*.gi
-		gap createautodoc.g
 		gap makedoc.g
 
 test:   doc

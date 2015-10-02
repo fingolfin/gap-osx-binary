@@ -1,0 +1,155 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ratgb_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ratgb_lib">
+<META NAME="keywords" CONTENT="Singular Manual: ratgb_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC864"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_812.htm#SEC863"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: is_cenSubbimodule" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_814.htm#SEC865"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ratstd" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_805.htm#SEC856"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: nchomolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_545.htm#SEC596"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Non-commutative libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 7.7.20 ratgb_lib </H3>
+<!--docid::SEC864::-->
+Status: experimental
+<A NAME="IDX363"></A>
+<A NAME="IDX364"></A>
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>ratgb.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>  Groebner bases in Ore localizations of noncommutative G-algebras
+<DT><STRONG>Author:</STRONG>
+<DD>Viktor Levandovskyy, levandov@risc.uni-linz.ac.at
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>Theory: Let A be an operator algebra with <CODE>R = K[x1,.,xN]</CODE> as subring.
+The operators are usually denoted by <CODE>d1,..,dM</CODE>.
+<P>
+
+Assume, that A is a <CODE>G</CODE>-algebra, then the set <CODE>S=R-0</CODE> is multiplicatively
+closed Ore set in A.
+That is, for any s in S and a in A, there exist t in S and b in A, such that <CODE>sa=bt</CODE>.
+In other words, one can transform any left fraction into a right fraction.
+The algebra <CODE>A_S</CODE> is called an Ore localization of A with respect to S.
+</P><P>
+
+This library provides Groebner basis procedure for A_S, performing polynomial (that is
+fraction-free) computations only. Note, that there is ongoing development of the
+subsystem called Singular:Locapal, which will provide yet another approach to Groebner
+bases over such Ore localizations.
+</P><P>
+
+Assumptions: in order to treat such localizations constructively, some care need to be taken.
+We will assume that the variables <CODE>x1,...,xN</CODE> from above (which will become invertible
+in the localization) come as the first block among the variables of the basering.
+Moreover, the ordering on the basering must be an antiblock ordering, that is its
+matrix form has the left upper <CODE>NxN</CODE> block zero. Here is a recipe to create such
+an ordering easily: use 'a(w)' definitions of the ordering N times with intvecs <CODE>w_i</CODE>
+of the following form: <CODE>w_i</CODE> has first N components zero. The rest entries need to
+be positive and such, that <CODE>w1,..,wN</CODE> are linearly independent (see an example below).
+</P><P>
+
+Guide: with this library, it is possible
+<BR>- to compute a Groebner basis of an ideal or a submodule in the 'rational'
+Ore localization D = A_S
+<BR>- to compute a dimension of associated graded submodule (called D-dimension)
+- to compute a vector space dimension over Quot(R) of a submodule of
+D-dimension 0 (so called D-finite submodule)
+<BR>- to compute a basis over Quot(R) of a D-finite submodule
+</P><P>
+
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_814.htm#SEC865">7.7.20.0. ratstd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">compute Groebner basis and dimensions in Ore localization of the basering Support: SpezialForschungsBereich F1301 of the Austrian FWF and Transnational Access Program of RISC Linz, Austria</TD></TR>
+</TABLE></BLOCKQUOTE>
+See also:
+ <A HREF="sing_1801.htm#SEC1876">jacobson_lib</A>.
+<P>
+
+<A NAME="ratstd"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_812.htm#SEC863"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: is_cenSubbimodule" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_814.htm#SEC865"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ratstd" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_805.htm#SEC856"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: nchomolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_545.htm#SEC596"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Non-commutative libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

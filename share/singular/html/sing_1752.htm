@@ -1,0 +1,208 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: NSplaces</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: NSplaces">
+<META NAME="keywords" CONTENT="Singular Manual: NSplaces">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1827"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1751.htm#SEC1826"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Adj_div" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1753.htm#SEC1828"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: BrillNoether" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.1.2 NSplaces </H4>
+<!--docid::SEC1827::-->
+Procedure from library <CODE>brnoeth.lib</CODE> (see  <A HREF="sing_1750.htm#SEC1825">brnoeth_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>NSplaces( h, CURVE ), where h is an intvec and CURVE is a list
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list L with updated data of CURVE after computing all non-singular
+affine closed places whose degrees are in the intvec h: <BR>
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">   in L[1][1]: (affine ring) lists Aff_Points(d) with affine non-singular
+               (closed) points of degree d (if non-empty),
+   in L[3]:    the newly computed closed places are added,
+   in L[5]:    local rings created/updated to store (repres. of) new places.
+</pre></td></tr></table>See  <A HREF="sing_1751.htm#SEC1826">Adj_div</A> for a description of the entries in L.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The list_expression should be the output of the procedure Adj_div.<BR>
+Raising <CODE>printlevel</CODE>, additional comments are displayed
+(default: <CODE>printlevel=0</CODE>).
+<P>
+
+<DT><STRONG>Warning:</STRONG>
+<DD>The parameter of the needed field extensions is called 'a'. Thus,
+there should be no global object named 'a' when executing NSplaces.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "brnoeth.lib";
+int plevel=printlevel;
+printlevel=-1;
+ring s=2,(x,y),lp;
+list C=Adj_div(x3y+y3+x);
+==> The genus of the curve is 3
+// The list of computed places:
+C[3];
+==> [1]:
+==>    1,1
+==> [2]:
+==>    1,2
+// create places up to degree 4
+list L=NSplaces(1..4,C);
+// The list of computed places is now:
+L[3];
+==> [1]:
+==>    1,1
+==> [2]:
+==>    1,2
+==> [3]:
+==>    1,3
+==> [4]:
+==>    2,1
+==> [5]:
+==>    3,1
+==> [6]:
+==>    3,2
+==> [7]:
+==>    3,3
+==> [8]:
+==>    3,4
+==> [9]:
+==>    3,5
+==> [10]:
+==>    3,6
+==> [11]:
+==>    3,7
+==> [12]:
+==>    4,1
+==> [13]:
+==>    4,2
+==> [14]:
+==>    4,3
+// e.g., affine non-singular points of degree 4 :
+def aff_r=L[1][1];
+setring aff_r;
+Aff_Points(4);
+==> [1]:
+==>    [1]:
+==>       _[1]=y2+y+1
+==>       _[2]=x2+xy+x+1
+==>    [2]:
+==>       12
+==> [2]:
+==>    [1]:
+==>       _[1]=y4+y3+y2+y+1
+==>       _[2]=x+y2+y+1
+==>    [2]:
+==>       13
+==> [3]:
+==>    [1]:
+==>       _[1]=y4+y3+1
+==>       _[2]=x+y3+y
+==>    [2]:
+==>       14
+// e.g., base point of the 1st place of degree 4 :
+def S(4)=L[5][4][1];
+setring S(4);
+POINTS[1];
+==> [1]:
+==>    (a3+a)
+==> [2]:
+==>    (a2+a+1)
+==> [3]:
+==>    1
+printlevel=plevel;
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1751.htm#SEC1826">Adj_div</A>;
+ <A HREF="sing_1760.htm#SEC1835">closed_points</A>.
+<P>
+
+<A NAME="BrillNoether"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1751.htm#SEC1826"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Adj_div" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1753.htm#SEC1828"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: BrillNoether" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

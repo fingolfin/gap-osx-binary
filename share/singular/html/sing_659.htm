@@ -1,0 +1,182 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ivSickleHil</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ivSickleHil">
+<META NAME="keywords" CONTENT="Singular Manual: ivSickleHil">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC710"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_658.htm#SEC709"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ivSickle" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_660.htm#SEC711"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ivSickleDim" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: freegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_649.htm#SEC700"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: fpadim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.7.0. ivSickleHil </H5>
+<!--docid::SEC710::-->
+Procedure from library <CODE>fpadim.lib</CODE> (see  <A HREF="sing_649.htm#SEC700">fpadim_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>ivSickleHil(L,n[,degbound]); L a list of intmats, n an integer,
+<BR> degbound an optional integer
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Computing the mistletoes and the Hilbert series
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>- basering is a Letterplace ring.
+<BR> - all rows of each intmat correspond to a Letterplace monomial
+<BR> as explained in the overview
+<BR> - if you specify a different degree bound degbound,
+<BR> degbound &lt;= attrib(basering,uptodeg) should hold.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>- If L is the list returned, then L[1] is an intvec, L[2] is a list,
+<BR> containing the mistletoes as intvecs.
+<BR> - If degbound is set, a degree bound will be added. By default there
+<BR> is no degree bound.
+<BR> - n is the number of variables.
+<BR> - If I = L[1] is the intvec returned, then I[k] is the (k-1)-th
+<BR> coefficient of the Hilbert series.
+<BR> - If the K-dimension is known to be infinite, a degree bound is needed
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "fpadim.lib";
+ring r = 0,(x,y),dp;
+def R = makeLetterplaceRing(5); // constructs a Letterplace ring
+setring R; // sets basering to Letterplace ring
+//some intmats, which contain monomials in intvec representation as rows
+intmat I1[2][2] = 1,1,2,2; intmat I2[1][3]  = 1,2,1;
+intmat J1[1][2] =  1,1; intmat J2[2][3] = 2,1,2,1,2,1;
+print(I1);
+==>      1     1
+==>      2     2
+print(I2);
+==>      1     2     1
+print(J1);
+==>      1     1
+print(J2);
+==>      2     1     2
+==>      1     2     1
+list G = I1,I2;// ideal, which is already a Groebner basis
+list I =  J1,J2; // ideal, which is already a Groebner basis
+ivSickleHil(G,2); // invokes the procedure without any degree bound
+==> [1]:
+==>    1,2,2,1
+==> [2]:
+==>    [1]:
+==>       1,2
+==>    [2]:
+==>       2,1,2
+ivSickleHil(I,2,5); // invokes the procedure with degree bound 5
+==> [1]:
+==>    1,2,3,3,4,4
+==> [2]:
+==>    [1]:
+==>       1,2,2,1
+==>    [2]:
+==>       1,2,2,2,1
+==>    [3]:
+==>       1,2,2,2,2
+==>    [4]:
+==>       2,1
+==>    [5]:
+==>       2,2,1
+==>    [6]:
+==>       2,2,2,1
+==>    [7]:
+==>       2,2,2,2,1
+==>    [8]:
+==>       2,2,2,2,2
+</FONT></pre></td></tr></table><P>
+
+<A NAME="ivSickleDim"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_658.htm#SEC709"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: ivSickle" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_660.htm#SEC711"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ivSickleDim" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: freegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_649.htm#SEC700"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: fpadim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

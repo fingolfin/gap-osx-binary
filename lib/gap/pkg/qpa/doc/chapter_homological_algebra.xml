@@ -1,0 +1,707 @@
+<Chapter Label="HomologicalAlgebra"><Heading>Homological algebra</Heading>
+
+This chapter describes the homological algebra that is implemented in QPA.<P/> 
+
+The example used throughout this chapter is the following.
+<Example><![CDATA[
+gap> Q := Quiver(3,[[1,2,"a"],[1,2,"b"],[2,2,"c"],[2,3,"d"],
+> [3,1,"e"]]);;
+gap> KQ := PathAlgebra(Rationals, Q);;
+gap> AssignGeneratorVariables(KQ);;
+gap> rels := [d*e,c^2,a*c*d-b*d,e*a];;
+gap> A := KQ/rels;;
+gap> mat := [["a",[[1,2],[0,3],[1,5]]],["b",[[2,0],[3,0],[5,0]]],
+> ["c",[[0,0],[1,0]]],["d",[[1,2],[0,1]]],["e",[[0,0,0],[0,0,0]]]];;
+gap> N := RightModuleOverPathAlgebra(A,mat);;]]>
+</Example>
+
+<Section><Heading>Homological algebra</Heading>
+
+<ManSection>
+   <Attr Name="1stSyzygy" Arg="M" Comm="for a
+   PathAlgebraMatModule"/>
+   <Description>
+    Arguments: <Arg>M</Arg> -- a path algebra module (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>the first syzygy of the representation <Arg>M</Arg> as a
+     representation. 
+   </Returns>
+</ManSection>
+
+
+<ManSection>
+   <Oper Name="AllComplementsOfAlmostCompleteTiltingModule" Arg="M, X"
+	 Comm=""/>
+   <Oper Name="AllComplementsOfAlmostCompleteCotiltingModule" Arg="M, X" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>X</Arg> - two PathAlgebraMatModule's.<Br />
+   </Description>
+   <Returns>all the complements of the almost complete (co-)tilting module
+   <Arg>M</Arg> as two exact sequences, the first is all complements
+   which are gotten as an <Arg>add M</Arg>-resolution of <Arg>X</Arg>
+   and the second is all complements which are gotten as an <Arg>add
+   M</Arg>-coresolution of <Arg>X</Arg>.  If there are no complements
+   to the left of  <Arg>X</Arg>, then an empty list is returned.
+   Similarly for to the right of <Arg>X</Arg>.  In particular, if
+   <Arg>X</Arg> has no other complements the list <Code>[[],[]]</Code>
+   is returned. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="CotiltingModule" Arg="M, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>n</Arg> - a PathAlgebraMatModule and a
+     positive integer.<Br />
+   </Description>
+   <Returns>false if <Arg>M</Arg> is not a cotilting module of
+   injective dimension at most <Arg>a</Arg>. Otherwise, it returns the
+   injective dimension of <Arg>M</Arg> and the resolution of all
+   indecomposable injective modules in <Arg>add M</Arg>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="DominantDimensionOfAlgebra" Arg="A, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>A</Arg>, <Arg>n</Arg> - a quiver algebra, a
+     positive integer.<Br />
+   </Description>
+   <Returns> the dominant dimension of the algebra <Arg>A</Arg> if the
+   dominant dimension is less or equal to <Arg>n</Arg>.  If the
+   function can decide that the dominant dimension is infinite, it
+   returns <C>infinity</C>.  Otherwise, if the dominant dimension is
+   larger than <Arg>n</Arg>, then it returns <C>false</C>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="DominantDimensionOfModule" Arg="M, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>n</Arg> - a PathAlgebraMatModule, a
+     positive integer.<Br />
+   </Description>
+   <Returns> the dominant dimension of the module <Arg>M</Arg> if the
+   dominant dimension is less or equal to <Arg>n</Arg>.  If the
+   function can decide that the dominant dimension is infinite, it
+   returns <C>infinity</C>.  Otherwise, if the dominant dimension is
+   larger than <Arg>n</Arg>, then it returns <C>false</C>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="ExtAlgebraGenerators" Arg="M, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module, <Arg>n</Arg> - a positive integer.<Br />
+   </Description>
+   <Returns>a list of three elements, where the first element
+     is the dimensions of Ext^[0..n](M,M), the second element is the number
+     of minimal generators in the degrees [0..n], and the third element is
+     the generators in these degrees.</Returns>
+   <Description>
+     This function computes the generators of the Ext-algebra
+     <Math>Ext^*(M,M)</Math> up to degree  <Arg>n</Arg>.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="ExtOverAlgebra" Arg="M, N" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>N</Arg> - two modules.<Br />
+   </Description>
+   <Returns>a list of three elements <Ref Oper="ExtOverAlgebra"/>, where the first
+   element is the map from the first syzygy, <M>\Omega(M)</M> to the
+   projective cover, <M>P(M)</M> of the module <Arg>M</Arg>, the
+   second element is a basis of <Math>\Ext^1(M,N)</Math> in terms of
+   elements in <Math>\Hom(\Omega(M),N)</Math> and the third element is
+   a function that takes as an argument a homomorphism in  <C>Hom(Omega(M),N)</C>
+   and returns the coefficients of this element when written in 
+   terms of the basis of <Math>\Ext^1(M,N)</Math>.</Returns>
+   <Description>
+    The function checks if the arguments <Arg>M</Arg> and <Arg>N</Arg>
+    are modules of the same algebra, and returns an error message
+    otherwise. It <Math>\Ext^1(M,N)</Math> is zero, an empty list is
+    returned.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Attr Name="FaithfulDimension" Arg="M" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a PathAlgebraMatModule.<Br />
+   </Description>
+   <Returns> the faithful dimension of the module <Arg>M</Arg>. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="GlobalDimensionOfAlgebra" Arg="A, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>A</Arg>, <Arg>n</Arg> - a quiver algebra, a
+     positive integer.<Br />
+   </Description>
+   <Returns> the global dimension of  <Arg>A</Arg>  if the global
+   dimension is less or equal to  <Arg>n</Arg>.  If the function can
+   decide that the global dimension is infinite,  it returns
+   <C>infinity</C>.  Otherwise, if the global dimension is larger than
+   <Arg>n</Arg>, then it returns <C>false</C>. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="GorensteinDimension" Arg="A" Comm="for a quiver algebra"/>
+   <Description>
+     Arguments: <Arg>A</Arg> - a quiver algebra.<Br />
+   </Description>
+   <Returns> the Gorenstein dimension of <Arg>A</Arg>, if the
+   Gorenstein dimension has been computed.  Otherwise it returns an
+   error message.  
+     </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="GorensteinDimensionOfAlgebra" Arg="A, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>A</Arg>, <Arg>n</Arg> - a quiver algebra, a
+     positive integer.<Br />
+   </Description>
+   <Returns> the Gorenstein dimension of <Arg>A</Arg> if the
+   Gorenstein dimension is less or equal to <Arg>n</Arg>.  Otherwise,
+   if the Gorenstein dimension is larger than <Arg>n</Arg>, then it
+   returns <C>false</C>.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="HaveFiniteCoresolutionInAddM" Arg="N, M, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>N</Arg>, <Arg>M</Arg>, <Arg>n</Arg> - two
+     PathAlgebraMatModule's and an integer.<Br />
+   </Description>
+   <Returns>false if  <Arg>N</Arg> does not have a coresolution of
+   length at most  <Arg>n</Arg> in <Arg>add M</Arg>, otherwise it 
+   returns the coresolution of <Arg>N</Arg> of length at most
+   <Arg>n</Arg>. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="HaveFiniteResolutionInAddM" Arg="N, M, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>N</Arg>, <Arg>M</Arg>, <Arg>n</Arg> - two
+     PathAlgebraMatModule's and an integer.<Br />
+   </Description>
+   <Returns>false if  <Arg>N</Arg> does not have a resolution of
+   length at most  <Arg>n</Arg> in <Arg>add M</Arg>, otherwise it 
+   returns the resolution of <Arg>N</Arg> of length at most
+   <Arg>n</Arg>. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="InjDimension" Arg="M" Comm="a PathAlgebraMatModule"/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a PathAlgebraMatModule.<Br />
+   </Description>
+   <Description>
+     If the injetive dimension of the module  <Arg>M</Arg>  has been
+     computed, then the projective dimension is returned.  
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="InjDimensionOfModule" Arg="M, n" Comm="for a
+						      PathAlgebraMatModule
+						      and an integer"/>
+   <Description>
+     Arguments: <Arg>M, n</Arg> - a PathAlgebraMatModule, a positive integer.<Br />
+   </Description>
+   <Returns>Returns the injective dimension of the module
+   <Arg>M</Arg> if it is less or equal to <Arg>n</Arg>.  Otherwise it
+   returns false.</Returns>
+ </ManSection>
+
+<ManSection>
+   <Attr Name="IsCotiltingModule" Arg="M" Comm="a PathAlgebraMatModule"/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a PathAlgebraMatModule.<Br />
+   </Description>
+   <Returns> true if the module <Arg>M</Arg> has been checked to be a
+   cotilting mdoule, otherwise it returns an error message.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="IsOmegaPeriodic" Arg="M, n" Comm="for a
+   PathAlgebraMatModule and a positive integer"/>
+   <Description> 
+    Arguments: <Arg>M</Arg> -- a path algebra module (<C>PathAlgebraMatModule</C>), <Arg>n</Arg> -- be a positive integer.
+   <Br /></Description>
+   <Returns><C>i</C>, where <C>i</C> is the smallest positive integer
+     less or equal <C>n</C> such that the representation <Arg>M</Arg> is isomorphic
+     to the <C>i</C>-th syzygy of <Arg>M</Arg>, and false otherwise.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="IsTtiltingModule" Arg="M" Comm="a PathAlgebraMatModule"/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a PathAlgebraMatModule.<Br />
+   </Description>
+   <Returns> true if the module <Arg>M</Arg> has been checked to be a
+   tilting mdoule, otherwise it returns an error message.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="IyamaGenerator" Arg="M" Comm="for a PathAlgebraMatModule"/>
+   <Description> 
+    Arguments: <Arg>M</Arg> -- a path algebra module
+    (<C>PathAlgebraMatModule</C>).  <Br /></Description>
+   <Returns>a module <Math>N</Math> such that <Arg>M</Arg> is a direct
+   summand of <Math>N</Math> and such that the global dimension of the
+   endomorphism ring of <Math>N</Math> is finite using the algorithm
+   provided by Osamu Iyama (add reference here).
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="LeftFacMApproximation" Arg="C, M" Comm="for two PathAlgebraMatModules"/>
+   <Oper Name="MinimalLeftFacMApproximation" Arg="C, M" Comm="for two PathAlgebraMatModules"/>
+   <Description> 
+    Arguments: <Arg>C</Arg>, <Arg>M</Arg> -- two path algebra modules (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>a left <Math>\operatorname{Fac} M</Math>-approximation of
+   the module <Math>C</Math>, where the first version returns a not
+   necessarily minimal left <Math>\operatorname{Fac} M</Math>-approximation and the
+   second returns a minimal approximation.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="LeftMutationOfTiltingModuleComplement" Arg="M, N" Comm="for two PathAlgebraMatModules"/>
+   <Oper Name="LeftMutationOfCotiltingModuleComplement" Arg="M, N" Comm="for two PathAlgebraMatModules"/>
+   <Description> 
+    Arguments: <Arg>M</Arg>, <Arg>N</Arg> -- two path algebra modules (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>a left mutation of the complement <Arg>N</Arg> of the
+   almost complete tilting/cotilting module  <Arg>M</Arg>, if such a
+   complement exists.  Otherwise it returns false.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="LeftSubMApproximation" Arg="C, M" Comm="for two PathAlgebraMatModules"/>
+   <Oper Name="MinimalLeftSubMApproximation" Arg="C, M" Comm="for two PathAlgebraMatModules"/>
+   <Description> 
+    Arguments: <Arg>C</Arg>, <Arg>M</Arg> -- two path algebra modules (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>a minimal left <Math>\operatorname{Sub} M</Math>-approximation of
+   the module <Math>C</Math>. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="LiftingInclusionMorphisms" Arg="f, g" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg> - two homomorphisms with
+     common range.<Br />
+   </Description>
+   <Returns>
+     a factorization of <Arg>g</Arg> in terms of <Arg>f</Arg>, whenever
+     possible and <C>fail</C> otherwise.
+   </Returns>
+   <Description>
+    Given two inclusions <Math>f\colon B\to C</Math> and <Math>g\colon
+    A\to C</Math>, this function constructs a morphism
+    from <Math>A</Math> to <Math>B</Math>, whenever the image
+    of <Arg>g</Arg> is contained in the image of <Arg>f</Arg>.
+    Otherwise the function returns fail. The function checks
+    if <Arg>f</Arg> and <Arg>g</Arg> are one-to-one, if they have
+    the same range and if the image of <Arg>g</Arg> is contained in
+    the image of <Arg>f</Arg>.
+   </Description>
+</ManSection>
+
+
+<ManSection>
+   <Oper Name="LiftingMorphismFromProjective" Arg="f, g" Comm=""/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg> - two homomorphisms with
+     common range.<Br />
+   </Description>
+   <Returns>
+     a factorization of <Arg>g</Arg> in terms of <Arg>f</Arg>, whenever
+     possible and <C>fail</C> otherwise.
+   </Returns>
+   <Description>
+    Given two morphisms <Math>f\colon B\to C</Math> and <Math>g\colon
+    P\to C</Math>, where <Math>P</Math> is a direct sum of
+    indecomposable projective modules constructed
+    via <Code>DirectSumOfQPAModules</Code> and <Arg>f</Arg> an
+    epimorphism, this function finds a lifting of <Arg>g</Arg>
+    to <Math>B</Math>. The function checks if <Math>P</Math> is a
+    direct sum of indecomposable projective modules, if <Arg>f</Arg>
+    is onto and if <Arg>f</Arg> and <Arg>g</Arg> have the same range.
+   </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> B := BasisVectors(Basis(N));
+[ [ [ 1, 0, 0 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 1, 0 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 1 ], [ 0, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 1, 0 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 1 ], [ 0, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 1, 0 ] ], 
+  [ [ 0, 0, 0 ], [ 0, 0 ], [ 0, 1 ] ] ]
+gap> g := SubRepresentationInclusion(N,[B[1],B[4]]);
+<<[ 1, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> f := SubRepresentationInclusion(N,[B[1],B[2]]);
+<<[ 2, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> LiftingInclusionMorphisms(f,g);
+<<[ 1, 2, 2 ]> ---> <[ 2, 2, 2 ]>>
+
+gap> S := SimpleModules(A); 
+[ <[ 1, 0, 0 ]>, <[ 0, 1, 0 ]>, <[ 0, 0, 1 ]> ]
+gap> homNS := HomOverAlgebra(N,S[1]);
+[ <<[ 3, 2, 2 ]> ---> <[ 1, 0, 0 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 1, 0, 0 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 1, 0, 0 ]>>
+     ]
+gap> f := homNS[1];
+<<[ 3, 2, 2 ]> ---> <[ 1, 0, 0 ]>>
+
+gap> p := ProjectiveCover(S[1]);
+<<[ 1, 4, 3 ]> ---> <[ 1, 0, 0 ]>>
+
+gap> LiftingMorphismFromProjective(f,p);
+<<[ 1, 4, 3 ]> ---> <[ 3, 2, 2 ]>>
+[ [(1)*v1], [(1)*v2], [(1)*v3], [(1)*a], [(1)*b], [(1)*c], [(1)*d], [(1)*e] 
+ ] )> > ]]>
+</Example>
+
+<ManSection>
+   <Attr Name="MinimalLeftAddMApproximation" Arg="C, M" Comm=""/>
+   <Attr Name="MinimalLeftApproximation" Arg="C, M" Comm=""/>
+   <Description>
+     Arguments: <Arg>C</Arg>, <Arg>M</Arg> - two modules.<Br />
+   </Description>
+   <Returns>
+     the minimal left <M>\add M</M>-approximation of the
+     module <Arg>C</Arg>. Note: The order of the arguments is opposite
+     of the order for minimal right approximations.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="MinimalRightApproximation" Arg="M, C" Comm=""/>
+   <Attr Name="MinimalRightAddMApproximation" Arg="M, C" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>C</Arg> - two modules.<Br />
+   </Description>
+   <Returns>
+     the minimal right <M>\add M</M>-approximation of the
+     module <Arg>C</Arg>. Note: The order of the arguments is opposite
+     of the order for minimal left approximations.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="MorphismOnKernel" Arg="f, g,  alpha, beta" Comm="for a
+   commutative diagram of maps"/>
+   <Oper Name="MorphismOnImage" Arg="f, g,  alpha, beta" Comm="for a
+   commutative diagram of maps"/>
+   <Oper Name="MorphismOnCoKernel" Arg="f, g, alpha, beta" Comm="for a
+   commutative diagram of maps"/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg>, <Arg>alpha</Arg>, <Arg>beta</Arg>
+     - four homomorphisms of modules.<Br />
+   </Description>
+   <Returns>the morphism induced on the kernels, the images or the
+   cokernels of the morphisms <Arg>f</Arg> and <Arg>g</Arg>,
+   respectively, whenever <M>f\colon A\to B</M>, <M>\beta\colon B\to
+   B'</M>, <M>\alpha\colon A\to A'</M> and <M>g\colon A'\to B'</M>
+   forms a commutative diagram.</Returns>
+   <Description>
+    It is checked
+    if <Arg>f</Arg>, <Arg>g</Arg>, <Arg>alpha</Arg>, <Arg>beta</Arg>
+    forms a commutative diagram, that is, if <Math>f \beta - \alpha g
+    = 0</Math>.
+   </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> hom := HomOverAlgebra(N,N);
+[ <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 2, 2 ]> ---> <[ 3, 2, 2 ]>>
+     ]
+gap> g := MorphismOnKernel(hom[1],hom[2],hom[1],hom[2]);
+<<[ 2, 2, 2 ]> ---> <[ 2, 2, 2 ]>>
+
+gap> IsomorphicModules(Source(g),Range(g));
+true
+gap> p := ProjectiveCover(N);
+<<[ 3, 12, 9 ]> ---> <[ 3, 2, 2 ]>>
+
+gap> N1 := Kernel(p);
+<[ 0, 10, 7 ]>
+gap> pullback := PullBack(p,hom[1]);
+[ <<[ 3, 12, 9 ]> ---> <[ 3, 2, 2 ]>>
+    , <<[ 3, 12, 9 ]> ---> <[ 3, 12, 9 ]>>
+     ]
+gap> Kernel(pullback[1]);
+<[ 0, 10, 7 ]>
+gap> IsomorphicModules(N1,Kernel(pullback[1]));
+true
+gap> t := LiftingMorphismFromProjective(p,p*hom[1]);
+<<[ 3, 12, 9 ]> ---> <[ 3, 12, 9 ]>>
+
+gap> s := MorphismOnKernel(p,p,t,hom[1]);    
+<<[ 0, 10, 7 ]> ---> <[ 0, 10, 7 ]>>
+
+gap> Source(s) = N1;
+true
+gap> q := KernelInclusion(p);
+<<[ 0, 10, 7 ]> ---> <[ 3, 12, 9 ]>>
+
+gap> pushout := PushOut(q,s);
+[ <<[ 0, 10, 7 ]> ---> <[ 3, 12, 9 ]>>
+    , <<[ 3, 12, 9 ]> ---> <[ 3, 12, 9 ]>>
+     ]
+gap> U := CoKernel(pushout[1]);
+<[ 3, 2, 2 ]>
+gap> IsomorphicModules(U,N);
+true ]]>
+</Example>
+
+<ManSection>
+   <Oper Name="NthSyzygy" Arg="M, n" Comm="for a
+   PathAlgebraMatModule"/>
+   <Description> 
+    Arguments: <Arg>M</Arg> -- a path algebra module (<C>PathAlgebraMatModule</C>), <Arg>n</Arg> -- a positive integer.
+   <Br /></Description>
+   <Returns>the <Arg>n</Arg>-th syzygy of <Arg>M</Arg> if it has
+   projective dimension at least <Arg>n</Arg>, and if the projective
+   dimension is less than <Arg>n</Arg>, then it returns the last
+   non-zero projective syzygy. 
+   </Returns>
+   <Description>
+This functions computes the <Arg>n</Arg>-th syzygy of the module
+<Arg>M</Arg> by successively computing first, second, third,
+... syzygy of <Arg>M</Arg> the operation <Ref Attr="1stSyzygy"/> and
+at each stage checking if the is a projective module.
+</Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="NthSyzygyNC" Arg="M, n" Comm="for a
+   PathAlgebraMatModule"/>
+   <Description>
+    Arguments: <Arg>M</Arg> -- a path algebra module (<C>PathAlgebraMatModule</C>), <Arg>n</Arg> -- a positive integer.
+   <Br /></Description>
+   <Returns>the <Arg>n</Arg>-th syzygy of the module <Arg>M</Arg>,
+   unless the projective dimension of <Arg>M</Arg> is less or equal to
+   <C>n-1</C>, in which case it returns the zero module. It does not
+   check if the <C>n</C>-th syzygy is projective or not.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="NumberOfComplementsOfAlmostCompleteTiltingModule" Arg="M" Comm="for a
+   PathAlgebraMatModule"/>
+   <Oper Name="NumberOfComplementsOfAlmostCompleteCotiltingModule" Arg="M" Comm="for a
+   PathAlgebraMatModule"/>
+   <Description> 
+    Arguments: <Arg>M</Arg> -- a PathAlgebraMatModule.<Br /></Description>
+   <Returns>the number complements of an almost complete
+   tilting/cotilting module  <Arg>M</Arg>, assuming that  <Arg>M</Arg>
+   is an almost complete tilting module. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Attr Name="ProjDimension" Arg="M" Comm="a PathAlgebraMatModule"/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a PathAlgebraMatModule.<Br />
+   </Description>
+   <Returns>the projective dimension of the module <Arg>M</Arg>, if it
+   has been computed. 
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="ProjDimensionOfModule" Arg="M, " Comm="for a
+						      PathAlgebraMatModule
+						      and a positive integer"/>
+   <Description>
+     Arguments: <Arg>M, n</Arg> - a PathAlgebraMatModule, a positive integer.<Br />
+   </Description>
+   <Returns>Returns the projective dimension of the module
+   <Arg>M</Arg> if it is less or equal to <Arg>n</Arg>.  Otherwise it
+   returns false.</Returns>
+ </ManSection>
+
+<ManSection>
+   <Attr Name="ProjectiveCover" Arg="M" Comm="for a PathAlgebraMatModule"/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a module.<Br />
+   </Description>
+   <Returns>the projective cover of <Arg>M</Arg>, that is, returns the
+   map <Math>P(M)\to M</Math>.</Returns>
+   <Description>
+     If the module <Arg>M</Arg> is zero, then the zero map to
+     <Arg>M</Arg> is returned.
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="ProjectiveResolutionOfPathAlgebraModule" Arg="M, n" Comm="for a PathAlgebraMatModule and an integer"/>
+   <Description>
+     Arguments: <Arg>M</Arg> - a path algebra module (<C>PathAlgebraMatModule</C>), <Arg>n</Arg> - a positive integer.<Br />
+   </Description>
+   <Returns>in terms of attributes <C>RProjectives</C>,
+   <C>ProjectivesFList</C> and <C>Maps</C> a projective resolution of
+   <Arg>M</Arg> out to stage <Arg>n</Arg>, where <C>RProjectives</C>
+   are the projectives in the resolution lifted up to projectives over
+   the path algebra, <C>ProjectivesFList</C> are the generators of the
+   projective modules given in <C>RProjectives</C> in terms of
+   elements in the first projective in the resolution and <C>Maps</C>
+   contains the information about the maps in the
+   resolution.</Returns>
+   <Description>
+     The algorithm for computing this projective resolution is based
+     on the paper <Cite Key="GreenSolbergZacharia" />. In addition, the
+     algebra over which the modules are defined is available via the
+     attribute <C>ParentAlgebra</C>. 
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="PullBack" Arg="f, g" Comm="for two maps between modules
+   with common target"/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg> - two homomorphisms with a common range.<Br />
+   </Description>
+   <Returns>the pullback of the maps <Arg>f</Arg> and <Arg>g</Arg>.</Returns>
+   <Description>
+    It is checked if <Arg>f</Arg> and <Arg>g</Arg> have the same range.
+    Given the input <Math>f\colon A\to B</Math> (horizontal map)
+    and <Math>g\colon C\to B</Math> (vertical map), the
+    pullback <Math>E</Math> is returned as the two
+    homomorphisms <Math>[f',g']</Math>, where <Math>f'\colon E\to
+    C</Math> (horizontal map) and <Math>g'\colon E\to A</Math>
+    (vertical map).
+   </Description>
+</ManSection>
+
+<ManSection>
+   <Oper Name="PushOut" Arg="f, g" Comm="for two maps between modules
+   with common source"/>
+   <Description>
+     Arguments: <Arg>f</Arg>, <Arg>g</Arg> - two homomorphisms between
+     modules with a common source.<Br />
+   </Description>
+   <Returns>the pushout of the maps <Arg>f</Arg> and <Arg>g</Arg>.</Returns>
+   <Description>
+    It is checked if <Arg>f</Arg> and <Arg>g</Arg> have the same
+    source. Given the input <Math>f\colon A\to B</Math> (horizontal
+    map) and <Math>g\colon A\to C</Math> (vertical map), the
+    pushout <Math>E</Math> is returned as the two
+    homomorphisms <Math>[f',g']</Math>, where <Math>f'\colon C\to
+    E</Math> (horizontal map) and <Math>g'\colon B\to E</Math>
+    (vertical map).
+   </Description>
+</ManSection>
+
+<Example><![CDATA[
+gap> S := SimpleModules(A);
+[ <[ 1, 0, 0 ]>, <[ 0, 1, 0 ]>, <[ 0, 0, 1 ]> ]
+gap> Ext := ExtOverAlgebra(S[2],S[2]);
+[ <<[ 0, 1, 2 ]> ---> <[ 0, 2, 2 ]>>
+    , [ <<[ 0, 1, 2 ]> ---> <[ 0, 1, 0 ]>>
+         ], function( map ) ... end ]
+gap> Length(Ext[2]);
+1
+gap> # i.e. Ext^1(S[2],S[2]) is 1-dimensional
+gap> pushout := PushOut(Ext[2][1],Ext[1]);   
+[ <<[ 0, 2, 2 ]> ---> <[ 0, 2, 0 ]>>
+    , <<[ 0, 1, 0 ]> ---> <[ 0, 2, 0 ]>>
+     ]
+gap> f := CoKernelProjection(pushout[1]);
+<<[ 0, 2, 0 ]> ---> <[ 0, 0, 0 ]>>
+
+gap> U := Range(pushout[1]); 
+<[ 0, 2, 0 ]> ]]>
+</Example>
+
+<ManSection>
+   <Oper Name="RightFacMApproximation" Arg="M, C" Comm="for two PathAlgebraMatModules"/>
+   <Oper Name="MinimalRightFacMApproximation" Arg="M, C" Comm="for two PathAlgebraMatModules"/>
+   <Description> 
+    Arguments: <Arg>M</Arg>, <Arg>C</Arg> -- two path algebra modules (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>a minimal right <Math>\operatorname{Fac} M</Math>-approximation of
+   the module <Math>C</Math>.  
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="RightMutationOfTiltingModuleComplement" Arg="M, N" Comm="for two PathAlgebraMatModules"/>
+   <Oper Name="RightMutationOfCotiltingModuleComplement" Arg="M, N" Comm="for two PathAlgebraMatModules"/>
+   <Description>
+    Arguments: <Arg>M</Arg>, <Arg>N</Arg> -- two path algebra modules (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>a right mutation of the complement <Arg>N</Arg> of the
+   almost complete tilting/cotilting module  <Arg>M</Arg>, if such a
+   complement exists.  Otherwise it returns false.
+   </Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="RightSubMApproximation" Arg="M, C" Comm="for two PathAlgebraMatModules"/>
+   <Oper Name="MinimalRightSubMApproximation" Arg="M, C" Comm="for two PathAlgebraMatModules"/>
+   <Description> 
+    Arguments: <Arg>M</Arg>, <Arg>C</Arg> -- two path algebra modules (<C>PathAlgebraMatModule</C>).
+   <Br /></Description>
+   <Returns>a right <Math>\operatorname{Sub} M</Math>-approximation of
+   the module <Math>C</Math>, where the first version returns a not
+   necessarily minimal right <Math>\operatorname{Sub} M</Math>-approximation and the
+   second returns a minimal approximation.
+   </Returns>
+</ManSection>
+
+
+<ManSection>
+   <Oper Name="N_RigidModule" Arg="M, n" Comm="for a
+					       PathAlgebraMatModule
+					       and an integer"/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>n</Arg> - a PathAlgebraMatModule,
+     an integer.<Br />
+   </Description>
+   <Returns>true if  <Arg>M</Arg> is a <Arg>n</Arg>-rigid
+   module. Otherwise it returns false.</Returns>
+</ManSection>
+
+<ManSection>
+   <Oper Name="TiltingModule" Arg="M, n" Comm=""/>
+   <Description>
+     Arguments: <Arg>M</Arg>, <Arg>n</Arg> - a PathAlgebraMatModule and a
+     positive integer.<Br />
+   </Description>
+   <Returns>false if <Arg>M</Arg> is not a tilting module of projective
+   dimension at most <Arg>n</Arg>. Otherwise, it returns the projective
+   dimension of <Arg>M</Arg> and the coresolution of all
+   indecomposable projective modules in <M>\add M</M>.
+   </Returns>
+</ManSection>
+</Section>
+
+</Chapter>

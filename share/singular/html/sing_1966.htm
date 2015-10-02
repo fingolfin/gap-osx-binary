@@ -1,0 +1,153 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: puiseuxExpansion</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: puiseuxExpansion">
+<META NAME="keywords" CONTENT="Singular Manual: puiseuxExpansion">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2041"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1965.htm#SEC2040"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayTropicalLifting" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1967.htm#SEC2042"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayPuiseuxExpansion" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.3.3 puiseuxExpansion </H4>
+<!--docid::SEC2041::-->
+Procedure from library <CODE>tropical.lib</CODE> (see  <A HREF="sing_1963.htm#SEC2038">tropical_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>puiseuxExpansion(f,n,#); f poly, n int, # list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f is a non-constant polynomial in two variables which is not
+divisible by the first variable and which is squarefree
+as a power series over the complex numbers;
+<BR>the base field is either the field of rational numbers or a finite extension thereof;
+monomial ordering is assumed to be local;
+<BR>the optional parameter # can be the string 'subst'
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, where each entry of the list l describes the Newton-Puiseux
+<BR> parametrisations of one branch of the plane curve singularity
+<BR> at the origin defined by f; only the terms up to order n of each
+<BR> parametetrisation are computed
+<BR> l[i][1] = is a ring
+<BR> l[i][2] = int
+<BR> l[i][3] = string
+<BR>
+<BR> WE NOW DESCRIBE THE LIST ENTRIES l[i] IN MORE DETAIL:
+<BR> - the ring l[i][1] contains an ideal LIFT and the Newton-Puiseux
+parametrisation of the branch is given by x=t^N and y=LIFT[1],
+where N=l[i][2]
+<BR> - if the base field had a parameter and a minimal polynomial, then
+the new base field will have a parameter and a new minimal polynomial,
+and LIFT[2] describes how the old parameter can be computed from the new one
+<BR> - if a field extension with minimal polynomial of degree k was necessary,
+then to the one extension produced acutally k extensions correspond by replacing
+the parameter a successively by all zeros of the minimal polynomial
+<BR> - if the option subst was set l[i][3] contains the polynomial where
+y has been substituted by y(t^{1/N}) as a string
+<P>
+
+<DT><STRONG>Remark:</STRONG>
+<DD>- it is best to use the procedure displayPuiseuxExpansion to
+display the result
+<BR> - the procedure requires the @sc{Singular} procedure absPrimdecGTZ to be
+present in the package primdec.lib
+<BR> - if f is not squarefree it will be replaced by its squarefree part
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "tropical.lib";
+printlevel=1;
+ring r=0,(x,y),ds;
+poly f=x2-y4+x5y7;
+puiseuxExpansion(f,3,"subst");
+displayPuiseuxExpansion(puiseuxExpansion(f,3));
+</FONT></pre></td></tr></table><P>
+
+<A NAME="displayPuiseuxExpansion"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1965.htm#SEC2040"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayTropicalLifting" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1967.htm#SEC2042"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayPuiseuxExpansion" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

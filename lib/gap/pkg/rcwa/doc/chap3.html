@@ -24,24 +24,25 @@
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X81242A6586A604A3">3.1 <span class="Heading">Constructing residue-class-wise affine groups</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8143AB647801F438">3.1-1 GroupByResidueClasses</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79450C1C8756FEB3">3.1-2 RCWA</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7BD42D8481300E25">3.1-3 CT</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7EB8A301790290C7">3.1-4 IsomorphismRcwaGroup</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79CAE48981C11FE8">3.1-5 DirectProduct</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X80D13D2A7AD73C2C">3.1-6 <span class="Heading">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7EB8A301790290C7">3.1-1 IsomorphismRcwaGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79CAE48981C11FE8">3.1-2 DirectProduct</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X80D13D2A7AD73C2C">3.1-3 <span class="Heading">
     WreathProduct
     (for an rcwa group over Z, with a permutation group or (ℤ,+))
   </span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X852EF2C079E4D7FF">3.1-7 <span class="Heading">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8794913B878DD5C4">3.1-4 MergerExtension</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8143AB647801F438">3.1-5 GroupByResidueClasses</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X852EF2C079E4D7FF">3.1-6 <span class="Heading">
     Restriction (of an rcwa mapping or -group, by an injective rcwa mapping)
   </span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X82171D7287CBED95">3.1-8 <span class="Heading">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X82171D7287CBED95">3.1-7 <span class="Heading">
     Induction (of an rcwa mapping or -group, by an injective rcwa mapping)
   </span></a>
 </span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79450C1C8756FEB3">3.1-8 RCWA</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7BD42D8481300E25">3.1-9 CT</a></span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X80C042BE82EE0F9A">3.2 <span class="Heading">
   Basic routines for investigating residue-class-wise affine groups
@@ -59,7 +60,7 @@
 <div class="ContSSBlock">
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7C046BE97EE53692">3.3-1 <span class="Heading"> Orbit (for an rcwa group and either a point or a set) </span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7B30F7207817D859">3.3-2 DrawOrbitPicture</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7D9DFAC97F9F0891">3.3-2 DrawOrbitPicture</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78F145197F63A25D">3.3-3 <span class="Heading">
     ShortOrbits (for rcwa groups) &amp; ShortCycles (for rcwa permutations)
   </span></a>
@@ -110,7 +111,7 @@
 
 <h4>3.1 <span class="Heading">Constructing residue-class-wise affine groups</span></h4>
 
-<p>As any other groups in <strong class="pkg">GAP</strong>, residue-class-wise affine groups can be constructed by <code class="code">Group</code>, <code class="code">GroupByGenerators</code> or <code class="code">GroupWithGenerators</code>.</p>
+<p>As any other groups in <strong class="pkg">GAP</strong>, residue-class-wise affine (rcwa-) groups can be constructed by <code class="code">Group</code>, <code class="code">GroupByGenerators</code> or <code class="code">GroupWithGenerators</code>.</p>
 
 
 <div class="example"><pre>
@@ -125,11 +126,145 @@ false
 
 </pre></div>
 
-<p>A further means of entering rcwa groups is the following:</p>
+<p>An rcwa group isomorphic to a given group can be obtained by taking the image of a faithful rcwa representation:</p>
+
+<p><a id="X7EB8A301790290C7" name="X7EB8A301790290C7"></a></p>
+
+<h5>3.1-1 IsomorphismRcwaGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsomorphismRcwaGroup</code>( <var class="Arg">G</var>, <var class="Arg">R</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsomorphismRcwaGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<p>Returns: a monomorphism from the group <var class="Arg">G</var> to RCWA(<var class="Arg">R</var>) or to RCWA(ℤ), respectively.</p>
+
+<p>The best-supported case is <var class="Arg">R</var> = ℤ. Currently there are methods available for finite groups, for free products of finite groups and for free groups. The method for free products of finite groups uses the Table-Tennis Lemma (cf. e.g. Section II.B. in <a href="chapBib.html#biBLaHarpe00">[dlH00]</a>), and the method for free groups uses an adaptation of the construction given on page 27 in <a href="chapBib.html#biBLaHarpe00">[dlH00]</a> from PSL(2,ℂ) to RCWA(ℤ).</p>
+
+
+<div class="example"><pre>
+
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F := FreeProduct(Group((1,2)(3,4),(1,3)(2,4)),Group((1,2,3)),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">                    SymmetricGroup(3));</span>
+&lt;fp group on the generators [ f1, f2, f3, f4, f5 ]&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsomorphismRcwaGroup(F);</span>
+[ f1, f2, f3, f4, f5 ] -&gt; [ &lt;rcwa permutation of Z with modulus 12&gt;,
+  &lt;rcwa permutation of Z with modulus 24&gt;,
+  &lt;rcwa permutation of Z with modulus 12&gt;,
+  &lt;rcwa permutation of Z with modulus 72&gt;,
+  &lt;rcwa permutation of Z with modulus 36&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsomorphismRcwaGroup(FreeGroup(2));</span>
+[ f1, f2 ] -&gt; [ &lt;wild rcwa permutation of Z with modulus 8&gt;,
+  &lt;wild rcwa permutation of Z with modulus 8&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2 := Image(last);</span>
+&lt;wild rcwa group over Z with 2 generators&gt;
+
+</pre></div>
+
+<p>Further, new rcwa groups can be constructed from given ones by taking direct products and by taking wreath products with finite groups or with the infinite cyclic group:</p>
+
+<p><a id="X79CAE48981C11FE8" name="X79CAE48981C11FE8"></a></p>
+
+<h5>3.1-2 DirectProduct</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DirectProduct</code>( <var class="Arg">G1</var>, <var class="Arg">G2</var>, <var class="Arg">...</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>Returns: an rcwa group isomorphic to the direct product of the rcwa groups over ℤ given as arguments.</p>
+
+<p>There is certainly no unique or canonical way to embed a direct product of rcwa groups into RCWA(ℤ). This method chooses to embed the groups <var class="Arg">G1</var>, <var class="Arg">G2</var>, <var class="Arg">G3</var> ... via restrictions by <span class="SimpleMath">n ↦ mn</span>, <span class="SimpleMath">n ↦ mn+1</span>, <span class="SimpleMath">n ↦ mn+2</span> ... (<span class="SimpleMath">→</span> <code class="func">Restriction</code> (<a href="chap3.html#X852EF2C079E4D7FF"><span class="RefLink">3.1-6</span></a>)), where <span class="SimpleMath">m</span> denotes the number of groups given as arguments.</p>
+
+
+<div class="example"><pre>
+
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2xF2 := DirectProduct(F2,F2);</span>
+&lt;wild rcwa group over Z with 4 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Image(Projection(F2xF2,1)) = F2;</span>
+true
+
+</pre></div>
+
+<p><a id="X80D13D2A7AD73C2C" name="X80D13D2A7AD73C2C"></a></p>
+
+<h5>3.1-3 <span class="Heading">
+    WreathProduct
+    (for an rcwa group over Z, with a permutation group or (ℤ,+))
+  </span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WreathProduct</code>( <var class="Arg">G</var>, <var class="Arg">P</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WreathProduct</code>( <var class="Arg">G</var>, <var class="Arg">Z</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>Returns: an rcwa group isomorphic to the wreath product of the rcwa group <var class="Arg">G</var> over ℤ with the finite permutation group <var class="Arg">P</var> or with the infinite cyclic group <var class="Arg">Z</var>, respectively.</p>
+
+<p>The first-mentioned method embeds the <code class="code">DegreeAction(<var class="Arg">P</var>)</code>th direct power of <var class="Arg">G</var> using the method for <code class="code">DirectProduct</code>, and lets the permutation group <var class="Arg">P</var> act naturally on the set of residue classes modulo <code class="code">DegreeAction(<var class="Arg">P</var>)</code>. The second-mentioned method restricts (<span class="SimpleMath">→</span> <code class="func">Restriction</code> (<a href="chap3.html#X852EF2C079E4D7FF"><span class="RefLink">3.1-6</span></a>)) the group <var class="Arg">G</var> to the residue class 3(4), and maps the generator of the infinite cyclic group <var class="Arg">Z</var> to <code class="code">ClassTransposition(0,2,1,2) * ClassTransposition(0,2,1,4)</code>.</p>
+
+
+<div class="example"><pre>
+
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2wrA5 := WreathProduct(F2,AlternatingGroup(5));;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(F2wrA5,1);</span>
+[ &lt;wild rcwa permutation of Z with modulus 8&gt;,
+  &lt;wild rcwa permutation of Z with modulus 8&gt; ] -&gt;
+[ &lt;wild rcwa permutation of Z with modulus 40&gt;,
+  &lt;wild rcwa permutation of Z with modulus 40&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(F2wrA5,2);</span>
+[ (1,2,3,4,5), (3,4,5) ] -&gt; [ ( 0(5), 1(5), 2(5), 3(5), 4(5) ), 
+  ( 2(5), 3(5), 4(5) ) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ZwrZ := WreathProduct(Group(ClassShift(0,1)),Group(ClassShift(0,1)));</span>
+&lt;wild rcwa group over Z with 2 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(ZwrZ,1);</span>
+[ ClassShift( Z ) ] -&gt;
+[ &lt;tame rcwa permutation of Z with modulus 4, of order infinity&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(ZwrZ,2);</span>
+[ ClassShift( Z ) ] -&gt; [ &lt;wild rcwa permutation of Z with modulus 4&gt; ]
+
+</pre></div>
+
+<p>Also, rcwa groups can be obtained as particular extensions of finite permutation groups:</p>
+
+<p><a id="X8794913B878DD5C4" name="X8794913B878DD5C4"></a></p>
+
+<h5>3.1-4 MergerExtension</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MergerExtension</code>( <var class="Arg">G</var>, <var class="Arg">points</var>, <var class="Arg">point</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: roughly spoken, an extension of <var class="Arg">G</var> by an involution which "merges" <var class="Arg">points</var> into <var class="Arg">point</var>.</p>
+
+<p>The arguments of this operation are a finite permutation group <var class="Arg">G</var>, a set <var class="Arg">points</var> of points moved by <var class="Arg">G</var> and a single point <var class="Arg">point</var> moved by <var class="Arg">G</var> which is not in <var class="Arg">points</var>.</p>
+
+<p>Let <span class="SimpleMath">n</span> be the largest moved point of <var class="Arg">G</var>, and let <span class="SimpleMath">H</span> be the tame subgroup of CT(ℤ) which respects the partition <span class="SimpleMath">mathcalP</span> of ℤ into the residue classes (mod <span class="SimpleMath">n</span>), and which acts on <span class="SimpleMath">mathcalP</span> as <var class="Arg">G</var> acts on <span class="SimpleMath">{1, dots, n}</span>. Further assume that <var class="Arg">points</var> = <span class="SimpleMath">{p_1, dots, p_k}</span> and <var class="Arg">point</var> = <span class="SimpleMath">p</span>, and put <span class="SimpleMath">r_i := p_i-1, i = 1, dots, k</span> and <span class="SimpleMath">r := p-1</span>. Now let <span class="SimpleMath">σ</span> be the product of the class transpositions <span class="SimpleMath">τ_r_i(n),r+(i-1)n(kn), i = 1, dots, k</span>. The group returned by this operation is the extension of <span class="SimpleMath">H</span> by the involution <span class="SimpleMath">σ</span>. -- On first reading, this may look a little complicated, but really the code of the method is only about half as long as this description.</p>
+
+
+<div class="example"><pre>
+
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># First example -- a group isomorphic to PSL(2,Z):</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := MergerExtension(Group((1,2,3)),[1,2],3);</span>
+&lt;rcwa group over Z with 2 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Size(G); </span>
+infinity
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">GeneratorsOfGroup(G);</span>
+[ ( 0(3), 1(3), 2(3) ), ( 0(3), 2(6) ) ( 1(3), 5(6) ) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">B := Ball(G,One(G),6:Spheres);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">List(B,Length);</span>
+[ 1, 3, 4, 6, 8, 12, 16 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">#</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Second example -- a group isomorphic to Thompson's group V:</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := MergerExtension(Group((1,2,3,4),(1,2)),[1,2],3);</span>
+&lt;rcwa group over Z with 3 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Size(G);</span>
+infinity
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">GeneratorsOfGroup(G);</span>
+[ ( 0(4), 1(4), 2(4), 3(4) ), ( 0(4), 1(4) ),
+  ( 0(4), 2(8) ) ( 1(4), 6(8) ) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">B := Ball(G,One(G),6:Spheres);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">List(B,Length);</span>
+[ 1, 4, 11, 28, 69, 170, 413 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G = Group(List([[0,2,1,2],[1,2,2,4],[0,2,1,4],[1,4,2,4]],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">                  ClassTransposition));</span>
+true
+
+</pre></div>
+
+<p>It is also possible to build an rcwa group from a list of residue classes:</p>
 
 <p><a id="X8143AB647801F438" name="X8143AB647801F438"></a></p>
 
-<h5>3.1-1 GroupByResidueClasses</h5>
+<h5>3.1-5 GroupByResidueClasses</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GroupByResidueClasses</code>( <var class="Arg">classes</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: the group which is generated by all class transpositions which interchange disjoint residue classes in <var class="Arg">classes</var>.</p>
@@ -152,11 +287,75 @@ true
 
 </pre></div>
 
-<p>Often, a smaller generating set of a given rcwa group can be found by the operation <code class="code">SmallGeneratingSet</code>. There are methods for the operations <code class="code">View</code>, <code class="code">Display</code>, <code class="code">Print</code> and <code class="code">String</code> which are applicable to rcwa groups. All rcwa groups over a ring <span class="SimpleMath">R</span> are subgroups of RCWA(<span class="SimpleMath">R</span>). The group RCWA(<span class="SimpleMath">R</span>) itself is not finitely generated, thus cannot be constructed as described above. It is handled as a special case:</p>
+<p>Various ways to construct rcwa groups are based on certain monomorphisms from the group RCWA(<span class="SimpleMath">R</span>) into itself. Examples are the constructions of direct products and wreath products described above. The support of the image of such a monomorphism is the image of a given injective rcwa mapping. For this reason, these monomorphisms are called <em>restriction monomorphisms</em>. The following operation computes images of rcwa mappings and -groups under these embeddings of RCWA(<span class="SimpleMath">R</span>) into itself:</p>
+
+<p><a id="X852EF2C079E4D7FF" name="X852EF2C079E4D7FF"></a></p>
+
+<h5>3.1-6 <span class="Heading">
+    Restriction (of an rcwa mapping or -group, by an injective rcwa mapping)
+  </span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Restriction</code>( <var class="Arg">g</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Restriction</code>( <var class="Arg">G</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: the restriction of the rcwa mapping <var class="Arg">g</var> (respectively the rcwa group <var class="Arg">G</var>) by the injective rcwa mapping <var class="Arg">f</var>.</p>
+
+<p>By definition, the <em>restriction</em> <span class="SimpleMath">g_f</span> of an rcwa mapping <var class="Arg">g</var> by an injective rcwa mapping <var class="Arg">f</var> is the unique rcwa mapping which satisfies the equation <span class="SimpleMath">f ⋅ g_f = g ⋅ f</span> and which fixes the complement of the image of <var class="Arg">f</var> pointwise. If <var class="Arg">f</var> is bijective, the restriction of <var class="Arg">g</var> by <var class="Arg">f</var> is just the conjugate of <var class="Arg">g</var> under <var class="Arg">f</var>.</p>
+
+<p>The <em>restriction</em> of an rcwa group <var class="Arg">G</var> by an injective rcwa mapping <var class="Arg">f</var> is defined as the group whose elements are the restrictions of the elements of <var class="Arg">G</var> by <var class="Arg">f</var>. The restriction of <var class="Arg">G</var> by <var class="Arg">f</var> acts on the image of <var class="Arg">f</var> and fixes its complement pointwise.</p>
+
+
+<div class="example"><pre>
+
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2tilde := Restriction(F2,RcwaMapping([[5,3,1]]));</span>
+&lt;wild rcwa group over Z with 2 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Support(F2tilde);</span>
+3(5)
+
+</pre></div>
+
+<p><a id="X82171D7287CBED95" name="X82171D7287CBED95"></a></p>
+
+<h5>3.1-7 <span class="Heading">
+    Induction (of an rcwa mapping or -group, by an injective rcwa mapping)
+  </span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Induction</code>( <var class="Arg">g</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Induction</code>( <var class="Arg">G</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: the induction of the rcwa mapping <var class="Arg">g</var> (respectively the rcwa group <var class="Arg">G</var>) by the injective rcwa mapping <var class="Arg">f</var>.</p>
+
+<p><em>Induction</em> is the right inverse of restriction, i.e. it is <code class="code">Induction(Restriction(<var class="Arg">g</var>,<var class="Arg">f</var>),<var class="Arg">f</var>) = <var class="Arg">g</var></code> and <code class="code">Induction(Restriction(<var class="Arg">G</var>,<var class="Arg">f</var>),<var class="Arg">f</var>) = <var class="Arg">G</var></code>. The mapping <var class="Arg">g</var> respectively the group <var class="Arg">G</var> must not move points outside the image of <var class="Arg">f</var>.</p>
+
+
+<div class="example"><pre>
+
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Induction(F2tilde,RcwaMapping([[5,3,1]])) = F2;</span>
+true
+
+</pre></div>
+
+<p>Once having constructed an rcwa group, it is sometimes possible to obtain a smaller generating set by the operation <code class="code">SmallGeneratingSet</code>.</p>
+
+<p>There are methods for the operations <code class="code">View</code>, <code class="code">Display</code>, <code class="code">Print</code> and <code class="code">String</code> which are applicable to rcwa groups.</p>
+
+<p>Basic attributes of an rcwa group which are derived from the coefficients of its elements are <code class="code">Modulus</code>, <code class="code">Multiplier</code>, <code class="code">Divisor</code> and <code class="code">PrimeSet</code>. The <em>modulus</em> of an rcwa group is the lcm of the moduli of its elements if such an lcm exists, i.e. if the group is tame, and 0 otherwise. The <em>multiplier</em> respectively <em>divisor</em> of an rcwa group is the lcm of the multipliers respectively divisors of its elements in case such an lcm exists and <span class="SimpleMath">∞</span> otherwise. The <em>prime set</em> of an rcwa group is the union of the prime sets of its elements. There are shorthands <code class="code">Mod</code>, <code class="code">Mult</code> and <code class="code">Div</code> defined for <code class="code">Modulus</code>, <code class="code">Multiplier</code> and <code class="code">Divisor</code>, respectively. An rcwa group is called <em>class-wise translating</em>, <em>integral</em> or <em>class-wise order-preserving</em> if all of its elements are so. There are corresponding methods available for <code class="code">IsClassWiseTranslating</code>, <code class="code">IsIntegral</code> and <code class="code">IsClassWiseOrderPreserving</code>. There is a property <code class="code">IsSignPreserving</code>, which indicates whether a given rcwa group over ℤ acts on the set of nonnegative integers. The latter holds for any subgroup of CT(ℤ) (cf. below).</p>
+
+
+<div class="example"><pre>
+
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := Group(ClassTransposition(0,2,1,2),ClassTransposition(1,3,2,6),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">              ClassReflection(2,4));</span>
+&lt;rcwa group over Z with 3 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">List([Modulus,Multiplier,Divisor,PrimeSet,IsClassWiseTranslating,</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">         IsIntegral,IsClassWiseOrderPreserving,IsSignPreserving],f-&gt;f(G));</span>
+[ 24, 2, 2, [ 2, 3 ], false, false, false, false ]
+
+</pre></div>
+
+<p>All rcwa groups over a ring <span class="SimpleMath">R</span> are subgroups of RCWA(<span class="SimpleMath">R</span>). The group RCWA(<span class="SimpleMath">R</span>) itself is not finitely generated, thus cannot be constructed as described above. It is handled as a special case:</p>
 
 <p><a id="X79450C1C8756FEB3" name="X79450C1C8756FEB3"></a></p>
 
-<h5>3.1-2 RCWA</h5>
+<h5>3.1-8 RCWA</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RCWA</code>( <var class="Arg">R</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: the group RCWA(<var class="Arg">R</var>) of all residue-class-wise affine permutations of the ring <var class="Arg">R</var>.</p>
@@ -185,7 +384,7 @@ true
 
 <p><a id="X7BD42D8481300E25" name="X7BD42D8481300E25"></a></p>
 
-<h5>3.1-3 CT</h5>
+<h5>3.1-9 CT</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CT</code>( <var class="Arg">R</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: the group CT(<var class="Arg">R</var>) which is generated by all class transpositions of the ring <span class="SimpleMath">R</span>.</p>
@@ -198,7 +397,7 @@ CT(Z)
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsSimple(CT_Z); # One of a number of stored attributes/properties.</span>
 true
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsSubgroup(CT_Z,G);</span>
-true
+false
 
 </pre></div>
 
@@ -229,155 +428,7 @@ true
 
 </pre></div>
 
-<p>The number of conjugacy classes of CT(ℤ) of elements of given order is also known under the hypothesis that CT(ℤ) is the setwise stabilizer of <span class="SimpleMath">ℕ_0</span> in RCWA(ℤ). It can be determined by the function <code class="code">NrConjugacyClassesOfCTZOfOrder</code>. Another way of constructing an rcwa group is taking the image of an rcwa representation:</p>
-
-<p><a id="X7EB8A301790290C7" name="X7EB8A301790290C7"></a></p>
-
-<h5>3.1-4 IsomorphismRcwaGroup</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsomorphismRcwaGroup</code>( <var class="Arg">G</var>, <var class="Arg">R</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsomorphismRcwaGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
-<p>Returns: a monomorphism from the group <var class="Arg">G</var> to RCWA(<var class="Arg">R</var>) or to RCWA(ℤ), respectively.</p>
-
-<p>The best-supported case is <var class="Arg">R</var> = ℤ. Currently there are methods available for finite groups, for free products of finite groups and for free groups. The method for free products of finite groups uses the Table-Tennis Lemma (cf. e.g. Section II.B. in <a href="chapBib.html#biBLaHarpe00">[dlH00]</a>), and the method for free groups uses an adaptation of the construction given on page 27 in <a href="chapBib.html#biBLaHarpe00">[dlH00]</a> from PSL(2,ℂ) to RCWA(ℤ).</p>
-
-
-<div class="example"><pre>
-
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F := FreeProduct(Group((1,2)(3,4),(1,3)(2,4)),Group((1,2,3)),</span>
-<span class="GAPprompt">&gt;</span> <span class="GAPinput">                    SymmetricGroup(3));</span>
-&lt;fp group on the generators [ f1, f2, f3, f4, f5 ]&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsomorphismRcwaGroup(F);</span>
-[ f1, f2, f3, f4, f5 ] -&gt; [ &lt;rcwa permutation of Z with modulus 12&gt;,
-  &lt;rcwa permutation of Z with modulus 24&gt;,
-  &lt;rcwa permutation of Z with modulus 12&gt;,
-  &lt;rcwa permutation of Z with modulus 72&gt;,
-  &lt;rcwa permutation of Z with modulus 36&gt; ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsomorphismRcwaGroup(FreeGroup(2));</span>
-[ f1, f2 ] -&gt; [ &lt;wild rcwa permutation of Z with modulus 8&gt;,
-  &lt;wild rcwa permutation of Z with modulus 8&gt; ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2 := Image(last);</span>
-&lt;wild rcwa group over Z with 2 generators&gt;
-
-</pre></div>
-
-<p>The class of groups which can faithfully be represented as rcwa groups over the integers is closed under taking direct products, under taking wreath products with finite groups and under taking wreath products with the infinite cyclic group (ℤ,+). Therefore these operations can be used to build rcwa groups as well:</p>
-
-<p><a id="X79CAE48981C11FE8" name="X79CAE48981C11FE8"></a></p>
-
-<h5>3.1-5 DirectProduct</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DirectProduct</code>( <var class="Arg">G1</var>, <var class="Arg">G2</var>, <var class="Arg">...</var> )</td><td class="tdright">( method )</td></tr></table></div>
-<p>Returns: an rcwa group isomorphic to the direct product of the rcwa groups over ℤ given as arguments.</p>
-
-<p>There is certainly no unique or canonical way to embed a direct product of rcwa groups into RCWA(ℤ). This method chooses to embed the groups <var class="Arg">G1</var>, <var class="Arg">G2</var>, <var class="Arg">G3</var> ... via restrictions by <span class="SimpleMath">n ↦ mn</span>, <span class="SimpleMath">n ↦ mn+1</span>, <span class="SimpleMath">n ↦ mn+2</span> ... (<span class="SimpleMath">→</span> <code class="func">Restriction</code> (<a href="chap3.html#X852EF2C079E4D7FF"><span class="RefLink">3.1-7</span></a>)), where <span class="SimpleMath">m</span> denotes the number of groups given as arguments.</p>
-
-
-<div class="example"><pre>
-
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2xF2 := DirectProduct(F2,F2);</span>
-&lt;wild rcwa group over Z with 4 generators&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Image(Projection(F2xF2,1)) = F2;</span>
-true
-
-</pre></div>
-
-<p><a id="X80D13D2A7AD73C2C" name="X80D13D2A7AD73C2C"></a></p>
-
-<h5>3.1-6 <span class="Heading">
-    WreathProduct
-    (for an rcwa group over Z, with a permutation group or (ℤ,+))
-  </span></h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WreathProduct</code>( <var class="Arg">G</var>, <var class="Arg">P</var> )</td><td class="tdright">( method )</td></tr></table></div>
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WreathProduct</code>( <var class="Arg">G</var>, <var class="Arg">Z</var> )</td><td class="tdright">( method )</td></tr></table></div>
-<p>Returns: an rcwa group isomorphic to the wreath product of the rcwa group <var class="Arg">G</var> over ℤ with the finite permutation group <var class="Arg">P</var> or with the infinite cyclic group <var class="Arg">Z</var>, respectively.</p>
-
-<p>The first-mentioned method embeds the <code class="code">DegreeAction(<var class="Arg">P</var>)</code>th direct power of <var class="Arg">G</var> using the method for <code class="code">DirectProduct</code>, and lets the permutation group <var class="Arg">P</var> act naturally on the set of residue classes modulo <code class="code">DegreeAction(<var class="Arg">P</var>)</code>. The second-mentioned method restricts (<span class="SimpleMath">→</span> <code class="func">Restriction</code> (<a href="chap3.html#X852EF2C079E4D7FF"><span class="RefLink">3.1-7</span></a>)) the group <var class="Arg">G</var> to the residue class 3(4), and maps the generator of the infinite cyclic group <var class="Arg">Z</var> to <code class="code">ClassTransposition(0,2,1,2) * ClassTransposition(0,2,1,4)</code>.</p>
-
-
-<div class="example"><pre>
-
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2wrA5 := WreathProduct(F2,AlternatingGroup(5));;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(F2wrA5,1);</span>
-[ &lt;wild rcwa permutation of Z with modulus 8&gt;,
-  &lt;wild rcwa permutation of Z with modulus 8&gt; ] -&gt;
-[ &lt;wild rcwa permutation of Z with modulus 40&gt;,
-  &lt;wild rcwa permutation of Z with modulus 40&gt; ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(F2wrA5,2);</span>
-[ (1,2,3,4,5), (3,4,5) ] -&gt; [ ( 0(5), 1(5), 2(5), 3(5), 4(5) ), 
-  ( 2(5), 3(5), 4(5) ) ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ZwrZ := WreathProduct(Group(ClassShift(0,1)),Group(ClassShift(0,1)));</span>
-&lt;wild rcwa group over Z with 2 generators&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(ZwrZ,1);</span>
-[ ClassShift( Z ) ] -&gt;
-[ &lt;tame rcwa permutation of Z with modulus 4, of order infinity&gt; ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Embedding(ZwrZ,2);</span>
-[ ClassShift( Z ) ] -&gt; [ &lt;wild rcwa permutation of Z with modulus 4&gt; ]
-
-</pre></div>
-
-<p>Many of the above group constructions are based on certain monomorphisms from the group RCWA(<span class="SimpleMath">R</span>) into itself. The support of the image of such a monomorphism is the image of a given injective rcwa mapping. For this reason, these monomorphisms are called <em>restriction monomorphisms</em>. The following operation computes images of rcwa mappings and -groups under them:</p>
-
-<p><a id="X852EF2C079E4D7FF" name="X852EF2C079E4D7FF"></a></p>
-
-<h5>3.1-7 <span class="Heading">
-    Restriction (of an rcwa mapping or -group, by an injective rcwa mapping)
-  </span></h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Restriction</code>( <var class="Arg">g</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Restriction</code>( <var class="Arg">G</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<p>Returns: the restriction of the rcwa mapping <var class="Arg">g</var> (respectively the rcwa group <var class="Arg">G</var>) by the injective rcwa mapping <var class="Arg">f</var>.</p>
-
-<p>By definition, the <em>restriction</em> <span class="SimpleMath">g_f</span> of an rcwa mapping <var class="Arg">g</var> by an injective rcwa mapping <var class="Arg">f</var> is the unique rcwa mapping which satisfies the equation <span class="SimpleMath">f ⋅ g_f = g ⋅ f</span> and which fixes the complement of the image of <var class="Arg">f</var> pointwise. If <var class="Arg">f</var> is bijective, the restriction of <var class="Arg">g</var> by <var class="Arg">f</var> is just the conjugate of <var class="Arg">g</var> under <var class="Arg">f</var>.</p>
-
-<p>The <em>restriction</em> of an rcwa group <var class="Arg">G</var> by an injective rcwa mapping <var class="Arg">f</var> is defined as the group whose elements are the restrictions of the elements of <var class="Arg">G</var> by <var class="Arg">f</var>. The restriction of <var class="Arg">G</var> by <var class="Arg">f</var> acts on the image of <var class="Arg">f</var> and fixes its complement pointwise.</p>
-
-
-<div class="example"><pre>
-
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F2tilde := Restriction(F2,RcwaMapping([[5,3,1]]));</span>
-&lt;wild rcwa group over Z with 2 generators&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Support(F2tilde);</span>
-3(5)
-
-</pre></div>
-
-<p><a id="X82171D7287CBED95" name="X82171D7287CBED95"></a></p>
-
-<h5>3.1-8 <span class="Heading">
-    Induction (of an rcwa mapping or -group, by an injective rcwa mapping)
-  </span></h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Induction</code>( <var class="Arg">g</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Induction</code>( <var class="Arg">G</var>, <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<p>Returns: the induction of the rcwa mapping <var class="Arg">g</var> (respectively the rcwa group <var class="Arg">G</var>) by the injective rcwa mapping <var class="Arg">f</var>.</p>
-
-<p><em>Induction</em> is the right inverse of restriction, i.e. it is <code class="code">Induction(Restriction(<var class="Arg">g</var>,<var class="Arg">f</var>),<var class="Arg">f</var>) = <var class="Arg">g</var></code> and <code class="code">Induction(Restriction(<var class="Arg">G</var>,<var class="Arg">f</var>),<var class="Arg">f</var>) = <var class="Arg">G</var></code>. The mapping <var class="Arg">g</var> respectively the group <var class="Arg">G</var> must not move points outside the image of <var class="Arg">f</var>.</p>
-
-
-<div class="example"><pre>
-
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Induction(F2tilde,RcwaMapping([[5,3,1]])) = F2;</span>
-true
-
-</pre></div>
-
-<p>Basic attributes of an rcwa group which are derived from the coefficients of its elements are <code class="code">Modulus</code>, <code class="code">Multiplier</code>, <code class="code">Divisor</code> and <code class="code">PrimeSet</code>. The <em>modulus</em> of an rcwa group is the lcm of the moduli of its elements if such an lcm exists, i.e. if the group is tame, and 0 otherwise. The <em>multiplier</em> respectively <em>divisor</em> of an rcwa group is the lcm of the multipliers respectively divisors of its elements in case such an lcm exists and <span class="SimpleMath">∞</span> otherwise. The <em>prime set</em> of an rcwa group is the union of the prime sets of its elements. There are shorthands <code class="code">Mod</code>, <code class="code">Mult</code> and <code class="code">Div</code> defined for <code class="code">Modulus</code>, <code class="code">Multiplier</code> and <code class="code">Divisor</code>, respectively. An rcwa group is called <em>class-wise translating</em>, <em>integral</em> or <em>class-wise order-preserving</em> if all of its elements are so. There are corresponding methods available for <code class="code">IsClassWiseTranslating</code>, <code class="code">IsIntegral</code> and <code class="code">IsClassWiseOrderPreserving</code>. There is a property <code class="code">IsSignPreserving</code>, which indicates whether a given rcwa group over ℤ acts on the set of nonnegative integers. The latter holds for any subgroup of CT(ℤ).</p>
-
-
-<div class="example"><pre>
-
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := Group(ClassTransposition(0,2,1,2),ClassTransposition(1,3,2,6),</span>
-<span class="GAPprompt">&gt;</span> <span class="GAPinput">              ClassReflection(2,4));</span>
-&lt;rcwa group over Z with 3 generators&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">List([Modulus,Multiplier,Divisor,PrimeSet,IsClassWiseTranslating,</span>
-<span class="GAPprompt">&gt;</span> <span class="GAPinput">         IsIntegral,IsClassWiseOrderPreserving,IsSignPreserving],f-&gt;f(G));</span>
-[ 24, 2, 2, [ 2, 3 ], false, false, false, false ]
-
-</pre></div>
+<p>The number of conjugacy classes of CT(ℤ) of elements of given order is also known under the hypothesis that CT(ℤ) is the setwise stabilizer of <span class="SimpleMath">ℕ_0</span> in RCWA(ℤ). It can be determined by the function <code class="code">NrConjugacyClassesOfCTZOfOrder</code>.</p>
 
 <p><a id="X80C042BE82EE0F9A" name="X80C042BE82EE0F9A"></a></p>
 
@@ -662,22 +713,22 @@ true
 
 <p>Given an rcwa group <var class="Arg">G</var> over ℤ and an integer <var class="Arg">n</var>, the operation <code class="code">DistanceToNextSmallerPointInOrbit(</code><var class="Arg">G</var><code class="code">,</code><var class="Arg">n</var><code class="code">)</code> computes the smallest number <span class="SimpleMath">d</span> such that there is a product <span class="SimpleMath">g</span> of <span class="SimpleMath">d</span> generators or inverses of generators of <var class="Arg">G</var> which maps <var class="Arg">n</var> to an integer with absolute value less than |<var class="Arg">n</var>|, provided that the orbit of <var class="Arg">n</var> contains such integer. <strong class="pkg">RCWA</strong> permits drawing pictures of orbits of rcwa groups on <span class="SimpleMath">ℤ^2</span>. The pictures are written to files in bitmap- (bmp-) format. The author has successfully tested this feature both under Linux and under Windows, and the produced pictures can be processed further with many common graphics programs:</p>
 
-<p><a id="X7B30F7207817D859" name="X7B30F7207817D859"></a></p>
+<p><a id="X7D9DFAC97F9F0891" name="X7D9DFAC97F9F0891"></a></p>
 
 <h5>3.3-2 DrawOrbitPicture</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DrawOrbitPicture</code>( <var class="Arg">G</var>, <var class="Arg">p0</var>, <var class="Arg">r</var>, <var class="Arg">h</var>, <var class="Arg">w</var>, <var class="Arg">colored</var>, <var class="Arg">palette</var>, <var class="Arg">filename</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DrawOrbitPicture</code>( <var class="Arg">G</var>, <var class="Arg">p0</var>, <var class="Arg">bound</var>, <var class="Arg">h</var>, <var class="Arg">w</var>, <var class="Arg">colored</var>, <var class="Arg">palette</var>, <var class="Arg">filename</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: nothing.</p>
 
-<p>Draws a picture of the orbit(s) of the point(s) <var class="Arg">p0</var> under the action of the group <var class="Arg">G</var> on <span class="SimpleMath">ℤ^2</span>. The argument <var class="Arg">p0</var> is either one point or a list of points. The argument <var class="Arg">r</var> denotes the radius of the ball around <var class="Arg">p0</var> to be computed. The size of the created picture is <var class="Arg">h</var> x <var class="Arg">w</var> pixels. The argument <var class="Arg">colored</var> is a boolean which indicates whether a 24-bit True-Color picture or a monochrome picture should be drawn. In the former case, <var class="Arg">palette</var> must be a list of triples of integers in the range <span class="SimpleMath">0, dots, 255</span>, denoting the RGB values of colors to be used. In the latter case, <var class="Arg">palette</var> is not used, and any value can be passed. The picture is written in bitmap- (bmp-) format to a file named <var class="Arg">filename</var>. This is done using the utility function <code class="func">SaveAsBitmapPicture</code> (<a href="chap9.html#X81DE1E838615C214"><span class="RefLink">9.7-1</span></a>).</p>
+<p>Draws a picture of the orbit(s) of the point(s) <var class="Arg">p0</var> under the action of the group <var class="Arg">G</var> on <span class="SimpleMath">ℤ^2</span>. The argument <var class="Arg">p0</var> is either one point or a list of points. The argument <var class="Arg">bound</var> denotes the bound to which the ball about <var class="Arg">p0</var> is to be computed, in terms of absolute values of coordinates. The size of the produced picture is <var class="Arg">h</var> x <var class="Arg">w</var> pixels. The argument <var class="Arg">colored</var> is a boolean which indicates whether a 24-bit True-Color picture or a monochrome picture should be drawn. In the former case, <var class="Arg">palette</var> must be a list of triples of integers in the range <span class="SimpleMath">0, dots, 255</span>, denoting the RGB values of colors to be used. In the latter case, <var class="Arg">palette</var> is not used, and any value can be passed. The picture is written in bitmap- (bmp-) format to a file named <var class="Arg">filename</var>. This is done using the utility function <code class="func">SaveAsBitmapPicture</code> (<a href="chap9.html#X81DE1E838615C214"><span class="RefLink">9.7-1</span></a>).</p>
 
 
 <div class="example"><pre>
 
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">PSL2Z := Image(IsomorphismRcwaGroup(FreeProduct(CyclicGroup(2),</span>
 <span class="GAPprompt">&gt;</span> <span class="GAPinput">                                                   CyclicGroup(3))));;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">DrawOrbitPicture(PSL2Z,[0,1],20,512,512,false,fail,"example1.bmp");</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">DrawOrbitPicture(PSL2Z,Combinations([1..4],2),20,512,512,true,</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">DrawOrbitPicture(PSL2Z,[0,1],2000,512,512,false,fail,"example1.bmp");</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">DrawOrbitPicture(PSL2Z,Combinations([1..4],2),2000,512,512,true,</span>
 <span class="GAPprompt">&gt;</span> <span class="GAPinput">                    [[255,0,0],[0,255,0],[0,0,255]],"example2.bmp");</span>
 
 </pre></div>

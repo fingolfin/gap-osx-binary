@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: weightedRing</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: weightedRing">
+<META NAME="keywords" CONTENT="Singular Manual: weightedRing">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC813"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_761.htm#SEC812"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Gweights" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_763.htm#SEC814"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ndcond" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_785.htm#SEC836"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: perron_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_760.htm#SEC811"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: nctools_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.15.0. weightedRing </H5>
+<!--docid::SEC813::-->
+Procedure from library <CODE>nctools.lib</CODE> (see  <A HREF="sing_760.htm#SEC811">nctools_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>weightedRing(r); r a ring
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>equip the variables of the given ring with weights such that the relations of new ring (with weighted variables) satisfies the ordering condition for G-algebras:
+e.g. \forall\;i&lt;j\;\;lm_w(d_{ij})&lt;_w x_i x_j.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>activate this ring with the "setring" command
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "nctools.lib";
+ring r = (0,q),(a,b,c,d),lp;
+matrix C[4][4];
+C[1,2]=q; C[1,3]=q; C[1,4]=1; C[2,3]=1; C[2,4]=q; C[3,4]=q;
+matrix D[4][4];
+D[1,4]=(q-1/q)*b*c;
+def S = nc_algebra(C,D); setring S; S;
+==> //   characteristic : 0
+==> //   1 parameter    : q 
+==> //   minpoly        : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering lp
+==> //                  : names    a b c d
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    ba=(q)*ab
+==> //    ca=(q)*ac
+==> //    da=ad+(q2-1)/(q)*bc
+==> //    db=(q)*bd
+==> //    dc=(q)*cd
+def t=weightedRing(S);
+setring t; t;
+==> //   characteristic : 0
+==> //   1 parameter    : q 
+==> //   minpoly        : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering M
+==> //                  : names    a b c d
+==> //                  : weights  2 1 1 1
+==> //                  : weights  0 0 0 1
+==> //                  : weights  0 0 1 0
+==> //                  : weights  0 1 0 0
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    ba=(q)*ab
+==> //    ca=(q)*ac
+==> //    da=ad+(q2-1)/(q)*bc
+==> //    db=(q)*bd
+==> //    dc=(q)*cd
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_761.htm#SEC812">Gweights</A>.
+<P>
+
+<A NAME="ndcond"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_761.htm#SEC812"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Gweights" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_763.htm#SEC814"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ndcond" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_785.htm#SEC836"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: perron_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_760.htm#SEC811"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: nctools_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

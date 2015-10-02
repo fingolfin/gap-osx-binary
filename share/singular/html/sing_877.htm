@@ -1,0 +1,274 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Branches of space curve singularities</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Branches of space curve singularities">
+<META NAME="keywords" CONTENT="Singular Manual: Branches of space curve singularities">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC928"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_876.htm#SEC927"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Invariants of plane curve singularities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_878.htm#SEC929"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Classification of hypersurface singularities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.4.7 Branches of space curve singularities </H3>
+<!--docid::SEC928::-->
+<P>
+
+In this example, the number of branches of a given quasihomogeneous isolated
+space curve singularity will be computed as an example of the pitfalls
+appearing in the use of primary decomposition. When dealing with singularities,
+two situations are possible in which the primary decomposition algorithm
+might not lead to a complete decomposition: first of all, one of the computed
+components could be globally irreducible, but analytically reducible
+(this is impossible for quasihomogeneous singularities) and,
+as a second possibility, a component might be irreducible over the rational
+numbers, but reducible over the complex numbers.
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x,y,z),ds;
+  ideal i=x^4-y*z^2,x*y-z^3,y^2-x^3*z;  // the space curve singularity
+  qhweight(i);
+==> 1,2,1
+  // The given space curve singularity is quasihomogeneous. Hence we can pass
+  // to the polynomial ring.
+  ring rr=0,(x,y,z),dp;
+  ideal i=imap(r,i);
+  resolution ires=mres(i,0);
+  ires;
+==>   1       3       2       
+==> rr &lt;--  rr &lt;--  rr
+==> 
+==> 0       1       2       
+==> 
+  // From the structure of the resolution, we see that the Cohen-Macaulay
+  // type of the given singularity is 2
+  //
+  // Let us now look for the branches using the primdec library.
+  LIB "primdec.lib";
+  primdecSY(i);
+==> [1]:
+==>    [1]:
+==>       _[1]=z3-xy
+==>       _[2]=x3+x2z+xz2+xy+yz
+==>       _[3]=x2z2+x2y+xyz+yz2+y2
+==>    [2]:
+==>       _[1]=z3-xy
+==>       _[2]=x3+x2z+xz2+xy+yz
+==>       _[3]=x2z2+x2y+xyz+yz2+y2
+==> [2]:
+==>    [1]:
+==>       _[1]=x-z
+==>       _[2]=z2-y
+==>    [2]:
+==>       _[1]=x-z
+==>       _[2]=z2-y
+  def li=_[1];
+  ideal i2=li[2];       // call the first ideal i1
+  // The curve seems to have 2 branches by what we computed using the
+  // algorithm of Shimoyama-Yokoyama.
+  // Now the same computation by the Gianni-Trager-Zacharias algorithm:
+  primdecGTZ(i);
+==> [1]:
+==>    [1]:
+==>       _[1]=-z2+y
+==>       _[2]=x-z
+==>    [2]:
+==>       _[1]=-z2+y
+==>       _[2]=x-z
+==> [2]:
+==>    [1]:
+==>       _[1]=z8+yz6+y2z4+y3z2+y4
+==>       _[2]=xz5+z6+yz4+y2z2+y3
+==>       _[3]=-z3+xy
+==>       _[4]=x2z2+xz3+xyz+yz2+y2
+==>       _[5]=x3+x2z+xz2+xy+yz
+==>    [2]:
+==>       _[1]=z8+yz6+y2z4+y3z2+y4
+==>       _[2]=xz5+z6+yz4+y2z2+y3
+==>       _[3]=-z3+xy
+==>       _[4]=x2z2+xz3+xyz+yz2+y2
+==>       _[5]=x3+x2z+xz2+xy+yz
+  // Having computed the primary decomposition in 2 different ways and
+  // having obtained the same number of branches, we might expect that the
+  // number of branches is really 2, but we can check this by formulae
+  // for the invariants of space curve singularities:
+  //
+  // mu = tau - t + 1 (for quasihomogeneous curve singularities)
+  // where mu denotes the Milnor number, tau the Tjurina number and
+  // t the Cohen-Macaulay type
+  //
+  // mu = 2 delta - r + 1
+  // where delta denotes the delta-Invariant and r the number of branches
+  //
+  // tau can be computed by using the corresponding procedure T1 from
+  // sing.lib.
+  setring r;
+  LIB "sing.lib";
+  T_1(i);
+==> // dim T_1 = 13
+==> _[1]=gen(6)+2z*gen(5)
+==> _[2]=gen(4)+3x2*gen(2)
+==> _[3]=gen(3)+gen(1)
+==> _[4]=x*gen(5)-y*gen(2)-z*gen(1)
+==> _[5]=x*gen(1)-z2*gen(2)
+==> _[6]=y*gen(5)+3x2z*gen(2)
+==> _[7]=y*gen(2)-z*gen(1)
+==> _[8]=2y*gen(1)-z2*gen(5)
+==> _[9]=z2*gen(5)
+==> _[10]=z2*gen(1)
+==> _[11]=x3*gen(2)
+==> _[12]=x2z2*gen(2)
+==> _[13]=xz3*gen(2)
+==> _[14]=z4*gen(2)
+  setring rr;
+  // Hence tau is 13 and therefore mu is 12. But then it is impossible that
+  // the singularity has two branches, since mu is even and delta is an
+  // integer!
+  // So obviously, we did not decompose completely. Because the second branch
+  // is smooth, only the first ideal can be the one which can be decomposed
+  // further.
+  // Let us now consider the normalization of this first ideal i1.
+  LIB "normal.lib";
+  normal(i2);
+==> 
+==> // 'normal' created a list, say nor, of two elements.
+==> // To see the list type
+==>       nor;
+==> 
+==> // * nor[1] is a list of 1 ring(s).
+==> // To access the i-th ring nor[1][i], give it a name, say Ri, and type
+==>      def R1 = nor[1][1]; setring R1; norid; normap;
+==> // For the other rings type first (if R is the name of your base ring)
+==>      setring R;
+==> // and then continue as for R1.
+==> // Ri/norid is the affine algebra of the normalization of R/P_i where
+==> // P_i is the i-th component of a decomposition of the input ideal id
+==> // and normap the normalization map from R to Ri/norid.
+==> 
+==> // * nor[2] is a list of 1 ideal(s). Let ci be the last generator
+==> // of the ideal nor[2][i]. Then the integral closure of R/P_i is
+==> // generated as R-submodule of the total ring of fractions by
+==> // 1/ci * nor[2][i].
+==> [1]:
+==>    [1]:
+==>       //   characteristic : 0
+==> //   number of vars : 6
+==> //        block   1 : ordering dp
+==> //                  : names    T(1) T(2) T(3)
+==> //        block   2 : ordering dp
+==> //                  : names    x y z
+==> //        block   3 : ordering C
+==> [2]:
+==>    [1]:
+==>       _[1]=y
+==>       _[2]=xz
+==>       _[3]=x2
+==>       _[4]=z2
+  def rno=_[1][1];
+  setring rno;
+  norid;
+==> norid[1]=-T(2)*z+x
+==> norid[2]=T(1)*x-z
+==> norid[3]=T(2)*x-T(3)*z
+==> norid[4]=T(1)*z+T(2)*z+T(3)*x+T(3)*z+z
+==> norid[5]=-T(2)*y+z^2
+==> norid[6]=T(1)*z^2-y
+==> norid[7]=T(2)*z^2-T(3)*y
+==> norid[8]=T(1)*y+T(2)*y+T(3)*z^2+T(3)*y+y
+==> norid[9]=T(1)^2+T(1)+T(2)+T(3)+1
+==> norid[10]=T(1)*T(2)-1
+==> norid[11]=T(2)^2-T(3)
+==> norid[12]=T(1)*T(3)-T(2)
+==> norid[13]=T(2)*T(3)+T(1)+T(2)+T(3)+1
+==> norid[14]=T(3)^2-T(1)
+==> norid[15]=z^3-x*y
+==> norid[16]=x^3+x^2*z+x*z^2+x*y+y*z
+==> norid[17]=x^2*z^2+x^2*y+x*y*z+y*z^2+y^2
+  // The ideal is generated by a polynomial in one variable of degree 4 which
+  // factors completely into 4 polynomials of type T(2)+a.
+  // From this, we know that the ring of the normalization is the direct sum of
+  // 4 polynomial rings in one variable.
+  // Hence our original curve has these 4 branches plus a smooth one
+  // which we already determined by primary decomposition.
+  // Our final result is therefore: 5 branches.
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Classification of hypersurface singularities"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_876.htm#SEC927"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Invariants of plane curve singularities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_878.htm#SEC929"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Classification of hypersurface singularities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

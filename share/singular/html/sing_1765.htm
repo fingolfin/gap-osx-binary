@@ -1,0 +1,197 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: sysCRHT</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: sysCRHT">
+<META NAME="keywords" CONTENT="Singular Manual: sysCRHT">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1840"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1766.htm#SEC1841"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: sysCRHTMindist" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.2.1 sysCRHT </H4>
+<!--docid::SEC1840::-->
+Procedure from library <CODE>decodegb.lib</CODE> (see  <A HREF="sing_1764.htm#SEC1839">decodegb_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>sysCRHT(n,defset,e,q,m,[k]); n,e,q,m,k are int, defset list of int's
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">         - n length of the cyclic code,
+         - defset is a list representing the defining set,
+         - e the error-correcting capacity,
+         - q field size
+         - m degree extension of the splitting field,
+         - if k&gt;0 additional equations representing the fact that every two
+         error positions are either different or at least one of them is zero
+</pre></td></tr></table><P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>the ring to work with the CRHT-ideal (with Sala's additions),
+containig an ideal with name 'crht'
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Based on 'defset' of the given cyclic code, the procedure constructs
+the corresponding Cooper-Reed-Heleseth-Truong ideal 'crht'. With its
+help one can solve the decoding problem. For basics of the method  <A HREF="sing_920.htm#SEC981">Cooper philosophy</A>.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "decodegb.lib";
+// binary cyclic [15,7,5] code with defining set (1,3)
+intvec v = option(get);
+list defset=1,3;           // defining set
+int n=15;                  // length
+int e=2;                   // error-correcting capacity
+int q=2;                   // basefield size
+int m=4;                   // degree extension of the splitting field
+int sala=1;                // indicator to add additional equations
+def A=sysCRHT(n,defset,e,q,m);
+setring A;
+A;                         // shows the ring we are working in
+==> //   characteristic : 2
+==> //   1 parameter    : a 
+==> //   minpoly        : 0
+==> //   number of vars : 6
+==> //        block   1 : ordering lp
+==> //                  : names    Y(2) Y(1) Z(1) Z(2) X(2) X(1)
+==> //        block   2 : ordering C
+print(crht);               // the CRHT-ideal
+==> Y(2)*Z(2)+Y(1)*Z(1)+X(1),
+==> Y(2)*Z(2)^3+Y(1)*Z(1)^3+X(2),
+==> X(1)^16+X(1),
+==> X(2)^16+X(2),
+==> Z(1)^16+Z(1),
+==> Z(2)^16+Z(2),
+==> Y(1)+1,
+==> Y(2)+1
+option(redSB);
+ideal red_crht=std(crht);  // reduced Groebner basis
+print(red_crht);
+==> X(1)^16+X(1),
+==> X(2)*X(1)^15+X(2),
+==> X(2)^8+X(2)^4*X(1)^12+X(2)^2*X(1)^3+X(2)*X(1)^6,
+==> Z(2)^2*X(1)+Z(2)*X(1)^2+X(2)+X(1)^3,
+==> Z(2)^2*X(2)+Z(2)*X(2)*X(1)+X(2)^2*X(1)^14+X(2)*X(1)^2,
+==> Z(2)^16+Z(2),
+==> Z(1)+Z(2)+X(1),
+==> Y(1)+1,
+==> Y(2)+1
+//============================
+A=sysCRHT(n,defset,e,q,m,sala);
+setring A;
+print(crht);                // CRHT-ideal with additional equations from Sala
+==> Y(2)*Z(2)+Y(1)*Z(1)+X(1),
+==> Y(2)*Z(2)^3+Y(1)*Z(1)^3+X(2),
+==> X(1)^16+X(1),
+==> X(2)^16+X(2),
+==> Z(1)^16+Z(1),
+==> Z(2)^16+Z(2),
+==> Y(1)+1,
+==> Y(2)+1,
+==> Z(1)^15*Z(2)+Z(1)^14*Z(2)^2+Z(1)^13*Z(2)^3+Z(1)^12*Z(2)^4+Z(1)^11*Z(2)^5+\
+   Z(1)^10*Z(2)^6+Z(1)^9*Z(2)^7+Z(1)^8*Z(2)^8+Z(1)^7*Z(2)^9+Z(1)^6*Z(2)^10+Z\
+   (1)^5*Z(2)^11+Z(1)^4*Z(2)^12+Z(1)^3*Z(2)^13+Z(1)^2*Z(2)^14+Z(1)*Z(2)^15
+option(redSB);
+ideal red_crht=std(crht);   // reduced Groebner basis
+print(red_crht);
+==> X(1)^16+X(1),
+==> X(2)*X(1)^15+X(2),
+==> X(2)^8+X(2)^4*X(1)^12+X(2)^2*X(1)^3+X(2)*X(1)^6,
+==> Z(2)*X(1)^15+Z(2),
+==> Z(2)^2+Z(2)*X(1)+X(2)*X(1)^14+X(1)^2,
+==> Z(1)+Z(2)+X(1),
+==> Y(1)+1,
+==> Y(2)+1
+red_crht[5];                // general error-locator polynomial for this code
+==> Z(2)^2+Z(2)*X(1)+X(2)*X(1)^14+X(1)^2
+option(set,v);
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1768.htm#SEC1843">sysBin</A>;
+ <A HREF="sing_1767.htm#SEC1842">sysNewton</A>.
+<P>
+
+<A NAME="sysCRHTMindist"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1766.htm#SEC1841"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: sysCRHTMindist" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

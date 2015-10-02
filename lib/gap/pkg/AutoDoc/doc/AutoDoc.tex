@@ -98,8 +98,8 @@
 {\Huge \textbf{ Generate documentation from \textsf{GAP} source code \mbox{}}}\\
 \vfill
 
-{\Huge  2014.03.27 \mbox{}}\\[1cm]
-{ 27/03/2014 \mbox{}}\\[1cm]
+{\Huge  2015.04.29 \mbox{}}\\[1cm]
+{ 29/04/2015 \mbox{}}\\[1cm]
 \mbox{}\\[2cm]
 {\Large \textbf{ Sebastian Gutsche\\
     \mbox{}}}\\
@@ -492,11 +492,11 @@ before opening it might cause unexpected errors.
  }
 
  
-\subsection{\textcolor{Chapter }{@AutoDoc}}\label{@AutoDoc}
+\subsection{\textcolor{Chapter }{@BeginAutoDoc}}\label{@BeginAutoDoc}
 \logpage{[ 2, 2, 6 ]}
-\hyperdef{L}{X7CBD8AAF7DCEF352}{}
+\hyperdef{L}{X7D22AA4485535112}{}
 {
- \index{@AutoDoc@\texttt{@AutoDoc}}  Causes all subsequent declarations to be documented in the manual, regardless
+ \index{@BeginAutoDoc@\texttt{@BeginAutoDoc}}  Causes all subsequent declarations to be documented in the manual, regardless
 of whether they have an \textsf{AutoDoc} comment in front of them or not. }
 
  
@@ -504,9 +504,9 @@ of whether they have an \textsf{AutoDoc} comment in front of them or not. }
 \logpage{[ 2, 2, 7 ]}
 \hyperdef{L}{X782E748B82E264EB}{}
 {
- \index{@EndAutoDoc@\texttt{@EndAutoDoc}}  Ends the affect of \texttt{@AutoDoc}. So from here on, again only declarations with an explicit \textsf{AutoDoc} comment in front are added to the manual. 
+ \index{@EndAutoDoc@\texttt{@EndAutoDoc}}  Ends the affect of \texttt{@BeginAutoDoc}. So from here on, again only declarations with an explicit \textsf{AutoDoc} comment in front are added to the manual. 
 \begin{Verbatim}[fontsize=\small,frame=single,label=]
-  #! @AutoDoc
+  #! @BeginAutoDoc
   
   DeclareOperation( "Operation1", [ IsList ] );
   
@@ -569,16 +569,16 @@ chapters, sections, and items, are given the level \mbox{\texttt{\mdseries\slsha
  }
 
  
-\subsection{\textcolor{Chapter }{@Example and @EndExample}}\label{@Example}
+\subsection{\textcolor{Chapter }{@BeginExample and @EndExample}}\label{@BeginExample}
 \logpage{[ 2, 2, 12 ]}
-\hyperdef{L}{X872D68497D3EFBDD}{}
+\hyperdef{L}{X83D6DA3B83D3436C}{}
 {
- \index{@Example@\texttt{@Example and @EndExample}}  @Example inserts an example into the manual. The syntax is like the example
-enviroment in GAPDoc. This examples can be tested by GAPDoc, and also stay
-readable by GAP. The GAP prompt is added by AutoDoc. @EndExample ends the
+ \index{@BeginExample@\texttt{@BeginExample and @EndExample}}  @BeginExample inserts an example into the manual. The syntax is like the
+example enviroment in GAPDoc. This examples can be tested by GAPDoc, and also
+stay readable by GAP. The GAP prompt is added by AutoDoc. @EndExample ends the
 example block. 
 \begin{Verbatim}[fontsize=\small,frame=single,label=]
-  #! @Example
+  #! @BeginExample
   S3 := SymmetricGroup(5);
   #! Sym( [ 1 .. 5 ] )
   Order(S3);
@@ -588,12 +588,12 @@ example block.
  }
 
  
-\subsection{\textcolor{Chapter }{@Log and @EndLog}}\label{@Log}
+\subsection{\textcolor{Chapter }{@BeginLog and @EndLog}}\label{@BeginLog}
 \logpage{[ 2, 2, 13 ]}
-\hyperdef{L}{X84F880A781E1839C}{}
+\hyperdef{L}{X81A2D44D834C0A17}{}
 {
- \index{Log@\texttt{@Log and @EndLog}}  Works just like the @Example command, but the example wont be testet. See the
-GAPDoc manual for more information. }
+ \index{@BeginLog@\texttt{@BeginLog and @EndLog}}  Works just like the @BeginExample command, but the example wont be testet. See
+the GAPDoc manual for more information. }
 
  
 \subsection{\textcolor{Chapter }{@DoNotReadRestOfFile}}\label{@DoNotReadRestOfFile}
@@ -612,58 +612,57 @@ finished or temporary files.
  }
 
  
-\subsection{\textcolor{Chapter }{@System \mbox{\texttt{\mdseries\slshape name}}, @EndSystem, and @InsertSystem \mbox{\texttt{\mdseries\slshape name}}}}\label{@System}
+\subsection{\textcolor{Chapter }{@BeginChunk \mbox{\texttt{\mdseries\slshape name}}, @EndChunk, and @InsertChunk \mbox{\texttt{\mdseries\slshape name}}}}\label{@BeginChunk}
 \logpage{[ 2, 2, 15 ]}
-\hyperdef{L}{X7C0067DB79654996}{}
+\hyperdef{L}{X84F96D3E7BD5F617}{}
 {
- \index{@System@\texttt{@System, @EndSystem, and @InsertSystem}}  @System causes the next documentation parts not to be inserted in the
+ \index{@BeginChunk@\texttt{@BeginChunk, @EndChunk, and @InsertChunk}}  @BeginChunk causes the next documentation parts not to be inserted in the
 documentation at it's point in the file, but at the point where the
-@InsertSystem \mbox{\texttt{\mdseries\slshape name}} command is. This can be used to insert examples from different files at a
-specific point in the documentation. A normal system ends at the end of the
-file. You can also end a system with EndSystem. Systems are collected over the
-whole document. 
+@InsertChunk \mbox{\texttt{\mdseries\slshape name}} command is. This can be used to insert examples from different files at a
+specific point in the documentation. A normal chunk ends at the end of the
+file. You can also end a system with @EndChunk. 
 \begin{Verbatim}[fontsize=\small,frame=single,label=]
-  #! @System Example_Symmetric_Group
-  #! @Example
-  S3 := SymmetricGroup(5);
-  #! Sym( [ 1 .. 5 ] )
-  Order(S3);
-  #! 120
-  #! @EndExample
-  #! @EndSystem
-\end{Verbatim}
- 
-\begin{Verbatim}[fontsize=\small,frame=single,label=]
-  #! @InsertSystem Example_Symmetric_Group
-\end{Verbatim}
- }
-
- 
-\subsection{\textcolor{Chapter }{@Chunk \mbox{\texttt{\mdseries\slshape name}}, @EndChunk, and @InsertChunk \mbox{\texttt{\mdseries\slshape name}}}}\label{@Chunk}
-\logpage{[ 2, 2, 16 ]}
-\hyperdef{L}{X8031B57B85D15A6C}{}
-{
- \index{@Chunk@\texttt{@Chunk, @EndChunk, and @InsertChunk}}  Just the same as system 
-\begin{Verbatim}[fontsize=\small,frame=single,label=]
-  #! @Chunk MyChunk
+  #! @BeginChunk MyChunk
   #! This is some text.
   #! @EndChunk
   
   #! @InsertChunk MyChunk
   ## Text is inserted here.
 \end{Verbatim}
+ 
+\begin{Verbatim}[fontsize=\small,frame=single,label=]
+  #! @BeginChunk Example_Symmetric_Group
+  #! @BeginExample
+  S3 := SymmetricGroup(5);
+  #! Sym( [ 1 .. 5 ] )
+  Order(S3);
+  #! 120
+  #! @EndExample
+  #! @EndChunk
+\end{Verbatim}
+ 
+\begin{Verbatim}[fontsize=\small,frame=single,label=]
+  #! @InsertChunk Example_Symmetric_Group
+\end{Verbatim}
  }
 
  
-\subsection{\textcolor{Chapter }{@Code \mbox{\texttt{\mdseries\slshape name}}, @EndCode, and @InsertCode \mbox{\texttt{\mdseries\slshape name}}}}\label{@Code}
-\logpage{[ 2, 2, 17 ]}
-\hyperdef{L}{X7EAB1D56788E7DDC}{}
+\subsection{\textcolor{Chapter }{@BeginSystem \mbox{\texttt{\mdseries\slshape name}}, @EndSystem, and @InsertSystem \mbox{\texttt{\mdseries\slshape name}}}}\label{@BeginSystem}
+\logpage{[ 2, 2, 16 ]}
+\hyperdef{L}{X86B00B6A876D6E7C}{}
 {
- \index{@Code@\texttt{@Code, @EndCode, and @InsertCode}}  Inserts the code between @Code and @EndCode verbatim at the point where
+ \index{@BeginSystem@\texttt{@BeginSystem, @EndSystem, and @InsertSystem}}  Same as @BeginChunk etc. This command is deprecated. Please use chunk instead. }
+
+ 
+\subsection{\textcolor{Chapter }{@BeginCode \mbox{\texttt{\mdseries\slshape name}}, @EndCode, and @InsertCode \mbox{\texttt{\mdseries\slshape name}}}}\label{@BeginCode}
+\logpage{[ 2, 2, 17 ]}
+\hyperdef{L}{X79B28EFE7C93E47D}{}
+{
+ \index{@BeginCode@\texttt{@BeginCode, @EndCode, and @InsertCode}}  Inserts the code between @BeginCode and @EndCode verbatim at the point where
 @InsertCode is called. This is useful to insert your programm code directly
 into the manual. 
 \begin{Verbatim}[fontsize=\small,frame=single,label=]
-  #! @Code Increment
+  #! @BeginCode Increment
   i := i + 1;
   #! @EndCode
   
@@ -940,7 +939,7 @@ AutoDoc parser. }
 \label{AutoDoc}
 }\hfill{\scriptsize (function)}}\\
 \textbf{\indent Returns:\ }
- nothing 
+nothing 
 
 
 
@@ -992,7 +991,7 @@ XML element names, and the values of the components are outputted as content
 of these XML elements. For example, you could pass the following record to set
 a custom acknowledgements text: 
 \begin{Verbatim}[fontsize=\small,frame=single,label=]
-   rec( Acknowledgements := "Many thanks to ..." )
+  rec( Acknowledgements := "Many thanks to ..." )
 \end{Verbatim}
  For a list of valid entries in the titlepage, please refer to the \textsf{GAPDoc} manual, specifically section  (\textbf{GAPDoc: Title}) and following. 
 \item[{\mbox{\texttt{\mdseries\slshape document{\textunderscore}class}}}]  Sets the document class of the resulting pdf. The value can either be a string

@@ -1,0 +1,144 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: algemodstd_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: algemodstd_lib">
+<META NAME="keywords" CONTENT="Singular Manual: algemodstd_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2100"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2026.htm#SEC2101"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: chinrempoly" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.15.1 algemodstd_lib </H3>
+<!--docid::SEC2100::-->
+<P>
+
+<A NAME="IDX705"></A>
+<A NAME="IDX706"></A>
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>algemodstd.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>  Groebner bases of ideals in polynomial rings
+                           over algebraic number fields
+<DT><STRONG>Authors:</STRONG>
+<DD>D.K. Boku boku@mathematik.uni-kl.de
+<BR> W. Decker decker@mathematik.uni-kl.de
+<BR> C. Fieker fieker@mathematik.uni-kl.de
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>A library for computing the Groebner basis of an ideal in the polynomial
+ring over an algebraic number field Q(t) using the modular methods, where t is
+algebraic over the field of rational numbers Q. For the case Q(t) = Q, the procedure
+is inspired by Arnold [1]. This idea is then extended
+to the case t not in Q using factorization as follows:
+Let f be the minimal polynomial of t.
+<BR>For I, I' ideals in Q(t)[X], Q[X,t]/&lt;f&gt; respectively, we map I to I' via the map sending
+t to t + &lt;f&gt;.
+<BR>We first choose a prime p such that f has at least two factors in characteristic p and
+add each factor f_i to I' to obtain the ideal J'_i = I' + &lt;f_i&gt;.
+We then compute a standard basis G'_i of J'_i for each i and combine the G'_i to G_p
+(a standard basis of I'_p) using chinese remaindering for polynomials. The procedure is
+repeated for many primes p, where we compute the G_p in parallel until the
+number of primes is sufficiently large to recover the correct standard basis G' of I'.
+Finally, by mapping G' back to Q(t)[X], a standard basis G of I is obtained.
+<P>
+
+<DT><STRONG>References:</STRONG>
+<DD>[1] E. A. Arnold: Modular algorithms for computing Groebner bases.
+J. Symb. Comp. 35, 403-419 (2003).
+<P>
+
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2026.htm#SEC2101">D.15.1.1 chinrempoly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">chinese remaindering for polynomials</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2027.htm#SEC2102">D.15.1.2 algemodStd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">standard basis of I over algebraic number field using modular methods</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="chinrempoly"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2026.htm#SEC2101"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: chinrempoly" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

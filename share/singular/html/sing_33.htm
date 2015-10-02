@@ -1,0 +1,382 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Implemented algorithms</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Implemented algorithms">
+<META NAME="keywords" CONTENT="Singular Manual: Implemented algorithms">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC46"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_32.htm#SEC44"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Coefficient rings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_34.htm#SEC55"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: The SINGULAR language" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_28.htm#SEC38"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Rings and orderings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_72.htm#SEC111"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Data types" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: General concepts" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> 3.4 Implemented algorithms </H2>
+<!--docid::SEC46::-->
+<P>
+
+The basic algorithm in S<SMALL>INGULAR</SMALL> is a general standard basis algorithm for
+any monomial ordering which is compatible with the natural semi-group
+structure of the exponents. This includes well-orderings
+(Buchberger algorithm to compute a Groebner basis)
+and tangent cone orderings (Mora algorithm) as special cases.
+</P><P>
+
+Nonetheless, there are a lot of other important algorithms:
+<UL>
+
+<LI>
+Algorithms to compute the standard operations on ideals and modules:
+intersection, ideal quotient, elimination, etc.
+<P>
+
+<LI>
+Different Syzygy algorithms and algorithms to compute free resolutions
+of modules.
+<P>
+
+<LI>
+Combinatorial algorithms to compute dimensions, Hilbert series,
+multiplicities, etc.
+<P>
+
+<LI>
+Algorithms for univariate and multivariate polynomial factorization,
+resultant and gcd computations.
+</UL>
+<P>
+
+<A NAME="SEC47"></A>
+<H3> Commands to compute standard bases </H3>
+<!--docid::SEC47::-->
+<DL COMPACT>
+<DT><CODE>facstd</CODE>
+<DD> <A HREF="sing_291.htm#SEC330">facstd</A>
+<BR>computes a list of Groebner bases via the Factorizing Groebner Basis
+Algorithm, i.e., their intersection has the same radical as the original ideal. It need not
+be a Groebner basis of the given ideal.
+<P>
+
+The intersection of the zero-sets is the zero-set of the given ideal.
+<DT><CODE>fglm</CODE>
+<DD> <A HREF="sing_296.htm#SEC335">fglm</A>
+<BR>computes a Groebner basis provided that a reduced Groebner basis
+w.r.t. another ordering is given.
+<P>
+
+Implements the so-called FGLM (Faugere, Gianni, Lazard, Mora) algorithm.
+The given ideal must be zero-dimensional.
+<DT><CODE>groebner</CODE>
+<DD> <A HREF="sing_307.htm#SEC346">groebner</A><BR>
+computes a standard resp. Groebner basis using a heuristically chosen
+method.
+<P>
+
+This is the preferred method to compute a standard resp. Groebner
+bases.
+<DT><CODE>mstd</CODE>
+<DD> <A HREF="sing_353.htm#SEC392">mstd</A>
+<BR>computes a standard basis and a minimal set of generators.
+<DT><CODE>std</CODE>
+<DD> <A HREF="sing_402.htm#SEC441">std</A>
+<BR>computes a standard resp. Groebner basis.
+<DT><CODE>stdfglm</CODE>
+<DD> <A HREF="sing_403.htm#SEC442">stdfglm</A>
+<BR>computes a Groebner basis in a ring with a "difficult" ordering
+(e.g., lexicographical) via <CODE>std</CODE> w.r.t. a "simple" ordering and
+<CODE>fglm</CODE>.
+<P>
+
+The given ideal must be zero-dimensional.
+<DT><CODE>stdhilb</CODE>
+<DD> <A HREF="sing_404.htm#SEC443">stdhilb</A><BR>
+computes a Groebner basis in a ring with a "difficult" ordering
+(e.g., lexicographical) via <CODE>std</CODE> w.r.t. a "simple" ordering
+and a <CODE>std</CODE> computation guided by the Hilbert series.
+</DL>
+<P>
+
+<A NAME="SEC48"></A>
+<H3> Further processing of standard bases </H3>
+<!--docid::SEC48::-->
+The next commands require the input to be a standard basis.
+<P>
+
+<DL COMPACT>
+<DT><CODE>degree</CODE>
+<DD> <A HREF="sing_277.htm#SEC316">degree</A>
+<BR>computes the (Krull) dimension, codimension and the multiplicity.
+<P>
+
+The result is only displayed on the screen.
+<DT><CODE>dim</CODE>
+<DD> <A HREF="sing_282.htm#SEC321">dim</A><BR>
+computes the dimension of the ideal resp. module.
+<DT><CODE>highcorner</CODE>
+<DD> <A HREF="sing_309.htm#SEC348">highcorner</A><BR>
+computes the smallest monomial not contained in the ideal resp. module.
+The ideal resp. module has to be finite dimensional as a vector space
+over the ground field.
+<DT><CODE>hilb</CODE>
+<DD> <A HREF="sing_310.htm#SEC349">hilb</A><BR>
+computes the first, and resp. or, second Hilbert series of an ideal
+resp. module.
+<DT><CODE>kbase</CODE>
+<DD> <A HREF="sing_323.htm#SEC362">kbase</A><BR> computes a vector space basis (consisting of monomials) of
+the quotient of a ring by an ideal resp. of a free module by a
+submodule.
+<P>
+
+The ideal resp. module has to be finite dimensional as a vector space
+over the ground field and has to be represented by a standard basis w.r.t.
+the ring ordering.
+<DT><CODE>mult</CODE>
+<DD> <A HREF="sing_354.htm#SEC393">mult</A><BR>
+computes the degree of the monomial ideal resp. module generated by
+the leading monomials of the input.
+<DT><CODE>reduce</CODE>
+<DD> <A HREF="sing_383.htm#SEC422">reduce</A><BR>
+reduces a polynomial, vector, ideal or module to its normal form with
+respect to an ideal or module represented by a standard basis.
+<DT><CODE>vdim</CODE>
+<DD> <A HREF="sing_418.htm#SEC457">vdim</A><BR>
+computes the vector space dimension of a ring (resp. free module)
+modulo an ideal (resp. module).
+</DL>
+<P>
+
+<A NAME="SEC49"></A>
+<H3> Commands to compute resolutions </H3>
+<!--docid::SEC49::-->
+<DL COMPACT>
+<DT><CODE>res</CODE>
+<DD> <A HREF="sing_386.htm#SEC425">res</A><BR>
+computes a free resolution of an ideal or module using a heuristically
+chosen method.
+This is the preferred method to compute free resolutions of ideals or
+modules.
+<DT><CODE>lres</CODE>
+<DD> <A HREF="sing_337.htm#SEC376">lres</A><BR>
+computes a free resolution of an ideal or module with LaScala's
+method. The input needs to be homogeneous.
+<DT><CODE>mres</CODE>
+<DD> <A HREF="sing_352.htm#SEC391">mres</A><BR>
+computes a minimal free resolution of an ideal or module with the Syzygy
+method.
+<DT><CODE>sres</CODE>
+<DD> <A HREF="sing_400.htm#SEC439">sres</A><BR>
+computes a free resolution of an ideal or module with Schreyer's
+method. The input has to be a standard basis.
+<DT><CODE>nres</CODE>
+<DD> <A HREF="sing_359.htm#SEC398">nres</A><BR>
+computes a free resolution of an ideal or module with the standard basis
+method.
+<DT><CODE>syz</CODE>
+<DD> <A HREF="sing_407.htm#SEC446">syz</A><BR>
+computes the first Syzygy (i.e., the module of relations of the
+given generators).
+</DL>
+<P>
+
+<A NAME="SEC50"></A>
+<H3> Further processing of resolutions </H3>
+<!--docid::SEC50::-->
+<DL COMPACT>
+<DT><CODE>betti</CODE>
+<DD> <A HREF="sing_263.htm#SEC302">betti</A><BR>
+computes the graded Betti numbers of a module from a free resolution.
+<DT><CODE>minres</CODE>
+<DD> <A HREF="sing_347.htm#SEC386">minres</A><BR>
+minimizes a free resolution of an ideal or module.
+<DT><CODE>regularity</CODE>
+<DD> <A HREF="sing_384.htm#SEC423">regularity</A><BR>
+computes the regularity of a homogeneous ideal resp. module from a given
+minimal free resolution.
+</DL>
+<P>
+
+<A NAME="SEC51"></A>
+<H3> Processing of polynomials </H3>
+<!--docid::SEC51::-->
+<DL COMPACT>
+<DT><CODE>char_series</CODE>
+<DD> <A HREF="sing_265.htm#SEC304">char_series</A><BR>
+computes characteristic sets of polynomial ideals.
+<DT><CODE>extgcd</CODE>
+<DD> <A HREF="sing_290.htm#SEC329">extgcd</A><BR>
+computes the extended gcd of two polynomials.
+<P>
+
+This is implemented as extended Euclidean Algorithm, and applicable for univariate
+polynomials only.
+<DT><CODE>factorize</CODE>
+<DD> <A HREF="sing_293.htm#SEC332">factorize</A><BR>
+computes factorization of univariate and multivariate polynomials into
+irreducible factors.
+<P>
+
+The most basic algorithm is univariate factorization in prime
+characteristic.  The Cantor-Zassenhaus Algorithm is used in this case.
+For characteristic 0, a univariate Hensel-lifting is done to lift from
+prime characteristic to characteristic 0.  For multivariate
+factorization in any characteristic, the problem is reduced to the
+univariate case first, then a multivariate Hensel-lifting is used to
+lift the univariate factorization.
+</P><P>
+
+Factorization of polynomials over algebraic extensions is provided by
+factoring the norm for univariate polynomials f (the gcd of f and the
+factors of the norm is a factorization of f) resp. by the extended Zassenhaus
+algorithm for multivariate polynomials.
+</P><P>
+
+<DT><CODE>gcd</CODE>
+<DD> <A HREF="sing_304.htm#SEC343">gcd</A><BR>
+computes greatest common divisors of univariate and multivariate polynomials.
+<P>
+
+In the univariate case NTL is used.
+For prime characteristic, a subresultant gcd is used.  In characteristic 0,
+the EZGCD is used, except for a special case where a modular algorithm is used.
+</P><P>
+
+<DT><CODE>resultant</CODE>
+<DD> <A HREF="sing_388.htm#SEC427">resultant</A><BR>
+computes the resultant of two univariate polynomials using the subresultant
+algorithm.
+<P>
+
+Multivariate polynomials are considered as univariate polynomials in the
+main variable (which has to be specified by the user).
+<DT><CODE>vandermonde</CODE>
+<DD> <A HREF="sing_414.htm#SEC453">vandermonde</A><BR>
+interpolates a polynomial from its values at several points
+</DL>
+<P>
+
+<A NAME="SEC52"></A>
+<H3> Matrix computations </H3>
+<!--docid::SEC52::-->
+<DL COMPACT>
+<DT><CODE>bareiss</CODE>
+<DD> <A HREF="sing_262.htm#SEC301">bareiss</A><BR>
+implements sparse Gauss-Bareiss method for elimination (matrix
+triangularization) in arbitrary integral domains.
+<DT><CODE>det</CODE>
+<DD> <A HREF="sing_280.htm#SEC319">det</A><BR>
+computes the determinant of a square matrix.
+<P>
+
+For matrices with integer entries a modular algorithm is used.  For
+other domains the Gauss-Bareiss method is used.
+<DT><CODE>minor</CODE>
+<DD> <A HREF="sing_346.htm#SEC385">minor</A><BR>
+computes all minors (=subdeterminants) of a given size for a matrix.
+</DL>
+<P>
+
+<A NAME="SEC53"></A>
+<H3> Numeric computations </H3>
+<!--docid::SEC53::-->
+<DL COMPACT>
+<DT><CODE>laguerre</CODE>
+<DD> <A HREF="sing_328.htm#SEC367">laguerre</A><BR>
+computes all (complex) roots of a univariate polynomial
+<DT><CODE>uressolve</CODE>
+<DD> <A HREF="sing_413.htm#SEC452">uressolve</A><BR>
+finds all roots of a 0-dimensional ideal with multivariate resultants
+</DL>
+<P>
+
+<A NAME="SEC54"></A>
+<H3> Controlling computations </H3>
+<!--docid::SEC54::-->
+<DL COMPACT>
+<DT><CODE>option</CODE>
+<DD> <A HREF="sing_364.htm#SEC403">option</A><BR>
+allows setting of options for manipulating the behaviour of computations
+(such as reduction strategies) and for showing protocol information indicating
+the progress of a computation.
+</DL>
+<P>
+
+<A NAME="The SINGULAR language"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_32.htm#SEC44"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Coefficient rings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_34.htm#SEC55"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: The SINGULAR language" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_28.htm#SEC38"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Rings and orderings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_72.htm#SEC111"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Data types" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: General concepts" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

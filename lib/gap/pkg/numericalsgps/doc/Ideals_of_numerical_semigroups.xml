@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+        Let <M>S</M> be a numerical semigroup. A set <M>I</M> of integers is an <E>ideal relative</E>
+        to a numerical semigroup <M>S</M> provided that <M>I+S\subseteq I</M> and that there
+        exists <M>d\in S</M> such that <M>d+I\subseteq S</M>.
+        <P/>
+        If <M>\{i_1,\ldots,i_k\}</M> is a subset of <M>{\mathbb Z}</M>, then the set
+        <M>I=\{i_1,\ldots,i_k\}+S=\bigcup_{n=1}^k i_n+S</M> is an ideal relative to <M>S</M>,
+        and <M>\{i_1,\ldots, i_k\}</M> is a system of generators of <M>I</M>. A system of generators 
+        <M>M</M> is minimal if no proper subset of <M>M</M> generates the same ideal.
+        Usually, ideals are specified by means of its generators and the ambient numerical
+        semigroup to which they are ideals (for more information see for instance
+        <Cite Key="BDF97"></Cite>).
+
 <Section>
                 <Heading>
-                    Ideals of numerical semigroups
+                    Definitions and basic operations
                 </Heading>
-                Let <M>S</M> be a numerical semigroup. A set <M>I</M> of integers is an <E>ideal relative</E>
-                to a numerical semigroup <M>S</M> provided that <M>I+S\subseteq I</M> and that there
-                exists <M>d\in S</M> such that <M>d+I\subseteq S</M>.
-                <P/>
-                If <M>\{i_1,\ldots,i_k\}</M> is a subset of <M>{\mathbb Z}</M>, then the set
-                <M>I=\{i_1,\ldots,i_k\}+S=\bigcup_{n=1}^k i_n+S</M> is an ideal relative to <M>S</M>,
-                and <M>\{i_1,\ldots, i_k\}</M> is a system of generators of <M>I</M>. A system of generators 
-                <M>M</M> is minimal if no proper subset of <M>M</M> generates the same ideal.
-                Usually, ideals are specified by means of its generators and the ambient numerical
-                semigroup to which they are ideals (for more information see for instance
-                <Cite Key="BDF97"></Cite>).
 
 
                 <ManSection>
@@ -60,6 +62,7 @@ false
 
                 <ManSection>
                     <Func Arg="I" Name="MinimalGeneratingSystemOfIdealOfNumericalSemigroup"></Func>
+<Func Arg="I" Name="MinimalGeneratingSystem"></Func>
                     <Description>
                         <A>I</A> is an ideal of a numerical semigroup.
                         <P/>
@@ -69,6 +72,8 @@ false
                         <Example><![CDATA[
 gap> I:=[3,5,9]+NumericalSemigroup(2,11);;
 gap> MinimalGeneratingSystemOfIdealOfNumericalSemigroup(I);
+[ 3 ]
+gap> MinimalGeneratingSystem(I);                           
 [ 3 ]
 ]]></Example>
                     </Description>
@@ -119,7 +124,7 @@ gap> AmbientNumericalSemigroupOfIdeal(I);
 
 
                 <ManSection>
-                    <Func Arg="I" Name="SmallElementsOfIdealOfNumericalSemigroup"></Func>
+                    <Func Arg="I" Name="SmallElementsOfIdealOfNumericalSemigroup"></Func><Func Arg="I" Name="SmallElements"></Func>
                     <Description>
                         <A>I</A> is an ideal of a numerical semigroup.
                         <P/>
@@ -131,6 +136,8 @@ gap> AmbientNumericalSemigroupOfIdeal(I);
 gap> I:=[3,5,9]+NumericalSemigroup(2,11);;
 gap> SmallElementsOfIdealOfNumericalSemigroup(I);
 [ 3, 5, 7, 9, 11, 13 ]
+gap> SmallElements(I) = SmallElementsOfIdealOfNumericalSemigroup(I);
+true
 gap> J:=[2,11]+NumericalSemigroup(2,11);;
 gap> SmallElementsOfIdealOfNumericalSemigroup(J);
 [ 2, 4, 6, 8, 10 ]
@@ -289,7 +296,64 @@ true
 									</Description>
                 </ManSection>
 
+<ManSection>
+                    <Func Arg="I, J" Name="IntersectionIdealsOfNumericalSemigroup"></Func>
+                    <Description>
+Given two ideals <A>I</A> and <A>J</A> of a numerical semigroup <A>S</A>
+returns the ideal of the numerical semigroup <A>S</A> which is the
+intersection of the ideals <A>I</A> and <A>J</A>.
 
+                        <Example><![CDATA[
+gap> i:=IdealOfNumericalSemigroup([75,89],s);;
+gap> j:=IdealOfNumericalSemigroup([115,289],s);;
+gap> IntersectionIdealsOfNumericalSemigroup(i,j);
+<Ideal of numerical semigroup>
+]]></Example>
+                    </Description>
+                </ManSection>
+
+
+<ManSection>
+                    <Func Arg="S" Name="MaximalIdealOfNumericalSemigroup"></Func>
+                    <Description>
+                        Returns the maximal ideal of the numerical semigroup <A>S</A>.
+
+                        <Example><![CDATA[
+gap> MaximalIdealOfNumericalSemigroup(NumericalSemigroup(3,7));
+<Ideal of numerical semigroup>
+]]></Example>
+                    </Description>
+                </ManSection>
+
+
+<ManSection>
+                    <Func Arg="S" Name="CanonicalIdealOfNumericalSemigroup"></Func>
+                    <Description>
+                        Computes a canonical ideal of <A>S</A> (<Cite Key="BF06"></Cite>):
+                        <M>\{ x \in \mathbb{Z} | g-x \not \in S\} </M>.
+
+                        <Example><![CDATA[
+gap> s:=NumericalSemigroup(4,6,11);;
+gap> m:=MaximalIdealOfNumericalSemigroup(s);;
+gap> c:=CanonicalIdealOfNumericalSemigroup(s);
+<Ideal of numerical semigroup>
+gap> (m-c)-c=m;
+true
+gap> id:=3+s;
+<Ideal of numerical semigroup>
+gap> (id-c)-c=id;
+true
+]]></Example>
+                    </Description>
+                </ManSection>
+
+
+</Section>
+
+<Section>
+                <Heading>
+                    Other functions for ideals
+                </Heading>
 
                 <ManSection>
                     <Func Arg="n, I" Name="HilbertFunctionOfIdealOfNumericalSemigroup"></Func>
@@ -345,17 +409,6 @@ gap> ReductionNumberIdealNumericalSemigroup(I);
 
 
 
-<ManSection>
-                    <Func Arg="S" Name="MaximalIdealOfNumericalSemigroup"></Func>
-                    <Description>
-                        Returns the maximal ideal of the numerical semigroup <A>S</A>.
-
-                        <Example><![CDATA[
-gap> MaximalIdealOfNumericalSemigroup(NumericalSemigroup(3,7));
-<Ideal of numerical semigroup>
-]]></Example>
-                    </Description>
-                </ManSection>
 
 
 <ManSection>
@@ -442,43 +495,7 @@ gap> List(AperyListOfNumericalSemigroupWRTElement(s,4),
                 </ManSection>
 
 
-<ManSection>
-                    <Func Arg="S" Name="CanonicalIdealOfNumericalSemigroup"></Func>
-                    <Description>
-                        Computes a canonical ideal of <A>S</A> (<Cite Key="BF06"></Cite>):
-                        <M>\{ x \in \mathbb{Z} | g-x \not \in S\} </M>.
 
-                        <Example><![CDATA[
-gap> s:=NumericalSemigroup(4,6,11);;
-gap> m:=MaximalIdealOfNumericalSemigroup(s);;
-gap> c:=CanonicalIdealOfNumericalSemigroup(s);
-<Ideal of numerical semigroup>
-gap> (m-c)-c=m;
-true
-gap> id:=3+s;
-<Ideal of numerical semigroup>
-gap> (id-c)-c=id;
-true
-]]></Example>
-                    </Description>
-                </ManSection>
-
-
-<ManSection>
-                    <Func Arg="I, J" Name="IntersectionIdealsOfNumericalSemigroup"></Func>
-                    <Description>
-Given two ideals <A>I</A> and <A>J</A> of a numerical semigroup <A>S</A>
-returns the ideal of the numerical semigroup <A>S</A> which is the
-intersection of the ideals <A>I</A> and <A>J</A>.
-
-                        <Example><![CDATA[
-gap> i:=IdealOfNumericalSemigroup([75,89],s);;
-gap> j:=IdealOfNumericalSemigroup([115,289],s);;
-gap> IntersectionIdealsOfNumericalSemigroup(i,j);
-<Ideal of numerical semigroup>
-]]></Example>
-                    </Description>
-                </ManSection>
 
                 <Heading>
                     Monomial Numerical Semigroups
@@ -537,7 +554,7 @@ gap> AperyListOfIdealOfNumericalSemigroupWRTElement(i,10);
 
 
                 <ManSection>
-                    <Func Arg="s" Name="AperyListOfIdealOfNumericalSemigroupWRTElement"></Func>
+                    <Func Arg="s" Name="AperyTableOfNumericalSemigroup"></Func>
                     <Description>
 				
 				 Computes the Apéry table associated to the numerical semigroup <A>s</A> as explained in <Cite Key="CJZ"></Cite>, 
@@ -556,6 +573,24 @@ gap> AperyTableOfNumericalSemigroup(s);
 ]]></Example>
                      </Description>
                 </ManSection>
+
+                <ManSection>
+                    <Func Arg="i, is" Name="StarClosureOfIdealOfNumericalSemigroup"></Func>
+                    <Description>
+				
+						<A>i</A> is an ideal and <A>is</A> is a set of ideals (all from the same numerical semigroup<M>s</M>). 
+						The output is <M>i^{*_is}</M>, where <M>*_is</M> is the star operation generated by <A>is</A>: <M>(s-(s-i))\bigcap_{k\in is} (k-(k-i))</M>. 
+						The implementation uses Section 3 of <Cite Key="Sp"></Cite>.
+
+                       <Example><![CDATA[
+gap> s:=NumericalSemigroup(3,5,7);;
+gap> StarClosureOfIdealOfNumericalSemigroup([0,2]+s,[[0,4]+s]);;
+gap> MinimalGeneratingSystemOfIdealOfNumericalSemigroup(last);
+[ 0, 2, 4 ]
+						]]></Example>
+                     </Description>
+                </ManSection>
+
 
 </Section>
 

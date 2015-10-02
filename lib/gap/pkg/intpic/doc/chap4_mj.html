@@ -18,7 +18,7 @@
 <body class="chap4"  onload="jscontent()">
 
 
-<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
 
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5_mj.html">[Next Chapter]</a>&nbsp;  </div>
 
@@ -46,29 +46,31 @@
 
 <h3>4 <span class="Heading">Visualization of the pictures created</span></h3>
 
-<p>This chapter describes two easy ways to visualize the images created by using the <span class="URL"><a href="http://www.fc.up.pt/cmup/mdelgado/intpic">IntPic</a></span> package. Both require LaTeX and some LaTeX packages, such as <strong class="pkg">Tikz</strong> and <strong class="pkg">pgf</strong>, to be installed and working. One of the ways we will describe is almost completely automatic, but requires the <span class="URL"><a href="https://bitbucket.org/zen154115/viz">Viz</a></span> package. The other is not so automatic but has the advantage of not requiring other packages, besides the LaTeX ones.</p>
+<p>This chapter describes two easy ways to visualize the images created by using the <span class="URL"><a href="http://www.fc.up.pt/cmup/mdelgado/intpic">IntPic</a></span> package. Both require LaTeX and some LaTeX packages, such as <strong class="pkg">Tikz</strong> and <strong class="pkg">pgf</strong>, to be installed and working. One of the ways we will describe is almost completely automatic. It makes use of the function <code class="code">Splash</code>, borrowed from the <span class="URL"><a href="https://bitbucket.org/zen154115/viz">Viz</a></span> package. The other is not so automatic but has the advantage of not requiring other packages, besides the LaTeX ones, and should work in any operation system.</p>
 
 <p><a id="X78668CD6797F734B" name="X78668CD6797F734B"></a></p>
 
 <h4>4.1 <span class="Heading">Viewing using <strong class="pkg">Viz</strong></span></h4>
 
-<p>If you have a working copy of the <span class="URL"><a href="https://bitbucket.org/zen154115/viz">Viz</a></span> package, you may produce and display a picture from a <code class="code">tikz</code> string <var class="Arg">tkz</var> just by typing the following:</p>
+<p>Producing and displaying a picture from a <code class="code">tikz</code> string <var class="Arg">tkz</var> may me achieved in a simple way. (Warning: extenvive tests have only been done with Linux.) One just have to type the following:</p>
 
 
 <div class="example"><pre>
-Splash(tkz);
+IP_Splash(tkz);
 </pre></div>
 
-<p>A picture is popped up after this use of the function <code class="func">Splash</code> (<a href="/home/mdelgado/research/software/pkg/viz/doc/chap2_mj.html#X79DDA8347CACC236"><span class="RefLink">Viz: Splash</span></a>). To see the name of the temporary directory created to perform the computations, and thus being able to copy the files involved to any other place, one should set the info level <code class="code">InfoViz</code> to <span class="SimpleMath">\(1\)</span> or more. The following example illustrates this and the use of some options of the <code class="func">Splash</code> (<a href="/home/mdelgado/research/software/pkg/viz/doc/chap2_mj.html#X79DDA8347CACC236"><span class="RefLink">Viz: Splash</span></a>) function of the <span class="URL"><a href="https://bitbucket.org/zen154115/viz">Viz</a></span> package. Setting the option <code class="code">papersize</code> to "a0paper" may be convenient for the visualization of large images. The <code class="code">pdf</code> viewer can also be changed.</p>
+<p>A picture is popped up after this use of the function <code class="code">IP_Splash</code>.. To see the name of the temporary directory created to perform the computations, and thus being able to copy the files involved to any other place, one should set the info level <code class="code">InfoViz</code> to <span class="SimpleMath">\(1\)</span> or more. The following example illustrates this and the use of some options of the function <code class="code">IP_Splash</code>. For instance, the <code class="code">pdf</code> viewer can be changed.</p>
 
 
 <div class="example"><pre>
 gap&gt; SetInfoLevel(InfoViz,1);
-gap&gt; Splash(tkz,rec(latexpoints:="10pt",papersize:="a0paper",viewer:="okular")); 
+gap&gt; IP_Splash(tkz,rec(viewer:="okular")); 
 #I  The temporary directory used is: /tmp/tmJcpphI/
 </pre></div>
 
-<p>The temporary directory /tmp/tmJcpphI/ contains the files vizpicture1.tex and vizpicture.tex. The file vizpicture1.tex contains the tikz code and the file vizpicture.tex is the LaTeX document to be processed. Other files, namely the <code class="code">vizpicture.pdf</code> are created by the <code class="code">pdflatex</code> command that is called by the <code class="func">Splash</code> (<a href="/home/mdelgado/research/software/pkg/viz/doc/chap2_mj.html#X79DDA8347CACC236"><span class="RefLink">Viz: Splash</span></a>) function.</p>
+<p>The temporary directory /tmp/tmJcpphI/ contains the file and vizpicture.tex. The file vizpicture.tex is the LaTeX document to be processed. Other files, namely the <code class="code">vizpicture.pdf</code> are created by the <code class="code">pdflatex</code> command that is called by the <code class="code">IP_Splash</code> function.</p>
+
+<p><code class="code">Warning:</code> In the case of large pictures, it may happen the LaTeX memory being exceeded. In this case, no image is produced and the user is not warned.</p>
 
 <p><a id="X7CED7CEA804873E1" name="X7CED7CEA804873E1"></a></p>
 
@@ -309,7 +311,7 @@ If you want to scale this immage, please chang the ``scale'' in the file
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5_mj.html">[Next Chapter]</a>&nbsp;  </div>
 
 
-<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
 
 <hr />
 <p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>

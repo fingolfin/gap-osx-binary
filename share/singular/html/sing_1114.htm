@@ -1,0 +1,141 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: alg_kernel</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: alg_kernel">
+<META NAME="keywords" CONTENT="Singular Manual: alg_kernel">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1189"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1113.htm#SEC1188"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: algDependent" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1115.htm#SEC1190"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_injective" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.2.5 alg_kernel </H4>
+<!--docid::SEC1189::-->
+Procedure from library <CODE>algebra.lib</CODE> (see  <A HREF="sing_1109.htm#SEC1184">algebra_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>alg_kernel(phi,pr[,s,c]); phi map to basering, pr preimage ring,
+s string (name of kernel in pr), c integer.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a string, the kernel of phi as string.
+<BR>If, moreover, a string s is given, the algorithm creates, in the
+preimage ring pr the kernel of phi with name s.
+<BR>Three different algorithms are used depending on c = 1,2,3.
+If c is not given or c=0, a heuristically best method is chosen.
+(algorithm 1 uses the preimage command)
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Since the kernel of phi lives in pr, it cannot be returned to the
+basering. If s is given, the user has access to it in pr via s.
+The basering may be a quotient ring.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "algebra.lib";
+ring r = 0,(a,b,c),ds;
+ring s = 0,(x,y,z,u,v,w),dp;
+ideal I = x-w,u2w+1,yz-v;
+map phi = r,I;                // a map from r to s:
+alg_kernel(phi,r);            // a,b,c ---&gt; x-w,u2w+1,yz-v
+==> 0
+ring S = 0,(a,b,c),ds;
+ring R = 0,(x,y,z),dp;
+qring Q = std(x-y);
+ideal i = x, y, x2-y3;
+map phi = S,i;                 // a map to a quotient ring
+alg_kernel(phi,S,"ker",3);     // uses algorithm 3
+==> a-b,b^3-b^2+c
+setring S;                     // you have access to kernel in preimage
+ker;
+==> ker[1]=a-b
+==> ker[2]=c-b2+b3
+</FONT></pre></td></tr></table><P>
+
+<A NAME="is_injective"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1113.htm#SEC1188"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: algDependent" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1115.htm#SEC1190"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: is_injective" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1106.htm#SEC1181"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: absfact_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1122.htm#SEC1197"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: assprimeszerodim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1109.htm#SEC1184"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algebra_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,192 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: deltaLoc</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: deltaLoc">
+<META NAME="keywords" CONTENT="Singular Manual: deltaLoc">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1312"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1236.htm#SEC1311"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: iMult" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1238.htm#SEC1313"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: locAtZero" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: noether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.17.9 deltaLoc </H4>
+<!--docid::SEC1312::-->
+Procedure from library <CODE>normal.lib</CODE> (see  <A HREF="sing_1228.htm#SEC1303">normal_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>deltaLoc(f,J); f poly, J ideal
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f is reduced bivariate polynomial; basering has exactly two variables;
+J is irreducible prime component of the singular locus of f (e.g., one
+entry of the output of <CODE>minAssGTZ(I);</CODE>, I = &lt;f,jacob(f)&gt;).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list L:
+<P>
+
+<DL COMPACT>
+<DT><CODE>L[1]</CODE>; int:
+<DD>         the sum of (local) delta invariants of f at the (conjugated) singular
+         points given by J.
+<DT><CODE>L[2]</CODE>; int:
+<DD>         the sum of (local) Tjurina numbers of f at the (conjugated) singular
+         points given by J.
+<DT><CODE>L[3]</CODE>; int:
+<DD>         the sum of (local) number of branches of f at the (conjugated)
+         singular points given by J.
+</DL>
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>procedure makes use of <CODE>execute</CODE>; increasing printlevel displays
+more comments (default: printlevel=0).
+<P>
+
+<A NAME="IDX464"></A>
+<A NAME="IDX465"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "normal.lib";
+ring r=0,(x,y),dp;
+poly f=(x2+y^2-1)^3 +27x2y2;
+ideal I=f,jacob(f);
+I=std(I);
+list qr=minAssGTZ(I);
+size(qr);
+==> 6
+// each component of the singular locus either describes a cusp or a pair
+// of conjugated nodes:
+deltaLoc(f,qr[1]);
+==> [1]:
+==>    1
+==> [2]:
+==>    2
+==> [3]:
+==>    1
+deltaLoc(f,qr[2]);
+==> [1]:
+==>    1
+==> [2]:
+==>    2
+==> [3]:
+==>    1
+deltaLoc(f,qr[3]);
+==> [1]:
+==>    1
+==> [2]:
+==>    2
+==> [3]:
+==>    1
+deltaLoc(f,qr[4]);
+==> [1]:
+==>    1
+==> [2]:
+==>    2
+==> [3]:
+==>    1
+deltaLoc(f,qr[5]);
+==> [1]:
+==>    2
+==> [2]:
+==>    2
+==> [3]:
+==>    4
+deltaLoc(f,qr[6]);
+==> [1]:
+==>    2
+==> [2]:
+==>    2
+==> [3]:
+==>    4
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1526.htm#SEC1601">delta</A>;
+ <A HREF="sing_1572.htm#SEC1647">tjurina</A>.
+<P>
+
+<A NAME="locAtZero"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1236.htm#SEC1311"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: iMult" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1238.htm#SEC1313"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: locAtZero" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: noether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

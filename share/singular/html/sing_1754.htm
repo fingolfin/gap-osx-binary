@@ -1,0 +1,171 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Weierstrass</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Weierstrass">
+<META NAME="keywords" CONTENT="Singular Manual: Weierstrass">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1829"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1753.htm#SEC1828"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: BrillNoether" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1755.htm#SEC1830"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: extcurve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.1.4 Weierstrass </H4>
+<!--docid::SEC1829::-->
+Procedure from library <CODE>brnoeth.lib</CODE> (see  <A HREF="sing_1750.htm#SEC1825">brnoeth_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>Weierstrass( i, m, CURVE ); i,m integers and CURVE a list
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list WS of two lists:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">  WS[1] list of integers (Weierstr. semigroup of the curve at place i up to m)
+  WS[2] list of ideals (the associated rational functions)
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The procedure must be called from the ring CURVE[1][2],
+where CURVE is the output of the procedure <CODE>NSplaces</CODE>.
+<BR> i represents the place CURVE[3][i].
+<BR> Rational functions are represented by numerator/denominator
+in form of ideals with two homogeneous generators.
+<P>
+
+<DT><STRONG>Warning:</STRONG>
+<DD>The place must be rational, i.e., necessarily CURVE[3][i][1]=1. <BR>
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "brnoeth.lib";
+int plevel=printlevel;
+printlevel=-1;
+ring s=2,(x,y),lp;
+list C=Adj_div(x3y+y3+x);
+==> The genus of the curve is 3
+C=NSplaces(1..4,C);
+def R=C[1][2];
+setring R;
+// Place C[3][1] has degree 1 (i.e it is rational);
+list WS=Weierstrass(1,7,C);
+==> Vector basis successfully computed 
+// the first part of the list is the Weierstrass semigroup up to 7 :
+WS[1];
+==> [1]:
+==>    0
+==> [2]:
+==>    3
+==> [3]:
+==>    5
+==> [4]:
+==>    6
+==> [5]:
+==>    7
+// and the second part are the corresponding functions :
+WS[2];
+==> [1]:
+==>    _[1]=1
+==>    _[2]=1
+==> [2]:
+==>    _[1]=y
+==>    _[2]=z
+==> [3]:
+==>    _[1]=xy
+==>    _[2]=z2
+==> [4]:
+==>    _[1]=y2
+==>    _[2]=z2
+==> [5]:
+==>    _[1]=y3
+==>    _[2]=xz2
+printlevel=plevel;
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1751.htm#SEC1826">Adj_div</A>;
+ <A HREF="sing_1753.htm#SEC1828">BrillNoether</A>;
+ <A HREF="sing_1752.htm#SEC1827">NSplaces</A>.
+<P>
+
+<A NAME="extcurve"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1753.htm#SEC1828"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: BrillNoether" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1755.htm#SEC1830"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: extcurve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

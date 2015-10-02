@@ -2547,6 +2547,36 @@ InstallMethod( Embedding,
 #############################################################################
 ##
 #S  Constructing rcwa groups: ///////////////////////////////////////////////
+#S  Group extensions. ///////////////////////////////////////////////////////
+##
+#############################################################################
+
+#############################################################################
+##
+#O  MergerExtension( <G>, <points>, <point> ) . . . . build rcwa group over Z
+##
+InstallMethod( MergerExtension,
+               "build rcwa group over Z (RCWA)",
+               ReturnTrue, [ IsPermGroup, IsList, IsPosInt ],
+
+  function ( G, points, point )
+
+    local  P, S1, S2, g, n;
+
+    n := LargestMovedPoint(G);
+    if   not IsSubset([1..n],points) or point > n or point in points
+    then return fail; fi;
+
+    P  := AllResidueClassesModulo(Integers,n);
+    S1 := P{points};
+    S2 := SplittedClass(P[point],Length(points));
+    g  := Product([1..Length(points)],i->ClassTransposition(S1[i],S2[i]));
+    return ClosureGroupAddElm(Image(IsomorphismRcwaGroupOverZ(G)),g); 
+  end );
+
+#############################################################################
+##
+#S  Constructing rcwa groups: ///////////////////////////////////////////////
 #S  Getting smaller or otherwise nicer sets of generators. //////////////////
 ##
 #############################################################################
@@ -4084,6 +4114,78 @@ InstallMethod( IsSubset,
 
 #############################################################################
 ##
+#M  \=( <G>, <H> ) . . . . . . . . . . . . . . . . . . .  for two rcwa groups
+##
+InstallMethod( \=,
+               "for two rcwa groups (RCWA)", true,
+               [ IsRcwaGroup and HasGeneratorsOfGroup,
+                 IsRcwaGroup and HasGeneratorsOfGroup ], 0,
+
+  function ( G, H )
+
+    local  gensG, gensH;
+
+    gensG := Set(GeneratorsOfGroup(G)); gensH := Set(GeneratorsOfGroup(H));
+    if gensG = gensH then return true; fi;
+    if PrimeSet(G) <> PrimeSet(H) then return false; fi;
+    if Support(G) <> Support(H) then return false; fi;
+    if IsTame(G) <> IsTame(H) then return false; fi;
+    if IsTame(G) and IsTame(H) then
+      if Multiplier(G) <> Multiplier(H) then return false; fi;
+      if   RespectedPartition(G) <> RespectedPartition(H)
+      then return false; fi;
+      if   ActionOnRespectedPartition(G) <> ActionOnRespectedPartition(H)
+      then return false; fi;
+      if Size(G) <> Size(H) then return false; fi;
+    fi;
+    return ForAll(gensH,h->h in G) and ForAll(gensG,g->g in H);
+  end );
+
+#############################################################################
+##
+#M  \=( <G>, <H> ) . . . . . . . . . . . . . . . . for two rcwa groups over Z
+##
+InstallMethod( \=,
+               "for two rcwa groups over Z (RCWA)", true,
+               [ IsRcwaGroupOverZ and HasGeneratorsOfGroup,
+                 IsRcwaGroupOverZ and HasGeneratorsOfGroup ], 0,
+
+  function ( G, H )
+
+    local  gensG, gensH, dG, dH;
+
+    gensG := Set(GeneratorsOfGroup(G)); gensH := Set(GeneratorsOfGroup(H));
+    if gensG = gensH then return true; fi;
+    if PrimeSet(G) <> PrimeSet(H) then return false; fi;
+    if Support(G) <> Support(H) then return false; fi;
+    if IsSignPreserving(G) <> IsSignPreserving(H) then return false; fi;
+    if   (ForAll(gensG,g->Sign(g) = 1) and ForAny(gensH,h->Sign(h)=-1))
+      or (ForAll(gensH,h->Sign(h) = 1) and ForAny(gensG,g->Sign(g)=-1))
+    then return false; fi;
+    if   IsClassWiseOrderPreserving(G) <> IsClassWiseOrderPreserving(H)
+    then return false; fi;
+    if   IsClassWiseOrderPreserving(G) then
+      dG := Gcd(List(gensG,Determinant));
+      dH := Gcd(List(gensH,Determinant));
+      if dG <> dH then return false; fi;
+    fi;
+    if IsTame(G) <> IsTame(H) then return false; fi;
+    if IsTame(G) then
+      if Multiplier(G) <> Multiplier(H) then return false; fi;
+      if   RespectedPartition(G) <> RespectedPartition(H)
+      then return false; fi;
+      if   ActionOnRespectedPartition(G) <> ActionOnRespectedPartition(H)
+      then return false; fi;
+      if Size(G) <> Size(H) then return false; fi;
+      if    RankOfKernelOfActionOnRespectedPartition(G)
+         <> RankOfKernelOfActionOnRespectedPartition(H)
+      then return false; fi;
+    fi;
+    return ForAll(gensH,h->h in G) and ForAll(gensG,g->g in H);
+  end );
+
+#############################################################################
+##
 #S  The action of rcwa groups on subsets of the underlying ring. ////////////
 ##
 #############################################################################
@@ -5232,18 +5334,19 @@ InstallMethod( FixedResidueClasses,
 
 #############################################################################
 ##
-#F  DrawOrbitPicture( <G>, <p0>, <r>, <height>, <width>, <colored>,
+#F  DrawOrbitPicture( <G>, <p0>, <bound>, <height>, <width>, <colored>,
 #F                    <palette>, <filename> )
 ##
 InstallGlobalFunction( DrawOrbitPicture,
 
-  function ( G, p0, r, height, width, colored, palette, filename )
+  function ( G, p0, bound, height, width, colored, palette, filename )
 
-    local  grid, orbits, orbit, balls, sphere, action, ps, p, k,
+    local  grid, orbits, orbit, balls, spheres, sphere, action, ps, p, k,
            color, white, z, e, offset, i, j;
 
     if   not (IsRcwaGroupOverZ(G) or IsRcwaGroupOverZxZ(G)) or not IsList(p0)
-      or not ForAll(Flat(p0),IsInt) or not ForAll([r,height,width],IsPosInt)
+      or not ForAll(Flat(p0),IsInt)
+      or not ForAll([bound,height,width],IsPosInt)
       or not IsBool(colored) or (colored = true and (not IsList(palette)
       or not ForAll(palette,IsList) or not Set(List(palette,Length)) = [3]
       or not IsSubset([0..255],Flat(palette)))) or not IsString(filename)
@@ -5257,12 +5360,18 @@ InstallGlobalFunction( DrawOrbitPicture,
       white := 2^24-1;
       grid  := List([1..height],i->List([1..width],j->white));
       if IsInt(p0[1]) then # One orbit, color reflects distance from p0.
-        balls := List([1..r+1],k->Union(Ball(G,p0,k-1,action:Spheres)));
-        if   Minimum(Flat(balls[r+1])) < 0
-        then offset := [Int(height/2)+1,Int(width/2)+1]; fi;
-        for k in [2..r+1] do
-          sphere := Difference(balls[k],balls[k-1]);
-          color  := palette[(k-2) mod Length(palette) + 1];
+        spheres := RestrictedBall(G,p0,infinity,action,bound:Spheres);
+        if IsRcwaGroupOverZ(G) then
+          if   ForAny(spheres,sphere->sphere<>[] and Minimum(sphere)<0)
+          then offset := [Int(height/2)+1,Int(width/2)+1]; fi;
+        elif IsRcwaGroupOverZxZ(G) then
+          if   ForAny(spheres,sphere->sphere<>[]
+                              and ForAny(sphere,p->Minimum(p)<0))
+          then offset := [Int(height/2)+1,Int(width/2)+1]; fi;
+        fi;
+        for k in [1..Length(spheres)] do
+          sphere := spheres[k];
+          color  := palette[(k-1) mod Length(palette) + 1];
           for p in sphere do
             i := p[1]+offset[1]; j := p[2]+offset[2];
             if   i in [1..height] and j in [1..width]
@@ -5273,7 +5382,7 @@ InstallGlobalFunction( DrawOrbitPicture,
         ps := p0; orbits := [];
         while ps <> [] do
           p0    := ps[1];
-          orbit := Union(Ball(G,p0,r,action:Spheres));
+          orbit := RestrictedBall(G,p0,infinity,action,bound);
           ps    := Difference(ps,orbit);
           Add(orbits,orbit);
         od;
@@ -5294,11 +5403,7 @@ InstallGlobalFunction( DrawOrbitPicture,
       z := Zero(GF(2)); e := One(GF(2));
       grid := List([1..height],i->List([1..width],j->e));
       for i in [1..height] do ConvertToGF2VectorRep(grid[i]); od;
-      if IsInt(p0[1]) then ps := [p0]; else ps := p0; fi; orbit := [];
-      for p0 in ps do
-        if   not p0 in orbit
-        then orbit := Union(orbit,Union(Ball(G,p0,r,action:Spheres))); fi;
-      od;
+      orbit := RestrictedBall(G,p0,infinity,action,bound);
       if   Minimum(Flat(orbit)) < 0
       then offset := [Int(height/2)+1,Int(width/2)+1]; fi;
       for p in orbit do

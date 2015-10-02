@@ -27,6 +27,14 @@
 #ifndef FQ_ZECH_POLY_H
 #define FQ_ZECH_POLY_H
 
+#ifdef FQ_ZECH_POLY_INLINES_C
+#define FQ_ZECH_POLY_INLINE FLINT_DLL
+#define FQ_POLY_TEMPLATES_INLINE FLINT_DLL
+#else
+#define FQ_ZECH_POLY_INLINE static __inline__
+#define FQ_POLY_TEMPLATES_INLINE static __inline__
+#endif
+
 #include "fq_zech_mat.h"
 
 #define FQ_ZECH_POLY_DIVREM_DIVCONQUER_CUTOFF  16
@@ -35,6 +43,10 @@
 #define FQ_ZECH_SQR_CLASSICAL_CUTOFF 100
 #define FQ_ZECH_MUL_CLASSICAL_CUTOFF 90
 #define FQ_ZECH_MULLOW_CLASSICAL_CUTOFF 90
+
+#define FQ_ZECH_POLY_HGCD_CUTOFF 35
+#define FQ_ZECH_POLY_GCD_CUTOFF 96
+#define FQ_ZECH_POLY_SMALL_GCD_CUTOFF 96
 
 #ifdef T
 #undef T

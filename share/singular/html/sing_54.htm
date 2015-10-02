@@ -1,0 +1,196 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Procedures in a library</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Procedures in a library">
+<META NAME="keywords" CONTENT="Singular Manual: Procedures in a library">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC90"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_53.htm#SEC89"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: LIB commands" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_55.htm#SEC91"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: template_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Procedures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.8.6 Procedures in a library </H3>
+<!--docid::SEC90::-->
+<P>
+
+Here asre hints and requirements on how procedures contained in a
+library should be implemented. For more on procedures,
+see  <A HREF="sing_42.htm#SEC76">Procedures</A>.
+<OL>
+<LI>
+Each procedure not meant to be accessible by users should be declared static.
+<LI>
+The header of each procedure not declared static must comply with the guidelines
+described in  <A HREF="sing_43.htm#SEC77">Procedure definition</A> and  <A HREF="sing_45.htm#SEC81">Help string</A>.
+In particular, it must have a help and example section, and assumptions made
+should be carefully explained. If the assumptions are checked by the procedure
+on run-time, errors may be reported using the  <A HREF="sing_287.htm#SEC326">ERROR</A> function.
+<LI>
+Names of procedures should not be shorter than 4 characters and should not
+contain any special characters. In particular, the use of <CODE>_</CODE> in names of
+procedures is discourraged. If the name of the procedure is composed of
+more than one word, each new word should start with a capital letter, all
+other letters should be lower case (e.g. linearMapKernel).
+<LI>
+No procedures should be defined within the body of another procedure.
+<LI>
+A procedure may print out comments, for instance to explain results or to
+display intermediate computations. This is often helpful when calling the
+procedure directly, but it may also cause confusions in cases where the
+procedure is called by another procedure. The S<SMALL>INGULAR</SMALL>  solution to
+this problem makes use of the function <CODE>dbprint</CODE> (see  <A HREF="sing_274.htm#SEC313">dbprint</A>)
+and the reserved variables <CODE>printlevel</CODE> and <CODE>voice</CODE>
+(see  <A HREF="sing_448.htm#SEC487">printlevel</A> and see  <A HREF="sing_453.htm#SEC492">voice</A>). Note that <CODE>printlevel</CODE> is a
+predefined, global variable whose value can be changed by the user, while
+<CODE>voice</CODE> is an internal variable, representing the nesting level of
+procedures. Accordingly, the value of  <A HREF="sing_453.htm#SEC492">voice</A> is 1 on the top level,
+2 inside the first procedure, and so on. The default value of
+<CODE>printlevel</CODE>  is 0, but <CODE>printlevel</CODE>  can be set to
+any integer value by the user.
+</OL>
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Example:</STRONG>
+<DD>If the procedure <CODE>Test</CODE> below is called directly from
+the top level, then `comment1' is displayed, but not `comment2'.
+By default, nothing is displayed if <CODE>Test</CODE> is called from within any
+other procedure. However, if <CODE>printlevel</CODE> is set to a value k
+with k&gt;0, then `comment1' (resp. `comment2') is displayed -- provided
+<CODE>Test</CODE> is called from another procedure with nesting level at
+most k (resp. k-1).
+<P>
+
+The example part of a procedure behaves in this respect like the
+procedure on top level (the nesting level is 1, that is, the value of
+<CODE>voice</CODE> is 2). Therefore, due to the command <CODE>printlevel=1;</CODE>,
+`comment1' will be displayed when entering <CODE>example Test;</CODE>.
+However, since printlevel is a global variable, it should be reset to
+its old value at the end of the example part.
+</P><P>
+
+The predefined variable <CODE>echo</CODE>  controls whether input lines are
+echoed or not. Its default is 0, but it can be reset by the user. Input
+is echoed if <CODE>echo&gt;=voice</CODE>. At the beginning of the example
+part, <CODE>echo</CODE> is set to the value 2. In this way, the input lines
+of the example will be displayed when entering <CODE>example Test;</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>      proc Test
+      "USAGE:   ...
+               ...
+      EXAMPLE: example Test; shows an example
+      "
+      {   ...
+         int p = printlevel - voice + 3;
+          ...
+         dbprint(p,"comment1");
+         dbprint(p-1,"comment2");
+         // dbprint prints only if p &gt; 0
+          ...
+      }
+      example
+      { "EXAMPLE:"; echo = 2;
+         int p = printlevel;   //store old value of printlevel
+         printlevel = 1;       //assign new value to printlevel
+          ...
+         Test();
+         printlevel = p;       //reset printlevel to old value
+      }
+</FONT></pre></td></tr></table></P><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>S<SMALL>INGULAR</SMALL>  functions such as <CODE>pause</CODE> or <CODE>read</CODE>  allow
+and require interactive user-input. They are, thus, in particular useful
+for debugging purposes. If such a command is used inside the procedure
+of a library to be distributed with S<SMALL>INGULAR</SMALL>, the example section of
+the procedure has to be written with some care -- the procedure should
+only be called from within the example if the value of <CODE>printlevel</CODE>
+is 0. Otherwise,  the automatic build process of S<SMALL>INGULAR</SMALL> will not
+run through since the examples are carried out during the build process.
+They are, thus, tested against changes in the code.
+</DL>
+<P>
+
+<A NAME="template_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_53.htm#SEC89"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: LIB commands" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_55.htm#SEC91"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: template_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Procedures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_63.htm#SEC99"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Debugging tools" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

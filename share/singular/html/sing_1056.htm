@@ -1,0 +1,139 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: skewmat</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: skewmat">
+<META NAME="keywords" CONTENT="Singular Manual: skewmat">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1131"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1055.htm#SEC1130"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: power" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1057.htm#SEC1132"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: submat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Linear algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1079.htm#SEC1154"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: linalg_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1046.htm#SEC1121"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: matrix_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.3.1.10 skewmat </H4>
+<!--docid::SEC1131::-->
+Procedure from library <CODE>matrix.lib</CODE> (see  <A HREF="sing_1046.htm#SEC1121">matrix_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>skewmat(n[,id]); n integer, id ideal
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>skew-symmetric nxn matrix, with entries from id
+<BR>(default: id=maxideal(1))
+<BR>skewmat(n); creates the generic skew-symmetric matrix
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>if id has less than n*(n-1)/2 elements, the matrix is
+<BR>filled with 0's,
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "matrix.lib";
+ring R=0,x(1..5),lp;
+print(skewmat(4));    // the generic skew-symmetric matrix
+==> 0,    x(1), x(2),x(3),
+==> -x(1),0,    x(4),x(5),
+==> -x(2),-x(4),0,   0,   
+==> -x(3),-x(5),0,   0    
+ring R1 = 0,(a,b,c),dp;
+matrix A=skewmat(4,maxideal(1)^2);
+print(A);
+==> 0,  a2, ab, ac,
+==> -a2,0,  b2, bc,
+==> -ab,-b2,0,  c2,
+==> -ac,-bc,-c2,0  
+int n=3;
+ideal i = ideal(randommat(1,n*(n-1) div 2,maxideal(1),9));
+print(skewmat(n,i));  // skew matrix of generic linear forms
+==> 0,       4a+b-8c, -a+6b+c,  
+==> -4a-b+8c,0,       -8a+2b-9c,
+==> a-6b-c,  8a-2b+9c,0         
+kill R1;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="submat"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1055.htm#SEC1130"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: power" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1057.htm#SEC1132"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: submat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1045.htm#SEC1120"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Linear algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1079.htm#SEC1154"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: linalg_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1046.htm#SEC1121"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: matrix_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

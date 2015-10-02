@@ -1,0 +1,143 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: locstd</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: locstd">
+<META NAME="keywords" CONTENT="Singular Manual: locstd">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1641"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1565.htm#SEC1640"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: is_regs" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1567.htm#SEC1642"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: milnor" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1547.htm#SEC1622"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: qhmoduli_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1577.htm#SEC1652"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: spcurve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.13.9 locstd </H4>
+<!--docid::SEC1641::-->
+Procedure from library <CODE>sing.lib</CODE> (see  <A HREF="sing_1557.htm#SEC1632">sing_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>locstd (id); id = ideal
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a standard basis for a local degree ordering
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the procedure homogenizes id w.r.t. a new 1st variable @t@, computes
+a SB w.r.t. (dp(1),dp) and substitutes @t@ by 1.
+<BR>Hence the result is a SB with respect to an ordering which sorts
+first w.r.t. the order and then refines it with dp. This is a
+local degree ordering.
+<BR>This is done in order to avoid cancellation of units and thus
+be able to use option(contentSB);
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "sing.lib";
+ring R = 0,(x,y,z),ds;
+ideal i  = xyz+z5,2x2+y3+z7,3z5+y5;
+locstd(i);
+==> _[1]=y5+3z5
+==> _[2]=3x4y3z8-4x3y3z9+6x2y4z9+3y5z10
+==> _[3]=3x4z13-4x3z14+6x2yz14+3y2z15
+==> _[4]=3x4yz12-4x3yz13+6x2y2z13+3y3z14
+==> _[5]=2x2z9+x2y2z8+y3z9
+==> _[6]=2x2y4z5+y7z5-3x2yz9
+==> _[7]=6y2z10-3x2y3z8+4xy3z9-3y4z9
+==> _[8]=3x2y2z8+3y3z9+2xy4z8
+==> _[9]=18z14-4xy6z8+3y7z8-9x2yz12
+==> _[10]=xyz+z5
+==> _[11]=3xz6-y4z5
+==> _[12]=3y3z6+2xy4z5-3xyz9
+==> _[13]=y4z5-2xz9-xy2z8
+==> _[14]=3z10+2xyz9+xy3z8
+==> _[15]=2x2z5+y3z5-xyz8
+==> _[16]=y4z-2xz5+yz8
+==> _[17]=3z6+2xyz5-y2z8
+==> _[18]=2x2+y3+z7
+</FONT></pre></td></tr></table><P>
+
+<A NAME="milnor"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1565.htm#SEC1640"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: is_regs" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1567.htm#SEC1642"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: milnor" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1547.htm#SEC1622"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: qhmoduli_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1577.htm#SEC1652"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: spcurve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,143 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Emaxcont</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Emaxcont">
+<META NAME="keywords" CONTENT="Singular Manual: Emaxcont">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1436"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1360.htm#SEC1435"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: elimrep" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1362.htm#SEC1437"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: cleanunit" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1381.htm#SEC1456"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resgraph_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.2.12 Emaxcont </H4>
+<!--docid::SEC1436::-->
+Procedure from library <CODE>resbinomial.lib</CODE> (see  <A HREF="sing_1349.htm#SEC1424">resbinomial_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>Emaxcont(Coef,Exp,k,n,flag);
+<BR>Coef,Exp,flag lists, k,n, integers
+<BR>Exp is a list of lists of exponents, k=size(Exp)
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>Identify ALL the variables of E-maximal contact
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list with the indexes of the variables of E-maximal contact
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "resbinomial.lib";
+ring r = 0,(x(1),y(2),x(3),y(4),x(5..7),y(8)),dp;
+list flag=identifyvar();
+ideal J=x(1)^3*x(3)-y(2)*y(4)^2,x(5)*y(2)-x(7)*y(4)^2,x(6)^2*(1-y(4)*y(8)^5),x(7)^4*y(8)^2;
+list L=data(J,4,8);
+list hyp=Emaxcont(L[1],L[2],4,8,flag);
+hyp[1]; // max E-order=0
+==> 0
+hyp[2]; // There are no hypersurfaces of E-maximal contact
+==> empty list
+ring r = 0,(x(1),y(2),x(3),y(4),x(5..7),y(8)),dp;
+==> // ** redefining r **
+list flag=identifyvar();
+==> // ** redefining flag **
+ideal J=x(1)^3*x(3)-y(2)*y(4)^2*x(3),x(5)*y(2)-x(7)*y(4)^2,x(6)^2*(1-y(4)*y(8)^5),x(7)^4*y(8)^2;
+list L=data(J,4,8);
+list hyp=Emaxcont(L[1],L[2],4,8,flag);
+hyp[1]; // the E-order is 1
+==> 1
+hyp[2]; // {x(3)=0},{x(5)=0},{x(7)=0} are hypersurfaces of E-maximal contact
+==> [1]:
+==>    3
+==> [2]:
+==>    7
+==> [3]:
+==>    5
+</FONT></pre></td></tr></table><P>
+
+<A NAME="cleanunit"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1360.htm#SEC1435"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: elimrep" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1362.htm#SEC1437"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: cleanunit" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1381.htm#SEC1456"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resgraph_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

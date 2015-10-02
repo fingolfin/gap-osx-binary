@@ -11,9 +11,6 @@
 #define DISABLE_GMP_CPP 1
 #endif
 
-/* integrate python */
-/* #undef EMBED_PYTHON */
-
 /* Define if GMP is version 3.xxx */
 /* #undef GMP_VERSION_3 */
 
@@ -51,6 +48,11 @@
 
 /* Define to 1 if you have the <factory/factory.h> header file. */
 /* #undef HAVE_FACTORY_FACTORY_H */
+
+/* Define if FLINT is installed */
+#ifndef HAVE_FLINT
+#define HAVE_FLINT 1
+#endif
 
 /* Define to 1 if you have the <float.h> header file. */
 #ifndef HAVE_FLOAT_H
@@ -136,11 +138,6 @@
 /* Define to 1 if you have the <pwd.h> header file. */
 #ifndef HAVE_PWD_H
 #define HAVE_PWD_H 1
-#endif
-
-/* compile python-related stuff */
-#ifndef HAVE_PYTHON
-#define HAVE_PYTHON 1
 #endif
 
 /* Enable RatGB support */
@@ -267,7 +264,7 @@
 
 /* Define to the full name and version of this package. */
 #ifndef PACKAGE_STRING
-#define PACKAGE_STRING "libpolys 4.0.1"
+#define PACKAGE_STRING "libpolys 4.0.2"
 #endif
 
 /* Define to the one symbol short name of this package. */
@@ -282,7 +279,7 @@
 
 /* Define to the version of this package. */
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.0.1"
+#define PACKAGE_VERSION "4.0.2"
 #endif
 
 /* SINGULAR */
@@ -334,7 +331,7 @@
 
 /* Version number of package */
 #ifndef VERSION
-#define VERSION "4.0.1"
+#define VERSION "4.0.2"
 #endif
 
 /* Define to empty if `const' does not conform to ANSI C. */

@@ -1,0 +1,154 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: boolean_ideal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: boolean_ideal">
+<META NAME="keywords" CONTENT="Singular Manual: boolean_ideal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2087"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2011.htm#SEC2086"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: recursive_boolean_poly" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2013.htm#SEC2088"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: boolean_set" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: phindex_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2005.htm#SEC2080"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polybori_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.14.2.7 boolean_ideal </H4>
+<!--docid::SEC2087::-->
+Procedure from library <CODE>polybori.lib</CODE> (see  <A HREF="sing_2005.htm#SEC2080">polybori_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>boolean_ideal(Is[, rb]); Is Ideal, rb boolean ring
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>default: ideal Is in the representation of the boolean ring
+rb==boolean_poly_ring(basering); optional input: rb boolean ring
+<P>
+
+<A NAME="IDX693"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "polybori.lib";
+ring r0=2,x(1..4),lp;
+poly f1=x(1)^2+2*x(2)*(x(3))-x(4)^3;
+poly f2=x(1)^2-x(3)*x(1);
+poly f3=x(2)+5-2*x(1);
+poly f4=x(1)*x(2)-x(3);
+ideal I=f1,f2,f3,f4;
+boolean_ideal(I);
+==> _[1] = x(1) + x(4)
+==> _[2] = x(1)*x(3) + x(1)
+==> _[3] = x(2) + 1
+==> _[4] = x(1)*x(2) + x(3)
+==> 
+ring r1=0,x,Dp;
+poly f1=x3+2*x+1;
+poly f2=x10-x5+2x;
+poly f3=19;
+ideal I=f1,f2,f3;
+boolean_ideal(I);
+==> _[1] = x + 1
+==> _[2] = 0
+==> _[3] = 1
+==> 
+ring r2=32003,(x,y,z),Dp;
+bring bbr2=r2;
+poly f1=xyz+20*x^2*y-3*xz+15;
+poly f2=32002*xy+z2;
+poly f3=19;
+ideal I=f1,f2,f3;
+boolean_ideal(I);
+==> _[1] = x*y*z + x*z + 1
+==> _[2] = x*y + z
+==> _[3] = 1
+==> 
+boolean_ideal(I,bbr2);
+==> _[1] = x*y*z + x*z + 1
+==> _[2] = x*y + z
+==> _[3] = 1
+==> 
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_2006.htm#SEC2081">boolean_std</A>.
+<P>
+
+<A NAME="boolean_set"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2011.htm#SEC2086"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: recursive_boolean_poly" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2013.htm#SEC2088"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: boolean_set" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: phindex_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2005.htm#SEC2080"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polybori_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

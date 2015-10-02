@@ -1,0 +1,152 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: par2varRing</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: par2varRing">
+<META NAME="keywords" CONTENT="Singular Manual: par2varRing">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1004"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_928.htm#SEC1003"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: qslimgb" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_930.htm#SEC1005"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: General purpose" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_926.htm#SEC1001"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: SINGULAR libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_930.htm#SEC1005"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General purpose" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_927.htm#SEC1002"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: standard_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.1.2 par2varRing </H3>
+<!--docid::SEC1004::-->
+Procedure from library <CODE>standard.lib</CODE> (see  <A HREF="sing_927.htm#SEC1002">standard_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>par2varRing([l]); l list of ideals/modules [default:l=empty list]
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, say L, with L[1] a ring where the parameters of the
+basering have been converted to an additional last block of
+variables, all of weight 1, and ordering dp.
+<BR>If a list l with l[i] an ideal/module is given, then
+<BR>l[i] + minpoly*freemodule(nrows(l[i])) is mapped to an ideal/module
+in L[1] with name Id(i).
+<BR>If the basering has no parameters then L[1] is the basering.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>   ring R = (0,x),(y,z,u,v),lp;
+minpoly = x2+1;
+ideal i = x3,x2+y+z+u+v,xyzuv-1; i;
+==> i[1]=(-x)
+==> i[2]=y+z+u+v-1
+==> i[3]=(x)*yzuv-1
+def P = par2varRing(i)[1]; P;
+==> //   characteristic : 0
+==> //   number of vars : 5
+==> //        block   1 : ordering lp
+==> //                  : names    y z u v
+==> //        block   2 : ordering dp
+==> //                  : names    x
+==> //        block   3 : ordering C
+setring(P);
+Id(1);
+==> Id(1)[1]=-x
+==> Id(1)[2]=y+z+u+v-1
+==> Id(1)[3]=yzuvx-1
+==> Id(1)[4]=x2+1
+setring R;
+module m = x3*[1,1,1], (xyzuv-1)*[1,0,1];
+def Q = par2varRing(m)[1]; Q;
+==> //   characteristic : 0
+==> //   number of vars : 5
+==> //        block   1 : ordering lp
+==> //                  : names    y z u v
+==> //        block   2 : ordering dp
+==> //                  : names    x
+==> //        block   3 : ordering C
+setring(Q);
+print(Id(1));
+==> -x,yzuvx-1,x2+1,0,   0,  
+==> -x,0,      0,   x2+1,0,  
+==> -x,yzuvx-1,0,   0,   x2+1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="General purpose"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_928.htm#SEC1003"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: qslimgb" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_930.htm#SEC1005"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: General purpose" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_926.htm#SEC1001"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: SINGULAR libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_930.htm#SEC1005"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General purpose" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_927.htm#SEC1002"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: standard_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

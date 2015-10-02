@@ -1,0 +1,217 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: simplex</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: simplex">
+<META NAME="keywords" CONTENT="Singular Manual: simplex">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC432"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_392.htm#SEC431"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: setring" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_394.htm#SEC433"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: simplify" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.134 simplex </H3>
+<!--docid::SEC432::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>simplex (</CODE> matrix_expression<CODE>,</CODE> int_expression<CODE>,</CODE>
+int_expression<CODE>,</CODE> int_expression<CODE>,</CODE> int_expression<CODE>,</CODE>
+int_expression<CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>list
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>perform the simplex algorithm for the tableau given by the input, e.g.
+<CODE>simplex (</CODE>M, m, n, m1, m2, m3 <CODE>)</CODE>:
+<P>
+
+<DL COMPACT>
+<DT>M matrix of numbers :
+<DD>     first row describing the objective function (maximize problem),
+     the remaining rows describing constraints;
+<DT>m, n, m1, m2, m3 int :
+<DD>     n = number of variables;
+     m = total number of constraints;
+     m1 = number of inequalities "&lt;=" (rows 2 ... m1+1 of M);
+     m2 = number of inequalities "&gt;=" (rows m1+2 ... m1+m2+1 of M);
+     m3 = number of equalities.
+</DL>
+<P>
+
+The following assumptions are made:
+<DL COMPACT>
+<DT>* ground field is of type <CODE>(real,N)</CODE>, N&gt;=4;
+<DD><DT>* the matrix M is of size m x n;
+<DD><DT>* m=m1+m2+m3;
+<DD><DT>* the entries M[2,1] ,..., M[m+1,1] are non-negative;
+<DD><DT>* the variables x(i) are non-negative;
+<DD><DT>* a row  b, a(1) ,..., a(n)  corresponds to  b+a(1)x(1)+...+a(n)x(n);
+<DD><DT>* for a &lt;=, &gt;=, or == constraint: add "in mind" &gt;=0, &lt;=0, or ==0.
+<DD></DL>
+<P>
+
+The output is a list L with
+<DL COMPACT>
+<DT>* L[1] = matrix
+<DD><DT>* L[2] = int:
+<DD>    0 = finite solution found;  1 = unbounded;  -1 = no solution;
+   -2 = error occured;
+<DT>* L[3] = intvec :
+<DD>   L[3][k] = number of variable which corresponds to row k+1 of L[1];
+<DT>* L[4] = intvec :
+<DD>   L[4][j] = number of variable which is represented by column j+1 of L[1]
+   ("non-basis variable");
+<DT>* L[5] = int :
+<DD>   number of constraints (= m);
+<DT>* L[6] = int :
+<DD>   number of variables (= n).
+</DL>
+<P>
+
+The solution can be read off the first column of L[1] as it is done by the
+procedure  <A HREF="sing_1689.htm#SEC1764">simplexOut</A> in <CODE>solve.lib</CODE>.
+</P><P>
+
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>    ring r = (real,10),(x),lp;
+
+    // consider the max. problem:
+    //
+    //    maximize  x(1) + x(2) + 3*x(3) - 0.5*x(4)
+    //
+    //  with constraints:   x(1) +          2*x(3)          &lt;= 740
+    //                             2*x(2)          - 7*x(4) &lt;=   0
+    //                               x(2) -   x(3) + 2*x(4) &gt;=   0.5
+    //                      x(1) +   x(2) +   x(3) +   x(4)  =   9
+    //
+    matrix sm[5][5]=(  0, 1, 1, 3,-0.5,
+                     740,-1, 0,-2, 0,
+                       0, 0,-2, 0, 7,
+                     0.5, 0,-1, 1,-2,
+                       9,-1,-1,-1,-1);
+
+    int n = 4;  // number of constraints
+    int m = 4;  // number of variables
+    int m1= 2;  // number of &lt;= constraints
+    int m2= 1;  // number of &gt;= constraints
+    int m3= 1;  // number of == constraints
+    simplex(sm, n, m, m1, m2, m3);
+==> [1]:
+==>    _[1,1]=17.025
+==>    _[1,2]=-0.95
+==>    _[1,3]=-0.05
+==>    _[1,4]=1.95
+==>    _[1,5]=-1.05
+==>    _[2,1]=730.55
+==>    _[2,2]=0.1
+==>    _[2,3]=-0.1
+==>    _[2,4]=-1.1
+==>    _[2,5]=0.9
+==>    _[3,1]=3.325
+==>    _[3,2]=-0.35
+==>    _[3,3]=-0.15
+==>    _[3,4]=0.35
+==>    _[3,5]=0.35
+==>    _[4,1]=0.95
+==>    _[4,2]=-0.1
+==>    _[4,3]=0.1
+==>    _[4,4]=0.1
+==>    _[4,5]=0.1
+==>    _[5,1]=4.725
+==>    _[5,2]=-0.55
+==>    _[5,3]=0.05
+==>    _[5,4]=0.55
+==>    _[5,5]=-0.45
+==> [2]:
+==>    0
+==> [3]:
+==>    5,2,4,3
+==> [4]:
+==>    1,6,8,7
+==> [5]:
+==>    4
+==> [6]:
+==>    4
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_1689.htm#SEC1764">simplexOut</A>.
+<A NAME="simplify"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_392.htm#SEC431"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: setring" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_394.htm#SEC433"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: simplify" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

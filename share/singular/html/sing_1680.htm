@@ -1,0 +1,231 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: idealSplit</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: idealSplit">
+<META NAME="keywords" CONTENT="Singular Manual: idealSplit">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1755"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1679.htm#SEC1754"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: valvars" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: solve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1659.htm#SEC1734"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ffsolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: solve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1666.htm#SEC1741"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: presolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.8.2.14 idealSplit </H4>
+<!--docid::SEC1755::-->
+Procedure from library <CODE>presolve.lib</CODE> (see  <A HREF="sing_1666.htm#SEC1741">presolve_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>idealSplit(id,timeF,timeS); id ideal and optional
+<BR>timeF, timeS integers to bound the time which can be used
+for factorization resp. standard basis computation
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list of ideals such that their intersection
+<BR>has the same radical as id
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "presolve.lib";
+ring r=32003,(b,s,t,u,v,w,x,y,z),dp;
+ideal i=
+bv+su,
+bw+tu,
+sw+tv,
+by+sx,
+bz+tx,
+sz+ty,
+uy+vx,
+uz+wx,
+vz+wy,
+bvz;
+idealSplit(i);
+==> [1]:
+==>    _[1]=x
+==>    _[2]=u
+==>    _[3]=t
+==>    _[4]=s
+==>    _[5]=b
+==>    _[6]=wy+vz
+==> [2]:
+==>    _[1]=z
+==>    _[2]=w
+==>    _[3]=t
+==>    _[4]=s
+==>    _[5]=b
+==>    _[6]=vx+uy
+==> [3]:
+==>    _[1]=z
+==>    _[2]=x
+==>    _[3]=w
+==>    _[4]=u
+==>    _[5]=t
+==>    _[6]=b
+==> [4]:
+==>    _[1]=z
+==>    _[2]=y
+==>    _[3]=x
+==>    _[4]=t
+==>    _[5]=s
+==>    _[6]=b
+==> [5]:
+==>    _[1]=z
+==>    _[2]=y
+==>    _[3]=x
+==>    _[4]=u
+==>    _[5]=b
+==>    _[6]=tv+sw
+==> [6]:
+==>    _[1]=z
+==>    _[2]=y
+==>    _[3]=x
+==>    _[4]=w
+==>    _[5]=t
+==>    _[6]=su+bv
+==> [7]:
+==>    _[1]=w
+==>    _[2]=v
+==>    _[3]=u
+==>    _[4]=t
+==>    _[5]=s
+==>    _[6]=b
+==> [8]:
+==>    _[1]=x
+==>    _[2]=w
+==>    _[3]=v
+==>    _[4]=u
+==>    _[5]=b
+==>    _[6]=ty+sz
+==> [9]:
+==>    _[1]=z
+==>    _[2]=w
+==>    _[3]=v
+==>    _[4]=u
+==>    _[5]=t
+==>    _[6]=sx+by
+==> [10]:
+==>    _[1]=z
+==>    _[2]=y
+==>    _[3]=x
+==>    _[4]=w
+==>    _[5]=v
+==>    _[6]=u
+==> [11]:
+==>    _[1]=y
+==>    _[2]=v
+==>    _[3]=t
+==>    _[4]=s
+==>    _[5]=b
+==>    _[6]=wx+uz
+==> [12]:
+==>    _[1]=y
+==>    _[2]=x
+==>    _[3]=v
+==>    _[4]=u
+==>    _[5]=s
+==>    _[6]=b
+==> [13]:
+==>    _[1]=z
+==>    _[2]=y
+==>    _[3]=x
+==>    _[4]=v
+==>    _[5]=s
+==>    _[6]=tu+bw
+==> [14]:
+==>    _[1]=z
+==>    _[2]=y
+==>    _[3]=w
+==>    _[4]=v
+==>    _[5]=t
+==>    _[6]=s
+==> [15]:
+==>    _[1]=y
+==>    _[2]=w
+==>    _[3]=v
+==>    _[4]=u
+==>    _[5]=s
+==>    _[6]=tx+bz
+</FONT></pre></td></tr></table><A NAME="solve_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1679.htm#SEC1754"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: valvars" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: solve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1659.htm#SEC1734"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ffsolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: solve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1666.htm#SEC1741"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: presolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

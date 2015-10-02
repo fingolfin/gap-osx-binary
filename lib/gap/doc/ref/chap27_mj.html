@@ -43,9 +43,10 @@
 <div class="ContSSBlock">
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X7A17EDF8785C9F58">27.3-1 IsStringRep</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X7CE2415F7FEC5809">27.3-2 ConvertToStringRep</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X7D944D507CBB24CD">27.3-3 IsEmptyString</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X836078DC829A8221">27.3-4 EmptyString</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X7DA671FC7F490C16">27.3-5 CharsFamily</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X7FFC464683CC8023">27.3-3 CopyToStringRep</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X7D944D507CBB24CD">27.3-4 IsEmptyString</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X836078DC829A8221">27.3-5 EmptyString</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap27_mj.html#X7DA671FC7F490C16">27.3-6 CharsFamily</a></span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap27_mj.html#X82F980A17FE84AA4">27.4 <span class="Heading">Recognizing Characters</span></a>
 </span>
@@ -356,9 +357,16 @@ This is another line.
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ConvertToStringRep</code>( <var class="Arg">obj</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>If <var class="Arg">obj</var> is a dense internally represented list of characters then <code class="func">ConvertToStringRep</code> changes the representation to <code class="func">IsStringRep</code> (<a href="chap27_mj.html#X7A17EDF8785C9F58"><span class="RefLink">27.3-1</span></a>). This is useful in particular for converting the empty list <code class="code">[]</code>, which usually is in <code class="code">IsPlistRep</code>, to <code class="func">IsStringRep</code> (<a href="chap27_mj.html#X7A17EDF8785C9F58"><span class="RefLink">27.3-1</span></a>). If <var class="Arg">obj</var> is not a string then <code class="func">ConvertToStringRep</code> signals an error.</p>
 
+<p><a id="X7FFC464683CC8023" name="X7FFC464683CC8023"></a></p>
+
+<h5>27.3-3 CopyToStringRep</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CopyToStringRep</code>( <var class="Arg">obj</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>If <var class="Arg">obj</var> is a dense internally represented list of characters then <code class="func">CopyToStringRep</code> copies <var class="Arg">obj</var> to a new object with representation <code class="func">IsStringRep</code> (<a href="chap27_mj.html#X7A17EDF8785C9F58"><span class="RefLink">27.3-1</span></a>). If <var class="Arg">obj</var> is not a string then <code class="func">CopyToStringRep</code> signals an error.</p>
+
 <p><a id="X7D944D507CBB24CD" name="X7D944D507CBB24CD"></a></p>
 
-<h5>27.3-3 IsEmptyString</h5>
+<h5>27.3-4 IsEmptyString</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsEmptyString</code>( <var class="Arg">str</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p><code class="func">IsEmptyString</code> returns <code class="keyw">true</code> if <var class="Arg">str</var> is the empty string in the representation <code class="func">IsStringRep</code> (<a href="chap27_mj.html#X7A17EDF8785C9F58"><span class="RefLink">27.3-1</span></a>), and <code class="keyw">false</code> otherwise. Note that the empty list <code class="code">[]</code> and the empty string <code class="code">""</code> have the same type, the recommended way to distinguish them is via <code class="func">IsEmptyString</code>. For formatted printing, this distinction is sometimes necessary.</p>
@@ -386,7 +394,7 @@ true
 
 <p><a id="X836078DC829A8221" name="X836078DC829A8221"></a></p>
 
-<h5>27.3-4 EmptyString</h5>
+<h5>27.3-5 EmptyString</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EmptyString</code>( <var class="Arg">len</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: a string</p>
@@ -402,7 +410,7 @@ true
 
 <p><a id="X7DA671FC7F490C16" name="X7DA671FC7F490C16"></a></p>
 
-<h5>27.3-5 CharsFamily</h5>
+<h5>27.3-6 CharsFamily</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CharsFamily</code></td><td class="tdright">( global variable )</td></tr></table></div>
 <p>Each character lies in the family <code class="func">CharsFamily</code>, each nonempty string lies in the collections family of this family. Note the subtle differences between the empty list <code class="code">[]</code> and the empty string <code class="code">""</code> when both are printed.</p>

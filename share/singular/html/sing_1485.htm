@@ -1,0 +1,181 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: esIdeal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: esIdeal">
+<META NAME="keywords" CONTENT="Singular Manual: esIdeal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1560"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1484.htm#SEC1559"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tau_es" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1486.htm#SEC1561"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: esStratum" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: deform_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: equising_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.6.2 esIdeal </H4>
+<!--docid::SEC1560::-->
+Procedure from library <CODE>equising.lib</CODE> (see  <A HREF="sing_1483.htm#SEC1558">equising_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>esIdeal(f[,any]]); f poly
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f is a reduced bivariate polynomial, the basering has precisely
+two variables, is local and no qring, and the characteristic of
+the ground field does not divide mult(f).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>if called with only one parameter: list of two ideals,
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">          _[1]:  equisingularity ideal of f (in sense of Wahl),
+          _[2]:  ideal of equisingularity with fixed position of the
+                 singularity;
+</pre></td></tr></table>if called with more than one parameter: list of three ideals,
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">          _[1]:  equisingularity ideal of f (in sense of Wahl)
+          _[2]:  ideal of equisingularity with fixed position of the
+                 singularity;
+          _[3]:  ideal of all g such that the deformation defined by f+eg
+                 (e^2=0) is isomorphic to an equisingular deformation
+                 of V(f) with all equimultiple sections being trivial.
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>if some of the above condition is not satisfied then return
+value is list(0,0).
+<P>
+
+<A NAME="IDX518"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "equising.lib";
+ring r=0,(x,y),ds;
+poly f=x7+y7+(x-y)^2*x2y2;
+list K=esIdeal(f);
+==> polynomial is Newton degenerate !
+==> 
+==> // 
+==> // versal deformation with triv. section
+==> // =====================================
+==> // 
+==> // 
+==> // Compute equisingularity Stratum over Spec(C[t]/t^2)
+==> // ===================================================
+==> // 
+==> // finished
+==> // 
+option(redSB);
+// Wahl's equisingularity ideal:
+std(K[1]);
+==> _[1]=4x4y-10x2y3+6xy4+21x6+14y6
+==> _[2]=4x3y2-6x2y3+2xy4+7x6
+==> _[3]=x2y4-xy5
+==> _[4]=x7
+==> _[5]=xy6
+==> _[6]=y7
+ring rr=0,(x,y),ds;
+poly f=x4+4x3y+6x2y2+4xy3+y4+2x2y15+4xy16+2y17+xy23+y24+y30+y31;
+list K=esIdeal(f);
+==> polynomial is Newton degenerate !
+==> 
+==> // 
+==> // versal deformation with triv. section
+==> // =====================================
+==> // 
+==> // 
+==> // Compute equisingularity Stratum over Spec(C[t]/t^2)
+==> // ===================================================
+==> // 
+==> // finished
+==> // 
+vdim(std(K[1]));
+==> 68
+// the latter should be equal to:
+tau_es(f);
+==> 68
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1486.htm#SEC1561">esStratum</A>;
+ <A HREF="sing_1484.htm#SEC1559">tau_es</A>.
+<P>
+
+<A NAME="esStratum"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1484.htm#SEC1559"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tau_es" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1486.htm#SEC1561"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: esStratum" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1478.htm#SEC1553"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: deform_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1489.htm#SEC1564"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gmssing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1483.htm#SEC1558"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: equising_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

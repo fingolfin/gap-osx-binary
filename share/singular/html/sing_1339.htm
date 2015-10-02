@@ -1,0 +1,167 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: invertBirMap</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: invertBirMap">
+<META NAME="keywords" CONTENT="Singular Manual: invertBirMap">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1414"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1338.htm#SEC1413"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: adjointIdeal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1340.htm#SEC1415"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: paraPlaneCurve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.1.2 invertBirMap </H4>
+<!--docid::SEC1414::-->
+Procedure from library <CODE>paraplanecurves.lib</CODE> (see  <A HREF="sing_1337.htm#SEC1412">paraplanecurves_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>invertBirMap(phi, I); phi ideal, I ideal
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The ideal phi in the basering R represents a birational map of the
+variety given by the ideal I in R to its image in projective space
+P = PP^(size(phi)-1).
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The procedure might fail or give a wrong output if phi does
+not define a birational map.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring, the coordinate ring of P, with an ideal named J and an ideal
+named psi.<BR>
+The ideal J defines the image of phi.<BR>
+The ideal psi gives the inverse of phi.<BR>
+Note that the entries of psi should be considered as representatives
+of classes in the quotient ring R/J.<BR>
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>We compute the ideal I(G) in R**S of the graph G of phi.<BR>
+The ideal J is given by the intersection of I(G) with S.<BR>
+The map psi is given by a relation mod J of those relations
+in I(G) which are linear in the variables of R.<BR>
+<P>
+
+<A NAME="IDX479"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "paraplanecurves.lib";
+ring R = 0,(x,y,z),dp;
+poly f = y^8-x^3*(z+x)^5;
+ideal adj = adjointIdeal(f);
+def Rn = invertBirMap(adj,ideal(f));
+==> // 'invertBirMap' created a ring together with two ideals J and psi.
+==> // Supposing you typed, say,  def RPn = invertBirMap(phi,I);
+==> // you may access the ideals by typing
+==> //      setring RPn; J; psi;
+setring(Rn);
+J;
+==> J[1]=y(5)*y(6)-y(4)*y(7)
+==> J[2]=y(4)*y(6)-y(3)*y(7)
+==> J[3]=y(2)*y(6)-y(1)*y(7)
+==> J[4]=y(4)*y(5)-y(2)*y(7)
+==> J[5]=y(3)*y(5)-y(1)*y(7)
+==> J[6]=y(1)*y(5)-y(7)^2
+==> J[7]=y(4)^2-y(1)*y(7)
+==> J[8]=y(3)*y(4)-y(1)*y(6)
+==> J[9]=y(2)*y(4)-y(7)^2
+==> J[10]=y(1)*y(4)-y(6)*y(7)
+==> J[11]=y(2)*y(3)-y(6)*y(7)
+==> J[12]=y(1)*y(3)-y(6)^2
+==> J[13]=y(2)^2-y(5)*y(7)
+==> J[14]=y(1)*y(2)-y(4)*y(7)
+==> J[15]=y(1)^2-y(3)*y(7)
+==> J[16]=y(1)*y(6)^2-y(3)^2*y(7)
+==> J[17]=y(6)^4-y(3)^3*y(7)
+psi;
+==> psi[1]=-y(6)^2
+==> psi[2]=-y(4)*y(7)
+==> psi[3]=y(6)^2-y(5)*y(7)
+</FONT></pre></td></tr></table><P>
+
+<A NAME="paraPlaneCurve"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1338.htm#SEC1413"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: adjointIdeal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1340.htm#SEC1415"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: paraPlaneCurve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

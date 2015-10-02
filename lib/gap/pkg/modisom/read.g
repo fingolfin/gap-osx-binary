@@ -63,6 +63,7 @@ ReadPkg("modisom", "gap/grpalg/basis.gi");
 ReadPkg("modisom", "gap/grpalg/tables.gi");
 ReadPkg("modisom", "gap/grpalg/autiso.gi");
 ReadPkg("modisom", "gap/grpalg/check.gi");
+ReadPkg("modisom", "gap/grpalg/head.gi");
 
 ReadPkg("modisom", "gap/grpalg/detbins.gi");
 ReadPkg("modisom", "gap/grpalg/chkbins.gi");

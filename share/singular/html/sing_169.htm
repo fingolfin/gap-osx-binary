@@ -1,0 +1,168 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: string type cast</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: string type cast">
+<META NAME="keywords" CONTENT="Singular Manual: string type cast">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC208"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_168.htm#SEC207"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: string expressions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_170.htm#SEC209"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: string operations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_160.htm#SEC199"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ring" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_172.htm#SEC211"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: vector" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_166.htm#SEC205"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: string" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.19.3 string type cast </H3>
+<!--docid::SEC208::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>string (</CODE> expression [, expression_2, ... expression_n]<CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>string
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>Converts each expression to a string, where expression can be of any
+type. The concatenated string of all converted expressions is returned.
+<P>
+
+<BR>The elements of intvec, intmat, ideal, module, matrix, and list, are
+separated by a comma. No newlines are inserted.
+<BR>Not defined elements of a list are omitted.
+<BR>For link, the name of the link is used.
+<BR>For map, the ideal defining the mapping is converted.
+</P><P>
+
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>When applied to a list, elements of type intvec, intmat, ideal, module,
+matrix, and list become indistinguishable.
+<P>
+
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  string("1+1=", 2);
+==> 1+1=2
+  string(intvec(1,2,3,4));
+==> 1,2,3,4
+  string(intmat(intvec(1,2,3,4), 2, 2));
+==> 1,2,3,4 
+  ring r;
+  string(r);
+==> (32003),(x,y,z),(dp(3),C)
+  string(ideal(x,y));
+==> x,y
+  qring R = std(ideal(x,y));
+  string(R);
+==> (32003),(x,y,z),(dp(3),C)
+  map phi = r, ideal(x,z);
+  string(phi);
+==> x,z
+  list l;
+  string(l);
+==> 
+  l[3] = 1;
+  string(l); // notice that l[1],l[2] are omitted
+==> 1
+  l[2] = l;
+  l;
+==> [2]:
+==>    [3]:
+==>       1
+==> [3]:
+==>    1
+  string(l); // notice that lists of list is flattened
+==> 1,1
+  l[1] = intvec(1,2,3);
+  l;
+==> [1]:
+==>    1,2,3
+==> [2]:
+==>    [3]:
+==>       1
+==> [3]:
+==>    1
+  string(l); // notice that intvec elements are not distinguishable
+==> 1,2,3,1,1
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_39.htm#SEC66">Type conversion and casting</A>;
+ <A HREF="sing_373.htm#SEC412">print</A>;
+ <A HREF="sing_166.htm#SEC205">string</A>.
+<P>
+
+<A NAME="string operations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_168.htm#SEC207"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: string expressions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_170.htm#SEC209"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: string operations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_160.htm#SEC199"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ring" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_172.htm#SEC211"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: vector" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_166.htm#SEC205"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: string" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

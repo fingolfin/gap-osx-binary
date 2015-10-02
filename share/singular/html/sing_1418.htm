@@ -1,0 +1,177 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: sheafCoh</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: sheafCoh">
+<META NAME="keywords" CONTENT="Singular Manual: sheafCoh">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1493"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1417.htm#SEC1492"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: sheafCohBGG2" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1419.htm#SEC1494"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: dimH" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1402.htm#SEC1477"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: reszeta_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1422.htm#SEC1497"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: JMBTest_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1412.htm#SEC1487"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sheafcoh_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.7.6 sheafCoh </H4>
+<!--docid::SEC1493::-->
+Procedure from library <CODE>sheafcoh.lib</CODE> (see  <A HREF="sing_1412.htm#SEC1487">sheafcoh_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>sheafCoh(M,l,h); M module, l,h int
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD><CODE>M</CODE> is graded, and it comes assigned with an admissible degree
+vector as an attribute, <CODE>h&gt;=l</CODE>. The basering <CODE>S</CODE> has
+<CODE>n+1</CODE> variables.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>intmat, cohomology of twists of the coherent sheaf F on P^n
+associated to coker(M). The range of twists is determined by <CODE>l</CODE>,
+<CODE>h</CODE>.
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>The intmat is displayed in a diagram of the following form: <BR>
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">                l            l+1                      h
+  ----------------------------------------------------------
+      n:     h^n(F(l))    h^n(F(l+1))   ......    h^n(F(h))
+           ...............................................
+      1:     h^1(F(l))    h^1(F(l+1))   ......    h^1(F(h))
+      0:     h^0(F(l))    h^0(F(l+1))   ......    h^0(F(h))
+  ----------------------------------------------------------
+    chi:     chi(F(l))    chi(F(l+1))   ......    chi(F(h))
+</pre></td></tr></table>A <CODE>'-'</CODE> in the diagram refers to a zero entry.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The procedure is based on local duality as described in [Eisenbud:
+Computing cohomology. In Vasconcelos: Computational methods in
+commutative algebra and algebraic geometry. Springer (1998)].<BR>
+By default, the procedure uses <CODE>mres</CODE> to compute the Ext
+modules. If called with the additional parameter <CODE>"sres"</CODE>,
+the <CODE>sres</CODE> command is used instead.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "sheafcoh.lib";
+//
+// cohomology of structure sheaf on P^4:
+//-------------------------------------------
+ring r=0,x(1..5),dp;
+module M=0;
+def A=sheafCoh(0,-7,2);
+==>       -7  -6  -5  -4  -3  -2  -1   0   1   2
+==> --------------------------------------------
+==>   4:  15   5   1   -   -   -   -   -   -   -
+==>   3:   -   -   -   -   -   -   -   -   -   -
+==>   2:   -   -   -   -   -   -   -   -   -   -
+==>   1:   -   -   -   -   -   -   -   -   -   -
+==>   0:   -   -   -   -   -   -   -   1   5  15
+==> --------------------------------------------
+==> chi:  15   5   1   0   0   0   0   1   5  15
+//
+// cohomology of cotangential bundle on P^3:
+//-------------------------------------------
+ring R=0,(x,y,z,u),dp;
+resolution T1=mres(maxideal(1),0);
+module M=T1[3];
+intvec v=2,2,2,2,2,2;
+attrib(M,"isHomog",v);
+def B=sheafCoh(M,-6,2);
+==>       -6  -5  -4  -3  -2  -1   0   1   2
+==> ----------------------------------------
+==>   3:  70  36  15   4   -   -   -   -   -
+==>   2:   -   -   -   -   -   -   -   -   -
+==>   1:   -   -   -   -   -   -   1   -   -
+==>   0:   -   -   -   -   -   -   -   -   6
+==> ----------------------------------------
+==> chi: -70 -36 -15  -4   0   0  -1   0   6
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1419.htm#SEC1494">dimH</A>;
+ <A HREF="sing_1416.htm#SEC1491">sheafCohBGG</A>.
+<P>
+
+<A NAME="dimH"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1417.htm#SEC1492"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: sheafCohBGG2" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1419.htm#SEC1494"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: dimH" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1402.htm#SEC1477"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: reszeta_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1422.htm#SEC1497"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: JMBTest_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1412.htm#SEC1487"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sheafcoh_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

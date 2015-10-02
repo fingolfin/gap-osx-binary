@@ -335,7 +335,7 @@
 
 /* Define to the full name and version of this package. */
 #ifndef PACKAGE_STRING
-#define PACKAGE_STRING "singular 4.0.1"
+#define PACKAGE_STRING "singular 4.0.2"
 #endif
 
 /* Define to the one symbol short name of this package. */
@@ -350,7 +350,7 @@
 
 /* Define to the version of this package. */
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.0.1"
+#define PACKAGE_VERSION "4.0.2"
 #endif
 
 /* Define to necessary symbol if this constant uses a non-standard name on
@@ -439,12 +439,12 @@
 
 /* Version number of package */
 #ifndef VERSION
-#define VERSION "4.0.1"
+#define VERSION "4.0.2"
 #endif
 
 /* release date */
 #ifndef VERSION_DATE
-#define VERSION_DATE "Sep 2014"
+#define VERSION_DATE "Feb 2015"
 #endif
 
 /* Define to 1 if on MINIX. */

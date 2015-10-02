@@ -1,0 +1,160 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: eta</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: eta">
+<META NAME="keywords" CONTENT="Singular Manual: eta">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2027"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1951.htm#SEC2026"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: splitPolygon" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1953.htm#SEC2028"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: findOrientedBoundary" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.1.11 eta </H4>
+<!--docid::SEC2027::-->
+Procedure from library <CODE>polymake.lib</CODE> (see  <A HREF="sing_1941.htm#SEC2016">polymake_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>eta(triang,polygon); triang, polygon list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>polygon has the format of the output of splitPolygon, i.e. it is a
+list with three entries describing a convex lattice polygon in the
+following way:
+<BR> polygon[1] : is a list of lists; for each i the entry polygon[1][i][1]
+is a lattice point which is a vertex of the lattice
+<BR>polygon, and polygon[1][i][2] is an integer assigned to
+this lattice point as identifying index
+<BR> polygon[2] : is a list of lists; for each vertex of the polygon,
+i.e. for each entry in polygon[1], it contains a list
+polygon[2][i], which contains the lattice points on the
+facet with endpoints polygon[1][i] and polygon[1][i+1]
+- i considered mod size(polygon[1]);
+<BR>each such lattice point contributes an entry
+<BR>polygon[2][i][j][1] which is an integer
+<BR>vector giving the coordinate of the lattice point and an
+entry polygon[2][i][j][2] which is the identifying index
+<BR> polygon[3] : is a list of lists, where each entry corresponds to a
+lattice point in the interior of the polygon, with
+<BR>polygon[3][j][1] being the coordinates of the point
+<BR>and polygon[3][j][2] being the identifying index;
+<BR> triang is a list of integer vectors all of size three describing a
+triangulation of the polygon described by polygon; if an entry of
+triang is the vector (i,j,k) then the triangle is built by the vertices
+with indices i, j and k
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>intvec, the integer vector eta describing that vertex of the Newton
+polytope discriminant of the polygone whose dual cone in the
+Groebner fan contains the cone of the secondary fan of the
+polygon corresponding to the given triangulation
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>for a better description of eta see Gelfand, Kapranov,
+<BR>Zelevinski: Discriminants, Resultants and multidimensional Determinants.
+Chapter 10.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "polymake.lib";
+// the lattice polygon spanned by the points (0,0), (3,0) and (0,3)
+// with all integer points as markings
+list polygon=intvec(1,1),intvec(3,0),intvec(2,0),intvec(1,0),
+intvec(0,0),intvec(2,1),intvec(0,1),intvec(1,2),
+intvec(0,2),intvec(0,3);
+// split the polygon in its vertices, its facets and its interior points
+list sp=splitPolygon(polygon);
+// define a triangulation by connecting the only interior point
+//        with the vertices
+list triang=intvec(1,2,5),intvec(1,5,10),intvec(1,5,10);
+// compute the eta-vector of this triangulation
+eta(triang,sp);
+</FONT></pre></td></tr></table><P>
+
+<A NAME="findOrientedBoundary"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1951.htm#SEC2026"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: splitPolygon" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1953.htm#SEC2028"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: findOrientedBoundary" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1940.htm#SEC2015"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tropical Geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1941.htm#SEC2016"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: polymake_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

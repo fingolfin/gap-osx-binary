@@ -1,0 +1,182 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: std (plural)</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: std (plural)">
+<META NAME="keywords" CONTENT="Singular Manual: std (plural)">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC567"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_527.htm#SEC566"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: slimgb (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_529.htm#SEC568"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: subst (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 7.3.26 std (plural) </H3>
+<!--docid::SEC567::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>std (</CODE> ideal_expression<CODE>)</CODE>
+<BR><CODE>std (</CODE> module_expression<CODE>)</CODE>
+<BR><CODE>std (</CODE> ideal_expression<CODE>,</CODE> poly_expression <CODE>)</CODE>
+<BR><CODE>std (</CODE> module_expression<CODE>,</CODE> vector_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>ideal or module
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>returns a left Groebner basis (see  <A HREF="sing_535.htm#SEC578">Groebner bases in G-algebras</A> for a definition)
+of an ideal or module with respect to the
+monomial ordering of the basering.
+<P>
+
+Use an optional second argument of type poly, resp. vector,
+to construct the Groebner basis from an already computed one (given as the
+first argument) and one additional generator (the second argument).
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>To view the progress of long running computations, use
+<CODE>option(prot)</CODE>.
+(see  <A HREF="sing_364.htm#SEC403">option</A>(prot)).
+<P>
+
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ncalg.lib";
+option(prot);
+def R = makeUsl2();
+// this algebra is U(sl_2)
+setring R;
+ideal I = e2, f2, h2-1;
+I=std(I);
+==> 2(2)s
+==> s
+==> s
+==> 3s
+==> (3)2(2)s
+==> s
+==> (4)(3)(2)3s
+==> 2(4)(3)(2)32product criterion:6 chain criterion:3
+I;
+==> I[1]=h2-1
+==> I[2]=fh-f
+==> I[3]=eh+e
+==> I[4]=f2
+==> I[5]=2ef-h-1
+==> I[6]=e2
+kill R;
+//------------------------------------------
+def RQ = makeQso3(3);
+// this algebra is U'_q(so_3),
+// where Q is a 6th root of unity
+setring RQ;
+RQ;
+==> //   characteristic : 0
+==> //   1 parameter    : Q 
+==> //   minpoly        : (Q2-Q+1)
+==> //   number of vars : 3
+==> //        block   1 : ordering dp
+==> //                  : names    x y z
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    yx=(Q-1)*xy+(-Q)*z
+==> //    zx=(-Q)*xz+(-Q+1)*y
+==> //    zy=(Q-1)*yz+(-Q)*x
+ideal J=x2, y2, z2;
+J=std(J);
+==> 2(2)s
+==> s
+==> s
+==> 3s
+==> (4)s
+==> 2(3)s
+==> (5)s
+==> (6)s
+==> 1(8)s
+==> (7)(5)s
+==> (3)(2)product criterion:0 chain criterion:17
+J;
+==> J[1]=z
+==> J[2]=y
+==> J[3]=x
+</FONT></pre></td></tr></table></DL>
+See also
+ <A HREF="sing_471.htm#SEC510">ideal (plural)</A>;
+ <A HREF="sing_498.htm#SEC537">ring (plural)</A>.
+<P>
+
+<A NAME="subst (plural)"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_527.htm#SEC566"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: slimgb (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_529.htm#SEC568"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: subst (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

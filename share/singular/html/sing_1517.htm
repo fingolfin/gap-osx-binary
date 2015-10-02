@@ -1,0 +1,171 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: extdevelop</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: extdevelop">
+<META NAME="keywords" CONTENT="Singular Manual: extdevelop">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1592"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1516.htm#SEC1591"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: develop" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1518.htm#SEC1593"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: param" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.9.3 extdevelop </H4>
+<!--docid::SEC1592::-->
+Procedure from library <CODE>hnoether.lib</CODE> (see  <A HREF="sing_1514.htm#SEC1589">hnoether_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>extdevelop(L,N); list L, int N
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>L is the output of <CODE>develop(f)</CODE>, or of <CODE>extdevelop(l,n)</CODE>,
+or one entry in the list <CODE>hne</CODE> in the ring created by
+<CODE>hnexpansion(f[,"ess"])</CODE>.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>an extension of the Hamburger-Noether development of f as a list
+in the same format as L has (up to the last entry in the output
+of <CODE>develop(f)</CODE>).<BR>
+Type <CODE>help develop;</CODE>, resp. <CODE>help hnexpansion;</CODE> for more
+details.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The new HN-matrix will have at least N columns (if the HNE is not
+finite). In particular, if f is irreducible then (in most cases)
+<CODE>extdevelop(develop(f),N)</CODE> will produce the same result as
+<CODE>develop(f,N)</CODE>.<BR>
+If the matrix M of L has n columns then, compared with
+<CODE>parametrization(L)</CODE>, <CODE>paramametrize(extdevelop(L,N))</CODE> will increase the
+exactness by at least (N-n) more significant monomials.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "hnoether.lib";
+ring exring=0,(x,y),dp;
+list Hne=hnexpansion(x14-3y2x11-y3x10-y2x9+3y4x8+y5x7+3y4x6+x5*(-y6+y5)
+-3y6x3-y7x2+y8);
+==> // No change of ring necessary, return value is HN expansion.
+displayHNE(Hne);    // HNE of 1st,3rd branch is finite
+==> // Hamburger-Noether development of branch nr.1:
+==>   y = z(1)*x
+==>   x = z(1)^2
+==> 
+==> // Hamburger-Noether development of branch nr.2:
+==>   y = z(1)*x
+==>   x = z(1)^2+z(1)^2*z(2)
+==>   z(1) = z(2)^2-z(2)^3 + ..... (terms of degree &gt;=4)
+==> 
+==> // Hamburger-Noether development of branch nr.3:
+==>   y = z(1)*x^2
+==>   x = z(1)^2
+==> 
+print(extdevelop(Hne[1],5)[1]);
+==>  No extension is possible
+==> 0,x,0,
+==> 0,1,x 
+list ehne=extdevelop(Hne[2],5);
+displayHNE(ehne);
+==>   y = z(1)*x
+==>   x = z(1)^2+z(1)^2*z(2)
+==>   z(1) = z(2)^2-z(2)^3+z(2)^4-z(2)^5 + ..... (terms of degree &gt;=6)
+param(Hne[2]);
+==> // ** Warning: result is exact up to order 5 in x and 7 in y !
+==> _[1]=x7-x6-x5+x4
+==> _[2]=-x10+2x9-2x7+x6
+param(ehne);
+==> // ** Warning: result is exact up to order 7 in x and 9 in y !
+==> _[1]=x11-x10+x9-x8-x7+x6-x5+x4
+==> _[2]=-x16+2x15-3x14+4x13-2x12+2x10-4x9+3x8-2x7+x6
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1516.htm#SEC1591">develop</A>;
+ <A HREF="sing_1515.htm#SEC1590">hnexpansion</A>;
+ <A HREF="sing_1518.htm#SEC1593">param</A>.
+<P>
+
+<A NAME="param"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1516.htm#SEC1591"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: develop" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1518.htm#SEC1593"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: param" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

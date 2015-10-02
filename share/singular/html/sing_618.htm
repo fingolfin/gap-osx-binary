@@ -1,0 +1,170 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: initialMalgrange</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: initialMalgrange">
+<META NAME="keywords" CONTENT="Singular Manual: initialMalgrange">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC669"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_617.htm#SEC668"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: GBWeight" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_619.htm#SEC670"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: initialIdealW" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.5.0. initialMalgrange </H5>
+<!--docid::SEC669::-->
+Procedure from library <CODE>dmodapp.lib</CODE> (see  <A HREF="sing_611.htm#SEC662">dmodapp_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>initialMalgrange(f,[,a,b,v]); f poly, a,b optional ints, v opt. intvec
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring, Weyl algebra induced by basering, extended by two new vars t,Dt
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>computes the initial Malgrange ideal of a given polynomial w.r.t. the
+<BR> weight vector (-1,0...,0,1,0,...,0) such that the weight of t is -1
+<BR> and the weight of Dt is 1.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is commutative and over a field of characteristic 0.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Activate the output ring with the <CODE>setring</CODE> command.
+<BR> The returned ring contains the ideal 'inF', being the initial ideal
+<BR> of the Malgrange ideal of f.
+<BR> Varnames of the basering should not include t and Dt.
+<BR> If a&lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations,
+<BR> otherwise, and by default, <CODE>slimgb</CODE> is used.
+<BR> If b&lt;&gt;0, a matrix ordering is used for Groebner basis computations,
+<BR> otherwise, and by default, a block ordering is used.
+<BR> If a positive weight vector v is given, the weight
+<BR> (d,v[1],...,v[n],1,d+1-v[1],...,d+1-v[n]) is used for homogenization
+<BR> computations, where d denotes the weighted degree of f.
+<BR> Otherwise and by default, v is set to (1,...,1). See Noro (2002).
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If printlevel=1, progress debug messages will be printed,
+<BR> if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodapp.lib";
+ring r = 0,(x,y),dp;
+poly f = x^2+y^3+x*y^2;
+def D = initialMalgrange(f);
+setring D;
+inF;
+==> inF[1]=x*Dt
+==> inF[2]=2*x*y*Dx+3*y^2*Dx-y^2*Dy-2*x*Dy
+==> inF[3]=2*x^2*Dx+x*y*Dx+x*y*Dy+18*t*Dt+9*x*Dx-x*Dy+6*y*Dy+4*x+18
+==> inF[4]=18*t*Dt^2+6*y*Dt*Dy-y*Dt+27*Dt
+==> inF[5]=y^2*Dt
+==> inF[6]=2*t*y*Dt+2*x*y*Dx+2*y^2*Dx-6*t*Dt-3*x*Dx-x*Dy-2*y*Dy+2*y-6
+==> inF[7]=x*y^2+y^3+x^2
+==> inF[8]=2*y^3*Dx-2*y^3*Dy-3*y^2*Dx-2*x*y*Dy+y^2*Dy-4*y^2+36*t*Dt+18*x*Dx+1\
+   2*y*Dy+36
+setring r;
+intvec v = 3,2;
+def D2 = initialMalgrange(f,1,1,v);
+setring D2;
+inF;
+==> inF[1]=x*Dt
+==> inF[2]=2*x*y*Dx+3*y^2*Dx-y^2*Dy-2*x*Dy
+==> inF[3]=4*x^2*Dx-3*y^2*Dx+2*x*y*Dy+y^2*Dy+36*t*Dt+18*x*Dx+12*y*Dy+8*x+36
+==> inF[4]=18*t*Dt^2+6*y*Dt*Dy-y*Dt+27*Dt
+==> inF[5]=y^2*Dt
+==> inF[6]=2*t*y*Dt-y^2*Dx+y^2*Dy-6*t*Dt-3*x*Dx+x*Dy-2*y*Dy+2*y-6
+==> inF[7]=x*y^2+y^3+x^2
+==> inF[8]=2*y^3*Dx-2*y^3*Dy-3*y^2*Dx-2*x*y*Dy+y^2*Dy-4*y^2+36*t*Dt+18*x*Dx+1\
+   2*y*Dy+36
+</FONT></pre></td></tr></table><P>
+
+<A NAME="initialIdealW"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_617.htm#SEC668"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: GBWeight" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_619.htm#SEC670"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: initialIdealW" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: dmod_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_644.htm#SEC695"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodvar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

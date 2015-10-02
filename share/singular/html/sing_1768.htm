@@ -1,0 +1,159 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: sysBin</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: sysBin">
+<META NAME="keywords" CONTENT="Singular Manual: sysBin">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1843"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1767.htm#SEC1842"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: sysNewton" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1769.htm#SEC1844"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: encode" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.2.4 sysBin </H4>
+<!--docid::SEC1843::-->
+Procedure from library <CODE>decodegb.lib</CODE> (see  <A HREF="sing_1764.htm#SEC1839">decodegb_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>sysBin (v,Q,n,[odd]); v,n,odd are int, Q is list of int's
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">          - v a number if errors,
+          - Q is a defining set of the code,
+          - n the length,
+          - odd is an additional parameter: if
+           set to 1, then the defining set is enlarged by odd elements,
+           which are 2^(some power)*(some elment in the def.set) mod n
+</pre></td></tr></table><P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>the ring with the resulting system called 'bin'
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Based on Q of the given cyclic code, the procedure constructs
+the corresponding ideal 'bin' with the use of the Waring function.
+With its help one can solve the decoding problem.
+For basics of the method  <A HREF="sing_921.htm#SEC986">Generalized Newton identities</A>.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "decodegb.lib";
+// [31,16,7] quadratic residue code
+list l=1,5,7,9,19,25;
+// we do not need even synromes here
+def A=sysBin(3,l,31);
+setring A;
+print(bin);
+==> S(1)+sigma(1),
+==> S(5)+sigma(1)^5+sigma(1)^3*sigma(2)+sigma(1)^2*sigma(3)+sigma(1)*sigma(2)\
+   ^2+sigma(2)*sigma(3),
+==> S(7)+sigma(1)^7+sigma(1)^5*sigma(2)+sigma(1)^4*sigma(3)+sigma(1)^2*sigma(\
+   2)*sigma(3)+sigma(1)*sigma(2)^3+sigma(1)*sigma(3)^2+sigma(2)^2*sigma(3),
+==> S(9)+sigma(1)^9+sigma(1)^7*sigma(2)+sigma(1)^6*sigma(3)+sigma(1)^5*sigma(\
+   2)^2+sigma(1)^4*sigma(2)*sigma(3)+sigma(1)*sigma(2)^4+sigma(1)*sigma(2)*s\
+   igma(3)^2+sigma(2)^3*sigma(3)+sigma(3)^3,
+==> S(19)+sigma(1)^19+sigma(1)^17*sigma(2)+sigma(1)^16*sigma(3)+sigma(1)^14*s\
+   igma(2)*sigma(3)+sigma(1)^13*sigma(2)^3+sigma(1)^13*sigma(3)^2+sigma(1)^1\
+   2*sigma(2)^2*sigma(3)+sigma(1)^11*sigma(2)^4+sigma(1)^9*sigma(2)^5+sigma(\
+   1)^8*sigma(2)^4*sigma(3)+sigma(1)^8*sigma(2)*sigma(3)^3+sigma(1)^3*sigma(\
+   2)^8+sigma(1)^2*sigma(2)*sigma(3)^5+sigma(1)*sigma(2)^9+sigma(1)*sigma(2)\
+   ^3*sigma(3)^4+sigma(1)*sigma(3)^6+sigma(2)^8*sigma(3)+sigma(2)^5*sigma(3)\
+   ^3+sigma(2)^2*sigma(3)^5,
+==> S(25)+sigma(1)^25+sigma(1)^23*sigma(2)+sigma(1)^22*sigma(3)+sigma(1)^21*s\
+   igma(2)^2+sigma(1)^20*sigma(2)*sigma(3)+sigma(1)^17*sigma(2)^4+sigma(1)^1\
+   7*sigma(2)*sigma(3)^2+sigma(1)^16*sigma(2)^3*sigma(3)+sigma(1)^16*sigma(3\
+   )^3+sigma(1)^11*sigma(2)*sigma(3)^4+sigma(1)^10*sigma(3)^5+sigma(1)^9*sig\
+   ma(2)^5*sigma(3)^2+sigma(1)^9*sigma(2)^2*sigma(3)^4+sigma(1)^8*sigma(2)^7\
+   *sigma(3)+sigma(1)^8*sigma(2)^4*sigma(3)^3+sigma(1)^8*sigma(2)*sigma(3)^5\
+   +sigma(1)^7*sigma(2)^9+sigma(1)^6*sigma(2)^8*sigma(3)+sigma(1)^5*sigma(2)\
+   ^10+sigma(1)^4*sigma(2)^9*sigma(3)+sigma(1)*sigma(2)^12+sigma(1)*sigma(2)\
+   ^9*sigma(3)^2+sigma(1)*sigma(3)^8+sigma(2)^11*sigma(3)+sigma(2)^8*sigma(3\
+   )^3
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1765.htm#SEC1840">sysCRHT</A>;
+ <A HREF="sing_1767.htm#SEC1842">sysNewton</A>.
+<P>
+
+<A NAME="encode"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1767.htm#SEC1842"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: sysNewton" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1769.htm#SEC1844"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: encode" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1783.htm#SEC1858"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: System and Control theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

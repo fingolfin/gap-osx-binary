@@ -22,8 +22,7 @@ Obj REAL_CREATE_CONE_BY_RAYS( Polymake_Data* data, Obj rays ){
   int len_elem = LEN_PLIST( akt );
   data->main_polymake_session->set_application("polytope");
   
-  pm::Integer* ratarray;
-  ratarray = new pm::Integer[(len)*(len_elem)];
+  pm::Integer* ratarray = new pm::Integer[(len)*(len_elem)];
   
   for(int i=0;i<len;i++){
       akt = ELM_PLIST( rays, i+1 );
@@ -48,7 +47,7 @@ Obj REAL_CREATE_CONE_BY_RAYS( Polymake_Data* data, Obj rays ){
           return NULL;
         }
 #endif
-        ratarray[ ( i * len_elem ) + j] = INT_INTOBJ( elem );
+        ratarray[ ( i * len_elem ) + j] = static_cast<pm::Integer>(INT_INTOBJ( elem ));
       }
       
   }
@@ -57,11 +56,13 @@ Obj REAL_CREATE_CONE_BY_RAYS( Polymake_Data* data, Obj rays ){
   delete [] ratarray;
   perlobj* p = new perlobj("Cone");
   p->take("INPUT_RAYS") << *matr;
+  
   delete matr;
+  
   elem = NewPolymakeExternalObject(T_POLYMAKE_EXTERNAL_CONE);
 
   POLYMAKEOBJ_SET_PERLOBJ(elem, p);
-
+  
   return elem;
 }
 
@@ -213,10 +214,9 @@ Obj REAL_CREATE_DUAL_CONE_OF_CONE(  Polymake_Data* data, Obj cone ){
      pm::Matrix<pm::Rational> matr_temp = coneobj->give("FACETS"); //That is the ugliest solution 
      matr = matr_temp;
   }
-  catch( std::exception err ){
-      ErrorMayQuit( " an error occured during computation of facets.",0,0 );
-      return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   perlobj* p;
   p = new perlobj("Cone<Rational>");
   pm::Matrix<pm::Rational> matr2;
@@ -225,10 +225,9 @@ Obj REAL_CREATE_DUAL_CONE_OF_CONE(  Polymake_Data* data, Obj cone ){
     pm::Matrix<pm::Rational> matr2_temp = coneobj->give("LINEAR_SPAN");
     matr2 = matr2_temp;
   }
-  catch( std::exception err ){
-      ErrorMayQuit( " an error occured during computation of linear span.",0,0 );
-      return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   pm::Matrix<pm::Rational>* matr3 = new pm::Matrix<pm::Rational>(matr.rows()+2*matr2.rows(), matr.cols());
   for(int i = 0; i < matr.rows(); i++)
     matr3->row(i) = matr.row(i);
@@ -298,54 +297,43 @@ Obj REAL_GENERATING_RAYS_OF_CONE( Polymake_Data* data, Obj cone){
       pm::Matrix<pm::Rational> matr_temp = coneobj->give("RAYS");
       matr = matr_temp;
   }
-  catch( std::exception err ){
-      ErrorMayQuit( " an error occured during computation of rays.",0,0 );
-      return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   pm::Matrix<pm::Rational> matr2;
   try{
      pm::Matrix<pm::Rational> matr2_temp  = coneobj->give("LINEALITY_SPACE");
      matr2 = matr2_temp;
   }
-  catch( std::exception err ){
-      ErrorMayQuit( " an error occured during computation of linear span.",0,0 );
-      return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows() + 2*matr2.rows());
   UInt lenght_RETLI = matr.rows() + 2*matr2.rows();
   SET_LEN_PLIST( RETLI , lenght_RETLI );
+  
+  polymake::common::primitive( matr );
+  polymake::common::primitive( matr2 );
+  
   Obj LIZeil;
-  pm::Integer nenner;
-  pm::Integer dentemp;
   UInt matr_cols = matr.cols();
   for(int i = 0;i<matr.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr.cols());
     SET_LEN_PLIST( LIZeil , matr_cols );
-    nenner = 1;
     for(int j = 0;j<matr.cols();j++){
-      CallPolymakeFunction("denominator",matr(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr(i,j)*nenner).to_int() ));
+      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr(i,j)).to_int() ));
     }
     SET_ELM_PLIST(RETLI,i+1,LIZeil);
     CHANGED_BAG(RETLI);
   }
   
   UInt matr2_cols = matr2.cols();
-
   
   for(int i = 0;i<matr2.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr2.cols());
     SET_LEN_PLIST( LIZeil ,matr2_cols );
-    nenner = 1;
     for(int j = 0;j<matr2.cols();j++){
-      CallPolymakeFunction("denominator",matr2(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr2.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr2(i,j)*nenner).to_int() ));
+      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr2(i,j)).to_int() ));
     }
     SET_ELM_PLIST(RETLI,matr.rows() + i +1,LIZeil);
     CHANGED_BAG(RETLI);
@@ -354,13 +342,8 @@ Obj REAL_GENERATING_RAYS_OF_CONE( Polymake_Data* data, Obj cone){
   for(int i = 0;i<matr2.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr2.cols());
     SET_LEN_PLIST( LIZeil ,matr2_cols);
-    nenner = 1;
     for(int j = 0;j<matr2.cols();j++){
-      CallPolymakeFunction("denominator",matr2(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr2.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (-matr2(i,j)*nenner).to_int() ));
+      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (-matr2(i,j)).to_int() ));
     }
     SET_ELM_PLIST(RETLI,matr.rows() + matr2.rows() + i +1,LIZeil);
     CHANGED_BAG(RETLI);
@@ -386,28 +369,22 @@ Obj REAL_LINEALITY_SPACE_OF_CONE( Polymake_Data* data, Obj cone){
       pm::Matrix<pm::Rational> matr_temp = coneobj->give("LINEALITY_SPACE");
       matr = matr_temp;
   }
-  catch( std::exception err )
-  {
-      ErrorMayQuit( " an error occured during computation of linear span.",0,0 );
-      return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
+  
+  polymake::common::primitive( matr );
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
   Obj LIZeil;
-  pm::Integer nenner;
-  pm::Integer dentemp;
   UInt matr_cols = matr.cols();
   for(int i = 0;i<matr.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr.cols());
     SET_LEN_PLIST( LIZeil , matr_cols );
-    nenner = 1;
     for(int j = 0;j<matr.cols();j++){
-      CallPolymakeFunction("denominator",matr(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr(i,j)*nenner).to_int() ));
+      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr(i,j)).to_int() ));
     }
     SET_ELM_PLIST(RETLI,i+1,LIZeil);
     CHANGED_BAG(RETLI);
@@ -430,13 +407,12 @@ Obj REAL_HILBERT_BASIS_OF_CONE( Polymake_Data* data, Obj cone){
   pm::Matrix<pm::Rational> matr;
   try
   {
-     pm::Matrix<pm::Rational> matr_temp = coneobj->give("HILBERT_BASIS");
-     matr = matr_temp;
+     pm::Array<pm::Matrix<pm::Rational> > matr_temp = coneobj->give("HILBERT_BASIS_GENERATORS");
+     matr = matr_temp[0];
   }
-  catch( std::exception err ){
-      ErrorMayQuit(" an error occured during computation of hilbert basis in polymake.",0,0 );
-      return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
@@ -471,10 +447,9 @@ Obj REAL_RAYS_IN_FACETS( Polymake_Data* data, Obj cone){
       pm::IncidenceMatrix<pm::NonSymmetric> matr_temp = coneobj->give("RAYS_IN_FACETS");
       matr = matr_temp;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during polymake computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows());
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI , matr_rows );
@@ -498,42 +473,35 @@ Obj REAL_DEFINING_INEQUALITIES_OF_CONE( Polymake_Data* data, Obj cone){
 
 #ifdef MORE_TESTS
   if(! IS_POLYMAKE_CONE(cone) ){
-    ErrorMayQuit(" parameter is not an integer.",0,0);
+    ErrorMayQuit("parameter is not a polymake cone",0,0);
     return NULL;
   }
 #endif
   
   perlobj* coneobj = PERLOBJ_POLYMAKEOBJ( cone );
   data->main_polymake_session->set_application_of(*coneobj);
-  pm::Matrix<pm::Rational> matr;
-  pm::Matrix<pm::Rational> matr2;
+  pm::Matrix<pm::Integer> matr;
+  pm::Matrix<pm::Integer> matr2;
+  
   try{
-    pm::Matrix<pm::Rational> matr_temp = coneobj->give("FACETS");
-    pm::Matrix<pm::Rational> matr2_temp = coneobj->give("LINEAR_SPAN");
-    matr = matr_temp;
-    matr2 = matr2_temp;
+    coneobj->give("FACETS") >> matr;
+    coneobj->give("LINEAR_SPAN") >> matr2;
   }
-  catch( std::exception err ){
-    ErrorMayQuit(" error during ray and linear span computation.",0,0);
-    return NULL;
-  }
+  
+  POLYMAKE_GAP_CATCH
+  
   Obj RETLI = NEW_PLIST( T_PLIST , matr.rows() + 2*matr2.rows());
   UInt lenght_RETLI = matr.rows() + 2*matr2.rows();
   SET_LEN_PLIST( RETLI , lenght_RETLI );
   Obj LIZeil;
-  pm::Integer nenner;
-  pm::Integer dentemp;
+
   UInt matr_cols = matr.cols();
   for(int i = 0;i<matr.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr.cols());
     SET_LEN_PLIST( LIZeil , matr_cols );
-    nenner = 1;
     for(int j = 0;j<matr.cols();j++){
-      CallPolymakeFunction("denominator",matr(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr(i,j)*nenner).to_int() ));
+      SET_ELM_PLIST(LIZeil, j+1, INTOBJ_INT( matr(i,j).to_int() ) );
+      CHANGED_BAG( LIZeil );
     }
     SET_ELM_PLIST(RETLI,i+1,LIZeil);
     CHANGED_BAG(RETLI);
@@ -541,36 +509,25 @@ Obj REAL_DEFINING_INEQUALITIES_OF_CONE( Polymake_Data* data, Obj cone){
   
   UInt matr2_cols = matr2.cols();
   
-  for(int i = 0;i<matr2.rows();i++){
-    LIZeil = NEW_PLIST( T_PLIST, matr2.cols());
-    SET_LEN_PLIST( LIZeil , matr2_cols );
-    nenner = 1;
-    for(int j = 0;j<matr2.cols();j++){
-      CallPolymakeFunction("denominator",matr2(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr2.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr2(i,j)*nenner).to_int() ));
-    }
-    SET_ELM_PLIST(RETLI,matr.rows() + i +1,LIZeil);
-    CHANGED_BAG(RETLI);
-  }
+  Obj LIZeil2;
   
   for(int i = 0;i<matr2.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr2.cols());
+    LIZeil2 = NEW_PLIST( T_PLIST, matr2.cols() );
     SET_LEN_PLIST( LIZeil , matr2_cols );
-    nenner = 1;
+    SET_LEN_PLIST( LIZeil2, matr2_cols );
     for(int j = 0;j<matr2.cols();j++){
-      CallPolymakeFunction("denominator",matr2(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
+      SET_ELM_PLIST( LIZeil,  j+1, INTOBJ_INT( matr2(i,j).to_int() ));
+      CHANGED_BAG( LIZeil );
+      SET_ELM_PLIST( LIZeil2, j+1, INTOBJ_INT( -matr2(i,j).to_int() ) );
+      CHANGED_BAG( LIZeil2 );
+      
     }
-    for(int j = 0;j<matr2.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (-matr2(i,j)*nenner).to_int() ));
-    }
-    SET_ELM_PLIST(RETLI,matr.rows() + matr2.rows() + i +1,LIZeil);
+    SET_ELM_PLIST(RETLI,matr.rows() + i +1 ,LIZeil);
+    CHANGED_BAG(RETLI);
+    SET_ELM_PLIST(RETLI, matr.rows() + matr2.rows() + i + 1, LIZeil2 );
     CHANGED_BAG(RETLI);
   }
-  
   return RETLI;
   
 }
@@ -618,19 +575,13 @@ Obj REAL_EQUALITIES_OF_CONE( Polymake_Data* data, Obj cone){
   UInt matr_rows = matr.rows();
   SET_LEN_PLIST( RETLI ,matr_rows);
   Obj LIZeil;
-  pm::Integer nenner;
-  pm::Integer dentemp;
+  polymake::common::primitive( matr );
   UInt matr_cols = matr.cols();
   for(int i = 0;i<matr.rows();i++){
     LIZeil = NEW_PLIST( T_PLIST, matr.cols());
     SET_LEN_PLIST( LIZeil , matr_cols );
-    nenner = 1;
     for(int j = 0;j<matr.cols();j++){
-      CallPolymakeFunction("denominator",matr(i,j)) >> dentemp;
-      CallPolymakeFunction("lcm",nenner, dentemp ) >> nenner;
-    }
-    for(int j = 0;j<matr.cols();j++){
-      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr(i,j)*nenner).to_int() ));
+      SET_ELM_PLIST(LIZeil,j+1,INTOBJ_INT( (matr(i,j)).to_int() ));
     }
     SET_ELM_PLIST(RETLI,i+1,LIZeil);
     CHANGED_BAG(RETLI);

@@ -1,0 +1,228 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Invariants of plane curve singularities</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Invariants of plane curve singularities">
+<META NAME="keywords" CONTENT="Singular Manual: Invariants of plane curve singularities">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC927"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_875.htm#SEC926"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Deformations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_877.htm#SEC928"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Branches of space curve singularities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.4.6 Invariants of plane curve singularities </H3>
+<!--docid::SEC927::-->
+<P>
+
+The Puiseux pairs of an irreducible and reduced plane curve singularity are
+probably its most important invariants.  They can be computed from its
+Hamburger-Noether expansion (which is the analogue of the Puiseux
+expansion in characteristic 0 for fields of arbitrary characteristic).
+</P><P>
+
+The library <CODE>hnoether.lib</CODE> (see  <A HREF="sing_1514.htm#SEC1589">hnoether_lib</A>) uses the
+algorithm of Antonio Campillo in "Algebroid curves in
+positive characteristic" SLN 813, 1980.  This algorithm has the
+advantage that it needs least possible field extensions and, moreover,
+works in any characteristic. This fact can be used to compute the
+invariants over a field of finite characteristic, say 32003, which will
+most probably be the same as in characteristic 0.
+</P><P>
+
+We compute the Hamburger-Noether expansion of a plane curve
+singularity given by a polynomial <CODE>f</CODE> in two variables. This
+expansion is given by a matrix, and it allows us to compute a
+primitive parametrization (up to a given order) for the curve
+singularity defined by <CODE>f</CODE> and numerical invariants such as the
+<UL>
+<LI>
+    characteristic exponents,
+<LI>
+    Puiseux pairs (of a complex model),
+<LI>
+    degree of the conductor,
+<LI>
+    delta invariant,
+<LI>
+    generators of the semigroup.
+</UL>
+Besides commands for computing a parametrization and the invariants
+mentioned above, the library <CODE>hnoether.lib</CODE> provides commands for the
+computation of the Newton polygon of <CODE>f</CODE>, the square-free part of
+<CODE>f</CODE> and a procedure to convert one set of invariants to another.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  LIB "hnoether.lib";
+  // ======== The irreducible case ========
+  ring s = 0,(x,y),ds;
+  poly f = y4-2x3y2-4x5y+x6-x7;
+  list hn = develop(f);
+  show(hn[1]);     // Hamburger-Noether matrix
+==> // matrix, 3x3
+==> 0,x,  0,  
+==> 0,1,  x,  
+==> 0,1/4,-1/2
+  displayHNE(hn);  // Hamburger-Noether development
+==>   y = z(1)*x
+==>   x = z(1)^2+z(1)^2*z(2)
+==>   z(1) = 1/4*z(2)^2-1/2*z(2)^3 + ..... (terms of degree &gt;=4)
+  setring s;
+  displayInvariants(hn);
+==>  characteristic exponents  : 4,6,7
+==>  generators of semigroup   : 4,6,13
+==>  Puiseux pairs             : (3,2)(7,2)
+==>  degree of the conductor   : 16
+==>  delta invariant           : 8
+==>  sequence of multiplicities: 4,2,2,1,1
+  // invariants(hn);  returns the invariants as list
+  // partial parametrization of f: param takes the first variable
+  // as infinite except the ring has more than 2 variables. Then
+  // the 3rd variable is chosen.
+  param(hn);
+==> // ** Warning: result is exact up to order 5 in x and 7 in y !
+==> _[1]=1/16x4-3/16x5+1/4x7
+==> _[2]=1/64x6-5/64x7+3/32x8+1/16x9-1/8x10
+  ring extring=0,(x,y,t),ds;
+  poly f=x3+2xy2+y2;
+  list hn=develop(f,-1);
+  param(hn);       // partial parametrization of f
+==> // ** Warning: result is exact up to order 2 in x and 3 in y !
+==> _[1]=-t2
+==> _[2]=-t3
+  list hn1=develop(f,6);
+  param(hn1);     // a better parametrization
+==> // ** Warning: result is exact up to order 6 in x and 7 in y !
+==> _[1]=-t2+2t4-4t6
+==> _[2]=-t3+2t5-4t7
+  // instead of recomputing you may extend the development:
+  list hn2=extdevelop(hn,12);
+  param(hn2);     // a still better parametrization
+==> // ** Warning: result is exact up to order 12 in x and 13 in y !
+==> _[1]=-t2+2t4-4t6+8t8-16t10+32t12
+==> _[2]=-t3+2t5-4t7+8t9-16t11+32t13
+  //
+  // ======== The reducible case ========
+  ring r = 0,(x,y),dp;
+  poly f=x11-2y2x8-y3x7-y2x6+y4x5+2y4x3+y5x2-y6;
+  // = (x5-1y2) * (x6-2x3y2-1x2y3+y4)
+  list L=hnexpansion(f);
+==> // No change of ring necessary, return value is HN expansion.
+  show(L[1][1]);     // Hamburger-Noether matrix of 1st branch
+==> // matrix, 3x3
+==> 0,x,0,
+==> 0,1,x,
+==> 0,1,-1
+  displayInvariants(L);
+==>  --- invariants of branch number 1 : ---
+==>  characteristic exponents  : 4,6,7
+==>  generators of semigroup   : 4,6,13
+==>  Puiseux pairs             : (3,2)(7,2)
+==>  degree of the conductor   : 16
+==>  delta invariant           : 8
+==>  sequence of multiplicities: 4,2,2,1,1
+==> 
+==>  --- invariants of branch number 2 : ---
+==>  characteristic exponents  : 2,5
+==>  generators of semigroup   : 2,5
+==>  Puiseux pairs             : (5,2)
+==>  degree of the conductor   : 4
+==>  delta invariant           : 2
+==>  sequence of multiplicities: 2,2,1,1
+==> 
+==>  -------------- contact numbers : -------------- 
+==> 
+==> branch |    2    
+==> -------+-----
+==>     1  |    2
+==> 
+==>  -------------- intersection multiplicities : -------------- 
+==> 
+==> branch |    2    
+==> -------+-----
+==>     1  |   12
+==> 
+==>  -------------- delta invariant of the curve :  22
+  param(L[2]);       // parametrization of 2nd branch
+==> _[1]=x2
+==> _[2]=x5
+</FONT></pre></td></tr></table><A NAME="Branches of space curve singularities"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_875.htm#SEC926"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Deformations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_877.htm#SEC928"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Branches of space curve singularities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

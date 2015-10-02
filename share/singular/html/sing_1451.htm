@@ -1,0 +1,191 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: classify</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: classify">
+<META NAME="keywords" CONTENT="Singular Manual: classify">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1526"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1450.htm#SEC1525"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: basicinvariants" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1452.htm#SEC1527"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: corank" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1444.htm#SEC1519"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: arcpoint_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1467.htm#SEC1542"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: curvepar_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1449.htm#SEC1524"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: classify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.3.2 classify </H4>
+<!--docid::SEC1526::-->
+Procedure from library <CODE>classify.lib</CODE> (see  <A HREF="sing_1449.htm#SEC1524">classify_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>classify(f); f=poly
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>normal form and singularity type of f with respect to right
+equivalence, as given in the book "Singularities of differentiable
+maps, Volume I" by V.I. Arnold, S.M. Gusein-Zade, A.N. Varchenko
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>normal form of f, of type poly
+<P>
+
+<DT><STRONG>Remark:</STRONG>
+<DD>This version of classify is only beta. Please send bugs and
+comments to: "Kai Krueger" &lt;krueger@mathematik.uni-kl.de&gt; <BR>
+Be sure to have at least @sc{Singular} version 1.0.1. Updates can be
+found at: <BR>
+URL=http://www.mathematik.uni-kl.de/~krueger/Singular/
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>type init_debug(n); (0 &lt;= n &lt;= 10) in order to get intermediate
+information, higher values of n give more information.
+<BR>The proc creates several global objects with names all starting
+with @, hence there should be no name conflicts.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "classify.lib";
+ring r=0,(x,y,z),ds;
+poly f=(x2+3y-2z)^2+xyz-(x-y3+x2*z3)^3;
+classify(f);
+==> About the singularity :
+==>           Milnor number(f)   = 4
+==>           Corank(f)          = 2
+==>           Determinacy       &lt;= 5
+==> Guessing type via Milnorcode:   D[k]=D[4]
+==> 
+==> Computing normal form ...
+==> I have to apply the splitting lemma. This will take some time....:-)
+==>    Arnold step number 4
+==> The singularity
+==>    -x3+3/2xy2+1/2x3y-1/16x2y2+3x2y3
+==> is R-equivalent to D[4].
+==>    Milnor number = 4
+==>    modality      = 0
+==> 2z2+x2y+y3
+init_debug(3);
+==> Debugging level change from  0  to  3
+classify(f);
+==> Computing Basicinvariants of f ...
+==> About the singularity :
+==>           Milnor number(f)   = 4
+==>           Corank(f)          = 2
+==>           Determinacy       &lt;= 5
+==> Hcode: 1,2,1,0,0
+==> Milnor code :  1,1,1
+==> Debug:(2):  entering HKclass3_teil_1 1,1,1
+==> Debug:(2):  finishing HKclass3_teil_1
+==> Guessing type via Milnorcode:   D[k]=D[4]
+==> 
+==> Computing normal form ...
+==> I have to apply the splitting lemma. This will take some time....:-)
+==> Debug:(3):  Split the polynomial below using determinacy:  5
+==> Debug:(3):  9y2-12yz+4z2-x3+6x2y-4x2z+xyz+x4+3x2y3
+==> Debug:(2):  Permutations: 3,2,1
+==> Debug:(2):  Permutations: 3,2,1
+==> Debug:(2):  rank determined with Morse rg= 1
+==> Residual singularity f= -x3+3/2xy2+1/2x3y-1/16x2y2+3x2y3
+==> Step 3
+==>    Arnold step number 4
+==> The singularity
+==>    -x3+3/2xy2+1/2x3y-1/16x2y2+3x2y3
+==> is R-equivalent to D[4].
+==>    Milnor number = 4
+==>    modality      = 0
+==> Debug:(2):  Decode:
+==> Debug:(2):  S_in= D[4]   s_in= D[4]                          
+==> Debug:(2):  Looking for Normalform of  D[k] with (k,r,s) = ( 4 , 0 , 0 )
+==> Debug:(2):  Opening Singalarity-database:  
+==>  DBM: NFlist
+==> Debug:(2):  DBMread( D[k] )= x2y+y^(k-1) .
+==> Debug:(2):  S= f = x2y+y^(k-1);  Tp= x2y+y^(k-1) Key= I_D[k]
+==> Polynom f= x2y+y3   crk= 2   Mu= 4  MlnCd= 1,1,1
+==> Debug:(2):  Info= x2y+y3
+==> Debug:(2):  Normal form NF(f)= 2*x(3)^2+x(1)^2*x(2)+x(2)^3
+==> 2z2+x2y+y3
+</FONT></pre></td></tr></table><P>
+
+<A NAME="corank"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1450.htm#SEC1525"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: basicinvariants" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1452.htm#SEC1527"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: corank" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1444.htm#SEC1519"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: arcpoint_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1467.htm#SEC1542"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: curvepar_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1449.htm#SEC1524"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: classify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

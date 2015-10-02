@@ -538,30 +538,26 @@
   [29X[2XOrthogonalEmbeddings[102X( [3Xgram[103X[, [3X"positive"[103X][, [3Xmaxdim[103X] ) [32X function
   
   [33X[0;0Ycomputes  all  possible orthogonal embeddings of a lattice given by its Gram
-  matrix [3Xgram[103X, which must be a regular matrix. In other words, all solutions [22XX[122X
-  of the problem[133X
+  matrix  [3Xgram[103X, which must be a regular symmetric matrix of integers. In other
+  words,  all  integral  solutions  [22XX[122X  of  the  equation  [22XX^tr  ⋅  X =[122X[3Xgram[103X are
+  calculated. The implementation follows the description in [Ple95].[133X
   
-  
-        [33X[1;6Y[24X[33X[0;0YX^tr ⋅ X = gram[133X[124X[133X
-  
-  
-  [33X[0;0Yare  calculated  (see [Ple95]).  Usually  there are many solutions [22XX[122X but all
-  their  rows  are chosen from a small set of vectors, so [2XOrthogonalEmbeddings[102X
-  returns  the  solutions  in  an  encoded  form,  namely as a record with the
-  following components.[133X
+  [33X[0;0YUsually  there are many solutions [22XX[122X but all their rows belong to a small set
+  of  vectors,  so  [2XOrthogonalEmbeddings[102X  returns  the  solutions encoded by a
+  record with the following components.[133X
   
   [8X[10Xvectors[110X[108X
         [33X[0;6Ythe  list  [22XL = [ x_1, x_2, ..., x_n ][122X of vectors that may be rows of a
-        solution;  these  are exactly those vectors that fulfill the condition
-        [22Xx_i  ⋅  [3Xgram[103X^{-1}  ⋅ x_i^tr ≤ 1[122X (see [2XShortestVectors[102X ([14X25.6-2[114X)), and we
-        have [22X[3Xgram[103X = ∑_{i = 1}^n x_i^tr ⋅ x_i[122X,[133X
+        solution,  up to sign; these are exactly the vectors with the property
+        [22Xx_i ⋅[122X[3Xgram[103X[22X^{-1} ⋅ x_i^tr ≤ 1[122X, see [2XShortestVectors[102X ([14X25.6-2[114X),[133X
   
   [8X[10Xnorms[110X[108X
-        [33X[0;6Ythe list of values [22Xx_i ⋅ [3Xgram[103X^{-1} ⋅ x_i^tr[122X, and[133X
+        [33X[0;6Ythe list of values [22Xx_i ⋅[122X[3Xgram[103X[22X^{-1} ⋅ x_i^tr[122X, and[133X
   
   [8X[10Xsolutions[110X[108X
-        [33X[0;6Ya  list  [3XS[103X  of  lists;  the  [3Xi[103X-th solution matrix is [10X[3XL[103X[10X{ [3XS[103X[10X[[3Xi[103X[10X] }[110X, so the
-        dimension of the [3Xi[103X-th solution is the length of [10X[3XS[103X[10X[[3Xi[103X[10X][110X.[133X
+        [33X[0;6Ya list [22XS[122X of index lists; the [22Xi[122X-th solution matrix is [22XL[122X[10X{ [110X[22XS[i][122X[10X }[110X, so the
+        dimension  of  the  [3Xi[103X-th  solution  is the length of [22XS[i][122X, and we have
+        [3Xgram[103X[22X= ∑_{j ∈ S[i]} x_j^tr ⋅ x_j[122X,[133X
   
   [33X[0;0YThe  optional argument [10X"positive"[110X will cause [2XOrthogonalEmbeddings[102X to compute
   only vectors [22Xx_i[122X with nonnegative entries. In the context of characters this
@@ -570,16 +566,16 @@
   
   [33X[0;0YWhen  [2XOrthogonalEmbeddings[102X  is  called  with the optional argument [3Xmaxdim[103X (a
   positive  integer), only solutions up to dimension [3Xmaxdim[103X are computed; this
-  will accelerate the algorithm in some cases.[133X
+  may accelerate the algorithm.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27Xb:= [ [ 3, -1, -1 ], [ -1, 3, -1 ], [ -1, -1, 3 ] ];;[127X[104X
     [4X[25Xgap>[125X [27Xc:=OrthogonalEmbeddings( b );[127X[104X
-    [4X[28Xrec( norms := [ 1, 1, 1, 1/2, 1/2, 1/2, 1/2, 1/2, 1/2 ], [128X[104X
-    [4X[28X  solutions := [ [ 1, 2, 3 ], [ 1, 6, 6, 7, 7 ], [ 2, 5, 5, 8, 8 ], [128X[104X
-    [4X[28X      [ 3, 4, 4, 9, 9 ], [ 4, 5, 6, 7, 8, 9 ] ], [128X[104X
-    [4X[28X  vectors := [ [ -1, 1, 1 ], [ 1, -1, 1 ], [ -1, -1, 1 ], [128X[104X
-    [4X[28X      [ -1, 1, 0 ], [ -1, 0, 1 ], [ 1, 0, 0 ], [ 0, -1, 1 ], [128X[104X
+    [4X[28Xrec( norms := [ 1, 1, 1, 1/2, 1/2, 1/2, 1/2, 1/2, 1/2 ],[128X[104X
+    [4X[28X  solutions := [ [ 1, 2, 3 ], [ 1, 6, 6, 7, 7 ], [ 2, 5, 5, 8, 8 ],[128X[104X
+    [4X[28X      [ 3, 4, 4, 9, 9 ], [ 4, 5, 6, 7, 8, 9 ] ],[128X[104X
+    [4X[28X  vectors := [ [ -1, 1, 1 ], [ 1, -1, 1 ], [ -1, -1, 1 ],[128X[104X
+    [4X[28X      [ -1, 1, 0 ], [ -1, 0, 1 ], [ 1, 0, 0 ], [ 0, -1, 1 ],[128X[104X
     [4X[28X      [ 0, 1, 0 ], [ 0, 0, 1 ] ] )[128X[104X
     [4X[25Xgap>[125X [27Xc.vectors{ c.solutions[1] };[127X[104X
     [4X[28X[ [ -1, 1, 1 ], [ 1, -1, 1 ], [ -1, -1, 1 ] ][128X[104X

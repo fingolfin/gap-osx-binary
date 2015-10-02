@@ -1,0 +1,180 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: canonMap</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: canonMap">
+<META NAME="keywords" CONTENT="Singular Manual: canonMap">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1224"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1150.htm#SEC1225"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: cup" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.7.1 canonMap </H4>
+<!--docid::SEC1224::-->
+Procedure from library <CODE>homolog.lib</CODE> (see  <A HREF="sing_1148.htm#SEC1223">homolog_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>canonMap(id); id= ideal/module,
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list L, the kernel in two different representations and
+<BR> the cokernel of the canonical map
+<BR> M ---&gt; Ext^c_R(Ext^c_R(M,R),R) given by presentations
+<BR> Here M is the R-module (R=basering) given by the presentation
+<BR> defined by id, i.e. M=R/id resp. M=R^n/id
+<BR> c is the codimension of M
+<BR> L[1] is the preimage of the kernel in R resp. R^n
+<BR> L[2] is a presentation of the kernel
+<BR> L[3] is a presentation of the cokernel
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "homolog.lib";
+ring s=0,(x,y),dp;
+ideal i = x,y;
+canonMap(i);
+==> [1]:
+==>    _[1]=y*gen(1)
+==>    _[2]=x*gen(1)
+==> [2]:
+==>    _[1]=0
+==> [3]:
+==>    _[1]=0
+ring R = 0,(x,y,z,w),dp;
+ideal I1 = x,y;
+ideal I2 = z,w;
+ideal I = intersect(I1,I2);
+canonMap(I);
+==> [1]:
+==>    _[1]=yw*gen(1)
+==>    _[2]=xw*gen(1)
+==>    _[3]=yz*gen(1)
+==>    _[4]=xz*gen(1)
+==> [2]:
+==>    _[1]=0
+==> [3]:
+==>    _[1]=-w*gen(1)
+==>    _[2]=-z*gen(1)
+==>    _[3]=-y*gen(1)
+==>    _[4]=-x*gen(1)
+module M = syz(I);
+canonMap(M);
+==> [1]:
+==>    _[1]=z*gen(1)-w*gen(3)
+==>    _[2]=z*gen(2)-w*gen(4)
+==>    _[3]=x*gen(1)-y*gen(2)
+==>    _[4]=x*gen(3)-y*gen(4)
+==> [2]:
+==>    _[1]=0
+==> [3]:
+==>    _[1]=yw*gen(1)
+==>    _[2]=xw*gen(1)
+==>    _[3]=yz*gen(1)
+==>    _[4]=xz*gen(1)
+ring S = 0,(x,y,z,t),Wp(3,4,5,1);
+ideal I = x-t3,y-t4,z-t5;
+ideal J = eliminate(I,t);
+ring T = 0,(x,y,z),Wp(3,4,5);
+ideal p = imap(S,J);
+ideal p2 = p^2;
+canonMap(p2);
+==> [1]:
+==>    _[1]=x5*gen(1)-3x2yz*gen(1)+xy3*gen(1)+z3*gen(1)
+==>    _[2]=x2z2*gen(1)-2xy2z*gen(1)+y4*gen(1)
+==>    _[3]=x4z*gen(1)-x3y2*gen(1)-xyz2*gen(1)+y3z*gen(1)
+==>    _[4]=x3yz*gen(1)-x2y3*gen(1)-xz3*gen(1)+y2z2*gen(1)
+==>    _[5]=x4y2*gen(1)-4xy3z*gen(1)+2y5*gen(1)+z4*gen(1)
+==> [2]:
+==>    _[1]=x*gen(1)
+==>    _[2]=y*gen(1)
+==>    _[3]=z*gen(1)
+==> [3]:
+==>    _[1]=0
+</FONT></pre></td></tr></table><P>
+
+<A NAME="cup"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1150.htm#SEC1225"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: cup" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

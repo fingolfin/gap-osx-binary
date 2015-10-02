@@ -1,0 +1,160 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: subrInterred</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: subrInterred">
+<META NAME="keywords" CONTENT="Singular Manual: subrInterred">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1076"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1000.htm#SEC1075"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: substitute" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1002.htm#SEC1077"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: newtonDiag" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: inout_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1004.htm#SEC1079"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: random_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_983.htm#SEC1058"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: poly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.6.18 subrInterred </H4>
+<!--docid::SEC1076::-->
+Procedure from library <CODE>poly.lib</CODE> (see  <A HREF="sing_983.htm#SEC1058">poly_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>subrInterred(mon,sm,iv);
+<BR>sm: ideal in a ring r with n + s variables,
+<BR>e.g. x_1,..,x_n and t_1,..,t_s
+<BR>mon: ideal with monomial generators (not divisible by
+any of the t_i) such that sm is contained in the module
+k[t_1,..,t_s]*mon[1]+..+k[t_1,..,t_s]*mon[size(mon)]
+<BR>iv: intvec listing the variables which are supposed to be used
+as x_i
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list l:
+<BR>l[1]=the monomials from mon in the order used
+<BR>l[2]=their coefficients after interreduction
+<BR>l[3]=l[1]*l[2]
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Do interred only w.r.t. a subset of variables.
+<BR>The procedure returns an interreduced system of generators of
+sm considered as a k[t_1,..,t_s]-submodule of the free module
+k[t_1,..,t_s]*mon[1]+..+k[t_1,..,t_s]*mon[size(mon)]).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "poly.lib";
+ring r=0,(x,y,z),dp;
+ideal i=x^2+x*y^2,x*y+x^2*y,z;
+ideal j=x^2+x*y^2,x*y,z;
+ideal mon=x^2,z,x*y;
+intvec iv=1,3;
+subrInterred(mon,i,iv);
+==> [1]:
+==>    _[1,1]=z
+==>    _[1,2]=xy
+==>    _[1,3]=x2
+==> [2]:
+==>    _[1]=gen(1)
+==>    _[2]=y2*gen(2)-gen(2)
+==>    _[3]=y*gen(2)+gen(3)
+==> [3]:
+==>    _[1,1]=z
+==>    _[1,2]=xy3-xy
+==>    _[1,3]=xy2+x2
+subrInterred(mon,j,iv);
+==> [1]:
+==>    _[1,1]=z
+==>    _[1,2]=xy
+==>    _[1,3]=x2
+==> [2]:
+==>    _[1]=gen(1)
+==>    _[2]=gen(2)
+==>    _[3]=gen(3)
+==> [3]:
+==>    _[1,1]=z
+==>    _[1,2]=xy
+==>    _[1,3]=x2
+</FONT></pre></td></tr></table><P>
+
+<A NAME="newtonDiag"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1000.htm#SEC1075"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: substitute" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1002.htm#SEC1077"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: newtonDiag" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: inout_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1004.htm#SEC1079"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: random_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_983.htm#SEC1058"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: poly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

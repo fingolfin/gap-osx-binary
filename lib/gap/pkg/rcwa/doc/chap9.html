@@ -49,10 +49,11 @@
 <div class="ContSSBlock">
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9.html#X850524E47E3DB78D">9.6-1 RunDemonstration</a></span>
 </div></div>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9.html#X7C7AB20486E56B83">9.7 <span class="Heading">Loading and saving bitmap pictures</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9.html#X7E87938C84EB0229">9.7 <span class="Heading">Utility functions for bitmap pictures</span></a>
 </span>
 <div class="ContSSBlock">
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9.html#X81DE1E838615C214">9.7-1 SaveAsBitmapPicture</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9.html#X8404B60A84DA4534">9.7-2 EncryptIntoBitmapPicture</a></span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9.html#X7ED9DEDA83B2BA05">9.8 <span class="Heading">Converting GAP logfiles to HTML</span></a>
 </span>
@@ -70,7 +71,7 @@
 
 <h4>9.1 <span class="Heading">Requirements</span></h4>
 
-<p>This version of <strong class="pkg">RCWA</strong> needs at least <strong class="pkg">GAP</strong> 4.7.0, <strong class="pkg">ResClasses</strong> 3.3.1, <strong class="pkg">GRAPE</strong> 4.3 <a href="chapBib.html#biBGRAPE">[Soi06]</a>, <strong class="pkg">Polycyclic</strong> 2.6 <a href="chapBib.html#biBPolycyclic">[EN09]</a> and <strong class="pkg">GAPDoc</strong> 1.4 <a href="chapBib.html#biBGAPDoc">[LN11]</a>. With possible exception of the most recent version of <strong class="pkg">ResClasses</strong>, all needed packages are already present in an up-to-date standard <strong class="pkg">GAP</strong> installation. The <strong class="pkg">RCWA</strong> package can be used on all platforms for which <strong class="pkg">GAP</strong> is available. It is completely written in the <strong class="pkg">GAP</strong> language and does neither contain nor require external binaries. In particular, possible warnings concerning missing binaries issued by other packages when loading <strong class="pkg">RCWA</strong> can safely be ignored.</p>
+<p>This version of <strong class="pkg">RCWA</strong> needs at least <strong class="pkg">GAP</strong> 4.7.0, <strong class="pkg">ResClasses</strong> 3.4.0, <strong class="pkg">GRAPE</strong> 4.3 <a href="chapBib.html#biBGRAPE">[Soi06]</a>, <strong class="pkg">Polycyclic</strong> 2.6 <a href="chapBib.html#biBPolycyclic">[EN09]</a> and <strong class="pkg">GAPDoc</strong> 1.4 <a href="chapBib.html#biBGAPDoc">[LN11]</a>. With possible exception of the most recent version of <strong class="pkg">ResClasses</strong>, all needed packages are already present in an up-to-date standard <strong class="pkg">GAP</strong> installation. The <strong class="pkg">RCWA</strong> package can be used on all platforms for which <strong class="pkg">GAP</strong> is available. It is completely written in the <strong class="pkg">GAP</strong> language and does neither contain nor require external binaries. In particular, possible warnings concerning missing binaries issued by other packages when loading <strong class="pkg">RCWA</strong> can safely be ignored.</p>
 
 <p><a id="X8360C04082558A12" name="X8360C04082558A12"></a></p>
 
@@ -152,9 +153,9 @@
 
 <p>This function executes the commands in the file named <var class="Arg">filename</var>. It shows a command and the corresponding output, waits for a keystroke, shows the next command and the corresponding output, waits again for a keystroke, and so on until the end of the file. The demonstration can be stopped by pressing <code class="code">q</code>. The function is adapted from the function <code class="code">Demonstration</code> in the file <code class="file">lib/demo.g</code> of the main <strong class="pkg">GAP</strong> distribution.</p>
 
-<p><a id="X7C7AB20486E56B83" name="X7C7AB20486E56B83"></a></p>
+<p><a id="X7E87938C84EB0229" name="X7E87938C84EB0229"></a></p>
 
-<h4>9.7 <span class="Heading">Loading and saving bitmap pictures</span></h4>
+<h4>9.7 <span class="Heading">Utility functions for bitmap pictures</span></h4>
 
 <p><strong class="pkg">RCWA</strong> provides functions to create bitmap picture files from suitable pixel matrices and vice versa. The author has successfully tested this feature both under Linux and under Windows, and the produced pictures can be processed further with many common graphics programs:</p>
 
@@ -177,6 +178,24 @@
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SaveAsBitmapPicture(picture,"~/images/gcd.bmp");</span>
 
 </pre></div>
+
+<p><strong class="pkg">RCWA</strong> also provides functions for steganography in bitmap pictures:</p>
+
+<p><a id="X8404B60A84DA4534" name="X8404B60A84DA4534"></a></p>
+
+<h5>9.7-2 EncryptIntoBitmapPicture</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EncryptIntoBitmapPicture</code>( <var class="Arg">picturefile</var>, <var class="Arg">cleartextfile</var>, <var class="Arg">passphrase</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DecryptFromBitmapPicture</code>( <var class="Arg">picturefile</var>, <var class="Arg">cleartextfile</var>, <var class="Arg">passphrase</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: nothing.</p>
+
+<p>The first function encrypts the contents of the textfile named <var class="Arg">cleartextfile</var> into the image from the file named <var class="Arg">picturefile</var>, using the passphrase <var class="Arg">passphrase</var>. The modified image is written to a file whose name is derived from <var class="Arg">picturefile</var> by appending the string <code class="code">-out</code>.</p>
+
+<p>The second function decrypts an encoded text from the file named <var class="Arg">picturefile</var> using the passphrase <var class="Arg">passphrase</var>, and writes the obtained cleartext to a file named <var class="Arg">cleartextfile</var>.</p>
+
+<p>These steganographic utility functions are designed for security rather than speed, and are intended to be used for texts of the order of magnitude of what one would normally write into the body of an e-mail -- encoding about 100kb into a picture of usual size should be still convenient, while the functions are definitely not suitable for encoding entire backups or the like.</p>
+
+<p><code class="code">Info</code> messages on the progress of the encryption / decryption are given at <code class="code">InfoLevel</code> 2 of <code class="code">InfoRCWA</code>.</p>
 
 <p><a id="X7ED9DEDA83B2BA05" name="X7ED9DEDA83B2BA05"></a></p>
 

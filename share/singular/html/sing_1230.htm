@@ -1,0 +1,275 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: normalP</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: normalP">
+<META NAME="keywords" CONTENT="Singular Manual: normalP">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1305"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1229.htm#SEC1304"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: normal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1231.htm#SEC1306"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: normalC" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: noether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.17.2 normalP </H4>
+<!--docid::SEC1305::-->
+Procedure from library <CODE>normal.lib</CODE> (see  <A HREF="sing_1228.htm#SEC1303">normal_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>normalP(id [,choose]); id = radical ideal, choose = optional list of
+strings.
+<BR>Optional parameters in list choose (can be entered in any order):<BR>
+"withRing", "isPrim", "noFac", "noRed", where<BR>
+- "noFac" -&gt; factorization is avoided during the computation
+of the minimal associated primes.<BR>
+- "isPrim" -&gt; assumes that the ideal is prime. If the assumption
+does not hold, output might be wrong.<BR>
+- "withRing" -&gt; the ring structure of the normalization is
+computed. The number of variables in the new ring is reduced as much
+as possible.<BR>
+- "noRed" -&gt; when computing the ring structure, no reduction on the
+number of variables is done, it creates one new variable for every
+new module generator of the integral closure in the quotient field.<BR>
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The characteristic of the ground field must be positive. If the
+option "isPrim" is not set, the minimal associated primes of id
+are computed first and hence normalP computes the normalization of
+the radical of id. If option "isPrim" is set, the ideal must be
+a prime ideal otherwise the result may be wrong.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list, say 'nor' of size 2 (resp. 3 if "withRing" is set).<BR>
+** If option "withRing" is not set: <BR>
+Only the module structure is computed: <BR>
+* nor[1] is a list of ideals Ii, i=1..r, in the basering R where r
+is the number of minimal associated prime ideals P_i of the input
+ideal id, describing the module structure:<BR>
+If Ii is given by polynomials g_1,...,g_k in R, then c:=g_k is
+non-zero in the ring R/P_i and g_1/c,...,g_k/c generate the integral
+closure of R/P_i as R-module in the quotient field of R/P_i.<BR>
+* nor[2] shows the delta invariants: it is a list of an intvec
+of size r, the delta invariants of the r components, and an integer,
+the total delta invariant of R/id
+<BR>(-1 means infinite, and 0 that R/P_i resp. R/id is normal). <BR>
+** If option "withRing" is set: <BR>
+The ring structure is also computed, and in this case:<BR>
+* nor[1] is a list of r rings.<BR>
+Each ring Ri = nor[1][i], i=1..r, contains two ideals with given
+names <CODE>norid</CODE> and <CODE>normap</CODE> such that <BR>
+- Ri/norid is the normalization of R/P_i, i.e. isomorphic as
+K-algebra (K the ground field) to the integral closure of R/P_i in
+the field of fractions of R/P_i; <BR>
+- the direct sum of the rings Ri/norid is the normalization
+of R/id; <BR>
+- <CODE>normap</CODE> gives the normalization map from R to Ri/norid.<BR>
+* nor[2] gives the module generators of the normalization of R/P_i,
+it is the same as nor[1] if "withRing" is not set.<BR>
+* nor[3] shows the delta invariants, it is the same as nor[2] if
+"withRing" is not set.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>normalP uses the Leonard-Pellikaan-Singh-Swanson algorithm (using the
+Frobenius) cf. [A. K. Singh, I. Swanson: An algorithm for computing
+the integral closure, arXiv:0901.0871].
+<BR>The delta invariant of a reduced ring A is dim_K(normalization(A)/A).
+For A=K[x1,...,xn]/id we call this number also the delta invariant of
+id. The procedure returns the delta invariants of the components P_i
+and of id.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>To use the i-th ring type: <CODE>def R=nor[1][i]; setring R;</CODE>.
+<BR> Increasing/decreasing printlevel displays more/less comments
+(default: printlevel = 0).
+<BR> Not implemented for local or mixed orderings or quotient rings.
+For local or mixed orderings use proc 'normal'.
+<BR> If the input ideal id is weighted homogeneous a weighted ordering may
+be used (qhweight(id); computes weights).
+<BR> Works only in characteristic p &gt; 0; use proc normal in char 0.
+<P>
+
+<A NAME="IDX458"></A>
+<A NAME="IDX459"></A>
+<A NAME="IDX460"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "normal.lib";
+ring r  = 11,(x,y,z),wp(2,1,2);
+ideal i = x*(z3 - xy4 + x2);
+list nor= normalP(i); nor;
+==> 
+==> // 'normalP' computed a list, say nor, of two lists:
+==> // To see the result, type
+==>      nor;
+==> 
+==> // * nor[1] is a list of 2 ideal(s), where each ideal nor[1][i] consists
+==> // of elements g1..gk of the basering R such that gj/gk generate the inte\
+   gral
+==> // closure of R/P_i (where P_i is a min. associated prime of the input id\
+   eal)
+==> // as R-module in the quotient field of R/P_i;
+==> 
+==> // * nor[2] shows the delta-invariant of each component and of the input \
+   ideal
+==> // (-1 means infinite, and 0 that R/P_i is normal).
+==> [1]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=1
+==> [2]:
+==>    [1]:
+==>       0,0
+==>    [2]:
+==>       -1
+//the result says that both components of i are normal, but i itself
+//has infinite delta
+ring s = 2,(x,y),dp;
+ideal i = y*((x-y^2)^2 - x^3);
+list nor = normalP(i,"withRing"); nor;
+==> 
+==> // 'normalP' created a list, say nor, of three lists:
+==> // To see the result, type
+==>      nor;
+==> 
+==> // * nor[1] is a list of 2 ring(s):
+==> // To access the i-th ring nor[1][i] give it a name, say Ri, and type e.g\
+   .
+==>      def R1 = nor[1][1]; setring R1;  norid; normap;
+==> // for the other rings type first setring R; (if R is the name of your
+==> // original basering) and then continue as for R1;
+==> // Ri/norid is the affine algebra of the normalization of the i-th
+==> // component R/P_i (where P_i is a min. associated prime of the input ide\
+   al)
+==> // and normap the normalization map from R to Ri/norid;
+==> 
+==> // * nor[2] is a list of 2 ideal(s), each ideal nor[2][i] consists of
+==> // elements g1..gk of r such that the gj/gk generate the integral
+==> // closure of R/P_i as R-module in the quotient field of R/P_i.
+==> 
+==> // * nor[3] shows the delta-invariant of each component and of the input
+==> // ideal (-1 means infinite, and 0 that r/P_i is normal).
+==> [1]:
+==>    [1]:
+==>       //   characteristic : 2
+==> //   number of vars : 1
+==> //        block   1 : ordering dp
+==> //                  : names    x
+==> //        block   2 : ordering C
+==>    [2]:
+==>       //   characteristic : 2
+==> //   number of vars : 2
+==> //        block   1 : ordering dp
+==> //                  : names    T(1)
+==> //        block   2 : ordering dp
+==> //                  : names    y
+==> //        block   3 : ordering C
+==> [2]:
+==>    [1]:
+==>       _[1]=1
+==>    [2]:
+==>       _[1]=y3+xy
+==>       _[2]=x2
+==> [3]:
+==>    [1]:
+==>       0,3
+==>    [2]:
+==>       6
+def R2  = nor[1][2]; setring R2;
+norid; normap;
+==> norid[1]=T(1)^4+T(1)^3*y+T(1)^2+y^2
+==> norid[2]=T(1)^3+T(1)+y
+==> norid[3]=T(1)^6+T(1)^5*y+T(1)^4*y^2+T(1)^3*y^3+T(1)^2+T(1)*y+y^4
+==> normap[1]=T(1)^2+T(1)*y+1
+==> normap[2]=y
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1229.htm#SEC1304">normal</A>;
+ <A HREF="sing_1231.htm#SEC1306">normalC</A>.
+<P>
+
+<A NAME="normalC"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1229.htm#SEC1304"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: normal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1231.htm#SEC1306"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: normalC" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1219.htm#SEC1294"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: noether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1243.htm#SEC1318"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: normaliz_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: normal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

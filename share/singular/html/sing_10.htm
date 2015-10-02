@@ -1,0 +1,206 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Modules and their annihilator</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Modules and their annihilator">
+<META NAME="keywords" CONTENT="Singular Manual: Modules and their annihilator">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC16"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_9.htm#SEC15"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Change of rings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_11.htm#SEC17"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Resolution" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_4.htm#SEC6"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: How to use this manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General concepts" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_5.htm#SEC11"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Getting started" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 2.3.5 Modules and their annihilator </H3>
+<!--docid::SEC16::-->
+<P>
+
+Now we shall give three more advanced examples.
+</P><P>
+
+S<SMALL>INGULAR</SMALL> is able to handle modules over all the rings,
+which can be defined as a basering. A free module of rank <CODE>n</CODE>
+is defined as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring rr;
+int n = 4;
+freemodule(4);
+==> _[1]=gen(1)
+==> _[2]=gen(2)
+==> _[3]=gen(3)
+==> _[4]=gen(4)
+typeof(_);
+==> module
+print(freemodule(4));
+==> 1,0,0,0,
+==> 0,1,0,0,
+==> 0,0,1,0,
+==> 0,0,0,1
+</FONT></pre></td></tr></table></P><P>
+
+To define a module, we provide a list of vectors generating a submodule of
+a free module. Then this set of vectors may be identified with the
+columns of a matrix.  For that reason in S<SMALL>INGULAR</SMALL> matrices and
+modules may be interchanged. However, the representation is different
+(modules may be considered as sparse matrices).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r =0,(x,y,z),dp;
+module MD = [x,0,x],[y,z,-y],[0,z,-2y];
+matrix MM = MD;
+print(MM);
+==> x,y,0,
+==> 0,z,z,
+==> x,-y,-2y
+</FONT></pre></td></tr></table></P><P>
+
+However the submodule 
+<IMG
+ WIDTH="35" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_10.png"
+ ALT="$MD$"> may also be considered as the module
+of relations of the factor module
+<IMG
+ WIDTH="57" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_11.png"
+ ALT="$r^3/MD$">.In this way, S<SMALL>INGULAR</SMALL> can treat arbitrary finitely generated modules
+over the
+basering (see  <A HREF="sing_890.htm#SEC941">Representation of mathematical objects</A>).
+</P><P>
+
+In order to get the module of relations of 
+<IMG
+ WIDTH="35" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_10.png"
+ ALT="$MD$">,
+we use the command <CODE>syz</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>syz(MD);
+==> _[1]=x*gen(3)-x*gen(2)+y*gen(1)
+</FONT></pre></td></tr></table></P><P>
+
+We want to calculate, as an application, the annihilator of a given module.
+Let
+<IMG
+ WIDTH="78" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_12.png"
+ ALT="$M = r^3/U$">,where U is our defining module of relations for the module
+<IMG
+ WIDTH="22" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_13.png"
+ ALT="$M$">.</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>module U = [z3,xy2,x3],[yz2,1,xy5z+z3],[y2z,0,x3],[xyz+x2,y2,0],[xyz,x2y,1];
+</FONT></pre></td></tr></table></P><P>
+
+Then, by definition, the annihilator of M is the ideal
+<!-- MATH
+ $\hbox{ann}(M) = \{a \mid aM = 0 \}$
+ -->
+<IMG
+ WIDTH="173" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_14.png"
+ ALT="$\hbox{ann}(M) = \{a \mid aM = 0 \}$">which is, by definition of M, the same as
+<!-- MATH
+ $\{ a \mid ar^3 \in U \}$
+ -->
+<IMG
+ WIDTH="97" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_15.png"
+ ALT="$\{ a \mid ar^3 \in U \}$">.Hence we have to calculate the quotient
+<IMG
+ WIDTH="39" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_16.png"
+ ALT="$U \colon r^3 $">.The rank of the free module is determined by the choice of U and is the
+number of rows of the corresponding matrix. This may be retrieved by
+the function <CODE>nrows</CODE>. All we have to do now is the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>quotient(U,freemodule(nrows(U)));
+</FONT></pre></td></tr></table></P><P>
+
+The result is too big to be shown here.
+</P><P>
+
+<A NAME="Resolution"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_9.htm#SEC15"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Change of rings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_11.htm#SEC17"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Resolution" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_4.htm#SEC6"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: How to use this manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General concepts" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_5.htm#SEC11"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Getting started" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

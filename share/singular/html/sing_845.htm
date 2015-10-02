@@ -1,0 +1,285 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Writing procedures and libraries</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Writing procedures and libraries">
+<META NAME="keywords" CONTENT="Singular Manual: Writing procedures and libraries">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC896"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_844.htm#SEC895"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Basic programming" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_846.htm#SEC897"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Rings associated to monomial orderings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.1.2 Writing procedures and libraries </H3>
+<!--docid::SEC896::-->
+<P>
+
+The user may add their own commands to the commands already available in
+S<SMALL>INGULAR</SMALL> by writing S<SMALL>INGULAR</SMALL> procedures. There are basically
+two kinds of procedures:
+<UL>
+<LI>procedures written in the S<SMALL>INGULAR</SMALL> programming language (which are
+usually collected in S<SMALL>INGULAR</SMALL> libraries).
+<LI>procedures written in C/C++ (collected in dynamic modules).
+</UL>
+<P>
+
+At this point, we restrict ourselves to describing the first kind of
+(library) procedures, which are sufficient for most applications. The
+syntax and general structure of a library (procedure) is described in
+ <A HREF="sing_42.htm#SEC76">Procedures</A>, and  <A HREF="sing_48.htm#SEC84">Libraries</A>.
+</P><P>
+
+The probably most efficient way of
+writing a new library is to use one of the official S<SMALL>INGULAR</SMALL>
+libraries, say <CODE>ring.lib</CODE> as a sample. On a Unix-like operating
+system, type <CODE>LIB "ring.lib";</CODE> to get information on where the
+libraries are stored on your disk.
+</P><P>
+
+S<SMALL>INGULAR</SMALL> provides several commands and tools, which may be useful
+when writing a procedure, for instance, to have a look at intermediate
+results (see  <A HREF="sing_63.htm#SEC99">Debugging tools</A>).
+</P><P>
+
+If such a libarary should be contributed to S<SMALL>INGULAR</SMALL> some formal
+requirements are needed:
+<UL>
+<LI>
+the library header must explain the purpose of the library and
+(for non-trivial algorithm) a pointer to the algorithm (text book, article, etc.)
+<LI>
+all global procedures must have a help string and an example which shows its usage.
+<LI>
+it is strongly recommend also to provide test scripts which test the functionality: one should test the essential functionality of the
+  library/command in a relatively short time (say, in no more than 30s),
+  other tests  should check the functionality of the
+  library/command in detail so that, if possible, all relevant
+  cases/results are tested. Nevertheless, such a test should not run
+  longer than, say, 10 minutes.
+</UL>
+<P>
+
+We give short examples of procedures to demonstrate the following:
+</P><P>
+
+<UL>
+<LI>
+Write procedures which return an integer (ring independent), see also
+ <A HREF="sing_871.htm#SEC922">Milnor and Tjurina number</A>. (Here we restrict ourselves to the main
+body of the procedures).
+<UL>
+<LI>
+  The procedure <CODE>milnorNumber</CODE> must be called with one parameter, a
+  polynomial.
+  The name g is local to the procedure and is killed automatically when
+  leaving the procedure.
+  <CODE>milnorNumber</CODE> returns the Milnor number (and displays a comment).
+<LI>
+  The procedure <CODE>tjurinaNumber</CODE> has no specified number of
+  parameters. Here, the parameters are referred to by <CODE>#[1]</CODE> for
+  the 1st, <CODE>#[2]</CODE> for the 2nd parameter, etc.
+  <CODE>tjurinaNumber</CODE> returns the Tjurina number (and displays a comment).
+<LI>
+  the procedure <CODE>milnor_tjurina</CODE> which returns a list consisting of two
+  integers, the Milnor and the Tjurina number.
+</UL>
+<P>
+
+<LI>
+Write a procedure which creates a new ring and returns data dependent on
+this new ring (two numbers) and an int. In this example, we also show
+how to write a help text for the procedure (which is optional, but
+recommended).
+</UL>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>proc milnorNumber (poly g)
+{
+   "Milnor number:";
+   return(vdim(std(jacob(g))));
+}
+
+proc tjurinaNumber
+{
+   "Tjurina number:";
+   return(vdim(std(jacob(#[1])+#[1])));
+}
+
+proc milnor_tjurina (poly f)
+{
+   ideal j=jacob(f);
+   list L=vdim(std(j)),vdim(std(j+f));
+   return(L);
+}
+
+proc real_sols (number b, number c)
+"USAGE: real_sols (b,c);  b,c number
+ASSUME: active basering has characteristic 0
+RETURN: list: first entry is an integer (the number of different real
+        solutions). If this number is non-negative, the list has as second
+        entry a ring in which the list SOL of real solutions of x^2+bx+c=0
+        is stored (as floating point number, precision 30 digits).
+NOTE:   This procedure calls laguerre_solve from solve.lib.
+"
+{
+  def oldring = basering;  // assign name to the ring active when
+                           // calling the procedure
+  number disc = b^2-4*c;
+  if (disc&gt;0) { int n_of_sols = 2; }
+  if (disc==0) { int n_of_sols = 1; }
+  string s = nameof(var(1));  // name of first ring variable
+  if (disc&gt;=0) {
+    execute("ring rinC =(complex,30),("+s+"),lp;");
+    if (not(defined(laguerre_solve))) { LIB "solve.lib"; }
+    poly f = x2+imap(oldring,b)*x+imap(oldring,c);
+                        // f is a local ring-dependent variable
+    list SOL = laguerre_solve(f,30);
+    export SOL;         // make SOL a global ring-dependent variable
+                        // such variables are still accessible when the
+                        // ring is among the return values of the proc
+    setring oldring;
+    return(list(n_of_sols,rinC));
+  }
+  else {
+    return(list(0));
+  }
+}
+
+//
+// We now apply the procedures which are defined by the
+// lines of code above:
+//
+ring r = 0,(x,y),ds;
+poly f = x7+y7+(x-y)^2*x2y2;
+
+milnorNumber(f);
+==> Milnor number:
+==> 28
+tjurinaNumber(f);
+==> Tjurina number:
+==> 24
+milnor_tjurina(f);     // a list containing Milnor and Tjurina number
+==> [1]:
+==>    28
+==> [2]:
+==>    24
+
+def L=real_sols(2,1);
+L[1];                  // number of real solutions of x^2+2x+1
+==> 1
+def R1=L[2];
+setring R1;
+listvar(R1);           // only global ring-dependent objects are still alive
+==> // R1                             [0]  *ring
+==> // SOL                            [0]  list, size: 2
+SOL;                   // the real solutions
+==> [1]:
+==>    -1
+==> [2]:
+==>    -1
+
+setring r;
+L=real_sols(1,1);
+L[1];                  // number of reals solutions of x^2+x+1
+==> 0
+
+setring r;
+L=real_sols(1,-5);
+L[1];                  // number of reals solutions of x^2+x-5
+==> 2
+def R3=L[2];
+setring R3; SOL;       // the real solutions
+==> [1]:
+==>    -2.791287847477920003294023596864
+==> [2]:
+==>    1.791287847477920003294023596864
+</FONT></pre></td></tr></table></P><P>
+
+Writing a dynamic module is not as simple as writing a library
+procedure, since it does not only require some knowledge of C/C++, but
+also about the way the S<SMALL>INGULAR</SMALL> kernel works.
+See also  <A HREF="sing_852.htm#SEC903">Dynamic modules</A>.
+</P><P>
+
+<A NAME="Rings associated to monomial orderings"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_844.htm#SEC895"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Basic programming" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_846.htm#SEC897"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Rings associated to monomial orderings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

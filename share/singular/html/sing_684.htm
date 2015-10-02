@@ -1,0 +1,160 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: freeGBasis</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: freeGBasis">
+<META NAME="keywords" CONTENT="Singular Manual: freeGBasis">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC735"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_683.htm#SEC734"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: lpNF" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_685.htm#SEC736"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setLetterplaceAttributes" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_649.htm#SEC700"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: fpadim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: involut_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: freegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.8.0. freeGBasis </H5>
+<!--docid::SEC735::-->
+Procedure from library <CODE>freegb.lib</CODE> (see  <A HREF="sing_680.htm#SEC731">freegb_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>freeGBasis(L, d); L a list of modules, d an integer
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>L has a special form. Namely, it is a list of modules, where
+<P>
+
+- each generator of every module stands for a monomial times coefficient in
+<BR> free algebra,
+</P><P>
+
+- in such a vector generator, the 1st entry is a nonzero coefficient from the
+<BR> ground field
+</P><P>
+
+- and each next entry hosts a variable from the basering.
+</P><P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute the two-sided Groebner basis of an ideal, encoded by L
+<BR> in the free associative algebra, up to degree d
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Apply <CODE>lst2str</CODE> to the output in order to obtain a better readable
+<BR> presentation
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "freegb.lib";
+ring r = 0,(x,y,z),(dp(1),dp(2)); //  ring r = 0,(x,y,z),(a(3,0,2), dp(2));
+module M = [-1,x,y],[-7,y,y],[3,x,x]; // stands for free poly -xy - 7yy - 3xx
+module N = [1,x,y,x],[-1,y,x,y]; // stands for free poly xyx - yxy
+list L; L[1] = M; L[2] = N; // list of modules stands for an ideal in free algebra
+lst2str(L); // list to string conversion of input polynomials
+==> [1]:
+==>    -xy-7yy+3xx
+==> [2]:
+==>    xyx-yxy
+def U = freeGBasis(L,5); // 5 is the degree bound
+lst2str(U);
+==> [1]:
+==>    yyyyy
+==> [2]:
+==>    22803yyyx+19307yyyy
+==> [3]:
+==>    1933yyxy+2751yyyx+161yyyy
+==> [4]:
+==>    22xyy-3yxy-21yyx+7yyy
+==> [5]:
+==>    3xyx-22xyy+21yyx-7yyy
+==> [6]:
+==>    3xx-xy-7yy
+</FONT></pre></td></tr></table><P>
+
+<A NAME="setLetterplaceAttributes"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_683.htm#SEC734"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: lpNF" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_685.htm#SEC736"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setLetterplaceAttributes" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_649.htm#SEC700"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: fpadim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_698.htm#SEC749"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: involut_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_680.htm#SEC731"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: freegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

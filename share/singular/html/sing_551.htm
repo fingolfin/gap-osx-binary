@@ -1,0 +1,140 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: isPureTensor</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: isPureTensor">
+<META NAME="keywords" CONTENT="Singular Manual: isPureTensor">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC602"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_550.htm#SEC601"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: CompDecomp" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_552.htm#SEC603"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: isTwoSidedGB" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_539.htm#SEC590"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: LETTERPLACE" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_553.htm#SEC604"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: bfun_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_546.htm#SEC597"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bimodules_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.1.0. isPureTensor </H5>
+<!--docid::SEC602::-->
+Procedure from library <CODE>bimodules.lib</CODE> (see  <A HREF="sing_546.htm#SEC597">bimodules_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>isPureTensor(g); g poly
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>This procedure only works if the basering is an enveloping algebra A^{env} of a (non-commutative) ring A. Thus also the polynomial in the argument has to be in A^{env}.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>Returns 0 if g is not a pure tensor and if g is a pure tensor then isPureTensor() returns a vector v with v = a*gen(1)+b*gen(2) = (a,b)^T with a (X) b = g.
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Checks whether a given polynomial in $\A^{env}$ is a pure tensor. This is also an auxiliary procedure for checking total divisibility.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "bimodules.lib";
+ring r = 0,(x,s),dp;
+def R = nc_algebra(1,s); setring R; //1st shift algebra
+def Re = envelope(R); setring Re; //basering is now R^{env} = R (X) R^{opp}
+poly p = x*(x*s)*x + s^2*x; p;
+==> x3s+x2s+xs2+2s2
+// p is of the form q(X)1, a pure tensor indeed:
+isPureTensor(p);
+==> x3s*gen(1)+x2s*gen(1)+xs2*gen(1)+2s2*gen(1)+gen(2)
+// v = transpose( x3s+x2s+xs2+2s2  1 ) i.e. p = x3s+x2s+xs2+2s2 (X) 1
+poly g = S*X+ x*s*X+ S^2*x;
+g;
+==> xsX+xS2+SX
+isPureTensor(g); // indeed g is not a pure tensor
+==> 0
+poly d = x*X+s*X+x*S*X+s*S*X;d;
+==> xSX+xX+sSX+sX
+isPureTensor(d); // d is a pure tensor indeed
+==> x*gen(1)+s*gen(1)+SX*gen(2)+X*gen(2)
+// v = transpose( x+s  S*X+X ) i.e. d = x+s (X) s*x+x
+// remember that * denotes to the opposite mulitiplication s*x = xs in R.
+</FONT></pre></td></tr></table><P>
+
+<A NAME="isTwoSidedGB"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_550.htm#SEC601"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: CompDecomp" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_552.htm#SEC603"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: isTwoSidedGB" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_539.htm#SEC590"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: LETTERPLACE" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_553.htm#SEC604"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: bfun_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_546.htm#SEC597"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bimodules_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

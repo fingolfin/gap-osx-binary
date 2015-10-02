@@ -278,11 +278,13 @@ InstallMethod( CoefficientsOfUnreducedNumeratorOfHilbertPoincareSeries,
             
             r := Length( free );
             
-            free := HomalgZeroMatrix( 1, 1, R );
+            if not IsBound( R!.CoefficientsOfUnreducedNumeratorOfHilbertPoincareSeries_of_free_rank_1 ) then
+                free := HomalgZeroMatrix( 1, 1, R );
+                R!.CoefficientsOfUnreducedNumeratorOfHilbertPoincareSeries_of_free_rank_1 :=
+                  CoefficientsOfUnreducedNumeratorOfHilbertPoincareSeries( free );
+            fi;
             
-            hilb_free := CoefficientsOfUnreducedNumeratorOfHilbertPoincareSeries( free );
-            
-            hilb_free := r * hilb_free;
+            hilb_free := r * R!.CoefficientsOfUnreducedNumeratorOfHilbertPoincareSeries_of_free_rank_1;
             
             if IsZero( M ) then
                 return hilb_free;
@@ -291,6 +293,10 @@ InstallMethod( CoefficientsOfUnreducedNumeratorOfHilbertPoincareSeries,
             M := CertainColumns( M, NonZeroColumns( M ) );
             
         else
+            
+            if not ( IsZero( M ) and NrRows( M ) = 1 and NrColumns( M ) = 1 ) then
+                M := BasisOfRowModule( M );
+            fi;
             
             hilb_free := 0;
             
@@ -1224,6 +1230,10 @@ InstallMethod( AffineDimension,
     
     if IsBound( RP!.AffineDimension ) then
         
+        if not IsZero( M ) then
+            M := BasisOfRowModule( M );
+        fi;
+        
         d := RP!.AffineDimension( M );
         
         if d < 0 then
@@ -1864,7 +1874,7 @@ InstallMethod( IntersectWithSubalgebra,
                " to be a subset of the set of indeterminates ", indets, "\n" );
     fi;
     
-    J := Eliminate( I, Difference( indets, var ), R );
+    J := Eliminate( I, Difference( indets, var ) );
     
     S := CoefficientsRing( R ) * var;
     
@@ -1878,7 +1888,7 @@ InstallMethod( MaximalIndependentSet,
         [ IsFinitelyPresentedSubmoduleRep and ConstructedAsAnIdeal ],
         
   function( I )
-    local R, indets, d, combinations, u;
+    local R, indets, d, RP, i, combinations, u;
     
     R := HomalgRing( I );
     
@@ -1894,7 +1904,22 @@ InstallMethod( MaximalIndependentSet,
         return [ ];
     fi;
     
-    combinations := Combinations( indets, d );
+    RP := homalgTable( R );
+    
+    if IsBound(RP!.MaximalIndependentSet) then
+        i := MatrixOfSubobjectGenerators( I );
+        if not IsHomalgLeftObjectOrMorphismOfLeftObjects( I ) then
+            i := Involution( i );
+        fi;
+        i := BasisOfRowModule( i );
+        indets := RP!.MaximalIndependentSet( i );
+        Assert( 0, Length( indets ) = d );
+        return indets;
+    fi;
+    
+    ## the fallback method
+    
+    combinations := IteratorOfCombinations( indets, d );
     
     for u in combinations do
         if IsZero( IntersectWithSubalgebra( I, u ) ) then
@@ -1903,5 +1928,227 @@ InstallMethod( MaximalIndependentSet,
     od;
     
     Error( "oh, no maximal independent set found, this is a bug!\n" );
+    
+end );
+
+## for ideals with affine entries
+InstallMethod( MaximalIndependentSet,
+        "for ideals",
+        [ IsFinitelyPresentedSubmoduleRep and ConstructedAsAnIdeal ],
+        
+  function( I )
+    local R, indets, d, left;
+    
+    R := HomalgRing( I );
+    
+    indets := Indeterminates( R );
+    
+    if IsZero( I ) then
+        return indets;
+    fi;
+    
+    d := AffineDimension( I );
+    
+    if d = 0 then
+        return [ ];
+    fi;
+    
+    left := IsHomalgLeftObjectOrMorphismOfLeftObjects( I );
+    
+    I := MatrixOfSubobjectGenerators( I );
+    
+    if not left then
+        I := Involution( I );
+    fi;
+    
+    I := BasisOfRowModule( I );
+    
+    if not ForAll( EntriesOfHomalgMatrix( I ), a -> Degree( a ) = 1 ) then
+        TryNextMethod( );
+    fi;
+    
+    I := LeadingModule( I );
+    
+    return Difference( indets, EntriesOfHomalgMatrix( I ) );
+    
+end );
+
+##
+InstallMethod( EliminateOverBaseRing,
+        "for a matrix and a list",
+        [ IsHomalgMatrix, IsList, IsInt ],
+        
+  function( M, elim, d )
+    local R, B, indets, L, N, n, monoms, monomStr, monomS, m,
+          MonomsL, monomsL, monomSL, posL, coeffs, coeffsL;
+    
+    if not NrColumns( M ) = 1 then
+        Error( "the number of columns must be 1\n" );
+    fi;
+    
+    R := HomalgRing( M );
+    
+    if HasRelativeIndeterminatesOfPolynomialRing( R ) then
+        B := BaseRing( R );
+        indets := RelativeIndeterminatesOfPolynomialRing( R );
+    elif HasIndeterminatesOfPolynomialRing( R ) then
+        B := CoefficientsRing( R );
+        indets := IndeterminatesOfPolynomialRing( R );
+    elif IsFieldForHomalg( R ) then
+        return HomalgZeroMatrix( 0, 1, R );
+    else
+        TryNextMethod( );
+    fi;
+    
+    if not IsSubset( indets, elim ) then
+        Error( "the second argument is not a subset of the list of indeterminates\n" );
+    fi;
+    
+    L := Difference( indets, elim );
+    
+    if d > 0 then
+        indets := HomalgMatrix( indets, R );
+    fi;
+    
+    while d > 0 do
+        M := UnionOfRows( M, KroneckerMat( indets, M ) );
+        d := d - 1;
+    od;
+    
+    M := EntriesOfHomalgMatrix( M );
+    
+    M := List( M, Coefficients );
+    
+    N := List( M, a -> a!.monomials );
+    
+    n := Length( N );
+    
+    M := List( M, a -> B * a );
+    
+    monoms := Concatenation( N );
+    
+    ## check if a monomial could be reconstructed from its string
+    m := Length( monoms );
+    if m > 0 then
+        Assert( 0, monoms[m] = String( monoms[m] ) / R );
+    fi;
+    
+    monomStr := List( monoms, String );
+    
+    monomS := Set( monomStr );
+    
+    monoms := monoms{List( monomS, a -> Position( monomStr, a ) )};
+    
+    m := Length( monoms );
+    
+    MonomsL := Select( HomalgMatrix( monoms, m, 1, R ), L );
+    
+    monomsL := EntriesOfHomalgMatrix( MonomsL );
+    
+    monomSL := List( monomsL, String );
+    
+    posL := List( monomSL, a -> PositionSet( monomS, a ) );
+    
+    monoms := Concatenation( monomsL, monoms{Difference( [ 1 .. m ], posL )} );
+    
+    Assert( 0, m = Length( monoms ) );
+    
+    monomS := List( monoms, String );
+    
+    N := List( N, a -> List( a, b -> Position( monomS, String( b ) ) ) );
+    
+    coeffs := HomalgInitialMatrix( n, m, B );
+    
+    Perform( [ 1 .. n ],
+            function( r )
+              local l;
+              l := N[r];
+              Perform( [ 1 .. Length( l ) ],
+                      function( c )
+                        SetMatElm( coeffs, r, l[c], MatElm( M[r], c, 1 ) );
+                      end );
+            end );
+    
+    MakeImmutable( coeffs );
+    
+    coeffs := LeftSubmodule( coeffs );
+    
+    n := Length( monomsL );
+    
+    coeffsL := UnionOfColumns(
+                       HomalgIdentityMatrix( n, B ),
+                       HomalgZeroMatrix( n, m - n, B )
+                       );
+    
+    coeffsL := Subobject( coeffsL, SuperObject( coeffs ) );
+    
+    elim := Intersect( coeffs, coeffsL );
+    
+    OnBasisOfPresentation( elim );
+    
+    ByASmallerPresentation( elim );
+    
+    elim := MatrixOfSubobjectGenerators( elim );
+    
+    elim := CertainColumns( elim, [ 1 .. n ] );
+    
+    return ( R * elim ) * MonomsL;
+    
+end );
+
+##
+InstallMethod( EliminateOverBaseRing,
+        "for a matrix and a list",
+        [ IsHomalgMatrix, IsList ],
+        
+  function( M, elim )
+    
+    return EliminateOverBaseRing( M, elim, 0 );
+    
+end );
+
+##
+InstallMethod( SimplifiedInequalities,
+        [ IsList ],
+        
+  function( ineqs )
+    local R;
+    
+    if ineqs = [ ] then
+        return ineqs;
+    fi;
+    
+    R := HomalgRing( ineqs[1] );
+    
+    ineqs := Set( ineqs );
+    
+    ## normalize
+    ineqs := List( ineqs, i -> BasisOfRows( HomalgMatrix( [ i ], 1, 1, R ) ) );
+    ineqs := Filtered( ineqs, u -> not IsZero( u ) );
+    ineqs := List( ineqs, u -> MatElm( u, 1, 1 ) );
+    ineqs := Set( ineqs );
+    
+    ## radical decomposition
+    ineqs := List( ineqs, i -> RadicalDecomposition( LeftSubmodule( [ i ] ) ) );
+    ineqs := Concatenation( ineqs );
+    ineqs := List( ineqs, i -> MatElm( MatrixOfSubobjectGenerators( i ), 1, 1 ) );
+    ineqs := Set( ineqs );
+    
+    ## get rid of constants
+    ineqs := Filtered( ineqs, i -> not IsUnit( i ) );
+    
+    return ineqs;
+    
+end );
+
+##
+InstallMethod( SimplifiedInequalities,
+        [ IsHomalgMatrix ],
+        
+  function( ineqs )
+    
+    ineqs := EntriesOfHomalgMatrix( ineqs );
+    
+    return SimplifiedInequalities( ineqs );
     
 end );

@@ -1,0 +1,145 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: divideUnits</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: divideUnits">
+<META NAME="keywords" CONTENT="Singular Manual: divideUnits">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1879"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1803.htm#SEC1878"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: jacobson" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: control_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.3.3 divideUnits </H4>
+<!--docid::SEC1879::-->
+Procedure from library <CODE>jacobson.lib</CODE> (see  <A HREF="sing_1801.htm#SEC1876">jacobson_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>divideUnits(L); list L
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>matrix or list of matrices
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>L is an output of <CODE>smith</CODE> or a <CODE>jacobson</CODE> procedures, that is
+<BR> either L contains one rectangular matrix with elements only on the main diagonal
+<BR> or L consists of three matrices, where L[1] and L[3] are square invertible matrices
+<BR> while L[2] is a rectangular matrix with elements only on the main diagonal
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>divide out units from the diagonal and reflect this in transformation matrices
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "jacobson.lib";
+ring R=(0,m,M,L1,L2,m1,m2,g), D, lp; // two pendula example
+matrix P[3][4]=m1*L1*D^2,m2*L2*D^2,(M+m1+m2)*D^2,-1,
+m1*L1^2*D^2-m1*L1*g,0,m1*L1*D^2,0,0,
+m2*L2^2*D^2-m2*L2*g,m2*L2*D^2,0;
+list s=smith(P,1);  // returns a list with 3 entries
+print(s[2]); // a diagonal form, close to the Smith form
+==> (L1*L2*m2*g^2-L2^2*m2*g^2),0,   0,    0,
+==> 0,                         (L2),0,    0,
+==> 0,                         0,   (g^2),0 
+print(s[1]); // U, left transformation matrix
+==> 0,    (-L2*m2)/(L1*m1),    1,
+==> (-L2),(M*L2+L2*m1)/(L1*m1),1,
+==> 0,    1/(L1*m1),           0 
+list t = divideUnits(s);
+print(t[2]); // the Smith form of the matrix P
+==> 1,0,0,0,
+==> 0,1,0,0,
+==> 0,0,1,0 
+print(t[1]); // U', modified left transformation matrix
+==> 0, -1/(L1^2*m1*g^2-L1*L2*m1*g^2),1/(L1*L2*m2*g^2-L2^2*m2*g^2),
+==> -1,(M+m1)/(L1*m1),               1/(L2),                      
+==> 0, 1/(L1*m1*g^2),                0                            
+</FONT></pre></td></tr></table><P>
+
+<A NAME="findifs_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1803.htm#SEC1878"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: jacobson" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: control_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

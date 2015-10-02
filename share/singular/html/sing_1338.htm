@@ -1,0 +1,160 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: adjointIdeal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: adjointIdeal">
+<META NAME="keywords" CONTENT="Singular Manual: adjointIdeal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1413"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1339.htm#SEC1414"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: invertBirMap" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.1.1 adjointIdeal </H4>
+<!--docid::SEC1413::-->
+Procedure from library <CODE>paraplanecurves.lib</CODE> (see  <A HREF="sing_1337.htm#SEC1412">paraplanecurves_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>adjointIdeal(f [, choices]); f polynomial in three variables, choices
+optional list consisting of one integer or of one string or of one
+integer followed by one string. <BR>
+Optional integer can be: <BR>
+1: compute integral basis via normalization. <BR>
+2: make local analysis of singularities first and apply normalization
+separately. <BR>
+3: normalization via ideal quotient. <BR>
+4: normalization via local ideal quotient. <BR>
+The default is 2. <BR>
+Optional string may contain substrings: <BR>
+- rattestyes -&gt; causes error message if curve is not rational. <BR>
+- firstchecksdone -&gt; prevents that check of assumptions will be done
+more than once.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering must be a polynomial ring in three variables, say x,y,z,
+with coefficients in Q. <BR>
+The polynomial f must be homogeneous and absolutely irreducible.<BR>
+All these conditions will be checked automatically.<BR>
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal, the adjoint ideal of the curve defined by f.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Considering C in the chart z&lt;&gt;0, the algorithm regards x as
+transcendental and y as algebraic and computes an integral basis in C(x)[y] of
+the integral closure of C[x] in C(x,y) using the normalization algorithm
+from  <A HREF="sing_1228.htm#SEC1303">normal_lib</A>: see  <A HREF="sing_1169.htm#SEC1244">integralbasis_lib</A>. In a future edition of the library,
+also van Hoeij's algorithm for computing the integral basis will be available.<BR>
+From the integral basis, the adjoint ideal is obtained by linear algebra.
+Alternatively, the algorithm starts with a local analysis of the singular
+locus of C. Then, for each primary component of the singular locus which
+does not correspond to ordinary multiple points or cusps, the integral
+basis algorithm is applied separately. The ordinary multiple points and
+cusps, in turn, are addressed by a straightforward direct algorithm. The
+adjoint ideal is obtained by intersecting all ideals obtained locally.
+The local variant of the algorithm is used by default. <BR>
+<P>
+
+<A NAME="IDX477"></A>
+<A NAME="IDX478"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "paraplanecurves.lib";
+ring R = 0,(x,y,z),dp;
+poly f = y^8-x^3*(z+x)^5;
+adjointIdeal(f);
+==> _[1]=y6
+==> _[2]=xy5+y5z
+==> _[3]=x2y4+xy4z
+==> _[4]=x3y3+2x2y3z+xy3z2
+==> _[5]=x4y2+3x3y2z+3x2y2z2+xy2z3
+==> _[6]=x5y+3x4yz+3x3yz2+x2yz3
+==> _[7]=x6+4x5z+6x4z2+4x3z3+x2z4
+</FONT></pre></td></tr></table><P>
+
+<A NAME="invertBirMap"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1339.htm#SEC1414"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: invertBirMap" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

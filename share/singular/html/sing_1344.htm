@@ -1,0 +1,163 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: rncItProjOdd</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: rncItProjOdd">
+<META NAME="keywords" CONTENT="Singular Manual: rncItProjOdd">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1419"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1343.htm#SEC1418"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: mapToRatNormCurve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1345.htm#SEC1420"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rncItProjEven" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.1.7 rncItProjOdd </H4>
+<!--docid::SEC1419::-->
+Procedure from library <CODE>paraplanecurves.lib</CODE> (see  <A HREF="sing_1337.htm#SEC1412">paraplanecurves_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>rncItProjOdd(I); I ideal
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>I is a homogeneous ideal in the basering with n+1 variables
+defining a rational normal curve C in PP^n with n odd.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The procedure will fail or give a wrong output if I is not the
+ideal of a rational normal curve. It will test whether n is odd.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal PHI defining an isomorphic projection of C to PP^1.<BR>
+Note that the entries of PHI should be considered as
+<BR>representatives of elements in R/I, where R is the basering.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>We iterate the procedure  <A HREF="sing_1341.htm#SEC1416">rncAntiCanonicalMap</A> to obtain PHI.
+<P>
+
+<A NAME="IDX482"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "paraplanecurves.lib";
+ring R = 0,(x,y,z),dp;
+poly f = -x7-10x5y2-10x4y3-3x3y4+8x2y5+7xy6+11y7+3x6+10x5y +30x4y2
++26x3y3-13x2y4-29xy5-33y6-3x5-20x4y-33x3y2-8x2y3+37xy4+33y5
++x4+10x3y+13x2y2-15xy3-11y4;
+f = homog(f,z);
+ideal adj = adjointIdeal(f);
+def Rn = mapToRatNormCurve(f,adj);
+==> //'mapToRatNorm' created a ring together with an ideal RNC.
+==> // Supposing you typed, say,  def RPn = mapToRatNorm(f,AI);
+==> // you may access the ideal by typing
+==> //      setring RPn; RNC;
+setring(Rn);
+RNC;
+==> RNC[1]=y(4)*y(5)-y(3)*y(6)
+==> RNC[2]=y(2)*y(5)-y(1)*y(6)
+==> RNC[3]=y(4)^2-y(2)*y(6)
+==> RNC[4]=y(3)*y(4)-y(1)*y(6)
+==> RNC[5]=11*y(1)*y(4)+7*y(2)*y(4)+8*y(1)*y(6)-3*y(2)*y(6)-10*y(3)*y(6)-10*y\
+   (4)*y(6)-y(6)^2
+==> RNC[6]=y(3)^2-y(1)*y(5)
+==> RNC[7]=11*y(2)*y(3)+7*y(2)*y(4)+8*y(1)*y(6)-3*y(2)*y(6)-10*y(3)*y(6)-10*y\
+   (4)*y(6)-y(6)^2
+==> RNC[8]=11*y(1)*y(3)+7*y(1)*y(4)+8*y(1)*y(5)-10*y(3)*y(5)-3*y(1)*y(6)-10*y\
+   (3)*y(6)-y(5)*y(6)
+==> RNC[9]=121*y(1)*y(2)+77*y(2)^2-89*y(2)*y(4)-174*y(1)*y(6)-86*y(2)*y(6)+80\
+   *y(3)*y(6)+69*y(4)*y(6)+8*y(6)^2
+==> RNC[10]=1331*y(1)^2-539*y(2)^2+1246*y(2)*y(4)-1914*y(1)*y(5)+880*y(3)*y(5\
+   )+984*y(1)*y(6)+335*y(2)*y(6)-691*y(3)*y(6)-1373*y(4)*y(6)+88*y(5)*y(6)-1\
+   45*y(6)^2
+rncItProjOdd(RNC);
+==> _[1]=121*y(3)+77*y(4)
+==> _[2]=-11*y(5)-7*y(6)
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1345.htm#SEC1420">rncItProjEven</A>.
+<P>
+
+<A NAME="rncItProjEven"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1343.htm#SEC1418"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: mapToRatNormCurve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1345.htm#SEC1420"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: rncItProjEven" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -84,10 +84,12 @@ if n=128 then
 
 elif n=243 then
   
-  code[1] := SingleHTTPRequest( "www.cs.st-andrews.ac.uk", 80, "GET", 
-       Concatenation( "/~alexk/unitlib/data/243/u243_",  String(nLibNumber), ".txt"), 
+  code[1] := SingleHTTPRequest( "alexk.host.cs.st-andrews.ac.uk", 80, "GET", 
+       Concatenation( "/unitlib/data/243/u243_",  String(nLibNumber), ".txt"), 
        rec( ), false, false ).body;
-				  
+  if Length(code[1]) = 0 then
+    Error("Can not retrieve remote data");
+  fi;
   Info( LAGInfo, 1, "Data retrieved successfully, starting generation of V(KG) ..." );
 
 elif n>243 then

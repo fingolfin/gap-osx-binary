@@ -38,19 +38,19 @@ Subtitle := "A package for drawing integers",
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "0.1.0",
+Version := "0.2.1",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 # 
-Date := "05/07/2013",
+Date := "05/06/2015",
         
 ##  Optional: if the package manual uses GAPDoc, you may duplicate the 
 ##  version and the release date as shown below to read them while building
 ##  the manual using GAPDoc facilities to distibute documents across files.
-##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.1.0">
-##  <!ENTITY RELEASEDATE "5 July 2013">
-##  <#/GAPDoc>
+## <#GAPDoc Label="PKGVERSIONDATA">
+## <!ENTITY VERSION "0.2.1">
+## <!ENTITY RELEASEDATE "5 July 2015">
+## <#/GAPDoc>
 
 PackageWWWHome :=
   Concatenation( "http://www.fc.up.pt/cmup/mdelgado/",
@@ -169,8 +169,7 @@ Persons := [
 ##    "dev"           for development versions of packages 
 ##    "other"         for all other packages
 ##
-#Status := "accepted",
-Status := "dev",
+Status :=    "deposited",       
 
 ##  You must provide the next two entries if and only if the status is 
 ##  "accepted" because is was successfully refereed:
@@ -235,16 +234,13 @@ AbstractHTML :=
 PackageDoc := rec(
   # use same as in GAP            
   BookName  := "IntPic",
-  # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
- # Archive := "http://www.fc.up.pt/cmup/mdelgado/automata/doc/doc",
-  ArchiveURLSubset := ["doc"],
+  ArchiveURLSubset := ["doc","images"],
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   # the path to the .six file used by GAP's help system
   SixFile   := "doc/manual.six",
   # a longer title of the book, this together with the book name should
   # fit on a single text line (appears with the '?books' command in GAP)
-  # LongTitle := "Elementary Divisors of Integer Matrices",
   LongTitle := "IntPic, a GAP package for drawing integers",
 ),
 
@@ -263,7 +259,7 @@ Dependencies := rec(
   #NeededOtherPackages := [],
   # without these the package will issue a warning while loading
   # SuggestedOtherPackages := [],
-  SuggestedOtherPackages := [["viz", "0.2.5"]],
+  SuggestedOtherPackages := [["numericalsgps", "1.0"]],
  
   # *Optional*: a list of pairs as above, denoting those needed packages
   # that must be completely loaded before loading of the current package

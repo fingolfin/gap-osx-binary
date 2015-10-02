@@ -1,0 +1,167 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: division (plural)</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: division (plural)">
+<META NAME="keywords" CONTENT="Singular Manual: division (plural)">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC545"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_505.htm#SEC544"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: dim (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_507.htm#SEC546"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: eliminate (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 7.3.4 division (plural) </H3>
+<!--docid::SEC545::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>division (</CODE> ideal_expression<CODE>,</CODE> ideal_expression <CODE>)</CODE>
+<BR><CODE>division (</CODE> module_expression<CODE>,</CODE> module_expression <CODE>)</CODE>
+<BR><CODE>division (</CODE> ideal_expression<CODE>,</CODE> ideal_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>division (</CODE> module_expression<CODE>,</CODE> module_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>division (</CODE> ideal_expression<CODE>,</CODE> ideal_expression<CODE>,</CODE> int_expression<CODE>,</CODE> intvec_expression <CODE>)</CODE>
+<BR><CODE>division (</CODE> module_expression<CODE>,</CODE> module_expression<CODE>,</CODE> int_expression<CODE>,</CODE>
+<BR>          intvec_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>list
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD><CODE>division</CODE> computes a left division with remainder.
+For two left ideals resp. modules <CODE>M</CODE> (first argument) and <CODE>N</CODE>
+(second argument), it returns a list <CODE>T,R,U</CODE> where <CODE>T</CODE> is a matrix,
+<CODE>R</CODE> is a left ideal resp. a module, and <CODE>U</CODE> is a diagonal matrix of units such that
+<CODE>transpose(U)*transpose(matrix(M))=transpose(T)*transpose(matrix(N)) + transpose(matrix(R))</CODE>. From this data one gets
+a left standard representation for the left normal form <CODE>R</CODE> of <CODE>M</CODE> with respect to a left Groebner basis of <CODE>N</CODE>.
+<CODE>division</CODE> uses different algorithms depending on whether <CODE>N</CODE> is represented by a Groebner basis.
+For a GR-algebra, the matrix <CODE>U</CODE> is the identity matrix.
+A matrix <CODE>T</CODE> as above is also computed by <CODE>lift</CODE>.
+<BR>For additional arguments <CODE>n</CODE> (third argument) and <CODE>w</CODE> (fourth argument),
+<CODE>division</CODE> returns a list <CODE>T,R</CODE> as above such that
+<CODE>transpose(matrix(M))=transpose(T)*transpose(matrix(N)) + transpose(matrix(R))</CODE> is a left standard representation for the
+left normal form <CODE>R</CODE> of <CODE>M</CODE> with respect to <CODE>N</CODE> up to weighted degree <CODE>n</CODE> with respect to the weight vector <CODE>w</CODE>.
+The weighted degree of <CODE>T</CODE> and <CODE>R</CODE> respect to <CODE>w</CODE> is at most <CODE>n</CODE>.
+If the weight vector <CODE>w</CODE> is not given,
+<CODE>division</CODE> uses the standard weight vector <CODE>w=1,...,1</CODE>.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmod.lib";
+ring r = 0,(x,y),dp;
+poly f = x^3+xy;
+def S = Sannfs(f); setring S; // compute the annihilator of f^s
+LD; // is not a Groebner basis yet!
+==> LD[1]=3*x^2*Dy-x*Dx+y*Dy
+==> LD[2]=x*Dx+2*y*Dy-3*s
+poly f = imap(r,f);
+poly P = f*Dx-s*diff(f,x);
+division(P,LD); // so P is in the ideal via the cofactors in _[1]
+==> [1]:
+==>    _[1,1]=-2/3*y
+==>    _[2,1]=x^2+1/3*y
+==> [2]:
+==>    _[1]=0
+==> [3]:
+==>    _[1,1]=1
+ideal I = LD, f; // consider a bigger ideal
+list L = division(s^2, I); // the normal form is -2s-1
+L;
+==> [1]:
+==>    _[1,1]=2/3*x^2*Dy-1/3*x*Dx+2/3*s+1/3
+==>    _[2,1]=2/3*x^2*Dy-1/3*x*Dx-1/3*s-2/3
+==>    _[3,1]=-2*x*Dy^2+Dx*Dy
+==> [2]:
+==>    _[1]=-2*s-1
+==> [3]:
+==>    _[1,1]=1
+// now we show that the formula above holds
+matrix M[1][1] = s^2; matrix N = matrix(I);
+matrix T = matrix(L[1]); matrix R = matrix(L[2]); matrix U  = matrix(L[3]);
+// the formula must return zero:
+transpose(U)*transpose(M) - transpose(T)*transpose(N) - transpose(R);
+==> _[1,1]=0
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_85.htm#SEC124">ideal</A>;
+ <A HREF="sing_334.htm#SEC373">lift</A>;
+ <A HREF="sing_134.htm#SEC173">module</A>;
+ <A HREF="sing_147.htm#SEC186">poly</A>;
+ <A HREF="sing_172.htm#SEC211">vector</A>.
+<P>
+
+<A NAME="eliminate (plural)"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_505.htm#SEC544"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: dim (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_507.htm#SEC546"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: eliminate (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_470.htm#SEC509"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Data types (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_533.htm#SEC572"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Mathematical background (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_502.htm#SEC541"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

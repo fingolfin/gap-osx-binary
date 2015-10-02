@@ -1,0 +1,154 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Ssi file links</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Ssi file links">
+<META NAME="keywords" CONTENT="Singular Manual: Ssi file links">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC153"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Ssi links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_115.htm#SEC154"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Ssi tcp links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_112.htm#SEC151"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ASCII links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Pipe links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Ssi links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> 4.8.5.1 Ssi file links </H4>
+<!--docid::SEC153::-->
+<P>
+
+Ssi file links provide the possibility to store data in a file using the
+ssi format.
+For storing large amounts of data, ssi file links
+should be used instead of ASCII links. Unlike ASCII links, data read
+from ssi file links is returned as expressions one at a time.
+</P><P>
+
+The ssi file link describing string has to be one of the following:
+</P><P>
+
+<OL>
+<LI><CODE>"ssi:r "</CODE> + filename
+<BR>opens the file for reading.
+<LI><CODE>"ssi:w "</CODE> + filename
+<BR>opens the file for overwriting.
+<LI><CODE>"ssi:a "</CODE> + filename
+<BR>opens the file for appending.
+</OL>
+<P>
+
+Note that the filename may contain a path. An ssi file link can be used
+either for reading or for writing, but not for both at the same time. A
+<CODE>close</CODE> command must be used before a change of I/O direction.
+</P><P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r;
+  link l="ssi:w example.ssi"; // type=ssi, mode=overwrite
+  l;
+==> // type : ssi
+==> // mode : w
+==> // name : example.ssi
+==> // open : no
+==> // read : not open
+==> // write: not open
+  ideal i=x2,y2,z2;
+  write (l,1, i, "hello world");// write three expressions
+  write(l,4);                   // append one more expression
+  close(l);                     // link is closed
+  // open the file for reading now
+  read(l);                      // only first expression is read
+==> 1
+  kill r;                       // no basering active now
+  def i = read(l);              // second expression
+  // notice that current ring was set, the name was assigned
+  // automatically
+  listvar(ring);
+==> // ssiRing0                       [0]  *ring
+  def s = read(l);              // third expression
+  listvar();
+==> // s                              [0]  string hello world
+==> // ssiRing0                       [0]  *ring
+==> //      i                              [0]  ideal, 3 generator(s)
+==> // l                              [0]  link
+  close(l);                     // link is closed
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Ssi tcp links"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Ssi links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_115.htm#SEC154"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Ssi tcp links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_112.htm#SEC151"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ASCII links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Pipe links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Ssi links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

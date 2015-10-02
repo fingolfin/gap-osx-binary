@@ -1,0 +1,165 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: intmat operations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: intmat operations">
+<META NAME="keywords" CONTENT="Singular Manual: intmat operations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC140"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_100.htm#SEC139"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: intmat type cast" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_102.htm#SEC141"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intmat related functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_90.htm#SEC129"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: int" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_103.htm#SEC142"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: intvec" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_97.htm#SEC136"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: intmat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.6.4 intmat operations </H3>
+<!--docid::SEC140::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE>+</CODE>
+<DD>addition with intmat or int; the int is converted into a diagonal intmat
+<P>
+
+<DT><CODE>-</CODE>
+<DD>negation or subtraction with intmat or int; the int is converted into a
+diagonal intmat
+<P>
+
+<DT><CODE>*</CODE>
+<DD>multiplication with intmat, intvec, or int; the int is converted into a
+diagonal intmat
+<P>
+
+<DT><CODE>div,/</CODE>
+<DD>division of entries in the integers (omitting the remainder)
+<DT><CODE>%, mod</CODE>
+<DD>entries modulo int (remainder of the division)
+<DT><CODE>&lt;&gt;</CODE>, <CODE>==</CODE>
+<DD>comparators
+<P>
+
+<DT>intmat_expression <CODE>[</CODE> intvec_expression<CODE>,</CODE> intvec_expression <CODE>]</CODE>
+<DD>is an intmat entry, where the first index indicates the row and the
+second the column
+</DL>
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  intmat m[2][4] = 1,0,2,4,0,1,-1,0,3,2,1,-2;
+  m;
+==> 1,0,2,4,
+==> 0,1,-1,0 
+  m[2,3];          // entry at row 2, col 3
+==> -1
+  size(m);         // number of entries
+==> 8
+  intvec v = 1,0,-1,2;
+  m * v;
+==> 7,1
+  typeof(_);
+==> intvec
+  intmat m1[4][3] = 0,1,2,3,v,1;
+  intmat m2 = m * m1;
+  m2;             //  2 x 3 intmat
+==> -2,5,4,
+==> 4,-1,-1 
+  m2*10;           // multiply each entry of m with 10;
+==> -20,50,40,
+==> 40,-10,-10 
+  -m2;
+==> 2,-5,-4,
+==> -4,1,1 
+  m2 % 2;
+==> 0,1,0,
+==> 0,1,1 
+  m2 div 2;
+==> -1,2,2,
+==> 2,-1,-1 
+  m2[2,1];          // entry at row 2, col 1
+==> 4
+  m1[2..3,2..3];   // submatrix
+==> 1 0 2 1
+  m2[nrows(m2),ncols(m2)];      // the last entry of intmat m2
+==> -1
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="intmat related functions"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_100.htm#SEC139"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: intmat type cast" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_102.htm#SEC141"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intmat related functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_90.htm#SEC129"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: int" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_103.htm#SEC142"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: intvec" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_97.htm#SEC136"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: intmat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

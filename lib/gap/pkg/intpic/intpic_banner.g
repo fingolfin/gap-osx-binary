@@ -30,7 +30,7 @@ rg := [1..n];
 
 arr := [Intersection(small_primes,rg),[],[], Intersection(Union(twins,twins+2),rg),[],[],[],[],[],[],[],[],[],[],[],[],[],Difference(rg,small_primes)];;
 
-tkz:=IP_TikzArrayOfIntegers([1..n],flen,rec(highlights:=arr,cell_width := "6",colsep:="0",rowsep:="0",inner_sep:="2",shape_only:=" ",line_width:="0",line_color:="black!20" ));;
+tkz:=IP_TikzArrayOfIntegers([1..n],row_length,rec(highlights:=arr,cell_width := "6",colsep:="0",rowsep:="0",inner_sep:="2",shape_only:=" ",line_width:="0",line_color:="black!20" ));;
 
 FileString(file,Concatenation(IP_Preamble,tkz,IP_Closing));
 

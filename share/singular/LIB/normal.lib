@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-version="version normal.lib 4.0.0.0 Jun_2013 "; // $Id: 96da54476d7aa5c51dce15ab4682aed3ec1c1bcd $
+version="version normal.lib 4.0.1.1 Dec_2014 "; // $Id: 065ae0d0042c29c5515e165d3f738e50b447c5d3 $
 category="Commutative Algebra";
 info="
 LIBRARY:  normal.lib     Normalization of Affine Rings
@@ -185,7 +185,7 @@ EXAMPLE: example normal; shows an example
   {
     if ( typeof(#[i]) == "string" )
     {
-//--------------------------- choosen methods -----------------------
+//--------------------------- chosen methods -----------------------
       if ( (#[i]=="isprim") or (#[i]=="isPrim") )
       {decomp = 0;}
 
@@ -1147,8 +1147,6 @@ EXAMPLE: example normalizationPrimes; shows an example
       {
           "// the ideal was the zero-ideal";
       }
-     // execute("ring newR7="+charstr(basering)+",("+varstr(basering)+"),("
-     //                 +ordstr(basering)+");");
          def newR7 = ring(gnirlist);
          setring newR7;
          ideal norid=ideal(0);
@@ -1596,8 +1594,6 @@ EXAMPLE: example normalizationPrimes; shows an example
          // ------------------ the normal case, RETURN -----------------
          // Now RR[2] must be 1, hence the test for normality was positive
          MB=SM[2];
-         //execute("ring newR7="+charstr(basering)+",("+varstr(basering)+"),("
-         //             +ordstr(basering)+");");
          def newR7 = ring(gnirlist);
          setring newR7;
          ideal norid=fetch(BAS,MB);
@@ -1900,8 +1896,6 @@ EXAMPLE: example normalizationPrimes; shows an example
       ideal new2 = quotient(SM[2],Ann);
       //ideal new2=SL[1],SM[2];
 
-      //execute("ring newR1="+charstr(basering)+",("+varstr(basering)+"),("
-      //                +ordstr(basering)+");");
       def newR1 = ring(gnirlist);
       setring newR1;
 
@@ -1929,8 +1923,6 @@ EXAMPLE: example normalizationPrimes; shows an example
       list delta1 = keepresult1[size(keepresult1)];
 
       setring BAS;
-      //execute("ring newR2="+charstr(basering)+",("+varstr(basering)+"),("
-      //                +ordstr(basering)+");");
       def newR2 = ring(gnirlist);
       setring newR2;
 
@@ -2284,19 +2276,24 @@ EXAMPLE: example genus; shows an example
    {
       return(0);
    }
-   list N=findvars(I,0);
-   if(size(N[1])==1)
+   ideal N=variables(I);
+   if(size(N)==1)
    {
       poly p=I[1];
      // if(deg(squarefree(p))<deg(p)){ERROR("Curve is not reduced");}
       return(-deg(p)+1);
    }
-   if(size(N[1]) < nvars(R0))
+   if(size(N) < nvars(R0))
    {
-     string newvar=string(N[1]);
-     execute("ring R=("+charstr(R0)+"),("+newvar+"),dp;");
+     list newvar=N[1..ncols(N)];
+     list @rl0=ringlist(R0);
+     @rl0[2]=list(N[1..ncols(N)]);
+     @rl0[3]=list(list("dp",1:ncols(N)),list("C",0));
+     def R=ring(@rl0); kill @rl0;
+     setring R;
      ideal I =imap(R0,I);
-     if((ringlist(R0)[3][1][1]=="dp")&&(size(ringlist(R0)[3])==2))
+     list @rl0=ringlist(R0);
+     if((@rl0[3][1][1]=="dp")&&(size(@rl0[3])==2))
      {
        attrib(I,"isSB",1);
      }
@@ -2304,6 +2301,7 @@ EXAMPLE: example genus; shows an example
      {
        I=std(I);
      }
+     kill @rl0;
    }
    else
    {
@@ -2314,31 +2312,33 @@ EXAMPLE: example genus; shows an example
    }
    if(dim(I)==2)
    {
-      def newR=basering;
+     def newR=basering;
    }
    else
    {
-      short=0;
-      string smp = string(minpoly);
-      if(dim(I)==0)
-      {
-         execute("ring Rhelp=("+charstr(R0)+"),(@s,@t),dp;");
-      }
-      else
-      {
-         execute("ring Rhelp=("+charstr(R0)+"),(@s),dp;");
-      }
-      execute("minpoly = "+smp+";");
-      def newR=R+Rhelp;
-      setring newR;
-      ideal I=imap(R,I);
-      I=homog(I,@s);
-      attrib(I,"isSB",1);
+     list @rl0=ringlist(R0);
+     if(dim(I)==0)
+     {
+       @rl0[2]=list("@s","@t");
+       @rl0[3]=list(list("dp",1:2),list("C",0));
+     }
+     else
+     {
+       @rl0[2]=list("@s");
+       @rl0[3]=list(list("dp",1),list("C",0));
+     }
+     def Rhelp=ring(@rl0);
+     kill @rl0;
+     def newR=R+Rhelp;
+     setring newR;
+     ideal I=imap(R,I);
+     I=homog(I,@s);
+     attrib(I,"isSB",1);
    }
 
    if((nvars(basering)<=3)&&(size(I)>1))
    {
-       ERROR("This is not equidimensional");
+     ERROR("This is not equidimensional");
    }
 
    intvec hp=hilbPoly(I);
@@ -2658,7 +2658,10 @@ EXAMPLE: example deltaLoc;  shows an example
    intvec save_opt=option(get);
    option(redSB);
    def R=basering;
-   execute("ring S=("+charstr(R)+"),(x,y),lp;");
+   list @rl=ringlist(R);
+   @rl[2]=list("x","y");
+   @rl[3]=list(list("lp",1:2),list("C",0));
+   def S=ring(@rl); setring S;
    map phi=R,x,y;
    ideal singL=phi(singL);
    singL=simplify(std(singL),1);
@@ -2671,7 +2674,7 @@ EXAMPLE: example deltaLoc;  shows an example
    {
       map alpha=S,var(1)-singL[2][2],var(2)-singL[1][2];
       f=alpha(f);
-      execute("ring C=("+charstr(S)+"),("+varstr(S)+"),ds;");
+      def C=changeordTo(S,"ds"); setring C;
       poly f=imap(S,f);
       ideal singL=imap(S,singL);
       if((w>=1)&&(ord(f)>=2))
@@ -2718,7 +2721,7 @@ EXAMPLE: example deltaLoc;  shows an example
       map beta=S,a,a;
       poly p=beta(p);
 
-      execute("ring C=("+charstr(S)+",a),("+varstr(S)+"),ds;");
+      execute("ring C=("+charstr(S)+",a),(x,y),ds;");
       number p=number(imap(B,p));
 
       minpoly=p;
@@ -3666,6 +3669,29 @@ EXAMPLE: example normalP; shows an example
      noFac=1;
    }
 
+   // check for 0-ideal
+   if (size(id)==0)
+   {
+     list result=list(ideal(1)),list(intvec(0),int(0));
+     // delta invariant,total delta invariant
+     if (wring)
+     {
+       result[3]=result[2]; // pair(delta invariants , total delta invariant)
+       result[2]=result[1];
+       def BR = basering;
+       list rl = ringlist(basering);
+       def rng = ring(rl);
+       setring rng;
+       ideal norid = 0;
+       ideal normap = maxideal(1);
+       export(norid);
+       export(normap);
+       setring BR;
+       result[1] = list(rng);
+     }
+     return (result);
+   }
+
    kill #;
    list #;
 //--------------------------- start computation ---------------------------
@@ -3852,6 +3878,7 @@ static proc normalityTest(list mstdid)
    int ii;
 
    ideal J = mstdid[1];         //J is the SB of I
+   if (J[1]==1) { return(ideal(0));}
    ideal I = mstdid[2];
    int h = n-dim(J);            //codimension of V(I), I is a prime ideal
 
@@ -4017,7 +4044,10 @@ static proc substpartSpecial(ideal endid, ideal endphi)
 
         for ( jj = n(ii-1)+1; jj<=n(ii); jj++)
         {
-          if( Le[4][jj] !=0 )     //jj=index of var which was not substituted
+          if(  Le[4][jj] !=0 or                                             // jj=index of var which was not substituted
+               (  (ii==n3-1) and ( jj==n(ii) ) and  (size(newg2)==0) )      // or we have no variables yet in the new ring and
+                                                                            // want to keep at least the last one!
+            )
           {
             kk=kk+1;
             newg2[kk] = g2[jj];   //not substituted var from varlist
@@ -4082,6 +4112,7 @@ static proc substpartSpecial(ideal endid, ideal endphi)
       export(norid);
       export(normap);
       list L = newBAS;
+      setring BAS;
       return(L);
 
    //Hier scheint interred gut zu sein, da es Ergebnis relativ schnell
@@ -4136,10 +4167,11 @@ static proc computeRing(ideal J, ideal I, list #)
     setring R1;
     ideal norid = imap(R, I);
     ideal normap = imap(R, maxid);
-    export norid;
-    export normap;
+
 
     if(noRed == 1){
+      export norid;
+      export normap;
       setring R;
       return(R1);
     }
@@ -5717,7 +5749,7 @@ EXAMPLE: example normalC; shows an example
      }
    }
 
-   //--------------------------- choosen methods -----------------------
+   //--------------------------- chosen methods -----------------------
    // "withGens": computes algebra generators for each irreducible component
    // ### the extra code for withGens should be incorporated in the general case
 
@@ -6666,7 +6698,7 @@ EXAMPLE: example norTest; shows an example
     LR[3] = newg3;
 //LR;"";
     def newR = ring(LR);
-
+    kill LR; //otherwise it keeps defined and will cause a warning next time norTest is run.
     setring newR;
     ideal norid = fetch(R,norid);
     ideal normap = fetch(R,normap);

@@ -1,0 +1,217 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Handling graded modules</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Handling graded modules">
+<META NAME="keywords" CONTENT="Singular Manual: Handling graded modules">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC913"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_861.htm#SEC912"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Free resolution" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_863.htm#SEC914"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Computation of Ext" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.3.5 Handling graded modules </H3>
+<!--docid::SEC913::-->
+<P>
+
+How to deal with graded modules in S<SMALL>INGULAR</SMALL> is best explained by
+looking at an example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring R = 0, (w,x,y,z), dp;
+module I = [-x,0,-z2,0,y2z], [0,-x,-yz,0,y3], [-w,0,0,yz,-z3],
+           [0,-w,0,y2,-yz2], [0,-1,-w,0,xz], [0,-w,0,y2,-yz2],
+           [x2,-y2,-wy2+xz2];
+print(I);
+==> -x, 0,  -w, 0,   0, 0,   x2,      
+==> 0,  -x, 0,  -w,  -1,-w,  -y2,     
+==> -z2,-yz,0,  0,   -w,0,   -wy2+xz2,
+==> 0,  0,  yz, y2,  0, y2,  0,       
+==> y2z,y3, -z3,-yz2,xz,-yz2,0        
+
+// (1) Check on degrees:
+// =====================
+attrib(I,"isHomog"); // attribute not set =&gt; empty output
+==> 
+homog(I);
+==> 1
+attrib(I,"isHomog");
+==> 2,2,1,1,0
+
+print(betti(I,0),"betti");  // read degrees from Betti diagram
+==>            0     1
+==> ------------------
+==>     0:     1     -
+==>     1:     2     1
+==>     2:     2     5
+==>     3:     -     1
+==> ------------------
+==> total:     5     7
+==> 
+
+// (2) Shift degrees:
+// ==================
+def J=I;
+intvec DV = 0,0,-1,-1,-2;
+attrib(J,"isHomog",DV);    // assign new weight vector
+attrib(J,"isHomog");
+==> 0,0,-1,-1,-2
+print(betti(J,0),"betti");
+==>            0     1
+==> ------------------
+==>    -2:     1     -
+==>    -1:     2     1
+==>     0:     2     5
+==>     1:     -     1
+==> ------------------
+==> total:     5     7
+==> 
+
+intmat bettiI=betti(I,0);  // degree corresponding to first non-zero row
+                           // of Betti diagram is accessible via
+                           // attribute "rowShift"
+attrib(bettiI);
+==> attr:rowShift, type int 
+intmat bettiJ=betti(J,0);
+attrib(bettiJ);
+==> attr:rowShift, type int 
+
+// (3) Graded free resolutions:
+// ============================
+resolution resJ = mres(J,0);
+attrib(resJ);
+==> attr:isHomog, type intvec 
+print(betti(resJ),"betti");
+==>            0     1     2
+==> ------------------------
+==>    -2:     1     -     -
+==>    -1:     2     -     -
+==>     0:     1     4     -
+==>     1:     -     -     1
+==> ------------------------
+==> total:     4     4     1
+==> 
+attrib(betti(resJ));
+==> attr:rowShift, type int 
+</FONT></pre></td></tr></table></P><P>
+
+A check on degrees ((1), by using the <CODE>homog</CODE> command) shows that this
+is a graded matrix. The <CODE>homog</CODE> command assigns an admissible weight
+vector (here: 2,2,1,1,0) to the module <CODE>I</CODE> which is accessible via the
+attribute <CODE>"isHomog"</CODE>. Thus, we may think of <CODE>I</CODE> as a graded
+submodule of the graded free 
+<IMG
+ WIDTH="17" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_51.png"
+ ALT="$R$">-module
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+F=R(-2)^2\oplus R(-1)^2\oplus R\,.
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="194" HEIGHT="28" BORDER="0"
+ SRC="sing_354.png"
+ ALT="\begin{displaymath}F=R(-2)^2\oplus R(-1)^2\oplus R\,.\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>We may also read the degrees from the Betti diagram as shown above.
+The degree on the left of the first nonzero row of the Betti diagram is
+accessible via the attribute <CODE>"rowShift"</CODE> of the betti matrix
+(which is of type <CODE>intmat</CODE>):
+</P><P>
+
+(2) We may shift degrees by assigning another admissible degree vector.
+Note that S<SMALL>INGULAR</SMALL> does not check whether the assigned degree
+vector really is admissible. Moreover, note that all assigned
+attributes are lost under a type conversion (e.g. from <CODE>module</CODE> to
+<CODE>matrix</CODE>).
+</P><P>
+
+(3) These considerations may be applied when computing data from free resolutions (see  <A HREF="sing_863.htm#SEC914">Computation of Ext</A>).
+</P><P>
+
+<A NAME="Computation of Ext"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_861.htm#SEC912"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Free resolution" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_863.htm#SEC914"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Computation of Ext" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

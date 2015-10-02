@@ -1,0 +1,157 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: annfsRB</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: annfsRB">
+<META NAME="keywords" CONTENT="Singular Manual: annfsRB">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC654"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_602.htm#SEC653"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: annfs2" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_604.htm#SEC655"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: checkFactor" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_567.htm#SEC618"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: central_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmod_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.4.0. annfsRB </H5>
+<!--docid::SEC654::-->
+Procedure from library <CODE>dmod.lib</CODE> (see  <A HREF="sing_588.htm#SEC639">dmod_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>annfsRB(I, F [,eng]); I an ideal, F a poly, eng an optional int
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute the annihilator ideal of f^s in the Weyl Algebra,
+<BR> based on the output of Sannfs like procedure
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>activate the output ring with the <CODE>setring</CODE> command. In this ring,
+<BR> - the ideal LD (which is a Groebner basis) is the annihilator of f^s,
+<BR> - the list BS contains the roots with multiplicities of a Bernstein polynomial of f.
+<BR> If eng &lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations,
+<BR> otherwise and by default <CODE>slimgb</CODE> is used.
+<BR> This procedure uses in addition to F its Jacobian ideal.
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If <CODE>printlevel</CODE>=1, progress debug messages will be printed,
+<BR> if <CODE>printlevel</CODE>&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmod.lib";
+ring r = 0,(x,y,z),Dp;
+poly F = x^3+y^3+z^3;
+printlevel = 0;
+def A = SannfsBM(F); setring A;
+LD; // s-parametric ahhinilator
+==> LD[1]=z^2*Dy-y^2*Dz
+==> LD[2]=x*Dx+y*Dy+z*Dz-3*s
+==> LD[3]=z^2*Dx-x^2*Dz
+==> LD[4]=y^2*Dx-x^2*Dy
+poly F = imap(r,F);
+def B  = annfsRB(LD,F); setring B;
+LD;
+==> LD[1]=x*Dx+y*Dy+z*Dz+6
+==> LD[2]=z^2*Dy-y^2*Dz
+==> LD[3]=z^2*Dx-x^2*Dz
+==> LD[4]=y^2*Dx-x^2*Dy
+==> LD[5]=x^3*Dz+y^3*Dz+z^3*Dz+6*z^2
+==> LD[6]=x^3*Dy+y^3*Dy+y^2*z*Dz+6*y^2
+BS;
+==> [1]:
+==>    _[1]=-1
+==>    _[2]=-2
+==>    _[3]=-5/3
+==>    _[4]=-4/3
+==> [2]:
+==>    2,1,1,1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="checkFactor"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_602.htm#SEC653"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: annfs2" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_604.htm#SEC655"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: checkFactor" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_567.htm#SEC618"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: central_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_611.htm#SEC662"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: dmodapp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_588.htm#SEC639"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmod_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

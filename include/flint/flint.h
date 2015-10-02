@@ -28,12 +28,14 @@
 
 #undef ulong
 #define ulong ulongxx /* ensure vendor doesn't typedef ulong */
+#if !defined(_MSC_VER)
 #include <sys/param.h> /* for BSD define */
+#endif
 #include <gmp.h>
 #include <mpfr.h>
 #include <stdio.h>
 #include <stdlib.h> /* for alloca on FreeBSD */
-#if !defined(BSD) && !defined(__MINGW64__) && !defined(__MINGW32__) 
+#if !defined(BSD) && !defined(__MINGW64__) && !defined(__MINGW32__) && !defined(_MSC_VER)
 /* MinGW and FreeBSD have alloca, but not alloca.h */
 #include <alloca.h>
 #endif
@@ -60,9 +62,9 @@
 /* flint version number */
 
 #define __FLINT_VERSION 2
-#define __FLINT_VERSION_MINOR 4
-#define __FLINT_VERSION_PATCHLEVEL 4 
-#define FLINT_VERSION "2.4.4"
+#define __FLINT_VERSION_MINOR 5 
+#define __FLINT_VERSION_PATCHLEVEL 2 
+#define FLINT_VERSION "2.5.2"
 #define __FLINT_RELEASE (__FLINT_VERSION * 10000 + \
                          __FLINT_VERSION_MINOR * 100 + \
                          __FLINT_VERSION_PATCHLEVEL)
@@ -95,14 +97,15 @@ extern char version[];
 void * flint_malloc(size_t size);
 void * flint_realloc(void * ptr, size_t size);
 void * flint_calloc(size_t num, size_t size);
-void flint_free(void * ptr);
+FLINT_DLL void flint_free(void * ptr);
 
 typedef void (*flint_cleanup_function_t)(void);
-void flint_register_cleanup_function(flint_cleanup_function_t cleanup_function);
-void flint_cleanup(void);
+FLINT_DLL void flint_register_cleanup_function(flint_cleanup_function_t cleanup_function);
+FLINT_DLL void flint_cleanup(void);
 
-#if defined(_WIN64)
+#if defined(_WIN64) || defined(__mips64)
 #define WORD_FMT "%ll"
+#define WORD_WIDTH_FMT "%*ll"
 #define WORD(xx) (xx##LL)
 #define UWORD(xx) (xx##ULL)
 #define UWORD_MAX ULLONG_MAX
@@ -111,6 +114,7 @@ void flint_cleanup(void);
 #define WORD_MIN LLONG_MIN
 #else
 #define WORD_FMT "%l"
+#define WORD_WIDTH_FMT "%*l"
 #define WORD(xx) (xx##L)
 #define UWORD(xx) (xx##UL)
 #define UWORD_MAX ULONG_MAX
@@ -131,15 +135,19 @@ void flint_cleanup(void);
 #define mp_bitcnt_t ulong
 
 #if HAVE_TLS
+#ifdef _MSC_VER
+#define FLINT_TLS_PREFIX __declspec(thread)
+#else
 #define FLINT_TLS_PREFIX __thread
+#endif
 #else
 #define FLINT_TLS_PREFIX
 #endif
 
-int flint_get_num_threads(void);
-void flint_set_num_threads(int num_threads);
+FLINT_DLL int flint_get_num_threads(void);
+FLINT_DLL void flint_set_num_threads(int num_threads);
 
-int flint_test_multiplier(void);
+FLINT_DLL int flint_test_multiplier(void);
 
 typedef struct
 {
@@ -162,6 +170,13 @@ void flint_randinit(flint_rand_t state)
     state->__randval = UWORD(4187301858);
     state->__randval2 = UWORD(3721271368);
 #endif
+}
+
+static __inline__
+void flint_randseed(flint_rand_t state, ulong seed1, ulong seed2)
+{
+   state->__randval = seed1;
+   state->__randval2 = seed2;
 }
 
 static __inline__
@@ -207,6 +222,12 @@ typedef __mpfr_struct mpfr;
 #define FLINT_ASSERT(param)
 #endif
 
+#if defined(__GNUC__)
+#define FLINT_UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#else
+#define FLINT_UNUSED(x) x
+#endif
+
 #define FLINT_MAX(x, y) ((x) > (y) ? (x) : (y))
 #define FLINT_MIN(x, y) ((x) > (y) ? (y) : (x))
 #define FLINT_ABS(x) ((slong)(x) < 0 ? (-(x)) : (x))
@@ -226,7 +247,7 @@ typedef __mpfr_struct mpfr;
     ((shift == FLINT_BITS) ? WORD(0) : ((in) << (shift)))
 
 #ifdef NEED_CLZ_TAB
-extern const unsigned char __flint_clz_tab[128];
+FLINT_DLL extern const unsigned char __flint_clz_tab[128];
 #endif
 
 static __inline__
@@ -271,28 +292,6 @@ unsigned int FLINT_BIT_COUNT(mp_limb_t x)
          (xxx)[ixxx] = yyy; \
    } while (0)
 
-/* compatibility between gmp and mpir */
-#ifndef mpn_com_n
-#define mpn_com_n mpn_com
-#endif
-
-#ifndef mpn_neg_n
-#define mpn_neg_n mpn_neg
-#endif
-
-#ifndef mpn_tdiv_q
-/* substitute for mpir's mpn_tdiv_q */
-static __inline__
-void mpn_tdiv_q(mp_ptr qp,
-	   mp_srcptr np, mp_size_t nn,
-	   mp_srcptr dp, mp_size_t dn)
-    {
-    mp_ptr _scratch = (mp_ptr) flint_malloc(dn * sizeof(mp_limb_t));
-    mpn_tdiv_qr(qp, _scratch, 0, np, nn, dp, dn);
-    flint_free(_scratch);
-    }
-#endif
-
 /* temporary allocation */
 #define TMP_INIT \
    typedef struct __tmp_struct { \
@@ -307,7 +306,7 @@ void mpn_tdiv_q(mp_ptr qp,
 
 #define TMP_ALLOC(size) \
    ((size) > 8192 ? \
-      (__tpx = alloca(sizeof(__tmp_t)), \
+      (__tpx = (__tmp_t *) alloca(sizeof(__tmp_t)), \
        __tpx->next = __tmp_root, \
        __tmp_root = __tpx, \
        __tpx->block = flint_malloc(size)) : \
@@ -319,15 +318,62 @@ void mpn_tdiv_q(mp_ptr qp,
       __tmp_root = __tmp_root->next; \
    }
 
-int parse_fmt(int * floating, const char * fmt);
+/* compatibility between gmp and mpir */
+#ifndef mpn_com_n
+#define mpn_com_n mpn_com
+#endif
 
-size_t flint_printf(const char * str, ...); /* flint version of printf */
-size_t flint_fprintf(FILE * f, const char * str, ...); /* flint version of fprintf */
-size_t flint_sprintf(char * s, const char * str, ...); /* flint version of sprintf */
+#ifndef mpn_neg_n
+#define mpn_neg_n mpn_neg
+#endif
 
-int flint_scanf(const char * str, ...); /* flint version of scanf */
-int flint_fscanf(FILE * f, const char * str, ...); /* flint version of fscanf */
-int flint_sscanf(const char * s, const char * str, ...); /* flint version of sscanf */
+#ifndef mpn_tdiv_q
+/* substitute for mpir's mpn_tdiv_q */
+static __inline__ void
+mpn_tdiv_q(mp_ptr qp, mp_srcptr np, mp_size_t nn, mp_srcptr dp, mp_size_t dn)
+{
+    mp_ptr _scratch;
+    TMP_INIT;
+    TMP_START;
+    _scratch = (mp_ptr) TMP_ALLOC(dn * sizeof(mp_limb_t));
+    mpn_tdiv_qr(qp, _scratch, 0, np, nn, dp, dn);
+    TMP_END;
+}
+#endif
+
+/* Newton iteration macros */
+#define FLINT_NEWTON_INIT(from, to) \
+    { \
+        slong __steps[FLINT_BITS], __i, __from, __to; \
+        __steps[__i = 0] = __to = (to); \
+        __from = (from); \
+        while (__to > __from) \
+            __steps[++__i] = (__to = (__to + 1) / 2); \
+
+#define FLINT_NEWTON_BASECASE(bc_to) { slong bc_to = __to;
+
+#define FLINT_NEWTON_END_BASECASE }
+
+#define FLINT_NEWTON_LOOP(step_from, step_to) \
+        { \
+            for (__i--; __i >= 0; __i--) \
+            { \
+                slong step_from = __steps[__i+1]; \
+                slong step_to = __steps[__i]; \
+
+#define FLINT_NEWTON_END_LOOP }}
+
+#define FLINT_NEWTON_END }
+
+FLINT_DLL int parse_fmt(int * floating, const char * fmt);
+
+FLINT_DLL int flint_printf(const char * str, ...); /* flint version of printf */
+FLINT_DLL int flint_fprintf(FILE * f, const char * str, ...); /* flint version of fprintf */
+FLINT_DLL int flint_sprintf(char * s, const char * str, ...); /* flint version of sprintf */
+
+FLINT_DLL int flint_scanf(const char * str, ...); /* flint version of scanf */
+FLINT_DLL int flint_fscanf(FILE * f, const char * str, ...); /* flint version of fscanf */
+FLINT_DLL int flint_sscanf(const char * s, const char * str, ...); /* flint version of sscanf */
 
 #include "gmpcompat.h"
 

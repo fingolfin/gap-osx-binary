@@ -1,0 +1,178 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Dlocalization</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Dlocalization">
+<META NAME="keywords" CONTENT="Singular Manual: Dlocalization">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC867"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_817.htm#SEC868"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: WeylClosure" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_813.htm#SEC864"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ratgb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.21.0. Dlocalization </H5>
+<!--docid::SEC867::-->
+Procedure from library <CODE>dmodloc.lib</CODE> (see  <A HREF="sing_815.htm#SEC866">dmodloc_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>Dlocalization(I,f[,k,e]); I ideal, f poly, k,e optional ints
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The basering is the n-th Weyl algebra over a field of
+characteristic 0 and for all 1&lt;=i&lt;=n the identity
+<BR>var(i+n)*var(i)=var(i)*var(i+1)+1 holds, i.e. the sequence of
+variables is given by x(1),...,x(n),D(1),...,D(n), where D(i)
+is the differential operator belonging to x(i).
+<BR> Further, assume that f does not contain any D(i) and that I is
+holonomic on K^n\V(f).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal or list, computes an ideal J such that D/J is isomorphic
+to D/I localized at f as D-modules.
+<BR>If k&lt;&gt;0, a list consisting of J and an integer m is returned,
+such that f^m represents the natural map from D/I to D/J.
+Otherwise (and by default), only the ideal J is returned.
+<P>
+
+<DT><STRONG>Remarks:</STRONG>
+<DD>It is known that a localization at f of a holonomic D-module is
+again a holonomic D-module.
+<BR> Reference: (OTW)
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>If e&lt;&gt;0, <CODE>std</CODE> is used for Groebner basis computations,
+otherwise (and by default) <CODE>slimgb</CODE> is used.
+<BR> If printlevel=1, progress debug messages will be printed,
+if printlevel&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "dmodloc.lib";
+// (OTW), Example 8
+ring r = 0,(x,y,z,Dx,Dy,Dz),dp;
+def W = Weyl();
+setring W;
+poly f = x^3-y^2*z^2;
+ideal I = f^2*Dx+3*x^2, f^2*Dy-2*y*z^2, f^2*Dz-2*y^2*z;
+// I annihilates exp(1/f)
+ideal J = Dlocalization(I,f);
+J;
+==> J[1]=y*Dy-z*Dz
+==> J[2]=2*y*z^2*Dx+3*x^2*Dy
+==> J[3]=2*y^2*z*Dx+3*x^2*Dz
+==> J[4]=2*z^3*Dx*Dz+3*x^2*Dy^2+2*z^2*Dx
+==> J[5]=3*y^2*z^3*Dz-2*x^4*Dx-6*x^3*z*Dz+12*y^2*z^2-12*x^3-6
+==> J[6]=4*x^4*Dx^2+12*x^3*z*Dx*Dz+9*x^2*z^2*Dz^2+40*x^3*Dx+63*x^2*z*Dz+72*x^\
+   2+12*Dx
+==> J[7]=3*y*z^4*Dz^2-2*x^4*Dx*Dy-6*x^3*z*Dy*Dz+21*y*z^3*Dz-12*x^3*Dy+24*y*z^\
+   2-6*Dy
+==> J[8]=3*z^5*Dz^3-2*x^4*Dx*Dy^2-6*x^3*z*Dy^2*Dz+30*z^4*Dz^2-12*x^3*Dy^2+66*\
+   z^3*Dz+24*z^2-6*Dy^2
+Dlocalization(I,f,1); // The natural map D/I -&gt; D/J is given by 1/f^2
+==> [1]:
+==>    _[1]=y*Dy-z*Dz
+==>    _[2]=2*y*z^2*Dx+3*x^2*Dy
+==>    _[3]=2*y^2*z*Dx+3*x^2*Dz
+==>    _[4]=2*z^3*Dx*Dz+3*x^2*Dy^2+2*z^2*Dx
+==>    _[5]=3*y^2*z^3*Dz-2*x^4*Dx-6*x^3*z*Dz+12*y^2*z^2-12*x^3-6
+==>    _[6]=4*x^4*Dx^2+12*x^3*z*Dx*Dz+9*x^2*z^2*Dz^2+40*x^3*Dx+63*x^2*z*Dz+72\
+   *x^2+12*Dx
+==>    _[7]=3*y*z^4*Dz^2-2*x^4*Dx*Dy-6*x^3*z*Dy*Dz+21*y*z^3*Dz-12*x^3*Dy+24*y\
+   *z^2-6*Dy
+==>    _[8]=3*z^5*Dz^3-2*x^4*Dx*Dy^2-6*x^3*z*Dy^2*Dz+30*z^4*Dz^2-12*x^3*Dy^2+\
+   66*z^3*Dz+24*z^2-6*Dy^2
+==> [2]:
+==>    2
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_614.htm#SEC665">DLoc</A>;
+ <A HREF="sing_616.htm#SEC667">DLoc0</A>;
+ <A HREF="sing_615.htm#SEC666">SDLoc</A>.
+<P>
+
+<A NAME="WeylClosure"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_817.htm#SEC868"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: WeylClosure" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_813.htm#SEC864"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ratgb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_815.htm#SEC866"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: dmodloc_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

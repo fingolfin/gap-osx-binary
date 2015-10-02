@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-version="version latex.lib 4.0.0.0 Jun_2013 "; // $Id: 4778910a1f942b08c92b4b7bea7b83ef41a6d905 $
+version="version latex.lib 4.0.0.0 Jun_2013 "; // $Id: e4a01f52f53834cf5c92156dafc6dd07fd2c3929 $
 category="Visualization";
 info="
 LIBRARY: latex.lib    Typesetting of Singular-Objects in LaTeX2e
@@ -774,7 +774,7 @@ EXAMPLE: example texobj; shows an example
    "\\begin{array}{*{" + string(2*nvars(basering)-1) + "}{c}cr}" + newline;
            for(j=1; j<=size(obj);j++)
            { h = jet(obj[j],0);   // absterm
-             ineq = "="; 
+             ineq = "=";
               l = ""; nc = 0;
               for (i=1; i<=nvars(basering);i++)
               { t = " "; sg ="";
@@ -873,8 +873,8 @@ EXAMPLE: example texobj; shows an example
     s = s + l;
   }
 
-  if (typeof(obj) == "ring" or
-      typeof(obj) == "qring") { s = s + D + texring("",obj) + D + newline;}
+  if (typeof(obj) == "ring")
+  { s = s + D + texring("",obj) + D + newline;}
 
   kill obj;
  }
@@ -1125,7 +1125,7 @@ EXAMPLE: example texring; shows an example
   { s = s + texpoly("",maxideal(1),","); }
    s = s + cb + en;
 
-  if (typeof(r)=="qring")
+  if (size(ideal(r))>0) /*qring*/
   { ideal @I = ideal(r);
     if (defined(TeXbrack))
     {
@@ -1371,7 +1371,7 @@ EXAMPLE: example texpoly; shows an example
   string notvalid = "intvec intmat vector matrix module map";
 
   if (typeof(p) == "int") { return(p);}
-  if (typeof(p)  == "ring" or typeof(p) == "qring")
+  if (typeof(p)  == "ring")
   { " -- Call  texring  instead "; return();}
   if (find(notvalid,typeof(p)))
   { " -- Call  texobj  instead "; return();}
@@ -1813,7 +1813,7 @@ static proc tktex (def d)
 
  if (typeofd=="intvec" or typeofd == "intmat" or typeofd =="vector" or
      typeofd=="matrix" or typeofd == "module")   { return(texobj("",d));}
- if (typeofd=="ring" or typeofd=="qring") { return(texring("",d));}
+ if (typeofd=="ring") { return(texring("",d));}
  if (typeofd =="ideal") { return(texobj("",d));}
  if (typeofd=="number" or typeofd=="poly" or typeofd=="ideal")
                                                  { return(texpoly("",d));}

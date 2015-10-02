@@ -1,0 +1,166 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: jacobson</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: jacobson">
+<META NAME="keywords" CONTENT="Singular Manual: jacobson">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1878"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1802.htm#SEC1877"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: smith" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1804.htm#SEC1879"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: divideUnits" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: control_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.3.2 jacobson </H4>
+<!--docid::SEC1878::-->
+Procedure from library <CODE>jacobson.lib</CODE> (see  <A HREF="sing_1801.htm#SEC1876">jacobson_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>jacobson(M, eng); M matrix, eng an optional int
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>Basering is a (non-commutative) ring in two variables.
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute a weak Jacobson normal form of M over the basering
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Groebner bases and involutions are used, following [3]
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>A list L of matrices {U,D,V} is returned. That is L[1]*M*L[3]=L[2],
+<BR> where L[2] is a diagonal matrix and
+<BR> L[1], L[3] are square invertible polynomial (unimodular) matrices.
+<BR> Note, that M can be rectangular.
+<BR> The optional integer <CODE>eng2</CODE> determines the Groebner basis engine:
+<BR> 0 (default) ensures the use of 'slimgb' , otherwise 'std' is used.
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If <CODE>printlevel</CODE>=1, progress debug messages will be printed,
+<BR> if <CODE>printlevel</CODE>&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "jacobson.lib";
+ring r = 0,(x,d),Dp;
+def R = nc_algebra(1,1);   setring R; // the 1st Weyl algebra
+matrix m[2][2] = d,x,0,d; print(m);
+==> d,x,
+==> 0,d 
+list J = jacobson(m); // returns a list with 3 entries
+print(J[2]); // a Jacobson Form D for m
+==> xd2-d,0,
+==> 0,    1 
+print(J[1]*m*J[3] - J[2]); // check that U*M*V = D
+==> 0,0,
+==> 0,0 
+/*   now, let us do the same for the shift algebra  */
+ring r2 = 0,(x,s),Dp;
+def R2 = nc_algebra(1,s);   setring R2; // the 1st shift algebra
+matrix m[2][2] = s,x,0,s; print(m); // matrix of the same for as above
+==> s,x,
+==> 0,s 
+list J = jacobson(m);
+print(J[2]); // a Jacobson Form D, quite different from above
+==> xs2+s2,0,
+==> 0,     x 
+print(J[1]*m*J[3] - J[2]); // check that U*M*V = D
+==> 0,0,
+==> 0,0 
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1804.htm#SEC1879">divideUnits</A>;
+ <A HREF="sing_1802.htm#SEC1877">smith</A>.
+<P>
+
+<A NAME="divideUnits"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1802.htm#SEC1877"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: smith" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1804.htm#SEC1879"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: divideUnits" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: control_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

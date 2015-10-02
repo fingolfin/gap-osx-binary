@@ -1,0 +1,163 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: bigintmat operations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: bigintmat operations">
+<META NAME="keywords" CONTENT="Singular Manual: bigintmat operations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC121"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_81.htm#SEC120"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bigintmat type cast" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_83.htm#SEC122"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: def" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_73.htm#SEC112"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: bigint" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_83.htm#SEC122"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: def" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_78.htm#SEC117"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bigintmat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.2.4 bigintmat operations </H3>
+<!--docid::SEC121::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE>+</CODE>
+<DD>addition with intmat, int, or bigint. In case of (big-)int, it is added to
+every entry of the matrix.
+<P>
+
+<DT><CODE>-</CODE>
+<DD>negation or subtraction with intmat, int, or bigint. In case of (big-)int,
+it is subtracted from every entry of the matrix.
+<P>
+
+<DT><CODE>*</CODE>
+<DD>multiplication with intmat, int, or bigint; In case of (big-)int, every entry
+of the matrix is multiplied by the (big-)int
+<P>
+
+<DT><CODE>&lt;&gt;</CODE>, <CODE>==</CODE>
+<DD>comparators
+<P>
+
+<DT>bigintmat_expression <CODE>[</CODE> int<CODE>,</CODE> int <CODE>]</CODE>
+<DD>is a bigintmat entry, where the first index indicates the row and the
+second the column
+</DL>
+<P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  bigintmat m[3][4] = 3,3,6,3,5,2,2,7,0,0,45,3;
+  m;
+==> 3,3, 6,3,
+==> 5,2, 2,7,
+==> 0,0,45,3
+  m[1,3];               // show entry at [row 1, col 3]
+==> 6
+  m[1,3] = 10;          // set entry at [row 1, col 3] to 10
+  m;
+==> 3,3,10,3,
+==> 5,2, 2,7,
+==> 0,0,45,3
+  size(m);         // number of entries
+==> 12
+  bigintmat n[2][3] = 2,6,0,4,0,5;
+  n * m;
+==> 36,18, 32,48,
+==> 12,12,265,27
+  typeof(_);
+==> bigintmat
+  -m;
+==> -3,-3,-10,-3,
+==> -5,-2, -2,-7,
+==>  0, 0,-45,-3
+  bigintmat o;
+  o=n-10;
+  o;
+==> -8, -4,-10,
+==> -6,-10, -5
+  m*2;           // double each entry of m
+==>  6,6,20, 6,
+==> 10,4, 4,14,
+==>  0,0,90, 6
+  o-2*m;
+==>    ? bigintmat/cmatrix not compatible
+==>    ? error occurred in or before ./examples/bigintmat_operations.sing lin\
+   e 15: `  o-2*m;`
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="def"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_81.htm#SEC120"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bigintmat type cast" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_83.htm#SEC122"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: def" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_73.htm#SEC112"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: bigint" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_83.htm#SEC122"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: def" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_78.htm#SEC117"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: bigintmat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

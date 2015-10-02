@@ -1,0 +1,273 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Adj_div</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Adj_div">
+<META NAME="keywords" CONTENT="Singular Manual: Adj_div">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1826"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1752.htm#SEC1827"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: NSplaces" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.10.1.1 Adj_div </H4>
+<!--docid::SEC1826::-->
+Procedure from library <CODE>brnoeth.lib</CODE> (see  <A HREF="sing_1750.htm#SEC1825">brnoeth_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>Adj_div( f [,l] ); f a poly, [l a list]
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list L with the computed data:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">  L[1] a list of rings: L[1][1]=aff_r (affine), L[1][2]=Proj_R (projective),
+  L[2] an intvec with 2 entries (degree, genus),
+  L[3] a list of intvec (closed places),
+  L[4] an intvec (conductor),
+  L[5] a list of lists:
+     L[5][d][1] a (local) ring over an extension of degree d,
+     L[5][d][2] an intvec (degrees of base points of places of degree d)
+</pre></td></tr></table><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD><CODE>Adj_div(f);</CODE> computes and stores the fundamental data of the
+plane curve defined by f as needed for AG codes.
+<BR>In the affine ring you can find the following data:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">   poly CHI:  affine equation of the curve,
+   ideal Aff_SLocus:  affine singular locus (std),
+   list Inf_Points:  points at infinity
+            Inf_Points[1]:  singular points
+            Inf_Points[2]:  non-singular points,
+   list Aff_SPoints:  affine singular points (if not empty).
+</pre></td></tr></table>In the projective ring you can find the projective equation
+CHI of the curve (poly).
+<BR>In the local rings L[5][d][1] you find:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">   list POINTS:  base points of the places of degree d,
+   list LOC_EQS:  local equations of the curve at the base points,
+   list BRANCHES:  Hamburger-Noether developments of the places,
+   list PARAMETRIZATIONS:  local parametrizations of the places,
+</pre></td></tr></table>Each entry of the list L[3] corresponds to one closed place (i.e.,
+a place and all its conjugates) which is represented by an intvec
+of size two, the first entry is the degree of the place (in
+particular, it tells the local ring where to find the data
+describing one representative of the closed place), and the
+second one is the position of those data in the lists POINTS, etc.,
+inside this local ring.<BR>
+In the intvec L[4] (conductor) the i-th entry corresponds to the
+i-th entry in the list of places L[3].
+<P>
+
+With no optional arguments, the conductor is computed by
+local invariants of the singularities; otherwise it is computed
+by the Dedekind formula. <BR>
+An affine point is represented by a list P where P[1] is std
+of a prime ideal and P[2] is an intvec containing the position
+of the places above P in the list of closed places L[3]. <BR>
+If the point is at infinity, P[1] is a homogeneous irreducible
+polynomial in two variables.
+</P><P>
+
+If <CODE>printlevel&gt;=0</CODE> additional comments are displayed (default:
+<CODE>printlevel=0</CODE>).
+</P><P>
+
+<DT><STRONG>Warning:</STRONG>
+<DD>The parameter of the needed field extensions is called 'a'. Thus,
+there should be no global object named 'a' when executing Adj_div.
+<P>
+
+<A NAME="IDX645"></A>
+<A NAME="IDX646"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "brnoeth.lib";
+int plevel=printlevel;
+printlevel=-1;
+ring s=2,(x,y),lp;
+list C=Adj_div(y9+y8+xy6+x2y3+y2+x3);
+==> The genus of the curve is 3
+def aff_R=C[1][1];      // the affine ring
+setring aff_R;
+listvar(aff_R);         // data in the affine ring
+==> // aff_R                          [0]  *ring
+==> // Inf_Points                     [0]  list, size: 2
+==> // Aff_SPoints                    [0]  list, size: 3
+==> // Aff_SLocus                     [0]  ideal (SB), 2 generator(s)
+==> // CHI                            [0]  poly
+CHI;                    // affine equation of the curve
+==> x3+x2y3+xy6+y9+y8+y2
+Aff_SLocus;             // ideal of the affine singular locus
+==> Aff_SLocus[1]=y8+y2
+==> Aff_SLocus[2]=x2+y6
+Aff_SPoints[1];         // 1st affine singular point: (1:1:1), no.1
+==> [1]:
+==>    _[1]=y+1
+==>    _[2]=x+1
+==> [2]:
+==>    1
+Inf_Points[1];          // singular point(s) at infinity: (1:0:0), no.4
+==> [1]:
+==>    [1]:
+==>       y
+==>    [2]:
+==>       4
+Inf_Points[2];          // list of non-singular points at infinity
+==> empty list
+//
+def proj_R=C[1][2];     // the projective ring
+setring proj_R;
+CHI;                    // projective equation of the curve
+==> x3z6+x2y3z4+xy6z2+y9+y8z+y2z7
+C[2][1];                // degree of the curve
+==> 9
+C[2][2];                // genus of the curve
+==> 3
+C[3];                   // list of computed places
+==> [1]:
+==>    1,1
+==> [2]:
+==>    1,2
+==> [3]:
+==>    2,1
+==> [4]:
+==>    1,3
+C[4];                   // adjunction divisor (all points are singular!)
+==> 2,2,2,42
+//
+// we look at the place(s) of degree 2 by changing to the ring
+C[5][2][1];
+==> //   characteristic : 2
+==> //   1 parameter    : a 
+==> //   minpoly        : ...
+==> //   number of vars : 3
+==> //        block   1 : ordering ls
+==> //                  : names    x y t
+==> //        block   2 : ordering C
+def S(2)=C[5][2][1];
+setring S(2);
+POINTS;                // base point(s) of place(s) of degree 2: (1:a:1)
+==> [1]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       (a)
+==>    [3]:
+==>       1
+LOC_EQS;               // local equation(s)
+==> [1]:
+==>    y2+y3+(a+1)*y4+y6+(a+1)*y8+y9+(a)*xy2+(a+1)*xy4+xy6+(a+1)*x2y+(a)*x2y2\
+   +x2y3+x3
+PARAMETRIZATIONS;      // parametrization(s) and exactness
+==> [1]:
+==>    [1]:
+==>       _[1]=t2+(a+1)*t3
+==>       _[2]=t3+(a+1)*t4
+==>    [2]:
+==>       3,4
+BRANCHES;              // Hamburger-Noether development
+==> [1]:
+==>    [1]:
+==>       _[1,1]=0
+==>       _[1,2]=x
+==>       _[1,3]=0
+==>       _[2,1]=0
+==>       _[2,2]=1
+==>       _[2,3]=(a+1)
+==>    [2]:
+==>       1,-4
+==>    [3]:
+==>       0
+==>    [4]:
+==>       y+(a+1)*xy+(a)*x2y+(a)*x2y2+(a+1)*x3+x3y+x3y3+(a)*x4+(a+1)*x4y2+(a+\
+   1)*x4y3+x5+x5y2+(a)*x6+(a+1)*x6y2+x6y4+x6y5+x7y+(a+1)*x8+(a+1)*x8y+x8y4+(\
+   a+1)*x8y6+x9+x9y7+(a+1)*x10+x11y6+(a+1)*x12y4+x13y5+x14+x14y+x15y4+x16+(a\
+   +1)*x16y2+x17y3+x19y2+(a+1)*x20+x21y+x23
+printlevel=plevel;
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1752.htm#SEC1827">NSplaces</A>;
+ <A HREF="sing_1760.htm#SEC1835">closed_points</A>.
+<P>
+
+<A NAME="NSplaces"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1752.htm#SEC1827"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: NSplaces" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1721.htm#SEC1796"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Visualization" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1764.htm#SEC1839"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: decodegb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1750.htm#SEC1825"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brnoeth_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

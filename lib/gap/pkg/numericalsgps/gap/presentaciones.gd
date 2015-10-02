@@ -5,8 +5,6 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: presentaciones.gd,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado, 
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the 
@@ -73,3 +71,44 @@ DeclareGlobalFunction("MinimalPresentationOfNumericalSemigroup");
 ##
 #############################################################################
 DeclareGlobalFunction("BettiElementsOfNumericalSemigroup");
+
+#############################################################################
+##
+#F  IsUniquelyPresentedNumericalSemigroup(s)
+##
+##  For a numerical semigroup s, checks it it has a unique minimal presentation
+##  Basado en GS-O
+##
+#############################################################################
+DeclareGlobalFunction("IsUniquelyPresentedNumericalSemigroup");
+
+#############################################################################
+##
+#F  IsGenericNumericalSemigroup(s)
+##
+##  For a numerical semigroup s, checks it it has a generic presentation,
+##  that is, in every relation all minimal generators appear. These semigroups are uniquely
+##  presented véase B-GS-G.
+##
+#############################################################################
+DeclareGlobalFunction("IsGenericNumericalSemigroup");
+
+#############################################################################
+##
+#F ShadedSetOfElementInNumericalSemigroup(x,s)
+## computes the shading set of x in s as defined in 
+##  -Székely, L. A.; Wormald, N. C. Generating functions for the Frobenius 
+##    problem with 2 and 3 generators. Math. Chronicle 15 (1986), 49–57.
+#############################################################################
+DeclareGlobalFunction("ShadedSetOfElementInNumericalSemigroup");
+
+############################################################################
+##
+#F  PrimitiveElementsOfNumericalSemigroup(s)
+##
+## Computes the sets of elements in s, such that there exists a minimal 
+## solution to msg*x-msg*y = 0,  such that x,y are factorizations of s
+##
+#############################################################################
+DeclareGlobalFunction("PrimitiveElementsOfNumericalSemigroup");
+

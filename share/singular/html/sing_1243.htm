@@ -1,0 +1,179 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: normaliz_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: normaliz_lib">
+<META NAME="keywords" CONTENT="Singular Manual: normaliz_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1318"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1242.htm#SEC1317"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: changeDenominator" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1244.htm#SEC1319"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intclToricRing" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1105.htm#SEC1180"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.4.18 normaliz_lib </H3>
+<!--docid::SEC1318::-->
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>normaliz.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>  Provides an interface for the use of Normaliz 2.8 or
+         newer within SINGULAR.
+<DT><STRONG>Authors:</STRONG>
+<DD>Winfried Bruns, Winfried.Bruns@Uni-Osnabrueck.de
+<BR>Christof Soeger, Christof.Soeger@Uni-Osnabrueck.de
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>The library normaliz.lib provides an interface for the use of Normaliz 2.8 or
+newer within SINGULAR. The exchange of data is via files.
+In addition to the top level
+functions that aim at objects of type ideal or ring, several other auxiliary
+functions allow the user to apply Normaliz to data of type intmat. Therefore
+SINGULAR can be used as a comfortable environment for the work with Normaliz.
+<BR> Please see the <CODE>Normaliz.pdf</CODE> (included in the Normaliz
+distribution) for a more extensive documentation of Normaliz.
+<P>
+
+Normaliz allows the use of a grading. In the Singular functions that access
+Normaliz the parameter grading is an intvec that assigns a (not necessarily
+positive) degree to every variable of the ambient polynomial ring.
+But it must give positive degrees to the generators given to function.
+</P><P>
+
+Singular and Normaliz exchange data via files. These files are automatically
+created and erased behind the scenes. As long as one wants to use only the
+ring-theoretic functions there is no need for file management.
+<BR>Note that the numerical invariants computed by Normaliz can be
+accessed in this "automatic file mode".
+<BR>However, if Singular is used as a frontend for Normaliz or the user
+wants to inspect data not automatically returned to Singular, then
+an explicit filename and a path can be specified for the exchange of
+data. Moreover, the library provides functions for access to these files.
+Deletion of the files is left to the user.
+</P><P>
+
+Use of this library requires the program Normaliz to be installed.
+You can download it from
+<A HREF="http://www.mathematik.uni-osnabrueck.de/normaliz/">http://www.mathematik.uni-osnabrueck.de/normaliz/</A>. Please make sure
+that the executables are in the search path or use setNmzExecPath
+( <A HREF="sing_1259.htm#SEC1334">setNmzExecPath</A>).
+</P><P>
+
+<A NAME="IDX466"></A>
+<A NAME="IDX467"></A>
+<A NAME="IDX468"></A>
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1244.htm#SEC1319">D.4.18.1 intclToricRing</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the integral closure of the toric ring generated by the leading monomials of the elements of I in the basering</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1245.htm#SEC1320">D.4.18.2 normalToricRing</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the normalization of the toric ring generated by the leading monomials of the elements of I</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1246.htm#SEC1321">D.4.18.3 normalToricRingFromBinomials</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the normalization of the polynomial ring modulo the unique minimal binomial prime ideal of the binomial ideal I</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1247.htm#SEC1322">D.4.18.4 ehrhartRing</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">considers the exponent vectors of the elements of I as points of a lattice polytope and computes the integral cloure of the polytopal algebra</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1248.htm#SEC1323">D.4.18.5 intclMonIdeal</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Computes the integral closure of the Rees algebra of the ideal generated by the leading monomials of the elements of I</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1249.htm#SEC1324">D.4.18.6 torusInvariants</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the ring of invariants of a torus action</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1250.htm#SEC1325">D.4.18.7 finiteDiagInvariants</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the ring of invariants of a finite abelian group acting diagonally on a polynomial ring</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1251.htm#SEC1326">D.4.18.8 diagInvariants</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the ring of invariants of a diagonalizable group</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1252.htm#SEC1327">D.4.18.9 intersectionValRings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes the intersection of the polynomial ring with the valuation rings of monomial valuations</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1253.htm#SEC1328">D.4.18.10 intersectionValRingIdeals</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">computes ideals of monomial valuations</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1254.htm#SEC1329">D.4.18.11 showNuminvs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">prints the numerical invariants found by Normaliz</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1255.htm#SEC1330">D.4.18.12 exportNuminvs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">exports the numerical invariants found by Normaliz</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1256.htm#SEC1331">D.4.18.13 setNmzOption</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">sets the option s to onoff</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1257.htm#SEC1332">D.4.18.14 showNmzOptions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">prints the enabled options to the standard output</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1258.htm#SEC1333">D.4.18.15 normaliz</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">applies Normaliz</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1259.htm#SEC1334">D.4.18.16 setNmzExecPath</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">sets the path to the Normaliz executable</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1260.htm#SEC1335">D.4.18.17 writeNmzData</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">creates an input file for Normaliz</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1261.htm#SEC1336">D.4.18.18 readNmzData</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">reads the Normaliz output file with the specified suffix</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1262.htm#SEC1337">D.4.18.19 setNmzFilename</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">sets the filename for the exchange of data</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1263.htm#SEC1338">D.4.18.20 setNmzDataPath</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">sets the directory for the exchange of data</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1264.htm#SEC1339">D.4.18.21 writeNmzPaths</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">writes the path names into two files</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1265.htm#SEC1340">D.4.18.22 startNmz</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">retrieves the path names written by writeNmzPaths</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1266.htm#SEC1341">D.4.18.23 rmNmzFiles</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">removes the files created for and by Normaliz</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1267.htm#SEC1342">D.4.18.24 mons2intmat</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">returns the intmat whose rows represent the leading exponents of the elements of I</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1268.htm#SEC1343">D.4.18.25 intmat2mons</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">returns the ideal generated by the monomials which have the rows of expo_vecs as exponent vector</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_1269.htm#SEC1344">D.4.18.26 binomials2intmat</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">returns the intmat whose rows represent the exponents of the elements of the binomial ideal I</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="intclToricRing"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1242.htm#SEC1317"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: changeDenominator" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1244.htm#SEC1319"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: intclToricRing" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1228.htm#SEC1303"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: normal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1270.htm#SEC1345"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: pointid_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1105.htm#SEC1180"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

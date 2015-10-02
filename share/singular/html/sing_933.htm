@@ -1,0 +1,521 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: cgs</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: cgs">
+<META NAME="keywords" CONTENT="Singular Manual: cgs">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1008"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_932.htm#SEC1007"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: compregb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_934.htm#SEC1009"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: base2str" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_931.htm#SEC1006"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: all_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: general_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_932.htm#SEC1007"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: compregb_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.2.1 cgs </H4>
+<!--docid::SEC1008::-->
+Procedure from library <CODE>compregb.lib</CODE> (see  <A HREF="sing_932.htm#SEC1007">compregb_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>cgs(Polys,Vars,Paras,RingVar,RingAll); Polys an ideal, Vars, the list
+of variables, Paras the list of parameters, RingVar the ring with
+Paras as parameters, RingAll the ring with Paras as variables
+(RingAll should be the current ring)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list L of lists L[i] of a polynomial and an ideal:
+<BR>L[i][1] the polynomial giving the condition on the parameters
+L[i][2] the Groebner basis for this case
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "compregb.lib";
+ring RingVar=(0,a,b),(x,y,t),lp;
+ring RingAll=0,(x,y,t,a,b),(lp(3),dp);
+ideal polys=x^3-a,y^4-b,x+y-t;
+list vars=x,y,t;
+list paras=a,b;
+list G = cgs(polys,vars,paras,RingVar,RingAll);
+G;
+==> [1]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [2]:
+==>    [1]:
+==>       a
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a4
+==>       _[3]=t6a3
+==>       _[4]=5t8a2-28t5a3
+==>       _[5]=14t10a-60t7a2+105t4a3
+==>       _[6]=t12-4t9a+6t6a2-4t3a3
+==>       _[7]=81ya3-14t10+60t7a-105t4a2+59ta3
+==>       _[8]=81yt2a2+4t9-21t6a+3t3a2+14a3
+==>       _[9]=21yt3a+6ya2-t7-7t4a+8ta2
+==>       _[10]=12yt5+15yt2a-7t6+5t3a+2a2
+==>       _[11]=3y2a+5yt4+4yta-3t5+3t2a
+==>       _[12]=6y2t2-8yt3-ya+3t4-3ta
+==>       _[13]=y3-3y2t+3yt2-t3+a
+==>       _[14]=x+y-t
+==> [3]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [4]:
+==>    [1]:
+==>       b
+==>    [2]:
+==>       _[1]=a
+==>       _[2]=b3
+==>       _[3]=t6b2
+==>       _[4]=5t9b-18t5b2
+==>       _[5]=t12-3t8b+3t4b2
+==>       _[6]=32yb2-5t9+18t5b-45tb2
+==>       _[7]=32yt3b+3t8-30t4b-5b2
+==>       _[8]=5yt4+3yb-3t5-5tb
+==>       _[9]=10y2b-24ytb-t6+15t2b
+==>       _[10]=6y2t2-8yt3+3t4-b
+==>       _[11]=y3-3y2t+3yt2-t3
+==>       _[12]=x+y-t
+==> [5]:
+==>    [1]:
+==>       ab
+==>    [2]:
+==>       _[1]=729a4-4096b3
+==>       _[2]=41472t11b2-6561t10a3+5832t9a2b-171072t8ab2+27648t7b3-4374t6a3b\
+   +252720t5a2b2-2215296t4ab3+2093568t3b4-497097t2a3b2-802296ta2b3+215488ab4
+==>       _[3]=46656t11ab-41472t10b2+6561t9a3-192456t8a2b+31104t7ab2-27648t6b\
+   3+284310t5a3b-2492208t4a2b2+2355264t3ab3-3142144t2b4-902583ta3b2+242424a2\
+   b3
+==>       _[4]=52488t11a2-46656t10ab+41472t9b2-216513t8a3+34992t7a2b-31104t6a\
+   b2+1797120t5b3-2803734t4a3b+2649672t3a2b2-3534912t2ab3-5705216tb4+272727a\
+   3b2
+==>       _[5]=729t12-2916t9a-2187t8b+4374t6a2-34992t5ab+2187t4b2-2916t3a3-21\
+   870t2a2b-8748tab2+3367b3
+==>       _[6]=3594240ytb3+568620ya3b-99144t11a-1728t10b+426465t8a2+327888t7a\
+   b+17280t6b2-752328t5a3+4509270t4a2b-366984t3ab2+2206528t2b3+1791180ta3b+6\
+   59529a2b2
+==>       _[7]=1137240yta2b2+1010880yab3-28431t10a2+24786t9ab+31104t8b2+12465\
+   9t7a3-13122t6a2b-263412t5ab2-1398528t4b3+1467477t3a3b-1414503t2a2b2-22543\
+   8tab3+2088320b4
+==>       _[8]=1705860yta3b+1516320ya2b2-269568t11b-729t9a2+1158624t8ab+87091\
+   2t7b2+8748t6a3-2037798t5a2b+12301632t4ab2-1240320t3b3+1109376t2a3b+487676\
+   7ta2b2+1731808ab3
+==>       _[9]=12130560yt2ab2-1705860ya3b-425736t11a+642816t10b+1782405t8a2-1\
+   403568t7ab-2612736t6b2-2956824t5a3+24555150t4a2b-35184456t3ab2+19255040t2\
+   b3+6714252ta3b-4160403a2b2
+==>       _[10]=3411720yt2a2b-1516320ytab2-4043520yb3+112266t10a+61560t9b-481\
+   140t7a2-788292t6ab-221616t5b2+841995t4a3-5807700t3a2b-762534t2ab2-2104264\
+   tb3-1043523a3b
+==>       _[11]=171072yt3b2+413343yt2a3+393660yta2b+44712yab2+20412t9a+16038t\
+   8b-107163t6a2-163296t5ab-160380t4b2+15309t3a3-817209t2a2b-329508tab2+3746\
+   78b3
+==>       _[12]=552yt3ab-448yt2b2-405yta3-228ya2b+70t11-300t8a-252t7b+525t5a2\
+   -3384t4ab+630t3b2-295t2a3-1089ta2b-228ab2
+==>       _[13]=2052yt3a2-648yt2ab-320ytb2+297ya3+50t10-312t7a-180t6b-309t4a2\
+   -1440t3ab+450t2b2+571ta3+297a2b
+==>       _[14]=66yt4b+81yt2a2+96ytab+14yb2+4t9-21t6a-54t5b+3t3a2-135t2ab-30t\
+   b2+14a3
+==>       _[15]=63yt4a-32yt3b+18yta2+5yab-3t8-21t5a+30t4b+24t2a2+33tab+5b2
+==>       _[16]=10yt6+16yt3a+6yt2b+ya2-6t7+3t4a-10t3b+3ta2+ab
+==>       _[17]=2y2b-12yt5-15yt2a-12ytb+7t6-5t3a+15t2b-2a2
+==>       _[18]=3y2a+5yt4+4yta+3yb-3t5+3t2a-5tb
+==>       _[19]=6y2t2-8yt3-ya+3t4-3ta-b
+==>       _[20]=y3-3y2t+3yt2-t3+a
+==>       _[21]=x+y-t
+==> [6]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [7]:
+==>    [1]:
+==>       a
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a4
+==>       _[3]=t6a3
+==>       _[4]=5t8a2-28t5a3
+==>       _[5]=14t10a-60t7a2+105t4a3
+==>       _[6]=t12-4t9a+6t6a2-4t3a3
+==>       _[7]=81ya3-14t10+60t7a-105t4a2+59ta3
+==>       _[8]=81yt2a2+4t9-21t6a+3t3a2+14a3
+==>       _[9]=21yt3a+6ya2-t7-7t4a+8ta2
+==>       _[10]=12yt5+15yt2a-7t6+5t3a+2a2
+==>       _[11]=3y2a+5yt4+4yta-3t5+3t2a
+==>       _[12]=6y2t2-8yt3-ya+3t4-3ta
+==>       _[13]=y3-3y2t+3yt2-t3+a
+==>       _[14]=x+y-t
+==> [8]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [9]:
+==>    [1]:
+==>       b
+==>    [2]:
+==>       _[1]=a
+==>       _[2]=b3
+==>       _[3]=t6b2
+==>       _[4]=5t9b-18t5b2
+==>       _[5]=t12-3t8b+3t4b2
+==>       _[6]=32yb2-5t9+18t5b-45tb2
+==>       _[7]=32yt3b+3t8-30t4b-5b2
+==>       _[8]=5yt4+3yb-3t5-5tb
+==>       _[9]=10y2b-24ytb-t6+15t2b
+==>       _[10]=6y2t2-8yt3+3t4-b
+==>       _[11]=y3-3y2t+3yt2-t3
+==>       _[12]=x+y-t
+==> [10]:
+==>    [1]:
+==>       ab
+==>    [2]:
+==>       _[1]=729a4+64b3
+==>       _[2]=432t10b2-2187t9a3-1458t8a2b-2592t7ab2-2592t6b3+16038t5a3b+1263\
+   6t4a2b2-13536t3ab3-3472t2b4+31077ta3b2+4758a2b3
+==>       _[3]=5832t10ab+2592t9b2-19683t8a3-34992t7a2b-34992t6ab2-19008t5b3+1\
+   70586t4a3b-182736t3a2b2-46872t2ab3-36832tb4+64233a3b2
+==>       _[4]=6561t10a2+2916t9ab+1944t8b2-39366t7a3-39366t6a2b-21384t5ab2-16\
+   848t4b3-205578t3a3b-52731t2a2b2-41436tab3-6344b4
+==>       _[5]=648t11b-729t9a2-2916t8ab-2160t7b2+4374t6a3+8262t5a2b-28728t4ab\
+   2+3816t3b3+20250t2a3b-13581ta2b2-3172ab3
+==>       _[6]=2916t11a-648t10b-10935t8a2-5832t7ab+2160t6b2+13122t5a3-148230t\
+   4a2b+37476t3ab2-2792t2b3-107730ta3b-21411a2b2
+==>       _[7]=729t12-2916t9a-2187t8b+4374t6a2-34992t5ab+2187t4b2-2916t3a3-21\
+   870t2a2b-8748tab2-793b3
+==>       _[8]=112320yt2b3+568620yta3b+126360ya2b2-4374t9a2+12474t8ab+6336t7b\
+   2+43011t6a3-54108t5a2b-80388t4ab2-75392t3b3-52407t2a3b-489222ta2b2-75062a\
+   b3
+==>       _[9]=505440yt2ab2-224640ytb3+568620ya3b-3888t10b+69255t8a2+51840t7a\
+   b+6336t6b2-387828t5a3-475470t4a2b-217440t3ab2+51952t2b3-2481192ta3b-38060\
+   1a2b2
+==>       _[10]=3411720yt2a2b-1516320ytab2-336960yb3+112266t10a+61560t9b-4811\
+   40t7a2-788292t6ab-221616t5b2+841995t4a3-5807700t3a2b-762534t2ab2+595576tb\
+   3-1043523a3b
+==>       _[11]=171072yt3b2+413343yt2a3+393660yta2b+44712yab2+20412t9a+16038t\
+   8b-107163t6a2-163296t5ab-160380t4b2+15309t3a3-817209t2a2b-329508tab2-3300\
+   2b3
+==>       _[12]=552yt3ab-448yt2b2-405yta3-228ya2b+70t11-300t8a-252t7b+525t5a2\
+   -3384t4ab+630t3b2-295t2a3-1089ta2b-228ab2
+==>       _[13]=2052yt3a2-648yt2ab-320ytb2+297ya3+50t10-312t7a-180t6b-309t4a2\
+   -1440t3ab+450t2b2+571ta3+297a2b
+==>       _[14]=66yt4b+81yt2a2+96ytab+14yb2+4t9-21t6a-54t5b+3t3a2-135t2ab-30t\
+   b2+14a3
+==>       _[15]=63yt4a-32yt3b+18yta2+5yab-3t8-21t5a+30t4b+24t2a2+33tab+5b2
+==>       _[16]=10yt6+16yt3a+6yt2b+ya2-6t7+3t4a-10t3b+3ta2+ab
+==>       _[17]=2y2b-12yt5-15yt2a-12ytb+7t6-5t3a+15t2b-2a2
+==>       _[18]=3y2a+5yt4+4yta+3yb-3t5+3t2a-5tb
+==>       _[19]=6y2t2-8yt3-ya+3t4-3ta-b
+==>       _[20]=y3-3y2t+3yt2-t3+a
+==>       _[21]=x+y-t
+==> [11]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [12]:
+==>    [1]:
+==>       a
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a4
+==>       _[3]=t6a3
+==>       _[4]=5t8a2-28t5a3
+==>       _[5]=14t10a-60t7a2+105t4a3
+==>       _[6]=t12-4t9a+6t6a2-4t3a3
+==>       _[7]=81ya3-14t10+60t7a-105t4a2+59ta3
+==>       _[8]=81yt2a2+4t9-21t6a+3t3a2+14a3
+==>       _[9]=21yt3a+6ya2-t7-7t4a+8ta2
+==>       _[10]=12yt5+15yt2a-7t6+5t3a+2a2
+==>       _[11]=3y2a+5yt4+4yta-3t5+3t2a
+==>       _[12]=6y2t2-8yt3-ya+3t4-3ta
+==>       _[13]=y3-3y2t+3yt2-t3+a
+==>       _[14]=x+y-t
+==> [13]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [14]:
+==>    [1]:
+==>       b
+==>    [2]:
+==>       _[1]=a
+==>       _[2]=b3
+==>       _[3]=t6b2
+==>       _[4]=5t9b-18t5b2
+==>       _[5]=t12-3t8b+3t4b2
+==>       _[6]=32yb2-5t9+18t5b-45tb2
+==>       _[7]=32yt3b+3t8-30t4b-5b2
+==>       _[8]=5yt4+3yb-3t5-5tb
+==>       _[9]=10y2b-24ytb-t6+15t2b
+==>       _[10]=6y2t2-8yt3+3t4-b
+==>       _[11]=y3-3y2t+3yt2-t3
+==>       _[12]=x+y-t
+==> [15]:
+==>    [1]:
+==>       ab
+==>    [2]:
+==>       _[1]=16767a4+5632b3
+==>       _[2]=16767t12-67068t9a-50301t8b+100602t6a2-804816t5ab+50301t4b2-670\
+   68t3a3-503010t2a2b-201204tab2-22399b3
+==>       _[3]=32348160yb4+27766152t11a2-2146176t10ab+476928t9b2-114535377t8a\
+   3-78067152t7a2b+2861568t6ab2-63272448t5b3-1314163926t4a3b+210548808t3a2b2\
+   +27688320t2ab3+228423424tb4-183555801a3b2
+==>       _[4]=2274480ya2b3-655776t11b2-150903t10a3+33534t9a2b+2705076t8ab2+1\
+   843776t7b3+201204t6a3b-4448844t5a2b2+31037688t4ab3-4972704t3b4+1946835t2a\
+   3b2+16061022ta2b3+4335188ab4
+==>       _[5]=10235160ya3b2-2950992t11ab+228096t10b2+150903t9a3+12172842t8a2\
+   b+8296992t7ab2-304128t6b3-20019798t5a3b+139669596t4a2b2-22377168t3ab3-294\
+   2720t2b4+72274599ta3b2+19508346a2b3
+==>       _[6]=1797120ytb3+13078260ya3b-3889944t11a+317952t10b+15844815t8a2+1\
+   0760688t7ab-794880t6b2-24546888t5a3+185536170t4a2b-29127384t3ab2-6614272t\
+   2b3+100664100ta3b+26988039a2b2
+==>       _[7]=26156520yta2b2+2021760yab3+251505t10a2+972486t9ab+983664t8b2-2\
+   565351t7a3-5734314t6a2b-9009468t5ab2-6972768t4b3+5382207t3a3b-39810447t2a\
+   2b2-26365962tab3-6221072b4
+==>       _[8]=1705860yta3b+379080ya2b2-71280t11b+67068t9a2+358182t8ab+256608\
+   t7b2-352107t6a3-1071144t5a2b+2918916t4ab2-658416t3b3-2384721t2a3b+26244ta\
+   2b2+65494ab3
+==>       _[9]=6065280yt2ab2+42646500ya3b-12206376t11a+1168992t10b+50049495t8\
+   a2+33199632t7ab-3250368t6b2-78871968t5a3+581360490t4a2b-102330216t3ab2-17\
+   630624t2b3+303270156ta3b+80747199a2b2
+==>       _[10]=78469560yt2a2b-34875360ytab2-4043520yb3+2582118t10a+1415880t9\
+   b-11066220t7a2-18130716t6ab-5097168t5b2+19365885t4a3-133577100t3a2b-17538\
+   282t2ab2+16398088tb3-24001029a3b
+==>       _[11]=3934656yt3b2+9506889yt2a3+9054180yta2b+1028376yab2+469476t9a+\
+   368874t8b-2464749t6a2-3755808t5ab-3688740t4b2+352107t3a3-18795807t2a2b-75\
+   78684tab2-1166726b3
+==>       _[12]=552yt3ab-448yt2b2-405yta3-228ya2b+70t11-300t8a-252t7b+525t5a2\
+   -3384t4ab+630t3b2-295t2a3-1089ta2b-228ab2
+==>       _[13]=2052yt3a2-648yt2ab-320ytb2+297ya3+50t10-312t7a-180t6b-309t4a2\
+   -1440t3ab+450t2b2+571ta3+297a2b
+==>       _[14]=66yt4b+81yt2a2+96ytab+14yb2+4t9-21t6a-54t5b+3t3a2-135t2ab-30t\
+   b2+14a3
+==>       _[15]=63yt4a-32yt3b+18yta2+5yab-3t8-21t5a+30t4b+24t2a2+33tab+5b2
+==>       _[16]=10yt6+16yt3a+6yt2b+ya2-6t7+3t4a-10t3b+3ta2+ab
+==>       _[17]=2y2b-12yt5-15yt2a-12ytb+7t6-5t3a+15t2b-2a2
+==>       _[18]=3y2a+5yt4+4yta+3yb-3t5+3t2a-5tb
+==>       _[19]=6y2t2-8yt3-ya+3t4-3ta-b
+==>       _[20]=y3-3y2t+3yt2-t3+a
+==>       _[21]=x+y-t
+==> [16]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [17]:
+==>    [1]:
+==>       a
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=t12-4t9a+6t6a2-4t3a3+a4
+==>       _[3]=81ya3-14t10+60t7a-105t4a2+59ta3
+==>       _[4]=81yt2a2+4t9-21t6a+3t3a2+14a3
+==>       _[5]=21yt3a+6ya2-t7-7t4a+8ta2
+==>       _[6]=12yt5+15yt2a-7t6+5t3a+2a2
+==>       _[7]=3y2a+5yt4+4yta-3t5+3t2a
+==>       _[8]=6y2t2-8yt3-ya+3t4-3ta
+==>       _[9]=y3-3y2t+3yt2-t3+a
+==>       _[10]=x+y-t
+==> [18]:
+==>    [1]:
+==>       1
+==>    [2]:
+==>       _[1]=b
+==>       _[2]=a
+==>       _[3]=t6
+==>       _[4]=5yt4-3t5
+==>       _[5]=6y2t2-8yt3+3t4
+==>       _[6]=y3-3y2t+3yt2-t3
+==>       _[7]=x+y-t
+==> [19]:
+==>    [1]:
+==>       b
+==>    [2]:
+==>       _[1]=a
+==>       _[2]=t12-3t8b+3t4b2-b3
+==>       _[3]=32yb2-5t9+18t5b-45tb2
+==>       _[4]=32yt3b+3t8-30t4b-5b2
+==>       _[5]=5yt4+3yb-3t5-5tb
+==>       _[6]=10y2b-24ytb-t6+15t2b
+==>       _[7]=6y2t2-8yt3+3t4-b
+==>       _[8]=y3-3y2t+3yt2-t3
+==>       _[9]=x+y-t
+==> [20]:
+==>    [1]:
+==>       -8910671247a13b+46290636864a9b4+20949663744a5b7+1476395008ab10
+==>    [2]:
+==>       _[1]=t12-4t9a-3t8b+6t6a2-48t5ab+3t4b2-4t3a3-30t2a2b-12tab2+a4-b3
+==>       _[2]=531441ya8-2939328ya4b3-262144yb6+673920t11a2b2-91854t10a5-8294\
+   4t10ab3+87480t9a4b+40960t9b4-2779920t8a3b2+393660t7a6-1762560t7a2b3-78732\
+   t6a5b+43008t6ab4+4132944t5a4b2-147456t5b5-688905t4a7-32127840t4a3b3+48551\
+   40t3a6b+6741120t3a2b4-7735014t2a5b2-1926144t2ab5+387099ta8-15277896ta4b3+\
+   368640tb6+1336257a7b-4006288a3b4
+==>       _[3]=6561yta5+576ytab3+5832ya4b+512yb4-1134t11a2+72t10ab-80t9b2+486\
+   0t8a3+3348t7a2b+240t6ab2-8505t5a4+288t5b3+52380t4a3b-8934t3a2b2+4779t2a5+\
+   2952t2ab3+20745ta4b-720tb4+6344a3b2
+==>       _[4]=373248yta4b2+32768ytb5+59049ya7+5184ya3b3+10368t11ab2-10206t10\
+   a4-5120t10b3+9720t9a3b-32400t8a2b2+43740t7a5-5376t7ab3-8748t6a4b+18432t6b\
+   4-24624t5a3b2-76545t4a6-589920t4a2b3+539460t3a5b+240768t3ab4-587574t2a4b2\
+   -46080t2b5+43011ta7-517384ta3b3+148473a6b-84240a2b4
+==>       _[5]=9360yt2ab2+13851yta4-2944ytb3+10530ya3b-2394t11a+460t10b+10260\
+   t8a2+5748t7ab-1656t6b2-17955t5a3+112890t4a2b-34794t3ab2+10089t2a4+4140t2b\
+   3+42497ta3b+10530a2b2
+==>       _[6]=42120yt2a2b-18720ytab2-8019ya4-4864yb3+1386t10a+760t9b-5940t7a\
+   2-9732t6ab-2736t5b2+10395t4a3-71700t3a2b-9414t2ab2-5841ta4+6840tb3-12883a\
+   3b
+==>       _[7]=266240yt2b4+1347840yta3b2+150903ya6+312768ya2b3-41600t11b2-260\
+   82t10a3+24840t9a2b+209040t8ab2+111780t7a4+149760t7b3-22356t6a3b-573648t5a\
+   2b2-195615t4a5+1703520t4ab3+1378620t3a4b-374400t3b4-1214602t2a3b2+109917t\
+   a6-113400ta2b3+379431a5b+84240ab4
+==>       _[8]=16767yt2a4+5632yt2b3+21060yta3b+4680ya2b2-880t11b+828t9a2+4422\
+   t8ab+3168t7b2-4347t6a3-13224t5a2b+36036t4ab2+621t3a4-7920t3b3-29441t2a3b+\
+   324ta2b2+2898a5+1782ab3
+==>       _[9]=704yt3b2+1701yt2a3+1620yta2b+184yab2+84t9a+66t8b-441t6a2-672t5\
+   ab-660t4b2+63t3a3-3363t2a2b-1356tab2+294a4-110b3
+==>       _[10]=552yt3ab-448yt2b2-405yta3-228ya2b+70t11-300t8a-252t7b+525t5a2\
+   -3384t4ab+630t3b2-295t2a3-1089ta2b-228ab2
+==>       _[11]=2052yt3a2-648yt2ab-320ytb2+297ya3+50t10-312t7a-180t6b-309t4a2\
+   -1440t3ab+450t2b2+571ta3+297a2b
+==>       _[12]=66yt4b+81yt2a2+96ytab+14yb2+4t9-21t6a-54t5b+3t3a2-135t2ab-30t\
+   b2+14a3
+==>       _[13]=63yt4a-32yt3b+18yta2+5yab-3t8-21t5a+30t4b+24t2a2+33tab+5b2
+==>       _[14]=10yt6+16yt3a+6yt2b+ya2-6t7+3t4a-10t3b+3ta2+ab
+==>       _[15]=2y2b-12yt5-15yt2a-12ytb+7t6-5t3a+15t2b-2a2
+==>       _[16]=3y2a+5yt4+4yta+3yb-3t5+3t2a-5tb
+==>       _[17]=6y2t2-8yt3-ya+3t4-3ta-b
+==>       _[18]=y3-3y2t+3yt2-t3+a
+==>       _[19]=x+y-t
+</FONT></pre></td></tr></table><P>
+
+<A NAME="base2str"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_932.htm#SEC1007"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: compregb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_934.htm#SEC1009"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: base2str" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_931.htm#SEC1006"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: all_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: general_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_932.htm#SEC1007"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: compregb_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

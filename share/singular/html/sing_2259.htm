@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: waitTasks</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: waitTasks">
+<META NAME="keywords" CONTENT="Singular Manual: waitTasks">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2334"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2258.htm#SEC2333"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: stopTask" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2260.htm#SEC2335"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: waitAllTasks" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2246.htm#SEC2321"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: resources_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: derham_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2251.htm#SEC2326"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tasks_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.20.8 waitTasks </H4>
+<!--docid::SEC2334::-->
+Procedure from library <CODE>tasks.lib</CODE> (see  <A HREF="sing_2251.htm#SEC2326">tasks_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>waitTasks(T, N[, timeout]), T list of tasks, N int, timeout int
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>an ordered list of the indices of those tasks which have been
+successfully completed. The state of these tasks is set to
+'completed'.
+<BR> The procedure waits for N tasks to complete.
+<BR> An optional timeout in ms can be provided. Default is 0 which
+disables the timeout.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>A task whose state is neither 'started' nor 'completed' cannot be
+waited for.
+<BR> The result of any completed task can be accessed via  <A HREF="sing_2264.htm#SEC2339">getResult</A>.
+<BR> The returned list may contain more than N entries if the computation
+of some tasks has already finished and/or if several tasks finish
+"at the same time". It may contain less than N entries in
+the case of timeout or errors occurring.
+<BR> Polling is guaranteed, i.e. the index of any task t for which
+'pollTask(t);' would return 1 will appear in the returned list.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "tasks.lib";
+ring R = 0, (x,y), dp;
+ideal I = x9y2+x10, x2y7-y8;
+task t1 = "std", list(I);
+task t2 = "slimgb", list(I);
+startTasks(t1, t2);
+waitTasks(list(t1, t2), 2);   // wait for both tasks
+==> [1]:
+==>    1
+==> [2]:
+==>    2
+getResult(t1);
+==> _[1]=x2y7-y8
+==> _[2]=x9y2+x10
+==> _[3]=x12y+xy11
+==> _[4]=x13-xy12
+==> _[5]=y14+xy12
+==> _[6]=xy13+y12
+getResult(t2);
+==> _[1]=x2y7-y8
+==> _[2]=x9y2+x10
+==> _[3]=x12y+xy11
+==> _[4]=x13-xy12
+==> _[5]=xy13+y12
+==> _[6]=y14+xy12
+killTask(t1);
+killTask(t2);
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_2264.htm#SEC2339">getResult</A>;
+ <A HREF="sing_2265.htm#SEC2340">getState</A>;
+ <A HREF="sing_2261.htm#SEC2336">pollTask</A>;
+ <A HREF="sing_2256.htm#SEC2331">printTask</A>;
+ <A HREF="sing_2257.htm#SEC2332">startTasks</A>.
+<P>
+
+<A NAME="waitAllTasks"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2258.htm#SEC2333"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: stopTask" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2260.htm#SEC2335"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: waitAllTasks" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2246.htm#SEC2321"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: resources_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: derham_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2251.htm#SEC2326"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tasks_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

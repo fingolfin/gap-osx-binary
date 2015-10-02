@@ -1,0 +1,174 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: testNCfac</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: testNCfac">
+<META NAME="keywords" CONTENT="Singular Manual: testNCfac">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC794"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_742.htm#SEC793"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: facFirstWeyl" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_744.htm#SEC795"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: facSubWeyl" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_740.htm#SEC791"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncfactor_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.13.0. testNCfac </H5>
+<!--docid::SEC794::-->
+Procedure from library <CODE>ncfactor.lib</CODE> (see  <A HREF="sing_740.htm#SEC791">ncfactor_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>testNCfac(l[,p,b]); l is a list, p is an optional poly, b is 1 or 0
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>Case 1: No optional argument. In this case the output is 1, if the
+entries in the given list represent the same polynomial or 0
+otherwise.
+<BR>Case 2: One optional argument p is given. In this case it returns 1,
+if all the entries in l are factorizations of p, otherwise 0.
+Case 3: Second optional b is given. In this case a list is returned
+containing the difference between the product of each entry in
+l and p.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>basering is the first Weyl algebra, the entries of l are polynomials
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Checks whether a list of factorizations contains factorizations of
+the same element in the first Weyl algebra
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD><CODE>testNCfac</CODE> multiplies out each factorization and checks whether
+each factorization was a factorization of the same element.
+<BR> - if there is only a list given, the output will be 0, if it
+does not contain factorizations of the same element. Otherwise the output
+will be 1.
+<BR> - if there is a polynomial in the second argument, then the procedure checks
+whether the given list contains factorizations of this polynomial. If it
+does, then the output depends on the third argument. If it is not given,
+the procedure will check whether the factorizations in the list
+l are associated to this polynomial and return either 1 or 0, respectively.
+If the third argument is given, the output will be a list with
+the length of the given one and in each entry is the product of one
+entry in l subtracted by the polynomial.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ncfactor.lib";
+ring r = 0,(x,y),dp;
+def R = nc_algebra(1,1);
+setring R;
+poly h = (x^2*y^2+1)*(x^2);
+def t1 = facFirstWeyl(h);
+//fist a correct list
+testNCfac(t1);
+==> 1
+//now a correct list with the factorized polynomial
+testNCfac(t1,h);
+==> 1
+//now we put in an incorrect list without a polynomial
+t1[3][3] = y;
+testNCfac(t1);
+==> 0
+// take h as additional input
+testNCfac(t1,h);
+==> 0
+// take h as additional input and output list of differences
+testNCfac(t1,h,1);
+==> [1]:
+==>    0
+==> [2]:
+==>    0
+==> [3]:
+==>    -x4y2+x3y3-4x3y+6x2y2-3x2+7xy
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_746.htm#SEC797">facFirstShift</A>;
+ <A HREF="sing_742.htm#SEC793">facFirstWeyl</A>;
+ <A HREF="sing_744.htm#SEC795">facSubWeyl</A>.
+<P>
+
+<A NAME="facSubWeyl"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_742.htm#SEC793"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: facFirstWeyl" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_744.htm#SEC795"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: facSubWeyl" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_740.htm#SEC791"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncfactor_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

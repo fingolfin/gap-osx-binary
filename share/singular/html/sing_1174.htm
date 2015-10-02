@@ -1,0 +1,154 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: locNormal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: locNormal">
+<META NAME="keywords" CONTENT="Singular Manual: locNormal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1249"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1173.htm#SEC1248"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: locnormal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1175.htm#SEC1250"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: modnormal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1171.htm#SEC1246"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: intprog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1175.htm#SEC1250"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: modnormal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1173.htm#SEC1248"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: locnormal_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.10.1 locNormal </H4>
+<!--docid::SEC1249::-->
+Procedure from library <CODE>locnormal.lib</CODE> (see  <A HREF="sing_1173.htm#SEC1248">locnormal_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>locNormal(I [,options]); I = prime ideal, options = list of options. <BR>
+Optional parameters in list options (can be entered in any order):<BR>
+modular: use a modular approach for the local computations. The number of primes is
+increased one at a time, starting with 2 primes, until the result stabelizes.<BR>
+noVerificication: if the modular approach is used, the result will not be verified.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>I is a prime ideal (the algorithm will also work for radical ideals as long as the
+normal command does not detect that the ideal under consideration is not prime).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list of an ideal U and a universal denominator d such that U/d is the normalization.
+<P>
+
+<DT><STRONG>Remarks:</STRONG>
+<DD>We use the local-to-global algorithm given in [1] to compute the normalization of
+A = R/I, where R is the basering.<BR>
+The idea is to stratify the singular locus of A, apply the normalization algorithm
+given in [2] locally at each stratum, and put the local results together.<BR>
+If the option modular is given, the result is returned as a probabilistic result
+or verified, depending on whether the option noVerificication is used or not.<BR>
+The normalization of A is represented as an R-module by returning a list of U and d,
+where U is an ideal of A and d is an element of A such that U/d is the normalization of A.
+In fact, U and d are returned as an ideal and a polynomial of the base ring R.
+<P>
+
+<DT><STRONG>References:</STRONG>
+<DD>[1] Janko Boehm, Wolfram Decker, Santiago Laplagne, Gerhard Pfister, Stefan Steidel,
+Andreas Steenpass: Parallel algorithms for normalization, http://arxiv.org/abs/1110.4299, 2011.<BR>
+[2] Gert-Martin Greuel, Santiago Laplagne, Frank Seelisch: Normalization of Rings,
+Journal of Symbolic Computation 9 (2010), p. 887-901
+<P>
+
+<A NAME="IDX448"></A>
+<A NAME="IDX449"></A>
+<A NAME="IDX450"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "locnormal.lib";
+ring R = 0,(x,y,z),dp;
+int k = 4;
+poly f = (x^(k+1)+y^(k+1)+z^(k+1))^2-4*(x^(k+1)*y^(k+1)+y^(k+1)*z^(k+1)+z^(k+1)*x^(k+1));
+f = subst(f,z,3x-2y+1);
+ring S = 0,(x,y),dp;
+poly f = imap(R,f);
+ideal i = f;
+list L = locNormal(i);
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1175.htm#SEC1250">modnormal_lib</A>;
+ <A HREF="sing_1228.htm#SEC1303">normal_lib</A>.
+<P>
+
+<A NAME="modnormal_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1173.htm#SEC1248"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: locnormal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1175.htm#SEC1250"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: modnormal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1171.htm#SEC1246"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: intprog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1175.htm#SEC1250"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: modnormal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1173.htm#SEC1248"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: locnormal_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

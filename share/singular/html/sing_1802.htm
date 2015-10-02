@@ -1,0 +1,160 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: smith</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: smith">
+<META NAME="keywords" CONTENT="Singular Manual: smith">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1877"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1803.htm#SEC1878"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: jacobson" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: control_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.3.1 smith </H4>
+<!--docid::SEC1877::-->
+Procedure from library <CODE>jacobson.lib</CODE> (see  <A HREF="sing_1801.htm#SEC1876">jacobson_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>smith(M[, eng1, eng2]); M matrix, eng1 and eng2 are optional integers
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>matrix or list of matrices, depending on arguments
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>Basering is a commutative polynomial ring in one variable
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute the Smith Normal Form of M with (optionally) transformation matrices
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>Groebner bases are used for the Smith form like in [2] and [3].
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>By default, just the Smith normal form of M is returned.
+<BR> If the optional integer <CODE>eng1</CODE> is non-zero, the list {U,D,V} is returned
+<BR> where U*M*V = D and the diagonal field entries of D are not normalized.
+<BR> The normalization of the latter can be done with the 'divideUnits' procedure.
+<BR> U and V above are square unimodular (invertible) matrices.
+<BR> Note, that the procedure works for a rectangular matrix M.
+<BR>
+<BR> The optional integer <CODE>eng2</CODE> determines the Groebner basis engine:
+<BR> 0 (default) ensures the use of 'slimgb' , otherwise 'std' is used.
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>If <CODE>printlevel</CODE>=1, progress debug messages will be printed,
+<BR> if <CODE>printlevel</CODE>&gt;=2, all the debug messages will be printed.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "jacobson.lib";
+ring r = 0,x,Dp;
+matrix m[3][2]=x, x^4+x^2+21, x^4+x^2+x, x^3+x, 4*x^2+x, x;
+list s=smith(m,1);
+print(s[2]);  // non-normalized Smith form of m
+==> 21,0,
+==> 0, x,
+==> 0, 0 
+print(s[1]*m*s[3] - s[2]); // check U*M*V = D
+==> 0,0,
+==> 0,0,
+==> 0,0 
+list t = divideUnits(s);
+print(t[2]); // the Smith form of m
+==> 1,0,
+==> 0,x,
+==> 0,0 
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1804.htm#SEC1879">divideUnits</A>;
+ <A HREF="sing_1803.htm#SEC1878">jacobson</A>.
+<P>
+
+<A NAME="jacobson"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1803.htm#SEC1878"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: jacobson" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: control_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: findifs_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

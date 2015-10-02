@@ -1,0 +1,14 @@
+DeclareCategory("IsUnitForm", IsMatrix ); 
+DeclareCategoryFamily(  "IsUnitForm" );
+DeclareCategoryCollections( "IsUnitForm" );
+DeclareRepresentation("IsUnitFormRep", IsComponentObjectRep and IsAttributeStoringRep, ["type"]);
+DeclareOperation( "UnitForm", [ IsMatrix ] );
+DeclareAttribute( "SymmetricMatrixOfUnitForm", IsUnitForm );
+DeclareAttribute( "BilinearFormOfUnitForm", IsUnitForm );
+DeclareAttribute( "QuadraticFormOfUnitForm", IsUnitForm );
+DeclareAttribute( "PositiveRootsOfUnitForm", IsUnitForm );
+DeclareOperation( "TitsUnitFormOfAlgebra", [ IsQuiverAlgebra ] );
+DeclareOperation( "EulerBilinearFormOfAlgebra", [ IsQuiverAlgebra ] );
+DeclareOperation( "ReflectionByBilinearForm", [ IsUnitForm, IS_INT, IsVector ] );
+DeclareProperty( "IsWeaklyNonnegativeUnitForm",  IsUnitForm  );
+DeclareProperty( "IsWeaklyPositiveUnitForm",  IsUnitForm  );

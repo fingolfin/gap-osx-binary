@@ -1,0 +1,191 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: multsequence</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: multsequence">
+<META NAME="keywords" CONTENT="Singular Manual: multsequence">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1597"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1521.htm#SEC1596"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayInvariants" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1523.htm#SEC1598"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayMultsequence" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.9.8 multsequence </H4>
+<!--docid::SEC1597::-->
+Procedure from library <CODE>hnoether.lib</CODE> (see  <A HREF="sing_1514.htm#SEC1589">hnoether_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>multsequence(INPUT); INPUT list or poly
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD><CODE>INPUT</CODE> is the output of <CODE>develop(f)</CODE>, or of
+<CODE>extdevelop(develop(f),n)</CODE>, or one entry of the list of HN data
+computed by <CODE>hnexpansion(f[,"ess"])</CODE>.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>intvec corresponding to the multiplicity sequence of the irreducible
+plane curve singularity described by the HN data (return value
+coincides with <CODE>invariants(INPUT)[6]</CODE>).
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD><CODE>INPUT</CODE> is a bivariate polynomial f, or the output of
+<CODE>hnexpansion(f)</CODE>, or the list of HN data computed by
+<CODE>hnexpansion(f [,"ess"])</CODE>.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list of two integer matrices:
+<P>
+
+<DL COMPACT>
+<DT><CODE>multsequence(INPUT)[1][i,*]</CODE>
+<DD>   contains the multiplicities of the branches at their infinitely near point
+   of 0 in its (i-1) order neighbourhood (i.e., i=1: multiplicity of the
+   branches themselves, i=2: multiplicity of their 1st quadratic transform,
+   etc., <BR>
+   Hence, <CODE>multsequence(INPUT)[1][*,j]</CODE> is the multiplicity sequence
+   of branch j.
+<DT><CODE>multsequence(INPUT)[2][i,*]</CODE>:
+<DD>   contains the information which of these infinitely near points coincide.
+</DL>
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The order of the elements of the list of HN data obtained from
+<CODE>hnexpansion(f [,"ess"])</CODE> must not be changed (because otherwise
+the coincident infinitely near points couldn't be grouped together,
+see the meaning of the 2nd intmat in the example).
+<BR>Hence, it is not wise to compute the HN expansion of polynomial factors
+separately, put them into a list INPUT and call
+<CODE>multsequence(INPUT)</CODE>. <BR>
+Use <CODE>displayMultsequence</CODE> to produce a better readable output for
+reducible curves on the screen. <BR>
+In case the Hamburger-Noether expansion of the curve f is needed
+for other purposes as well it is better to calculate this first
+with the aid of <CODE>hnexpansion</CODE> and use it as input instead of
+the polynomial itself.
+<P>
+
+<A NAME="IDX622"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "hnoether.lib";
+ring r=0,(x,y),dp;
+list Hne=hnexpansion((x6-y10)*(x+y2-y3)*(x+y2+y3));
+==> // No change of ring necessary, return value is HN expansion.
+multsequence(Hne[1]),"  |  ",multsequence(Hne[2]),"  |  ",
+multsequence(Hne[3]),"  |  ",multsequence(Hne[4]);
+==> 3,2,1,1   |   3,2,1,1   |   1   |   1
+multsequence(Hne);
+==> [1]:
+==>    3,3,1,1,
+==>    2,2,1,1,
+==>    1,1,1,1,
+==>    1,1,1,1,
+==>    1,1,1,1 
+==> [2]:
+==>    4,0,0,0,
+==>    4,0,0,0,
+==>    2,2,0,0,
+==>    2,1,1,0,
+==>    1,1,1,1 
+// The meaning of the entries of the 2nd matrix is as follows:
+displayMultsequence(Hne);
+==> [(3,3,1,1)],
+==> [(2,2,1,1)],
+==> [(1,1),(1,1)],
+==> [(1,1),(1),(1)],
+==> [(1),(1),(1),(1)]
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1516.htm#SEC1591">develop</A>;
+ <A HREF="sing_1523.htm#SEC1598">displayMultsequence</A>;
+ <A HREF="sing_1515.htm#SEC1590">hnexpansion</A>;
+ <A HREF="sing_1531.htm#SEC1606">separateHNE</A>.
+<P>
+
+<A NAME="displayMultsequence"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1521.htm#SEC1596"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: displayInvariants" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1523.htm#SEC1598"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayMultsequence" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

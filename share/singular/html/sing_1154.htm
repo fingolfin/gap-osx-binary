@@ -1,0 +1,242 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Ext</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Ext">
+<META NAME="keywords" CONTENT="Singular Manual: Ext">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1229"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1153.htm#SEC1228"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Ext_R" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1155.htm#SEC1230"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: fitting" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.7.6 Ext </H4>
+<!--docid::SEC1229::-->
+Procedure from library <CODE>homolog.lib</CODE> (see  <A HREF="sing_1148.htm#SEC1223">homolog_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>Ext(v,M,N[,any]); v int resp. intvec, M,N modules
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>A presentation of Ext^k(M',N'); for k=v[1],v[2],... where
+M'=coker(M) and N'=coker(N). Let
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>       0 &lt;-- M' &lt;-- F0 &lt;-M-- F1 &lt;-- F2 &lt;--... ,
+       0 &lt;-- N' &lt;-- G0 &lt;--N- G1
+</FONT></pre></td></tr></table>be a free resolution of M', resp. a presentation of N'. Consider
+the commutative diagram
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>           0                  0                  0
+           |^                 |^                 |^
+   --&gt; Hom(Fk-1,N') -Ak-&gt; Hom(Fk,N') -Ak+1-&gt; Hom(Fk+1,N')
+           |^                 |^                 |^
+   --&gt; Hom(Fk-1,G0) -Ak-&gt; Hom(Fk,G0) -Ak+1-&gt; Hom(Fk+1,G0)
+                              |^                 |^
+                              |C                 |B
+                          Hom(Fk,G1) ------&gt; Hom(Fk+1,G1)
+
+      (Ak,Ak+1 induced by M and B,C induced by N).
+</FONT></pre></td></tr></table>Let K=modulo(Ak+1,B), J=module(Ak)+module(C) and Ext=modulo(K,J),
+then we have exact sequences
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>    R^p --K-&gt; Hom(Fk,G0) --Ak+1-&gt; Hom(Fk+1,G0)/im(B),
+
+    R^q -Ext-&gt; R^p --K-&gt; Hom(Fk,G0)/(im(Ak)+im(C)).
+</FONT></pre></td></tr></table>Hence, Ext presents Ext^k(M',N').
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>- module Ext, a presentation of Ext^k(M',N') if v is of type int<BR>
+- a list of Ext^k (k=v[1],v[2],...) if v is of type intvec.<BR>
+- In case of a third argument of any type return a list l:
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">             l[1] = module Ext/list of Ext^k
+             l[2] = SB of Ext/list of SB of Ext^k
+             l[3] = matrix/list of matrices, each representing a kbase of Ext^k
+                       (if finite dimensional)
+</pre></td></tr></table><P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>printlevel &gt;=0: dimension, vdim of Ext^k for each k (default).
+<BR> printlevel &gt;=1: matrices Ak, Ak+1 and kbase of Ext^k in Hom(Fk,G0)
+(if finite dimensional)
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>In order to compute Ext^k(M,N) use the command Ext(k,syz(M),syz(N));
+or: list P=mres(M,2); list Q=mres(N,2); Ext(k,P[2],Q[2]);
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "homolog.lib";
+int p      = printlevel;
+printlevel = 1;
+ring r     = 0,(x,y),dp;
+ideal i    = x2-y3;
+ideal j    = x2-y5;
+list E     = Ext(0..2,i,j);    // Ext^k(r/i,r/j) for k=0,1,2 over r
+==> // Computing Ext^0 (help Ext; gives an explanation):
+==> // Let 0&lt;--coker(M)&lt;--F0&lt;--F1&lt;--F2&lt;--... be a resolution of coker(M),
+==> // and 0&lt;--coker(N)&lt;--G0&lt;--G1 a presentation of coker(N),
+==> // then Hom(F0,G0)--&gt;Hom(F1,G0) is given by:
+==> y3-x2
+==> // and Hom(F-1,G0) + Hom(F0,G1)--&gt;Hom(F0,G0) is given by:
+==> 0,-y5+x2
+==> 
+==> // dimension of Ext^0:  -1
+==> 
+==> // Computing Ext^1 (help Ext; gives an explanation):
+==> // Let 0&lt;--coker(M)&lt;--F0&lt;--F1&lt;--F2&lt;--... be a resolution of coker(M),
+==> // and 0&lt;--coker(N)&lt;--G0&lt;--G1 a presentation of coker(N),
+==> // then Hom(F1,G0)--&gt;Hom(F2,G0) is given by:
+==> 0
+==> // and Hom(F0,G0) + Hom(F1,G1)--&gt;Hom(F1,G0) is given by:
+==> y3-x2,-y5+x2
+==> 
+==> // dimension of Ext^1:  0
+==> // vdim of Ext^1:       10
+==> 
+==> // Computing Ext^2 (help Ext; gives an explanation):
+==> // Let 0&lt;--coker(M)&lt;--F0&lt;--F1&lt;--F2&lt;--... be a resolution of coker(M),
+==> // and 0&lt;--coker(N)&lt;--G0&lt;--G1 a presentation of coker(N),
+==> // then Hom(F2,G0)--&gt;Hom(F3,G0) is given by:
+==> 1
+==> // and Hom(F1,G0) + Hom(F2,G1)--&gt;Hom(F2,G0) is given by:
+==> 0,-y5+x2
+==> 
+==> // dimension of Ext^2:  -1
+==> 
+qring R    = std(i);
+ideal j    = fetch(r,j);
+module M   = [-x,y],[-y2,x];
+printlevel = 2;
+module E1  = Ext(1,M,j);       // Ext^1(R^2/M,R/j) over R=r/i
+==> // Computing Ext^1 (help Ext; gives an explanation):
+==> // Let 0&lt;--coker(M)&lt;--F0&lt;--F1&lt;--F2&lt;--... be a resolution of coker(M),
+==> // and 0&lt;--coker(N)&lt;--G0&lt;--G1 a presentation of coker(N),
+==> // then Hom(F1,G0)--&gt;Hom(F2,G0) is given by:
+==> x, -y,
+==> y2,-x 
+==> // and Hom(F0,G0) + Hom(F1,G1)--&gt;Hom(F1,G0) is given by:
+==> x, -y,-y5+x2,0,    
+==> y2,-x,0,     -y5+x2
+==> 
+==> // dimension of Ext^1:  -1
+==> 
+list l     = Ext(4,M,M,1);     // Ext^4(R^2/M,R^2/M) over R=r/i
+==> // Computing Ext^4 (help Ext; gives an explanation):
+==> // Let 0&lt;--coker(M)&lt;--F0&lt;--F1&lt;--F2&lt;--... be a resolution of coker(M),
+==> // and 0&lt;--coker(N)&lt;--G0&lt;--G1 a presentation of coker(N),
+==> // then Hom(F4,G0)--&gt;Hom(F5,G0) is given by:
+==> x, -y,0, 0, 
+==> y2,-x,0, 0, 
+==> 0, 0, x, -y,
+==> 0, 0, y2,-x 
+==> // and Hom(F3,G0) + Hom(F4,G1)--&gt;Hom(F4,G0) is given by:
+==> x, -y,0, 0, -x,0, -y2,0,  
+==> y2,-x,0, 0, 0, -x,0,  -y2,
+==> 0, 0, x, -y,y, 0, x,  0,  
+==> 0, 0, y2,-x,0, y, 0,  x   
+==> 
+==> // dimension of Ext^4:  0
+==> // vdim of Ext^4:       2
+==> 
+==> // columns of matrix are kbase of Ext^4 in Hom(F4,G0)
+==> 1,0,
+==> 0,y,
+==> 0,1,
+==> 1,0 
+==> 
+==> // element 1 of kbase of Ext^4 in Hom(F4,G0)
+==> // as matrix: F4--&gt;G0
+==> 1,0,
+==> 0,1 
+==> // element 2 of kbase of Ext^4 in Hom(F4,G0)
+==> // as matrix: F4--&gt;G0
+==> 0,y,
+==> 1,0 
+==> 
+printlevel = p;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="fitting"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1153.htm#SEC1228"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Ext_R" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1155.htm#SEC1230"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: fitting" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -12,12 +12,12 @@ SetPackageInfo( rec(
 
 PackageName    := "Congruence",
 Subtitle       := "Congruence subgroups of SL(2,Integers)",
-Version        := "1.0.3",
-Date           := "01/02/2013",
+Version        := "1.1.1",
+Date           := "28/10/2014",
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "1.0.3">
-##  <!ENTITY RELEASEDATE "01 February 2013">
-##  <!ENTITY RELEASEYEAR "2013">
+##  <!ENTITY VERSION "1.1.1">
+##  <!ENTITY RELEASEDATE "28 October 2014">
+##  <!ENTITY RELEASEYEAR "2014">
 ##  <#/GAPDoc>
 
 PackageWWWHome := "http://www.cs.st-andrews.ac.uk/~alexk/congruence/",
@@ -87,9 +87,9 @@ Persons := [
      )      
 ],
 
-Status := "dev",
-#CommunicatedBy := "",
-#AcceptDate := "",
+Status := "accepted",
+CommunicatedBy := "Graham Ellis (Galway)",
+AcceptDate := "09/2014",
 
 README_URL := 
   Concatenation( ~.PackageWWWHome, "README" ),
@@ -109,7 +109,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.5",
+  GAP := ">=4.7",
   NeededOtherPackages := [ ["GAPDoc", ">= 1.5.1"] ],
   SuggestedOtherPackages := [],
   ExternalConditions := []

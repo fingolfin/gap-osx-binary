@@ -1,0 +1,695 @@
+<!-- 
+
+  vectors.xml            cvec package documentation           Max Neunhoeffer
+
+  Copyright (C) 2007  Max Neunhoeffer, Lehrstuhl D f. Math., RWTH Aachen
+  This file is free software, see license information at the end.
+
+This chapter covers compressed vectors.
+
+-->
+
+<Chapter Label="vectors">
+<Heading>Vectors</Heading>
+
+See Section <Ref Sect="cvecs"/> for a documentation of the data format
+of <C>cvec</C>s and its restrictions.<P/>
+
+<Section>
+<Heading>Creation</Heading>
+
+Note that many functions described later in this chapter implicitly 
+create new <C>cvec</C>s, such that it is usually only in the beginning
+of a calculation necessary to create <C>cvec</C>s explicitly.
+
+<ManSection>
+<Oper Name="CVec" Arg="arg"/>
+<Returns>a new mutable <C>cvec</C></Returns>
+<Description>
+    Creates a new <C>cvec</C>. See the method descriptions for details.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVec" Arg="cvecclass" Label="cvecclass"/>
+<Returns>a new mutable <C>cvec</C></Returns>
+<Description>
+    <A>cvecclass</A> must be a <C>cvecclass</C>. Creates a new
+    <C>cvec</C> containing only zeroes. For an explanation of the term
+    <C>cvecclass</C> see Section <Ref Sect="cvecs"/> and 
+    <Ref Oper="CVecClass"/>. 
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVec" Arg="coeffs, cvecclass" Label="coefflcvecclass"/>
+<Returns>a new mutable <C>cvec</C></Returns>
+<Description>
+    This method takes a coefficient list and a <C>cvecclass</C>
+    as arguments. Assume the vector will be over <M>GF(p,d)</M> with
+    <M>q=p^d</M>. For the coefficient list <A>coeffs</A> there exist
+    several possibilities, partially depending on the base field size. 
+    The easiest way is to use &GAP; finite
+    field elements, which will be put into the new vector in the same 
+    order. If <M>d=1</M>, one can always use &GAP; immediate integers
+    between <M>0</M> and <M>p-1</M>, the vector will then contain the 
+    corresponding cosets in <M>GF(p)=Z/pZ</M>. If <M>q</M> is small enough
+    to be a &GAP; immediate integer, then one can use &GAP; immediate
+    integers that are equal to the <M>p</M>-adic expansion using the
+    coefficients of the representing polynomial as coefficients. That is,
+    if an element in <M>GF(p,d)</M> is represented by the polynomial
+    <M>\sum_{{i=0}}^{{d-1}} a_i x^i</M> with <M>a_i \in \{0,\ldots,p-1\}</M>,
+    then one has to put <M>\sum_{{i=0}}^{{d-1}} a_i p^i</M> as integer into 
+    the coefficient list <A>coeffs</A>. If <M>q</M> is larger, then
+    <A>coeffs</A> must be a list of lists of length <M>d</M> 
+    and contains for each field element of <M>GF(p,d)</M> 
+    in the vector a list of its <M>d</M> coefficients of the representing 
+    polynomial.
+    For an explanation of the term <C>cvecclass</C> see Section <Ref
+    Sect="cvecs"/> and <Ref Oper="CVecClass"/>. Of course, the length of
+    the list <A>coeffs</A> must match the length of the vector given in the
+    <C>cvecclass</C>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVec" Arg="coeffs, p, d" Label="coefflpd"/>
+<Returns>a new mutable <C>cvec</C></Returns>
+<Description>
+    This method takes a coefficient list and two positive integers
+    <A>p</A> and <A>d</A> as arguments. A new <C>cvec</C> over <M>GF(p,d)</M>
+    will be created. Let <M>q := p^d</M>.<P/>
+    For a description of the possible values of the coefficient list 
+    <A>coeffs</A> see the description of the method <Ref Meth="CVec"
+    Label="coefflcvecclass"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVec" Arg="v" Label="compvec"/>
+<Returns>a new <C>cvec</C></Returns>
+<Description>
+    <A>v</A> must be a &GAP; compressed vector either over <M>GF(2)</M> or
+    <M>GF(p,d)</M> with <M>p^d \leq 256</M>. Creates a new
+    <C>cvec</C> containing the same numbers as <A>v</A> over the field
+    which the <C>Field</C> operation returns for <A>v</A>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVec" Arg="coeffs, f" Label="coefflff"/>
+<Returns>a new mutable <C>cvec</C></Returns>
+<Description>
+    This method takes a coefficient list and a finite field
+    <A>f</A> as arguments. A new <C>cvec</C> over <A>f</A>
+    will be created. Let <M>q := </M><C>Size(</C><A>f</A><C>)</C>.<P/>
+    For a description of the possible values of the coefficient list 
+    <A>coeffs</A> see the description of the method <Ref Meth="CVec"
+    Label="coefflcvecclass"/>.
+</Description>
+</ManSection>
+
+After having encountered the concept of a <C>cvecclass</C> already
+a few times it is time to learn how to create one. The following
+operation is used first to create new <C>cvecclass</C>es and second
+to ask a <C>cvec</C> for its class. In addition, it is used for
+<C>csca</C>s.
+
+<ManSection>
+<Oper Name="CVecClass" Arg="arg"/>
+<Returns>a <C>cvecclass</C></Returns>
+<Description>
+Creates new <C>cvecclass</C>es and asks <C>cvec</C>s
+for their class. See the following method descriptions for details.
+For an explanation of the term <C>cvecclass</C> see Section <Ref
+Sect="cvecs"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVecClass" Arg="p, d, l"/>
+<Returns>a <C>cvecclass</C></Returns>
+<Description>
+All three arguments must be integers. The arguments <A>p</A> and <A>d</A>
+must be positive and describe the base field <M>GF(p,d)</M>. The third
+argument must be non-negative and the method returns
+the <C>cvecclass</C> of vectors over <M>GF(p,d)</M> of length <A>l</A>.
+<P/>
+For an explanation of the term <C>cvecclass</C> and its data structure
+see Section <Ref Sect="cvecs"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVecClass" Arg="v"/>
+<Returns>a <C>cvecclass</C></Returns>
+<Description>
+The argument <A>v</A> must be a <C>cvec</C>.
+The method returns the corresponding <C>cvecclass</C>.
+For an explanation of the term <C>cvecclass</C> and its data structure
+see Section <Ref Sect="cvecs"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVecClass" Arg="v, l"/>
+<Returns>a <C>cvecclass</C></Returns>
+<Description>
+The argument <A>v</A> must be a <C>cvec</C>.
+The method returns the corresponding <C>cvecclass</C> for vectors
+over the same field as <A>v</A> but with length <A>l</A>. This is
+much faster than producing the same object by giving <M>p</M> and
+<M>d</M>.
+For an explanation of the term <C>cvecclass</C> and its data structure
+see Section <Ref Sect="cvecs"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVecClass" Arg="c, l"/>
+<Returns>a <C>cvecclass</C></Returns>
+<Description>
+The argument <A>c</A> must be a <C>cvecclass</C>.
+The method returns the corresponding <C>cvecclass</C> for vectors
+over the same field as those in <A>c</A> but with length <A>l</A>. 
+This is much faster than producing the same object by giving <M>p</M> and
+<M>d</M>.
+For an explanation of the term <C>cvecclass</C> and its data structure
+see Section <Ref Sect="cvecs"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVecClass" Arg="f, l"/>
+<Returns>a <C>cvecclass</C></Returns>
+<Description>
+The argument <A>f</A> must be a <C>finite field</C>.
+The method returns the corresponding <C>cvecclass</C> for vectors
+over the field <A>f</A> with length <A>l</A>. 
+For an explanation of the term <C>cvecclass</C> and its data structure
+see Section <Ref Sect="cvecs"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ZeroSameMutability" Arg="v" Label="cvec"/>
+<Returns>the zero <C>cvec</C> in the same <C>cvecclass</C> as <A>v</A>
+</Returns>
+<Description>
+<A>v</A> must be a <C>cvec</C>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ShallowCopy" Arg="v" Label="cvec"/>
+<Returns>a mutable copy of <A>v</A>
+</Returns>
+<Description>
+<A>v</A> must be a <C>cvec</C>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="Randomize" Arg="v" Label="cvec"/>
+<Meth Name="Randomize" Arg="v, rs" Label="cvecrandomsource"/>
+<Returns>the vector <A>v</A></Returns>
+<Description>
+<A>v</A> must be a <C>cvec</C> and <A>rs</A> must be a random source
+object if given. This method changes the vector <A>v</A> in place by
+(pseudo) random values in the field over which the vector lives. If
+a random source is given, the pseudo random numbers used are taken from
+this source, otherwise the global random source in the &GAP; library
+is taken.
+</Description>
+</ManSection>
+
+</Section>
+
+
+<Section>
+<Heading>Arithmetic</Heading>
+
+Of course, the standard arithmetic infix operations <M>+</M>, <M>-</M> and
+<M>*</M> (for vectors and scalars) work as expected by using the  
+methods below. We start this section with a subsection on the usage of
+scalars in arithmetic operations involving vectors.
+
+<Subsection Label="scahandl">
+<Heading>Handling of scalars in arithmetic operations</Heading>
+
+In all places (like in <C>\*</C>) where vectors and scalars occur, the
+following conventions apply to scalars:<P/>
+
+&GAP; finite field elements can be used as scalars.<P/>
+
+Integers between <M>0</M> and <M>p-1</M> (inclusively) can always be used as
+scalars representing prime field elements via the isomorphism 
+<M>GF(p)=Z/pZ</M>, also for extension fields. Larger integers than
+<M>p-1</M>, as long as they are &GAP; immediate integers, are interpreted 
+as the <M>p</M>-adic expansion of the coefficient list of the polynomial
+representing the scalar. Note that this usage of immediate integers
+differs from the standard list arithmetic in &GAP; because multiplication
+with the integer <M>n</M> not necessarily means the same than <M>n</M> times
+addition! Larger integers than immediate integers are not supported.
+</Subsection>
+
+<ManSection>
+<Meth Name="\+" Arg="v, w" Label="cveccvec"/>
+<Returns>the sum <M><A>v</A>+<A>w</A></M> as a new <C>cvec</C></Returns>
+<Description>
+    For two <C>cvec</C>s <A>v</A> and <A>w</A>. Works as expected.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="\-" Arg="v, w" Label="cveccvec"/>
+<Returns>the difference <M><A>v</A>-<A>w</A></M> as a new <C>cvec</C></Returns>
+<Description>
+    For two <C>cvec</C>s <A>v</A> and <A>w</A>. Works as expected.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="AdditiveInverseSameMutability" Arg="v" Label="cvec"/>
+<Meth Name="\-" Arg="v" Label="cvec"/>
+<Returns>the additive inverse of <A>v</A> as a new <C>cvec</C></Returns>
+<Description>
+For a <C>cvec</C> <A>v</A>. Works as expected.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="AdditiveInverseMutable" Arg="v" Label="cvec"/>
+<Returns>the additive inverse of <A>v</A> as a new mutable <C>cvec</C>
+</Returns>
+<Description>
+For a <C>cvec</C> <A>v</A>. Works as expected.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="\*" Arg="v, s" Label="cvecsca"/>
+<Meth Name="\*" Arg="s, v" Label="scacvec"/>
+<Returns>the scalar multiple <A>s</A><M>\cdot</M><A>v</A></Returns>
+<Description>
+    For a <C>cvec</C> <A>v</A> and a scalar <A>s</A>. For the format
+    of the scalar see <Ref Subsect="scahandl"/>. Works as expected.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="AddRowVector" Arg="v, w, s" Label="cveccvecsca"/>
+<Meth Name="AddRowVector" Arg="v, w, s, fr, to" Label="cveccvecscapospos"/>
+<Returns>nothing</Returns>
+<Description>
+    <A>v</A> and <A>w</A> must be <C>cvec</C>s over the same field with
+    equal length, <A>s</A> a scalar (see Subsection <Ref Subsect="scahandl"/>)
+    and <A>v</A> must be mutable.
+    Adds <A>s</A><M>\cdot</M><A>w</A> to <A>v</A> modifying <A>v</A>. If
+    <A>fr</A> and <A>to</A> are given, they give a hint, that <A>w</A> is
+    zero outside positions <A>fr</A> to <A>to</A> (inclusively). The method
+    can, if it chooses so, save time by not computing outside that range.
+    In fact, the implemented method restricts the operation to the
+    <C>Word</C>s involved.<P/>
+    If either <A>fr</A> or <A>to</A> is <M>0</M> it defaults to <M>1</M> and
+    <C>Length(v)</C> respectively.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="MultRowVector" Arg="v, s" Label="cvecsca"/>
+<Meth Name="MultRowVector" Arg="v, s, fr, to" Label="cvecscapospos"/>
+<Returns>nothing</Returns>
+<Description>
+    <A>v</A> must be a mutable <C>cvec</C> and <A>s</A> a scalar (see
+    Subsection <Ref Subsect="scahandl"/>).
+    Multiplies <A>v</A> by <A>s</A> modifying <A>v</A>. If
+    <A>fr</A> and <A>to</A> are given, they give a hint, that <A>v</A> is
+    zero outside positions <A>fr</A> to <A>to</A> (inclusively). The method
+    can, if it chooses so, save time by not computing outside that range.
+    In fact, the implemented method restricts the operation to the
+    <C>Word</C>s involved.<P/>
+    If either <A>fr</A> or <A>to</A> is <M>0</M> it defaults to <M>1</M> and
+    <C>Length(v)</C> respectively.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ScalarProduct" Arg="v, w" Label="cveccvec"/>
+<Returns>the scalar product</Returns>
+<Description>
+    Both <A>v</A> and <A>w</A> must be <C>cvec</C>s over the same field
+    with equal length. The function returns the scalar product of the
+    two vectors. Note that there is a very efficient method for prime
+    fields with <M>p &lt; 65536</M>. In the other cases the method taken
+    is not extremely fast.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ZeroMutable" Arg="v" Label="cvec"/>
+<Returns>a mutable copy of the zero <C>cvec</C> in the same <C>cvecclass</C> 
+as <A>v</A>
+</Returns>
+<Description>
+<A>v</A> must be a <C>cvec</C>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ZeroVector" Arg="l, v" Label="cvec"/>
+<Returns>a mutable copy of the zero <C>cvec</C> over the same
+field than <A>v</A> but with length <A>l</A></Returns>
+<Description>
+<A>v</A> must be a <C>cvec</C> and <A>l</A> a &GAP; integer.
+</Description>
+</ManSection>
+
+</Section>
+
+<Section>
+<Heading>Element access and slicing</Heading>
+
+<C>cvec</C>s behave to some extend like lists with respect to element access 
+and slicing. However, they allow only actions that can be implemented
+efficiently and that do not change their length. In addition there is a 
+highly optimised function to copy contiguous sections of <C>cvec</C>s
+into another <C>cvec</C>.
+
+<ManSection>
+<Meth Name="ELM_LIST" Arg="v, pos"/>
+<Returns>a finite field element</Returns>
+<Description>
+This is a method for (reading) element access of vectors. <A>v</A> must
+be a <A>cvec</A> and <A>pos</A> must be a positive integer not greater
+than the length of <A>v</A>. The finite field element at position
+<A>pos</A> in <A>v</A> is returned.<P/>
+
+Note that the list access syntax <Q><A>v</A>[<A>pos</A>]</Q> triggers a call
+to the <Ref Meth="ELM_LIST"/> operation.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ASS_LIST" Arg="v, pos, s"/>
+<Returns>nothing</Returns>
+<Description>
+This is a method for (writing) element access of vectors. <A>v</A> must
+be a <A>cvec</A> and <A>pos</A> must be a positive integer not greater
+than the length of <A>v</A>. <A>s</A> must be a finite field element
+or an integer. The finite field element at position
+<A>pos</A> in <A>v</A> is set to <A>s</A>.<P/>
+
+The scalar <A>s</A> is treated exactly as described in Subsection 
+<Ref Subsect="scahandl"/>.<P/>
+
+Note that the list access syntax 
+<Q><A>v</A><C>[</C><A>pos</A><C>] := </C><A>s</A></Q>
+triggers a call to the <Ref Meth="ASS_LIST"/> operation.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ELMS_LIST" Arg="v, l"/>
+<Returns>a <C>cvec</C></Returns>
+<Description>
+This is a method for (reading) slice access of vectors. <A>v</A> must
+be a <A>cvec</A> and <A>l</A> must be a range object or a list of positive 
+integers not greater than the length of <A>v</A>. In both cases the list
+of numbers must be contiguous list of valid positions in the vector.
+A new <C>cvec</C> over the same field as <A>v</A> and with the same
+length as <A>l</A> is created and returned. The finite field element at i
+positions <A>l</A> in <A>v</A> are copied into the new vector.<P/>
+
+Note that the list slice access syntax <Q><A>v</A>{<A>l</A>}</Q> triggers a 
+call to the <Ref Meth="ELMS_LIST"/> operation.
+</Description>
+</ManSection>
+
+Note that there intentionally is no write slice access to <C>cvec</C>s,
+because in most cases this would lead to code that unnecessarily
+copies data around in an expensive way. Please use the following function
+instead:
+
+<ManSection>
+<Func Name="CVEC_Slice" Arg="src, dst, srcpos, len, dstpos"/>
+<Returns>nothing</Returns>
+<Description>
+<A>src</A> and <A>dst</A> must be <C>cvec</C>s over the same field.
+The field elements from positions <A>srcpos</A> to 
+<M><A>srcpos</A>+<A>len</A>-1</M> in <A>src</A> are copied to positions 
+from <A>dstpos</A> in <A>dst</A>. Of course all positions must be within
+the vectors. <P/>
+
+Note that this functions is quite efficient, however, the ranges are
+checked. If you want to avoid this, use <C>CVEC&uscore;SLICE</C> instead (with
+same calling convention), but do not complain later if crashes occur in
+case of illegal positions used.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CopySubVector" Arg="src, dst, srcposs, dstposs"/>
+<Returns>nothing</Returns>
+<Description>
+Implements the operation <Ref Oper="CopySubVector" BookName="Ref"/>
+for <C>cvec</C>s <A>src</A> and <A>dst</A>, that is, <A>srcposs</A>
+and <A>dstposs</A> must be ranges or plain lists of integers of equal
+length such that all numbers contained lie between
+<M>1</M> and the length of <A>src</A> and <A>dst</A> respectively.
+The result is undefined if <A>src</A> and <A>dst</A> are the same
+objects. The method is particularly efficient if both <A>srcposs</A>
+and <A>dstposs</A> are ranges with increment <M>1</M>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="CVEC_Concatenation" Arg="arg"/>
+<Returns>a new <C>cvec</C> by concatenating all arguments</Returns>
+<Description>
+This function provides concatenation of <C>cvec</C>s over the same
+base field. The result is a new <C>cvec</C>. A variable number of
+<C>cvec</C>s over the same field can be given.
+</Description>
+</ManSection>
+
+</Section>
+
+
+<Section>
+<Heading>Comparison of Vectors and other information</Heading>
+
+<ManSection>
+<Meth Name="=" Arg="v, w"/>
+<Returns><C>true</C> or <C>false</C></Returns>
+<Description>
+    Returns <C>true</C> if the <C>cvec</C>s <A>v</A> and <A>w</A> are
+    equal. The vectors must be over the same field and must have equal
+    length.
+</Description>
+</ManSection>
+
+<ManSection>
+    <Meth Name="LT" Arg="v, w"/>
+<Returns><C>true</C> or <C>false</C></Returns>
+<Description>
+    Returns <C>true</C> if the <C>cvec</C> <A>v</A> is smaller than <A>w</A>.
+    The vectors must be over the same field and must have equal
+    length. The order implemented is very efficient but is <E>not</E> 
+    compatible with lexicographic ordering of lists of
+    finite field elements! This method should therefore only be used
+    for binary search purposes.
+    Note that the operation <C>LT</C> is the same as <C>&bslash;&lt;</C>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="IsZero" Arg="v"/>
+<Returns><C>true</C> or <C>false</C></Returns>
+<Description>
+    Returns <C>true</C> if the <C>cvec</C> <A>v</A> is equal to zero, meaning
+    that all entries are equal to zero.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="PositionNonZero" Arg="v"/>
+<Returns>a positive integer</Returns>
+<Description>
+    Returns the index of the first entry in the <C>cvec</C> <A>v</A> that is 
+    not equal to zero. If the vector is equal to zero, then its <C>Length</C>
+    plus one is returned.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="PositionLastNonZero" Arg="v"/>
+<Returns>a non-negative integer</Returns>
+<Description>
+    Returns the index of the last entry in the <C>cvec</C> <A>v</A> that is 
+    not equal to zero. If the vector is equal to zero, then <M>0</M>
+    is returned.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="Length" Arg="v"/>
+<Returns>a non-negative integer</Returns>
+<Description>
+    Returns the length of the <C>cvec</C> <A>v</A>.
+</Description>
+</ManSection>
+
+</Section>
+
+<Section>
+<Heading>Changing representation, Unpacking</Heading>
+
+<ManSection>
+<Meth Name="Unpack" Arg="v" Label="cvec"/>
+<Returns>a list of finite field elements</Returns>
+<Description>
+    This operation unpacks a <C>cvec</C> <A>v</A>. A new plain list containing
+    the corresponding numbers as &GAP; finite field elements. Note that
+    the vector <A>v</A> remains unchanged.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="IntegerRep" Arg="v" Label="cvec"/>
+<Returns>a list of integers or of lists of integers</Returns>
+<Description>
+    This operation unpacks a <C>cvec</C> <A>v</A> into its integer
+    representation. A new plain list containing
+    the corresponding numbers of the vector is returned. The integer
+    representation of a finite field element is either one integer
+    (containing the p-adic expansion of the polynomial representative of
+    the residue class modulo the Conway polynomial, if the field has
+    less or equal to <M>65536</M> elements. For larger finite fields each
+    field element is represented as a list of <M>d</M> integers between
+    <M>0</M> and <M>p-1</M>, where <M>d</M> is the degree of the finite
+    field over its prime field. Note that
+    the vector <A>v</A> remains unchanged.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="NumberFFVector" Arg="v, sz" Label="cvec"/>
+<Returns>an integer</Returns>
+<Description>
+    This implements the library operation <Ref Oper="NumberFFVector"
+        BookName="Ref"/>. Note that only the case that <A>sz</A> is the
+    number of elements in the base field of <A>v</A> is implemented.
+    There is an inverse operation called <Ref Oper="CVecNumber"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="CVecNumber" Arg="nr, cl"/>
+<Oper Name="CVecNumber" Arg="nr, p, d, l"/>
+<Returns>a <C>cvec</C></Returns>
+<Description>
+    This is the inverse operation to <Ref Oper="NumberFFVector" 
+        BookName="Ref"/>. Of course, the base field of the vector and its
+    length has to be specified, either by giving a <C>cvecclass</C> <A>cl</A>
+    or the parameters <A>p</A>, <A>d</A>, and <A>l</A>. For both cases
+    corresponding methods are available.
+</Description>
+</ManSection>
+
+</Section>
+
+<Section>
+<Heading>Access to the base field</Heading>
+
+<ManSection>
+<Meth Name="BaseDomain" Arg="v" Label="cvec"/>
+<Returns>the base field of <A>v</A>
+</Returns>
+<Description>
+    For a <C>cvec</C> <A>v</A> this returns
+    the &GAP; object <C>GF(p,d)</C>. 
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="BaseField" Arg="v" Label="cvec"/>
+<Returns>the base field of <A>v</A>
+</Returns>
+<Description>
+    For a <C>cvec</C> <A>v</A> this returns
+    the &GAP; object <C>GF(p,d)</C>. 
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="Characteristic" Arg="v" Label="cvec"/>
+<Returns>the characteristic of the base field of <A>v</A>
+</Returns>
+<Description>
+    Returns the characteristic of the base field of <A>v</A> (see
+    <Ref Meth="BaseField" Label="cvec"/>).
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="DegreeFFE" Arg="v" Label="cvec"/>
+<Returns>the degree of the base field of <A>v</A> over its prime field
+</Returns>
+<Description>
+    Returns the degree of the base field of <A>v</A> over its prime field (see
+    <Ref Meth="BaseField" Label="cvec"/>).
+</Description>
+</ManSection>
+
+</Section>
+
+<Section>
+<Heading>Hashing techniques for <C>cvec</C>s</Heading>
+
+<ManSection>
+<Func Name="CVEC_HashFunctionForCVecs" Arg="v, data"/>
+<Returns>an integer hash value</Returns>
+<Description>
+    This is a hash function usable for the <Ref Oper="ChooseHashFunction"
+BookName="orb"/> framework. It takes as arguments a <C>cvec</C>
+<A>v</A> and a list <A>data</A> of length <M>2</M>. The first entry of
+<A>data</A> is the length of the hash table used and the second entry
+is the number of bytes looked at in the <C>cvec</C>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="ChooseHashFunction" Arg="v, hashlen"/>
+<Returns>a record describing a hash function</Returns>
+<Description>
+Chooses a hash function to store <C>cvec</C>s like <A>v</A> in a hash table
+of length <A>hashlen</A>. The return value is a record with components
+<C>func</C> and <C>data</C> bound to <Ref
+Func="CVEC_HashFunctionForCVecs"/> and a list of length <M>2</M> to be
+given as a second argument to <Ref Func="CVEC_HashFunctionForCVecs"/>.
+This allows to use <C>cvec</C>s in the <Ref Oper="ChooseHashFunction"
+BookName="orb"/> framework.
+</Description>
+</ManSection>
+
+</Section>
+<!-- ############################################################ -->
+
+</Chapter>
+
+<!--
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; version 2 of the License.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+

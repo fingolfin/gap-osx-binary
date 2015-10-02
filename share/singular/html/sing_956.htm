@@ -1,0 +1,237 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: grobcov_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: grobcov_lib">
+<META NAME="keywords" CONTENT="Singular Manual: grobcov_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1031"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_955.htm#SEC1030"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: factorH" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_957.htm#SEC1032"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: grobcov" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_930.htm#SEC1005"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: General purpose" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.2.4 grobcov_lib </H3>
+<!--docid::SEC1031::-->
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>grobcov.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD>   Groebner Cover for parametric ideals.
+<P>
+
+          Comprehensive Groebner Systems, Groebner Cover, Canonical Forms,
+          Parametric Polynomial Systems, Dynamic Geometry, Loci, Envelop,
+          Constructible sets.
+          See
+</P><P>
+
+          A. Montes A, M. Wibmer,
+          "Groebner Bases for Polynomial Systems with parameters",
+          Journal of Symbolic Computation 45 (2010) 1391-1425.
+          (http://www-ma2.upc.edu/~montes/).
+</P><P>
+
+<DT><STRONG>Authors:</STRONG>
+<DD>Antonio Montes , Hans Schoenemann.
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>In 2010, the library was designed to contain Montes-Wibmer's
+algorithms for compute the canonical Groebner Cover of a
+parametric ideal as described in the paper:
+<P>
+
+Montes A., Wibmer M.,
+<BR>"Groebner Bases for Polynomial Systems with parameters".
+Journal of Symbolic Computation 45 (2010) 1391-1425.
+</P><P>
+
+The central routine is grobcov. Given a parametric
+<BR>ideal, grobcov outputs its Canonical Groebner Cover, consisting
+of a set of pairs of (basis, segment). The basis (after
+normalization) is the reduced Groebner basis for each point
+of the segment. The segments are disjoint, locally closed
+and correspond to constant lpp (leading power product)
+of the basis, and are represented in canonical prime
+representation. The segments are disjoint and cover the
+whole parameter space. The output is canonical, it only
+depends on the given parametric ideal and the monomial order.
+This is much more than a simple Comprehensive Groebner System.
+The algorithm grobcov allows options to solve partially the
+problem when the whole automatic algorithm does not finish
+in reasonable time.
+</P><P>
+
+grobcov uses a first algorithm cgsdr that outputs a disjoint
+reduced Comprehensive Groebner System with constant lpp.
+For this purpose, in this library, the implemented algorithm is
+Kapur-Sun-Wang algorithm, because it is the most efficient
+algorithm known for this purpose.
+</P><P>
+
+D. Kapur, Y. Sun, and D.K. Wang.
+<BR>"A New Algorithm for Computing Comprehensive Groebner Systems".
+Proceedings of ISSAC'2010, ACM Press, (2010), 29-36.
+</P><P>
+
+The library has evolved to include new applications of the
+Groebner Cover, and new theoretical developments have been done.
+</P><P>
+
+A new set of routines (locus, locusdg, locusto) has been included to
+compute loci of points. The routines are used in the Dynamic
+Geometry software Geogebra. They are described in:
+</P><P>
+
+Abanades, Botana, Montes, Recio:
+<BR>"An Algebraic Taxonomy for Locus Computation in Dynamic Geometry".
+Computer-Aided Design 56 (2014) 22-33.
+</P><P>
+
+Recently also routines for computing the envelop of a family
+of curves (enverlop, envelopdg), to be used in Dynamic Geometry,
+has been included and will be described in a forthcoming paper:
+</P><P>
+
+Abanades, Botana, Montes, Recio:
+<BR>"Envelops in Dynamic Geometry using the Groebner cover".
+</P><P>
+
+The actual version also includes two routines (AddCons and AddconsP)
+for computing the canonical form of a constructible set, given as a
+union of locally closed sets. They are used in the new version for the
+computation of loci and envelops. It determines the canonical locally closed
+level sets of a constructuble. They will be described in a forthcoming paper:
+</P><P>
+
+A. Montes, J.M. Brunat,
+<BR>"Canonical representations of constructible sets".
+</P><P>
+
+This version was finished on 31/01/2015
+</P><P>
+
+<DT><STRONG>Notations:</STRONG>
+<DD>All given and determined polynomials and ideals are in the
+<BR> basering Q[a][x]; (a=parameters, x=variables)
+<BR> After defining the ring, the main routines
+<BR> grobcov, cgsdr,
+<BR> generate the global rings
+<BR> Grobcov::@R (Q[a][x]),
+<BR> Grobcov::@P (Q[a]),
+<BR> Grobcov::@RP (Q[x,a])
+<BR> that are used inside and killed before the output.
+<BR> If you want to use some internal routine you must
+<BR> create before the above rings by calling setglobalrings();
+<BR> because some of the internal routines use these rings.
+<BR> The call to the basic routines grobcov, cgsdr will
+<BR> kill these rings.
+<P>
+
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_957.htm#SEC1032">D.2.4.1 grobcov</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Is the basic routine giving the canonical Groebner Cover of the parametric ideal F. This routine accepts many options, that allow to obtain results even when the canonical computation does not finish in reasonable time.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_958.htm#SEC1033">D.2.4.2 cgsdr</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Is the procedure for obtaining a first disjoint, reduced Comprehensive Groebner System that is used in grobcov, that can also be used independently if only the CGS is required. It is a more efficient routine than buildtree (the own routine of 2010 that is no more used). Now, KSW algorithm is used.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_959.htm#SEC1034">D.2.4.3 setglobalrings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Generates the global rings @R, @P and @PR that are respectively the rings Q[a][x], Q[a], Q[x,a]. (a=parameters, x=variables) It is called inside each of the fundamental routines of the library: grobcov, cgsdr, locus, locusdg and killed before the output. If the user want to use some other internal routine, then setglobalrings() is to be called before, as most of them use these rings.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_960.htm#SEC1035">D.2.4.4 pdivi</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Performs a pseudodivision of a parametric polynomial by a parametric ideal.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_961.htm#SEC1036">D.2.4.5 pnormalf</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Reduces a parametric polynomial f over V(E) V(N) ( E is the null ideal and N the non-null ideal ) over the parameters.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_962.htm#SEC1037">D.2.4.6 Crep</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Computes the canonical C-representation of V(N) V(M).</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_963.htm#SEC1038">D.2.4.7 Prep</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Computes the canonical P-representation of V(N) V(M).</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_964.htm#SEC1039">D.2.4.8 PtoCrep</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Starting from the canonical Prep of a locally closed set computes its Crep.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_965.htm#SEC1040">D.2.4.9 extend</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">When the grobcov of an ideal has been computed with the default option ('ext',0) and the explicit option ('rep',2) (which is not the default), then one can call extend (GC) (and options) to obtain the full representation of the bases. With the default option ('ext',0) only the generic representation of the bases are computed, and one can obtain the full representation using extend.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_966.htm#SEC1041">D.2.4.10 locus</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Special routine for determining the geometrical locus of points verifying given conditions. Given a parametric ideal J with parameters (x,y) and variables (x_1,..,xn), representing the system determining the locus of points (x,y) who verify certain properties, one can apply locus to the output of grobcov(J), locus determines the different classes of locus components. described in the paper: "An Algebraic Taxonomy for Locus Computation in Dynamic Geometry", M. Abanades, F. Botana, A. Montes, T. Recio, Computer-Aided Design 56 (2014) 22-33. The components can be 'Normal', 'Special', 'Accumulation', 'Degenerate'. The output are the components is given in P-canonical form It also detects automatically a possible point that is to be avoided by the mover, whose coordinates must be the last two coordinates in the definition of the ring. If such a point is detected, then it eliminates the segments of the grobcov depending on the point that is to be avoided.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_967.htm#SEC1042">D.2.4.11 locusdg</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Is a special routine that determines the 'Relevant' components of the locus in dynamic geometry. It is to be called to the output of locus and selects from it the useful components.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_968.htm#SEC1043">D.2.4.12 envelop</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Special routine for determining the envelop of a family of curves F in Q[x,y][x_1,..xn] depending on a ideal of constraints C in Q[x_1,..,xn]. It detemines the different components as well as its type: 'Normal', 'Special', 'Accumulation', 'Degenerate'. And it also classifies the Special components, determining the zero dimensional antiimage of the component and verifying if the component is a special curve of the family or not. It calls internally first grobcov and then locus with special options to obtain the complete result. The taxonomy that it provides, as well as the algorithms involved will be described in a forthcoming paper: Abanades, Botana, Montes, Recio: "Envelops in Dynamic Geometry using the Gr"obner cover".</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_969.htm#SEC1044">D.2.4.13 envelopdg</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Is a special routine to determine the 'Relevant' components of the envelop of a family of curves to be used in Dynamic Geometry. It must be called to the output of envelop(F,C).</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_970.htm#SEC1045">D.2.4.14 locusto</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Transforms the output of locus, locusdg, envelop and envelopdg into a string that can be reed from different computational systems.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_971.htm#SEC1046">D.2.4.15 AddCons</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Uses the routine AddConsP. Given a set of locally closed sets as difference of of varieties (does not need to be in C-representation) it returns the canonical P-representation of the constructible set formed by the union of them. The result is formed by a set of embedded, disjoint, locally closed sets (levels).</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_972.htm#SEC1047">D.2.4.16 AddConsP</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Given a set of locally closed P-components, it returns the canonical P-representation of the constructible set formed by the union of them, consisting of a set of embedded, disjoint locally closed sets (levels). The routines AddCons and AddConsP and the canonical structure of the constructible sets will be described in a forthcoming paper. A. Montes, J.M. Brunat, "Canonical representations of constructible sets".</TD></TR>
+</TABLE></BLOCKQUOTE>
+See also:
+ <A HREF="sing_932.htm#SEC1007">compregb_lib</A>.
+<P>
+
+<A NAME="grobcov"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_955.htm#SEC1030"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: factorH" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_957.htm#SEC1032"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: grobcov" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_930.htm#SEC1005"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: General purpose" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

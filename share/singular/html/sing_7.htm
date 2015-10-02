@@ -1,0 +1,370 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Rings and standard bases</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Rings and standard bases">
+<META NAME="keywords" CONTENT="Singular Manual: Rings and standard bases">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC13"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_6.htm#SEC12"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: First steps" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_8.htm#SEC14"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Procedures and libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_4.htm#SEC6"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: How to use this manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General concepts" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_5.htm#SEC11"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Getting started" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 2.3.2 Rings and standard bases </H3>
+<!--docid::SEC13::-->
+<P>
+
+In order to compute with objects such as ideals, matrices, modules, and polynomial
+vectors, a ring has to be defined first.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r = 0,(x,y,z),dp;
+</FONT></pre></td></tr></table></P><P>
+
+The definition of a ring consists of three parts: the first part
+determines the ground field, the second part determines the names of the
+ring variables, and the third part determines the monomial ordering to
+be used. Thus, the above example declares a polynomial ring called <CODE>r</CODE>
+with a ground field of characteristic 
+<IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_2.png"
+ ALT="$0$"> (i.e., the rational
+numbers) and ring variables called <CODE>x</CODE>, <CODE>y</CODE>, and <CODE>z</CODE>. The
+<CODE>dp</CODE> at the end determines that the degree reverse lexicographical
+ordering will be used.
+</P><P>
+
+Other ring declarations:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>ring r1=32003,(x,y,z),dp;</CODE>
+<DD>characteristic 32003, variables <CODE>x</CODE>, <CODE>y</CODE>, and <CODE>z</CODE> and
+ordering <CODE>dp</CODE>.
+<P>
+
+<DT><CODE>ring r2=32003,(a,b,c,d),lp;</CODE>
+<DD>characteristic 32003, variable names <CODE>a</CODE>, <CODE>b</CODE>, <CODE>c</CODE>,
+<CODE>d</CODE> and lexicographical ordering.
+<P>
+
+<DT><CODE>ring r3=7,(x(1..10)),ds;</CODE>
+<DD>characteristic 7, variable names <CODE>x(1)</CODE>,<small>...</small>,<CODE>x(10)</CODE>, negative
+degree reverse lexicographical ordering (<CODE>ds</CODE>).
+<P>
+
+<DT><CODE>ring r4=(0,a),(mu,nu),lp;</CODE>
+<DD>transcendental extension of 
+<IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_3.png"
+ ALT="$Q$"> by 
+<IMG
+ WIDTH="13" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_4.png"
+ ALT="$a$">, variable names
+<CODE>mu</CODE> and <CODE>nu</CODE>, lexicographical ordering.
+<P>
+
+<DT><CODE>ring r5=real,(a,b),lp;</CODE>
+<DD>floating point numbers (single machine precision),
+variable names <CODE>a</CODE> and <CODE>b</CODE>.
+<P>
+
+<DT><CODE>ring r6=(real,50),(a,b),lp;</CODE>
+<DD>floating point numbers with precision extended to 50 digits,
+variable names <CODE>a</CODE> and <CODE>b</CODE>.
+<P>
+
+<DT><CODE>ring r7=(complex,50,i),(a,b),lp;</CODE>
+<DD>complex floating point numbers with precision extended to 50 digits
+and imaginary unit <CODE>i</CODE>,
+variable names <CODE>a</CODE> and <CODE>b</CODE>.
+<P>
+
+<DT><CODE>ring r8=integer,(a,b),lp;</CODE>
+<DD>the ring of integers (see  <A HREF="sing_32.htm#SEC44">Coefficient rings</A>),
+variable names <CODE>a</CODE> and <CODE>b</CODE>.
+<P>
+
+<DT><CODE>ring r9=(integer, 60),(a,b),lp;</CODE>
+<DD>the ring of integers modulo 60 (see  <A HREF="sing_32.htm#SEC44">Coefficient rings</A>),
+variable names <CODE>a</CODE> and <CODE>b</CODE>.
+<P>
+
+<DT><CODE>ring r10=(integer, 2, 10),(a,b),lp;</CODE>
+<DD>the ring of integers modulo 2^10 (see  <A HREF="sing_32.htm#SEC44">Coefficient rings</A>),
+variable names <CODE>a</CODE> and <CODE>b</CODE>.
+<P>
+
+</DL>
+<P>
+
+Typing the name of a ring prints its definition. The example below
+shows that the default ring in S<SMALL>INGULAR</SMALL> is 
+<!-- MATH
+ $Z/32003[x,y,z]$
+ -->
+<IMG
+ WIDTH="112" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_5.png"
+ ALT="$Z/32003[x,y,z]$"> with
+degree reverse lexicographical ordering:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r11;
+r11;
+==> //   characteristic : 32003
+==> //   number of vars : 3
+==> //        block   1 : ordering dp
+==> //                  : names    x y z
+==> //        block   2 : ordering C
+</FONT></pre></td></tr></table></P><P>
+
+Defining a ring makes this ring the current active basering, so each
+ring definition above switches to a new basering. The concept of rings
+in S<SMALL>INGULAR</SMALL> is discussed in detail in
+ <A HREF="sing_28.htm#SEC38">Rings and orderings</A>.
+</P><P>
+
+The basering is now <CODE>r11</CODE>. Since we want to calculate in the ring
+<CODE>r</CODE>, which we defined first, we need to switch back to it. This can
+be done using the function <CODE>setring</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>setring r;
+</FONT></pre></td></tr></table></P><P>
+
+Once a ring is active, we can define polynomials. A monomial, say
+<IMG
+ WIDTH="25" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_6.png"
+ ALT="$x^3,$">may be entered in two ways: either using the power operator <CODE>^</CODE>,
+writing <CODE>x^3</CODE>, or in short-hand notation without operator, writing
+<CODE>x3</CODE>. Note that the short-hand notation is forbidden if a name
+of the ring variable(s) consists of more than one character(see  <A HREF="sing_466.htm#SEC505">Miscellaneous oddities</A> for details).
+Note, that S<SMALL>INGULAR</SMALL> always expands brackets and automatically
+sorts the terms with respect to the monomial ordering of the basering.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>poly f =  x3+y3+(x-y)*x2y2+z2;
+f;
+==> x3y2-x2y3+x3+y3+z2
+</FONT></pre></td></tr></table></P><P>
+
+The command <CODE>size</CODE> retrieves in general the number of entries in
+an object. In particular, for polynomials, <CODE>size</CODE> returns the
+number of monomials.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>size(f);
+==> 5
+</FONT></pre></td></tr></table></P><P>
+
+A natural question is to ask if a point, e.g., <CODE>(x,y,z)=(1,2,0)</CODE>, lies
+on the variety defined by the polynomials <CODE>f</CODE> and <CODE>g</CODE>. For
+this we define an ideal generated by both polynomials, substitute the
+coordinates of the point for the ring variables, and check if the result
+is zero:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>poly g =  f^2 *(2x-y);
+ideal I = f,g;
+ideal J = subst(I,var(1),1);
+J = subst(J,var(2),2);
+J = subst(J,var(3),0);
+J;
+==> J[1]=5
+==> J[2]=0
+</FONT></pre></td></tr></table></P><P>
+
+Since the result is not zero, the point <CODE>(1,2,0)</CODE> does
+not lie on the variety <CODE>V(f,g)</CODE>.
+</P><P>
+
+Another question is to decide whether some function vanishes on a
+variety, or in algebraic terms, if a polynomial is contained in a given
+ideal. For this we calculate a standard basis using the command
+<CODE>groebner</CODE> and afterwards reduce the polynomial with respect to
+this standard basis.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ideal sI = groebner(f);
+reduce(g,sI);
+==> 0
+</FONT></pre></td></tr></table></P><P>
+
+As the result is <CODE>0</CODE> the polynomial <CODE>g</CODE> belongs to the
+ideal defined by <CODE>f</CODE>.
+</P><P>
+
+The function <CODE>groebner</CODE>, like many other functions in
+S<SMALL>INGULAR</SMALL>, prints a protocol during calculations, if desired. The
+command <CODE>option(prot);</CODE> enables protocolling whereas
+<CODE>option(noprot);</CODE> turns it off.
+ <A HREF="sing_364.htm#SEC403">option</A>, explains the meaning
+of the different symbols printed during calculations.
+</P><P>
+
+The command <CODE>kbase</CODE> calculates a basis of the polynomial ring
+modulo an ideal, if the quotient ring is finite dimensional.
+As an example we calculate the Milnor number of a
+hypersurface singularity in the global and local case. This is the
+vector space dimension of the polynomial ring modulo the Jacobian ideal
+in the global case resp. of the power series ring modulo the Jacobian
+ideal in the local case. See  <A HREF="sing_872.htm#SEC923">Critical points</A>, for a detailed
+explanation.
+</P><P>
+
+The Jacobian ideal is obtained with the command <CODE>jacob</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ideal J = jacob(f);
+==> // ** redefining J **
+J;
+==> J[1]=3x2y2-2xy3+3x2
+==> J[2]=2x3y-3x2y2+3y2
+==> J[3]=2z
+</FONT></pre></td></tr></table></P><P>
+
+S<SMALL>INGULAR</SMALL> prints the line <CODE>// ** redefining J
+**</CODE>. This indicates that we had previously defined a variable with name
+<CODE>J</CODE> of type ideal (see above).
+</P><P>
+
+To obtain a representing set of the quotient vector space we first
+calculate a standard basis, and then apply the function <CODE>kbase</CODE> to
+this standard basis.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>J = groebner(J);
+ideal K = kbase(J);
+K;
+==> K[1]=y4
+==> K[2]=xy3
+==> K[3]=y3
+==> K[4]=xy2
+==> K[5]=y2
+==> K[6]=x2y
+==> K[7]=xy
+==> K[8]=y
+==> K[9]=x3
+==> K[10]=x2
+==> K[11]=x
+==> K[12]=1
+</FONT></pre></td></tr></table></P><P>
+
+Then
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>size(K);
+==> 12
+</FONT></pre></td></tr></table></P><P>
+
+gives the desired vector space dimension
+<!-- MATH
+ $K[x,y,z]/\hbox{\rm jacob}(f)$
+ -->
+<IMG
+ WIDTH="134" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_7.png"
+ ALT="$K[x,y,z]/\hbox{\rm jacob}(f)$">.As in S<SMALL>INGULAR</SMALL> the functions may take the input directly from
+earlier calculations, the whole sequence of commands may be written
+in one single statement.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>size(kbase(groebner(jacob(f))));
+==> 12
+</FONT></pre></td></tr></table></P><P>
+
+When we are not interested in a basis of the quotient vector space, but
+only in the resulting dimension we may even use the command <CODE>vdim</CODE>
+and write:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>vdim(groebner(jacob(f)));
+==> 12
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Procedures and libraries"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_6.htm#SEC12"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: First steps" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_8.htm#SEC14"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Procedures and libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_4.htm#SEC6"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: How to use this manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_12.htm#SEC18"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: General concepts" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_5.htm#SEC11"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Getting started" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

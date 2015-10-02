@@ -1,0 +1,160 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: chinrempoly</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: chinrempoly">
+<META NAME="keywords" CONTENT="Singular Manual: chinrempoly">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2101"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2027.htm#SEC2102"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: algemodStd" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.1.1 chinrempoly </H4>
+<!--docid::SEC2101::-->
+Procedure from library <CODE>algemodstd.lib</CODE> (see  <A HREF="sing_2025.htm#SEC2100">algemodstd_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>chinrempoly(l, m); l list, m list
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a polynomial (resp. ideal) which is congruent to l[i] modulo m[i] for all i
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The procedure applies chinese remaindering to the first argument w.r.t. the
+moduli given in the second. The elements in the first list must be of same type
+which can be polynomial or ideal. The moduli must be of type polynomial. Elements
+in the second list must be distinct and co-prime.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "algemodstd.lib";
+ring rr=97,x,dp;
+poly f=x^7-7*x + 3;
+ideal J=factorize(f,1);
+J;
+==> J[1]=x+37
+==> J[2]=x3+9x2+20x-20
+==> J[3]=x3-46x2+17x-8
+list m=J[1..ncols(J)];
+list l= x^2+2*x+3, x^2+5, x^2+7;
+ideal I=chinrempoly(l,m);
+I;
+==> I[1]=-44x6-36x5-45x4+12x3-36x2+25x-32
+ring s=0,x,dp;
+list m= x^2+2*x+3, x^3+5, x^4+x^3+7;
+list l=x^3 + 2, x^4 + 7, x^5 + 11;
+ideal I=chinrempoly(l,m);
+I;
+==> I[1]=18113/107610x8+5826/17935x7-5257/107610x6+3975/7174x5+246151/107610x\
+   4+131573/53805x3-910/633x2-36239/21522x+146695/7174
+int p=prime(536546513);
+ring r = p, (x,y,a), (dp(2),dp(1));
+poly minpolynomial = a^2+1;
+ideal kf=factorize(minpolynomial,1);//return factors without multiplicity
+kf;
+==> kf[1]=a+222052315
+==> kf[2]=a-222052315
+ideal k=(a+1)*x2+y, 3x-ay+ a+2;
+option(redSB);
+ideal k1=k,kf[1];
+ideal k2 =k,kf[2];
+k1=std(k1);
+k2=std(k2);
+list l=k1,k2;
+list m=kf[1..ncols(kf)];
+ideal I=chinrempoly(l,m);
+I=simplify(I,2);
+I;
+==> I[1]=x-178848838ya+178848838a-178848837
+==> I[2]=y2-268273248ya+268273250y-4a-3
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_267.htm#SEC306">chinrem</A>.
+<P>
+
+<A NAME="algemodStd"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2027.htm#SEC2102"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: algemodStd" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: arr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2025.htm#SEC2100"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: algemodstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

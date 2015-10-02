@@ -20,11 +20,11 @@
 
 BIND_GLOBAL( "GAPInfo", rec(
 
-# do not edit the following three lines. Occurences of `4.7.5' and `24-May-2014' 
+# do not edit the following three lines. Occurences of `4.7.8' and `09-Jun-2015' 
 # will be replaced by string matching by distribution wrapping scripts.
-    Version := "4.7.5",
-    Date := "24-May-2014",
-    NeedKernelVersion := "4.7.5",
+    Version := "4.7.8",
+    Date := "09-Jun-2015",
+    NeedKernelVersion := "4.7.8",
 
 # Without the needed packages, GAP does not start.
     Dependencies := rec(
@@ -211,7 +211,11 @@ CallAndInstallPostRestore( function()
 
     # paths
     GAPInfo.RootPaths:= GAPInfo.KernelInfo.GAP_ROOT_PATHS;
-    GAPInfo.UserHome:= GAPInfo.SystemEnvironment.HOME;
+    if  IsBound(GAPInfo.SystemEnvironment.HOME) then
+      GAPInfo.UserHome := GAPInfo.SystemEnvironment.HOME;
+    else
+      GAPInfo.UserHome := fail;
+    fi;
     if IsBound(GAPInfo.KernelInfo.DOT_GAP_PATH) then
       GAPInfo.UserGapRoot := GAPInfo.KernelInfo.DOT_GAP_PATH;
     else
@@ -224,20 +228,22 @@ CallAndInstallPostRestore( function()
     GAPInfo.DirectoriesTemporary:= [];
     GAPInfo.DirectoryCurrent:= false;
     GAPInfo.DirectoriesSystemPrograms:= [];
-    j:= 1;
-    for i in [1..LENGTH(GAPInfo.SystemEnvironment.PATH)] do
-      if GAPInfo.SystemEnvironment.PATH[i] = ':' then
-        if i > j then
-          ADD_LIST_DEFAULT(GAPInfo.DirectoriesSystemPrograms, 
-                GAPInfo.SystemEnvironment.PATH{[j..i-1]});
+    if IsBound(GAPInfo.SystemEnvironment.PATH) then
+      j:= 1;
+      for i in [1..LENGTH(GAPInfo.SystemEnvironment.PATH)] do
+        if GAPInfo.SystemEnvironment.PATH[i] = ':' then
+          if i > j then
+            ADD_LIST_DEFAULT(GAPInfo.DirectoriesSystemPrograms, 
+                  GAPInfo.SystemEnvironment.PATH{[j..i-1]});
+          fi;
+          j := i+1;
         fi;
-        j := i+1;
+      od;
+      if j <= LENGTH( GAPInfo.SystemEnvironment.PATH ) then
+        ADD_LIST_DEFAULT( GAPInfo.DirectoriesSystemPrograms, 
+            GAPInfo.SystemEnvironment.PATH{ [ j ..
+                LENGTH( GAPInfo.SystemEnvironment.PATH ) ] } );
       fi;
-    od;
-    if j <= LENGTH( GAPInfo.SystemEnvironment.PATH ) then
-      ADD_LIST_DEFAULT( GAPInfo.DirectoriesSystemPrograms, 
-          GAPInfo.SystemEnvironment.PATH{ [ j ..
-              LENGTH( GAPInfo.SystemEnvironment.PATH ) ] } );
     fi;
 
     # the command line options that were given for the current session

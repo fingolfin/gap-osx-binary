@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-version="version sagbi.lib 4.0.0.0 Jun_2013 "; // $Id: 90b5bf132ba4929bc0aebcdf438de3763af30d12 $
+version="version sagbi.lib 4.0.0.0 Jun_2013 "; // $Id: 1a57ac39190e7a55f6e7ea39972d0eb26c02b191 $
 category="Commutative Algebra";
 info="
 LIBRARY: sagbi.lib  Compute SAGBI basis (subalgebra bases analogous to Groebner bases for ideals) of a subalgebra
@@ -30,6 +30,7 @@ SEE ALSO: algebra_lib
 LIB "elim.lib";
 LIB "toric.lib";
 LIB "algebra.lib";
+LIB "ring.lib";
 //////////////////////////////////////////////////////////////////////////////
 
 static proc assumeQring()
@@ -1110,7 +1111,7 @@ EXAMPLE: example sagbiReduction; shows an example"
     poly v=product(maxideal(1));
 
     //------------- change the basering bsr to bsr[@(0),...,@(z)] ----------
-    execute("ring s=("+charstr(basering)+"),("+varstr(basering)+",@(0..z)),dp;");
+    def s=addNvarsTo(basering,z+1,,"@",0); setring s;
     // Ev hier die Reihenfolge der Vars aendern. Dazu muss unten aber entsprechend
     // geaendert werden:
     //  execute("ring s="+charstr(basering)+",(@(0..z),"+varstr(basering)+"),dp;");

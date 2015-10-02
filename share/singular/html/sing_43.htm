@@ -1,0 +1,201 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Procedure definition</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Procedure definition">
+<META NAME="keywords" CONTENT="Singular Manual: Procedure definition">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC77"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Procedures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_44.htm#SEC80"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Parameter list" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_41.htm#SEC70"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Input and output" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Procedures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.7.1 Procedure definition </H3>
+<!--docid::SEC77::-->
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD>[<CODE>static</CODE>] <CODE>proc</CODE> proc_name [(&lt;parameter_list&gt;)]
+<BR>[&lt;help_string&gt;]
+<BR><CODE>{</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;   &lt;procedure_body&gt;
+<BR><CODE>}</CODE>
+<BR>[<CODE>example</CODE>
+<BR><CODE>{</CODE>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;   &lt;sequence_of_commands&gt;
+<BR><CODE>}</CODE>]
+<DT><STRONG>Purpose:</STRONG>
+<DD><UL>
+<LI>
+Defines a new function, the <CODE>proc</CODE> proc_name.
+<LI>
+The help string, the parameter list, and the example section are optional.
+They are, however, mandatory for the procedures listed in the header of a library.
+The help string is ignored and no example section is allowed if the procedure is defined
+interactively, i.e., if it is not loaded from a file by the <CODE>LIB</CODE> or <CODE>load</CODE>
+command (see  <A HREF="sing_333.htm#SEC372">LIB</A> and see  <A HREF="sing_437.htm#SEC476">load</A> ).
+<LI>
+Once loaded from a file into a  S<SMALL>INGULAR</SMALL> session, the information provided in the help
+string will be displayed upon entering <CODE>help proc_name;</CODE>, while the <CODE>example</CODE>
+section will be executed  upon entering <CODE>example proc_name;</CODE>.
+See  <A HREF="sing_44.htm#SEC80">Parameter list</A>,  <A HREF="sing_45.htm#SEC81">Help string</A>, and the example in
+ <A HREF="sing_54.htm#SEC90">Procedures in a library</A>.
+<LI>
+In the body of a library, each procedure not meant to be accessible by
+users should be declared static. See  <A HREF="sing_54.htm#SEC90">Procedures in a library</A>.
+</UL>
+</DL>
+<P>
+
+<A NAME="SEC78"></A>
+<H4> Example of an interactive procedure definition and its execution: </H4>
+<!--docid::SEC78::-->
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  proc milnor_number (poly p)
+  {
+    ideal i= std(jacob(p));
+    int m_nr=vdim(i);
+    if (m_nr&lt;0)
+    {
+      "// not an isolated singularity";
+    }
+    return(m_nr);         // the value of m_nr is returned
+  }
+  ring r1=0,(x,y,z),ds;
+  poly p=x^2+y^2+z^5;
+  milnor_number(p);
+==> 4
+</FONT></pre></td></tr></table><P>
+
+<A NAME="SEC79"></A>
+<H4> Example of a procedure definition in a library: </H4>
+<!--docid::SEC79::-->
+First, we define the library (and store it as <CODE> sample.lib</CODE>):
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>// Example of a user accessible procedure
+proc tab (int n)
+"USAGE:    tab(n);  n integer
+RETURNS:  string of n space tabs
+EXAMPLE:  example tab; shows an example"
+{ return(internal_tab(n)); }
+example
+{
+  "EXAMPLE:"; echo=2;
+  for(int n=0; n&lt;=4; n=n+1)
+  { tab(4-n)+"*"+tab(n)+"+"+tab(n)+"*"; }
+}
+
+// Example of a static procedure
+static proc internal_tab (int n)
+{ return(" "[1,n]); }
+</FONT></pre></td></tr></table><P>
+
+Now, we load the library and execute its procedures:
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  LIB "sample.lib";        // load the library sample.lib
+  example tab;             // show an example
+==> // proc tab from lib sample.lib
+==> EXAMPLE:
+==>   for(int n=0; n&lt;=4; n=n+1)
+==>   { tab(4-n)+"*"+tab(n)+"+"+tab(n)+"*"; }
+==>     *+*
+==>    * + *
+==>   *  +  *
+==>  *   +   *
+==> *    +    *
+==> 
+  "*"+tab(3)+"*";          // use the procedure tab
+==> *   *
+  // the static procedure internal_tab is not accessible
+  "*"+internal_tab(3)+"*";
+==>    ? `internal_tab(3)` is not defined
+==>    ? error occurred in or before ./examples/Example_of_a_procedure_defini\
+   tion_in_a_library:.sing line 5: `  "*"+internal_tab(3)+"*";`
+  // show the help section for tab
+  help tab;
+==> // proc tab from lib sample.lib
+==> proc tab (int n)
+==> USAGE:    tab(n);  n integer
+==> RETURNS:  string of n space tabs
+==> EXAMPLE:  example tab; shows an example
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Parameter list"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Procedures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_44.htm#SEC80"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Parameter list" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_41.htm#SEC70"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Input and output" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_48.htm#SEC84"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_42.htm#SEC76"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Procedures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

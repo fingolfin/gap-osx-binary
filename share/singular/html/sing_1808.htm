@@ -1,0 +1,141 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: difpoly2tex</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: difpoly2tex">
+<META NAME="keywords" CONTENT="Singular Manual: difpoly2tex">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1883"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1807.htm#SEC1882"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: decoef" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1809.htm#SEC1884"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: exp2pt" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1815.htm#SEC1890"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Teaching" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: findifs_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.4.3 difpoly2tex </H4>
+<!--docid::SEC1883::-->
+Procedure from library <CODE>findifs.lib</CODE> (see  <A HREF="sing_1805.htm#SEC1880">findifs_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>difpoly2tex(S,P[,Q]); S an ideal, P and optional Q are lists
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>string
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>present the difference scheme in the nodal form
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>ideal S is the result of <CODE>decoef</CODE> procedure
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>a list P may be empty or may contain parameters, which will not
+appear in denominators
+<BR> an optional list Q represents the part of the scheme, depending
+on other function, than the major part
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "findifs.lib";
+ring r = (0,dh,dt,V),(Tx,Tt),dp;
+poly M = (4*dh*Tx+dt)^2*(Tt-1) + V*Tt*Tx;
+ideal I = decoef(M,dt);
+list L; L[1] = V;
+difpoly2tex(I,L);
+==> \frac{1}{8\tri t}\cdot (u^{n+1}_{j+2}-u^{n}_{j+2}+\frac{\nu}{16\tri h^{2}\
+   } u^{n+1}_{j+1})+ \frac{1}{16\tri h}\cdot (u^{n+1}_{j+1}-u^{n}_{j+1}+\fra\
+   c{\tri t}{8\tri h} u^{n+1}_{j}+\frac{-\tri t}{8\tri h} u^{n}_{j})
+poly G = V*dh^2*(Tt-Tx)^2;
+difpoly2tex(I,L,G);
+==> \frac{1}{8\tri t}\cdot (u^{n+1}_{j+2}-u^{n}_{j+2}+\frac{\nu}{16\tri h^{2}\
+   } u^{n+1}_{j+1})+ \frac{1}{16\tri h}\cdot (u^{n+1}_{j+1}-u^{n}_{j+1}+\fra\
+   c{\tri t}{8\tri h} u^{n+1}_{j}+\frac{-\tri t}{8\tri h} u^{n}_{j})+ \frac{\
+   \nu}{128\tri t}\cdot (p^{n}_{j+2}+(-2) p^{n+1}_{j+1}+p^{n+2}_{j})
+</FONT></pre></td></tr></table><P>
+
+<A NAME="exp2pt"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1807.htm#SEC1882"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: decoef" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1809.htm#SEC1884"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: exp2pt" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1815.htm#SEC1890"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Teaching" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: findifs_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

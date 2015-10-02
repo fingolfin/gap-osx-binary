@@ -1,0 +1,141 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: RiemannRochBN</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: RiemannRochBN">
+<META NAME="keywords" CONTENT="Singular Manual: RiemannRochBN">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2149"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2075.htm#SEC2150"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: classifyceq_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: arr_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2075.htm#SEC2150"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: classifyceq_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.3.1 RiemannRochBN </H4>
+<!--docid::SEC2149::-->
+Procedure from library <CODE>brillnoether.lib</CODE> (see  <A HREF="sing_2073.htm#SEC2148">brillnoether_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>RiemannRochBN(C,I,J); ideal C, ideal I, ideal J
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>C is a homogeneous ideal defining a projective curve.
+If C is a non-planar curve, then C is assumed to be
+<BR>nonsingular. This assumption is not checked.
+<BR>The ideals I and J represent a
+<BR>a divisor D on C.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>A vector space basis of the Riemann-Roch space of D,
+<BR>stored in a list RRBasis. The list RRBasis contains a
+list IH and a form F. The vector space basis of L(D)
+<BR>consists of all rational functions G/F, where G is an
+element of IH.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "brillnoether.lib";
+ring R = 0,(x,y,z),dp;
+poly f = y^2+x^2-1;
+f = homog(f,z);
+ideal C = f;
+ideal P1 = x,y-z;
+ideal P2 = x^2+y^2,z;
+ideal I = intersect(P1^3,P2^2);
+ideal P3 = x+z,y;
+ideal J = P3^2;
+RiemannRochBN(C,I,J);
+==> [1]:
+==>    _[1]=65y2z2-81xz3-81z4
+==>    _[2]=65xyz2+63xz3+65yz3+63z4
+==>    _[3]=65y3z-81xyz2-81yz3
+==>    _[4]=65xy2z-81x2z2-81xz3
+==>    _[5]=65y4-81xy2z-81y2z2
+==>    _[6]=65xy3-81x2yz-81xyz2
+==> [2]:
+==>    8xyz2-y2z2-8xz3+2yz3-z4
+</FONT></pre></td></tr></table><A NAME="classifyceq_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2075.htm#SEC2150"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: classifyceq_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2028.htm#SEC2103"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: arr_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2075.htm#SEC2150"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: classifyceq_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2073.htm#SEC2148"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: brillnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -5,8 +5,6 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: numsgp-def.gi,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado,
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the
@@ -41,23 +39,22 @@ InstallGlobalFunction(NumericalSemigroupByGenerators, function(arg)
     if Gcd(L) <> 1 then
         Error("The greatest common divisor is not 1.\n");
     fi;
-    M:= Objectify( NewType( FamilyObj( L ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(generators := L) );
+    M:= Objectify( NumericalSemigroupsType, rec());
+    SetGeneratorsNS(M,L);
     if 1 in L then
-        M!.minimalgenerators := [1];
-        M!.modularcondition := [1,2]; 
-        Setter(IsModularNumericalSemigroup)(M,true);
+        SetMinimalGeneratorsNS(M,[1]);
+        SetModularConditionNS(M,[1,2]);
+        SetGapsNS(M,[]);
+        SetSmallElementsNS(M,[0]);
     elif Length(L) = 2 then # a non-trivial numerical semigroup has at least 2 generators
-        M!.minimalgenerators := L;
+        SetMinimalGeneratorsNS(M, L);
         a := L[1];
         b := L[2];
         fr := a*b - a - b; #(Sylvester)
         SetFrobeniusNumberOfNumericalSemigroup(M,fr);
         # M is modular...
         u:=PowerModInt(b,-1,a);#the inverse ou b mod a        
-        Setter(IsModularNumericalSemigroup)(M,true);
-        M!.modularcondition := [b*u,a*b];
+        SetModularConditionNS(M,[b*u,a*b]);
     fi;
     #when the set of generators is an interval, using Rosales and Garcia-Sanchez (pacific), the  Frobenius number and the "small elements" are easily computed
     if not (1 in L) and (Length(L) = Maximum(L) - Minimum(L)+1) then
@@ -72,21 +69,18 @@ InstallGlobalFunction(NumericalSemigroupByGenerators, function(arg)
         od;
         Append(small,[fr+1]);
 
-        SetSmallElementsOfNumericalSemigroup(M,small);
+        SetSmallElementsNS(M,small);
 
         SetFrobeniusNumberOfNumericalSemigroup(M,fr);
 
-        M!.minimalgenerators := [a..Minimum(2*a-1,a+b)];
+        SetMinimalGeneratorsNS(M,[a..Minimum(2*a-1,a+b)]);
 
         # M is proportionaly modular...
-        Setter(IsProportionallyModularNumericalSemigroup)(M,true);
-        M!.proportionallymodularcondition := [a+b,a*(a+b),b];
-         M!.closedinterval := [L[1],L[Length(L)]];    
-         Setter(IsNumericalSemigroupByInterval)(M,true);
+        SetProportionallyModularConditionNS(M, [a+b,a*(a+b),b]);
+         SetClosedIntervalNS(M,[L[1],L[Length(L)]]);    
 
     fi;
 
-    Setter(IsNumericalSemigroupByGenerators)(M,true);
     return M;
 
 end);
@@ -183,15 +177,13 @@ InstallGlobalFunction(NumericalSemigroupByMinimalGenerators, function(arg)
 
     l := minimalGSNS(L);
     if not Length(L) = Length(l) then
-        Info(InfoNumSgps,0, "The given list was not the minimal generating set. The list ", l, " will be used instead.");
+        Info(InfoWarning,1,"The list ", L, " can not be the minimal generating set. The list ", l, " will be used instead.");
         L := l;
     fi;
-    M:= Objectify( NewType( FamilyObj( L ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(minimalgenerators := L, generators := L) );
+    M:= Objectify( NumericalSemigroupsType, rec() );
     #    Setter(GeneratorsOfNumericalSemigroup)( M, AsList( L ) );
-    Setter(IsNumericalSemigroupByMinimalGenerators)(M,true);
-    Setter(IsNumericalSemigroupByGenerators)(M,true);
+    SetMinimalGeneratorsNS(M,L);
+    SetGeneratorsNS(M,L);
     return M;
 
 end);
@@ -223,12 +215,10 @@ InstallGlobalFunction(NumericalSemigroupByMinimalGeneratorsNC, function(arg)
     fi;
 
 
-    M:= Objectify( NewType( FamilyObj( L ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(minimalgenerators := L, generators := L) );
+    M:= Objectify( NumericalSemigroupsType, rec() );
     #    Setter(GeneratorsOfNumericalSemigroup)( M, AsList( L ) );
-    Setter(IsNumericalSemigroupByMinimalGenerators)(M,true);
-    Setter(IsNumericalSemigroupByGenerators)(M,true);
+    SetMinimalGeneratorsNS(M,L);
+    SetGeneratorsNS(M,L);
     return M;
 
 end);
@@ -247,21 +237,16 @@ InstallGlobalFunction(ModularNumericalSemigroup, function(a,b)
     if not IsPosInt(a) or not IsPosInt(b) then
         Error("ModularNumericalSemigroup has 2 positive integers as arguments");
     fi;
-    M:= Objectify( NewType( FamilyObj( [a,b] ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(modularcondition := [a,b]) );
-    Setter(IsModularNumericalSemigroup)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetModularConditionNS(M,[a,b]);
     if (a = 1) or (b = 1) then #the semigroup is the entire N
-        M!.minimalgenerators := [1];
-        Setter(IsNumericalSemigroupByMinimalGenerators)(M,true);
+        SetMinimalGeneratorsNS(M,[1]);
     fi;
     # a modular semigroup is also a proportionally modular semigroup
-    Setter(IsProportionallyModularNumericalSemigroup)(M,true);
-    M!.proportionallymodularcondition := [a,b,1];
+    SetProportionallyModularConditionNS(M, [a,b,1]);
     # a modular semigroup is generated by an interval
     if a > 1 then
-        Setter(IsNumericalSemigroupByInterval)(M,true);
-        M!.closedinterval := [b/a,b/(a-1)];
+        SetClosedIntervalNS(M,[b/a,b/(a-1)]);
     fi;
     return M;
 end);
@@ -280,35 +265,28 @@ end);
 InstallGlobalFunction(ProportionallyModularNumericalSemigroup, function(a,b,c)
     local   M,  m;
 
-    #    if not IsInt(a) or not IsInt(b) or not IsInt(c) then
     if not IsPosInt(a) or not IsPosInt(b) or not IsPosInt(c) then
         Error("ProportionallyModularNumericalSemigroup has 3 positive integers as arguments");
     fi;
-    M:= Objectify( NewType( FamilyObj( [a,b,c] ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(proportionallymodularcondition := [a,b,c]) );
-    Setter(IsProportionallyModularNumericalSemigroup)(M,true);
-    if a <> c then
-        M!.closedinterval := [b/a,b/(a-c)];
-        Setter(IsNumericalSemigroupByInterval)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetProportionallyModularConditionNS(M,[a,b,c]);
+    if a > c then
+      SetClosedIntervalNS(M, [b/a,b/(a-c)]);
     else 
-        M!.closedinterval := [1,2];
-       Setter(IsNumericalSemigroupByInterval)(M,true);
+        SetClosedIntervalNS(M, [1,2]);
     fi;  
         
     m := CeilingOfRational(b/a);
     if a <> c and b/(a-c) > 2*m -1 then #the semigroup is a halfline
         SetSmallElementsOfNumericalSemigroup(M,[0,m]);
         SetFrobeniusNumberOfNumericalSemigroup(M,m-1);
-        M!.minimalgenerators := [m,2*m-1];
+        SetMinimalGeneratorsNS(M, [m,2*m-1]);
     fi;
     if b = 1 then #the semigroup is the entire N
-        M!.minimalgenerators := [1];
-        Setter(IsNumericalSemigroupByMinimalGenerators)(M,true);
+        SetMinimalGeneratorsNS(M, [1]);
     fi;
     if c = 1 then
-        Setter(IsModularNumericalSemigroup)(M,true);
-        M!.modularcondition := [a,b];
+        SetModularConditionNS(M, [a,b]);
     fi;
     
     return M;
@@ -343,34 +321,29 @@ InstallGlobalFunction(NumericalSemigroupByInterval, function(arg)
         Error("The argument of NumericalSemigroupByInterval must consist of a pair of rational numbers, <r> and <s> and with r < s");
     fi;
 
-    M:= Objectify( NewType( FamilyObj( [r,s] ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(closedinterval := [r,s]) );
-    ## the semigroup is proportionally modular (Lemma 4.12 [Rosales & Garcia-Sanchez - book])
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetClosedIntervalNS(M,[r,s]);
+## the semigroup is proportionally modular (Lemma 4.12 [Rosales & Garcia-Sanchez - book])
     b1 := NumeratorRat(r);
     a1 := DenominatorRat(r);
     b2 := NumeratorRat(s);
     a2 := DenominatorRat(s);
-    Setter(IsProportionallyModularNumericalSemigroup)(M,true);
-    M!.proportionallymodularcondition := [a1*b2,b1*b2,a1*b2-a2*b1];
+    SetProportionallyModularConditionNS(M, [a1*b2,b1*b2,a1*b2-a2*b1]);
     if b1*b2 = 1 then #the semigroup is the entire N
-        M!.minimalgenerators := [1];
-        Setter(IsNumericalSemigroupByMinimalGenerators)(M,true);
+        SetMinimalGeneratorsNS(M,[1]);
     fi;
     
     if a1*b2-a2*b1 = 1 then
-        Setter(IsModularNumericalSemigroup)(M,true);
-        M!.modularcondition := [a1*b2,b1*b2];
+      SetModularConditionNS(M, [a1*b2,b1*b2]);
     fi;
     
     m := CeilingOfRational(r);
     if s > 2*m -1 then #the semigroup is a halfline
-        SetSmallElementsOfNumericalSemigroup(M,[0,m]);
+        SetSmallElementsNS(M,[0,m]);
         SetFrobeniusNumberOfNumericalSemigroup(M,m-1);
-        M!.minimalgenerators := [m,2*m-1];
+        SetMinimalGeneratorsNS(M, [m,2*m-1]);
     fi;
 
-    Setter(IsNumericalSemigroupByInterval)(M,true);
     return M;
 end);
 
@@ -398,10 +371,8 @@ InstallGlobalFunction(NumericalSemigroupByOpenInterval, function(arg)
         Error("The argument of NumericalSemigroupByOpenInterval must consist of a pair of rational numbers, <r> and <s> and with r < s");
     fi;
 
-    M:= Objectify( NewType( FamilyObj( [r,s] ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(openinterval := [r,s]) );
-    Setter(IsNumericalSemigroupByOpenInterval)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetOpenIntervalNS(M,[r,s]);
     return M;
 end);
 
@@ -422,10 +393,8 @@ InstallGlobalFunction(NumericalSemigroupBySubAdditiveFunction, function(L)
         Error("The argument of NumericalSemigroupBySubAdditiveFunction must be a subadditive function");
     fi;
 
-    M:= Objectify( NewType( FamilyObj( L ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(subadditive := L) );
-    Setter(IsNumericalSemigroupBySubAdditiveFunction)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetSubAdditiveFunctionNS(M,L);
     return M;
 end);
 
@@ -445,10 +414,8 @@ InstallGlobalFunction(NumericalSemigroupByAperyList, function(L)
         Error("The argument of NumericalSemigroupByAperyList must be The Apery List of some numerical semigroup");
     fi;
 
-    M:= Objectify( NewType( FamilyObj( L ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(aperylist := L) );
-    Setter(IsNumericalSemigroupByAperyList)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetAperyListNS(M,L);
     return M;
 end);
 
@@ -476,11 +443,9 @@ InstallGlobalFunction(NumericalSemigroupBySmallElements, function(L)
     K := Difference([1..L[Length(L)]],L);
     R := Intersection([0..K[Length(K)]+1],L);
 
-    M:= Objectify( NewType( FamilyObj( R ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(elements := R, gaps := Difference([1..R[Length(R)]], R)) );
-    Setter(IsNumericalSemigroupBySmallElements)(M,true);
-    Setter(IsNumericalSemigroupByGaps)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetGapsNS(M,Difference([1..R[Length(R)]], R));
+    SetSmallElementsNS(M,R);
     return M;
 end);
 
@@ -500,11 +465,9 @@ InstallGlobalFunction(NumericalSemigroupBySmallElementsNC, function(L)
     K := Difference([1..L[Length(L)]],L);
     R := Intersection([0..K[Length(K)]+1],L);
 
-    M:= Objectify( NewType( FamilyObj( R ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(elements := R, gaps := Difference([1..R[Length(R)]], R)) );
-    Setter(IsNumericalSemigroupBySmallElements)(M,true);
-    Setter(IsNumericalSemigroupByGaps)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetGapsNS(M,Difference([1..R[Length(R)]], R));
+    SetSmallElementsNS(M,R);
     return M;
 end);
 
@@ -525,11 +488,9 @@ InstallGlobalFunction(NumericalSemigroupByGaps, function(L)
         Error("The argument does not represent the gaps of  a numerical semigroup");
     fi;
 
-    M:= Objectify( NewType( FamilyObj( L ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(gaps := L, elements := K) );
-    Setter(IsNumericalSemigroupByGaps)(M,true);
-    Setter(IsNumericalSemigroupBySmallElements)(M,true);
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetGapsNS(M,L);
+    SetSmallElementsNS(M,K);    
     return M;
 end);
 
@@ -552,15 +513,10 @@ InstallGlobalFunction(NumericalSemigroupByFundamentalGaps, function(L)
         Error("The argument does not represent the fundamental gaps of  a numerical semigroup");
     fi;
 
-    M:= Objectify( NewType( FamilyObj( L ),
-                IsAttributeStoringRep and IsNumericalSemigroup),
-                rec(fundamentalgaps := L) );
-    M!.gaps := G;
-    M!.elements := K;
-    Setter(IsNumericalSemigroupByFundamentalGaps)(M,true);
-    Setter(IsNumericalSemigroupByGaps)(M,true);
-    Setter(IsNumericalSemigroupBySmallElements)(M,true);
-
+    M:= Objectify( NumericalSemigroupsType, rec() );
+    SetFundamentalGapsNS(M,L);
+    SetGapsNS(M,G);
+    SetSmallElementsNS(M,K);
     return M;
 end);
 
@@ -657,12 +613,12 @@ InstallGlobalFunction(NumericalSemigroup, function(arg)
          "prints a Numerical Semigroup",
          [ IsNumericalSemigroup],
          function( S )
-     if HasIsModularNumericalSemigroup(S) then
-         Print("ModularNumericalSemigroup( ", S!.modularcondition, " )\n");
-     elif HasIsProportionallyModularNumericalSemigroup(S) then
-         Print("ProportionallyModularNumericalSemigroup( ", S!.proportionallymodularcondition, " )\n");
-     elif IsBound(S!.generators) then
-         Print("NumericalSemigroup( ", S!.generators, " )\n");
+     if HasModularConditionNS(S) then
+         Print("ModularNumericalSemigroup( ", ModularConditionNS(S), " )\n");
+     elif HasProportionallyModularConditionNS(S) then
+         Print("ProportionallyModularNumericalSemigroup( ", ProportionallyModularConditionNS(S), " )\n");
+     elif HasGeneratorsNS(S) then
+         Print("NumericalSemigroup( ", GeneratorsNS(S), " )\n");
      else
          Print("NumericalSemigroup( ", GeneratorsOfNumericalSemigroup(S), " )\n");
      fi;
@@ -681,16 +637,16 @@ InstallGlobalFunction(NumericalSemigroup, function(arg)
          "displays a Numerical Semigroup",
          [IsNumericalSemigroup],
          function( S )
-     if IsBound(S!.minimalgenerators) and 1 in S!.minimalgenerators then
+     if HasMinimalGeneratorsNS(S) and 1 in MinimalGeneratorsNS(S) then
          Print("<The numerical semigroup N>");
-     elif IsBound(S!.modularcondition) then
-         Print("<Modular numerical semigroup satisfying ", S!.modularcondition[1],"x mod ",S!.modularcondition[2], " <= x >");
-     elif IsBound(S!.proportionallymodularcondition) then
-         Print("<Proportionally modular numerical semigroup satisfying ", S!.proportionallymodularcondition[1],"x mod ",S!.proportionallymodularcondition[2], " <= ",S!.proportionallymodularcondition[3],"x >");
-     elif IsBound(S!.minimalgenerators) then
-         Print("<Numerical semigroup with ", Length(S!.minimalgenerators), " generators>");
-     elif IsBound(S!.generators) then
-         Print("<Numerical semigroup with ", Length(S!.generators), " generators>");
+     elif HasModularConditionNS(S) then
+         Print("<Modular numerical semigroup satisfying ", ModularConditionNS(S)[1],"x mod ",ModularConditionNS(S)[2], " <= x >");
+     elif HasProportionallyModularConditionNS(S) then
+         Print("<Proportionally modular numerical semigroup satisfying ", ProportionallyModularConditionNS(S)[1],"x mod ",ProportionallyModularConditionNS(S)[2], " <= ",ProportionallyModularConditionNS(S)[3],"x >");
+     elif HasMinimalGeneratorsNS(S) then
+         Print("<Numerical semigroup with ", Length(MinimalGeneratorsNS(S)), " generators>");
+     elif HasGeneratorsNS(S) then
+         Print("<Numerical semigroup with ", Length(GeneratorsNS(S)), " generators>");
      else
          Print("<Numerical semigroup>");
      fi;
@@ -747,159 +703,8 @@ InstallGlobalFunction(NumericalSemigroup, function(arg)
 
  ####################################################
  ####################################################
-
- #############################################################################
  ##
- #A  IsNumericalSemigroupByGenerators(S)
- ##
- ##  Tests if a numerical semigroup was given by its generators.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupByGenerators,
-         "Tests if a Numerical Semigroup was given by its generators",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupByGenerators( S ));
- end);
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupByMinimalGenerators(S)
- ##
- ##  Tests if a numerical semigroup was given by its minimal generators.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupByMinimalGenerators,
-         "Tests if a Numerical Semigroup was given by its minimal generators",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupByMinimalGenerators( S ));
- end);
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupByInterval(S)
- ##
- ##  Tests if a numerical semigroup was given by an interval.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupByInterval,
-         "Tests if a Numerical Semigroup was given by an interval",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupByInterval( S ));
- end);
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupByOpenInterval(S)
- ##
- ##  Tests if a numerical semigroup was given by an open interval.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupByOpenInterval,
-         "Tests if a Numerical Semigroup was given by an open interval",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupByOpenInterval( S ));
- end);
-
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupBySubAdditiveFunction(S)
- ##
- ##  Tests if a numerical semigroup was given by a subadditive function.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupBySubAdditiveFunction,
-         "Tests if a Numerical Semigroup was given by a subadditive function",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupBySubAdditiveFunction( S ));
- end);
-
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupByAperyList(S)
- ##
- ##  Tests if a numerical semigroup was given by its Apery list.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupByAperyList,
-         "Tests if a Numerical Semigroup was given by its Apery list",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupByAperyList( S ));
- end);
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupBySmallElements(S)
- ##
- ##  Tests if a numerical semigroup was given by its small elements.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupBySmallElements,
-         "Tests if a Numerical Semigroup was given by its small elements",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupBySmallElements( S ));
- end);
-
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupByGaps(S)
- ##
- ##  Tests if a numerical semigroup was given by its gaps.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupByGaps,
-         "Tests if a Numerical Semigroup was given by gaps",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupByGaps( S ));
- end);
-
-
-
-
- #############################################################################
- ##
- #A  IsNumericalSemigroupByFundamentalGaps(S)
- ##
- ##  Tests if a numerical semigroup was given by its fundamental gaps.
- ##
- #############################################################################
- InstallMethod(IsNumericalSemigroupByFundamentalGaps,
-         "Tests if a Numerical Semigroup was given by fundamental gaps",
-         [IsNumericalSemigroup],
-         function( S )
-     return(HasIsNumericalSemigroupByFundamentalGaps( S ));
- end);
-
-
-
-
- #############################################################################
- ##
- #A  IsProportionallyModularNumericalSemigroup(S)
+ #P  IsProportionallyModularNumericalSemigroup(S)
  ##
  ##  Tests if a numerical semigroup is proportionally modular.
  ##
@@ -911,19 +716,20 @@ InstallGlobalFunction(NumericalSemigroup, function(arg)
          [IsNumericalSemigroup],
          function( S )
      local   gens,  arrangements,  gs,  k,  addgenerator,  g,  arrangement,  
-            b1,  a1,  b2,  a2;
-    
+             b1,  a1,  b2,  a2;
+     
+     if HasProportionallyModularConditionNS(S) then 
+       return true;
+     fi;
+     
     gens := MinimalGeneratingSystemOfNumericalSemigroup(S);
 #    if Length(gens) <= 2 then
 #        return true;
 #    fi;
     if Length(gens) = 1 then
-        S!.closedinterval := [1,2]; 
-        Setter(IsNumericalSemigroupByInterval)(S,true);
-        S!.proportionallymodularcondition := [1,1,1]; 
-        Setter(IsProportionallyModularNumericalSemigroup)(S,true);
-        S!.modularcondition := [1,1];
-        Setter(IsModularNumericalSemigroup)(S,true);
+        SetClosedIntervalNS(S, [1,2]); 
+        SetProportionallyModularConditionNS(S, [1,1,1]); 
+        SetModularConditionNS(S, [1,1]);
         return true;
     else
         arrangements := [[gens[1],gens[2]]];
@@ -963,17 +769,13 @@ InstallGlobalFunction(NumericalSemigroup, function(arg)
     b2 := arrangement[k];
     a2 := (-arrangement[k-1])^-1 mod b2;
 
-    S!.closedinterval := [b1/a1,b2/a2];    
-    Setter(IsNumericalSemigroupByInterval)(S,true);
-    S!.proportionallymodularcondition := [a1*b2,b1*b2,a1*b2-a2*b1];
-    Setter(IsProportionallyModularNumericalSemigroup)(S,true);
+    SetClosedIntervalNS([b1/a1,b2/a2]);    
+    SetProportionallyModularConditionNS(S, [a1*b2,b1*b2,a1*b2-a2*b1]);
     if b1*b2 = 1 then #the semigroup is the entire N
-        S!.minimalgenerators := [1];
-        Setter(IsNumericalSemigroupByMinimalGenerators)(S,true);
+        SetMinimalGeneratorsNS(S,[1]);
     fi;
     if a1*b2-a2*b1 = 1 then
-        Setter(IsModularNumericalSemigroup)(S,true);
-        S!.modularcondition := [a1*b2,b1*b2];
+        SetModularConditionNS(S, [a1*b2,b1*b2]);
     fi;
 
     return true;
@@ -1080,7 +882,7 @@ end);
  #
  #############################################################################
  ##
- #A  IsModularNumericalSemigroup(S)
+ #P  IsModularNumericalSemigroup(S)
  ##
  ##  Tests if a numerical semigroup is modular.
  ##
@@ -1091,6 +893,9 @@ end);
          function( S )
      local   lhs,  gs,  ms,  b,  A,  a,  C,  c,  Ac;
 
+     if HasModularConditionNS(S) then 
+       return true;
+     fi;
 
      lhs := Length(GapsOfNumericalSemigroup(S));
      gs := FrobeniusNumberOfNumericalSemigroup(S);
@@ -1105,10 +910,8 @@ end);
      od;
      for a in A do
          if Display(S) = Display(ModularNumericalSemigroup(a,b)) then
-             S!.modularcondition := [a,b];
-             Setter(IsModularNumericalSemigroup)(S,true);
-             S!.proportionallymodularcondition := [a,b,1];
-             Setter(IsProportionallyModularNumericalSemigroup)(S,true);
+             SetModularConditionNS(S, [a,b]);
+             SetProportionallyModularConditionNS(S, [a,b,1]);
              return(true);
          fi;
      od;
@@ -1129,9 +932,8 @@ end);
          for a in Ac do
              if Display(S)
                 = Display(ModularNumericalSemigroup(a,c)) then
-                 S!.modularcondition := [a,c];
-                 S!.proportionallymodularcondition := [a,c,1];
-                 Setter(IsProportionallyModularNumericalSemigroup)(S,true);
+                 SetModularConditionNS(S, [a,c]);
+                 SetProportionallyModularConditionNS(S, [a,c,1]);
                  return(true);
              fi;
          od;
@@ -1185,29 +987,28 @@ end);
      if Set(GeneratorsOfNumericalSemigroup(x)) =
         Set(GeneratorsOfNumericalSemigroup(y)) then
          return(true);
-     elif IsBound(x!.minimalgenerators) and IsBound(y!.minimalgenerators) then
-         return  x!.minimalgenerators=y!.minimalgenerators;
+     elif HasMinimalGeneratorsNS(x) and HasMinimalGeneratorsNS(y) then
+         return  MinimalGeneratorsNS(x)=MinimalGeneratorsNS(y);
 
-     elif IsBound(x!.modularcondition) and IsBound(y!.modularcondition) and
-       x!.modularcondition=y!.modularcondition then
+     elif HasModularConditionNS(x) and HasModularConditionNS(y) and
+       ModularConditionNS(x) = ModularConditionNS(y) then
          return  true;
 
-     elif IsBound(x!.proportionallymodularcondition) and
-       IsBound(y!.proportionallymodularcondition) and
-       x!.proportionallymodularcondition=y!.proportionallymodularcondition then
+     elif  HasProportionallyModularConditionNS(x) and HasProportionallyModularConditionNS(y) and
+       ProportionallyModularConditionNS(x) = ProportionallyModularConditionNS(y) then
          return true;
 
-     elif IsBound(x!.aperylist) and IsBound(y!.aperylist) then
-         return  x!.aperylist=y!.aperylist;
+     elif HasAperyListNS(x) and HasAperyListNS(y) then
+         return  AperyListNS(x) = AperyListNS(y);
 
-     elif IsBound(x!.gaps) and IsBound(y!.gaps) then
-         return  x!.gaps=y!.gaps;
+     elif HasGapsNS(x) and HasGapsNS(y) then
+         return  GapsNS(x) = GapsNS(y);
 
-     elif IsBound(x!.fundamentalgaps) and IsBound(y!.fundamentalgaps) then
-         return  x!.fundamentalgaps=y!.fundamentalgaps;
+     elif HasFundamentalGapsNS(x) and HasFundamentalGapsNS(y) then
+         return FundamentalGapsNS(x) = FundamentalGapsNS(y);
 
-     elif IsBound(x!.elements) and IsBound(y!.elements) then
-         return  x!.elements=y!.elements;
+     elif HasSmallElementsNS(x) and HasSmallElementsNS(y) then
+         return SmallElementsNS(x) = SmallElementsNS(y);
 
      else
          return SmallElementsOfNumericalSemigroup(x) = SmallElementsOfNumericalSemigroup(y);

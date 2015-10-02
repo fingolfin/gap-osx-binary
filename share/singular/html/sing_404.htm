@@ -1,0 +1,180 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: stdhilb</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: stdhilb">
+<META NAME="keywords" CONTENT="Singular Manual: stdhilb">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC443"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_403.htm#SEC442"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: stdfglm" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_405.htm#SEC444"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: subst" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.145 stdhilb </H3>
+<!--docid::SEC443::-->
+Procedure from library <CODE>standard.lib</CODE> (see  <A HREF="sing_927.htm#SEC1002">standard_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>stdhilb (</CODE> ideal_expression <CODE>)</CODE> <BR>
+<CODE>stdhilb (</CODE> module_expression <CODE>)</CODE> <BR>
+<CODE>stdhilb (</CODE> ideal_expression, intvec_expression <CODE>)</CODE><BR>
+<CODE>stdhilb (</CODE> module_expression, intvec_expression <CODE>)</CODE><BR>
+<CODE>stdhilb (</CODE> ideal_expression<CODE>,</CODE> list of string_expressions,
+and intvec_expression <CODE>)</CODE> <BR>
+<P>
+
+<DT><STRONG>Type:</STRONG>
+<DD>type of the first argument
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Compute a Groebner basis of the ideal/module in the basering by
+using the Hilbert driven Groebner basis algorithm.
+If an argument of type string, stating <CODE>"std"</CODE> resp. <CODE>"slimgb"</CODE>,
+is given, the standard basis computation uses <CODE>std</CODE> or
+<CODE>slimgb</CODE>, otherwise a heuristically chosen method (default)<BR>
+If an optional second argument w of type intvec is given, w is used
+as variable weights. If w is not given, it is computed as w[i] =
+deg(var(i)). If the ideal is homogeneous w.r.t. w then the
+Hilbert series is computed w.r.t. to these weights.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>If the ideal is not homogeneous compute first a Groebner basis
+of the homogenization [w.r.t. the weights w] of the ideal/module,
+then the Hilbert function and, finally, a Groebner basis in the
+original ring by using the computed Hilbert function. If the given
+w does not coincide with the variable weights of the basering, the
+result may not be a groebner basis in the original ring.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>'Homogeneous' means weighted homogeneous with respect to the weights
+w[i] of the variables var(i) of the basering. Parameters are not
+converted to variables.
+<P>
+
+<A NAME="IDX184"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>   ring  r = 0,(x,y,z),lp;
+ideal i = y3+x2,x2y+x2z2,x3-z9,z4-y2-xz;
+ideal j = stdhilb(i); j;
+==> j[1]=z10
+==> j[2]=yz9
+==> j[3]=2y2z4-z8
+==> j[4]=2y3z3-2y2z5-yz7
+==> j[5]=y4+y3z2
+==> j[6]=xz+y2-z4
+==> j[7]=xy2-xz4-y3z
+==> j[8]=x2+y3
+ring  r1 = 0,(x,y,z),wp(3,2,1);
+ideal  i = y3+x2,x2y+x2z2,x3-z9,z4-y2-xz;  //ideal is homogeneous
+ideal j = stdhilb(i,"std"); j;
+==> j[1]=y2+xz-z4
+==> j[2]=x2-xyz+yz4
+==> j[3]=2xz5-z8
+==> j[4]=2xyz4-yz7+z9
+==> j[5]=z10
+==> j[6]=2yz9+z11
+//this is equivalent to:
+intvec v = hilb(std(i),1);
+ideal j1 = std(i,v,intvec(3,2,1)); j1;
+==> j1[1]=y2+xz-z4
+==> j1[2]=x2-xyz+yz4
+==> j1[3]=2xz5-z8
+==> j1[4]=2xyz4-yz7+z9
+==> j1[5]=z10
+==> j1[6]=yz9
+size(NF(j,j1))+size(NF(j1,j));            //j and j1 define the same ideal
+==> 0
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_307.htm#SEC346">groebner</A>;
+ <A HREF="sing_396.htm#SEC435">slimgb</A>;
+ <A HREF="sing_402.htm#SEC441">std</A>;
+ <A HREF="sing_403.htm#SEC442">stdfglm</A>.
+<P>
+
+<A NAME="subst"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_403.htm#SEC442"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: stdfglm" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_405.htm#SEC444"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: subst" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

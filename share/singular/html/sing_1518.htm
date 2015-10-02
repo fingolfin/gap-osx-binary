@@ -1,0 +1,191 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: param</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: param">
+<META NAME="keywords" CONTENT="Singular Manual: param">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1593"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1517.htm#SEC1592"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: extdevelop" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1519.htm#SEC1594"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayHNE" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.9.4 param </H4>
+<!--docid::SEC1593::-->
+Procedure from library <CODE>hnoether.lib</CODE> (see  <A HREF="sing_1514.htm#SEC1589">hnoether_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>param(L [,s]); L list, s any type (optional)
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>L is the output of <CODE>develop(f)</CODE>, or of
+<CODE>extdevelop(develop(f),n)</CODE>, or (one entry in) the list of HN
+data created by <CODE>hnexpansion(f[,"ess"])</CODE>.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>If L are the HN data of an irreducible plane curve singularity f: a
+parametrization for f in the following format: <BR>
+- if only the list L is given, the result is an ideal of two
+polynomials p[1],p[2]: if the HNE was finite then f(p[1],p[2])=0};
+if not, the true parametrization will be given by two power series,
+and p[1],p[2] are truncations of these series.<BR>
+- if the optional parameter s is given, the result is a list l:
+l[1]=param(L) (ideal) and l[2]=intvec with two entries indicating
+the highest degree up to which the coefficients of the monomials in
+l[1] are exact (entry -1 means that the corresponding parametrization
+is exact).
+<BR>If L collects the HN data of a reducible plane curve singularity f,
+the return value is a list of parametrizations in the respective
+format.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>If the basering has only 2 variables, the first variable is chosen
+as indefinite. Otherwise, the 3rd variable is chosen.
+<P>
+
+<A NAME="IDX616"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "hnoether.lib";
+ring exring=0,(x,y,t),ds;
+poly f=x3+2xy2+y2;
+list Hne=develop(f);
+list hne_extended=extdevelop(Hne,10);
+//   compare the HNE matrices ...
+print(Hne[1]);
+==> 0,x,
+==> 0,-1
+print(hne_extended[1]);
+==> 0,x, 0,0,0,0, 0,0,0,0, 
+==> 0,-1,0,2,0,-4,0,8,0,-16
+// ... and the resulting parametrizations:
+param(Hne);
+==> // ** Warning: result is exact up to order 2 in x and 3 in y !
+==> _[1]=-t2
+==> _[2]=-t3
+param(hne_extended);
+==> // ** Warning: result is exact up to order 10 in x and 11 in y !
+==> _[1]=-t2+2t4-4t6+8t8-16t10
+==> _[2]=-t3+2t5-4t7+8t9-16t11
+param(hne_extended,0);
+==> // ** Warning: result is exact up to order 10 in x and 11 in y !
+==> [1]:
+==>    _[1]=-t2+2t4-4t6+8t8-16t10
+==>    _[2]=-t3+2t5-4t7+8t9-16t11
+==> [2]:
+==>    10,11
+// An example with more than one branch:
+list L=hnexpansion(f*(x2+y4));
+==> 
+==> // 'hnexpansion' created a list of one ring.
+==> // To see the ring and the data stored in the ring, type (if you assigned
+==> // the name L to the list):
+==>      show(L);
+==> // To display the computed HN expansion, type
+==>      def HNring = L[1]; setring HNring;  displayHNE(hne); 
+def HNring = L[1]; setring HNring;
+param(hne);
+==> // Parametrization of branch number 1 computed.
+==> // ** Warning: result is exact up to order 4 in x and 5 in y !
+==> // Parametrization of branch number 2 computed.
+==> // Parametrization of branch number 3 computed.
+==> [1]:
+==>    _[1]=-x2+2*x4
+==>    _[2]=-x3+2*x5
+==> [2]:
+==>    _[1]=(a)*x2
+==>    _[2]=x
+==> [3]:
+==>    _[1]=(-a)*x2
+==>    _[2]=x
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1516.htm#SEC1591">develop</A>;
+ <A HREF="sing_1517.htm#SEC1592">extdevelop</A>.
+<P>
+
+<A NAME="displayHNE"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1517.htm#SEC1592"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: extdevelop" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1519.htm#SEC1594"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: displayHNE" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1511.htm#SEC1586"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gmspoly_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1535.htm#SEC1610"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: kskernel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1514.htm#SEC1589"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hnoether_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

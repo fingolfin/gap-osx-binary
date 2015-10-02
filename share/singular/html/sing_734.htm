@@ -1,0 +1,173 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: GKZsystem</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: GKZsystem">
+<META NAME="keywords" CONTENT="Singular Manual: GKZsystem">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC785"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_733.htm#SEC784"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Qso3Casimir" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_708.htm#SEC759"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncalg_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.11.0. GKZsystem </H5>
+<!--docid::SEC785::-->
+Procedure from library <CODE>ncalg.lib</CODE> (see  <A HREF="sing_708.htm#SEC759">ncalg_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>GKZsystem(A, sord, alg, [,v]); A intmat, sord, alg string, v intvec
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>define a ring (Weyl algebra) and create a Gelfand-Kapranov-Zelevinsky (GKZ) system of equations in a ring from the following data:
+<BR> <CODE>A</CODE> is an intmat, defining the system,
+<BR> <CODE>sord</CODE> is a string with desired term ordering,
+<BR> <CODE>alg</CODE> is a string, saying which algorithm to use (exactly like in toric_lib),
+<BR> <CODE>v</CODE> is an optional intvec.
+<BR> In addition, the ideal called <CODE>GKZid</CODE> containing actual equations is calculated and exported to the ring.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>activate the output ring with the <CODE>setring</CODE> command. This procedure is elaborated by Oleksandr Iena
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>This procedure uses toric_lib and therefore inherits its input requirements:
+<BR> possible values for input variable <CODE>alg</CODE> are: "ect","pt","blr", "hs", "du".
+<BR> As for the term ordering, it should be a string <CODE>sord</CODE> in @sc{Singular} format like "lp","dp", etc.
+<BR> Please consult the toric_lib for allowed orderings and more details.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ncalg.lib";
+// example 3.1.4 from the [SST] without the vector w
+intmat A[2][4]=3,2,1,0,0,1,2,3;
+print(A);
+==>      3     2     1     0
+==>      0     1     2     3
+def D1 = GKZsystem(A,"lp","ect");
+setring D1;
+D1;
+==> //   characteristic : 0
+==> //   2 parameter    : b(1) b(2) 
+==> //   minpoly        : 0
+==> //   number of vars : 8
+==> //        block   1 : ordering a
+==> //                  : names    x(1) x(2) x(3) x(4)
+==> //                  : weights     0    0    0    0
+==> //        block   2 : ordering lp
+==> //                  : names    x(1) x(2) x(3) x(4) d(1) d(2) d(3) d(4)
+==> //        block   3 : ordering C
+==> //   noncommutative relations:
+==> //    d(1)x(1)=x(1)*d(1)+1
+==> //    d(2)x(2)=x(2)*d(2)+1
+==> //    d(3)x(3)=x(3)*d(3)+1
+==> //    d(4)x(4)=x(4)*d(4)+1
+print(GKZid);
+==> 3*x(1)*d(1)+2*x(2)*d(2)+x(3)*d(3)+(-b(1)),
+==> x(2)*d(2)+2*x(3)*d(3)+3*x(4)*d(4)+(-b(2)),
+==> d(2)*d(4)-d(3)^2,
+==> d(1)*d(4)-d(2)*d(3),
+==> d(1)*d(3)-d(2)^2
+// now, consider A with the vector w=1,1,1,1
+intvec v=1,1,1,1;
+def D2 = GKZsystem(A,"lp","blr",v);
+setring D2;
+print(GKZid);
+==> 3*x(1)*d(1)+2*x(2)*d(2)+x(3)*d(3)+(-b(1)),
+==> x(2)*d(2)+2*x(3)*d(3)+3*x(4)*d(4)+(-b(2)),
+==> d(2)*d(4)-d(3)^2,
+==> d(1)*d(4)-d(2)*d(3),
+==> d(1)*d(3)-d(2)^2
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1333.htm#SEC1408">toric_lib</A>.
+<P>
+
+<A NAME="ncdecomp_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_733.htm#SEC784"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Qso3Casimir" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_708.htm#SEC759"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncalg_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

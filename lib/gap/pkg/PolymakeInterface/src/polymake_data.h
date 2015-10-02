@@ -7,6 +7,7 @@
 #include <polymake/Matrix.h>
 #include <polymake/IncidenceMatrix.h>
 #include <polymake/Rational.h>
+#include <polymake/common/lattice_tools.h>
 
 #include <iostream>
 #include <map>
@@ -62,5 +63,11 @@ void polymake_start( Polymake_Data* );
 
 // Obj x = NewPolymakeExternalObject(T_POLYMAKE_EXTERNAL_CONE);
 // POLYMAKEOBJ_SET_PERLOBJ(x, p);
+
+#define POLYMAKE_GAP_CATCH \
+    catch( std::exception& err ){ \
+    cerr << "Polymake error: " << endl << err.what( ) << endl; \
+    ErrorMayQuit("during polymake computation.",0,0); \
+  }
 
 #endif

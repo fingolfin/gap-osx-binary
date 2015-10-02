@@ -1,0 +1,186 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: orbitCones</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: orbitCones">
+<META NAME="keywords" CONTENT="Singular Manual: orbitCones">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2216"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2140.htm#SEC2215"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: isAface" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2142.htm#SEC2217"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: gradedModules_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2111.htm#SEC2186"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: finitediff_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2142.htm#SEC2217"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gradedModules_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2135.htm#SEC2210"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: gitfan_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.9.6 orbitCones </H4>
+<!--docid::SEC2216::-->
+Procedure from library <CODE>gitfan.lib</CODE> (see  <A HREF="sing_2135.htm#SEC2210">gitfan_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>orbitCones(a, Q, b, c); a: ideal, Q: bigintmat, b: int, c: int
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>Returns a list consisting of all cones Q(gam0) where gam0 is an a-face.
+Moreover, it is possible to specify a dimensional bound b,
+upon which only cones of that dimension and above are returned.
+Lastly, as the computation is parallizable, one can specify c,
+the number of cores to be used by the computation.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>a list of cones
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "gitfan.lib";
+intmat Q[3][4] =
+1,0,1,0,
+0,1,0,1,
+0,0,1,1;
+ring R = 0,T(1..4),dp;
+ideal a = 0;
+orbitCones(a, Q);
+==> [1]:
+==>    AMBIENT_DIM
+==> 3
+==> FACETS
+==> 
+==> LINEAR_SPAN
+==> 1,0,0,
+==> 0,1,0,
+==> 0,0,1
+==> 
+==> [2]:
+==>    AMBIENT_DIM
+==> 3
+==> FACETS
+==> 0,0, 1,
+==> 0,1, 0,
+==> 1,0,-1
+==> LINEAR_SPAN
+==> 
+==> 
+==> [3]:
+==>    AMBIENT_DIM
+==> 3
+==> FACETS
+==> 0,0, 1,
+==> 0,1,-1,
+==> 1,0, 0
+==> LINEAR_SPAN
+==> 
+==> 
+==> [4]:
+==>    AMBIENT_DIM
+==> 3
+==> FACETS
+==> 0,-1, 1,
+==> 0, 1, 0,
+==> 1, 1,-1
+==> LINEAR_SPAN
+==> 
+==> 
+==> [5]:
+==>    AMBIENT_DIM
+==> 3
+==> FACETS
+==> -1,0, 1,
+==>  1,0, 0,
+==>  1,1,-1
+==> LINEAR_SPAN
+==> 
+==> 
+==> [6]:
+==>    AMBIENT_DIM
+==> 3
+==> FACETS
+==> 0,0, 1,
+==> 0,1, 0,
+==> 1,0, 0,
+==> 1,1,-1
+==> LINEAR_SPAN
+==> 
+==> 
+</FONT></pre></td></tr></table><A NAME="gradedModules_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2140.htm#SEC2215"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: isAface" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2142.htm#SEC2217"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: gradedModules_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2111.htm#SEC2186"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: finitediff_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2142.htm#SEC2217"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: gradedModules_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2135.htm#SEC2210"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: gitfan_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

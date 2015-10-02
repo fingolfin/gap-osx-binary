@@ -1,0 +1,156 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: primitive</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: primitive">
+<META NAME="keywords" CONTENT="Singular Manual: primitive">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1381"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1307.htm#SEC1382"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primitive_extra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1297.htm#SEC1372"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: primdecint_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1309.htm#SEC1384"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realrad_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.22.1 primitive </H4>
+<!--docid::SEC1381::-->
+Procedure from library <CODE>primitiv.lib</CODE> (see  <A HREF="sing_1305.htm#SEC1380">primitiv_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>primitive(i); i ideal
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>i is given by generators m[1],...,m[n] such that for j=1,...,n <BR>
+- m[j] is a polynomial in k[x(1),...,x(j)] <BR>
+- m[j](a[1],...,a[j-1],x(j)) is the minimal polynomial for a[j] over
+k(a[1],...,a[j-1]) <BR>
+(k the ground field of the current basering and x(1),...,x(n)
+the ring variables).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal j in k[x(n)] with
+<BR>- j[1] a minimal polynomial for a primitive element b of
+k(a[1],...,a[n]) over k,
+<BR>- j[2],...,j[n+1] polynomials in k[x(n)] such that j[i+1](b)=a[i]
+for i=1,...,n.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the number of variables in the basering has to be exactly n,
+the number of given generators (i.e., minimal polynomials).<BR>
+If the ground field k has only a few elements it may happen that no
+linear combination of a[1],...,a[n] is a primitive element. In this
+case <CODE>primitive(i)</CODE> returns the zero ideal, and one should use
+<CODE>primitive_extra(i)</CODE> instead.
+<P>
+
+<A NAME="IDX469"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "primitiv.lib";
+ring exring=0,(x,y),dp;
+ideal i=x2+1,y2-x;                  // compute Q(i,i^(1/2))=:L
+ideal j=primitive(i);
+j[1];                               // L=Q(a) with a=(-1)^(1/4)
+==> y4+1
+j[2];                               // i=a^2
+==> y2
+j[3];                               // i^(1/2)=a
+==> y
+// the 2nd element was already primitive!
+j=primitive(ideal(x2-2,y2-3));      // compute Q(sqrt(2),sqrt(3))
+j[1];
+==> y4-10y2+1
+j[2];
+==> 1/2y3-9/2y
+j[3];
+==> -1/2y3+11/2y
+// no element was primitive -- the calculation of primitive elements
+// is based on a random choice.
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_1307.htm#SEC1382">primitive_extra</A>.
+<P>
+
+<A NAME="primitive_extra"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1307.htm#SEC1382"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: primitive_extra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1297.htm#SEC1372"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: primdecint_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1309.htm#SEC1384"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realrad_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1305.htm#SEC1380"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: primitiv_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

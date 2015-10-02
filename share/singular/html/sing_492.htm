@@ -1,0 +1,151 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: qring declaration (plural)</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: qring declaration (plural)">
+<META NAME="keywords" CONTENT="Singular Manual: qring declaration (plural)">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC531"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_491.htm#SEC530"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: qring (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_493.htm#SEC532"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: qring related functions (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_486.htm#SEC525"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: poly (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_494.htm#SEC533"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resolution (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_491.htm#SEC530"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: qring (plural)" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> 7.2.5.1 qring declaration (plural) </H4>
+<!--docid::SEC531::-->
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>qring</CODE> name <CODE>=</CODE> ideal_expression <CODE>;</CODE>
+<DT><STRONG>Default:</STRONG>
+<DD>none
+<DT><STRONG>Purpose:</STRONG>
+<DD>declares a quotient ring as the basering modulo an <CODE>ideal_expression</CODE> and sets
+it as current basering.
+<DT><STRONG>Note:</STRONG>
+<DD>reports error if an ideal is not a two-sided Groebner basis.
+<DT><STRONG>Example:</STRONG>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r=0,(z,u,v,w),dp;
+def R=nc_algebra(-1,0); // an anticommutative algebra
+setring R;
+option(redSB);
+option(redTail);
+ideal i=z^2,u^2,v^2,w^2, zuv-w;
+qring Q = i;  // incorrect call produces error
+==> // ** i is no standard basis
+==> // ** i is no twosided standard basis
+kill Q;
+setring R;  // go back to the ring R
+qring q=twostd(i); // now it is an exterior algebra modulo &lt;zuv-w&gt;
+q;
+==> //   characteristic : 0
+==> //   number of vars : 4
+==> //        block   1 : ordering dp
+==> //                  : names    z u v w
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    uz=-zu
+==> //    vz=-zv
+==> //    wz=-zw
+==> //    vu=-uv
+==> //    wu=-uw
+==> //    wv=-vw
+==> // quotient ring from ideal
+==> _[1]=w2
+==> _[2]=vw
+==> _[3]=uw
+==> _[4]=zw
+==> _[5]=v2
+==> _[6]=u2
+==> _[7]=z2
+==> _[8]=zuv-w
+poly k = (v-u)*(zv+u-w);
+k; // the output is not yet totally reduced
+==> zuv-uv+uw-vw
+poly ek=reduce(k,std(0));
+ek; // the reduced form
+==> -uv+w
+</FONT></pre></td></tr></table></DL>
+<P>
+
+<A NAME="qring related functions (plural)"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_491.htm#SEC530"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: qring (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_493.htm#SEC532"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: qring related functions (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_486.htm#SEC525"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: poly (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_494.htm#SEC533"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resolution (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_491.htm#SEC530"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: qring (plural)" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

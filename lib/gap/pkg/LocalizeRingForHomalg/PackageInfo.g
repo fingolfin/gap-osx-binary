@@ -30,9 +30,9 @@ Subtitle := "A Package for Localization of Polynomial Rings",
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
 Version := Maximum( [ ##To prevent merge conflicts
-  "2011.04.26", ## Markus' version
+  "2014.08.27", ## Markus' version
 ## this line prevents merge conflicts
-  "2013.10.25", ## Mohamed's version
+  "2014.11.20", ## Mohamed's version
 ## this line prevents merge conflicts
   "2013.07.15", ## Vinay's version
 ## this line prevents merge conflicts
@@ -55,7 +55,7 @@ Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1
 ##  directory containing the package (in our "example" probably:
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 # 
-ArchiveURL := Concatenation( "http://homalg.math.rwth-aachen.de/~markus/LocalizeRingForHomalg/LocalizeRingForHomalg-", ~.Version ),
+ArchiveURL := Concatenation( "http://homalg.math.rwth-aachen.de/~barakat/homalg-project/LocalizeRingForHomalg/LocalizeRingForHomalg-", ~.Version ),
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -210,9 +210,9 @@ Status := "deposited",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := 
-  "http://homalg.math.rwth-aachen.de/~markus/LocalizeRingForHomalg/README.LocalizeRingForHomalg",
+  "http://homalg.math.rwth-aachen.de/~barakat/homalg-project/LocalizeRingForHomalg/README.LocalizeRingForHomalg",
 PackageInfoURL := 
-  "http://homalg.math.rwth-aachen.de/~markus/LocalizeRingForHomalg/PackageInfo.g",
+  "http://homalg.math.rwth-aachen.de/~barakat/homalg-project/LocalizeRingForHomalg/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 

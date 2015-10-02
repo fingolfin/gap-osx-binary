@@ -1,0 +1,136 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ReesAlgebra</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ReesAlgebra">
+<META NAME="keywords" CONTENT="Singular Manual: ReesAlgebra">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1389"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1313.htm#SEC1388"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reesclos_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1315.htm#SEC1390"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: normalI" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1309.htm#SEC1384"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realrad_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1316.htm#SEC1391"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sagbi_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1313.htm#SEC1388"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: reesclos_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.24.1 ReesAlgebra </H4>
+<!--docid::SEC1389::-->
+Procedure from library <CODE>reesclos.lib</CODE> (see  <A HREF="sing_1313.htm#SEC1388">reesclos_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>ReesAlgebra (I); I = ideal
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>The Rees algebra R[It] as an affine ring, where I is an ideal in R.
+The procedure returns a list containing two rings:
+<BR>[1]: a ring, say RR; in the ring an ideal ker such that R[It]=RR/ker
+<P>
+
+[2]: a ring, say Kxt; the basering with additional variable t
+containing an ideal mapI that defines the map RR--&gt;Kxt
+</P><P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "reesclos.lib";
+ring R = 0,(x,y),dp;
+ideal I = x2,xy4,y5;
+list L = ReesAlgebra(I);
+def Rees = L[1];       // defines the ring Rees, containing the ideal ker
+setring Rees;          // passes to the ring Rees
+Rees;
+==> //   characteristic : 0
+==> //   number of vars : 5
+==> //        block   1 : ordering dp
+==> //                  : names    x y U(1) U(2) U(3)
+==> //        block   2 : ordering C
+ker;                   // R[It] is isomorphic to Rees/ker
+==> ker[1]=y*U(2)-x*U(3)
+==> ker[2]=y^3*U(1)*U(3)-U(2)^2
+==> ker[3]=y^4*U(1)-x*U(2)
+==> ker[4]=x*y^2*U(1)*U(3)^2-U(2)^3
+==> ker[5]=x^2*y*U(1)*U(3)^3-U(2)^4
+==> ker[6]=x^3*U(1)*U(3)^4-U(2)^5
+</FONT></pre></td></tr></table><P>
+
+<A NAME="normalI"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1313.htm#SEC1388"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: reesclos_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1315.htm#SEC1390"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: normalI" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1309.htm#SEC1384"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realrad_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1316.htm#SEC1391"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: sagbi_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1313.htm#SEC1388"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: reesclos_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

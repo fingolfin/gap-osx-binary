@@ -1,0 +1,152 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: findimAlgebra</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: findimAlgebra">
+<META NAME="keywords" CONTENT="Singular Manual: findimAlgebra">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC819"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_767.htm#SEC818"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Exterior" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_769.htm#SEC820"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: superCommutative" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_785.htm#SEC836"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: perron_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_760.htm#SEC811"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: nctools_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.15.0. findimAlgebra </H5>
+<!--docid::SEC819::-->
+Procedure from library <CODE>nctools.lib</CODE> (see  <A HREF="sing_760.htm#SEC811">nctools_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>findimAlgebra(M,[r]); M a matrix, r an optional ring
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>define a finite dimensional algebra structure on a ring
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the matrix M is used to define the relations x(i)*x(j) = M[i,j] in the
+basering (by default) or in the optional ring r.
+<BR> The procedure equips the ring with the noncommutative structure.
+<BR> The procedure exports the ideal (not a two-sided Groebner basis!), called <CODE>fdQuot</CODE>, for further qring definition.
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>finite dimensional algebra can be represented as a factor algebra
+of a G-algebra modulo certain two-sided ideal. The relations of a f.d. algebra are thus naturally divided into two groups: firstly, the relations
+on the variables of the ring, making it into G-algebra and the rest of them, which constitute the ideal which will be factored out.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "nctools.lib";
+ring r=(0,a,b),(x(1..3)),dp;
+matrix S[3][3];
+S[2,3]=a*x(1); S[3,2]=-b*x(1);
+def A=findimAlgebra(S); setring A;
+fdQuot = twostd(fdQuot);
+qring Qr = fdQuot;
+Qr;
+==> //   characteristic : 0
+==> //   2 parameter    : a b 
+==> //   minpoly        : 0
+==> //   number of vars : 3
+==> //        block   1 : ordering dp
+==> //                  : names    x(1) x(2) x(3)
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    x(3)x(2)=(-b)/(a)*x(2)*x(3)
+==> // quotient ring from ideal
+==> _[1]=x(3)^2
+==> _[2]=x(2)*x(3)+(-a)*x(1)
+==> _[3]=x(1)*x(3)
+==> _[4]=x(2)^2
+==> _[5]=x(1)*x(2)
+==> _[6]=x(1)^2
+</FONT></pre></td></tr></table><P>
+
+<A NAME="superCommutative"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_767.htm#SEC818"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Exterior" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_769.htm#SEC820"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: superCommutative" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_752.htm#SEC803"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ncpreim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_785.htm#SEC836"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: perron_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_760.htm#SEC811"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: nctools_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

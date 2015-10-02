@@ -1,0 +1,150 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: liftstd</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: liftstd">
+<META NAME="keywords" CONTENT="Singular Manual: liftstd">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC374"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_334.htm#SEC373"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: lift" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_336.htm#SEC375"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: listvar" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.76 liftstd </H3>
+<!--docid::SEC374::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>liftstd (</CODE> ideal_expression<CODE>,</CODE> matrix_name <CODE>)</CODE>
+<BR><CODE>liftstd (</CODE> module_expression<CODE>,</CODE> matrix_name <CODE>)</CODE>
+<BR><CODE>liftstd (</CODE> ideal_expression<CODE>,</CODE> matrix_name<CODE>,</CODE> module_name <CODE>)</CODE>
+<BR><CODE>liftstd (</CODE> module_expression<CODE>,</CODE> matrix_name<CODE>,</CODE> module_name <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>ideal or module
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>returns a standard basis of an ideal or module and the transformation
+matrix from the given ideal, resp. module, to the standard basis.
+<BR>That is, if <CODE>m</CODE> is the ideal or module, <CODE>sm</CODE> the standard
+basis returned by <CODE>liftstd</CODE>, and <CODE>T</CODE> the transformation matrix
+then <CODE>matrix(sm)=matrix(m)*T</CODE> and <CODE>sm=ideal(matrix(m)*T)</CODE>,
+resp. <CODE>sm=module(matrix(m)*T)</CODE>.
+<BR>In an optional third argument the syzygy module will be returned.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring R=0,(x,y,z),dp;
+  poly f=x3+y7+z2+xyz;
+  ideal i=jacob(f);
+  matrix T;
+  ideal sm=liftstd(i,T);
+  sm;
+==> sm[1]=xy+2z
+==> sm[2]=3x2+yz
+==> sm[3]=yz2+3048192z3
+==> sm[4]=3024xz2-yz2
+==> sm[5]=y2z-6xz
+==> sm[6]=3097158156288z4+2016z3
+==> sm[7]=7y6+xz
+  print(T);
+==> 0,1,T[1,3],   T[1,4],y,  T[1,6],0,
+==> 0,0,-3x+3024z,3x,    0,  T[2,6],1,
+==> 1,0,T[3,3],   T[3,4],-3x,T[3,6],0 
+  matrix(sm)-matrix(i)*T;
+==> _[1,1]=0
+==> _[1,2]=0
+==> _[1,3]=0
+==> _[1,4]=0
+==> _[1,5]=0
+==> _[1,6]=0
+==> _[1,7]=0
+  module s;
+  sm=liftstd(i,T,s);
+  print(s);
+==> -xy-2z,7y6+xz, -7056y6-1008xz,     
+==> 0,     -3x2-yz,3024x2-xy+1008yz-2z,
+==> 3x2+yz,0,      7y6+xz              
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_85.htm#SEC124">ideal</A>;
+ <A HREF="sing_128.htm#SEC167">matrix</A>;
+ <A HREF="sing_364.htm#SEC403">option</A>;
+ <A HREF="sing_160.htm#SEC199">ring</A>;
+ <A HREF="sing_402.htm#SEC441">std</A>.
+<A NAME="listvar"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_334.htm#SEC373"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: lift" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_336.htm#SEC375"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: listvar" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

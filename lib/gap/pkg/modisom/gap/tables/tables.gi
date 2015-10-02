@@ -153,13 +153,13 @@ PrintCompressedTable := function( A, name, file )
     AppendTo(file,"A := rec(); \n");
     AppendTo(file,"A.rnk := ",A.rnk,"; \n"); 
     AppendTo(file,"A.dim := ",A.dim,"; \n"); 
-    AppendTo(file,"A.com := ",A.com,"; \n"); 
     AppendTo(file,"A.fld := ",A.fld,"; \n"); 
     AppendTo(file,"A.wgs := ",A.wgs,"; \n"); 
     AppendTo(file,"A.wds := ",A.wds,"; \n"); 
-    AppendTo(file,"A.tab := ",[],"; \n"); 
+    if IsBound(A.com) then AppendTo(file,"A.com := ",A.com,"; \n"); fi;
 
     # add compressed tab
+    AppendTo(file,"A.tab := ",[],"; \n"); 
     for i in [1..A.rnk] do
         AppendTo(file,"A.tab[",i,"] := ",MatToList(A.tab[i]),"; \n");
     od;

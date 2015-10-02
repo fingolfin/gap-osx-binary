@@ -1,0 +1,321 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Elimination</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Elimination">
+<META NAME="keywords" CONTENT="Singular Manual: Elimination">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC911"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_859.htm#SEC910"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Finite fields" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_861.htm#SEC912"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Free resolution" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.3.3 Elimination </H3>
+<!--docid::SEC911::-->
+<P>
+
+Elimination is the algebraic counterpart of the geometric concept of
+projection. If
+<!-- MATH
+ $f=(f_1,\ldots,f_n):k^r\rightarrow k^n$
+ -->
+<IMG
+ WIDTH="186" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_345.png"
+ ALT="$f=(f_1,\ldots,f_n):k^r\rightarrow k^n$">is a polynomial map,
+the Zariski-closure of the image is the zero-set of the ideal
+<!-- MATH
+ $j=J \cap k[x_1,\ldots,x_n]$
+ -->
+<IMG
+ WIDTH="148" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_346.png"
+ ALT="$j=J \cap k[x_1,\ldots,x_n]$">,where
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+J=(x_1-f_1(t_1,\ldots,t_r),\ldots,x_n-f_n(t_1,\ldots,t_r))\subseteq
+k[t_1,\ldots,t_r,x_1,\ldots,x_n]
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="505" HEIGHT="28" BORDER="0"
+ SRC="sing_347.png"
+ ALT="\begin{displaymath}J=(x_1-f_1(t_1,\ldots,t_r),\ldots,x_n-f_n(t_1,\ldots,t_r))\subseteq
+k[t_1,\ldots,t_r,x_1,\ldots,x_n]\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>that is, of the ideal j obtained from J by eliminating the variables
+<!-- MATH
+ $t_1,\ldots,t_r$
+ -->
+<IMG
+ WIDTH="66" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_348.png"
+ ALT="$t_1,\ldots,t_r$">.This can be done by computing a Groebner basis for J with respect to a
+(global) product ordering where the block of t-variables precedes the block of
+x-variables, and then selecting those polynomials which do not contain
+any t. Alternatively, we may use a global monomial ordering with extra
+weight vector (see  <A HREF="sing_899.htm#SEC950">Extra weight vector</A>), assigning to the
+t-variables a positive weight and to the x-variables weight 0.
+</P><P>
+
+Since elimination is expensive, it may be useful to use a Hilbert-driven
+approach to the elimination problem (see  <A HREF="sing_855.htm#SEC906">Groebner basis conversion</A>):
+</P><P>
+
+First compute the Hilbert function of the ideal w.r.t.
+a fast ordering (e.g., <CODE>dp</CODE>), then make use of it to speed up the
+computation by a Hilbert-driven elimination which uses the <CODE>intvec</CODE> provided as
+third argument.
+</P><P>
+
+In S<SMALL>INGULAR</SMALL> the most convenient way is to use the
+<CODE>eliminate</CODE> command.
+In contrast to the first method, with <CODE>eliminate</CODE> the result needs not be a
+standard basis in the given ordering.
+Hence, there may be cases where the first method is the preferred one.
+</P><P>
+
+<STRONG>WARNING:</STRONG> In the case of a local or a mixed ordering,
+elimination needs special care. f may be considered as a map of germs
+<!-- MATH
+ $f:(k^r,0)\rightarrow(k^n,0)$
+ -->
+<IMG
+ WIDTH="140" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_349.png"
+ ALT="$f:(k^r,0)\rightarrow(k^n,0)$">,but even
+if this map germ is finite, we are in general not able to compute the image
+germ because for this we would need an implementation of the Weierstrass
+preparation theorem. What we can compute, and what <CODE>eliminate</CODE>
+actually does, is the following: let V(J) be the zero-set of J in
+<!-- MATH
+ $k^r\times(k^n,0)$
+ -->
+<IMG
+ WIDTH="85" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_350.png"
+ ALT="$k^r\times(k^n,0)$">,then the
+closure of the image of V(J) under the projection
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+\hbox{pr}:k^r\times(k^n,0)\rightarrow(k^n,0)
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="177" HEIGHT="28" BORDER="0"
+ SRC="sing_351.png"
+ ALT="\begin{displaymath}\hbox{pr}:k^r\times(k^n,0)\rightarrow(k^n,0)\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+can be computed.(Note that this germ contains also those components
+of V(J) which meet the fiber of pr outside the origin.)
+This is achieved by an ordering with the block of t-variables having a
+global ordering (and preceding the x-variables) and the x-variables having
+a local ordering.
+</P><P>
+
+In any case, if the input is weighted homogeneous (=quasihomogeneous),
+the weights given to the variables should be chosen accordingly.
+S<SMALL>INGULAR</SMALL> offers a function <CODE>weight</CODE> which proposes,
+given an ideal or module, integer weights for the variables, such that
+the ideal, resp. module, is as homogeneous as possible with respect to these weights.
+The function finds correct weights, if the input is weighted homogeneous
+(but is rather slow for many variables). In order to check, whether the
+input is quasihomogeneous, use the function <CODE>qhweight</CODE>, which returns
+an <CODE>intvec</CODE> of correct weights if the input is quasihomogeneous and an <CODE>intvec</CODE>
+of zeros otherwise.
+</P><P>
+
+Let us give three examples:
+<OL>
+<LI>
+First we compute the equations of the simple space curve 'T[7]'
+ consisting of two tangential cusps given in parametric form.
+<LI>
+We compute weights for the equations such that the
+   equations are quasihomogeneous w.r.t. these weights.
+<LI>
+Then we compute the tangent developable of the rational
+   normal curve in
+<IMG
+ WIDTH="24" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_352.png"
+ ALT="$P^4$">.</OL>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  // 1. Compute equations of curve given in parametric form:
+  // Two transversal cusps in (k^3,0):
+  ring r1 = 0,(t,x,y,z),ls;
+  ideal i1 = x-t2,y-t3,z;        // parametrization of the first branch
+  ideal i2 = y-t2,z-t3,x;        // parametrization of the second branch
+  ideal j1 = eliminate(i1,t);
+  j1;                            // equations of the first branch
+==> j1[1]=z
+==> j1[2]=y2-x3
+  ideal j2 = eliminate(i2,t);
+  j2;                            // equations of the second branch
+==> j2[1]=x
+==> j2[2]=z2-y3
+  // Now map to a ring with only x,y,z as variables and compute the
+  // intersection of j1 and j2 there:
+  ring r2 = 0,(x,y,z),ds;
+  ideal j1= imap(r1,j1);         // imap is a convenient ringmap for
+  ideal j2= imap(r1,j2);         // inclusions and projections of rings
+  ideal i = intersect(j1,j2);
+  i;                             // equations of both branches
+==> i[1]=z2-y3+x3y
+==> i[2]=xz
+==> i[3]=xy2-x4
+  //
+  // 2. Compute the weights:
+  intvec v= qhweight(i);         // compute weights
+  v;
+==> 4,6,9
+  //
+  // 3. Compute the tangent developable
+  // The tangent developable of a projective variety given parametrically
+  // by F=(f1,...,fn) : P^r --&gt; P^n is the union of all tangent spaces
+  // of the image. The tangent space at a smooth point F(t1,...,tr)
+  // is given as the image of the tangent space at (t1,...,tr) under
+  // the tangent map (affine coordinates)
+  //   T(t1,...,tr): (y1,...,yr) --&gt; jacob(f)*transpose((y1,...,yr))
+  // where jacob(f) denotes the jacobian matrix of f with respect to the
+  // t's evaluated at the point (t1,...,tr).
+  // Hence we have to create the graph of this map and then to eliminate
+  // the t's and y's.
+  // The rational normal curve in P^4 is given as the image of
+  //        F(s,t) = (s4,s3t,s2t2,st3,t4)
+  // each component being homogeneous of degree 4.
+  ring P = 0,(s,t,x,y,a,b,c,d,e),dp;
+  ideal M = maxideal(1);
+  ideal F = M[1..2];     // take the 1st two generators of M
+  F=F^4;
+  // simplify(...,2); deletes 0-columns
+  matrix jac = simplify(jacob(F),2);
+  ideal T = x,y;
+  ideal J = jac*transpose(T);
+  ideal H = M[5..9];
+  ideal i = matrix(H)-matrix(J);// this is tricky: difference between two
+                         // ideals is not defined, but between two
+                         // matrices. By type conversion
+                         // the ideals are converted to matrices,
+                         // subtracted and afterwards converted
+                         // to an ideal. Note that '+' is defined
+                         // and adds (concatenates) two ideals
+  i;
+==> i[1]=-4s3x+a
+==> i[2]=-3s2tx-s3y+b
+==> i[3]=-2st2x-2s2ty+c
+==> i[4]=-t3x-3st2y+d
+==> i[5]=-4t3y+e
+  // Now we define a ring with product ordering and weights 4
+  // for the variables a,...,e.
+  // Then we map i from P to P1 and eliminate s,t,x,y from i.
+  ring P1 = 0,(s,t,x,y,a,b,c,d,e),(dp(4),wp(4,4,4,4,4));
+  ideal i = fetch(P,i);
+  ideal j= eliminate(i,stxy);    // equations of tangent developable
+  j;
+==> j[1]=3c2-4bd+ae
+==> j[2]=2bcd-3ad2-3b2e+4ace
+==> j[3]=8b2d2-9acd2-9b2ce+14abde-4a2e2
+  // We can use the product ordering to eliminate s,t,x,y from i
+  // by a std-basis computation.
+  // We need proc 'nselect' from elim.lib.
+  LIB "elim.lib";
+  j = std(i);                    // compute a std basis j
+  j = nselect(j,1..4);           // select generators from j not
+  j;                             // containing variable 1,...,4
+==> j[1]=3c2-4bd+ae
+==> j[2]=2bcd-3ad2-3b2e+4ace
+==> j[3]=8b2d2-9acd2-9b2ce+12ac2e-2abde
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Free resolution"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_859.htm#SEC910"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Finite fields" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_861.htm#SEC912"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Free resolution" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,166 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Resolution of singularities</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Resolution of singularities">
+<META NAME="keywords" CONTENT="Singular Manual: Resolution of singularities">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC930"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_878.htm#SEC929"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Classification of hypersurface singularities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_881.htm#SEC932"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: G_a -Invariants" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.4.9 Resolution of singularities </H3>
+<!--docid::SEC930::-->
+<P>
+
+Resolution of singularities and applications thereof are provided by the
+libraries <CODE>resolve.lib</CODE> and <CODE>reszeta.lib</CODE>; graphical output may be
+generated automatically by using external programs <CODE>surf</CODE> and <CODE>dot</CODE>
+respectively to which a specialized interface is provided by the library
+<CODE>resgraph.lib</CODE>. In this example, the basic functionality of the
+resolution of singularities package is illustrated by the computation of
+the intersection matrix and genera of the exceptional curves on a surface
+obtained from resolving the A6 surface singularity. A separate tutorial,
+which introduces the complete functionality of the package and explains
+the rather complicated data structures appearing in intermediate results,
+can be found at <CODE>http://www.singular.uni-kl.de/tutor_resol.ps</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB"resolve.lib";                   // load the resolution algorithm
+LIB"reszeta.lib";                   // load its application algorithms
+
+ring R=0,(x,y,z),dp;              // define the ring Q[x,y,z]
+ideal I=x7+y2-z2;                 // an A6 surface singularity
+list L=resolve(I);                // compute the resolution
+list iD=intersectionDiv(L);       // compute intersection properties
+iD;                               // show the output
+==> [1]:
+==>    -2,0,1,0,0,0,
+==>    0,-2,0,1,0,0,
+==>    1,0,-2,0,1,0,
+==>    0,1,0,-2,0,1,
+==>    0,0,1,0,-2,1,
+==>    0,0,0,1,1,-2 
+==> [2]:
+==>    0,0,0,0,0,0
+==> [3]:
+==>    [1]:
+==>       [1]:
+==>          2,1,1
+==>       [2]:
+==>          4,1,1
+==>    [2]:
+==>       [1]:
+==>          2,1,2
+==>       [2]:
+==>          4,1,2
+==>    [3]:
+==>       [1]:
+==>          4,2,1
+==>       [2]:
+==>          6,2,1
+==>    [4]:
+==>       [1]:
+==>          4,2,2
+==>       [2]:
+==>          6,2,2
+==>    [5]:
+==>       [1]:
+==>          6,3,1
+==>       [2]:
+==>          7,3,1
+==>    [6]:
+==>       [1]:
+==>          6,3,2
+==>       [2]:
+==>          7,3,2
+==> [4]:
+==>    1,1,1,1,1,1
+// The output is a list whose first entry contains the intersection matrix
+// of the exceptional divisors. The second entry is the list of genera
+// of these divisors. The third and fourth entry contain the information
+// how to find the corresponding divisors in the respective charts.
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Invariant Theory"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_878.htm#SEC929"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Classification of hypersurface singularities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_880.htm#SEC931"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Invariant Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_881.htm#SEC932"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: G_a -Invariants" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -179,7 +179,7 @@
   [4X[32X[104X
   
   
-  [1X2.2-6 [33X[0;0Y@AutoDoc[133X[101X
+  [1X2.2-6 [33X[0;0Y@BeginAutoDoc[133X[101X
   
   [33X[0;0YCauses   all  subsequent  declarations  to  be  documented  in  the  manual,
   regardless of whether they have an [5XAutoDoc[105X comment in front of them or not.[133X
@@ -187,11 +187,11 @@
   
   [1X2.2-7 [33X[0;0Y@EndAutoDoc[133X[101X
   
-  [33X[0;0YEnds  the  affect of [10X@AutoDoc[110X. So from here on, again only declarations with
-  an explicit [5XAutoDoc[105X comment in front are added to the manual.[133X
+  [33X[0;0YEnds  the  affect of [10X@BeginAutoDoc[110X. So from here on, again only declarations
+  with an explicit [5XAutoDoc[105X comment in front are added to the manual.[133X
   
   [4X[32X[104X
-    [4X#! @AutoDoc[104X
+    [4X#! @BeginAutoDoc[104X
     [4X[104X
     [4XDeclareOperation( "Operation1", [ IsList ] );[104X
     [4X[104X
@@ -247,15 +247,15 @@
   [33X[0;0YResets the current level to 0.[133X
   
   
-  [1X2.2-12 [33X[0;0Y@Example and @EndExample[133X[101X
+  [1X2.2-12 [33X[0;0Y@BeginExample and @EndExample[133X[101X
   
-  [33X[0;0Y@Example  inserts an example into the manual. The syntax is like the example
-  enviroment  in  GAPDoc. This examples can be tested by GAPDoc, and also stay
-  readable  by  GAP.  The GAP prompt is added by AutoDoc. @EndExample ends the
-  example block.[133X
+  [33X[0;0Y@BeginExample  inserts  an  example  into the manual. The syntax is like the
+  example  enviroment  in  GAPDoc.  This examples can be tested by GAPDoc, and
+  also  stay  readable by GAP. The GAP prompt is added by AutoDoc. @EndExample
+  ends the example block.[133X
   
   [4X[32X[104X
-    [4X#! @Example[104X
+    [4X#! @BeginExample[104X
     [4XS3 := SymmetricGroup(5);[104X
     [4X#! Sym( [ 1 .. 5 ] )[104X
     [4XOrder(S3);[104X
@@ -264,10 +264,10 @@
   [4X[32X[104X
   
   
-  [1X2.2-13 [33X[0;0Y@Log and @EndLog[133X[101X
+  [1X2.2-13 [33X[0;0Y@BeginLog and @EndLog[133X[101X
   
-  [33X[0;0YWorks  just  like  the @Example command, but the example wont be testet. See
-  the GAPDoc manual for more information.[133X
+  [33X[0;0YWorks  just  like the @BeginExample command, but the example wont be testet.
+  See the GAPDoc manual for more information.[133X
   
   
   [1X2.2-14 [33X[0;0Y@DoNotReadRestOfFile[133X[101X
@@ -284,37 +284,16 @@
   [4X[32X[104X
   
   
-  [1X2.2-15 [33X[0;0Y@System [3Xname[103X[101X[1X, @EndSystem, and @InsertSystem [3Xname[103X[101X[1X[133X[101X
+  [1X2.2-15 [33X[0;0Y@BeginChunk [3Xname[103X[101X[1X, @EndChunk, and @InsertChunk [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0Y@System  causes  the  next  documentation  parts  not  to be inserted in the
+  [33X[0;0Y@BeginChunk  causes  the  next documentation parts not to be inserted in the
   documentation  at  it's  point  in  the  file,  but  at  the point where the
-  @InsertSystem  [3Xname[103X  command  is.  This  can be used to insert examples from
-  different  files  at  a specific point in the documentation. A normal system
-  ends  at  the  end  of  the  file. You can also end a system with EndSystem.
-  Systems are collected over the whole document.[133X
+  @InsertChunk  [3Xname[103X  command  is.  This  can  be used to insert examples from
+  different  files  at  a  specific point in the documentation. A normal chunk
+  ends at the end of the file. You can also end a system with @EndChunk.[133X
   
   [4X[32X[104X
-    [4X#! @System Example_Symmetric_Group[104X
-    [4X#! @Example[104X
-    [4XS3 := SymmetricGroup(5);[104X
-    [4X#! Sym( [ 1 .. 5 ] )[104X
-    [4XOrder(S3);[104X
-    [4X#! 120[104X
-    [4X#! @EndExample[104X
-    [4X#! @EndSystem[104X
-  [4X[32X[104X
-  
-  [4X[32X[104X
-    [4X#! @InsertSystem Example_Symmetric_Group[104X
-  [4X[32X[104X
-  
-  
-  [1X2.2-16 [33X[0;0Y@Chunk [3Xname[103X[101X[1X, @EndChunk, and @InsertChunk [3Xname[103X[101X[1X[133X[101X
-  
-  [33X[0;0YJust the same as system[133X
-  
-  [4X[32X[104X
-    [4X#! @Chunk MyChunk[104X
+    [4X#! @BeginChunk MyChunk[104X
     [4X#! This is some text.[104X
     [4X#! @EndChunk[104X
     [4X[104X
@@ -322,15 +301,36 @@
     [4X## Text is inserted here.[104X
   [4X[32X[104X
   
+  [4X[32X[104X
+    [4X#! @BeginChunk Example_Symmetric_Group[104X
+    [4X#! @BeginExample[104X
+    [4XS3 := SymmetricGroup(5);[104X
+    [4X#! Sym( [ 1 .. 5 ] )[104X
+    [4XOrder(S3);[104X
+    [4X#! 120[104X
+    [4X#! @EndExample[104X
+    [4X#! @EndChunk[104X
+  [4X[32X[104X
   
-  [1X2.2-17 [33X[0;0Y@Code [3Xname[103X[101X[1X, @EndCode, and @InsertCode [3Xname[103X[101X[1X[133X[101X
+  [4X[32X[104X
+    [4X#! @InsertChunk Example_Symmetric_Group[104X
+  [4X[32X[104X
   
-  [33X[0;0YInserts  the  code  between  @Code  and @EndCode verbatim at the point where
+  
+  [1X2.2-16 [33X[0;0Y@BeginSystem [3Xname[103X[101X[1X, @EndSystem, and @InsertSystem [3Xname[103X[101X[1X[133X[101X
+  
+  [33X[0;0YSame  as  @BeginChunk  etc.  This  command  is  deprecated. Please use chunk
+  instead.[133X
+  
+  
+  [1X2.2-17 [33X[0;0Y@BeginCode [3Xname[103X[101X[1X, @EndCode, and @InsertCode [3Xname[103X[101X[1X[133X[101X
+  
+  [33X[0;0YInserts the code between @BeginCode and @EndCode verbatim at the point where
   @InsertCode  is called. This is useful to insert your programm code directly
   into the manual.[133X
   
   [4X[32X[104X
-    [4X#! @Code Increment[104X
+    [4X#! @BeginCode Increment[104X
     [4Xi := i + 1;[104X
     [4X#! @EndCode[104X
     [4X[104X

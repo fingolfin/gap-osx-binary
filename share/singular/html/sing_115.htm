@@ -1,0 +1,211 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Ssi tcp links</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Ssi tcp links">
+<META NAME="keywords" CONTENT="Singular Manual: Ssi tcp links">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC154"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_114.htm#SEC153"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Ssi file links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Pipe links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_112.htm#SEC151"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ASCII links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Pipe links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Ssi links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> 4.8.5.2 Ssi tcp links </H4>
+<!--docid::SEC154::-->
+<P>
+
+Ssi tcp links give the possibility to exchange data
+between two processes which may run on the same or on different
+computers. Ssi tcp links can be opened in four different modes:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>tcp</CODE>
+<DD>S<SMALL>INGULAR</SMALL> acts as a server.
+<P>
+
+<DT><CODE>connect</CODE>
+<DD>S<SMALL>INGULAR</SMALL> acts as a client.
+<P>
+
+<DT><CODE>tcp &lt;host&gt;:&lt;program&gt;</CODE>
+<DD>S<SMALL>INGULAR</SMALL> acts as a client, launching an application as server.
+<P>
+
+<DT><CODE>fork</CODE>
+<DD>S<SMALL>INGULAR</SMALL> acts as a client, forking another S<SMALL>INGULAR</SMALL> as
+server.
+</DL>
+<P>
+
+The Ssi tcp link describing string has to be
+<UL>
+<LI>tcp mode:
+<OL>
+<LI><CODE>"ssi:tcp"</CODE>
+</OL>
+S<SMALL>INGULAR</SMALL> becomes a server and waits at the first free port (&gt;1024) for a
+connect call.
+<LI>connect mode:
+<OL>
+<LI><CODE>"ssi:connect "</CODE> + host<CODE>:</CODE>port
+</OL>
+S<SMALL>INGULAR</SMALL> becomes a client and connects to a server waiting at
+the host and port.
+<LI>launch mode:
+<OL>
+<LI><CODE>"ssi:tcp"</CODE> + host<CODE>:</CODE>application
+</OL>
+S<SMALL>INGULAR</SMALL> becomes a client and starts (launches) the application
+using ssh on a (possibly) different host
+which then acts as a server.
+<LI>fork mode:
+<OL>
+<LI><CODE>"ssi:fork"</CODE>
+</OL>
+S<SMALL>INGULAR</SMALL> becomes a client and forks another S<SMALL>INGULAR</SMALL> on the
+same host which acts as a server.
+</UL>
+<P>
+
+To open an ssi tcp link in launch mode, the application to launch must
+either be given with an absolute pathname, or must be in a directory
+contained in the search path. The launched application acts as a server,
+whereas the S<SMALL>INGULAR</SMALL> that actually opened the link acts as a
+client.
+The client "listens" at the some free port until the server
+application does a connect call.
+</P><P>
+
+If the ssi tcp link is opened in fork mode a child of the current
+S<SMALL>INGULAR</SMALL> is forked. All variables and their values are inherited by
+the child. The child acts as a server whereas the S<SMALL>INGULAR</SMALL> that
+actually opened the link acts as a client.
+</P><P>
+
+To arrange the evaluation of an expression by a server, the expression
+must be quoted using the command <CODE>quote</CODE> (see  <A HREF="sing_378.htm#SEC417">quote</A>), so that
+a local evaluation is prevented. Otherwise, the expression is evaluated
+first, and the result of the evaluation is written, instead of the
+expression which is to be evaluated.
+</P><P>
+
+If S<SMALL>INGULAR</SMALL> is in server mode, the value of the variable
+<CODE>link_ll</CODE> is the ssi link connecting to the client and
+S<SMALL>INGULAR</SMALL> is in an infinite read-eval-write loop until the
+connection is closed from the client side (by closing its connecting
+link).
+Reading and writing is done to the link <CODE>link_ll</CODE>:
+After an
+expression is read, it is evaluated and the result of the evaluation is
+written back.  That is, for each expression which was written to the
+server, there is exactly one expression written back. This might be an
+"empty" expression, if the evaluation on the server side does not return
+a value.
+</P><P>
+
+Ssi tcp links should explicitly be opened before being used. Ssi tcp links
+are bidirectional, i.e. can be used for both, writing and
+reading. Reading from an ssi tcp link blocks until data was written to
+that link. The <CODE>status</CODE> command can be used to check whether there
+is data to read.
+</P><P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  int i=7;
+  link l = "ssi:fork";      // fork link declaration
+  open(l); l;
+==> // type : ssi
+==> // mode : fork
+==> // name : 
+==> // open : yes
+==> // read : not ready
+==> // write: ready
+
+  write(l,quote(i)); // Child inherited vars and their values
+  read(l);
+==> 7
+  close(l);          // shut down forked child
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Pipe links"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_114.htm#SEC153"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Ssi file links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Pipe links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_112.htm#SEC151"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: ASCII links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_116.htm#SEC155"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Pipe links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Ssi links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -75,7 +75,7 @@ gap> NCurses.WidthAttributeLine( [ NCurses.attrs.BOLD, "abc",
 >        NCurses.attrs.NORMAL, "de" ] );
 5
 
-##  doc/../lib/ncurses.gi (2827-2834)
+##  doc/../lib/ncurses.gi (2861-2868)
 gap> NCurses.Alert( "Hello world!", 1000 );
 fail
 gap> NCurses.Alert( [ "Hello world!",
@@ -268,7 +268,7 @@ gap> if TestPackageAvailability( "TomLib" ) = true then
 >      BrowseData.SetReplay( false );
 >    fi;
 
-##  doc/../app/atlasbrowse.g (497-526)
+##  doc/../app/atlasbrowse.g (510-539)
 gap> d:= [ NCurses.keys.DOWN ];;  r:= [ NCurses.keys.RIGHT ];;
 gap> c:= [ NCurses.keys.ENTER ];;
 gap> BrowseData.SetReplay( Concatenation(
@@ -750,7 +750,7 @@ gap> NCurses.BrowseGeneric( t4 );
 gap> BrowseData.SetReplay( false );
 gap> Unbind( t4.dynamic.replay );
 
-##  doc/../app/transbrowse.g (446-455)
+##  doc/../app/transbrowse.g (488-497)
 gap> c:= [ NCurses.keys.ENTER ];;
 gap> BrowseData.SetReplay( Concatenation(
 >        "scrrrr/5", c,     # search for transitivity 5,
@@ -760,7 +760,7 @@ gap> BrowseTransitiveGroupsInfo();
 [ M(12) ]
 gap> BrowseData.SetReplay( false );
 
-##  doc/../app/transbrowse.g (563-568)
+##  doc/../app/transbrowse.g (605-610)
 gap> TransitiveGroupsData.AllTransitiveGroups(
 >      NrMovedPoints, [ 5 .. 28 ],
 >      IsSimpleGroup, true, IsAbelian, true );

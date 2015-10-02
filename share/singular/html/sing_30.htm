@@ -1,0 +1,302 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: General syntax of a ring declaration</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: General syntax of a ring declaration">
+<META NAME="keywords" CONTENT="Singular Manual: General syntax of a ring declaration">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC40"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_29.htm#SEC39"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Examples of ring declarations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_31.htm#SEC43"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Term orderings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_21.htm#SEC28"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Emacs user interface" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_33.htm#SEC46"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Implemented algorithms" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_28.htm#SEC38"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Rings and orderings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.3.2 General syntax of a ring declaration </H3>
+<!--docid::SEC40::-->
+<P>
+
+<A NAME="SEC41"></A>
+<H4> Rings </H4>
+<!--docid::SEC41::-->
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>ring</CODE> name <CODE>=</CODE> <CODE>(</CODE>coefficients<CODE>),</CODE>
+  <CODE>(</CODE> names_of_ring_variables <CODE>),</CODE>
+  <CODE>(</CODE> ordering <CODE>);</CODE>
+<DT><STRONG>Default:</STRONG>
+<DD><CODE>32003,(x,y,z),(dp,C);</CODE>
+<DT><STRONG>Purpose:</STRONG>
+<DD>declares a ring and sets it as the current basering.
+</DL>
+<P>
+
+The coefficients are given by one of the following:
+<OL>
+<LI>
+a non-negative int_expression less than 2147483648 (2^31).
+<BR> The int_expression should either be 0, specifying the field of
+rational numbers Q, or a prime number p, specifying the finite field
+with p elements.  If it is not a prime number, int_expression is
+converted to the next lower prime number.
+<P>
+
+<LI>
+an expression_list of an int_expression and one or more names.
+<BR> The int_expression specifies the characteristic of the coefficient
+field as described above. The names are used as parameters in
+transcendental or algebraic extensions of the coefficient
+field. Algebraic extensions are implemented for one parameter only. In
+this case, a minimal polynomial has to be defined by an assignment to
+<CODE>minpoly</CODE>. See  <A HREF="sing_445.htm#SEC484">minpoly</A>.
+<P>
+
+<LI>
+an expression_list of an int_expression and a name.
+<BR> The int_expression has to be a prime number p to the power of a
+positive integer n. This defines the Galois field
+<!-- MATH
+ $\hbox{GF}(p^n)$
+ -->
+<IMG
+ WIDTH="56" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_25.png"
+ ALT="$\hbox{GF}(p^n)$"> with <IMG
+ WIDTH="21" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_26.png"
+ ALT="$p^n$"> elements, where <IMG
+ WIDTH="21" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_26.png"
+ ALT="$p^n$"> has to be less than or equal to <IMG
+ WIDTH="26" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_59.png"
+ ALT="$2^{15}$">.The given name refers to a primitive element of
+<!-- MATH
+ $\hbox{GF}(p^n)$
+ -->
+<IMG
+ WIDTH="56" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_25.png"
+ ALT="$\hbox{GF}(p^n)$">generating the multiplicative group.  Due to a different internal
+representation, the arithmetic operations in these coefficient fields
+are faster than arithmetic operations in algebraic extensions as
+described above.
+<P>
+
+<LI>
+an expression_list of the name <CODE>real</CODE> and two optional int_expressions
+determining the precision in decimal digits and
+the size for the stabilizing rest. The default for the rest is the same size
+as for the representation.
+An exeption is the name <CODE>real</CODE> without any integers.
+These numbers are implemented as machine floating point numbers
+of single precision.
+Note that computations over all these fields are not exact.
+<P>
+
+<LI>
+an expression_list of the name <CODE>complex</CODE>,
+two optional int_expression and a name.
+This specifies the field of complex numbers represented by floating point
+numbers with a precision similar to <CODE>real</CODE>. An expression_list
+without int_expression defines a precision and rest with length 6.
+The name of the imaginary unit is given by the last parameter.
+Note that computations over these fields are not exact.
+<P>
+
+<LI>
+an expression_list with the name <CODE>integer</CODE>. This specifies the ring of integers.
+<P>
+
+<LI>
+an expression_list with the name <CODE>integer</CODE> and one subsequent int_expression.
+This specifies the ring of integers modulo the given int_expression.
+<P>
+
+<LI>
+an expression_list with the name <CODE>integer</CODE> and two int_expressions <CODE>b</CODE> and <CODE>e</CODE>.
+This specifies the ring of integers modulo b^e. If <CODE>b = 2</CODE> and <CODE>e &lt; int_bit_size</CODE>
+an optimized implementation is used.
+<P>
+
+</OL>
+<P>
+
+'names_of_ring_variables' is a list of names or indexed names.
+</P><P>
+
+'ordering' is a list of block orderings where each block ordering is either
+</P><P>
+
+<OL>
+<LI>
+<CODE>lp</CODE>, <CODE>dp</CODE>, <CODE>Dp</CODE>, <CODE>ls</CODE>, <CODE>ds</CODE>, or <CODE>Ds</CODE>
+optionally followed by a size parameter in parentheses.
+<P>
+
+<LI>
+<CODE>wp</CODE>, <CODE>Wp</CODE>, <CODE>ws</CODE>, <CODE>Ws</CODE>, or <CODE>a</CODE> followed by a
+weight vector given as an intvec_expression in parentheses.
+<P>
+
+<LI>
+<CODE>M</CODE> followed by an intmat_expression in parentheses.
+<P>
+
+<LI>
+<CODE>c</CODE> or <CODE>C</CODE>.
+</OL>
+<P>
+
+For the definition of the orderings, see  <A HREF="sing_891.htm#SEC942">Monomial orderings</A>.
+</P><P>
+
+If one of coefficients, names_of_ring_variables, and ordering
+consists of only one entry, the parentheses around this entry may be
+omitted.
+</P><P>
+
+<A NAME="SEC42"></A>
+<H4> Quotient rings </H4>
+<!--docid::SEC42::-->
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>qring</CODE> name <CODE>=</CODE> ideal_expression <CODE>;</CODE>
+<DT><STRONG>Default:</STRONG>
+<DD>none
+<DT><STRONG>Purpose:</STRONG>
+<DD>declares a quotient ring as the basering modulo ideal_expression, and sets
+it as current basering.
+</DL>
+<P>
+
+ideal_expression has to be represented by a standard basis.
+</P><P>
+
+The most convenient way to map objects from a ring to its quotient ring
+and vice versa is to use the <CODE>fetch</CODE> function (see  <A HREF="sing_295.htm#SEC334">fetch</A>).
+</P><P>
+
+S<SMALL>INGULAR</SMALL> computes in a quotient ring as long as possible with the
+given representative of a polynomial, say, <CODE>f</CODE>.  I.e., it usually
+does not reduce <CODE>f</CODE> w.r.t. the quotient ideal.  This is only done
+when necessary
+during standard bases computations or by an explicit reduction using
+the command <CODE>reduce(f, std(0))</CODE> (see  <A HREF="sing_383.htm#SEC422">reduce</A>).
+</P><P>
+
+Operations based on standard bases (e.g. <CODE>std</CODE>,<CODE>groebner</CODE>, etc., <CODE>reduce</CODE>) and functions which require a standard basis (e.g. <CODE>dim</CODE>,<CODE>hilb</CODE>, etc.) operated with the residue classes; all others on the polynomial objects.
+</P><P>
+
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  // defintion and usage:
+  ring r=32003,(x,y),dp;
+  poly f=x3+yx2+3y+4;
+  qring q=std(maxideal(2));
+  basering;
+==> //   characteristic : 32003
+==> //   number of vars : 2
+==> //        block   1 : ordering dp
+==> //                  : names    x y
+==> //        block   2 : ordering C
+==> // quotient ring from ideal
+==> _[1]=y2
+==> _[2]=xy
+==> _[3]=x2
+  poly g=fetch(r, f);
+  g;
+==> x3+x2y+3y+4
+  reduce(g,std(0));
+==> 3y+4
+  // polynomial and residue class:
+  ring R=0,(x,y),dp;
+  qring Q=std(y);
+  poly p1=x;
+  poly p2=x+y;
+  // comparing polynomial objects:
+  p1==p2;
+==> 0
+  // comparing residue classes:
+  reduce(p1,std(0))==reduce(p2,std(0));
+==> 1
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Term orderings"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_29.htm#SEC39"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Examples of ring declarations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_31.htm#SEC43"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Term orderings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_21.htm#SEC28"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Emacs user interface" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_33.htm#SEC46"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Implemented algorithms" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_28.htm#SEC38"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Rings and orderings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

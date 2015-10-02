@@ -1,0 +1,217 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: RiemannRochHess</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: RiemannRochHess">
+<META NAME="keywords" CONTENT="Singular Manual: RiemannRochHess">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2231"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2155.htm#SEC2230"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: hess_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2142.htm#SEC2217"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gradedModules_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2155.htm#SEC2230"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hess_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.11.1 RiemannRochHess </H4>
+<!--docid::SEC2231::-->
+Procedure from library <CODE>hess.lib</CODE> (see  <A HREF="sing_2155.htm#SEC2230">hess_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Note:</STRONG>
+<DD>All fractional ideals must represented by a list of size two.
+The first element is an ideal of k[x,y] and the second element
+the common denominator, i.e, a polynomial of k[x].
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>The base ring R must be a ring in two variables, say x,y,
+or three variables, say x,y,z.
+<BR>If nvars(R) = 2:
+<BR>- f is an absolutely irreducible polynomial, monic as a
+polynomial in y.
+<BR>- List divisorD describes a divisor D of F = Quot(k[x,y]/f).
+If (s = "ideals")
+<BR>D is given in ideal representation, i.e., divisorD is a
+list of size 2.
+<BR>divisorD[1] is the finite ideal of D, i.e., the
+<BR>fractional ideal of D of IntCl(k[x],F).
+<BR>divisorD[2] is the infinite ideal of D, i.e,
+<BR>the fractional ideal of D of IntCl(k[1/x],F).
+<BR>If (s = "free")
+<BR>D is given in free representation, i.e., divisorD is a list
+of size 2, containing the finite and infinite places of D
+with exponents.
+<BR>divisorD[i], i = 1,2, is a list. Each element of the list
+is again a list. The first entry is a fractional ideal,
+and the second an integer, the exponent of the place.
+If nvars(R) = 3:
+<BR>- f is an absolutely irreducible homogeneous polynomial
+describing the projective plane curve corresponding to
+the function field F. We assume that the dehomogenization
+of f w.r.t. z is monic as a polynomial in y.
+<BR>List divisorD describes a divisor D of F.
+<BR>If (s = "ideals")
+<BR>D is given in ideal representation, i.e., divisorD is
+a list of size 2. divisorD[1] is an ideal of the base
+ring representing the positive divisor of D and
+<BR>divisorD[2] is an ideal of the base ring representing the
+negative divisor. (i.e. D = (I) -(J)).
+<BR>If (s = "free")
+<BR>D is given in free representation, i.e., divisorD is a
+list of places of D. D[i][1] is an prime ideal and D[i][2]
+an integer, the exponent of the place.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>A vector space basis of the Riemann-Roch space of D,
+<BR>stored in a list RRBasis. The list RRBasis contains a
+list, say rbasis, and a polynomial, say den. The basis of
+L(D) consists of all rational functions g/den, where g is
+an element of rbasis.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "hess.lib";
+ring R = 0,(x,y),dp;
+poly f  = y^2*(y-1)^3-x^5;
+list A1 = list(ideal(x,y-1),1),2;
+list A2 = list(ideal(y^2-y+1,x),1),3;
+list A3 =  list(ideal(1,y-x),x),-2;
+list D = A1,A2;
+list E = list(A3);
+RiemannRochHess(f,list(D,E),"free");
+==> // ** redefining Infin **
+==> [1]:
+==>    [1]:
+==>       5x2y3-5xy4-5x2y2+10xy3-2y4-5xy2+4y3-2y2
+==>    [2]:
+==>       2x3y2+x2y3-3xy4-2x3y-x2y2+6xy3-3xy2
+==>    [3]:
+==>       5x3y2-5xy4-4x3y+10xy3-5xy2
+==>    [4]:
+==>       5x4y-5xy4-x3y+10xy3-5xy2
+==>    [5]:
+==>       x5+2x4y-3xy4+6xy3-3xy2
+==> [2]:
+==>    x5
+ring S = 0,(x,y,z),dp;
+poly f = y^2*(y-1)^3-x^5;
+f  = homog(f,z);
+ideal P1 = x,y-z;
+ideal P2 = y^2-yz+z^2,x;
+ideal P3 = x-y,z;
+list B1 = P1,2;
+list B2 = P2,3;
+list B3 = P3,-2;
+list Ddivisor = B1,B2,B3;
+RiemannRochHess(f,Ddivisor,"free");
+==> [1]:
+==>    [1]:
+==>       5x2y3-5xy4-5x2y2+10xy3-2y4-5xy2+4y3-2y2
+==>    [2]:
+==>       2x3y2+x2y3-3xy4-2x3y-x2y2+6xy3-3xy2
+==>    [3]:
+==>       5x3y2-5xy4-4x3y+10xy3-5xy2
+==>    [4]:
+==>       5x4y-5xy4-x3y+10xy3-5xy2
+==>    [5]:
+==>       x5+2x4y-3xy4+6xy3-3xy2
+==> [2]:
+==>    x5
+ideal I = intersect(P1^2,P2^3);
+ideal J = P3^2;
+RiemannRochHess(f,list(I,J),"ideals");
+==> [1]:
+==>    [1]:
+==>       5x2y3-5xy4-5x2y2+10xy3-2y4-5xy2+4y3-2y2
+==>    [2]:
+==>       2x3y2+x2y3-3xy4-2x3y-x2y2+6xy3-3xy2
+==>    [3]:
+==>       5x3y2-5xy4-4x3y+10xy3-5xy2
+==>    [4]:
+==>       5x4y-5xy4-x3y+10xy3-5xy2
+==>    [5]:
+==>       x5+2x4y-3xy4+6xy3-3xy2
+==> [2]:
+==>    x5
+</FONT></pre></td></tr></table><A NAME="orbitparam_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2155.htm#SEC2230"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: hess_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2142.htm#SEC2217"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gradedModules_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2155.htm#SEC2230"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: hess_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

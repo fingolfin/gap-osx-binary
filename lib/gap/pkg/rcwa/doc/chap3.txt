@@ -7,7 +7,7 @@
   
   [1X3.1 [33X[0;0YConstructing residue-class-wise affine groups[133X[101X
   
-  [33X[0;0YAs  any  other  groups  in  [5XGAP[105X,  residue-class-wise  affine  groups  can be
+  [33X[0;0YAs  any other groups in [5XGAP[105X, residue-class-wise affine (rcwa-) groups can be
   constructed by [10XGroup[110X, [10XGroupByGenerators[110X or [10XGroupWithGenerators[110X.[133X
   
   [4X[32X  Example  [32X[104X
@@ -22,9 +22,162 @@
     [4X[28X[128X[104X
   [4X[32X[104X
   
-  [33X[0;0YA further means of entering rcwa groups is the following:[133X
+  [33X[0;0YAn  rcwa  group  isomorphic  to  a given group can be obtained by taking the
+  image of a faithful rcwa representation:[133X
   
-  [1X3.1-1 GroupByResidueClasses[101X
+  [1X3.1-1 IsomorphismRcwaGroup[101X
+  
+  [29X[2XIsomorphismRcwaGroup[102X( [3XG[103X, [3XR[103X ) [32X attribute
+  [29X[2XIsomorphismRcwaGroup[102X( [3XG[103X ) [32X attribute
+  [6XReturns:[106X  [33X[0;10Ya   monomorphism  from  the  group  [3XG[103X  to RCWA([3XR[103X)  or  to RCWA(ℤ),
+            respectively.[133X
+  
+  [33X[0;0YThe  best-supported case is [3XR[103X = ℤ. Currently there are methods available for
+  finite  groups,  for free products of finite groups and for free groups. The
+  method  for  free products of finite groups uses the Table-Tennis Lemma (cf.
+  e.g.  Section II.B.  in [dlH00]),  and  the  method  for free groups uses an
+  adaptation  of the construction given on page 27 in [dlH00] from PSL(2,ℂ) to
+  RCWA(ℤ).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XF := FreeProduct(Group((1,2)(3,4),(1,3)(2,4)),Group((1,2,3)),[127X[104X
+    [4X[25X>[125X [27X                    SymmetricGroup(3));[127X[104X
+    [4X[28X<fp group on the generators [ f1, f2, f3, f4, f5 ]>[128X[104X
+    [4X[25Xgap>[125X [27XIsomorphismRcwaGroup(F);[127X[104X
+    [4X[28X[ f1, f2, f3, f4, f5 ] -> [ <rcwa permutation of Z with modulus 12>,[128X[104X
+    [4X[28X  <rcwa permutation of Z with modulus 24>,[128X[104X
+    [4X[28X  <rcwa permutation of Z with modulus 12>,[128X[104X
+    [4X[28X  <rcwa permutation of Z with modulus 72>,[128X[104X
+    [4X[28X  <rcwa permutation of Z with modulus 36> ][128X[104X
+    [4X[25Xgap>[125X [27XIsomorphismRcwaGroup(FreeGroup(2));[127X[104X
+    [4X[28X[ f1, f2 ] -> [ <wild rcwa permutation of Z with modulus 8>,[128X[104X
+    [4X[28X  <wild rcwa permutation of Z with modulus 8> ][128X[104X
+    [4X[25Xgap>[125X [27XF2 := Image(last);[127X[104X
+    [4X[28X<wild rcwa group over Z with 2 generators>[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YFurther, new rcwa groups can be constructed from given ones by taking direct
+  products  and  by  taking  wreath  products  with  finite groups or with the
+  infinite cyclic group:[133X
+  
+  [1X3.1-2 DirectProduct[101X
+  
+  [29X[2XDirectProduct[102X( [3XG1[103X, [3XG2[103X, [3X...[103X ) [32X method
+  [6XReturns:[106X  [33X[0;10Yan  rcwa group isomorphic to the direct product of the rcwa groups
+            over ℤ given as arguments.[133X
+  
+  [33X[0;0YThere  is  certainly no unique or canonical way to embed a direct product of
+  rcwa  groups  into  RCWA(ℤ). This method chooses to embed the groups [3XG1[103X, [3XG2[103X,
+  [3XG3[103X ...  via  restrictions  by  [22Xn ↦ mn[122X, [22Xn ↦ mn+1[122X, [22Xn ↦ mn+2[122X ... ([22X→[122X [2XRestriction[102X
+  ([14X3.1-6[114X)), where [22Xm[122X denotes the number of groups given as arguments.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XF2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;[127X[104X
+    [4X[25Xgap>[125X [27XF2xF2 := DirectProduct(F2,F2);[127X[104X
+    [4X[28X<wild rcwa group over Z with 4 generators>[128X[104X
+    [4X[25Xgap>[125X [27XImage(Projection(F2xF2,1)) = F2;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.1-3  [33X[0;0YWreathProduct  (for an rcwa group over Z, with a permutation group or[101X
+  [1X(ℤ,+))[133X[101X
+  
+  [29X[2XWreathProduct[102X( [3XG[103X, [3XP[103X ) [32X method
+  [29X[2XWreathProduct[102X( [3XG[103X, [3XZ[103X ) [32X method
+  [6XReturns:[106X  [33X[0;10Yan rcwa group isomorphic to the wreath product of the rcwa group [3XG[103X
+            over ℤ  with  the  finite permutation group [3XP[103X or with the infinite
+            cyclic group [3XZ[103X, respectively.[133X
+  
+  [33X[0;0YThe  first-mentioned  method  embeds the [10XDegreeAction([3XP[103X[10X)[110Xth direct power of [3XG[103X
+  using  the  method  for  [10XDirectProduct[110X, and lets the permutation group [3XP[103X act
+  naturally  on  the  set  of  residue  classes  modulo  [10XDegreeAction([3XP[103X[10X)[110X.  The
+  second-mentioned method restricts ([22X→[122X [2XRestriction[102X ([14X3.1-6[114X)) the group [3XG[103X to the
+  residue class 3(4), and maps the generator of the infinite cyclic group [3XZ[103X to
+  [10XClassTransposition(0,2,1,2) * ClassTransposition(0,2,1,4)[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XF2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;[127X[104X
+    [4X[25Xgap>[125X [27XF2wrA5 := WreathProduct(F2,AlternatingGroup(5));;[127X[104X
+    [4X[25Xgap>[125X [27XEmbedding(F2wrA5,1);[127X[104X
+    [4X[28X[ <wild rcwa permutation of Z with modulus 8>,[128X[104X
+    [4X[28X  <wild rcwa permutation of Z with modulus 8> ] ->[128X[104X
+    [4X[28X[ <wild rcwa permutation of Z with modulus 40>,[128X[104X
+    [4X[28X  <wild rcwa permutation of Z with modulus 40> ][128X[104X
+    [4X[25Xgap>[125X [27XEmbedding(F2wrA5,2);[127X[104X
+    [4X[28X[ (1,2,3,4,5), (3,4,5) ] -> [ ( 0(5), 1(5), 2(5), 3(5), 4(5) ), [128X[104X
+    [4X[28X  ( 2(5), 3(5), 4(5) ) ][128X[104X
+    [4X[25Xgap>[125X [27XZwrZ := WreathProduct(Group(ClassShift(0,1)),Group(ClassShift(0,1)));[127X[104X
+    [4X[28X<wild rcwa group over Z with 2 generators>[128X[104X
+    [4X[25Xgap>[125X [27XEmbedding(ZwrZ,1);[127X[104X
+    [4X[28X[ ClassShift( Z ) ] ->[128X[104X
+    [4X[28X[ <tame rcwa permutation of Z with modulus 4, of order infinity> ][128X[104X
+    [4X[25Xgap>[125X [27XEmbedding(ZwrZ,2);[127X[104X
+    [4X[28X[ ClassShift( Z ) ] -> [ <wild rcwa permutation of Z with modulus 4> ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAlso,  rcwa  groups  can  be  obtained  as  particular  extensions of finite
+  permutation groups:[133X
+  
+  [1X3.1-4 MergerExtension[101X
+  
+  [29X[2XMergerExtension[102X( [3XG[103X, [3Xpoints[103X, [3Xpoint[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Yroughly  spoken,  an  extension of [3XG[103X by an involution which [21Xmerges[121X
+            [3Xpoints[103X into [3Xpoint[103X.[133X
+  
+  [33X[0;0YThe  arguments  of  this  operation  are a finite permutation group [3XG[103X, a set
+  [3Xpoints[103X of points moved by [3XG[103X and a single point [3Xpoint[103X moved by [3XG[103X which is not
+  in [3Xpoints[103X.[133X
+  
+  [33X[0;0YLet  [22Xn[122X  be  the  largest moved point of [3XG[103X, and let [22XH[122X be the tame subgroup of
+  CT(ℤ)  which  respects  the partition [22XmathcalP[122X of ℤ into the residue classes
+  (mod [22Xn[122X),  and  which  acts  on  [22XmathcalP[122X  as [3XG[103X acts on [22X{1, dots, n}[122X. Further
+  assume that [3Xpoints[103X = [22X{p_1, dots, p_k}[122X and [3Xpoint[103X = [22Xp[122X, and put [22Xr_i := p_i-1, i
+  =  1,  dots,  k[122X  and  [22Xr  :=  p-1[122X.  Now  let  [22Xσ[122X  be  the product of the class
+  transpositions  [22Xτ_r_i(n),r+(i-1)n(kn), i = 1, dots, k[122X. The group returned by
+  this  operation  is  the  extension  of  [22XH[122X  by the involution [22Xσ[122X. -- On first
+  reading,  this  may  look  a  little complicated, but really the code of the
+  method is only about half as long as this description.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27X# First example -- a group isomorphic to PSL(2,Z):[127X[104X
+    [4X[25Xgap>[125X [27XG := MergerExtension(Group((1,2,3)),[1,2],3);[127X[104X
+    [4X[28X<rcwa group over Z with 2 generators>[128X[104X
+    [4X[25Xgap>[125X [27XSize(G); [127X[104X
+    [4X[28Xinfinity[128X[104X
+    [4X[25Xgap>[125X [27XGeneratorsOfGroup(G);[127X[104X
+    [4X[28X[ ( 0(3), 1(3), 2(3) ), ( 0(3), 2(6) ) ( 1(3), 5(6) ) ][128X[104X
+    [4X[25Xgap>[125X [27XB := Ball(G,One(G),6:Spheres);;[127X[104X
+    [4X[25Xgap>[125X [27XList(B,Length);[127X[104X
+    [4X[28X[ 1, 3, 4, 6, 8, 12, 16 ][128X[104X
+    [4X[25Xgap>[125X [27X#[127X[104X
+    [4X[25Xgap>[125X [27X# Second example -- a group isomorphic to Thompson's group V:[127X[104X
+    [4X[25Xgap>[125X [27XG := MergerExtension(Group((1,2,3,4),(1,2)),[1,2],3);[127X[104X
+    [4X[28X<rcwa group over Z with 3 generators>[128X[104X
+    [4X[25Xgap>[125X [27XSize(G);[127X[104X
+    [4X[28Xinfinity[128X[104X
+    [4X[25Xgap>[125X [27XGeneratorsOfGroup(G);[127X[104X
+    [4X[28X[ ( 0(4), 1(4), 2(4), 3(4) ), ( 0(4), 1(4) ),[128X[104X
+    [4X[28X  ( 0(4), 2(8) ) ( 1(4), 6(8) ) ][128X[104X
+    [4X[25Xgap>[125X [27XB := Ball(G,One(G),6:Spheres);;[127X[104X
+    [4X[25Xgap>[125X [27XList(B,Length);[127X[104X
+    [4X[28X[ 1, 4, 11, 28, 69, 170, 413 ][128X[104X
+    [4X[25Xgap>[125X [27XG = Group(List([[0,2,1,2],[1,2,2,4],[0,2,1,4],[1,4,2,4]],[127X[104X
+    [4X[25X>[125X [27X                  ClassTransposition));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIt is also possible to build an rcwa group from a list of residue classes:[133X
+  
+  [1X3.1-5 GroupByResidueClasses[101X
   
   [29X[2XGroupByResidueClasses[102X( [3Xclasses[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Ythe  group  which  is  generated by all class transpositions which
@@ -50,14 +203,100 @@
     [4X[28X[128X[104X
   [4X[32X[104X
   
-  [33X[0;0YOften,  a  smaller  generating set of a given rcwa group can be found by the
-  operation  [10XSmallGeneratingSet[110X.  There  are  methods for the operations [10XView[110X,
-  [10XDisplay[110X,  [10XPrint[110X  and  [10XString[110X  which  are applicable to rcwa groups. All rcwa
-  groups  over  a ring [22XR[122X are subgroups of RCWA([22XR[122X). The group RCWA([22XR[122X) itself is
-  not finitely generated, thus cannot be constructed as described above. It is
-  handled as a special case:[133X
+  [33X[0;0YVarious  ways  to  construct  rcwa groups are based on certain monomorphisms
+  from the group RCWA([22XR[122X) into itself. Examples are the constructions of direct
+  products  and  wreath  products described above. The support of the image of
+  such a monomorphism is the image of a given injective rcwa mapping. For this
+  reason,  these  monomorphisms  are  called  [13Xrestriction  monomorphisms[113X.  The
+  following operation computes images of rcwa mappings and -groups under these
+  embeddings of RCWA([22XR[122X) into itself:[133X
   
-  [1X3.1-2 RCWA[101X
+  
+  [1X3.1-6  [33X[0;0YRestriction  (of  an  rcwa  mapping  or  -group, by an injective rcwa[101X
+  [1Xmapping)[133X[101X
+  
+  [29X[2XRestriction[102X( [3Xg[103X, [3Xf[103X ) [32X operation
+  [29X[2XRestriction[102X( [3XG[103X, [3Xf[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ythe restriction of the rcwa mapping [3Xg[103X (respectively the rcwa group
+            [3XG[103X) by the injective rcwa mapping [3Xf[103X.[133X
+  
+  [33X[0;0YBy definition, the [13Xrestriction[113X [22Xg_f[122X of an rcwa mapping [3Xg[103X by an injective rcwa
+  mapping [3Xf[103X  is the unique rcwa mapping which satisfies the equation [22Xf ⋅ g_f =
+  g  ⋅  f[122X  and which fixes the complement of the image of [3Xf[103X pointwise. If [3Xf[103X is
+  bijective, the restriction of [3Xg[103X by [3Xf[103X is just the conjugate of [3Xg[103X under [3Xf[103X.[133X
+  
+  [33X[0;0YThe [13Xrestriction[113X of an rcwa group [3XG[103X by an injective rcwa mapping [3Xf[103X is defined
+  as  the group whose elements are the restrictions of the elements of [3XG[103X by [3Xf[103X.
+  The  restriction  of [3XG[103X  by [3Xf[103X acts on the image of [3Xf[103X and fixes its complement
+  pointwise.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XF2tilde := Restriction(F2,RcwaMapping([[5,3,1]]));[127X[104X
+    [4X[28X<wild rcwa group over Z with 2 generators>[128X[104X
+    [4X[25Xgap>[125X [27XSupport(F2tilde);[127X[104X
+    [4X[28X3(5)[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.1-7 [33X[0;0YInduction (of an rcwa mapping or -group, by an injective rcwa mapping)[133X[101X
+  
+  [29X[2XInduction[102X( [3Xg[103X, [3Xf[103X ) [32X operation
+  [29X[2XInduction[102X( [3XG[103X, [3Xf[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ythe  induction  of the rcwa mapping [3Xg[103X (respectively the rcwa group
+            [3XG[103X) by the injective rcwa mapping [3Xf[103X.[133X
+  
+  [33X[0;0Y[13XInduction[113X    is   the   right   inverse   of   restriction,   i.e.   it   is
+  [10XInduction(Restriction([3Xg[103X[10X,[3Xf[103X[10X),[3Xf[103X[10X) = [3Xg[103X[10X[110X and [10XInduction(Restriction([3XG[103X[10X,[3Xf[103X[10X),[3Xf[103X[10X) = [3XG[103X[10X[110X. The
+  mapping [3Xg[103X  respectively  the  group [3XG[103X must not move points outside the image
+  of [3Xf[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XInduction(F2tilde,RcwaMapping([[5,3,1]])) = F2;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YOnce  having constructed an rcwa group, it is sometimes possible to obtain a
+  smaller generating set by the operation [10XSmallGeneratingSet[110X.[133X
+  
+  [33X[0;0YThere  are  methods for the operations [10XView[110X, [10XDisplay[110X, [10XPrint[110X and [10XString[110X which
+  are applicable to rcwa groups.[133X
+  
+  [33X[0;0YBasic attributes of an rcwa group which are derived from the coefficients of
+  its  elements  are [10XModulus[110X, [10XMultiplier[110X, [10XDivisor[110X and [10XPrimeSet[110X. The [13Xmodulus[113X of
+  an  rcwa  group  is  the  lcm  of  the moduli of its elements if such an lcm
+  exists,  i.e.  if  the  group  is  tame,  and  0  otherwise.  The [13Xmultiplier[113X
+  respectively  [13Xdivisor[113X  of  an  rcwa  group  is  the  lcm  of the multipliers
+  respectively  divisors  of  its  elements  in  case such an lcm exists and [22X∞[122X
+  otherwise.  The [13Xprime set[113X of an rcwa group is the union of the prime sets of
+  its  elements.  There  are shorthands [10XMod[110X, [10XMult[110X and [10XDiv[110X defined for [10XModulus[110X,
+  [10XMultiplier[110X  and  [10XDivisor[110X,  respectively.  An rcwa group is called [13Xclass-wise
+  translating[113X,  [13Xintegral[113X or [13Xclass-wise order-preserving[113X if all of its elements
+  are     so.     There    are    corresponding    methods    available    for
+  [10XIsClassWiseTranslating[110X,  [10XIsIntegral[110X and [10XIsClassWiseOrderPreserving[110X. There is
+  a  property  [10XIsSignPreserving[110X,  which  indicates  whether a given rcwa group
+  over ℤ  acts  on  the  set of nonnegative integers. The latter holds for any
+  subgroup of CT(ℤ) (cf. below).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XG := Group(ClassTransposition(0,2,1,2),ClassTransposition(1,3,2,6),[127X[104X
+    [4X[25X>[125X [27X              ClassReflection(2,4));[127X[104X
+    [4X[28X<rcwa group over Z with 3 generators>[128X[104X
+    [4X[25Xgap>[125X [27XList([Modulus,Multiplier,Divisor,PrimeSet,IsClassWiseTranslating,[127X[104X
+    [4X[25X>[125X [27X         IsIntegral,IsClassWiseOrderPreserving,IsSignPreserving],f->f(G));[127X[104X
+    [4X[28X[ 24, 2, 2, [ 2, 3 ], false, false, false, false ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAll  rcwa  groups  over a ring [22XR[122X are subgroups of RCWA([22XR[122X). The group RCWA([22XR[122X)
+  itself  is  not  finitely generated, thus cannot be constructed as described
+  above. It is handled as a special case:[133X
+  
+  [1X3.1-8 RCWA[101X
   
   [29X[2XRCWA[102X( [3XR[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Ythe group RCWA([3XR[103X) of all residue-class-wise affine permutations of
@@ -87,7 +326,7 @@
   [33X[0;0YWe  denote  the  group which is generated by all class transpositions of the
   ring [22XR[122X by CT([22XR[122X). This group is handled as a special case as well:[133X
   
-  [1X3.1-3 CT[101X
+  [1X3.1-9 CT[101X
   
   [29X[2XCT[102X( [3XR[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Ythe  group CT([3XR[103X) which is generated by all class transpositions of
@@ -100,7 +339,7 @@
     [4X[25Xgap>[125X [27XIsSimple(CT_Z); # One of a number of stored attributes/properties.[127X[104X
     [4X[28Xtrue[128X[104X
     [4X[25Xgap>[125X [27XIsSubgroup(CT_Z,G);[127X[104X
-    [4X[28Xtrue[128X[104X
+    [4X[28Xfalse[128X[104X
     [4X[28X[128X[104X
   [4X[32X[104X
   
@@ -141,188 +380,7 @@
   [33X[0;0YThe  number of conjugacy classes of CT(ℤ) of elements of given order is also
   known  under  the  hypothesis that CT(ℤ) is the setwise stabilizer of [22Xℕ_0[122X in
   RCWA(ℤ).      It      can      be     determined     by     the     function
-  [10XNrConjugacyClassesOfCTZOfOrder[110X. Another way of constructing an rcwa group is
-  taking the image of an rcwa representation:[133X
-  
-  [1X3.1-4 IsomorphismRcwaGroup[101X
-  
-  [29X[2XIsomorphismRcwaGroup[102X( [3XG[103X, [3XR[103X ) [32X attribute
-  [29X[2XIsomorphismRcwaGroup[102X( [3XG[103X ) [32X attribute
-  [6XReturns:[106X  [33X[0;10Ya   monomorphism  from  the  group  [3XG[103X  to RCWA([3XR[103X)  or  to RCWA(ℤ),
-            respectively.[133X
-  
-  [33X[0;0YThe  best-supported case is [3XR[103X = ℤ. Currently there are methods available for
-  finite  groups,  for free products of finite groups and for free groups. The
-  method  for  free products of finite groups uses the Table-Tennis Lemma (cf.
-  e.g.  Section II.B.  in [dlH00]),  and  the  method  for free groups uses an
-  adaptation  of the construction given on page 27 in [dlH00] from PSL(2,ℂ) to
-  RCWA(ℤ).[133X
-  
-  [4X[32X  Example  [32X[104X
-    [4X[28X[128X[104X
-    [4X[25Xgap>[125X [27XF := FreeProduct(Group((1,2)(3,4),(1,3)(2,4)),Group((1,2,3)),[127X[104X
-    [4X[25X>[125X [27X                    SymmetricGroup(3));[127X[104X
-    [4X[28X<fp group on the generators [ f1, f2, f3, f4, f5 ]>[128X[104X
-    [4X[25Xgap>[125X [27XIsomorphismRcwaGroup(F);[127X[104X
-    [4X[28X[ f1, f2, f3, f4, f5 ] -> [ <rcwa permutation of Z with modulus 12>,[128X[104X
-    [4X[28X  <rcwa permutation of Z with modulus 24>,[128X[104X
-    [4X[28X  <rcwa permutation of Z with modulus 12>,[128X[104X
-    [4X[28X  <rcwa permutation of Z with modulus 72>,[128X[104X
-    [4X[28X  <rcwa permutation of Z with modulus 36> ][128X[104X
-    [4X[25Xgap>[125X [27XIsomorphismRcwaGroup(FreeGroup(2));[127X[104X
-    [4X[28X[ f1, f2 ] -> [ <wild rcwa permutation of Z with modulus 8>,[128X[104X
-    [4X[28X  <wild rcwa permutation of Z with modulus 8> ][128X[104X
-    [4X[25Xgap>[125X [27XF2 := Image(last);[127X[104X
-    [4X[28X<wild rcwa group over Z with 2 generators>[128X[104X
-    [4X[28X[128X[104X
-  [4X[32X[104X
-  
-  [33X[0;0YThe  class of groups which can faithfully be represented as rcwa groups over
-  the  integers  is  closed  under taking direct products, under taking wreath
-  products  with  finite  groups  and  under  taking  wreath products with the
-  infinite cyclic group (ℤ,+). Therefore these operations can be used to build
-  rcwa groups as well:[133X
-  
-  [1X3.1-5 DirectProduct[101X
-  
-  [29X[2XDirectProduct[102X( [3XG1[103X, [3XG2[103X, [3X...[103X ) [32X method
-  [6XReturns:[106X  [33X[0;10Yan  rcwa group isomorphic to the direct product of the rcwa groups
-            over ℤ given as arguments.[133X
-  
-  [33X[0;0YThere  is  certainly no unique or canonical way to embed a direct product of
-  rcwa  groups  into  RCWA(ℤ). This method chooses to embed the groups [3XG1[103X, [3XG2[103X,
-  [3XG3[103X ...  via  restrictions  by  [22Xn ↦ mn[122X, [22Xn ↦ mn+1[122X, [22Xn ↦ mn+2[122X ... ([22X→[122X [2XRestriction[102X
-  ([14X3.1-7[114X)), where [22Xm[122X denotes the number of groups given as arguments.[133X
-  
-  [4X[32X  Example  [32X[104X
-    [4X[28X[128X[104X
-    [4X[25Xgap>[125X [27XF2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;[127X[104X
-    [4X[25Xgap>[125X [27XF2xF2 := DirectProduct(F2,F2);[127X[104X
-    [4X[28X<wild rcwa group over Z with 4 generators>[128X[104X
-    [4X[25Xgap>[125X [27XImage(Projection(F2xF2,1)) = F2;[127X[104X
-    [4X[28Xtrue[128X[104X
-    [4X[28X[128X[104X
-  [4X[32X[104X
-  
-  
-  [1X3.1-6  [33X[0;0YWreathProduct  (for an rcwa group over Z, with a permutation group or[101X
-  [1X(ℤ,+))[133X[101X
-  
-  [29X[2XWreathProduct[102X( [3XG[103X, [3XP[103X ) [32X method
-  [29X[2XWreathProduct[102X( [3XG[103X, [3XZ[103X ) [32X method
-  [6XReturns:[106X  [33X[0;10Yan rcwa group isomorphic to the wreath product of the rcwa group [3XG[103X
-            over ℤ  with  the  finite permutation group [3XP[103X or with the infinite
-            cyclic group [3XZ[103X, respectively.[133X
-  
-  [33X[0;0YThe  first-mentioned  method  embeds the [10XDegreeAction([3XP[103X[10X)[110Xth direct power of [3XG[103X
-  using  the  method  for  [10XDirectProduct[110X, and lets the permutation group [3XP[103X act
-  naturally  on  the  set  of  residue  classes  modulo  [10XDegreeAction([3XP[103X[10X)[110X.  The
-  second-mentioned method restricts ([22X→[122X [2XRestriction[102X ([14X3.1-7[114X)) the group [3XG[103X to the
-  residue class 3(4), and maps the generator of the infinite cyclic group [3XZ[103X to
-  [10XClassTransposition(0,2,1,2) * ClassTransposition(0,2,1,4)[110X.[133X
-  
-  [4X[32X  Example  [32X[104X
-    [4X[28X[128X[104X
-    [4X[25Xgap>[125X [27XF2 := Image(IsomorphismRcwaGroup(FreeGroup(2)));;[127X[104X
-    [4X[25Xgap>[125X [27XF2wrA5 := WreathProduct(F2,AlternatingGroup(5));;[127X[104X
-    [4X[25Xgap>[125X [27XEmbedding(F2wrA5,1);[127X[104X
-    [4X[28X[ <wild rcwa permutation of Z with modulus 8>,[128X[104X
-    [4X[28X  <wild rcwa permutation of Z with modulus 8> ] ->[128X[104X
-    [4X[28X[ <wild rcwa permutation of Z with modulus 40>,[128X[104X
-    [4X[28X  <wild rcwa permutation of Z with modulus 40> ][128X[104X
-    [4X[25Xgap>[125X [27XEmbedding(F2wrA5,2);[127X[104X
-    [4X[28X[ (1,2,3,4,5), (3,4,5) ] -> [ ( 0(5), 1(5), 2(5), 3(5), 4(5) ), [128X[104X
-    [4X[28X  ( 2(5), 3(5), 4(5) ) ][128X[104X
-    [4X[25Xgap>[125X [27XZwrZ := WreathProduct(Group(ClassShift(0,1)),Group(ClassShift(0,1)));[127X[104X
-    [4X[28X<wild rcwa group over Z with 2 generators>[128X[104X
-    [4X[25Xgap>[125X [27XEmbedding(ZwrZ,1);[127X[104X
-    [4X[28X[ ClassShift( Z ) ] ->[128X[104X
-    [4X[28X[ <tame rcwa permutation of Z with modulus 4, of order infinity> ][128X[104X
-    [4X[25Xgap>[125X [27XEmbedding(ZwrZ,2);[127X[104X
-    [4X[28X[ ClassShift( Z ) ] -> [ <wild rcwa permutation of Z with modulus 4> ][128X[104X
-    [4X[28X[128X[104X
-  [4X[32X[104X
-  
-  [33X[0;0YMany  of  the  above  group constructions are based on certain monomorphisms
-  from  the  group  RCWA([22XR[122X)  into  itself.  The support of the image of such a
-  monomorphism  is  the  image  of  a  given  injective rcwa mapping. For this
-  reason,  these  monomorphisms  are  called  [13Xrestriction  monomorphisms[113X.  The
-  following operation computes images of rcwa mappings and -groups under them:[133X
-  
-  
-  [1X3.1-7  [33X[0;0YRestriction  (of  an  rcwa  mapping  or  -group, by an injective rcwa[101X
-  [1Xmapping)[133X[101X
-  
-  [29X[2XRestriction[102X( [3Xg[103X, [3Xf[103X ) [32X operation
-  [29X[2XRestriction[102X( [3XG[103X, [3Xf[103X ) [32X operation
-  [6XReturns:[106X  [33X[0;10Ythe restriction of the rcwa mapping [3Xg[103X (respectively the rcwa group
-            [3XG[103X) by the injective rcwa mapping [3Xf[103X.[133X
-  
-  [33X[0;0YBy definition, the [13Xrestriction[113X [22Xg_f[122X of an rcwa mapping [3Xg[103X by an injective rcwa
-  mapping [3Xf[103X  is the unique rcwa mapping which satisfies the equation [22Xf ⋅ g_f =
-  g  ⋅  f[122X  and which fixes the complement of the image of [3Xf[103X pointwise. If [3Xf[103X is
-  bijective, the restriction of [3Xg[103X by [3Xf[103X is just the conjugate of [3Xg[103X under [3Xf[103X.[133X
-  
-  [33X[0;0YThe [13Xrestriction[113X of an rcwa group [3XG[103X by an injective rcwa mapping [3Xf[103X is defined
-  as  the group whose elements are the restrictions of the elements of [3XG[103X by [3Xf[103X.
-  The  restriction  of [3XG[103X  by [3Xf[103X acts on the image of [3Xf[103X and fixes its complement
-  pointwise.[133X
-  
-  [4X[32X  Example  [32X[104X
-    [4X[28X[128X[104X
-    [4X[25Xgap>[125X [27XF2tilde := Restriction(F2,RcwaMapping([[5,3,1]]));[127X[104X
-    [4X[28X<wild rcwa group over Z with 2 generators>[128X[104X
-    [4X[25Xgap>[125X [27XSupport(F2tilde);[127X[104X
-    [4X[28X3(5)[128X[104X
-    [4X[28X[128X[104X
-  [4X[32X[104X
-  
-  
-  [1X3.1-8 [33X[0;0YInduction (of an rcwa mapping or -group, by an injective rcwa mapping)[133X[101X
-  
-  [29X[2XInduction[102X( [3Xg[103X, [3Xf[103X ) [32X operation
-  [29X[2XInduction[102X( [3XG[103X, [3Xf[103X ) [32X operation
-  [6XReturns:[106X  [33X[0;10Ythe  induction  of the rcwa mapping [3Xg[103X (respectively the rcwa group
-            [3XG[103X) by the injective rcwa mapping [3Xf[103X.[133X
-  
-  [33X[0;0Y[13XInduction[113X    is   the   right   inverse   of   restriction,   i.e.   it   is
-  [10XInduction(Restriction([3Xg[103X[10X,[3Xf[103X[10X),[3Xf[103X[10X) = [3Xg[103X[10X[110X and [10XInduction(Restriction([3XG[103X[10X,[3Xf[103X[10X),[3Xf[103X[10X) = [3XG[103X[10X[110X. The
-  mapping [3Xg[103X  respectively  the  group [3XG[103X must not move points outside the image
-  of [3Xf[103X.[133X
-  
-  [4X[32X  Example  [32X[104X
-    [4X[28X[128X[104X
-    [4X[25Xgap>[125X [27XInduction(F2tilde,RcwaMapping([[5,3,1]])) = F2;[127X[104X
-    [4X[28Xtrue[128X[104X
-    [4X[28X[128X[104X
-  [4X[32X[104X
-  
-  [33X[0;0YBasic attributes of an rcwa group which are derived from the coefficients of
-  its  elements  are [10XModulus[110X, [10XMultiplier[110X, [10XDivisor[110X and [10XPrimeSet[110X. The [13Xmodulus[113X of
-  an  rcwa  group  is  the  lcm  of  the moduli of its elements if such an lcm
-  exists,  i.e.  if  the  group  is  tame,  and  0  otherwise.  The [13Xmultiplier[113X
-  respectively  [13Xdivisor[113X  of  an  rcwa  group  is  the  lcm  of the multipliers
-  respectively  divisors  of  its  elements  in  case such an lcm exists and [22X∞[122X
-  otherwise.  The [13Xprime set[113X of an rcwa group is the union of the prime sets of
-  its  elements.  There  are shorthands [10XMod[110X, [10XMult[110X and [10XDiv[110X defined for [10XModulus[110X,
-  [10XMultiplier[110X  and  [10XDivisor[110X,  respectively.  An rcwa group is called [13Xclass-wise
-  translating[113X,  [13Xintegral[113X or [13Xclass-wise order-preserving[113X if all of its elements
-  are     so.     There    are    corresponding    methods    available    for
-  [10XIsClassWiseTranslating[110X,  [10XIsIntegral[110X and [10XIsClassWiseOrderPreserving[110X. There is
-  a  property  [10XIsSignPreserving[110X,  which  indicates  whether a given rcwa group
-  over ℤ  acts  on  the  set of nonnegative integers. The latter holds for any
-  subgroup of CT(ℤ).[133X
-  
-  [4X[32X  Example  [32X[104X
-    [4X[28X[128X[104X
-    [4X[25Xgap>[125X [27XG := Group(ClassTransposition(0,2,1,2),ClassTransposition(1,3,2,6),[127X[104X
-    [4X[25X>[125X [27X              ClassReflection(2,4));[127X[104X
-    [4X[28X<rcwa group over Z with 3 generators>[128X[104X
-    [4X[25Xgap>[125X [27XList([Modulus,Multiplier,Divisor,PrimeSet,IsClassWiseTranslating,[127X[104X
-    [4X[25X>[125X [27X         IsIntegral,IsClassWiseOrderPreserving,IsSignPreserving],f->f(G));[127X[104X
-    [4X[28X[ 24, 2, 2, [ 2, 3 ], false, false, false, false ][128X[104X
-    [4X[28X[128X[104X
-  [4X[32X[104X
+  [10XNrConjugacyClassesOfCTZOfOrder[110X.[133X
   
   
   [1X3.2 [33X[0;0YBasic routines for investigating residue-class-wise affine groups[133X[101X
@@ -682,26 +740,27 @@
   
   [1X3.3-2 DrawOrbitPicture[101X
   
-  [29X[2XDrawOrbitPicture[102X( [3XG[103X, [3Xp0[103X, [3Xr[103X, [3Xh[103X, [3Xw[103X, [3Xcolored[103X, [3Xpalette[103X, [3Xfilename[103X ) [32X function
+  [29X[2XDrawOrbitPicture[102X( [3XG[103X, [3Xp0[103X, [3Xbound[103X, [3Xh[103X, [3Xw[103X, [3Xcolored[103X, [3Xpalette[103X, [3Xfilename[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Ynothing.[133X
   
   [33X[0;0YDraws  a  picture of the orbit(s) of the point(s) [3Xp0[103X under the action of the
   group [3XG[103X on [22Xℤ^2[122X. The argument [3Xp0[103X is either one point or a list of points. The
-  argument [3Xr[103X denotes the radius of the ball around [3Xp0[103X to be computed. The size
-  of  the  created  picture is [3Xh[103X x [3Xw[103X pixels. The argument [3Xcolored[103X is a boolean
-  which  indicates whether a 24-bit True-Color picture or a monochrome picture
-  should  be  drawn.  In the former case, [3Xpalette[103X must be a list of triples of
-  integers  in the range [22X0, dots, 255[122X, denoting the RGB values of colors to be
-  used.  In the latter case, [3Xpalette[103X is not used, and any value can be passed.
-  The  picture  is  written in bitmap- (bmp-) format to a file named [3Xfilename[103X.
-  This is done using the utility function [2XSaveAsBitmapPicture[102X ([14X9.7-1[114X).[133X
+  argument  [3Xbound[103X  denotes  the  bound  to  which  the  ball about [3Xp0[103X is to be
+  computed,  in  terms  of  absolute  values  of  coordinates. The size of the
+  produced  picture  is  [3Xh[103X x [3Xw[103X pixels. The argument [3Xcolored[103X is a boolean which
+  indicates whether a 24-bit True-Color picture or a monochrome picture should
+  be  drawn. In the former case, [3Xpalette[103X must be a list of triples of integers
+  in  the range [22X0, dots, 255[122X, denoting the RGB values of colors to be used. In
+  the  latter  case,  [3Xpalette[103X  is  not  used, and any value can be passed. The
+  picture  is  written in bitmap- (bmp-) format to a file named [3Xfilename[103X. This
+  is done using the utility function [2XSaveAsBitmapPicture[102X ([14X9.7-1[114X).[133X
   
   [4X[32X  Example  [32X[104X
     [4X[28X[128X[104X
     [4X[25Xgap>[125X [27XPSL2Z := Image(IsomorphismRcwaGroup(FreeProduct(CyclicGroup(2),[127X[104X
     [4X[25X>[125X [27X                                                   CyclicGroup(3))));;[127X[104X
-    [4X[25Xgap>[125X [27XDrawOrbitPicture(PSL2Z,[0,1],20,512,512,false,fail,"example1.bmp");[127X[104X
-    [4X[25Xgap>[125X [27XDrawOrbitPicture(PSL2Z,Combinations([1..4],2),20,512,512,true,[127X[104X
+    [4X[25Xgap>[125X [27XDrawOrbitPicture(PSL2Z,[0,1],2000,512,512,false,fail,"example1.bmp");[127X[104X
+    [4X[25Xgap>[125X [27XDrawOrbitPicture(PSL2Z,Combinations([1..4],2),2000,512,512,true,[127X[104X
     [4X[25X>[125X [27X                    [[255,0,0],[0,255,0],[0,0,255]],"example2.bmp");[127X[104X
     [4X[28X[128X[104X
   [4X[32X[104X

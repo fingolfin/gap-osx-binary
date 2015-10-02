@@ -1,0 +1,176 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: number declarations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: number declarations">
+<META NAME="keywords" CONTENT="Singular Manual: number declarations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC179"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_139.htm#SEC178"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: number" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_141.htm#SEC180"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: number expressions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_134.htm#SEC173"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: module" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_144.htm#SEC183"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: package" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_139.htm#SEC178"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: number" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.13.1 number declarations </H3>
+<!--docid::SEC179::-->
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>number</CODE> name <CODE>=</CODE> number_expression <CODE>;</CODE>
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>defines a number.
+<P>
+
+<DT><STRONG>Default:</STRONG>
+<DD>0
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Numbers may only be declared w.r.t. the coefficient field of the current
+basering, i.e., a ring
+has to be defined prior to any number declaration. See  <A HREF="sing_28.htm#SEC38">Rings and orderings</A> for a list of the available coefficient fields.
+<P>
+
+<DT><STRONG>Example:</STRONG>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  // finite field Z/p, p&lt;= 32003
+  ring r = 32003,(x,y,z),dp;
+  number n = 4/6;
+  n;
+==> -10667
+  // finite field GF(p^n), p^n &lt;= 32767
+  // z is a primitive root of the minimal polynomial
+  ring rg= (7^2,z),x,dp;
+  number n = 4/9+z;
+  n;
+==> z38
+  // the rational numbers
+  ring r0 = 0,x,dp;
+  number n = 4/6;
+  n;
+==> 2/3
+  // algebraic extensions of Z/p or Q
+  ring ra=(0,a),x,dp;
+  minpoly=a^2+1;
+  number n=a3+a2+2a-1;
+  n;
+==> (a-2)
+  a^2;
+==> -1
+  // transcedental extensions of Z/p or Q
+  ring rt=(0,a),x,dp;
+  number n=a3+a2+2a-1;
+  n;
+==> (a3+a2+2a-1)
+  a^2;
+==> (a2)
+  // machine floating point numbers, single precision
+  ring R_0=real,x,dp;
+  number n=4/6;
+  n;
+==> (6.667e-01)
+  n=0.25e+2;
+  n;
+==> (2.500e+01)
+  // floating point numbers, arbitrary prescribed precision
+  ring R_1=(real,50),x,dp;
+  number n=4.0/6;
+  n;
+==> 0.66666666666666666666666666666666666666666666666667
+  n=0.25e+2;
+  n;
+==> 25
+  // floating point complex numbers, arbitrary prescribed precision
+  // the third parameter gives the name of the imaginary unit
+  ring R_2=(complex,50,i),x,dp;
+  number n=4.0/6;
+  n;
+==> 0.66666666666666666666666666666666666666666666666667
+  n=0.25e+2*i+n;
+  n;
+==> (0.66666666666666666666666666666666666666666666666667+i*25)
+</FONT></pre></td></tr></table></DL>
+<P>
+
+<A NAME="number expressions"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_139.htm#SEC178"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: number" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_141.htm#SEC180"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: number expressions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_134.htm#SEC173"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: module" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_144.htm#SEC183"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: package" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_139.htm#SEC178"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: number" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

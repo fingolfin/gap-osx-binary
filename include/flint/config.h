@@ -2,7 +2,9 @@
 #define POPCNT_INTRINSICS
 #define HAVE_BLAS 0
 #define HAVE_TLS 1
+#define HAVE_FENV 1
 #define HAVE_PTHREAD 1
 #define HAVE_GC 0
 #define FLINT_REENTRANT 0
 #define WANT_ASSERT 0
+#define FLINT_DLL

@@ -1,0 +1,161 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: canonize</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: canonize">
+<META NAME="keywords" CONTENT="Singular Manual: canonize">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1871"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1795.htm#SEC1870"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: genericity" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1797.htm#SEC1872"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: iostruct" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1784.htm#SEC1859"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Control theory background" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: control_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.2.11 canonize </H4>
+<!--docid::SEC1871::-->
+Procedure from library <CODE>control.lib</CODE> (see  <A HREF="sing_1785.htm#SEC1860">control_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>canonize(L); L a list
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>modules in the list are canonized by computing their reduced minimal (= unique up to constant factor w.r.t. the given ordering) Groebner bases
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>L is the output of control/autonomy procedures
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "control.lib";
+// TwoPendula with L1=L2=L
+ring r=(0,m1,m2,M,g,L),Dt,dp;
+module RR =
+[m1*L*Dt^2, m2*L*Dt^2, -1, (M+m1+m2)*Dt^2],
+[m1*L^2*Dt^2-m1*L*g, 0, 0, m1*L*Dt^2],
+[0, m2*L^2*Dt^2-m2*L*g, 0, m2*L*Dt^2];
+module R = transpose(RR);
+list C = control(R);
+list CC = canonize(C);
+view(CC);
+==> number of first nonzero Ext:
+==> 
+==> 1
+==> 
+==> not controllable , image representation for controllable part:
+==> 
+==> -Dt^2                           ,
+==> -Dt^2                           ,
+==> (M*L)*Dt^4+(-m1*g-m2*g-M*g)*Dt^2,
+==> (L)*Dt^2+(-g)                   
+==> 
+==> kernel representation for controllable part:
+==> 
+==> 1,0,0,
+==> 0,1,0,
+==> 0,0,1
+==> 
+==> obstruction to controllability
+==> 
+==> 1,0,0            ,
+==> 0,1,0            ,
+==> 0,0,(L)*Dt^2+(-g)
+==> 
+==> annihilator of torsion module (of obstruction to controllability)
+==> 
+==> (L)*Dt^2+(-g)
+==> 
+==> dimension of the system:
+==> 
+==> 1
+==> 
+</FONT></pre></td></tr></table><P>
+
+<A NAME="iostruct"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1795.htm#SEC1870"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: genericity" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1797.htm#SEC1872"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: iostruct" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1784.htm#SEC1859"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Control theory background" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1785.htm#SEC1860"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: control_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -620,9 +620,41 @@ InstallGlobalFunction( LoadBitmapPicture,
 
 #############################################################################
 ##
-#S  Some routines for drawing images. ///////////////////////////////////////
+#S  Routines for drawing or modifying bitmap images. ////////////////////////
 ##
 #############################################################################
+
+#############################################################################
+##
+#F  ShrinkMonochromePictureToGrayscalesPicture( <filename>, <factor> )
+##
+InstallGlobalFunction( ShrinkMonochromePictureToGrayscalesPicture,
+
+  function ( filename, factor )
+
+    local  A, B, h, w, M, blackpixels, i, j, m, n, zero, one, start;
+
+    zero := Zero(GF(2)); one := One(GF(2));
+    A := LoadBitmapPicture(Concatenation(filename,".bmp"));
+    h := Length(A); w := Length(A[1]);
+    B := NullMat(Int(h/factor),Int(w/factor));
+    i := 1; m := 1; start := Runtime();
+    while i <= h - factor + 1 do
+      j := 1; n := 1;
+      if Runtime() - start > 1000 then
+        Info(InfoRCWA,2,"m = ",m);
+        start := Runtime();
+      fi;
+      while j <= w - factor + 1 do
+        M := A{[i..i+factor-1]}{[j..j+factor-1]};
+        blackpixels := Number(Concatenation(M),pix->pix=zero);
+        B[m][n] := 65793 * (255 - Int(255 * blackpixels/factor^2));
+        j := j + factor; n := n + 1;
+      od;
+      i := i + factor; m := m + 1;
+    od;
+    SaveAsBitmapPicture(B,Concatenation(filename,"-small.bmp"));
+  end );
 
 #############################################################################
 ##
@@ -677,6 +709,167 @@ InstallGlobalFunction( DrawGrid,
 
     SaveAsBitmapPicture( grid, filename );
 
+  end );
+
+#############################################################################
+##
+#S  Functions for steganography in bitmap images. ///////////////////////////
+##
+#############################################################################
+
+#############################################################################
+##
+#F  EncryptIntoBitmapPicture( <picturefile>, <cleartextfile>, <passphrase> )
+##
+InstallGlobalFunction( EncryptIntoBitmapPicture,
+
+  function ( picturefile, cleartextfile, passphrase )
+
+    local  filename, outputfile, cleartext, picture, height, width, hits,
+           N, digits, C, a, b, c, p, q, n, e, i, j, pos, cols,
+           dl, dp, r, rgb, pow2;
+
+    if   picturefile{[Length(picturefile)-3..Length(picturefile)]}
+      in [".bmp",".BMP"]
+    then filename := picturefile{[1..Length(picturefile)-4]};
+    else filename := picturefile; fi; 
+    picturefile := Concatenation(filename,".bmp");
+    outputfile  := Concatenation(filename,"-out.bmp");
+
+    Info(InfoRCWA,2,"Loading picture etc. ...");
+    picture   := LoadBitmapPicture(picturefile);
+    height    := Length(picture);
+    width     := Length(picture[1]);
+    cleartext := StringFile(cleartextfile);
+
+    Info(InfoRCWA,2,"Initialisations ...");
+    hits      := NullMat(height,width);
+    N := List(passphrase,INT_CHAR)*List([0..Length(passphrase)-1],i->256^i);
+    digits := List(cleartext,INT_CHAR);
+    C := 0;
+    for i in [Length(digits),Length(digits)-1..1] do
+      C := 256*C + digits[i];
+    od;
+    p := NextProbablyPrimeInt(Int(1103*N/17));
+    a := PowerModInt(N,Int(37*N/3511),p);
+    q := NextProbablyPrimeInt(Int(223*a/7));
+    while Gcd(a,p-1) <> 1 or Gcd(a,q-1) <> 1 do a := a + 1; od;
+    n := p*q;
+    C := CoefficientsQadic(C,n);
+    C := List(C,d->PowerModInt(d,a,n));
+    C := Concatenation([Length(C)],C);
+    C := List(C,d->CoefficientsQadic(d,2));
+    dl := LogInt(n,2) + 1;
+    pow2 := List([0..23],i->2^i);
+
+    Info(InfoRCWA,2,"Encrypting ",Length(C),
+         " blocks of length ",dl," ...");
+    for pos in [0..dl*Length(C)-1] do
+      if   pos mod dl = 0
+      then Info(InfoRCWA,2,"Encoding block #",pos/dl + 1," ..."); fi;
+      repeat
+        i := a mod height + 1;
+        a := PowerModInt(a,i,n);
+        j := a mod width + 1;
+        a := PowerModInt(a,i+j,n);
+      until hits[i][j] = 0;
+      b := picture[i][j];
+      dp := Int(pos/dl) + 1;
+      r  := pos mod dl + 1;
+      if r > Length(C[dp]) then c := 0; else c := C[dp][r]; fi;
+      cols := List([b mod 256 + 256,Int(b/256) mod 256 + 256,
+                   Int(b/65536) + 256],
+                   col->CoefficientsQadic(col,2){[1..8]});
+      rgb := Int(a/564545657654311111) mod 3 + 1;
+      cols[rgb][1] := c;
+      picture[i][j] := Concatenation(cols) * pow2;
+      hits[i][j] := 1;
+    od;
+
+    Info(InfoRCWA,2,"Writing result to disk ..."); 
+    SaveAsBitmapPicture(picture,outputfile);
+  end );
+
+#############################################################################
+##
+#F  DecryptFromBitmapPicture( <picturefile>, <cleartextfile>, <passphrase> )
+##
+InstallGlobalFunction( DecryptFromBitmapPicture,
+
+  function ( picturefile, cleartextfile, passphrase )
+
+    local  filename, outputfile, cleartext, picture, height, width, hits,
+           N, C, a, a_start, b, c, p, q, n, e, i, j, pos, cols,
+           dl, dp, r, rgb, pow2, val, nrblocks;
+
+    Info(InfoRCWA,2,"Loading picture etc. ...");
+    picture := LoadBitmapPicture(picturefile);
+    height  := Length(picture);
+    width   := Length(picture[1]);
+
+    Info(InfoRCWA,2,"Initialisations ...");
+    hits := NullMat(height,width);
+    N := List(passphrase,INT_CHAR)*List([0..Length(passphrase)-1],i->256^i);
+    p := NextProbablyPrimeInt(Int(1103*N/17));
+    a := PowerModInt(N,Int(37*N/3511),p);
+    q := NextProbablyPrimeInt(Int(223*a/7));
+    while Gcd(a,p-1) <> 1 or Gcd(a,q-1) <> 1 do a := a + 1; od;
+    a_start := a;
+    n := p*q;
+    dl := LogInt(n,2) + 1;
+    pow2 := List([0..23],i->2^i);
+    C := [];
+
+    Info(InfoRCWA,2,"Decrypting ...");
+    pos := 0; nrblocks := 1;
+    repeat
+      if pos mod dl = 0 then
+        Info(InfoRCWA,2,"Decoding block #",pos/dl + 1," ...");
+        Add(C,[]);
+      fi;
+      if pos = dl then
+        nrblocks := C[1]{[1..24]} * pow2;
+        Info(InfoRCWA,2,"Number of blocks is ",nrblocks,"\n");
+      fi;
+      repeat
+        i := a mod height + 1;
+        a := PowerModInt(a,i,n);
+        j := a mod width + 1;
+        a := PowerModInt(a,i+j,n);
+      until hits[i][j] = 0;
+      b := picture[i][j];
+      dp := Int(pos/dl) + 1;
+      r  := pos mod dl + 1;
+      cols := List([b mod 256 + 256,Int(b/256) mod 256 + 256,
+                   Int(b/65536) + 256],
+                   col->CoefficientsQadic(col,2){[1..8]});
+      rgb := Int(a/564545657654311111) mod 3 + 1;
+      C[dp][r] := cols[rgb][1];
+      picture[i][j] := Concatenation(cols) * pow2;
+      hits[i][j] := 1;
+      pos := pos + 1;
+    until pos >= (nrblocks + 1) * dl;
+
+    Info(InfoRCWA,2,"Postprocessing ...");
+    C := C{[2..nrblocks+1]};
+    for i in [1..nrblocks] do
+      val := 0;
+      for j in [dl,dl-1..1] do
+        val := val * 2 + C[i][j];
+      od;
+      C[i] := val;
+    od;
+    e := 1/a_start mod ((p-1)*(q-1));
+    C := List(C,d->PowerModInt(d,e,n));
+    val := 0;
+    for i in [nrblocks,nrblocks-1..1] do
+      val := val * n + C[i];
+    od;
+    C := CoefficientsQadic(val,256);
+    cleartext := List(C,CHAR_INT);
+
+    Info(InfoRCWA,2,"Writing result to disk ...");
+    FileString(cleartextfile,cleartext);
   end );
 
 #############################################################################
@@ -941,4 +1134,4 @@ InstallGlobalFunction( ReadTestCompareRuntimes,
 
 #############################################################################
 ##
-#E  general.g . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here
+#E  general.gi . . . . . . . . . . . . . . . . . . . . . . . . . .  ends here

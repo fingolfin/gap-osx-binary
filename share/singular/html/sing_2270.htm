@@ -1,0 +1,166 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: s_res</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: s_res">
+<META NAME="keywords" CONTENT="Singular Manual: s_res">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2345"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2271.htm#SEC2346"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Sres" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: derham_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2324.htm#SEC2399"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Release Notes" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.22.1 s_res </H4>
+<!--docid::SEC2345::-->
+Procedure from library <CODE>schreyer.lib</CODE> (see  <A HREF="sing_2269.htm#SEC2344">schreyer_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>s_res(ideal/module M, int len)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>resolution object over basering
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>compute a non-minimal Schreyer free resolution of M of length at most len via the LiftTree algorithm described in [BMSS].
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>If given len is zero then nvars(basering) + 1 is used instead.
+<BR> This functions is not related to the helpers from this library. This procedure works in only in commutative case.
+<BR> One can switch on computation protocol and statistic (depending on the build) by setting the <CODE>prot</CODE> option.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "schreyer.lib";
+ring R;
+module M = maxideal(1); M;
+==> M[1]=x*gen(1)
+==> M[2]=y*gen(1)
+==> M[3]=z*gen(1)
+s_res(M, 0); // Koszul complex
+==>  1      3      3      1      
+==> R &lt;--  R &lt;--  R &lt;--  R
+==> 
+==> 0      1      2      3      
+==> resolution not minimized yet
+==> 
+list rs = _; // get syzygies
+print(betti(rs, 0), "betti"); // non-minimal betties
+==>            0     1     2     3
+==> ------------------------------
+==>     0:     1     3     3     1
+==> ------------------------------
+==> total:     1     3     3     1
+==> 
+print(minres(rs));
+==> [1]:
+==>    _[1]=x*gen(1)
+==>    _[2]=y*gen(1)
+==>    _[3]=z*gen(1)
+==> [2]:
+==>    _[1]=x*gen(2)-y*gen(1)
+==>    _[2]=x*gen(3)-z*gen(1)
+==>    _[3]=y*gen(3)-z*gen(2)
+==> [3]:
+==>    _[1]=x*gen(3)-y*gen(2)+z*gen(1)
+==> [4]:
+==>    _[1]=0
+print(betti(rs, 1), "betti"); //minimal betties
+==>            0     1     2     3
+==> ------------------------------
+==>     0:     1     3     3     1
+==> ------------------------------
+==> total:     1     3     3     1
+==> 
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_2271.htm#SEC2346">Sres</A>;
+ <A HREF="sing_337.htm#SEC376">lres</A>;
+ <A HREF="sing_400.htm#SEC439">sres</A>.
+<P>
+
+<A NAME="Sres"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2271.htm#SEC2346"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Sres" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: derham_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2324.htm#SEC2399"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Release Notes" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

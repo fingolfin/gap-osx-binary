@@ -69,6 +69,18 @@ line width=0pt,draw=black}]
 \node[fill=red]{89};\\
 };
 \end{tikzpicture}
+#######
+gap> SetOfNumericalSemigroups(rec(set:=rec(genus:=6),filter:=rec(type:= 2), order:="frobenius"));                                                 
+[ <Numerical semigroup with 3 generators>, 
+  <Numerical semigroup with 5 generators>, 
+  <Numerical semigroup with 5 generators>, 
+  <Numerical semigroup with 3 generators>, 
+  <Numerical semigroup with 4 generators>, 
+  <Numerical semigroup with 6 generators> ]
+gap> List(last,MinimalGeneratingSystem);
+[ [ 3, 10, 11 ], [ 5, 6, 7 ], [ 5, 6, 8 ], [ 3, 8, 13 ], [ 4, 7, 9 ], 
+  [ 6, 7, 8, 9, 11 ] ]
+
 gap> STOP_TEST( "testall.tst", 10000 );
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The number is a proportionality factor that is used to output a 

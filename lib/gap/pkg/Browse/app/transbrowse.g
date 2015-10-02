@@ -279,6 +279,9 @@ DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
 ##
 #V  TransitiveGroupsData.IdEnumerator.attributes.IsSolvableGroup
 ##
+##  If the 'datafile' component is missing then
+##  the default 'attributeValue' function is good enough.
+##
 DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
   identifier:= "IsSolvableGroup",
   type:= "values",
@@ -300,15 +303,28 @@ DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
 ##
 #V  TransitiveGroupsData.IdEnumerator.attributes.IsPerfectGroup
 ##
+##  If the 'datafile' component is missing then we may use the known
+##  'IsSolvableGroup' information,
+##  in order to check only the nonsolvable groups.
+##
 DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
   identifier:= "IsPerfectGroup",
   type:= "values",
+  datafile:= Filename( DirectoriesPackageLibrary( "Browse", "app" ),
+                       "transdbattr.g" ),
   name:= "IsPerfectGroup",
-  data:= [],
   neededAttributes:= [ "IsSolvableGroup" ],
   attributeValue:= function( attr, id )
     local pos, idenum, att;
 
+    if not IsBound( attr.data ) then
+      if IsBound( attr.datafile ) and IsReadableFile( attr.datafile ) then
+        Read( attr.datafile );
+      fi;
+    fi;
+    if not IsBound( attr.data ) then
+      attr.data:= [];
+    fi;
     pos:= TransitiveGroupsData.Position( id );
     if not IsBound( attr.data[ pos ] ) then
       idenum:= TransitiveGroupsData.IdEnumerator;
@@ -336,15 +352,28 @@ DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
 ##
 #V  TransitiveGroupsData.IdEnumerator.attributes.IsSimpleGroup
 ##
+##  If the 'datafile' component is missing then we may use the known
+##  'size' and 'IsSolvableGroup' information,
+##  in order to check only the nonsolvable groups.
+##
 DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
   identifier:= "IsSimpleGroup",
   type:= "values",
+  datafile:= Filename( DirectoriesPackageLibrary( "Browse", "app" ),
+                       "transdbattr.g" ),
   name:= "IsSimpleGroup",
-  data:= [],
   neededAttributes:= [ "size", "IsSolvableGroup" ],
   attributeValue:= function( attr, id )
     local pos, idenum, att;
 
+    if not IsBound( attr.data ) then
+      if IsBound( attr.datafile ) and IsReadableFile( attr.datafile ) then
+        Read( attr.datafile );
+      fi;
+    fi;
+    if not IsBound( attr.data ) then
+      attr.data:= [];
+    fi;
     pos:= TransitiveGroupsData.Position( id );
     if not IsBound( attr.data[ pos ] ) then
       idenum:= TransitiveGroupsData.IdEnumerator;
@@ -377,15 +406,28 @@ DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
 ##
 #V  TransitiveGroupsData.IdEnumerator.attributes.IsAbelian
 ##
+##  If the 'datafile' component is missing then we may use the known
+##  'IsSolvableGroup' information,
+##  in order to check only the nonsolvable groups.
+##
 DatabaseAttributeAdd( TransitiveGroupsData.IdEnumerator, rec(
   identifier:= "IsAbelian",
   type:= "values",
+  datafile:= Filename( DirectoriesPackageLibrary( "Browse", "app" ),
+                       "transdbattr.g" ),
   name:= "IsAbelian",
-  data:= [],
   neededAttributes:= [ "IsSolvableGroup" ],
   attributeValue:= function( attr, id )
     local pos, idenum, att;
 
+    if not IsBound( attr.data ) then
+      if IsBound( attr.datafile ) and IsReadableFile( attr.datafile ) then
+        Read( attr.datafile );
+      fi;
+    fi;
+    if not IsBound( attr.data ) then
+      attr.data:= [];
+    fi;
     pos:= TransitiveGroupsData.Position( id );
     if not IsBound( attr.data[ pos ] ) then
       idenum:= TransitiveGroupsData.IdEnumerator;

@@ -1,0 +1,193 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: findifs_example</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: findifs_example">
+<META NAME="keywords" CONTENT="Singular Manual: findifs_example">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1881"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findifs_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1807.htm#SEC1882"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: decoef" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1815.htm#SEC1890"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Teaching" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: findifs_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.11.4.1 findifs_example </H4>
+<!--docid::SEC1881::-->
+Procedure from library <CODE>findifs.lib</CODE> (see  <A HREF="sing_1805.htm#SEC1880">findifs_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>findifs_example();
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>nothing (demo)
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>demonstration of our approach and this library
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "findifs.lib";
+findifs_example();
+==> * Equation: u_tt - A^2 u_xx -B^2 u_yy = 0; A,B are constants
+==> * we employ three central differences
+==> * the vector we act on is (u_xx, u_yy, u_tt, u)^T
+==> * Set up the ring: 
+==> ring r = (0,A,B,dt,dx,dy),(Tx,Ty,Tt),(c,dp);
+==> * Set up the matrix with equation and approximations: 
+==> matrix M[4][4] =
+==>     // direct equation:
+==>     -A^2, -B^2, 1, 0,
+==>     // central difference u_tt
+==>     0, 0,  -dt^2*Tt, (Tt-1)^2,
+==>     // central difference u_xx
+==>     -dx^2*Tx, 0, 0, (Tx-1)^2,
+==>     // central difference u_yy
+==>     0, -dy^2*Ty, 0, (Ty-1)^2;
+==> * Print the differential form of equations: 
+==> (-A^2)*Uxx+(-B^2)*Uyy+Utt,     
+==> (-dt^2*Tt)*Utt+(Tt^2-2*Tt+1)*U,
+==> (-dx^2*Tx)*Uxx+(Tx^2-2*Tx+1)*U,
+==> (-dy^2*Ty)*Uyy+(Ty^2-2*Ty+1)*U 
+==> * Perform the elimination of module components:
+==>  module R = transpose(M);
+==>  module S = std(R);
+==>  * See the result of Groebner bases: generators are columns
+==>  print(S);
+==> 0,     0,           0,     0,           0,         (A^2),
+==> 0,     0,           0,     (dy^2)*Ty,   S[2,5],    (B^2),
+==> 0,     (dt^2)*Tt,   S[3,3],0,           (-dx^2)*Tx,-1,   
+==> S[4,1],-Tt^2+2*Tt-1,S[4,3],-Ty^2+2*Ty-1,S[4,5],    0     
+==>  * So, only the first column has its nonzero element in the last componen\
+   t
+==>  * Hence, this polynomial is the scheme
+==>  poly   p = S[4,1];
+==>  print(p); 
+==> (A^2*dt^2*dy^2)*Tx^2*Ty*Tt+(B^2*dt^2*dx^2)*Tx*Ty^2*Tt+(-dx^2*dy^2)*Tx*Ty*\
+   Tt^2+(-2*A^2*dt^2*dy^2-2*B^2*dt^2*dx^2+2*dx^2*dy^2)*Tx*Ty*Tt+(-dx^2*dy^2)\
+   *Tx*Ty+(B^2*dt^2*dx^2)*Tx*Tt+(A^2*dt^2*dy^2)*Ty*Tt
+==> * Create the nodal of the scheme in TeX format: 
+==>  ideal I = decoef(p,dt);
+==>  difpoly2tex(I,L);
+==> \frac{1}{\tri t^{2}}\cdot (u^{n+2}_{j+1,k+1}+(-2) u^{n+1}_{j+1,k+1}+u^{n}\
+   _{j+1,k+1})+ \frac{-\lambda^{2}}{\tri x^{2}}\cdot (u^{n+1}_{j+2,k+1}+\fra\
+   c{B^{2}\tri x^{2}}{\lambda^{2}\tri y^{2}} u^{n+1}_{j+1,k+2}+\frac{-(2\lam\
+   bda^{2}\tri y^{2}+2B^{2}\tri x^{2}}{\lambda^{2}\tri y^{2}} u^{n+1}_{j+1,k\
+   +1}+\frac{B^{2}\tri x^{2}}{\lambda^{2}\tri y^{2}} u^{n+1}_{j+1}+u^{n+1}_{\
+   j,k+1})
+==> * Preparations for the semi-factorized form: 
+==>  poly pi1 = subst(I[2],B,0);
+==>  poly pi2 = I[2] - pi1;
+==> * Show the semi-factorized form of the scheme: 1st summand
+==>  factorize(I[1]); 
+==> [1]:
+==>    _[1]=(-dx^2*dy^2)
+==>    _[2]=Tx
+==>    _[3]=Ty
+==>    _[4]=Tt-1
+==> [2]:
+==>    1,1,1,2
+==> * Show the semi-factorized form of the scheme: 2nd summand
+==>  factorize(pi1);
+==> [1]:
+==>    _[1]=(A^2*dt^2*dy^2)
+==>    _[2]=Tx-1
+==>    _[3]=Ty
+==>    _[4]=Tt
+==> [2]:
+==>    1,2,1,1
+==> * Show the semi-factorized form of the scheme: 3rd summand
+==>  factorize(pi1);
+==> [1]:
+==>    _[1]=(B^2*dt^2*dx^2)
+==>    _[2]=Tx
+==>    _[3]=Ty-1
+==>    _[4]=Tt
+==> [2]:
+==>    1,1,2,1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="decoef"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: findifs_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1807.htm#SEC1882"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: decoef" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1801.htm#SEC1876"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: jacobson_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1815.htm#SEC1890"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Teaching" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1805.htm#SEC1880"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: findifs_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -86,7 +86,7 @@ SRC0A = enum00.c enum01.c enum02.c
 # Note the setting of (THE)DATE, so that we can record the time/date of
 # this build in the executable (usage: "fprint(fop, "%s\n", DATE);")
 
-THEDATE = "'Fri Oct  2 09:01:41 CEST 2015'"
+THEDATE = "'Fri Oct  2 11:50:35 CEST 2015'"
 
 ace: al2.h $(SRC2) al1.h $(SRC1) al0.h $(SRC0) $(SRC0A)
 	$(CC) $(FLAGS) -DDATE="\"$(THEDATE)\"" -o ace \

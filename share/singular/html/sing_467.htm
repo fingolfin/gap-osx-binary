@@ -1,0 +1,149 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Identifier resolution</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Identifier resolution">
+<META NAME="keywords" CONTENT="Singular Manual: Identifier resolution">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC506"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_466.htm#SEC505"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Miscellaneous oddities" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> 6.5 Identifier resolution </H2>
+<!--docid::SEC506::-->
+<P>
+
+In S<SMALL>INGULAR</SMALL>, an identifier (i.e., a "word") is resolved in the
+following way and order: It is checked for
+<OL>
+<LI>
+a reserved name (like <CODE>ring</CODE>, <CODE>std</CODE>, <small>...</small>),
+<LI>
+a local  variable (w.r.t. a procedure),
+<LI>
+a local ring variable (w.r.t. the current basering locally set in a procedure),
+<LI>
+a global variable,
+<LI>
+a global ring variable (w.r.t. the current basering)
+<LI>
+a monomial consisting of local ring variables written without operators,
+<LI>
+a monomial consisting of global ring variables written without operators.
+</OL>
+<P>
+
+Consequently, it is allowed to have general variables with the same name
+as ring  variables. However, the above identifier resolution order must
+be kept in mind. Otherwise, surprising results may come up.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r=0,(x,y),dp;
+int x;
+x*y; // resolved product int*poly, i.e., 0*y
+==> 0
+xy; // "xy" is one identifier and resolved to monomial xy
+==> xy
+</FONT></pre></td></tr></table></P><P>
+
+For these reasons, we strongly recommend not to use variables which
+have the same name(s) as ring variables.
+</P><P>
+
+Moroever, we strongly recommend not to use ring variables whose name is
+fully contained in (i.e., is a substring of) another name of a ring
+variable. Otherwise, effects like the following might occur:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r=0,(x, x1),dp; // name x is substring of name x1 !!!!!!!!!
+x;x1;   // resolved polynomial x
+==> x
+==> x1
+short=0; 2x1; // resolved to monomial 2*x^1 !!!!!!
+==> 2*x
+2*x1; // resolved to product 2 times x1
+==> 2*x1
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Non-commutative subsystem"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_466.htm#SEC505"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Miscellaneous oddities" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

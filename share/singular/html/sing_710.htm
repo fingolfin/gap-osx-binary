@@ -1,0 +1,158 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: makeUsl</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: makeUsl">
+<META NAME="keywords" CONTENT="Singular Manual: makeUsl">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC761"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_709.htm#SEC760"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: makeUsl2" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_711.htm#SEC762"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: makeUgl" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_708.htm#SEC759"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncalg_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H5> 7.7.11.0. makeUsl </H5>
+<!--docid::SEC761::-->
+Procedure from library <CODE>ncalg.lib</CODE> (see  <A HREF="sing_708.htm#SEC759">ncalg_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>makeUsl(n,[p]); n an integer, n&gt;1; p an optional integer (field characteristic)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>set up the U(sl_n) in the variables ( x(i),y(i),h(i) | i=1..n+1) over the field of char p
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>activate this ring with the <CODE>setring</CODE> command
+<BR> This presentation of U(sl_n) is the standard one, i.e. positive resp. negative roots are denoted by x(i) resp. y(i) and the Cartan elements are denoted by h(i).
+<BR> The variables are ordered as x(1),...x(n),y(1),...,y(n),h(1),...h(n).
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "ncalg.lib";
+def a=makeUsl(3);
+setring a;
+a;
+==> //   characteristic : 0
+==> //   number of vars : 8
+==> //        block   1 : ordering dp
+==> //                  : names    x(1) x(2) x(3) y(1) y(2) y(3) h(1) h(2)
+==> //        block   2 : ordering C
+==> //   noncommutative relations:
+==> //    x(2)x(1)=x(1)*x(2)+x(3)
+==> //    y(1)x(1)=x(1)*y(1)-h(1)
+==> //    y(3)x(1)=x(1)*y(3)-y(2)
+==> //    h(1)x(1)=x(1)*h(1)+2*x(1)
+==> //    h(2)x(1)=x(1)*h(2)-x(1)
+==> //    y(2)x(2)=x(2)*y(2)-h(2)
+==> //    y(3)x(2)=x(2)*y(3)+y(1)
+==> //    h(1)x(2)=x(2)*h(1)-x(2)
+==> //    h(2)x(2)=x(2)*h(2)+2*x(2)
+==> //    y(1)x(3)=x(3)*y(1)-x(2)
+==> //    y(2)x(3)=x(3)*y(2)+x(1)
+==> //    y(3)x(3)=x(3)*y(3)-h(1)-h(2)
+==> //    h(1)x(3)=x(3)*h(1)+x(3)
+==> //    h(2)x(3)=x(3)*h(2)+x(3)
+==> //    y(2)y(1)=y(1)*y(2)-y(3)
+==> //    h(1)y(1)=y(1)*h(1)-2*y(1)
+==> //    h(2)y(1)=y(1)*h(2)+y(1)
+==> //    h(1)y(2)=y(2)*h(1)+y(2)
+==> //    h(2)y(2)=y(2)*h(2)-2*y(2)
+==> //    h(1)y(3)=y(3)*h(1)-y(3)
+==> //    h(2)y(3)=y(3)*h(2)-y(3)
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_732.htm#SEC783">makeQsl3</A>;
+ <A HREF="sing_730.htm#SEC781">makeQso3</A>;
+ <A HREF="sing_725.htm#SEC776">makeUg2</A>;
+ <A HREF="sing_711.htm#SEC762">makeUgl</A>;
+ <A HREF="sing_709.htm#SEC760">makeUsl2</A>.
+<P>
+
+<A NAME="makeUgl"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_709.htm#SEC760"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: makeUsl2" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_711.htm#SEC762"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: makeUgl" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_706.htm#SEC757"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: gkdim_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_735.htm#SEC786"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ncdecomp_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_708.htm#SEC759"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: ncalg_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

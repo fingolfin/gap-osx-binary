@@ -1349,8 +1349,7 @@ end;
 ##
 NCurses.EditFields := function( win, arecs )
     local results, i, yx, curs, field, createfield, fillfield, b, helppage,
-          arec, res,
-          max, pos, ins, c;
+          arec, res, max, pos, firstvisible, ins, c;
 
     # Initializations.
     results:= List( arecs, x -> "" );
@@ -1403,8 +1402,8 @@ NCurses.EditFields := function( win, arecs )
       arec.pan:= NCurses.new_panel( arec.win );
     end;
 
-    fillfield:= function( arec, res, pos, hasfocus )
-      local line;
+    fillfield:= function( arec, res, pos, firstvisible, max, hasfocus )
+      local line, showres;
 
       NCurses.werase( arec.win );
 
@@ -1417,22 +1416,47 @@ NCurses.EditFields := function( win, arecs )
         NCurses.wborder( arec.win, 0 );
       fi;
 
-      # Enter the current contents.
-      line:= [ NCurses.attrs.BOLD, arec.prefix, NCurses.attrs.NORMAL,
-               res, NCurses.attrs.BOLD, arec.suffix ];
+      # Cut out invisible parts of the string,
+      # and enter the current contents.
+      showres:= res;
+      line:= [ NCurses.attrs.BOLD, arec.prefix, NCurses.attrs.NORMAL ];
+      if 1 < firstvisible then
+        showres:= res{ [ firstvisible .. Length( res ) ] };
+      fi;
+      if Length( showres ) <= max then
+        Append( line, [ showres, NCurses.attrs.BOLD, arec.suffix ] );
+      else
+        Append( line, [ showres{ [ 1 .. max ] },
+                        NCurses.attrs.BOLD, arec.suffix ] );
+      fi;
       NCurses.PutLine( arec.win, 1, 1, line );
-      NCurses.wmove( arec.win, 1, Length( arec.prefix ) + pos );
+
+      # Show the continuation symbols if applicable.
+      if 1 < firstvisible then
+        NCurses.wmove( arec.win, 1, Length( arec.prefix ) + 1 );
+        NCurses.waddch( arec.win, NCurses.lineDraw.CKBOARD );
+      fi;
+      if max < Length( showres ) then
+        NCurses.wmove( arec.win, 1, arec.ncols );
+        NCurses.waddch( arec.win, NCurses.lineDraw.CKBOARD );
+      fi;
+      NCurses.wmove( arec.win, 1,
+                     Length( arec.prefix ) + pos - firstvisible + 1 );
     end;
 
     for i in [ 1 .. Length( arecs ) ] do
       if i <> field then
-        createfield( arecs[i] );
-        fillfield( arecs[i], results[i], 1, false );
+        arec:= arecs[i];
+        createfield( arec );
+        max:= arec.ncols - Length( arec.prefix ) - Length( arec.suffix );
+        fillfield( arec, results[i], 1, 1, max, false );
       fi;
     od;
     NCurses.curs_set( 1 );
-    createfield( arecs[ field ] );
-    fillfield( arecs[ field ], results[ field ], 1, true );
+    arec:= arecs[ field ];
+    createfield( arec );
+    max:= arec.ncols - Length( arec.prefix ) - Length( arec.suffix );
+    fillfield( arec, results[ field ], 1, 1, max, true );
 
     # Prepare a help menu.
     b:= NCurses.attrs.BOLD;
@@ -1475,23 +1499,31 @@ NCurses.EditFields := function( win, arecs )
       res:= results[ field ];
       max:= arec.ncols - Length( arec.prefix ) - Length( arec.suffix );
       pos:= 1;
+      firstvisible:= 1;
       ins:= true;
       createfield( arec );
 
       while true do
-        fillfield( arec, res, pos, true );
+        fillfield( arec, res, pos, firstvisible, max, true );
         NCurses.update_panels();
         NCurses.doupdate();
 
         # Get a character and adjust the data.
         c:= NCurses.wgetch( arec.win );
         if c = NCurses.keys.RIGHT then
-          if pos <= Length( res ) and pos < max then
+          if pos <= Length( res ) then
             pos:= pos + 1;
+            if max < pos - firstvisible + 1 or
+               ( max = pos - firstvisible + 1 and pos < Length( res ) ) then
+              firstvisible:= firstvisible + 1;
+            fi;
           fi;
         elif c = NCurses.keys.LEFT then
-          if pos > 1 then
+          if 1 < pos then
             pos:= pos - 1;
+            if pos = firstvisible and 1 < firstvisible then
+              firstvisible:= firstvisible - 1;
+            fi;
           fi;
         elif c = NCurses.keys.IC then
           ins:= not ins;
@@ -1499,16 +1531,20 @@ NCurses.EditFields := function( win, arecs )
           ins:= not ins;
         elif c in [ NCurses.keys.HOME, IntChar('') ] then
           pos:= 1;
+          firstvisible:= 1;
         elif c in [ NCurses.keys.END, IntChar('') ] then
-          pos := Length( res ) + 1;
-          if pos > max then
-            max:= max + 1;
-            arec.ncols:= arec.ncols + 1;
+          pos:= Length( res ) + 1;
+          firstvisible:= pos - max + 1;
+          if firstvisible < 1 then
+            firstvisible:= 1;
           fi;
         elif c in [ NCurses.keys.BACKSPACE, IntChar('') ] then
           if pos > 1 then
             pos:= pos - 1;
             RemoveElmList( res, pos );
+            if pos = firstvisible and 1 < firstvisible then
+              firstvisible:= firstvisible - 1;
+            fi;
           fi;
         elif c in [ NCurses.keys.DC, IntChar('') ] then
           if pos <= Length( res ) then
@@ -1528,20 +1564,18 @@ NCurses.EditFields := function( win, arecs )
           if ins then
             InsertElmList( res, pos, CHAR_INT( c mod 256 ) );
             pos:= pos + 1;
+            if max < pos - firstvisible + 1 or
+               ( max = pos - firstvisible + 1 and pos < Length( res ) ) then
+              firstvisible:= firstvisible + 1;
+            fi;
           else
             res[pos]:= CHAR_INT( c mod 256 );
             pos:= pos + 1;
+            if max < pos - firstvisible + 1 or
+               ( max = pos - firstvisible + 1 and pos < Length( res ) ) then
+              firstvisible:= firstvisible + 1;
+            fi;
           fi;
-        fi;
-        if max < pos or max < Length( res ) then
-          # Now the contents exceeds the window; resize the window.
-          max:= max + 1;
-          arec.ncols:= arec.ncols + 1;
-          NCurses.del_panel( arec.pan );
-          NCurses.delwin( arec.win );
-          arec.win:= NCurses.newwin( arec.nrows + 2, arec.ncols + 2,
-                                     arec.begin[1], arec.begin[2] );
-          arec.pan:= NCurses.new_panel( arec.win );
         fi;
       od;
 

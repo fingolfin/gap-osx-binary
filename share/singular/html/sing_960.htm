@@ -1,0 +1,146 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: pdivi</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: pdivi">
+<META NAME="keywords" CONTENT="Singular Manual: pdivi">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1035"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_959.htm#SEC1034"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: setglobalrings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_961.htm#SEC1036"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: pnormalf" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.4.4 pdivi </H4>
+<!--docid::SEC1035::-->
+Procedure from library <CODE>grobcov.lib</CODE> (see  <A HREF="sing_956.htm#SEC1031">grobcov_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>pdivi(f,F);
+<BR>poly f: the polynomialin Q[a][x] to be divided
+<BR>ideal F: the divisor ideal in Q[a][x].
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>A list (poly r, ideal q, poly m). r is the remainder of the
+pseudodivision, q is the set of quotients, and m is the
+coefficient factor by which f is to be multiplied.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>pseudodivision of a poly f by an ideal F in Q[a][x]. Returns a
+list (r,q,m) such that m*f=r+sum(q.G), and no lpp of a divisor
+divides a pp of r.
+<P>
+
+<A NAME="IDX413"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "grobcov.lib";
+ring R=(0,a,b,c),(x,y),dp;
+poly f=(ab-ac)*xy+(ab)*x+(5c);
+// Divisor=";
+f;
+==> (ab-ac)*xy+(ab)*x+(5c)
+ideal F=ax+b,cy+a;
+// Dividends=";
+F;
+==> F[1]=(a)*x+(b)
+==> F[2]=(c)*y+(a)
+def r=pdivi(f,F);
+// (Remainder, quotients, factor)=";
+r;
+==> [1]:
+==>    (ab2-abc-b2c+5c2)
+==> [2]:
+==>    _[1]=(bc-c2)*y+(bc)
+==>    _[2]=(-b2+bc)
+==> [3]:
+==>    (c)
+// Verifying the division:
+r[3]*f-(r[2][1]*F[1]+r[2][2]*F[2]+r[1]);
+==> 0
+</FONT></pre></td></tr></table><P>
+
+<A NAME="pnormalf"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_959.htm#SEC1034"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: setglobalrings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_961.htm#SEC1036"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: pnormalf" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

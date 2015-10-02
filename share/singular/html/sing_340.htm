@@ -1,0 +1,169 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: lusolve</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: lusolve">
+<META NAME="keywords" CONTENT="Singular Manual: lusolve">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC379"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_339.htm#SEC378"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: luinverse" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_341.htm#SEC380"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: max" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.81 lusolve </H3>
+<!--docid::SEC379::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>lusolve (</CODE> matrix_expression<CODE>,</CODE> matrix_expression<CODE>,</CODE>
+      matrix_expression<CODE>,</CODE> matrix_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>matrix
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>Computes all solutions of a linear equation system A*x = b, if solvable
+<BR>The (m x n matrix A must be given by its LU-decomposition, that is, by
+three matrices P, L, and U, in this order, which satisfy
+<BR>- P * A = L * U,
+<BR>- P is an (m x m) permutation matrix, i.e., its rows/columns form the
+standard basis of K^m,
+<BR>- L is an (m x m) matrix in lower triangular form with all diagonal
+entries equal to 1, and
+<BR>- U is an (m x n) matrix in upper row echelon form.
+<BR>The fourth argument, b, is expected to be an (m x 1) matrix.
+<P>
+
+<CODE>list Q=lusolve(P,L,U,b);</CODE> fills the list Q with either one entry = 0
+(signaling that A*x=b has no solution), or with the three entries 1, x, H,
+where x is any (n x 1) solution of the given linear system, and H is a
+matrix the columns of which span the solution space of the homogeneous
+linear system. (I.e., <CODE>ncols(H)</CODE> is the dimension of the solution space.)
+<BR>If there is exactly one solution, then H is the 1x1 matrix with entry
+zero.
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>The method will give a warning if the matrices violate the above conditions
+regarding row and column numbers, or if the number of rows of the vector b
+does not equal m.
+<BR> The method expects matrices with entries coming from the ground field of
+the given polynomial ring, only.
+<P>
+
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x),dp;
+  matrix A[4][4]=1,1,1,0,1,2,3,1,1,3,5,2,1,4,7,3;
+  matrix b[4][1]=2,5,8,11;
+  list L=ludecomp(A);
+  list Q=lusolve(L[1],L[2],L[3],b);
+  if (Q[1] == 1)
+  {
+    "one solution:";
+    print(Q[2]);
+    "check whether result is correct (iff next is zero vector):";
+    print(A*Q[2]-b);
+    if ((nrows(Q[3])==1) and (ncols(Q[3])==1) and (Q[3][1,1]==0))
+    { "printed solution is the only solution to given linear system" }
+    else
+    {
+      "homogeneous solution space is spanned by columns of:";
+      print(Q[3]);
+    }
+  }
+==> one solution:
+==> -1,
+==> 3, 
+==> 0, 
+==> 0  
+==> check whether result is correct (iff next is zero vector):
+==> 0,
+==> 0,
+==> 0,
+==> 0 
+==> homogeneous solution space is spanned by columns of:
+==> -1,-1,
+==> 1, 2, 
+==> 0, -1,
+==> -1,0  
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_338.htm#SEC377">ludecomp</A>.
+<A NAME="max"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_339.htm#SEC378"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: luinverse" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_341.htm#SEC380"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: max" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

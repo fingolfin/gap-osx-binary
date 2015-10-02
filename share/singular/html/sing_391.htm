@@ -1,0 +1,170 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: sba</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: sba">
+<META NAME="keywords" CONTENT="Singular Manual: sba">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC430"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_390.htm#SEC429"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: rvar" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_392.htm#SEC431"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setring" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.132 sba </H3>
+<!--docid::SEC430::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>sba (</CODE> ideal_expression<CODE>)</CODE>
+<BR><CODE>sba (</CODE> ideal_expression<CODE>,</CODE> int_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>ideal
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>returns a standard basis of an ideal with respect to the
+monomial ordering of the basering.
+A standard basis is a set of generators such that
+the leading terms generate the leading ideal, resp. module.
+<BR>Use optional
+second and third arguments of type <CODE>int</CODE> to determine the respective variant of
+the signature-based standard basis algorithm:
+<BR>The second argument specifies the internal module order <CODE>sba</CODE> uses:
+<UL>
+<LI>
+<CODE>0</CODE>: induced Schreyer order on the signatures, non-incremental computation
+of the basis
+<LI>
+<CODE>1</CODE>: position over term order, incremental computation of the basis
+<LI>
+<CODE>2</CODE>: term over position order, non-incremental computation
+<LI>
+<CODE>3</CODE>: Schreyer-weighted degree over index over leading term
+</UL>
+<BR>The third argument specifies the rewrite order <CODE>sba</CODE> uses:
+<UL>
+<LI>
+<CODE>0</CODE>: using the rewrite order described in
+<CODE>http://dx.doi.org/10.1016/j.jsc.2010.06.019</CODE>
+<LI>
+<CODE>1</CODE>: using the rewrite order described in
+<CODE>http://dx.doi.org/10.1016/j.jsc.2011.05.004</CODE>
+</UL>
+<BR>The standard call of <CODE>sba(i)</CODE> corresponds to <CODE>sba(i,0,1)</CODE>.
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>The
+standard basis is computed with an optimized version of known signature-based
+algorithms like Faugere's F5 Algorithm. Whereas the correctness of the
+algorithms is only guaranteed for global orderings, timings for pure
+lexicographical orderings can be slow. In this situation you should try to
+compute the basis w.r.t. the graded reverse-lexicographic ordering and then
+convert to a basis for the lexicographical ordering using other methods (
+see  <A HREF="sing_296.htm#SEC335">fglm</A> and see  <A HREF="sing_1141.htm#SEC1216">grwalk_lib</A>). If the algorithms tend to use too much
+memory, you should try the other implemented standard basis algorithms (
+see  <A HREF="sing_402.htm#SEC441">std</A>, see  <A HREF="sing_307.htm#SEC346">groebner</A>, and see  <A HREF="sing_396.htm#SEC435">slimgb</A>).
+<BR> Note that the behaviour of <CODE>sba</CODE> on an example can be rather different
+depending on which variant you choose (second and third argument).
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  // incremental F5 computation
+  ring r=32003,(x,y,z),dp;
+  poly s1=1x2y+151xyz10+169y21;
+  poly s2=1xz14+6x2y4+3z24;
+  poly s3=5y10z10x+2y20z10+y10z20+11x3;
+  ideal i=s1,s2,s3;
+  ideal j=sba(i,1,0);
+  // non-incremental F5 computation
+  ring rhom=32003,(x,y,z,h),dp;
+  ideal i=homog(imap(r,i),h);
+  ideal j=sba(i,0,0);
+  // non-incremental signature-based computation
+  ring whom=32003,(x,y,z),dp;
+  ideal i=fetch(r,i);
+  ideal j=sba(i);
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_296.htm#SEC335">fglm</A>;
+ <A HREF="sing_307.htm#SEC346">groebner</A>;
+ <A HREF="sing_85.htm#SEC124">ideal</A>;
+ <A HREF="sing_160.htm#SEC199">ring</A>;
+ <A HREF="sing_396.htm#SEC435">slimgb</A>;
+ <A HREF="sing_402.htm#SEC441">std</A>.
+<P>
+
+<A NAME="setring"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_390.htm#SEC429"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: rvar" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_392.htm#SEC431"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: setring" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

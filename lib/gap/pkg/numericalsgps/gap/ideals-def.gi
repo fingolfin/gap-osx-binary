@@ -5,8 +5,6 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: ideals-def.gi,v 0.98 $
-##
 #Y  Copyright 2005 by Manuel Delgado,
 #Y  Pedro Garcia-Sanchez and Jose Joao Morais
 #Y  We adopt the copyright regulations of GAP as detailed in the
@@ -27,11 +25,16 @@
 ##
 #############################################################################
 InstallGlobalFunction(IdealOfNumericalSemigroup, function(l,S)
-    if not (IsNumericalSemigroup(S) and IsListOfIntegersNS(l)) then
+  local  I;
+      if not (IsNumericalSemigroup(S) and IsListOfIntegersNS(l)) then
         Error("The arguments of IdealOfNumericalSemigroup must be a numerical semigroup and a nonempty list of integers.");
     fi;
-    return(Objectify( IdealsOfNumericalSemigroupsType,
-                  rec(sgp := S, generators := Set(l))));
+    I := rec();
+    ObjectifyWithAttributes(I, IdealsOfNumericalSemigroupsType,
+        UnderlyingNSIdeal, S,
+        GeneratorsIdealNS, Set(l)
+        );
+    return I;
 end );
 
 
@@ -39,7 +42,7 @@ end );
 ## L is a list of integers and S a numerical semigroup
 ## L + S is an abbreviation for IdealOfNumericalSemigroup(L, S)
 ##
-InstallMethod( \+, "for a list and a numerical semigroup", true,
+InstallOtherMethod( \+, "for a list and a numerical semigroup", true,
         [IsList and IsAdditiveElement,
          IsNumericalSemigroup], 0,
         function( L,S )
@@ -50,7 +53,7 @@ end);
 ## n is an integer and S a numerical semigroup
 ## n + S is an abbreviation for IdealOfNumericalSemigroup([n], S)
 ##
-InstallMethod( \+, "for an integer and a numerical semigroup", true,
+InstallOtherMethod( \+, "for an integer and a numerical semigroup", true,
         [IsInt and IsAdditiveElement,
          IsNumericalSemigroup], 0,
         function( n,S )
@@ -69,7 +72,7 @@ InstallMethod( PrintObj,
         "prints an Ideal of a Numerical Semigroup",
         [ IsIdealOfNumericalSemigroup],
         function( I )
-    Print(I!.generators," + NumericalSemigroup( ", GeneratorsOfNumericalSemigroup(I!.sgp), " )\n");
+    Print(GeneratorsIdealNS(I)," + NumericalSemigroup( ", GeneratorsOfNumericalSemigroup(UnderlyingNSIdeal(I)), " )\n");
 end);
 
 #############################################################################
@@ -185,7 +188,7 @@ InstallGlobalFunction(GeneratorsOfIdealOfNumericalSemigroup, function(I)
     if HasMinimalGeneratingSystemOfIdealOfNumericalSemigroup(I) then
        return (MinimalGeneratingSystemOfIdealOfNumericalSemigroup(I));
     fi;
-    return(ShallowCopy(I!.generators));
+    return(GeneratorsIdealNS(I));
     
 end);
 
@@ -200,7 +203,7 @@ InstallGlobalFunction(GeneratorsOfIdealOfNumericalSemigroupNC, function(I)
     if not IsIdealOfNumericalSemigroup(I) then
         Error("The argument must be an ideal of a numerical semigroup.");
     fi;
-    return(ShallowCopy(I!.generators));
+    return(GeneratorsIdealNS(I));
 end);
 
 #############################################################################
@@ -213,7 +216,7 @@ InstallGlobalFunction(AmbientNumericalSemigroupOfIdeal, function(I)
     if not IsIdealOfNumericalSemigroup(I) then
         Error("The argument must be an ideal of a numerical semigroup.");
     fi;
-    return(ShallowCopy(I!.sgp));
+    return(UnderlyingNSIdeal(I));
 end);
 
 #############################################################################
@@ -300,9 +303,6 @@ InstallMethod(MinimalGeneratingSystemOfIdealOfNumericalSemigroup,
         function(I)
     local m, S;
 
-    if not IsIdealOfNumericalSemigroup(I) then
-        Error("<I> must be an ideal of a  numerical semigroup");
-    fi;
     S := AmbientNumericalSemigroupOfIdeal(I);
     m:=MaximalIdealOfNumericalSemigroup(S);
     return DifferenceOfIdealsOfNumericalSemigroup(I,m+I);
@@ -333,7 +333,7 @@ end);
 ## I + J means SumIdealsOfNumericalSemigroup(I,J)
 ##########
 
-InstallMethod( \+, "for ideals of the same numerical semigroup", true,
+InstallOtherMethod( \+, "for ideals of the same numerical semigroup", true,
         [IsIdealOfNumericalSemigroup,
          IsIdealOfNumericalSemigroup], 0,
         function( I, J )
@@ -396,14 +396,14 @@ end);
 ## I can be the ambient numerical semigroup of J
 ##########
 
-InstallMethod( \-, "for ideals of the same numerical semigroup", true,
+InstallOtherMethod( \-, "for ideals of the same numerical semigroup", true,
         [IsIdealOfNumericalSemigroup,
          IsIdealOfNumericalSemigroup], 0,
         function( I, J )
     return(SubtractIdealsOfNumericalSemigroup( I, J ));
 end);
 
-InstallMethod( \-, "for a numerical semigroup and one of its ideals", true,
+InstallOtherMethod( \-, "for a numerical semigroup and one of its ideals", true,
         [IsNumericalSemigroup,
          IsIdealOfNumericalSemigroup], 0,
         function( S, J )
@@ -465,7 +465,7 @@ end);
 ## n is an integer and S a numerical semigroup
 ## n * I is an abbreviation for MultipleOfIdealOfNumericalSemigroup(n,I)
 ##########
-InstallMethod( \*, "for a non negative integer and an ideal of a numerical semigroup", true,
+InstallOtherMethod( \*, "for a non negative integer and an ideal of a numerical semigroup", true,
         [IsInt and IsMultiplicativeElement,
          IsIdealOfNumericalSemigroup], 999999990,
         function( n,I )
@@ -687,7 +687,7 @@ end);
 ##  <k> is an integer and <I> an ideal of a numerical semigroup.
 ##  k + I is an abbreviation for TranslationOfIdealOfNumericalSemigroup(k, I)
 ##
-InstallMethod( \+, "for an integer and an ideal of a numerical semigroup", true,
+InstallOtherMethod( \+, "for an integer and an ideal of a numerical semigroup", true,
         [IsInt and IsAdditiveElement,
          IsIdealOfNumericalSemigroup], 0,
         function(k,I)
@@ -778,4 +778,28 @@ InstallGlobalFunction(AperyTableOfNumericalSemigroup,function(S)
 		Append(table,[AperyListOfIdealOfNumericalSemigroupWRTElement(k*M,m)]);
 	od;
 	return table;	
+end);
+
+########################################################################
+## 
+#F StarClosureOfIdealOfNumericalSemigroup(i,is)
+##  i is an ideal and is is a set of ideals (all from the same 
+##	numerical semigroup). The output is i^{*_is}, where
+## *_is is the star operation generated by is
+## The implementation uses Section 3 of
+##  -D. Spirito, Start Operations on Numerical Semigroups
+########################################################################
+
+InstallGlobalFunction(StarClosureOfIdealOfNumericalSemigroup, function(i,is)
+	local j, s, k;
+
+	s:=AmbientNumericalSemigroupOfIdeal(i);
+	j:=s-(s-i); # i^v
+
+	for k in is do
+		j:=IntersectionIdealsOfNumericalSemigroup(j,k-(k-i));
+	od;
+
+	return j;
+	
 end);

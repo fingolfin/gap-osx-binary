@@ -1,0 +1,150 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: def</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: def">
+<META NAME="keywords" CONTENT="Singular Manual: def">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC122"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_82.htm#SEC121"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bigintmat operations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_84.htm#SEC123"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: def declarations" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_78.htm#SEC117"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: bigintmat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_85.htm#SEC124"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ideal" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_72.htm#SEC111"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Data types" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> 4.3 def </H2>
+<!--docid::SEC122::-->
+<P>
+
+Objects may be defined without a specific type: they inherit their
+type from the first assignment to them.
+E.g., <CODE>ideal i=x,y,z; def j=i^2;</CODE> defines the ideal <CODE>i^2</CODE>
+with the name <CODE>j</CODE>.
+</P><P>
+
+<STRONG>Note:</STRONG> Unlike other assignments a ring as an untyped object
+is not a copy but another reference to the same (possibly unnamed) ring.
+This means that entries in one of these rings appear also in the other ones.
+The following defines a ring <CODE>s</CODE> which is just another reference (or name)
+for the basering <CODE>r</CODE>.
+The name <CODE>basering</CODE> is an alias for the current ring.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=32003,(x,y,z),dp;
+  poly f = x;
+  def s=basering;
+  setring s;
+  nameof(basering);
+==> s
+  listvar();
+==> // s                              [0]  *ring
+==> //      f                              [0]  poly
+==> // r                              [0]  ring(*)
+  poly g = y;
+  kill f;
+  listvar(r);
+==> // r                              [0]  ring(*)
+==> // g                              [0]  poly
+  ring t=32003,(u,w),dp;
+  def rt=r+t;
+  rt;
+==> //   characteristic : 32003
+==> //   number of vars : 5
+==> //        block   1 : ordering dp
+==> //                  : names    x y z
+==> //        block   2 : ordering dp
+==> //                  : names    u w
+==> //        block   3 : ordering C
+</FONT></pre></td></tr></table></P><P>
+
+This reference to a ring with def is useful if the basering
+is not local to the procedure (so it cannot be accessed by its name) but one
+needs a name for it (e.g., for a use with <CODE>setring</CODE> or <CODE>map</CODE>).
+<CODE>setring r;</CODE> does not work in this case, because
+<CODE>r</CODE> may not be local to the procedure.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_84.htm#SEC123">4.3.1 def declarations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="def declarations"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_82.htm#SEC121"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: bigintmat operations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_84.htm#SEC123"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: def declarations" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_78.htm#SEC117"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: bigintmat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_85.htm#SEC124"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: ideal" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_72.htm#SEC111"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Data types" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,179 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: tangentGens</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: tangentGens">
+<META NAME="keywords" CONTENT="Singular Manual: tangentGens">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2233"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2159.htm#SEC2234"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: matrixExp" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2155.htm#SEC2230"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: hess_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2163.htm#SEC2238"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: modular_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.12.1 tangentGens </H4>
+<!--docid::SEC2233::-->
+Procedure from library <CODE>orbitparam.lib</CODE> (see  <A HREF="sing_2157.htm#SEC2232">orbitparam_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>tangentGens(L,v); L list, v matrix.
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>L is a list of strictly upper triangular n x n matrices of same size.
+The vector space &lt;L&gt; genererated by the elements of L should be closed
+under the Lie bracket.
+<P>
+
+v is matrix of constants of size n x 1.
+</P><P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, with four entries
+<BR> - first entry is the dimension of the orbit of under the action of exp(&lt;L&gt;)
+<BR> - second entry is a list generators of the tangent space of the orbit of v at v
+under the action of exp(&lt;L&gt;). If the characteristic p of the ground field is positive, then n has to be smaller than p. The generators are elements of &lt;L&gt;.
+<BR> - third entry is the list of matrices with the coefficient to obtain the generators
+as a linear combination of the elements of L
+<BR> - fourth entry is list of integers with entries in v which can be made zero by the
+action of exp(&lt;L&gt;)
+<P>
+
+<DT><STRONG>Theory:</STRONG>
+<DD>We apply the theorem of Chevalley-Rosenlicht.
+<P>
+
+<A NAME="IDX860"></A>
+<A NAME="IDX861"></A>
+<A NAME="IDX862"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "orbitparam.lib";
+ring R = 0,(x),dp;
+matrix L1[3][3] = 0,1,0, 0,0,0, 0,0,0;
+matrix L2[3][3] = 0,0,1, 0,0,0, 0,0,0;
+matrix L3[3][3] = 0,1,1, 0,0,1, 0,0,0;
+list L = L1,L2,L3;
+matrix v[3][1] = 1,2,3;
+tangentGens(L,v);
+==> [1]:
+==>    2
+==> [2]:
+==>    [1]:
+==>       _[1,1]=0
+==>       _[1,2]=1/3
+==>       _[1,3]=1/3
+==>       _[2,1]=0
+==>       _[2,2]=0
+==>       _[2,3]=1/3
+==>       _[3,1]=0
+==>       _[3,2]=0
+==>       _[3,3]=0
+==>    [2]:
+==>       _[1,1]=0
+==>       _[1,2]=1/2
+==>       _[1,3]=0
+==>       _[2,1]=0
+==>       _[2,2]=0
+==>       _[2,3]=0
+==>       _[3,1]=0
+==>       _[3,2]=0
+==>       _[3,3]=0
+==> [3]:
+==>    [1]:
+==>       _[1,1]=0
+==>       _[2,1]=0
+==>       _[3,1]=1/3
+==>    [2]:
+==>       _[1,1]=1/2
+==>       _[2,1]=0
+==>       _[3,1]=0
+==> [4]:
+==>    [1]:
+==>       2
+==>    [2]:
+==>       1
+</FONT></pre></td></tr></table><P>
+
+<A NAME="matrixExp"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2159.htm#SEC2234"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: matrixExp" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2155.htm#SEC2230"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: hess_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2163.htm#SEC2238"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: modular_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2157.htm#SEC2232"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: orbitparam_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

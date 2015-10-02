@@ -1,0 +1,218 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Finite fields</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Finite fields">
+<META NAME="keywords" CONTENT="Singular Manual: Finite fields">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC910"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_858.htm#SEC909"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Saturation" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_860.htm#SEC911"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Elimination" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.3.2 Finite fields </H3>
+<!--docid::SEC910::-->
+<P>
+
+We define a variety in the 
+<IMG
+ WIDTH="14" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_17.png"
+ ALT="$n$">-space of codimension 2 defined by
+polynomials of degree 
+<IMG
+ WIDTH="13" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_170.png"
+ ALT="$d$"> with generic coefficients over the prime
+field 
+<IMG
+ WIDTH="32" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_22.png"
+ ALT="$Z/p$"> and look for zeros on the torus. First over the prime
+field and then in the finite extension field with
+<IMG
+ WIDTH="20" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_344.png"
+ ALT="$p^k$">elements.
+In general there will be many more solutions in the second case.
+(Since the S<SMALL>INGULAR</SMALL> language is interpreted, the evaluation of many
+<CODE>for</CODE>-loops is not very fast):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  int p=3;  int n=3;  int d=5; int k=2;
+  ring rp = p,(x(1..n)),dp;
+  int s = size(maxideal(d));
+  s;
+==> 21
+  // create a dense homogeneous ideal m, all generators of degree d, with
+  // generic (random) coefficients:
+  ideal m = maxideal(d)*random(p,s,n-2);
+  m;
+==> m[1]=x(1)^3*x(2)^2-x(1)*x(2)^4+x(1)^4*x(3)-x(1)^3*x(2)*x(3)+x(1)*x(2)^3*x\
+   (3)+x(2)^4*x(3)+x(2)^3*x(3)^2+x(1)*x(2)*x(3)^3+x(1)*x(3)^4-x(3)^5
+  // look for zeros on the torus by checking all points (with no component 0)
+  // of the affine n-space over the field with p elements :
+  ideal mt;
+  int i(1..n);                    // initialize integers i(1),...,i(n)
+  int l;
+  s=0;
+  for (i(1)=1;i(1)&lt;p;i(1)=i(1)+1)
+  {
+    for (i(2)=1;i(2)&lt;p;i(2)=i(2)+1)
+    {
+      for (i(3)=1;i(3)&lt;p;i(3)=i(3)+1)
+      {
+        mt=m;
+        for (l=1;l&lt;=n;l=l+1)
+        {
+          mt=subst(mt,x(l),i(l));
+        }
+        if (size(mt)==0)
+        {
+          "solution:",i(1..n);
+          s=s+1;
+        }
+      }
+    }
+  }
+==> solution: 1 1 2
+==> solution: 1 2 1
+==> solution: 1 2 2
+==> solution: 2 1 1
+==> solution: 2 1 2
+==> solution: 2 2 1
+  "//",s,"solutions over GF("+string(p)+")";
+==> // 6 solutions over GF(3)
+  // Now go to the field with p^3 elements:
+  // As long as there is no map from Z/p to the field with p^3 elements
+  // implemented, use the following trick: convert the ideal to be mapped
+  // to the new ring to a string and then execute this string in the
+  // new ring
+  string ms="ideal m="+string(m)+";";
+  ms;
+==> ideal m=x(1)^3*x(2)^2-x(1)*x(2)^4+x(1)^4*x(3)-x(1)^3*x(2)*x(3)+x(1)*x(2)^\
+   3*x(3)+x(2)^4*x(3)+x(2)^3*x(3)^2+x(1)*x(2)*x(3)^3+x(1)*x(3)^4-x(3)^5;
+  // define a ring rpk with p^k elements, call the primitive element z. Hence
+  // 'solution exponent: 0 1 5' means that (z^0,z^1,z^5) is a solution
+  ring rpk=(p^k,z),(x(1..n)),dp;
+  rpk;
+==> //   # ground field : 9
+==> //   primitive element : z
+==> //   minpoly        : 1*z^2+2*z^1+2*z^0
+==> //   number of vars : 3
+==> //        block   1 : ordering dp
+==> //                  : names    x(1) x(2) x(3)
+==> //        block   2 : ordering C
+  execute(ms);
+  s=0;
+  ideal mt;
+  for (i(1)=0;i(1)&lt;p^k-1;i(1)=i(1)+1)
+  {
+    for (i(2)=0;i(2)&lt;p^k-1;i(2)=i(2)+1)
+    {
+      for (i(3)=0;i(3)&lt;p^k-1;i(3)=i(3)+1)
+      {
+        mt=m;
+        for (l=1;l&lt;=n;l=l+1)
+        {
+          mt=subst(mt,x(l),z^i(l));
+        }
+        if (size(mt)==0)
+        {
+          // we show only the first 7 solutions here:
+          if (s&lt;5) {"solution exponent:",i(1..n);}
+          s=s+1;
+        }
+      }
+    }
+  }
+==> solution exponent: 0 0 2
+==> solution exponent: 0 0 4
+==> solution exponent: 0 0 6
+==> solution exponent: 0 4 0
+==> solution exponent: 0 4 1
+  "//",s,"solutions over GF("+string(p^k)+")";
+==> // 72 solutions over GF(9)
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Elimination"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_858.htm#SEC909"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Saturation" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_860.htm#SEC911"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Elimination" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_870.htm#SEC921"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Singularity Theory" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_857.htm#SEC908"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Commutative Algebra" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

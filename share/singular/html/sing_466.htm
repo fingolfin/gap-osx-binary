@@ -1,0 +1,286 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Miscellaneous oddities</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Miscellaneous oddities">
+<META NAME="keywords" CONTENT="Singular Manual: Miscellaneous oddities">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC505"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_465.htm#SEC504"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: First index is 1" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_467.htm#SEC506"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Identifier resolution" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_457.htm#SEC496"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Major differences to the C programming language" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H2> 6.4 Miscellaneous oddities </H2>
+<!--docid::SEC505::-->
+<P>
+
+<OL>
+<LI>integer division
+<A NAME="IDX276"></A>
+<A NAME="IDX277"></A>
+<P>
+
+If two numerical constants (i.e., two sequences of digits) are divided
+using the <CODE>/</CODE> operator, the surrounding whitespace determines
+which division to use: if there is no space between the constants and
+the <CODE>/</CODE> operator (e.g., "3/2"), both numerical constants are
+treated as of type <CODE>number</CODE> and the current ring division is
+used. If there is at least one space surrounding the <CODE>/</CODE> operator
+(e.g., "3 / 2"), both numerical constants are treated as of type
+<CODE>int</CODE> and an integer division is performed. To avoid confusion, use
+the <CODE>div</CODE> operator instead of <CODE>/</CODE> for integer division and an
+explicit type cast to <CODE>number</CODE> for ring division. Note, that this
+problem does only occur for divisions of numerical constants.
+It also apllies for large numerical constants which are of type <CODE>bigint</CODE>.
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=32002,x,dp;
+==> // ** 32002 is invalid as characteristic of the ground field. 32003 is us\
+   ed.
+  3/2;    // ring division
+==> -16000
+  3 / 2;  // integer division
+==> // ** int division with `/`: use `div` instead in line &gt;&gt;  3 / 2;  // int\
+   eger division&lt;&lt;
+==> 1
+  3 div 2;
+==> 1
+  number(3) / number(2);
+==> -16000
+  number a=3;
+  number b=2;
+  a/b;
+==> -16000
+  int c=3;
+  int d=2;
+  c / d;
+==> // ** int division with `/`: use `div` instead in line &gt;&gt;  c / d;&lt;&lt;
+==> 1
+</FONT></pre></td></tr></table></P><P>
+
+<LI>monomials and precedence
+<A NAME="IDX278"></A>
+<P>
+
+The formation of a monomial has precedence over all operators
+(a monomial is here an optional coefficient followed by any sequence
+of ring variables (possibly followed by
+an exponent) which only conssist of letters, digits
+and (over the rationals) <CODE>/</CODE> without any whitespace):
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,(x,y),dp;
+  2xy^2 == (2*x*y)^2;
+==> 1
+  2xy^2 == 2x*y^2;
+==> 0
+  2x*y^2 == 2*x * (y^2);
+==> 1
+</FONT></pre></td></tr></table>During that formation no operator is involved: in the non-commutative
+case, we have
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  LIB "nctools.lib";
+  ring r = 0,(x,y),dp;
+  def S = superCommutative();
+  xy == yx;
+==> 1
+  x*y == y*x;
+==> 1
+  x*y, y*x;
+==> xy xy
+</FONT></pre></td></tr></table></P><P>
+
+<LI>meaning of <CODE>mult</CODE>
+<A NAME="IDX279"></A>
+<A NAME="IDX280"></A>
+<P>
+
+For an arbitrary ideal or module <CODE>i</CODE>, <CODE>mult(i)</CODE> returns the
+multiplicity of the ideal generated by the leading monomials of the
+given generators of <CODE>i</CODE>, hence depends on the monomial ordering!
+</P><P>
+
+A standard mistake is to interpret <CODE>degree(i)</CODE> or <CODE>mult(i)</CODE>
+for an inhomogeneous ideal <CODE>i</CODE> as the degree of the homogenization
+or as something like the 'degree of the affine part'. For the ordering
+<CODE>dp</CODE> (degree reverse lexicographical) the converse is true: if
+<CODE>i</CODE> is given by a standard basis, <CODE>mult(i)</CODE> is the degree of
+the homogeneous ideal obtained by homogenization of <CODE>i</CODE> and then
+putting the homogenizing variable to 0, hence it is the degree of the
+part at infinity (this can also be checked by looking at the initial
+ideal).
+</P><P>
+
+<LI>size of ideals
+<A NAME="IDX281"></A>
+<A NAME="IDX282"></A>
+<P>
+
+<CODE>size</CODE> counts the non-zero entries of an ideal or module. Use
+<CODE>ncols</CODE> to determine the actual number of entries in the ideal or module.
+</P><P>
+
+<LI>computations in <CODE>qring</CODE>
+<A NAME="IDX283"></A>
+<P>
+
+In order to speed up computations in quotient rings, S<SMALL>INGULAR</SMALL>
+usually does not reduce polynomials w.r.t. the quotient ideal; rather
+the given representative is used as long as possible during
+computations. If it is necessary, reduction is done during standard base
+computations. To reduce a polynomial <CODE>f</CODE> by hand w.r.t. the
+current quotient ideal use the command <CODE>reduce(f,std(0))</CODE>
+(see  <A HREF="sing_383.htm#SEC422">reduce</A>).
+</P><P>
+
+<LI>degree of a polynomial
+<A NAME="IDX284"></A>
+<P>
+
+<UL>
+<LI><CODE>degBound</CODE>
+<BR>The exact meaning of "degree" depends on the ring odering and the command:
+<CODE>slimgb</CODE> uses always the total degree with weights 1,
+<CODE>std</CODE> does so only for block orderings.
+<LI><CODE>hilb</CODE>
+<BR>the degree is the total degree with weights 1 unless a weight vector is given
+<LI><CODE>kbase</CODE>
+<BR>the degree is the total degree with weights 1
+(to use another weight vector see  <A HREF="sing_423.htm#SEC462">weightKB</A>)
+</UL>
+<P>
+
+<LI>substring selection
+<A NAME="IDX285"></A>
+<P>
+
+To extract substrings from a <CODE>string</CODE>, square brackets are used,
+enclosing either two comma-separated <CODE>int</CODE>s or an
+<CODE>intvec</CODE>. Although two comma-separated <CODE>int</CODE>s represent an
+<CODE>intvec</CODE>, they mean different things in substring access. Square
+brackets enclosing two <CODE>int</CODE>s (e.g. <CODE>s[2,6]</CODE>) return a
+substring where the first integer denotes the starting position and the
+second integer denotes the length of the substring. The result is
+returned as a <CODE>string</CODE>. Square brackets enclosing an <CODE>intvec</CODE>
+(e.g. <CODE>s[intvec(2,6)]</CODE>) return the characters of the string at the
+position given by the values of the <CODE>intvec</CODE>. The result is
+returned as an expression list of strings.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  string s = "one-word";
+  s[2,6];     // a substring starting at the second char
+==> ne-wor
+  size(_);
+==> 6
+  intvec v = 2,6;
+  s[v];      // the second and the sixth char
+==> n o
+  string st = s[v];  // stick together by an assignment
+  st;
+==> no
+  size(_);
+==> 2
+  v = 2,6,8;
+  s[v];
+==> n o d
+</FONT></pre></td></tr></table></P><P>
+
+<LI>packages and indexed variables
+<P>
+
+See example
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>package K;
+string K::varok;
+string K::donotwork(1);
+int K::i(1..3);
+// Toplevel does not contain i(1..3)
+listvar();
+==> // i(3)                           [0]  int 0
+==> // i(2)                           [0]  int 0
+==> // i(1)                           [0]  int 0
+==> // donotwork(1)                   [0]  string 
+// i(1..3) are stored in Package 'K'
+listvar(K);
+==> // K                              [0]  package K (N)
+==> // ::varok                        [0]  string 
+</FONT></pre></td></tr></table></P><P>
+
+</OL>
+<P>
+
+<A NAME="Identifier resolution"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_465.htm#SEC504"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: First index is 1" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_467.htm#SEC506"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Identifier resolution" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_457.htm#SEC496"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Major differences to the C programming language" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_468.htm#SEC507"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Non-commutative subsystem" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_454.htm#SEC493"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Tricks and pitfalls" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

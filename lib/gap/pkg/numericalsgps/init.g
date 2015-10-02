@@ -5,7 +5,7 @@
 #W                          Jose Morais <josejoao@fc.up.pt>
 ##
 ##
-#H  @(#)$Id: init.g,v 0.98 $
+#H  @(#)$Id: init.g,v 1.0 $
 ##
 #Y  Copyright 2005 by Manuel Delgado,
 #Y  Pedro A. Garcia-Sanchez and Jose Joao Morais
@@ -30,8 +30,41 @@ ReadPackage( "numericalsgps", "gap/irreducibles.gd" );
 ReadPackage( "numericalsgps", "gap/ideals-def.gd" );
 ReadPackage( "numericalsgps", "gap/arf-med.gd" );
 ReadPackage( "numericalsgps", "gap/catenary-tame.gd" );
+ReadPackage( "numericalsgps", "gap/pseudoFrobenius.gd" );
 ReadPackage( "numericalsgps", "gap/contributions.gd" );
 ReadPackage( "numericalsgps", "gap/numsgps-utils.gd" );
+ReadPackage( "numericalsgps", "gap/polynomials.gd" );
+##
+## Affine
+##
+NumSgpsCanUseNI:=false;
+NumSgpsCanUseSingular:=false;
+NumSgpsCanUseSI:=false;
+NumSgpsCanUse4ti2:=false;
+NumSgpsCanUse4ti2gap:=false;
+NumSgpsCanUseGradedModules:=false;
+
+
+ReadPackage( "numericalsgps", "gap/affine-def.gd" );
+ReadPackage( "numericalsgps", "gap/affine.gd" );
+if IsPackageMarkedForLoading("NormalizInterface","0.0") then 
+	NumSgpsCanUseNI:=true;
+fi;
+if IsPackageMarkedForLoading("4ti2Interface","0.0") then 
+	NumSgpsCanUse4ti2:=true;
+fi;
+if IsPackageMarkedForLoading("4ti2gap","0.0") then 
+	NumSgpsCanUse4ti2gap:=true;
+fi;
+if IsPackageMarkedForLoading("SingularInterface","0.0") 	then
+	NumSgpsCanUseSI:=true;
+fi;
+if IsPackageMarkedForLoading("singular","0.0") 	then
+	NumSgpsCanUseSingular:=true;
+fi;
+if IsPackageMarkedForLoading("GradedModules","0.0") 	then
+	NumSgpsCanUseGradedModules:=true;
+fi;
 
 
 #E  init.g  . . . . . . . . . . . . . . . . . . . . . . . . . . .  ends here

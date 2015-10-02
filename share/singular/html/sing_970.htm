@@ -1,0 +1,183 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: locusto</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: locusto">
+<META NAME="keywords" CONTENT="Singular Manual: locusto">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1045"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_969.htm#SEC1044"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: envelopdg" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_971.htm#SEC1046"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: AddCons" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.2.4.14 locusto </H4>
+<!--docid::SEC1045::-->
+Procedure from library <CODE>grobcov.lib</CODE> (see  <A HREF="sing_956.htm#SEC1031">grobcov_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>locusto(L);
+<BR>The argument must be the output of locus or locusdg or
+envelop or envelopdg.
+<BR>It transforms the output into a string in standard form
+readable in many languages (Geogebra).
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>The locus in string standard form
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>It can only be called after computing either
+<BR>- locus(grobcov(F)) -&gt; locusto( locus(grobcov(F)) )
+- locusdg(locus(grobcov(F))) -&gt; locusto( locusdg(locus(grobcov(F))) )
+- envelop(F,C) -&gt; locusto( envelop(F,C) )
+-envelopdg(envelop(F,C)) -&gt; locusto( envelopdg(envelop(F,C)) )
+<P>
+
+<A NAME="IDX420"></A>
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "grobcov.lib";
+ring R=(0,x,y),(x1,y1),dp;
+short=0;
+ideal S=x1^2+y1^2-4,(y-2)*x1-x*y1+2*x,(x-x1)^2+(y-y1)^2-1;
+locusto(locus(grobcov(S)));
+==> [[[(x^4+2*x^2*y^2-9*x^2+y^4-9*y^2+4*y+12)],[[1]]],[Normal],1]],[[(x^2+y^2\
+   -4*y+3)],[[1]]],[[Special],[y1-2,x1]],1]]]
+locusto(locusdg(locus(grobcov(S))));
+==> [[[(x^4+2*x^2*y^2-9*x^2+y^4-9*y^2+4*y+12)],[[1]]],[Relevant],1]]]
+kill R;
+"********************************************";
+==> ********************************************
+// 1. Take a fixed line l: x1-y1=0  and consider
+//    the family F of a lines parallel to l passing through the mover point M
+// 2. Consider a circle x1^2+x2^2-25, and a mover point M(x1,x2) on it.
+// 3. Compute the envelop of the family of lines.
+ring R=(0,x,y),(x1,y1),lp;
+poly F=(y-y1)-(x-x1);
+ideal C=x1^2+y1^2-25;
+short=0;
+// Curves Family F=
+F;
+==> x1-y1+(-x+y)
+// Conditions C=
+C;
+==> C[1]=x1^2+y1^2-25
+locusto(envelop(F,C));
+==> [[[(x^2-2*x*y+y^2-50)],[[1]]],[[Special],[2*y1^2-25,x1+y1],[1]],1]]]
+locusto(envelopdg(envelop(F,C)));
+==> [[[(x^2-2*x*y+y^2-50)],[[1]]],[Relevant],1]]]
+kill R;
+"********************************************";
+==> ********************************************
+// Steiner Deltoid
+// 1. Consider the circle x1^2+y1^2-1=0, and a mover point M(x1,y1) on it.
+// 2. Consider the triangle A(0,1), B(-1,0), C(1,0).
+// 3. Consider lines passing through M perpendicular to two sides of ABC triangle.
+// 4. Obtain the envelop of the lines above.
+ring R=(0,x,y),(x1,y1,x2,y2),lp;
+ideal C=(x1)^2+(y1)^2-1,
+x2+y2-1,
+x2-y2-x1+y1;
+matrix M[3][3]=x,y,1,x2,y2,1,x1,0,1;
+poly F=det(M);
+short=0;
+// Curves Family F=
+F;
+==> -x1*y2+(y)*x1+(-y)*x2+(x)*y2
+// Conditions C=
+C;
+==> C[1]=x1^2+y1^2-1
+==> C[2]=x2+y2-1
+==> C[3]=-x1+y1+x2-y2
+locusto(envelop(F,C));
+==> [[[(x^4+2*x^2*y^2+10*x^2*y-x^2+y^4-6*y^3+12*y^2-8*y)],[[1]]],[Normal],1]]\
+   ,[[(x+y-1)],[[1]]],[[Special],[y2,x2-1,y1,x1-1],[0]],1]]]
+locusto(envelopdg(envelop(F,C)));
+==> [[[(x^4+2*x^2*y^2+10*x^2*y-x^2+y^4-6*y^3+12*y^2-8*y)],[[1]]],[Relevant],1\
+   ]]]
+</FONT></pre></td></tr></table><P>
+
+<A NAME="AddCons"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_969.htm#SEC1044"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: envelopdg" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_971.htm#SEC1046"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: AddCons" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_935.htm#SEC1010"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: general_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_973.htm#SEC1048"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: inout_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_956.htm#SEC1031"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: grobcov_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

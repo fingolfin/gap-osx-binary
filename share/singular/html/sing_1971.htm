@@ -1,0 +1,159 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: tropicalJInvariant</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: tropicalJInvariant">
+<META NAME="keywords" CONTENT="Singular Manual: tropicalJInvariant">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2046"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1970.htm#SEC2045"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: drawNewtonSubdivision" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1972.htm#SEC2047"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: weierstrassForm" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.3.8 tropicalJInvariant </H4>
+<!--docid::SEC2046::-->
+Procedure from library <CODE>tropical.lib</CODE> (see  <A HREF="sing_1963.htm#SEC2038">tropical_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>tropicalJInvariant(f[,#]); f poly or list, # optional list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f is list of linear polynomials of the form ax+by+c with integers
+a, b and a rational number c representing a tropical Laurent
+polynomial defining a tropical plane curve;
+<BR>alternatively f can be a polynomial in Q(t)[x,y] defining a
+tropical plane curve via the valuation map;
+<BR> the basering must have a global monomial ordering, two variables
+and up to one parameter!
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>number, if the graph underlying the tropical curve has precisely
+one loop then its weighted lattice length is returned,
+otherwise the result will be -1
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>- if the tropical curve is elliptic and its embedded graph has
+precisely one loop, then the weigthed lattice length of
+the loop is its tropical j-invariant
+<BR> - the procedure checks if the embedded graph of the tropical
+curve has genus one, but it does NOT check if the loop can
+be resolved, so that the curve is not a proper tropical
+elliptic curve
+<BR> - if the embedded graph of a tropical elliptic curve has more
+than one loop, then all but one can be resolved, but this is
+not observed by this procedure, so it will not compute
+<BR>the j-invariant
+<BR> - if # is empty, then the tropical curve is computed w.r.t. minimum,
+if #[1] is the string 'max', then it is computed w.r.t. maximum
+<BR> - the tropicalJInvariant of a plane tropical cubic is the
+'cycle length' of the cubic as introduced in the paper:
+Eric Katz, Hannah Markwig, Thomas Markwig: The j-invariant
+of a cubic tropical plane curve.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "tropical.lib";
+ring r=(0,t),(x,y),dp;
+// tropcialJInvariant computes the tropical j-invariant of an elliptic curve
+tropicalJInvariant(t*(x3+y3+1)+1/t*(x2+y2+x+y+x2y+xy2)+1/t2*xy);
+// the Newton polygone need not be the standard simplex
+tropicalJInvariant(x+y+x2y+xy2+1/t*xy);
+// the curve can have arbitrary degree
+tropicalJInvariant(t*(x7+y7+1)+1/t*(x4+y4+x2+y2+x3y+xy3)+1/t7*x2y2);
+// the procedure does not realise, if the embedded graph of the tropical
+//     curve has a loop that can be resolved
+tropicalJInvariant(1+x+y+xy+tx2y+txy2);
+// but it does realise, if the curve has no loop at all ...
+tropicalJInvariant(x+y+1);
+// or if the embedded graph has more than one loop - even if only one
+//     cannot be resolved
+tropicalJInvariant(1+x+y+xy+tx2y+txy2+t3x5+t3y5+tx2y2+t2xy4+t2yx4);
+</FONT></pre></td></tr></table><P>
+
+<A NAME="weierstrassForm"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1970.htm#SEC2045"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: drawNewtonSubdivision" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1972.htm#SEC2047"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: weierstrassForm" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

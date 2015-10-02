@@ -1,0 +1,206 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: reference and shared operations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: reference and shared operations">
+<META NAME="keywords" CONTENT="Singular Manual: reference and shared operations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC295"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_255.htm#SEC294"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: shared expressions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_257.htm#SEC296"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: reference and shared related functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: pyobject" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: countedref" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.26.5 reference and shared operations </H3>
+<!--docid::SEC295::-->
+<P>
+
+All operations of the underlying objects are forwarded by
+<CODE>reference</CODE> and <CODE>shared</CODE> objects.
+THis kind of dereferencing is done automatically in most cases:
+</P><P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>system("reference"); system("shared");
+int i = 2;
+reference two = i;
+shared three = 3;
+
+two * three;
+==> 6
+two ^ three;
+==> 8
+two ** three;
+==> 8
+
+two + two;
+==> 4
+two - two;
+==> 0
+
+ring r = 0, (x,y,z), dp;
+poly p = x + y + z;
+reference ref = p;
+shared zvar =z;
+subst(ref, x,1, y,2, zvar,3);
+==> 6
+</FONT></pre></td></tr></table></P><P>
+
+In some cases <CODE>reference</CODE>s have to be dereferenced explicitely. For
+instance, this is the case for n-ary function calls not starting with
+a <CODE>reference</CODE> or <CODE>shared</CODE> object. You can use the <CODE>link</CODE>
+operator or a type cast to work around this.
+In contrast, some constructs like left-hand subexpressions prematurely
+evaluate. You can avoid this by using the <CODE>def</CODE> operator or by
+explicitly type casting to <CODE>reference</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>system("reference"); system("shared");
+ring r = 0, (x,y,z), dp;
+poly p = x + y + z;
+shared xsh = x;
+subst(p, xsh,1, y,2, z,3);        // fails
+==>    ? subst(`poly`,`shared`,`int`) failed
+==>    ? expected subst(`poly`,`poly`,`poly`)
+==>    ? expected subst(`poly`,`poly`,`poly`)
+==>    ? expected subst(`matrix`,`poly`,`int`)
+==>    ? error occurred in or before ./examples/reference_and_shared_operatio\
+   ns_1.sing line 5: `subst(p, xsh,1, y,2, z,3);        // fails`
+subst(p, poly(xsh),1, y,2, z,3);  // good
+==> 6
+subst(p, link(xsh),1, y,2, z,3);  // fine
+==> 6
+
+list ll = list(xsh, xsh, xsh);
+ll[1] = y;      // replaced only first entry
+ll;
+==> [1]:
+==>    y
+==> [2]:
+==>    x
+==> 
+==> [3]:
+==>    x
+==> 
+shared(ll[2]) = z;    // replaces the others
+ll;
+==> [1]:
+==>    y
+==> [2]:
+==>    z
+==> 
+==> [3]:
+==>    z
+==> 
+def(ll[2]) = x;       // generic alternative
+ll;
+==> [1]:
+==>    y
+==> [2]:
+==>    x
+==> 
+==> [3]:
+==>    x
+==> 
+</FONT></pre></td></tr></table></P><P>
+
+In particular, explicit dereferencing is useful
+to distinguish between typecasting and nested constructings.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>system("reference"); system("shared");
+shared shl = list(1);
+shl;
+==> [1]:
+==>    1
+==> 
+list(shl);  // wraps 'shl' by a list
+==> [1]:
+==>    [1]:
+==>    1
+==> 
+link(shl);  // extract the list in 'shl'
+==> [1]:
+==>    1
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="reference and shared related functions"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_255.htm#SEC294"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: shared expressions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_257.htm#SEC296"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: reference and shared related functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_243.htm#SEC282"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: pyobject" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_251.htm#SEC290"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: countedref" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

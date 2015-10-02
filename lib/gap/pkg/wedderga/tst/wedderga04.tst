@@ -1,6 +1,6 @@
 # wedderga, chapter 4
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/idempot.xml", 23, 41 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/idempot.xml", 23, 41 ]
 
 gap> QS3 := GroupRing( Rationals, SymmetricGroup(3) );;                 
 gap> PrimitiveCentralIdempotentsByCharacterTable( QS3 );
@@ -19,7 +19,7 @@ gap> Length(pciFG);
 7
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/idempot.xml", 80, 91 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/idempot.xml", 80, 91 ]
 
 gap> QS5 := GroupRing( Rationals, SymmetricGroup(5) );;
 gap> idemp := PrimitiveCentralIdempotentsByCharacterTable( QS5 );;
@@ -31,7 +31,7 @@ gap> IsCompleteSetOfOrthogonalIdempotents( QS5, [ One( QS5 ), One( QS5 ) ] );
 false
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/idempot.xml", 130, 154 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/idempot.xml", 130, 154 ]
 
 gap> QG:=GroupRing( Rationals, AlternatingGroup(4) );;           
 gap> PrimitiveCentralIdempotentsByStrongSP( QG );
@@ -56,7 +56,7 @@ Wedderga: Warning!!!
 The output is a NON-COMPLETE list of prim. central idemp.s of the input! 
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/idempot.xml", 177, 211 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/idempot.xml", 177, 211 ]
 
 gap> QG := GroupRing( Rationals, SymmetricGroup(4) );
 <algebra-with-one over Rationals, with 2 generators>
@@ -91,7 +91,7 @@ gap> IsCompleteSetOfPCIs( QS5 , pci );
 false
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/idempot.xml", 217, 241 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/idempot.xml", 217, 241 ]
 
 gap> QG := GroupRing( Rationals, SmallGroup(48,28) );;
 gap> pci:=PrimitiveCentralIdempotentsBySP( QG );;
@@ -116,7 +116,7 @@ The output is a NON-COMPLETE list of prim. central idemp.s of the input!
 false
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/idempot.xml", 272, 295 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/idempot.xml", 272, 295 ]
 
 gap> G:=DihedralGroup(8);; 
 gap> F:=GF(3);;                     
@@ -140,7 +140,7 @@ gap> PrimitiveIdempotentsNilpotent(FG,H,K,C,[epi,gq]);
   (Z(3)^0)*<identity> of ...+(Z(3))*f3+(Z(3))*f1*f2+(Z(3)^0)*f1*f2*f3 ]
 
 
-# [ "/Users/alexk/gap4r7p1pre/pkg/wedderga/doc/idempot.xml", 322, 345 ]
+# [ "/Users/alexk/gap4r7p6/pkg/wedderga/doc/idempot.xml", 322, 345 ]
 
 gap> G:=DihedralGroup(8);; 
 gap> F:=GF(3);;                     

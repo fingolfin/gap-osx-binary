@@ -1,0 +1,160 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: conicWithTangents</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: conicWithTangents">
+<META NAME="keywords" CONTENT="Singular Manual: conicWithTangents">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2049"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1973.htm#SEC2048"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: jInvariant" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1975.htm#SEC2050"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: tropicalise" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.13.3.11 conicWithTangents </H4>
+<!--docid::SEC2049::-->
+Procedure from library <CODE>tropical.lib</CODE> (see  <A HREF="sing_1963.htm#SEC2038">tropical_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>conicWithTangents(points[,#]); points list, # optional list
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>points is a list of five points in the plane over K(t)
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list, l[1] = the list points of the five given points
+<BR> l[2] = the conic f passing through the five points
+<BR> l[3] = list of equations of tangents to f in the given points
+<BR> l[4] = ideal, tropicalisation of f (i.e. list of linear forms)
+<BR> l[5] = a list of the tropicalisation of the tangents
+<BR> l[6] = a list containing the vertices of the tropical conic f
+<BR> l[7] = a list containing lists with vertices of the tangents
+<BR> l[8] = a string which contains the latex-code to draw the
+tropical conic and its tropicalised tangents
+<BR> l[9] = if # is non-empty, this is the same data for the dual
+conic and the points dual to the computed tangents
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>the points must be generic, i.e. no three on a line
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "tropical.lib";
+ring r=(0,t),(x,y),dp;
+// the input consists of a list of five points in the plane over Q(t)
+list points=list(1/t2,t),list(1/t,t2),list(1,1),list(t,1/t2),list(t2,1/t);
+list conic=conicWithTangents(points);
+// conic[1] is the list of the given five points
+conic[1];
+// conic[2] is the equation of the conic f passing through the five points
+conic[2];
+// conic[3] is a list containing the equations of the tangents
+//          through the five points
+conic[3];
+// conic[4] is an ideal representing the tropicalisation of the conic f
+conic[4];
+// conic[5] is a list containing the tropicalisation
+//          of the five tangents in conic[3]
+conic[5];
+// conic[6] is a list containing the vertices of the tropical conic
+conic[6];
+// conic[7] is a list containing the vertices of the five tangents
+conic[7];
+// conic[8] contains the latex code to draw the tropical conic and
+//          its tropicalised tangents; it can written in a file, processed and
+//          displayed via kghostview
+write(":w /tmp/conic.tex",conic[8]);
+system("sh","cd /tmp; latex /tmp/conic.tex; dvips /tmp/conic.dvi -o;
+kghostview conic.ps &amp;");
+// with an optional argument the same information for the dual conic is computed
+//         and saved in conic[9]
+conic=conicWithTangents(points,1);
+conic[9][2]; // the equation of the dual conic
+</FONT></pre></td></tr></table><P>
+
+<A NAME="tropicalise"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1973.htm#SEC2048"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: jInvariant" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1975.htm#SEC2050"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: tropicalise" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1959.htm#SEC2034"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: realizationMatroids_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1963.htm#SEC2038"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: tropical_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

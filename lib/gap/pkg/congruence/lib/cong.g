@@ -11,7 +11,9 @@
 #
 # CanEasilyCompareCongruenceSubgroups( G, H )
 #
-InstallGlobalFunction( "CanEasilyCompareCongruenceSubgroups",
+InstallMethod( CanEasilyCompareCongruenceSubgroups,
+    "for two congruence subgroups",
+    [ IsCongruenceSubgroup, IsCongruenceSubgroup ],
 function ( G, H )
 local i;
 if ForAll( [ G, H ], IsPrincipalCongruenceSubgroup ) or
@@ -49,7 +51,9 @@ end);
 # This is used in IntersectionOfCongruenceSubgroups to reduce the list of
 # canonical subgroups forming the intersection.
 # 
-InstallGlobalFunction( "CanReduceIntersectionOfCongruenceSubgroups",
+InstallMethod( CanReduceIntersectionOfCongruenceSubgroups,
+    "for two congruence subgroups",
+    [ IsCongruenceSubgroup, IsCongruenceSubgroup ],
 function( G, H )
 #
 # Case 1 - at least one subgroup is an intersection of congruence subgroups

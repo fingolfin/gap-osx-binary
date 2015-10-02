@@ -1,0 +1,143 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: parallelTestOR</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: parallelTestOR">
+<META NAME="keywords" CONTENT="Singular Manual: parallelTestOR">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2315"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2239.htm#SEC2314"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: parallelTestAND" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2241.htm#SEC2316"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: realclassify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2222.htm#SEC2297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: numerDecom_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2241.htm#SEC2316"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realclassify_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2235.htm#SEC2310"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: parallel_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.17.5 parallelTestOR </H4>
+<!--docid::SEC2315::-->
+Procedure from library <CODE>parallel.lib</CODE> (see  <A HREF="sing_2235.htm#SEC2310">parallel_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>parallelTestOR(commands, arguments[, timeout]); commands list or
+string, arguments list, timeout int
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>1, if commands[i] applied to arguments[i] is not equal to zero for
+any i = 1, ..., size(arguments);
+<BR>0, otherwise.
+<BR> An optional timeout in ms can be provided. Default is 0 which
+disables the timeout. In case of timeout, -1 is returned.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>The entries of the list commands must be strings. The entries of the
+list arguments must be lists.
+<BR> commands[i] applied to arguments[i] must evaluate to an integer for
+i = 1, ..., size(arguments).
+<BR> As a shortcut, <CODE>commands</CODE> can be a string. This is synonymous to
+providing a list of <CODE>size(arguments)</CODE> copies of this string.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "parallel.lib";
+ring R = 0, (x,y,z), dp;
+ideal I;
+string s;
+list l;
+module m1 = x*gen(1);
+module m2;
+string command = "size";
+list arguments1 = list(list(I), list(s), list(l), list(m1));
+list arguments2 = list(list(I), list(s), list(l), list(m2));
+// test if any of the arguments has non-zero size
+parallelTestOR(command, arguments1);
+==> 1
+parallelTestOR(command, arguments2);
+==> 0
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_2239.htm#SEC2314">parallelTestAND</A>;
+ <A HREF="sing_2251.htm#SEC2326">tasks_lib</A>.
+<P>
+
+<A NAME="realclassify_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2239.htm#SEC2314"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: parallelTestAND" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2241.htm#SEC2316"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: realclassify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2222.htm#SEC2297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: numerDecom_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2241.htm#SEC2316"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: realclassify_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2235.htm#SEC2310"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: parallel_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

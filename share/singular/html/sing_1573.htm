@@ -1,0 +1,168 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: T_1</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: T_1">
+<META NAME="keywords" CONTENT="Singular Manual: T_1">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1648"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1572.htm#SEC1647"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tjurina" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1574.htm#SEC1649"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: T_2" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1547.htm#SEC1622"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: qhmoduli_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1577.htm#SEC1652"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: spcurve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sing_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.6.13.16 T_1 </H4>
+<!--docid::SEC1648::-->
+Procedure from library <CODE>sing.lib</CODE> (see  <A HREF="sing_1557.htm#SEC1632">sing_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>T_1(id[,&lt;any&gt;]); id = ideal or poly
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>T_1(id): of type module/ideal if id is of type ideal/poly.
+We call T_1(id) the T_1-module of id. It is a std basis of the
+presentation of 1st order deformations of P/id, if P is the basering.
+If a second argument is present (of any type) return a list of
+3 modules:
+<BR>[1]= T_1(id)
+<BR>[2]= generators of normal bundle of id, lifted to P
+<BR>[3]= module of relations of [2], lifted to P
+<BR>(note: transpose[3]*[2]=0 mod id)
+<BR>The list contains all non-easy objects which must be computed
+to get T_1(id).
+<P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>k-dimension of T_1(id) if printlevel &gt;= 0 (default)
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>T_1(id) itself is usually of minor importance. Nevertheless, from it
+all relevant information can be obtained. The most important are
+probably vdim(T_1(id)); (which computes the Tjurina number),
+hilb(T_1(id)); and kbase(T_1(id)).
+<BR>If T_1 is called with two arguments, then matrix([2])*(kbase([1]))
+represents a basis of 1st order semiuniversal deformation of id
+(use proc 'deform', to get this in a direct way).
+<BR>For a complete intersection the proc Tjurina is faster.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "sing.lib";
+int p      = printlevel;
+printlevel = 1;
+ring r     = 32003,(x,y,z),(c,ds);
+ideal i    = xy,xz,yz;
+module T   = T_1(i);
+==> // dim T_1 = 3
+vdim(T);                      // Tjurina number = dim_K(T_1), should be 3
+==> 3
+list L=T_1(i,"");
+==> // dim T_1 = 3
+module kB  = kbase(L[1]);
+print(L[2]*kB);               // basis of 1st order miniversal deformation
+==> 0,0,0,
+==> z,0,0,
+==> 0,y,z 
+show(L[2]);                   // presentation of normal bundle
+==> // module, 6 generator(s)
+==> [x]
+==> [y,z]
+==> [0,x,y]
+==> [0,z]
+==> [0,0,y]
+==> [0,0,z]
+print(L[3]);                  // relations of i
+==> z, 0,
+==> -y,y,
+==> 0, -x
+print(transpose(L[3])*L[2]);  // should be 0 (mod i)
+==> xz,0, -xy,-yz,0,  0, 
+==> 0, yz,0,  yz, -xy,-xz
+printlevel = p;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="T_2"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1572.htm#SEC1647"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: tjurina" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1574.htm#SEC1649"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: T_2" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1547.htm#SEC1622"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: qhmoduli_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1577.htm#SEC1652"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: spcurve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1557.htm#SEC1632"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: sing_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -7,9 +7,6 @@
 
 #include "loadgap.h"
 
-static const char * Revision_polymake_main_c =
-   "polymake_main.cpp, V0.1";
-
 # define MORE_TESTS 1
 
 
@@ -401,6 +398,12 @@ Obj FuncPOLYMAKE_INTERSECTION_OF_CONES( Obj self, Obj cone1, Obj cone2 ){
   
 }
 
+Obj FuncPOLYMAKE_INTERSECTION_OF_POLYTOPES( Obj self, Obj cone1, Obj cone2 ){
+  
+  return REAL_INTERSECTION_OF_POLYTOPES( &akt_data, cone1, cone2 );
+  
+}
+
 Obj FuncPOLYMAKE_CREATE_CONE_BY_EQUALITIES_AND_INEQUALITIES( Obj self, Obj equalities, Obj inequalities ){
   
   polymake_start( &akt_data );
@@ -465,6 +468,18 @@ Obj FuncPOLYMAKE_RESET_WORKSPACE( Obj self ){
   akt_data.main_polymake_scope = new polymake::perl::Scope(akt_data.main_polymake_session->newScope());
   
   return True;
+  
+}
+
+Obj FuncPOLYMAKE_F_VECTOR_OF_FAN( Obj self, Obj fan ){
+  
+  return REAL_F_VECTOR( &akt_data, fan );
+  
+}
+
+Obj FuncPOLYMAKE_PROPERTIES( Obj self, Obj cone ){
+  
+  return REAL_POLYMAKE_PROPERTIES( &akt_data, cone );
   
 }
 
@@ -701,6 +716,10 @@ static StructGVarFunc GVarFuncs [] = {
     (Obj(*)())FuncPOLYMAKE_INTERSECTION_OF_CONES,
     "polymake_main.cpp:POLYMAKE_INTERSECTION_OF_CONES" },
     
+    { "POLYMAKE_INTERSECTION_OF_POLYTOPES", 2, "cone1,cone2",
+    (Obj(*)())FuncPOLYMAKE_INTERSECTION_OF_POLYTOPES,
+    "polymake_main.cpp:POLYMAKE_INTERSECTION_OF_POLYTOPES" },
+    
     { "POLYMAKE_TROPICAL_HYPERSURFACE_BY_MONOMS_AND_COEFFICIENTS", 2, "mon,coeff",
     (Obj(*)())FuncPOLYMAKE_TROPICAL_HYPERSURFACE_BY_MONOMS_AND_COEFFICIENTS,
     "polymake_main.cpp:POLYMAKE_TROPICAL_HYPERSURFACE_BY_MONOMS_AND_COEFFICIENTS" },
@@ -717,6 +736,14 @@ static StructGVarFunc GVarFuncs [] = {
     (Obj(*)())FuncPOLYMAKE_TROPICAL_POLYTOPE_BY_POINTS,
     "polymake_main.cpp:POLYMAKE_TROPICAL_POLYTOPE_BY_POINTS" },
     
+    { "POLYMAKE_F_VECTOR_OF_FAN", 1, "fan",
+    (Obj(*)())FuncPOLYMAKE_F_VECTOR_OF_FAN,
+    "polymake_main.cpp:POLYMAKE_F_VECTOR_OF_FAN" },
+    
+    { "POLYMAKE_PROPERTIES", 1, "cone",
+    (Obj(*)())FuncPOLYMAKE_PROPERTIES,
+    "polymake_main.cpp:POLYMAKE_PROPERTIES" },
+    
   { 0 }
 };
 
@@ -725,6 +752,8 @@ static StructGVarFunc GVarFuncs [] = {
 */
 static Int InitKernel ( StructInitInfo *module )
 {
+    
+    polymake_start( &akt_data );
     /* init filters and functions                                          */
     InitHdlrFuncsFromTable( GVarFuncs );
     
@@ -762,15 +791,7 @@ static Int InitLibrary ( StructInitInfo *module )
 //     //akt_data.polymake_objects = new map<int, pm::perl::Object*>;
 //     //akt_data.new_polymake_object_number=0;
 //     // We now have everything to handle polymake, lets do the gapthings
-// 
-//     /* init filters and functions
-//        we assign the functions to components of a record "IO"         */
-//     for ( i = 0; GVarFuncs[i].name != 0;  i++ ) {
-//       gvar = GVarName(GVarFuncs[i].name);
-//       AssGVar(gvar,NewFunctionC( GVarFuncs[i].name, GVarFuncs[i].nargs,
-//                                  GVarFuncs[i].args, GVarFuncs[i].handler ));
-//       MakeReadOnlyGVar(gvar);
-//     }
+
     InitGVarFuncsFromTable(GVarFuncs);
     /* return success                                                      */
     return 0;
@@ -798,7 +819,6 @@ extern "C" {
 
 StructInitInfo * Init__Dynamic ( void )
 {
-  module.revision_c = Revision_polymake_main_c;
   return &module;
 }
 

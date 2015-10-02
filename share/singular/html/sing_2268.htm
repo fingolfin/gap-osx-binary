@@ -1,0 +1,149 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: MVComplex</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: MVComplex">
+<META NAME="keywords" CONTENT="Singular Manual: MVComplex">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2343"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2267.htm#SEC2342"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: deRhamCohomology" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2251.htm#SEC2326"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: tasks_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: derham_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.15.21.2 MVComplex </H4>
+<!--docid::SEC2343::-->
+Procedure from library <CODE>derham.lib</CODE> (see  <A HREF="sing_2266.htm#SEC2341">derham_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>MVComplex(L); L a list of polynomials
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>-Basering is a polynomial ring with n vwariables and rational coefficients
+-L is a list of non-constant polynomials
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ring W: the nth Weyl algebra <BR>
+W contains a list MV, which represents the Mayer-Vietrois complex (C^i,d^i) of the
+polynomials contained in L as follows:<BR>
+the C^i are given by D_n^ncols(C[2*i-1])/im(C[2*i-1]) and the differentials
+d^i are given by C[2*i]
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "derham.lib";
+==> // ** redefining `safeVarName` **
+ring r = 0,(x,y,z),dp;
+list L=xy,xz;
+def C=MVComplex(L);
+setring C;
+MV;
+==> [1]:
+==>    _[1,1]=D(3)
+==>    _[1,2]=0
+==>    _[2,1]=x(1)*D(1)+1
+==>    _[2,2]=0
+==>    _[3,1]=-x(2)*D(2)-1
+==>    _[3,2]=0
+==>    _[4,1]=0
+==>    _[4,2]=D(2)
+==>    _[5,1]=0
+==>    _[5,2]=x(1)*D(1)+1
+==>    _[6,1]=0
+==>    _[6,2]=-x(3)*D(3)-1
+==> [2]:
+==>    _[1,1]=-x(1)*x(3)
+==>    _[2,1]=x(1)*x(2)
+==> [3]:
+==>    _[1,1]=x(2)*D(2)+1
+==>    _[2,1]=x(1)*D(1)+2
+==>    _[3,1]=-x(3)*D(3)-1
+==> [4]:
+==>    _[1,1]=0
+</FONT></pre></td></tr></table><P>
+
+<A NAME="schreyer_lib"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2267.htm#SEC2342"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: deRhamCohomology" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2251.htm#SEC2326"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: tasks_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2269.htm#SEC2344"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: schreyer_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: derham_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

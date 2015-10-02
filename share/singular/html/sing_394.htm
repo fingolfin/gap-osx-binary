@@ -1,0 +1,177 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: simplify</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: simplify">
+<META NAME="keywords" CONTENT="Singular Manual: simplify">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC433"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_393.htm#SEC432"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: simplex" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_395.htm#SEC434"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: size" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.135 simplify </H3>
+<!--docid::SEC433::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>simplify (</CODE> poly_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>simplify (</CODE> vector_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>simplify (</CODE> ideal_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>simplify (</CODE> module_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>the type of the first argument
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>returns the "simplified" first argument depending on the simplification rules
+specified by the second argument.
+The simplification rules are the following
+functions:
+<DL COMPACT>
+<DT><CODE>1</CODE>
+<DD>normalize (divide by leading coefficient if this is a unit of the ground field/ring).
+<DT><CODE>2</CODE>
+<DD>erase zero generators/columns.
+<DT><CODE>4</CODE>
+<DD>erase copies of earlier listed generators/columns.
+<DT><CODE>8</CODE>
+<DD>erase generators/columns which a skalar multiples (w.r.t. ground field/ring) of earlier listed generators/columns.
+<DT><CODE>16</CODE>
+<DD>erase generators/columns whose leading monomials are copies of leading monomials of earlier listed generators/columns such that the coefficients of both leading terms are units in the ground field/ring.
+<DT><CODE>32</CODE>
+<DD>erase generators/columns whose leading terms are divisible by leading terms of other (not necessarily earlier) listed generators/columns.
+</DL>
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring r=0,(x,y,z),(c,dp);
+ideal i=0,2x,2x,4x,3x+y,5x2;
+simplify(i,1);
+==> _[1]=0
+==> _[2]=x
+==> _[3]=x
+==> _[4]=x
+==> _[5]=x+1/3y
+==> _[6]=x2
+simplify(i,2);
+==> _[1]=2x
+==> _[2]=2x
+==> _[3]=4x
+==> _[4]=3x+y
+==> _[5]=5x2
+simplify(i,4);
+==> _[1]=0
+==> _[2]=2x
+==> _[3]=0
+==> _[4]=4x
+==> _[5]=3x+y
+==> _[6]=5x2
+simplify(i,8);
+==> _[1]=0
+==> _[2]=2x
+==> _[3]=0
+==> _[4]=0
+==> _[5]=3x+y
+==> _[6]=5x2
+simplify(i,16);
+==> _[1]=0
+==> _[2]=2x
+==> _[3]=0
+==> _[4]=0
+==> _[5]=0
+==> _[6]=5x2
+simplify(i,32);
+==> _[1]=0
+==> _[2]=2x
+==> _[3]=0
+==> _[4]=0
+==> _[5]=0
+==> _[6]=0
+simplify(i,32+2+1);
+==> _[1]=x
+matrix A[2][3]=x,0,2x,y,0,2y;
+simplify(A,2+8); // by automatic conversion to module
+==> _[1]=[x,y]
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_85.htm#SEC124">ideal</A>;
+ <A HREF="sing_134.htm#SEC173">module</A>;
+ <A HREF="sing_147.htm#SEC186">poly</A>;
+ <A HREF="sing_172.htm#SEC211">vector</A>.
+<A NAME="size"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_393.htm#SEC432"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: simplex" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_395.htm#SEC434"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: size" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,194 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: ASCII links</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: ASCII links">
+<META NAME="keywords" CONTENT="Singular Manual: ASCII links">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC151"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_111.htm#SEC150"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: link related functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Ssi links" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_103.htm#SEC142"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: intvec" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_118.htm#SEC157"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: list" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_108.htm#SEC147"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: link" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.8.4 ASCII links </H3>
+<!--docid::SEC151::-->
+<P>
+
+Via ASCII links data that can be converted to a string can be written
+into files for storage or communication with other programs. The data is
+written in plain ASCII format. The output format of polynomials is done
+w.r.t. the value of the global variable <CODE>short</CODE> (see  <A HREF="sing_449.htm#SEC488">short</A>).
+Reading from an ASCII link returns a string -- conversion into other data
+is up to the user. This can be done, for example,
+using the command <CODE>execute</CODE>
+(see  <A HREF="sing_289.htm#SEC328">execute</A>).
+</P><P>
+
+The ASCII link describing string has to be one of the following:
+</P><P>
+
+<OL>
+<LI><CODE>"ASCII: "</CODE> + filename
+<BR>the mode (read or append) is set by the first <CODE>read</CODE> or
+<CODE>write</CODE> command.
+<LI><CODE>"ASCII:r "</CODE> + filename
+<BR>opens the file for reading.
+<LI><CODE>"ASCII:w "</CODE> + filename
+<BR>opens the file for overwriting.
+<LI><CODE>"ASCII:a "</CODE> + filename
+<BR>opens the file for appending.
+</OL>
+<P>
+
+There are the following default values:
+<UL>
+<LI>the type <CODE>ASCII</CODE> may be omitted since ASCII links are the
+default links.
+<P>
+
+<LI>if non of <CODE>r</CODE>, <CODE>w</CODE>, or <CODE>a</CODE> is specified, the mode of
+the link is set by the first <CODE>read</CODE> or <CODE>write</CODE> command on the
+link. If the first command is <CODE>write</CODE>, the mode is set to <CODE>a</CODE>
+(append mode).
+<P>
+
+<LI>if the filename is omitted, <CODE>read</CODE> reads from stdin and
+<CODE>write</CODE> writes to stdout.
+</UL>
+<P>
+
+Using these default rules, the string <CODE>":r temp"</CODE> describes a link
+which is equivalent to the link <CODE>"ASCII:r temp"</CODE>: an ASCII link to
+the file <CODE>temp</CODE> which is opened for reading. The string
+<CODE>"temp"</CODE> describes an ASCII link to the file <CODE>temp</CODE>, where the
+mode is set by the first <CODE>read</CODE> or <CODE>write</CODE> command. See also
+the example below.
+</P><P>
+
+Note that the filename may contain a path. On Microsoft Windows
+(resp. MS-DOS) platforms, names of a drive can precede the filename, but
+must be started with a <CODE>//</CODE> (as in <CODE>//c/temp/ex</CODE>. An ASCII
+link can be used either for reading or for writing, but not for both at
+the same time. A <CODE>close</CODE> command must be used before a change of
+I/O direction. Types without a conversion to <CODE>string</CODE> cannot be
+written.
+</P><P>
+
+<BR><STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=32003,(x,y,z),dp;
+  link l=":w example.txt";     // type is ASCII, mode is overwrite
+  l;
+==> // type : ASCII
+==> // mode : w
+==> // name : example.txt
+==> // open : no
+==> // read : not ready
+==> // write: not ready
+  status(l, "open", "yes");    // link is not yet opened
+==> 0
+  ideal i=x2,y2,z2;
+  write (l,1,";",2,";","ideal i=",i,";");
+  status(l, "open", "yes");    // now link is open
+==> 1
+  status(l, "mode");           // for writing
+==> w
+  close(l);                    // link is closed
+  write("example.txt","int j=5;");// data is appended to file
+  read("example.txt");         // data is returned as string
+==> 1
+==> ;
+==> 2
+==> ;
+==> ideal i=
+==> x2,y2,z2
+==> ;
+==> int j=5;
+==> 
+  execute(read(l));            // read string is executed
+==> 1
+==> 2
+==> // ** redefining i **
+  close(l);                    // link is closed
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Ssi links"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_111.htm#SEC150"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: link related functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_113.htm#SEC152"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Ssi links" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_103.htm#SEC142"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: intvec" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_118.htm#SEC157"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: list" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_108.htm#SEC147"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: link" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

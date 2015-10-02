@@ -1,0 +1,218 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Rings associated to monomial orderings</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Rings associated to monomial orderings">
+<META NAME="keywords" CONTENT="Singular Manual: Rings associated to monomial orderings">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC897"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_845.htm#SEC896"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Writing procedures and libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_847.htm#SEC898"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Long coefficients" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> A.1.3 Rings associated to monomial orderings </H3>
+<!--docid::SEC897::-->
+<P>
+
+In S<SMALL>INGULAR</SMALL> we may implement localizations of the polynomial ring
+by choosing an appropriate monomial ordering (when defining the ring by
+the <CODE>ring</CODE> command). We refer to  <A HREF="sing_891.htm#SEC942">Monomial orderings</A> for a
+thorough discussion of the monomial orderings available in
+S<SMALL>INGULAR</SMALL>.
+</P><P>
+
+At this point, we restrict ourselves to describing the relation between
+a monomial ordering and the ring (as mathematical object) which is
+implemented by the ordering. This is most easily done by describing the
+set of units: if &gt; is a monomial ordering then precisely those elements
+which have leading monomial 1 are considered as units (in all
+computations performed with respect to this ordering).
+</P><P>
+
+In mathematical terms: choosing a monomial ordering <CODE>&gt;</CODE> implements the
+localization of the polynomial ring with respect to the multiplicatively
+closed set of polynomials with leading monomial 1.
+</P><P>
+
+That is, choosing <IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_329.png"
+ ALT="$&gt;$"> implements the ring
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+K[x]_> := \left\{{{f}\over{u}}\; \bigg|\; f, u \in K[x],
+  \, LM(u) =
+  1\right\}.
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="291" HEIGHT="45" BORDER="0"
+ SRC="sing_331.png"
+ ALT="\begin{displaymath}
+K[x]_&gt; := \left\{{{f}\over{u}}\; \bigg\vert\; f, u \in K[x],
+\, LM(u) =
+1\right\}.
+\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P></P><P>
+
+If &gt; is global (that is, 1 is the smallest monomial), the implemented
+ring is just the polynomial ring. If &gt; is local (that is, if 1 is the
+largest monomial), the implemented ring is the localization of the
+polynomial ring w.r.t. the homogeneous maximal ideal. For a mixed
+ordering, we obtain "something in between these two rings":
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>ring R = 0,(x,y,z),dp;     // polynomial ring (global ordering)
+poly f = y4z3+2x2y2z2+4z4+5y2+1;
+f;                         // display f in a degrevlex-ordered way
+==> y4z3+2x2y2z2+4z4+5y2+1
+short=0;                   // avoid short notation
+f;
+==> y^4*z^3+2*x^2*y^2*z^2+4*z^4+5*y^2+1
+short=1;
+leadmonom(f);              // leading monomial
+==> y4z3
+
+ring r = 0,(x,y,z),ds;     // local ring (local ordering)
+poly f = fetch(R,f);
+f;                         // terms of f sorted by degree
+==> 1+5y2+4z4+2x2y2z2+y4z3
+leadmonom(f);              // leading monomial
+==> 1
+
+// Now we implement more "advanced" examples of rings:
+//
+// 1)   (K[y]_&lt;y&gt;)[x]
+//
+int n,m=2,3;
+ring A1 = 0,(x(1..n),y(1..m)),(dp(n),ds(m));
+poly f  = x(1)*x(2)^2+1+y(1)^10+x(1)*y(2)^5+y(3);
+leadmonom(f);
+==> x(1)*x(2)^2
+leadmonom(1+y(1));         // unit
+==> 1
+leadmonom(1+x(1));         // no unit
+==> x(1)
+
+//
+// 2)  some ring in between (K[x]_&lt;x&gt;)[y] and K[x,y]_&lt;x&gt;
+//
+ring A2 = 0,(x(1..n),y(1..m)),(ds(n),dp(m));
+leadmonom(1+x(1));       // unit
+==> 1
+leadmonom(1+x(1)*y(1));  // unit
+==> 1
+leadmonom(1+y(1));       // no unit
+==> y(1)
+
+//
+// 3)  K[x,y]_&lt;x&gt;
+//
+ring A4 = (0,y(1..m)),(x(1..n)),ds;
+leadmonom(1+y(1));       // in ground field
+==> 1
+leadmonom(1+x(1)*y(1));  // unit
+==> 1
+leadmonom(1+x(1));       // unit
+==> 1
+
+</FONT></pre></td></tr></table></P><P>
+
+Note, that even if we implictly compute over the localization of
+the polynomial ring, most computations are explicitly performed with
+polynomial data only.
+In particular,  <CODE>1/(1-x);</CODE> does not return a power series
+expansion or a fraction but 0 (division with remainder in polynomial ring).
+</P><P>
+
+See  <A HREF="sing_283.htm#SEC322">division</A> for division with remainder in the localization and
+ <A HREF="sing_1543.htm#SEC1618">invunit</A> for a procedure returning a truncated power series expansion
+of the inverse of a unit.
+</P><P>
+
+<A NAME="Long coefficients"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_845.htm#SEC896"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Writing procedures and libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_847.htm#SEC898"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Long coefficients" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_842.htm#SEC893"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Examples" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_853.htm#SEC904"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Computing Groebner and Standard Bases" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_843.htm#SEC894"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Programming" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

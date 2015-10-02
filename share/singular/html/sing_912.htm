@@ -1,0 +1,306 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Di Biase and Urbanke</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Di Biase and Urbanke">
+<META NAME="keywords" CONTENT="Singular Manual: Di Biase and Urbanke">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC968"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_911.htm#SEC967"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Hosten and Sturmfels" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_913.htm#SEC969"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Bigatti and La Scala and Robbiano" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_905.htm#SEC961"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Gauss-Manin connection" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_914.htm#SEC970"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Buchberger algorithm" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_908.htm#SEC964"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Algorithms" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> C.6.2.4 The algorithm of Di Biase and Urbanke </H4>
+<!--docid::SEC968::-->
+<P>
+
+Like the algorithm of Hosten and Sturmfels, the algorithm of Di Biase
+and Urbanke (see  <A HREF="sing_916.htm#[DBUr95]">[DBUr95]</A>) performs up
+to <IMG
+ WIDTH="30" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_669.png"
+ ALT="$n/2$"> Groebner basis
+computations. It needs no auxiliary variables, but a supplementary
+precondition; namely, the existence of a vector without zero components
+in the kernel of <IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_187.png"
+ ALT="$A$">.
+
+<P>
+The main idea comes from the following observation:
+
+<P>
+Let <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_192.png"
+ ALT="$B$"> be an integer matrix, <!-- MATH
+ $u_1,\ldots,u_r$
+ -->
+<IMG
+ WIDTH="72" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_670.png"
+ ALT="$u_1,\ldots,u_r$"> a lattice basis of the
+integer kernel of <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_192.png"
+ ALT="$B$">. Assume that all components of <IMG
+ WIDTH="21" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_671.png"
+ ALT="$u_1$"> are
+positive. Then
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+I_B=<x^{u_i^+}-x^{u_i^-}|i=1,\ldots,r>,
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="227" HEIGHT="28" BORDER="0"
+ SRC="sing_672.png"
+ ALT="\begin{displaymath}I_B=&lt;x^{u_i^+}-x^{u_i^-}\vert i=1,\ldots,r&gt;, \end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+i.e., the ideal on the right is already saturated w.r.t. all variables.
+
+<P>
+The algorithm starts by finding a lattice basis <!-- MATH
+ $v_1,\ldots,v_r$
+ -->
+<IMG
+ WIDTH="70" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_485.png"
+ ALT="$v_1,
+\ldots, v_r$"> of the
+kernel of <IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_187.png"
+ ALT="$A$"> such that <IMG
+ WIDTH="19" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_673.png"
+ ALT="$v_1$"> has no zero component. Let
+<!-- MATH
+ $\{i_1,\ldots,i_l\}$
+ -->
+<IMG
+ WIDTH="79" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_674.png"
+ ALT="$\{i_1,\ldots,i_l\}$"> be the set of indices <IMG
+ WIDTH="10" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_55.png"
+ ALT="$i$"> with
+<IMG
+ WIDTH="57" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_675.png"
+ ALT="$v_{1,i}&lt;0$">. Multiplying the components <!-- MATH
+ $i_1,\ldots,i_l$
+ -->
+<IMG
+ WIDTH="63" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_676.png"
+ ALT="$i_1,\ldots,i_l$"> of
+<!-- MATH
+ $v_1,\ldots,v_r$
+ -->
+<IMG
+ WIDTH="70" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_485.png"
+ ALT="$v_1,
+\ldots, v_r$"> and the columns <!-- MATH
+ $i_1,\ldots,i_l$
+ -->
+<IMG
+ WIDTH="63" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_676.png"
+ ALT="$i_1,\ldots,i_l$"> of <IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_187.png"
+ ALT="$A$"> by <IMG
+ WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_677.png"
+ ALT="$-1$"> yields
+a matrix <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_192.png"
+ ALT="$B$"> and a lattice basis <!-- MATH
+ $u_1,\ldots,u_r$
+ -->
+<IMG
+ WIDTH="72" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_670.png"
+ ALT="$u_1,\ldots,u_r$"> of the kernel of <IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_192.png"
+ ALT="$B$">
+that fulfill the assumption of the observation above. It is then possible
+to compute a generating set of <IMG
+ WIDTH="22" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_649.png"
+ ALT="$I_A$"> by applying the following
+``variable flip'' successively to <!-- MATH
+ $i=i_1,\ldots,i_l$
+ -->
+<IMG
+ WIDTH="90" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_678.png"
+ ALT="$i=i_1,\ldots,i_l$">:
+
+<P>
+Let <IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_329.png"
+ ALT="$&gt;$"> be an elimination ordering for <IMG
+ WIDTH="19" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_125.png"
+ ALT="$x_i$">. Let <IMG
+ WIDTH="22" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_679.png"
+ ALT="$A_i$"> be the matrix
+obtained by multiplying the <IMG
+ WIDTH="10" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_55.png"
+ ALT="$i$">-th column of <IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_187.png"
+ ALT="$A$"> by <IMG
+ WIDTH="25" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_677.png"
+ ALT="$-1$">. Let
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+\{x_i^{r_j} x^{a_j} - x^{b_j} | j\in J \}
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="141" HEIGHT="28" BORDER="0"
+ SRC="sing_680.png"
+ ALT="\begin{displaymath}\{x_i^{r_j} x^{a_j} - x^{b_j} \vert j\in J \}\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+be a Groebner basis of <IMG
+ WIDTH="27" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_681.png"
+ ALT="$I_{A_i}$"> w.r.t. <IMG
+ WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_329.png"
+ ALT="$&gt;$"> (where <IMG
+ WIDTH="19" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_125.png"
+ ALT="$x_i$"> is neither
+involved in <IMG
+ WIDTH="27" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_682.png"
+ ALT="$x^{a_j}$"> nor in <IMG
+ WIDTH="26" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_683.png"
+ ALT="$x^{b_j}$">). Then
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+\{x^{a_j} - x_i^{r_j} x^{b_j} | j\in J \}
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="141" HEIGHT="28" BORDER="0"
+ SRC="sing_684.png"
+ ALT="\begin{displaymath}\{x^{a_j} - x_i^{r_j} x^{b_j} \vert j\in J \}\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+is a generating set for <IMG
+ WIDTH="22" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_649.png"
+ ALT="$I_A$">.</P><P>
+
+<A NAME="Bigatti and La Scala and Robbiano"></A>
+</P><P>
+
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_911.htm#SEC967"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Hosten and Sturmfels" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_913.htm#SEC969"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Bigatti and La Scala and Robbiano" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_905.htm#SEC961"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Gauss-Manin connection" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_914.htm#SEC970"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Buchberger algorithm" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_908.htm#SEC964"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Algorithms" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

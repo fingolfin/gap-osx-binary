@@ -1,0 +1,180 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: schreyer_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: schreyer_lib">
+<META NAME="keywords" CONTENT="Singular Manual: schreyer_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2344"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2268.htm#SEC2343"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: MVComplex" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2270.htm#SEC2345"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: s_res" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: derham_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2324.htm#SEC2399"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Release Notes" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.15.22 schreyer_lib </H3>
+<!--docid::SEC2344::-->
+<P>
+
+<A NAME="IDX901"></A>
+<A NAME="IDX902"></A>
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>schreyer.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD> Schreyer resolution computations and helpers for derham.lib
+<DT><STRONG>Author:</STRONG>
+<DD>Oleksandr Motsak &lt;U@D&gt;, where U={motsak}, D={mathematik.uni-kl.de}
+<P>
+
+<A NAME="IDX903"></A>
+<A NAME="IDX904"></A>
+<A NAME="IDX905"></A>
+<DT><STRONG>Overview:</STRONG>
+<DD>The library contains several procedures for computing a/part of Schreyer
+resoltion (cf. [SFO]), and some helpers for derham.lib (which requires
+resolutions over the homogenized Weyl algebra) for that purpose.
+The input for any resolution computation is a set of vectors M in form of a
+module over some basering R. The helpers works both in the commutative and
+non-commutative setting (cf. [MO]), that is the ring R may be non-commutative,
+in which case the ring ordering over it must be global. They produce/work with
+partial Schreyer resolutions of (R^rank(M))/M in form of a specially constructed
+ring (endowed with a special ring ordering that will be extended in the course
+of a resolution computation) containing the following objects:
+<BR> RES: the list of modules contains the images of maps (also called syzygy
+modules) substituting the computed beginning of a Schreyer resolution, that is,
+each syzygy module is given by a Groebner basis with respect to the
+corresponding Schreyer ordering. RES starts with a zero map given by rank(M)
+zero generators indicating that the image of the first differential map is
+zero. The second map RES[2] is given by M, which indicates that the resolution
+of (R^rank(M))/M is being computed.
+<BR> MRES: the module is a direct sum of modules from RES and thus comprises all
+computed differentials. Syzygies are shifted so that gen(i) is mapped to MRES[i]
+under the differential map.
+<BR> Here, we call a free resolution a Schreyer resolution if each syzygy
+module is given by a Groebner basis with respect to the corresponding Schreyer
+ordering. A Schreyer resolution can be much bigger than a minimal resolution of
+the same module, but may be easier to construct. The Schreyer ordering
+succesively extends the starting module ordering on M (defined in Singular by
+the basering R) and is extended to higher syzygies using the following
+definition:
+<BR> a &lt; b if and only if (d(a)&lt;d(b)) OR ( (d(a)=d(b) AND (comp(a)&lt;comp(b)) ),
+<BR> where d(a) is the image of an under the differential (given by MRES), and
+comp(a) is the module component, for any module terms a and b from the same
+higher syzygy module.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>Since most comutations require the module syzextra.so, please be make sure
+to build it into Singular on Windows.
+<P>
+
+<DT><STRONG>References:</STRONG>
+<DD><BR>
+[BMSS] Burcin, E., Motsak, O., Schreyer, F.-O., Steenpass, A.:
+Refined algorithms to compute syzygies, 2015 (to appear).
+<BR>
+[SFO] Schreyer, F.O.: Die Berechnung von Syzygien mit dem verallgemeinerten
+Weierstrassschen Divisionssatz, Master's thesis, Univ. Hamburg, 1980.
+<BR>
+[MO] Motsak, O.: Non-commutative Computer Algebra with applications:
+Graded commutative algebra and related structures in Singular with applications,
+Ph.D. thesis, TU Kaiserslautern, 2010.
+<P>
+
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2270.htm#SEC2345">D.15.22.1 s_res</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">compute Schreyer resolution via LiftTree method from [BMSS]</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2271.htm#SEC2346">D.15.22.2 Sres</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">helper for computing Schreyer resolution</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2272.htm#SEC2347">D.15.22.3 Ssyz</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">helper for computing Schreyer resolution of module M of length 1</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2273.htm#SEC2348">D.15.22.4 Scontinue</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">helper for extending currently active resolution</TD></TR>
+</TABLE></BLOCKQUOTE>
+See also:
+ <A HREF="sing_337.htm#SEC376">lres</A>;
+ <A HREF="sing_386.htm#SEC425">res</A>;
+ <A HREF="sing_400.htm#SEC439">sres</A>;
+ <A HREF="sing_407.htm#SEC446">syz</A>.
+<P>
+
+<A NAME="s_res"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2268.htm#SEC2343"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: MVComplex" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2270.htm#SEC2345"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: s_res" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2266.htm#SEC2341"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: derham_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2324.htm#SEC2399"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Release Notes" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

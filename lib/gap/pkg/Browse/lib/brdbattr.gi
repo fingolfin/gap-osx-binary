@@ -716,18 +716,6 @@ InstallGlobalFunction( BrowseTableFromDatabaseIdEnumerator,
         widthCol:= ShallowCopy( widthCol ),
 
         SpecialGrid:= BrowseData.SpecialGridLineDraw,
-#        Click:= rec(
-#          select_entry:= rec(
-#            helplines:= [ "..." ],
-#            action:= function( t ) 
-#            if t.dynamic.selectedEntry <> [ 0, 0 ] then
-#
-#            fi;
-#          end ),
-#          select_row:= ~.work.Click.select_entry,
-#        ),
-# generic Click? (access value of dbidenum!)
-# or per column?
         CategoryValues:= function( t, i, j )
           local val;
 
@@ -740,7 +728,6 @@ InstallGlobalFunction( BrowseTableFromDatabaseIdEnumerator,
       ),
       dynamic:= rec(
          sortFunctionsForColumns:= sortFunctions,
-#        Return:= [],
       ),
     );
 

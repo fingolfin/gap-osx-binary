@@ -1,0 +1,184 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: mres</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: mres">
+<META NAME="keywords" CONTENT="Singular Manual: mres">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC391"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_351.htm#SEC390"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: mpresmat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_353.htm#SEC392"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: mstd" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 5.1.93 mres </H3>
+<!--docid::SEC391::-->
+<DL COMPACT>
+<DT><CODE><STRONG>Syntax:</STRONG></CODE>
+<DD><CODE>mres (</CODE> ideal_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<BR><CODE>mres (</CODE> module_expression<CODE>,</CODE> int_expression <CODE>)</CODE>
+<DT><CODE><STRONG>Type:</STRONG></CODE>
+<DD>resolution
+<DT><CODE><STRONG>Purpose:</STRONG></CODE>
+<DD>computes a minimal free resolution of an ideal or module M with the
+standard basis method. More precisely, let A=<CODE>matrix</CODE>(M), then <CODE>mres</CODE>
+computes a free resolution of
+<!-- MATH
+ $coker(A)=F_0/M$
+ -->
+<IMG
+ WIDTH="130" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_163.png"
+ ALT="$coker(A)=F_0/M$">
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+...\longrightarrow F_2 \buildrel{A_2}\over{\longrightarrow} F_1
+\buildrel{A_1}\over{\longrightarrow} F_0\longrightarrow F_0/M
+\longrightarrow 0,
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="290" HEIGHT="28" BORDER="0"
+ SRC="sing_164.png"
+ ALT="\begin{displaymath}...\longrightarrow F_2 \buildrel{A_2}\over{\longrightarrow} F...
+...er{\longrightarrow} F_0\longrightarrow F_0/M
+\longrightarrow 0,\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>where the columns of the matrix
+<IMG
+ WIDTH="24" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_165.png"
+ ALT="$A_1$">are a minimal set of generators
+of M if the basering is local or if M is homogeneous.
+If the int expression k is not zero, then the computation stops after k steps
+and returns a list of modules
+<!-- MATH
+ $M_i={\tt module}(A_i)$
+ -->
+<IMG
+ WIDTH="126" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_134.png"
+ ALT="$M_i={\tt module} (A_i)$">, i=1...k.<BR><CODE>mres(M,0)</CODE> returns a resolution consisting of at most n+2 modules,
+where n is the number of variables of the basering.
+Let <CODE>list L=mres(M,0);</CODE>
+ then <CODE>L[1]</CODE> consists of a minimal set of generators of the input, <CODE>L[2]</CODE>
+consists of a minimal set of generators for the first syzygy module of
+<CODE>L[1]</CODE>, etc., until <CODE>L[p+1]</CODE>, such that
+<!-- MATH
+ ${\tt L[i]}\neq 0$
+ -->
+<IMG
+ WIDTH="59" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_166.png"
+ ALT="${\tt L[i]}\neq 0$"> for <IMG
+ WIDTH="39" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_167.png"
+ ALT="$i \le p$">, but <CODE>L[p+1]</CODE>, the first syzygy module of <CODE>L[p]</CODE>,
+is 0 (if the basering is not a qring).
+<DT><CODE><STRONG>Note:</STRONG></CODE>
+<DD>Accessing single elements of a resolution may require some partial
+computations to be finished and may therefore take some time.
+<DT><CODE><STRONG>Example:</STRONG></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=31991,(t,x,y,z,w),ls;
+  ideal M=t2x2+tx2y+x2yz,t2y2+ty2z+y2zw,
+          t2z2+tz2w+xz2w,t2w2+txw2+xyw2;
+  resolution L=mres(M,0);
+  L;
+==>  1      4      15      18      7      1      
+==> r &lt;--  r &lt;--  r &lt;--   r &lt;--   r &lt;--  r
+==> 
+==> 0      1      2       3       4      5      
+==> 
+  // projective dimension of M is 5
+</FONT></pre></td></tr></table></DL>
+See
+ <A HREF="sing_312.htm#SEC351">hres</A>;
+ <A HREF="sing_85.htm#SEC124">ideal</A>;
+ <A HREF="sing_337.htm#SEC376">lres</A>;
+ <A HREF="sing_134.htm#SEC173">module</A>;
+ <A HREF="sing_386.htm#SEC425">res</A>;
+ <A HREF="sing_400.htm#SEC439">sres</A>.
+<A NAME="mstd"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_351.htm#SEC390"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: mpresmat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_353.htm#SEC392"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: mstd" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_258.htm#SEC297"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Functions and system variables" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_425.htm#SEC464"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Control structures" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_259.htm#SEC298"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Functions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

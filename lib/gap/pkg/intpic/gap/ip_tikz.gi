@@ -17,10 +17,10 @@ function(arg)
          lens, l, r, cat, el, node, h, utable, k, table, 
          tikzstring, floor, nd, string;
   
-  opt := First(arg, a -> IsRecord(a));
-  rg := First(arg, a -> IsHomogeneousList(a) and not IsList(a[1]));
-  tb := First(arg, a -> IsTable(a));
-  flen := First(arg, a -> IsInt(a));
+  opt := StructuralCopy(First(arg, a -> IsRecord(a)));
+  rg := StructuralCopy(First(arg, a -> IsHomogeneousList(a) and not IsList(a[1])));
+  tb := StructuralCopy(First(arg, a -> IsTable(a)));
+  flen := StructuralCopy(First(arg, a -> IsInt(a)));
   
   ## the options ##
   if opt = fail then
@@ -43,30 +43,33 @@ function(arg)
       # a compromise to not get too large or too high images
       flen := Minimum(30,Int(40/(LogInt(Maximum(rg),10)+1)));       
     fi;
-  elif tb <> fail then
-    lens := List(tb,Length); #the lengths of the lists
-    if flen = fail then
-      flen := Maximum(lens);
-    else
-      flen := Maximum(Maximum(lens),flen); # 
-    fi;
-    if flen = Minimum(lens) then #all the lists have the same length, which 
-      # coincides with the length given as argument  
-      rg := Concatenation(tb);
-    else # otherwise, dots (".") are used at the end of the lists in order 
-      #to produce a table where all lists have the same length
-      aux := [];
-      for l in tb do
-        Append(aux,l);
-        if Length(l) < flen then
-          r := flen - Length(l);
-          for i in [1..r] do
-            Add(aux,".");
-          od;
-        fi;
-      od;
-      rg := aux;
-    fi;
+    #  elif tb <> fail then #201407
+    if tb <> fail then
+      lens := List(tb,Length); #the lengths of the lists
+      if flen = fail then
+        flen := Maximum(lens);
+      else
+        flen := Maximum(Maximum(lens),flen); # 
+      fi;
+      if flen = Minimum(lens) then #all the lists have the same length, which 
+        # coincides with the length given as argument  
+        rg := Concatenation(tb);
+      else # otherwise, dots (".") are used at the end of the lists in order 
+        #to produce a table where all lists have the same length
+        aux := [];
+        for l in tb do
+          Append(aux,l);
+          if Length(l) < flen then
+            r := flen - Length(l);
+            for i in [1..r] do
+              Add(aux,".");
+            od;
+          fi;
+        od;
+        rg := aux;
+      fi;
+    fi; #201407
+
   else #when no list or table is given, the minimum range containing all the elements 
     #to be highlighted is taken.
     cat := Concatenation(array);

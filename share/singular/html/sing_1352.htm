@@ -1,0 +1,480 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: determinecenter</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: determinecenter">
+<META NAME="keywords" CONTENT="Singular Manual: determinecenter">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1427"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1351.htm#SEC1426"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Eresol" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1353.htm#SEC1428"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Blowupcenter" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1381.htm#SEC1456"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resgraph_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.5.2.3 determinecenter </H4>
+<!--docid::SEC1427::-->
+Procedure from library <CODE>resbinomial.lib</CODE> (see  <A HREF="sing_1349.htm#SEC1424">resbinomial_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>determinecenter(Coef,expJ,c,n,Y,a,listmb,flag,control3,Hhist);
+Coef, expJ, listmb, flag lists, c number, n, Y, control3 integers, a, Hhist intvec
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>next center of blowing up and related information, see example
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>several lists defining the center and related information
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "resbinomial.lib";
+ring r = 0,(x(1..4)),dp;
+list flag=identifyvar();
+ideal J=x(1)^2-x(2)^2*x(3)^5, x(1)*x(3)^3+x(4)^6;
+list Lmb=1,list(0,0,0,0),list(0,0,0,0),list(0,0,0,0),iniD(4),iniD(4),list(0,0,0,0),-1;
+list L=data(J,2,4);
+list LL=determinecenter(L[1],L[2],2,4,0,0,Lmb,flag,0,-1); // Compute the first center
+LL[1];  // index of variables in the center
+==> [1]:
+==>    1
+==> [2]:
+==>    4
+==> [3]:
+==>    3
+==> [4]:
+==>    2
+LL[2];  // exponents of ideals J_4,J_3,J_2,J_1
+==> [1]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             2
+==>          [3]:
+==>             5
+==>          [4]:
+==>             0
+==>       [2]:
+==>          [1]:
+==>             2
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>    [2]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             6
+==>       [2]:
+==>          [1]:
+==>             1
+==>          [2]:
+==>             0
+==>          [3]:
+==>             3
+==>          [4]:
+==>             0
+==> [2]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             2
+==>          [3]:
+==>             5
+==>          [4]:
+==>             0
+==>    [2]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             6
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             6
+==>          [4]:
+==>             0
+==> [3]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             2
+==>          [3]:
+==>             5
+==>          [4]:
+==>             0
+==>    [2]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             6
+==>          [4]:
+==>             0
+==> [4]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             12
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+LL[3];  // list of orders of J_4,J_3,J_2,J_1
+==> [1]:
+==>    2
+==> [2]:
+==>    6
+==> [3]:
+==>    6
+==> [4]:
+==>    12
+LL[4];  // list of critical values
+==> [1]:
+==>    2
+==> [2]:
+==>    2
+==> [3]:
+==>    6
+==> [4]:
+==>    6
+LL[5];  // components of the resolution function t
+==> [1]:
+==>    1
+==> [2]:
+==>    3
+==> [3]:
+==>    1
+==> [4]:
+==>    2
+LL[6];  // list of D_4,D_3,D_2,D_1
+==> [1]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+==> [2]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+==> [3]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+==> [4]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+LL[7];  // list of H_4,H_3,H_2,H_1 (exceptional divisors)
+==> [1]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+==> [2]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+==> [3]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+==> [4]:
+==>    [1]:
+==>       0
+==>    [2]:
+==>       0
+==>    [3]:
+==>       0
+==>    [4]:
+==>       0
+LL[8];  // list of all exceptional divisors acumulated
+==> [1]:
+==>    0
+==> [2]:
+==>    0
+==> [3]:
+==>    0
+==> [4]:
+==>    0
+LL[9];  // auxiliary invariant
+==> [1]:
+==>    0
+LL[10]; // intvec pointing out the last step where the function t has dropped
+==> -1,-1,-1,-1
+ring r= 0,(x(1..4)),dp;
+==> // ** redefining r **
+list flag=identifyvar();
+==> // ** redefining flag **
+ideal J=x(1)^3-x(2)^2*x(3)^5, x(1)*x(3)^3+x(4)^5;
+list Lmb=2,list(0,0,0,0),list(0,0,0,0),list(0,0,0,0),iniD(4),iniD(4),list(0,0,0,0),-1;
+==> // ** redefining Lmb **
+list L2=data(J,2,4);
+list L3=determinecenter(L2[1],L2[2],2,4,0,0,Lmb,flag,0,-1); // Example with rational exponents in E-Coeff
+L3[1]; // index of variables in the center
+==> [1]:
+==>    1
+==> [2]:
+==>    3
+==> [3]:
+==>    4
+L3[2]; // exponents of ideals J_4,J_3,J_2,J_1
+==> [1]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             2
+==>          [3]:
+==>             5
+==>          [4]:
+==>             0
+==>       [2]:
+==>          [1]:
+==>             3
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+==>    [2]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             5
+==>       [2]:
+==>          [1]:
+==>             1
+==>          [2]:
+==>             0
+==>          [3]:
+==>             3
+==>          [4]:
+==>             0
+==> [2]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             2
+==>          [3]:
+==>             5
+==>          [4]:
+==>             0
+==>    [2]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             5
+==>    [3]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             9/2
+==>          [4]:
+==>             0
+==> [3]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             5
+==> [4]:
+==>    [1]:
+==>       [1]:
+==>          [1]:
+==>             0
+==>          [2]:
+==>             0
+==>          [3]:
+==>             0
+==>          [4]:
+==>             0
+L3[3]; // list of orders of J_4,J_3,J_2,J_1
+==> [1]:
+==>    3
+==> [2]:
+==>    9/2
+==> [3]:
+==>    5
+L3[4]; // list of critical values
+==> [1]:
+==>    2
+==> [2]:
+==>    3
+==> [3]:
+==>    9/2
+L3[5]; // components of the resolution function
+==> [1]:
+==>    3/2
+==> [2]:
+==>    3/2
+==> [3]:
+==>    10/9
+</FONT></pre></td></tr></table><P>
+
+<A NAME="Blowupcenter"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1351.htm#SEC1426"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Eresol" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1353.htm#SEC1428"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Blowupcenter" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1337.htm#SEC1412"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: paraplanecurves_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1381.htm#SEC1456"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: resgraph_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1349.htm#SEC1424"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: resbinomial_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,237 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Hom</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Hom">
+<META NAME="keywords" CONTENT="Singular Manual: Hom">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1232"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1156.htm#SEC1231"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: flatteningStrat" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1158.htm#SEC1233"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: homology" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.7.9 Hom </H4>
+<!--docid::SEC1232::-->
+Procedure from library <CODE>homolog.lib</CODE> (see  <A HREF="sing_1148.htm#SEC1223">homolog_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>Hom(M,N,[any]); M,N=modules
+<P>
+
+<DT><STRONG>Compute:</STRONG>
+<DD>A presentation of Hom(M',N'), M'=coker(M), N'=coker(N) as follows:
+let
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>   F1 --M-&gt; F0 --&gt;M' --&gt; 0,    G1 --N-&gt; G0 --&gt; N' --&gt; 0
+</FONT></pre></td></tr></table>be presentations of M' and N'. Consider
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>                                  0               0
+                                  |^              |^
+       0 --&gt; Hom(M',N') ----&gt; Hom(F0,N') ----&gt; Hom(F1,N')
+                                  |^              |^
+  (A:  induced by M)          Hom(F0,G0) --A-&gt; Hom(F1,G0)
+                                  |^              |^
+  (B,C:induced by N)              |C              |B
+                              Hom(F0,G1) ----&gt; Hom(F1,G1)
+
+</FONT></pre></td></tr></table>Let D=modulo(A,B) and Hom=modulo(D,C), then we have exact sequences
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>   R^p  --D-&gt; Hom(F0,G0) --A-&gt; Hom(F1,G0)/im(B),
+
+ R^q -Hom-&gt; R^p --D-&gt; Hom(F0,G0)/im(C) --A-&gt; Hom(F1,G0)/im(B).
+</FONT></pre></td></tr></table>Hence Hom presents Hom(M',N')
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>module Hom, a presentation of Hom(M',N'), resp., in case of
+3 arguments, a list l (of size &lt;=3):
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">           - l[1] = Hom
+           - l[2] = SB of Hom
+           - l[3] = kbase of coker(Hom) (if finite dimensional, not 0),
+                    represented by elements in Hom(F0,G0) via mapping D
+</pre></td></tr></table><P>
+
+<DT><STRONG>Display:</STRONG>
+<DD>printlevel &gt;=0: (affine) dimension of Hom (default)
+<BR> printlevel &gt;=1: D and C and kbase of coker(Hom) in Hom(F0,G0)
+<BR> printlevel &gt;=2: elements of kbase of coker(Hom) as matrix :F0--&gt;G0
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>DISPLAY is as described only for a direct call of 'Hom'. Calling 'Hom'
+from another proc has the same effect as decreasing printlevel by 1.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "homolog.lib";
+int p     = printlevel;
+printlevel= 1;   //in 'example proc' printlevel has to be increased by 1
+ring r    = 0,(x,y),dp;
+ideal i   = x2-y3,xy;
+qring q   = std(i);
+ideal i   = fetch(r,i);
+module M  = [-x,y],[-y2,x],[x3];
+module H  = Hom(M,i);
+==> // dimension of Hom:  0
+==> // vdim of Hom:       5
+==> 
+==> // given  F1 --M-&gt; F0 --&gt;M'--&gt; 0 and  G1 --N-&gt; G0 --&gt;N'--&gt; 0,
+==> // show D = ker( Hom(F0,G0) --&gt; Hom(F1,G0)/im(Hom(F1,G1)-&gt;Hom(F1,G0)) )
+==> y,x, 0,
+==> x,y2,x2
+==> // show C = im ( Hom(F0,G1) --&gt; Hom(F0,G0) )
+==> -y3+x2,0,     xy,0,
+==> 0,     -y3+x2,0, xy
+==> 
+print(H);
+==> 0, x, 0,y2,0, 
+==> y, 0, 0,-x,x2,
+==> -1,-1,x,0, 0  
+printlevel= 2;
+list L    = Hom(M,i,1);"";
+==> // dimension of Hom:  0
+==> // vdim of Hom:       5
+==> 
+==> // given  F1 --M-&gt; F0 --&gt;M'--&gt; 0 and  G1 --N-&gt; G0 --&gt;N'--&gt; 0,
+==> // show D = ker( Hom(F0,G0) --&gt; Hom(F1,G0)/im(Hom(F1,G1)-&gt;Hom(F1,G0)) )
+==> y,x, 0,
+==> x,y2,x2
+==> // show C = im ( Hom(F0,G1) --&gt; Hom(F0,G0) )
+==> -y3+x2,0,     xy,0,
+==> 0,     -y3+x2,0, xy
+==> 
+==> // element 1 of kbase of Hom in Hom(F0,G0) as matrix: F0--&gt;G0:
+==> y2,xy
+==> // element 2 of kbase of Hom in Hom(F0,G0) as matrix: F0--&gt;G0:
+==> y,x
+==> // element 3 of kbase of Hom in Hom(F0,G0) as matrix: F0--&gt;G0:
+==> x2,xy2
+==> // element 4 of kbase of Hom in Hom(F0,G0) as matrix: F0--&gt;G0:
+==> x,y2
+==> // element 5 of kbase of Hom in Hom(F0,G0) as matrix: F0--&gt;G0:
+==> 0,x2
+==> 
+printlevel=1;
+ring s    = 3,(x,y,z),(c,dp);
+ideal i   = jacob(ideal(x2+y5+z4));
+qring rq=std(i);
+matrix M[2][2]=xy,x3,5y,4z,x2;
+matrix N[3][2]=x2,x,y3,3xz,x2z,z;
+print(M);
+==> xy,x3,
+==> -y,z  
+print(N);
+==> x2, x,
+==> y3, 0,
+==> x2z,z 
+list l=Hom(M,N,1);
+==> // dimension of Hom:  0
+==> // vdim of Hom:       16
+==> 
+==> // given  F1 --M-&gt; F0 --&gt;M'--&gt; 0 and  G1 --N-&gt; G0 --&gt;N'--&gt; 0,
+==> // show D = ker( Hom(F0,G0) --&gt; Hom(F1,G0)/im(Hom(F1,G1)-&gt;Hom(F1,G0)) )
+==> 0,0, 0,0, 0,   0,0,   1,
+==> 0,0, 0,0, 0,   0,y3z2,0,
+==> 0,0, 0,0, 0,   1,0,   0,
+==> 0,0, 0,y3,y2z2,0,0,   0,
+==> 0,0, 1,0, 0,   0,0,   0,
+==> z,y3,0,0, 0,   0,0,   0 
+==> // show C = im ( Hom(F0,G1) --&gt; Hom(F0,G0) )
+==> x2, 0,  x,0,
+==> 0,  x2, 0,x,
+==> y3, 0,  0,0,
+==> 0,  y3, 0,0,
+==> x2z,0,  z,0,
+==> 0,  x2z,0,z 
+==> 
+==> // columns of matrix are kbase of Hom in Hom(F0,G0)
+==> 0, 0, 0, 0,0,0,   0,   0,  0, 0,  0, 0,0, 0,0,0,   
+==> 0, 0, 0, 0,0,0,   0,   0,  0, 0,  0, 0,0, 0,0,y3z2,
+==> 0, 0, 0, 0,0,0,   y2z2,yz2,z2,y2z,yz,z,y2,y,1,0,   
+==> 0, 0, 0, 0,0,y2z2,0,   0,  0, 0,  0, 0,0, 0,0,0,   
+==> 0, y3,y2,y,1,0,   0,   0,  0, 0,  0, 0,0, 0,0,0,   
+==> y3,0, 0, 0,0,0,   0,   0,  0, 0,  0, 0,0, 0,0,0    
+printlevel = p;
+</FONT></pre></td></tr></table><P>
+
+<A NAME="homology"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1156.htm#SEC1231"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: flatteningStrat" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1158.htm#SEC1233"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: homology" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1141.htm#SEC1216"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: grwalk_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1169.htm#SEC1244"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: integralbasis_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1148.htm#SEC1223"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: homolog_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

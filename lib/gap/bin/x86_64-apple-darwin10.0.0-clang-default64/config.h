@@ -342,7 +342,7 @@
 #define PACKAGE_NAME "GAP"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "GAP 4.7.5"
+#define PACKAGE_STRING "GAP 4.7.8"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gap"
@@ -351,7 +351,7 @@
 #define PACKAGE_URL "http://www.gap-system.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "4.7.5"
+#define PACKAGE_VERSION "4.7.8"
 
 /* The size of `void *', as computed by sizeof. */
 #define SIZEOF_VOID_P 8

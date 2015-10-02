@@ -1,0 +1,217 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: polybori_lib</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: polybori_lib">
+<META NAME="keywords" CONTENT="Singular Manual: polybori_lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC2080"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2004.htm#SEC2079"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: PH_nais" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2006.htm#SEC2081"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: boolean_std" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: phindex_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> D.14.2 polybori_lib </H3>
+<!--docid::SEC2080::-->
+<P>
+
+<A NAME="IDX679"></A>
+<A NAME="IDX680"></A>
+<DL COMPACT>
+<DT><STRONG>Library:</STRONG>
+<DD>polybori.lib
+<DT><STRONG>Purpose:</STRONG>
+<DD> A Singular Library Interface for PolyBoRi
+<DT><STRONG>Authors:</STRONG>
+<DD>Maximilian Kammermeier: Max0791@gmx.de
+<BR>Susanne Scherer: sscherer90@yahoo.de
+<P>
+
+<DT><STRONG>Overview:</STRONG>
+<DD>A library for using <CODE>PolyBoRi</CODE> in the SINGULAR interface, with
+procedures that convert structures (polynomials, rings, ideals) in both
+directions. Therefore, it is possible to compute boolean groebner basis
+via  <A HREF="sing_2006.htm#SEC2081">boolean_std</A>. Polynomials can be converted to zero-supressed decision
+diagrams (zdd) and vice versa.
+<P>
+
+For usability it defines the <CODE>PolyBoRi</CODE> types <CODE>bideal</CODE>, <CODE>bpoly</CODE>,
+and <CODE>bring</CODE> which are equivalent to Singular's <CODE>ideal</CODE>, <CODE>poly</CODE>,
+and <CODE>ring</CODE>, as well as <CODE>bset</CODE> which corresponds to the type <CODE>zdd</CODE>
+introduced here. In addition <CODE>bvar(i)</CODE> constructs the Boolean variable corresponding
+to <CODE>var(i)</CODE> from current <CODE>ring</CODE>;
+</P><P>
+
+For convenience, the corresponding types can be converted explictely or implicitely
+while assigning.
+Also several SINGULAR operators were overloaded: <CODE>bring</CODE> comes with <CODE>nvars</CODE>,
+<CODE>bpoly</CODE> implements <CODE>lead</CODE>, <CODE>leadmonom</CODE> and <CODE>leadcoef</CODE>.
+Objects of this type may be added and multiplied, too.
+Finally, <CODE>bideal</CODE> yields <CODE>std</CODE> and <CODE>size</CODE> as well as addition and element access.
+</P><P>
+
+Hence, by using these types <CODE>PolyBoRi</CODE> functionality
+can be carried out seamlessly in SINGULAR:
+</P><P>
+
+<CODE>&gt; LIB "polybori.lib";</CODE> <BR>
+<CODE>&gt; ring r0=2,x(1..4),lp;</CODE> <BR>
+<CODE>&gt; def x=bvar; // enforce Boolean variables</CODE> <BR>
+</P><P>
+
+<CODE>&gt; bpoly f1=x(1)+x(4);</CODE> <BR>
+<CODE>&gt; bpoly f2=x(1)+x(3)*x(1);</CODE> <BR>
+<CODE>&gt; bideal bI=list(f1,f2);</CODE> <BR>
+</P><P>
+
+<CODE>&gt; std(bI);</CODE> <BR>
+<CODE>_[1] = x(1) + x(4)</CODE> <BR>
+<CODE>_[2] = x(3)*x(4) + x(4)</CODE> <BR>
+</P><P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>For using this library SINGULAR's <CODE>python</CODE> interface must be available
+on your system.
+Please <CODE>./configure --with-python</CODE> when building SINGULAR for this purpose.
+<P>
+
+There are prebuilt binary packages for <CODE>PolyBoRi</CODE> available
+from <CODE>http://polybori.sf.net/</CODE>.
+</P><P>
+
+For building your own <CODE>PolyBoRi</CODE> please ensure that you have <CODE>scons</CODE> and a
+development version of the boost libaries installed on you system.
+Then you may execute the following commands in a <CODE>bash</CODE>-style shell
+to build <CODE>PolyBoRi</CODE> available to <CODE>python</CODE>:
+</P><P>
+
+<CODE>PBDIR=/path/to/custom/polybori</CODE> <BR>
+<CODE>wget http://downloads.sf.net/project/polybori/polybori/\</CODE><BR>
+<CODE>0.8.2/polybori-0.8.2.tar.gz</CODE> <BR>
+<CODE>tar -xvzf polybori-0.8.2.tar.gz</CODE> <BR>
+<CODE>cd polybori-0.8.2</CODE> <BR>
+<CODE>scons install PREFIX=$PBDIR PYINSTALLPREFIX=$PBDIR/python</CODE> <BR>
+<CODE>export PYTHONPATH=$PBDIR/python:$PYTHONPATH</CODE> <BR>
+</P><P>
+
+<DT><STRONG>References:</STRONG>
+<DD>See <CODE>http://polybori.sf.net</CODE> for details about <CODE>PolyBoRi</CODE>.
+<P>
+
+</DL>
+<P>
+
+<STRONG>Procedures:</STRONG>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2006.htm#SEC2081">D.14.2.1 boolean_std</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Singular ideal of boolean groebner basis of I</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2007.htm#SEC2082">D.14.2.2 boolean_poly_ring</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert ring</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2008.htm#SEC2083">D.14.2.3 boolean_constant</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert constant</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2009.htm#SEC2084">D.14.2.4 boolean_poly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert polynomial</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2010.htm#SEC2085">D.14.2.5 direct_boolean_poly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert polynomial direct</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2011.htm#SEC2086">D.14.2.6 recursive_boolean_poly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert polynomial recursively</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2012.htm#SEC2087">D.14.2.7 boolean_ideal</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert ideal</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2013.htm#SEC2088">D.14.2.8 boolean_set</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert zdd</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2014.htm#SEC2089">D.14.2.9 from_boolean_constant</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert boolean constant</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2015.htm#SEC2090">D.14.2.10 from_boolean_poly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert boolean polynomial</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2016.htm#SEC2091">D.14.2.11 direct_from_boolean_poly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert boolean polynomial direct</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2017.htm#SEC2092">D.14.2.12 recursive_from_boolean_poly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert boolean polynomial recursively</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2018.htm#SEC2093">D.14.2.13 from_boolean_ideal</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert to ideal</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2019.htm#SEC2094">D.14.2.14 from_boolean_set</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">convert to zdd</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2020.htm#SEC2095">D.14.2.15 bvar</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">return i-th Boolean variable</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2021.htm#SEC2096">D.14.2.16 poly2zdd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">return zdd of a given polynomial</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2022.htm#SEC2097">D.14.2.17 zdd2poly</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">return polynomial representation of a given zdd</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sing_2023.htm#SEC2098">D.14.2.18 disp_zdd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">return string with a visualization of a given</TD></TR>
+</TABLE></BLOCKQUOTE>
+<A NAME="IDX681"></A>
+<A NAME="IDX682"></A>
+<A NAME="IDX683"></A>
+<A NAME="IDX684"></A>
+<A NAME="IDX685"></A>
+<A NAME="IDX686"></A>
+<A NAME="IDX687"></A>
+See also:
+ <A HREF="sing_48.htm#SEC84">Libraries</A>;
+ <A HREF="sing_177.htm#SEC216">User defined types</A>;
+ <A HREF="sing_243.htm#SEC282">pyobject</A>.
+<P>
+
+<A NAME="boolean_std"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2004.htm#SEC2079"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: PH_nais" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2006.htm#SEC2081"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: boolean_std" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2000.htm#SEC2075"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: phindex_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2024.htm#SEC2099"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Experimental libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1999.htm#SEC2074"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Miscellaneous libraries" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,187 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: laguerre_solve</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: laguerre_solve">
+<META NAME="keywords" CONTENT="Singular Manual: laguerre_solve">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1757"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: solve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1683.htm#SEC1758"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: solve" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1666.htm#SEC1741"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: presolve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: triang_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: solve_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.8.3.1 laguerre_solve </H4>
+<!--docid::SEC1757::-->
+Procedure from library <CODE>solve.lib</CODE> (see  <A HREF="sing_1681.htm#SEC1756">solve_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>laguerre_solve(f [, m, l, n, s] ); f = polynomial,<BR>
+m, l, n, s = integers (control parameters of the method)<BR>
+m: precision of output in digits ( 4 &lt;= m), if basering is not ring of
+complex numbers;
+<BR>l: precision of internal computation in decimal digits ( l &gt;=8 )
+only if the basering is not complex or complex with smaller precision;<BR>
+n: control of multiplicity of roots or of splitting of f into
+squarefree factors
+<BR>n &lt; 0, no split of f (good, if all roots are simple)
+<BR>n &gt;= 0, try to split
+<BR>n = 0, return only different roots
+<BR>n &gt; 0, find all roots (with multiplicity)
+<BR>s: s != 0, returns ERROR if | f(root) | &gt; 0.1^m (when computing in the
+current ring)
+<BR>( default: m, l, n, s = 8, 30, 1, 0 )
+<P>
+
+<DT><STRONG>Assume:</STRONG>
+<DD>f is a univariate polynomial;<BR>
+basering has characteristic 0 and is either complex or without
+parameters.
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>list of (complex) roots of the polynomial f, depending on n. The
+entries of the result are of type<BR>
+string: if the basering is not complex,<BR>
+number: otherwise.
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>If printlevel &gt;0: displays comments ( default = 0 ).
+<BR>If s != 0 and if the procedure stops with ERROR, try a higher
+internal precision m.
+<P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "solve.lib";
+// Find all roots of an univariate polynomial using Laguerre's method:
+ring rs1= 0,(x,y),lp;
+poly f = 15x5 + x3 + x2 - 10;
+// 10 digits precision
+laguerre_solve(f,10);
+==> [1]:
+==>    0.8924637479
+==> [2]:
+==>    (-0.7392783383+i*0.5355190078)
+==> [3]:
+==>    (-0.7392783383-i*0.5355190078)
+==> [4]:
+==>    (0.2930464644-i*0.9003002396)
+==> [5]:
+==>    (0.2930464644+i*0.9003002396)
+// Now with complex coefficients,
+// internal precision is 30 digits (default)
+printlevel=2;
+ring rsc= (real,10,i),x,lp;
+poly f = (15.4+i*5)*x^5 + (25.0e-2+i*2)*x^3 + x2 - 10*i;
+list l = laguerre_solve(f);
+==> //BEGIN laguerre_solve
+==> //control: complex ring with precision 30
+==> //working in:  ring lagc=(complex,30,30),x,lp;
+==> //         polynomial has complex coefficients
+==> //split in working ring:
+==> //split without result
+==> //END laguerre_solve
+l;
+==> [1]:
+==>    (-0.8557376852+i*0.3557664188)
+==> [2]:
+==>    (-0.5462895588-i*0.6796668873)
+==> [3]:
+==>    (0.04588498039+i*0.9133296179)
+==> [4]:
+==>    (0.5037408279-i*0.8058051828)
+==> [5]:
+==>    (0.8524014357+i*0.2163760334)
+// check result, value of substituted polynomial should be near to zero
+// remember that l contains a list of strings
+// in the case of a different ring
+subst(f,x,l[1]);
+==> 0
+subst(f,x,l[2]);
+==> 0
+</FONT></pre></td></tr></table><P>
+
+<A NAME="solve"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: solve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1683.htm#SEC1758"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: solve" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1666.htm#SEC1741"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: presolve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1694.htm#SEC1769"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: triang_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1681.htm#SEC1756"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: solve_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

@@ -1,0 +1,156 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: matrix declarations</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: matrix declarations">
+<META NAME="keywords" CONTENT="Singular Manual: matrix declarations">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC168"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_128.htm#SEC167"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: matrix" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_130.htm#SEC169"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: matrix expressions" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_123.htm#SEC162"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: map" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_134.htm#SEC173"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: module" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_128.htm#SEC167"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: matrix" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 4.11.1 matrix declarations </H3>
+<!--docid::SEC168::-->
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Syntax:</STRONG>
+<DD><CODE>matrix</CODE> name<CODE>[</CODE>rows<CODE>][</CODE>cols<CODE>] =</CODE> list_of_poly_expressions <CODE>;</CODE>
+<BR><CODE>matrix</CODE> name = matrix_expression <CODE>;</CODE>
+<P>
+
+<DT><STRONG>Purpose:</STRONG>
+<DD>defines a matrix (of polynomials).
+<P>
+
+The given poly_list fills up the matrix beginning with the first row
+from the left to the right, then the second row and so on.
+If the poly_list contains less than rows*cols elements,
+the matrix is filled up with zeros; if it contains more
+elements, then only the first rows*cols elements are used.
+If the right-hand side is a matrix expression
+the matrix on the left-hand side gets the same size as the right-hand side,
+otherwise the size is determined by the left-hand side.
+If the size is omitted a 1x1 matrix is created.
+</P><P>
+
+<DT><STRONG>Default:</STRONG>
+<DD>0 (1 x 1 matrix)
+<P>
+
+<DT><STRONG>Example:</STRONG>
+<DD><TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  int ro = 3;
+  ring r = 32003,(x,y,z),dp;
+  poly f=xyz;
+  poly g=z*f;
+  ideal i=f,g,g^2;
+  matrix m[ro][3] = x3y4, 0, i, f ; // a 3 x 3 matrix
+  m;
+==> m[1,1]=x3y4
+==> m[1,2]=0
+==> m[1,3]=xyz
+==> m[2,1]=xyz2
+==> m[2,2]=x2y2z4
+==> m[2,3]=xyz
+==> m[3,1]=0
+==> m[3,2]=0
+==> m[3,3]=0
+  print(m);
+==> x3y4,0,     xyz,
+==> xyz2,x2y2z4,xyz,
+==> 0,   0,     0   
+  matrix A;   // the 1 x 1 zero matrix
+  matrix B[2][2] = m[1..2, 2..3]; //defines a submatrix
+  print(B);
+==> 0,     xyz,
+==> x2y2z4,xyz 
+  matrix C=m; // defines C as a 3 x 3 matrix equal to m
+  print(C);
+==> x3y4,0,     xyz,
+==> xyz2,x2y2z4,xyz,
+==> 0,   0,     0   
+</FONT></pre></td></tr></table></DL>
+<P>
+
+<A NAME="matrix expressions"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_128.htm#SEC167"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: matrix" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_130.htm#SEC169"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: matrix expressions" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_123.htm#SEC162"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: map" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_134.htm#SEC173"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: module" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_128.htm#SEC167"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: matrix" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

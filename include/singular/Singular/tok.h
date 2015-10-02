@@ -36,9 +36,11 @@ extern int  yyparse(void);
 
 enum {
   ALIAS_CMD     = UMINUS + 15,
+  ALIGN_CMD,
   ATTRIB_CMD,
   BAREISS_CMD,
   BIGINT_CMD,
+  BRANCHTO_CMD,
   BRACKET_CMD,
   BREAKPOINT_CMD,
   CHARACTERISTIC_CMD,

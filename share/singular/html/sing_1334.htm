@@ -1,0 +1,165 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: toric_ideal</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: toric_ideal">
+<META NAME="keywords" CONTENT="Singular Manual: toric_ideal">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC1409"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1333.htm#SEC1408"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: toric_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1335.htm#SEC1410"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: toric_std" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1326.htm#SEC1401"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: symodstd_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1333.htm#SEC1408"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: toric_lib" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H4> D.4.28.1 toric_ideal </H4>
+<!--docid::SEC1409::-->
+Procedure from library <CODE>toric.lib</CODE> (see  <A HREF="sing_1333.htm#SEC1408">toric_lib</A>).
+<P>
+
+<DL COMPACT>
+<DT><STRONG>Usage:</STRONG>
+<DD>toric_ideal(A,alg); A intmat, alg string
+<BR>toric_ideal(A,alg,prsv); A intmat, alg string, prsv intvec
+<P>
+
+<DT><STRONG>Return:</STRONG>
+<DD>ideal: standard basis of the toric ideal of A
+<P>
+
+<DT><STRONG>Note:</STRONG>
+<DD>These procedures return the standard basis of the toric ideal of A
+with respect to the term ordering in the current basering. Not all
+term orderings are supported: The usual global term orderings may be
+used, but no block orderings combining them.
+<BR>One may call the procedure with several different algorithms: <BR>
+- the algorithm of Conti/Traverso using elimination (ect), <BR>
+- the algorithm of Pottier (pt),
+<BR>- an algorithm of Bigatti/La Scala/Robbiano (blr),
+<BR>- the algorithm of Hosten/Sturmfels (hs),
+<BR>- the algorithm of DiBiase/Urbanke (du).
+<BR>The argument `alg' should be the abbreviation for an algorithm as
+above: ect, pt, blr, hs or du.
+<P>
+
+If `alg' is chosen to be `blr' or `hs', the algorithm needs a vector
+with positive coefficients in the row space of A.
+<BR>If no row of A contains only positive entries, one has to use the
+second version of toric_ideal which takes such a vector as its third
+argument.
+<BR>For the mathematical background, see
+</P><P>
+
+   <A HREF="sing_906.htm#SEC962">Toric ideals and integer programming</A>.
+</P><P>
+
+</DL>
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>LIB "toric.lib";
+ring r=0,(x,y,z),dp;
+// call with two arguments
+intmat A[2][3]=1,1,0,0,1,1;
+A;
+==> 1,1,0,
+==> 0,1,1 
+ideal I=toric_ideal(A,"du");
+I;
+==> I[1]=xz-y
+I=toric_ideal(A,"blr");
+==>    ? The chosen algorithm needs a positive vector in the row space of the\
+    matrix.
+==>    ? leaving toric.lib::toric_ideal_1
+==>    ? leaving toric.lib::toric_ideal
+I;
+==> I[1]=xz-y
+// call with three arguments
+intvec prsv=1,2,1;
+I=toric_ideal(A,"blr",prsv);
+I;
+==> I[1]=xz-y
+</FONT></pre></td></tr></table>See also:
+ <A HREF="sing_907.htm#SEC963">Toric ideals</A>;
+ <A HREF="sing_1171.htm#SEC1246">intprog_lib</A>;
+ <A HREF="sing_1333.htm#SEC1408">toric_lib</A>;
+ <A HREF="sing_1335.htm#SEC1410">toric_std</A>.
+<P>
+
+<A NAME="toric_std"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1333.htm#SEC1408"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: toric_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1335.htm#SEC1410"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: toric_std" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1326.htm#SEC1401"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: symodstd_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1336.htm#SEC1411"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Algebraic geometry" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_1333.htm#SEC1408"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: toric_lib" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

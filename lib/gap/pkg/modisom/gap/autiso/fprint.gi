@@ -83,7 +83,7 @@ FPMinOverIdeals := function( T, v, limit )
     d := Length(Filtered(T.wgs, x -> x=1));
     m := [];
     for i in [1..Length(v)] do
-        U := Concatenation(v[i]*I{[1..d]}, I{[d+1..T.dim]});
+        U := Concatenation([v[i]*I{[1..d]}], I{[d+1..T.dim]});
         m[i] := PowerBasisWeights(T, U, limit);
         m[i] := Collected(m[i]);
         Info( InfoModIsom, 1, "   found weights ",m[i]);

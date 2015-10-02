@@ -1,0 +1,294 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Type conversion and casting</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Type conversion and casting">
+<META NAME="keywords" CONTENT="Singular Manual: Type conversion and casting">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC66"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_38.htm#SEC65"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Objects" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_40.htm#SEC69"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Flow control" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_33.htm#SEC46"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Implemented algorithms" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_41.htm#SEC70"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Input and output" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_34.htm#SEC55"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: The SINGULAR language" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.5.5 Type conversion and casting </H3>
+<!--docid::SEC66::-->
+<P>
+
+<A NAME="SEC67"></A>
+<H4> Type conversion </H4>
+<!--docid::SEC67::-->
+Assignments convert the type of the right-hand side to the type of the
+left-hand side of the assignment, if possible.  Operators and functions
+which require certain types of operands can also implicitly convert the
+type of an expression.  It is, for example, possible to multiply a
+polynomial by an integer because the integer is automatically converted to
+a polynomial.  Type conversions do not act transitively.  Possible
+conversions are:
+<P>
+
+<TABLE>
+<TR><TD></TD>
+   1. </TD><TD> <CODE>intvec</CODE>  </TD><TD> ==> <CODE>intmat</CODE>
+</TR>
+<TR><TD></TD>
+   2. </TD><TD> <CODE>poly</CODE>  </TD><TD> ==> <CODE>ideal</CODE>
+</TR>
+<TR><TD></TD>
+   3. </TD><TD> <CODE>bigint</CODE>  </TD><TD> ==> <CODE>ideal</CODE>
+</TR>
+<TR><TD></TD>
+   4. </TD><TD> <CODE>int</CODE>  </TD><TD> ==> <CODE>ideal</CODE>
+</TR>
+<TR><TD></TD>
+   5. </TD><TD> <CODE>intmat</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   6. </TD><TD> <CODE>ideal</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   7. </TD><TD> <CODE>module</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   8. </TD><TD> <CODE>number</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   9. </TD><TD> <CODE>poly</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   10. </TD><TD> <CODE>vector</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   11. </TD><TD> <CODE>bigint</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   12. </TD><TD> <CODE>int</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   13. </TD><TD> <CODE>intvec</CODE>  </TD><TD> ==> <CODE>matrix</CODE>
+</TR>
+<TR><TD></TD>
+   14. </TD><TD> <CODE>ideal</CODE>  </TD><TD> ==> <CODE>module</CODE>
+</TR>
+<TR><TD></TD>
+   15. </TD><TD> <CODE>matrix</CODE>  </TD><TD> ==> <CODE>module</CODE>
+</TR>
+<TR><TD></TD>
+   16. </TD><TD> <CODE>vector</CODE>  </TD><TD> ==> <CODE>module</CODE>
+</TR>
+<TR><TD></TD>
+   17. </TD><TD> <CODE>bigint</CODE>  </TD><TD> ==> <CODE>number</CODE>
+</TR>
+<TR><TD></TD>
+   18. </TD><TD> <CODE>int</CODE>  </TD><TD> ==> <CODE>number</CODE>
+</TR>
+<TR><TD></TD>
+   19. </TD><TD> <CODE>number</CODE>  </TD><TD> ==> <CODE>poly</CODE>
+</TR>
+<TR><TD></TD>
+   20. </TD><TD> <CODE>bigint</CODE>  </TD><TD> ==> <CODE>poly</CODE>
+</TR>
+<TR><TD></TD>
+   21. </TD><TD> <CODE>int</CODE>  </TD><TD> ==> <CODE>poly</CODE>
+</TR>
+<TR><TD></TD>
+   22. </TD><TD> <CODE>list</CODE>  </TD><TD> ==> <CODE>resolution</CODE>
+</TR>
+<TR><TD></TD>
+   23. </TD><TD> <CODE>poly</CODE>  </TD><TD> ==> <CODE>vector</CODE>
+(p ==> p*<CODE>gen(1)</CODE>)
+</TR>
+<TR><TD></TD>
+   24. </TD><TD> <CODE>bigint</CODE>  </TD><TD> ==> <CODE>vector</CODE>
+</TR>
+<TR><TD></TD>
+   25. </TD><TD> <CODE>int</CODE>  </TD><TD> ==> <CODE>vector</CODE>
+(i ==> i*<CODE>gen(1)</CODE>)
+</TR>
+<TR><TD></TD>
+   26. </TD><TD> <CODE>int</CODE>  </TD><TD> ==> <CODE>bigint</CODE>
+</TR>
+<TR><TD></TD>
+   27. </TD><TD> <CODE>int</CODE>  </TD><TD> ==> <CODE>intvec</CODE>
+</TR>
+<TR><TD></TD>
+   28. </TD><TD> <CODE>string</CODE>  </TD><TD> ==> <CODE>link</CODE>
+</TR>
+<TR><TD></TD>
+   29. </TD><TD> <CODE>resolution</CODE>  </TD><TD> ==> <CODE>list</CODE>
+</TR></TABLE>
+<P>
+
+<A NAME="SEC68"></A>
+<H4> Type casting </H4>
+<!--docid::SEC68::-->
+An expression can be casted to another type by using a type cast
+expression:
+<BR> type <CODE>(</CODE> expression <CODE>)</CODE>.
+<P>
+
+Possible type casts are:
+</P><P>
+
+<TABLE>
+<TR><TD></TD>
+    </TD><TD> to </TD><TD> from
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>bigint</CODE> </TD><TD>  expression <CODE>int</CODE>, <CODE>number</CODE>, <CODE>poly</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>ideal</CODE> </TD><TD>  expression lists of <CODE>int</CODE>, <CODE>number</CODE>, <CODE>poly</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>ideal</CODE> </TD><TD>  <CODE>int</CODE>, <CODE>matrix</CODE>, <CODE>module</CODE>, <CODE>number</CODE>, <CODE>poly</CODE>, <CODE>vector</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>int</CODE> </TD><TD>    <CODE>number</CODE>, <CODE>poly</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>intvec</CODE> </TD><TD> expression lists of <CODE>int</CODE>, <CODE>intmat</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>intmat</CODE> </TD><TD> <CODE>intvec</CODE> (see  <A HREF="sing_100.htm#SEC139">intmat type cast</A>)
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>list</CODE> </TD><TD>   expression lists of any type
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>matrix</CODE> </TD><TD> <CODE>module</CODE>, <CODE>ideal</CODE>,
+<CODE>vector</CODE>, <CODE>matrix</CODE>.
+<BR> There are two forms to convert something to a matrix: if <CODE>matrix(</CODE>
+expression <CODE>)</CODE> is used then the size of the matrix is determined
+by the size of expression.
+<BR> But <CODE>matrix(</CODE> expression <CODE>,</CODE> m <CODE>,</CODE> n <CODE>)</CODE> may also be
+used - the result is a
+<IMG
+ WIDTH="48" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_67.png"
+ ALT="$ m \times n $">matrix (see  <A HREF="sing_131.htm#SEC170">matrix type cast</A>)
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>module</CODE> </TD><TD> expression lists of <CODE>int</CODE>, <CODE>number</CODE>,
+<CODE>poly</CODE>, <CODE>vector</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>module</CODE> </TD><TD> <CODE>ideal</CODE>, <CODE>matrix</CODE>, <CODE>vector</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>number</CODE> </TD><TD> <CODE>poly</CODE>
+</TR>
+<TR><TD></TD>
+   </TD><TD>  <CODE>poly</CODE> </TD><TD>   <CODE>int</CODE>, <CODE>number</CODE>
+</TR>
+<TR><TD></TD>
+    </TD><TD>  <CODE>ring</CODE> </TD><TD>   <CODE>list</CODE> (the inverse of <CODE>ringlist</CODE>)
+</TR>
+<TR><TD></TD>
+   </TD><TD>  <CODE>string</CODE> </TD><TD>   any type (see  <A HREF="sing_169.htm#SEC208">string type cast</A>)
+</TR></TABLE>
+<P>
+
+<STRONG>Example:</STRONG>
+<TABLE><tr><td>&nbsp;</td><td class=smallexample><FONT SIZE=-1><pre>  ring r=0,x,(c,dp);
+  number(3x);
+==> 0
+  number(poly(3));
+==> 3
+  ideal i=1,2,3,4,5,6;
+  print(matrix(i));
+==> 1,2,3,4,5,6
+  print(matrix(i,3,2));
+==> 1,2,
+==> 3,4,
+==> 5,6 
+  vector v=[1,2];
+  print(matrix(v));
+==> 1,
+==> 2 
+  module(matrix(i,3,2));
+==> _[1]=[1,3,5]
+==> _[2]=[2,4,6]
+  // generators are columns of a matrix
+</FONT></pre></td></tr></table></P><P>
+
+<A NAME="Flow control"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_38.htm#SEC65"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: Objects" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_40.htm#SEC69"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Flow control" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_33.htm#SEC46"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Implemented algorithms" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_41.htm#SEC70"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Input and output" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_34.htm#SEC55"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: The SINGULAR language" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

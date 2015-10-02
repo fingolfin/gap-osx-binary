@@ -1,0 +1,279 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on March, 4  2015 by texi2html 1.65 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+
+-->
+<HEAD>
+<TITLE>Singular Manual: Term orderings</TITLE>
+
+<META NAME="description" CONTENT="Singular Manual: Term orderings">
+<META NAME="keywords" CONTENT="Singular Manual: Term orderings">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.65">
+
+</HEAD>
+
+<BODY LANG="EN"  BACKGROUND="Mybg.gif">
+
+<A NAME="SEC43"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR VALIGN="TOP">
+<TD ALIGN="LEFT">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_30.htm#SEC40"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: General syntax of a ring declaration" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_32.htm#SEC44"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Coefficient rings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_21.htm#SEC28"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Emacs user interface" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_33.htm#SEC46"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Implemented algorithms" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_28.htm#SEC38"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Rings and orderings" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+</TR>
+<TR VALIGN="TOP" ALIGN="LEFT">
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR>
+</TABLE>
+</TD>
+<TD ALIGN="LEFT">
+<H3> 3.3.3 Term orderings </H3>
+<!--docid::SEC43::-->
+<P>
+
+Any polynomial (resp. vector) in S<SMALL>INGULAR</SMALL> is ordered w.r.t. a
+term ordering (or, monomial ordering), which has to be specified
+together with the declaration of a ring. S<SMALL>INGULAR</SMALL> stores and
+displays a polynomial (resp. vector) w.r.t. this ordering, i.e., the
+greatest monomial (also called the leading monomial) is the first one
+appearing in the output polynomial, and the smallest monomial is the last one.
+</P><P>
+
+<STRONG>Remark:</STRONG> The novice user should generally use the ordering
+<CODE>dp</CODE> for computations in the polynomial ring
+<!-- MATH
+ $K[x_1,\ldots,x_n]$
+ -->
+<IMG
+ WIDTH="97" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_60.png"
+ ALT="$K[x_1,\ldots,x_n]$">,resp.  <CODE>ds</CODE> for computations in the localization
+<!-- MATH
+ $\hbox{Loc}_{(x)}K[x_1,\ldots,x_n])$
+ -->
+<IMG
+ WIDTH="147" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_61.png"
+ ALT="$\hbox{Loc}_{(x)}K[x_1,\ldots,x_n])$">.For more details, see  <A HREF="sing_889.htm#SEC940">Polynomial data</A>.
+</P><P>
+
+In a ring declaration, S<SMALL>INGULAR</SMALL> offers the following orderings:
+<OL>
+<LI>Global orderings
+<DL COMPACT>
+<DT><CODE>lp</CODE>
+<DD>lexicographical ordering
+<P>
+
+<DT><CODE>rp</CODE>
+<DD>reverse lexicographical ordering, i.e. a lexicographical ordering from the right
+with 1 &lt; x_1 &lt; ... &lt;x_n
+(should not be used as it reverses the "natural" x_1 &gt; ... &gt; x_n,
+reorder the variables instead)
+<P>
+
+<DT><CODE>dp</CODE>
+<DD>degree reverse lexicographical ordering
+<P>
+
+<DT><CODE>Dp</CODE>
+<DD>degree lexicographical ordering
+<P>
+
+<DT><CODE>wp(</CODE> intvec_expression <CODE>)</CODE>
+<DD>weighted reverse lexicographical ordering; the weight vector is expected to
+consist of positive integers only.
+<P>
+
+<DT><CODE>Wp(</CODE> intvec_expression <CODE>)</CODE>
+<DD>weighted lexicographical ordering; the weight vector is expected to consist of
+positive integers only.
+</DL>
+<P>
+
+Global orderings are well-orderings, i.e., 
+<IMG
+ WIDTH="43" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="sing_62.png"
+ ALT="$1 &lt; x$"> for each ring
+variable 
+<IMG
+ WIDTH="14" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="sing_38.png"
+ ALT="$x$">. They are denoted by a <CODE>p</CODE> as the second
+character in their name.
+</P><P>
+
+<LI>Local orderings
+<DL COMPACT>
+<DT><CODE>ls</CODE>
+<DD>negative lexicographical ordering
+<P>
+
+<DT><CODE>rs</CODE>
+<DD>negative reverse lexicographical ordering, i.e. a lexicographical ordering from the right
+(should not be used as it reverses the "natural" x_1 &lt; ... &lt; x_n,
+reorder the variables instead)
+<P>
+
+<DT><CODE>ds</CODE>
+<DD>negative degree reverse lexicographical ordering
+<P>
+
+<DT><CODE>Ds</CODE>
+<DD>negative degree lexicographical ordering
+<P>
+
+<DT><CODE>ws(</CODE> intvec_expression <CODE>)</CODE>
+<DD>(general) weighted reverse lexicographical ordering; the first element
+of the weight vector has to be non-zero.
+<P>
+
+<DT><CODE>Ws(</CODE> intvec_expression <CODE>)</CODE>
+<DD>(general) weighted lexicographical ordering; the first element
+of the weight vector has to be non-zero.
+</DL>
+<P>
+
+Local orderings are not well-orderings. They are denoted by an <CODE>s</CODE>
+as the second character in their name.
+</P><P>
+
+<LI>Matrix orderings
+<DL COMPACT>
+<DT><CODE>M(</CODE> intmat_expression <CODE>)</CODE>
+<DD>intmat_expression has to be an invertible square matrix
+</DL>
+<P>
+
+Using matrix orderings, S<SMALL>INGULAR</SMALL> can compute standard bases
+w.r.t. any monomial ordering which is compatible with the natural
+semi-group structure on the monomials. In practice, the predefined global
+and local orderings together with the block orderings should be
+sufficient in most cases. These orderings are faster than their
+corresponding matrix orderings since evaluation of a matrix ordering is more
+time consuming.
+</P><P>
+
+<LI>Extra weight vector
+<DL COMPACT>
+<DT><CODE>a(</CODE> intvec_expression <CODE>)</CODE>
+<DD>an extra weight vector <CODE>a(</CODE> intvec_expression <CODE>)</CODE> may precede
+any monomial ordering
+</DL>
+<P>
+
+<LI>Product ordering
+<DL COMPACT>
+<DT><CODE>(</CODE> ordering [ <CODE>(</CODE> int_expression <CODE>)</CODE> ]<CODE>,</CODE> <small>...</small> <CODE>)</CODE>
+<DD>any of the above orderings and the extra weight vector may be combined
+to yield product or block orderings
+</DL>
+<P>
+
+The orderings <CODE>lp</CODE>, <CODE>dp</CODE>, <CODE>Dp</CODE>, <CODE>ls</CODE>, <CODE>ds</CODE>,
+<CODE>Ds</CODE> and <CODE>rp</CODE> may be followed by an int_expression in
+parentheses giving the
+size of the block. For the last block the size is calculated
+automatically. For weighted orderings, the size of the block is given
+by the size of the weight vector. The same holds analogously for matrix
+orderings.
+</P><P>
+
+<LI>Module orderings
+<DL COMPACT>
+<DT><CODE>(</CODE> ordering<CODE>,</CODE> <small>...</small><CODE>, C )</CODE>
+<DD><DT><CODE>(</CODE> ordering<CODE>,</CODE> <small>...</small><CODE>, c )</CODE>
+<DD>sort polynomial vectors by the monomial ordering first, then by
+components
+<P>
+
+<DT><CODE>( C,</CODE> ordering<CODE>,</CODE> <small>...</small> <CODE>)</CODE>
+<DD><DT><CODE>( c,</CODE> ordering<CODE>,</CODE> <small>...</small> <CODE>)</CODE>
+<DD>sort polynomial vectors by components first, then by the monomial
+ordering
+</DL>
+<P>
+
+Here a capital <CODE>C</CODE> sorts generators in ascending order, i.e.,
+<CODE>gen(1)</CODE> &lt; <CODE>gen(2)</CODE> &lt; <small>....</small> A small <CODE>c</CODE> sorts in
+descending order, i.e., <CODE>gen(1)</CODE> &gt; <CODE>gen(2)</CODE> &gt; <small>....</small> It is
+not necessary to specify the module ordering explicitly since <CODE>(</CODE>
+ordering<CODE>,</CODE> <small>...</small><CODE>, C )</CODE> is the default.
+</P><P>
+
+In fact, <CODE>c</CODE> or <CODE>C</CODE> may be specified anywhere in a product
+ordering specification, not only at its beginning or end.  All monomial
+block orderings preceding the component ordering have higher precedence,
+all monomial block orderings following after it have lower precedence.
+</OL>
+<P>
+
+For a mathematical description of these orderings, see
+ <A HREF="sing_889.htm#SEC940">Polynomial data</A>.
+</P><P>
+
+<A NAME="Coefficient rings"></A>
+</TD>
+</TR>
+</TABLE>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">  <a href="index.htm"><img
+    src="singular-icon-transparent.gif" width="50"
+      border="0" ALT="Top"></a>
+</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_30.htm#SEC40"><IMG SRC="a_left.gif" BORDER="0" ALT="Back: General syntax of a ring declaration" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_32.htm#SEC44"><IMG SRC="a_right.gif" BORDER="0" ALT="Forward: Coefficient rings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_21.htm#SEC28"><IMG SRC="a_leftdouble.gif" BORDER="0" ALT="FastBack: Emacs user interface" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_33.htm#SEC46"><IMG SRC="a_rightdouble.gif" BORDER="0" ALT="FastForward: Implemented algorithms" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_28.htm#SEC38"><IMG SRC="a_up.gif" BORDER="0" ALT="Up: Rings and orderings" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="index.htm#SEC_Top"><IMG SRC="a_top.gif" BORDER="0" ALT="Top: Singular Manual" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_toc.htm#SEC_Contents"><IMG SRC="a_tableofcon.gif" BORDER="0" ALT="Contents: Table of Contents" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_2336.htm#SEC2422"><IMG SRC="a_index.gif" BORDER="0" ALT="Index: Index" ALIGN="MIDDLE"></A></TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"><A HREF="sing_abt.htm#SEC_About"><IMG SRC="a_help.gif" BORDER="0" ALT="About: About this document" ALIGN="MIDDLE"></A></TD>
+</TR></TABLE>
+<FONT SIZE="-1">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; User manual for <A HREF="http://www.singular.uni-kl.de/"><I>Singular</I></A> version 4-0-2, 2015,
+generated by <I>texi2html</I>.
+</FONT>
+
+</BODY>
+</HTML>

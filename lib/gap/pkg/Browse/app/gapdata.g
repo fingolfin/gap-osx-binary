@@ -120,7 +120,7 @@
 ##      <Ref Func="BrowseCTblLibDifferences" BookName="ctbllib"/>),
 ##  </Item>
 ##  <Item>
-##      the information in &GAP; Character Table Library
+##      the information in the &GAP; Character Table Library
 ##      (see Section <Ref Func="BrowseCTblLibInfo" BookName="ctbllib"/>),
 ##  </Item>
 ##  <Item>

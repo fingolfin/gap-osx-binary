@@ -18,7 +18,7 @@ To start to work with the package, you need first to load it as follows:
 <![CDATA[
 gap> LoadPackage("congruence");
 -----------------------------------------------------------------------------
-Loading  Congruence 1.0.2 (Congruence subgroups of SL(2,Integers))
+Loading  Congruence 1.1.0 (Congruence subgroups of SL(2,Integers))
 by Ann Dooms (http://homepages.vub.ac.be/~andooms),
    Eric Jespers (http://homepages.vub.ac.be/~efjesper),
    Alexander Konovalov (http://www.cs.st-andrews.ac.uk/~alexk/), and
@@ -32,7 +32,7 @@ true
 <Heading>Construction of congruence subgroups</Heading>
             
 <ManSection>
-  <Func Name="PrincipalCongruenceSubgroup" 
+  <Oper Name="PrincipalCongruenceSubgroup" 
          Arg="N"  
         Comm="" />
   <Description>
@@ -89,7 +89,7 @@ true
 
 
 <ManSection>
-  <Func Name="CongruenceSubgroupGamma0" 
+  <Oper Name="CongruenceSubgroupGamma0" 
          Arg="N"  
         Comm="" />
   <Description>
@@ -128,7 +128,7 @@ gap> G0_4:=CongruenceSubgroupGamma0(4);
 
 
 <ManSection>
-  <Func Name="CongruenceSubgroupGammaUpper0" 
+  <Oper Name="CongruenceSubgroupGammaUpper0" 
          Arg="N"  
         Comm="" />
   <Description>
@@ -167,7 +167,7 @@ gap> GU0_2:=CongruenceSubgroupGammaUpper0(2);
 
 
 <ManSection>
-  <Func Name="CongruenceSubgroupGamma1" 
+  <Oper Name="CongruenceSubgroupGamma1" 
          Arg="N"  
         Comm="" />
   <Description>
@@ -206,7 +206,7 @@ gap> G1_6:=CongruenceSubgroupGamma1(6);
 
 
 <ManSection>
-  <Func Name="CongruenceSubgroupGammaUpper1" 
+  <Oper Name="CongruenceSubgroupGammaUpper1" 
          Arg="N"  
         Comm="" />
   <Description>
@@ -442,12 +442,14 @@ gap> IndexInSL2Z(GU1_4);
 <ManSection>
   <Attr Name="DefiningCongruenceSubgroups" 
          Arg="G" />
+  <Returns>
+    list of congruence subgroups
+  </Returns>          
   <Description>
     For an intersection of congruence subgroups, returns 
-    the list of congruence subgroups forming this intersection. 
-    Note that this only works for an intersection of congruence 
-    subgroups that can not be reduced to one of the canonical 
-    subgroups.
+    the list of congruence subgroups forming this intersection.
+    For a canonical congruence subgroup returns a list of length
+    one containing that subgroup.
   </Description>
 </ManSection>
 
@@ -456,6 +458,14 @@ gap> IndexInSL2Z(GU1_4);
 gap> DefiningCongruenceSubgroups(J);
 [ <congruence subgroup CongruenceSubgroupGamma_0(4) in SL_2(Z)>,
   <congruence subgroup CongruenceSubgroupGamma_1(6) in SL_2(Z)> ]
+gap> P:=PrincipalCongruenceSubgroup(6);
+<principal congruence subgroup of level 6 in SL_2(Z)>
+gap> Q:=PrincipalCongruenceSubgroup(10); 
+<principal congruence subgroup of level 10 in SL_2(Z)>
+gap> G:=IntersectionOfCongruenceSubgroups(Q,P);  
+<principal congruence subgroup of level 30 in SL_2(Z)>
+gap> DefiningCongruenceSubgroups(G);
+[ <principal congruence subgroup of level 30 in SL_2(Z)> ] 
 ]]>
 </Example>
 
