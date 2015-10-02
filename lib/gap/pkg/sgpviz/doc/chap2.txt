@@ -1,0 +1,195 @@
+  
+  [1X2 Basics[0X
+  
+  We  give some examples of semigroups to be used later. We also describe some
+  basic functions that are not directly available from [5XGAP[0m, but are useful for
+  the purposes of this package.
+  
+  
+  [1X2.1 Examples[0X
+  
+  These are some examples of semigroups that will be used through this manual
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> f := FreeMonoid("a","b"); [0X
+    [4X<free monoid on the generators [ a, b ]> [0X
+    [4Xgap> a := GeneratorsOfMonoid( f )[   1 ];; [0X
+    [4Xgap> b := GeneratorsOfMonoid( f )[ 2 ];; [0X
+    [4Xgap> r:=[[a^3,a^2],   [0X
+    [4X> [a^2*b,a^2], [0X
+    [4X> [b*a^2,a^2], [0X
+    [4X> [b^2,a^2], [0X
+    [4X> [a*b*a,a], [0X
+    [4X> [b*a*b,b] ]; [0X
+    [4X[ [ a^3, a^2 ], [ a^2*b, a^2 ], [ b*a^2, a^2 ], [ b^2, a^2 ], [ a*b*a, a ], [0X
+    [4X[ b*a*b, b ] ] [0X
+    [4Xgap> b21:= f/r; [0X
+    [4X<fp semigroup on the generators [<identity ... >, a, b ]> [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> f := FreeSemigroup("a","b"); [0X
+    [4X<free semigroup on the generators [ a, b ]>   [0X
+    [4Xgap> a := GeneratorsOfSemigroup( f )[ 1 ];; [0X
+    [4Xgap> b :=   GeneratorsOfSemigroup( f )[ 2 ];; [0X
+    [4Xgap> r:=[[a^3,a^2], [0X
+    [4X> [a^2*b,a^2],   [0X
+    [4X> [b*a^2,a^2], [0X
+    [4X> [b^2,a^2], [0X
+    [4X> [a*b*a,a], [0X
+    [4X> [b*a*b,b] ]; [0X
+    [4X[ [ a^3, a^2 ], [ a^2*b, a^2 ], [ b*a^2, a^2 ], [ b^2, a^2 ], [ a*b*a, a ], [0X
+    [4X[ b*a*b, b ] ] [0X
+    [4Xgap> b2:= f/r; [0X
+    [4X<fp semigroup on the generators [ a, b ]> [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> g0:=Transformation([4,1,2,4]);;[0X
+    [4Xgap> g1:=Transformation([1,3,4,4]);;[0X
+    [4Xgap> g2:=Transformation([2,4,3,4]);;[0X
+    [4Xgap> poi3:= Monoid(g0,g1,g2);[0X
+    [4X<monoid with 3 generators>[0X
+    [4X     [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X2.2 Some attributes[0X
+  
+  These functions are semigroup attributes that get stored once computed.
+  
+  [1X2.2-1 HasCommutingIdempotents[0m
+  
+  [2X> HasCommutingIdempotents( [0X[3XM[0X[2X ) ____________________________________[0Xattribute
+  
+  Tests whether the idempotents of the semigroup [3XM [0mcommute.
+  
+  [1X2.2-2 IsInverseSemigroup[0m
+  
+  [2X> IsInverseSemigroup( [0X[3XS[0X[2X ) _________________________________________[0Xattribute
+  
+  Tests  whether  a  finite  semigroup  [3XS [0mis inverse. It is well-known that it
+  suffices  to test whether the idempotents of [3XS [0mcommute and [3XS [0mis regular. The
+  function [10XIsRegularSemigroup [0mis part of [5XGAP[0m.
+  
+  
+  [1X2.3 Some basic functions[0X
+  
+  [1X2.3-1 PartialTransformation[0m
+  
+  [2X> PartialTransformation( [0X[3XL[0X[2X ) _______________________________________[0Xfunction
+  
+  A  partial  transformation is a partial function of a set of integers of the
+  form  {1,  ...,  n}.  It  is given by means of the list of images [3XL[0m. When an
+  element  has  no  image,  we write 0. Returns a full transformation on a set
+  with one more element that acts like a zero.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> PartialTransformation([2,0,4,0]);[0X
+    [4XTransformation( [ 2, 5, 4, 5, 5 ] )[0X
+    [4X      [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X2.3-2 ReduceNumberOfGenerators[0m
+  
+  [2X> ReduceNumberOfGenerators( [0X[3XL[0X[2X ) ____________________________________[0Xfunction
+  
+  Given  a  subset  [3XL[0m  of  the  generators  of  a semigroup, returns a list of
+  generators of the same semigroup but possibly with less elements than [3XL[0m.
+  
+  [1X2.3-3 SemigroupFactorization[0m
+  
+  [2X> SemigroupFactorization( [0X[3XSL[0X[2X ) _____________________________________[0Xfunction
+  
+  [3XL[0m  is an element (or list of elements) of the semigroup [3XS[0m. Returns a minimal
+  factorization  on the generators of [3XS[0m of the element(s) of [3XL[0m. Works only for
+  transformation semigroups.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> el1 := Transformation( [ 2, 3, 4, 4 ] );;[0X
+    [4Xgap> el2 := Transformation( [ 2, 4, 3, 4 ] );;[0X
+    [4Xgap> f1 := SemigroupFactorization(poi3,el1);[0X
+    [4X[ [ Transformation( [ 1, 3, 4, 4 ] ), Transformation( [ 2, 4, 3, 4 ] ) ] ][0X
+    [4Xgap> f1[1][1] * f1[1][2] = el1;[0X
+    [4Xtrue[0X
+    [4Xgap> SemigroupFactorization(poi3,[el1,el2]);[0X
+    [4X[ [ Transformation( [ 1, 3, 4, 4 ] ), Transformation( [ 2, 4, 3, 4 ] ) ],[0X
+    [4X  [ Transformation( [ 2, 4, 3, 4 ] ) ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X2.3-4 GrahamBlocks[0m
+  
+  [2X> GrahamBlocks( [0X[3Xmat[0X[2X ) ______________________________________________[0Xfunction
+  
+  [3Xmat[0m  is  a  matrix  as  displayed  by [10XDisplayEggBoxOfDClass(D);[0m of a regular
+  D-class  [10XD[0m.  This  function  outputs a list [10X[gmat, phi][0m where [10Xgmat[0m is [3Xmat[0m in
+  Graham's  blocks  form  and  [10Xphi[0m maps H-classes of [10Xgmat[0m to the corresponding
+  ones  of  [3Xmat[0m,  i.e., [10Xphi[i][j] = [i',j'][0m where [10Xmat[i'][j'] = gmat[i][j][0m. If
+  the  argument  to  this  function is not a matrix corresponding to a regular
+  D-class, the function may abort in error.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> p1 := PartialTransformation([6,2,0,0,2,6,0,0,10,10,0,0]);;[0X
+    [4Xgap> p2 := PartialTransformation([0,0,1,5,0,0,5,9,0,0,9,1]);;[0X
+    [4Xgap> p3 := PartialTransformation([0,0,3,3,0,0,7,7,0,0,11,11]);;[0X
+    [4Xgap> p4 := PartialTransformation([4,4,0,0,8,8,0,0,12,12,0,0]);;[0X
+    [4Xgap> css3:=Semigroup(p1,p2,p3,p4);[0X
+    [4X<semigroup with 4 generators>[0X
+    [4Xgap> el := Elements(css3)[8];;[0X
+    [4Xgap> D := GreensDClassOfElement(css3, el);;[0X
+    [4Xgap> IsRegularDClass(D);[0X
+    [4Xtrue[0X
+    [4Xgap> DisplayEggBoxOfDClass(D);[0X
+    [4X[ [  1,  0,  1,  0 ],[0X
+    [4X  [  0,  1,  0,  1 ],[0X
+    [4X  [  0,  1,  0,  1 ],[0X
+    [4X  [  1,  0,  1,  0 ] ][0X
+    [4Xgap> mat := [ [  1,  0,  1,  0 ],[0X
+    [4X>   [  0,  1,  0,  1 ],[0X
+    [4X>   [  0,  1,  0,  1 ],[0X
+    [4X>   [  1,  0,  1,  0 ] ];;[0X
+    [4Xgap> res := GrahamBlocks(mat);;[0X
+    [4Xgap> PrintArray(res[1]);[0X
+    [4X[ [  1,  1,  0,  0 ],[0X
+    [4X  [  1,  1,  0,  0 ],[0X
+    [4X  [  0,  0,  1,  1 ],[0X
+    [4X  [  0,  0,  1,  1 ] ][0X
+    [4Xgap> PrintArray(res[2]);[0X
+    [4X[ [  [ 1, 1 ],  [ 1, 3 ],  [ 1, 2 ],  [ 1, 4 ] ],[0X
+    [4X  [  [ 4, 1 ],  [ 4, 3 ],  [ 4, 2 ],  [ 4, 4 ] ],[0X
+    [4X  [  [ 2, 1 ],  [ 2, 3 ],  [ 2, 2 ],  [ 2, 4 ] ],[0X
+    [4X  [  [ 3, 1 ],  [ 3, 3 ],  [ 3, 2 ],  [ 3, 4 ] ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X2.4 Cayley graphs[0X
+  
+  [1X2.4-1 RightCayleyGraphAsAutomaton[0m
+  
+  [2X> RightCayleyGraphAsAutomaton( [0X[3XS[0X[2X ) _________________________________[0Xfunction
+  
+  Computes  the  right Cayley graph of a finite monoid or semigroup [3XS[0m. It uses
+  the  [5XGAP[0m  buit-in  function [10XCayleyGraphSemigroup[0m to compute the Cayley Graph
+  and  returns  it  as an automaton without initial nor final states. (In this
+  automaton  state  [10Xi[0m  represents  the  element  [10XElements(S)[i][0m.) The [5XAutomata[0m
+  package is used to this effect.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> rcg := RightCayleyGraphAsAutomaton(b21);[0X
+    [4X< deterministic automaton on 2 letters with 6 states >[0X
+    [4Xgap> Display(rcg);[0X
+    [4X   |  1  2  3  4  5  6[0X
+    [4X-----------------------[0X
+    [4X a |  2  4  6  4  2  4[0X
+    [4X b |  3  5  4  4  4  3[0X
+    [4XInitial state:   [ ][0X
+    [4XAccepting state: [ ][0X
+    [4X      [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X2.4-2 RightCayleyGraphMonoidAsAutomaton[0m
+  
+  [2X> RightCayleyGraphMonoidAsAutomaton( [0X[3XS[0X[2X ) ___________________________[0Xfunction
+  
+  This function is a synonym of [2XRightCayleyGraphAsAutomaton[0m ([14X2.4-1[0m).
+  

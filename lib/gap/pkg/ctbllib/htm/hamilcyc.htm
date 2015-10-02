@@ -1,0 +1,2346 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta name="GENERATOR" content="TtH 3.59">
+ <style type="text/css"> div.p { margin-top: 7pt;}</style>
+ <style type="text/css"><!--
+ td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}
+ td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}
+ td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}
+ td div.norm {line-height:normal;}
+ span.roman {font-family: serif; font-style: normal; font-weight: normal;} 
+ span.overacc2 {position: relative;  left: .8em; top: -1.2ex;}
+ span.overacc1 {position: relative;  left: .6em; top: -1.2ex;} --></style>
+ 
+
+             _known_monster_maxes  
+<title> GAP Computations Concerning Hamiltonian Cycles in the Generating Graphs of Finite Groups</title>
+ 
+<h1 align="center">GAP Computations Concerning Hamiltonian Cycles in the Generating Graphs of Finite Groups </h1>
+  <body bgcolor="FFFFFF"> 
+
+<div class="p"><!----></div>
+
+<h3 align="center"> T<font size="-2">HOMAS</font> B<font size="-2">REUER</font> <br />
+<i>Lehrstuhl D f&#252;r Mathematik</i> <br />
+<i>RWTH Aachen University, 52056 Aachen, Germany</i> </h3>
+
+<div class="p"><!----></div>
+
+<h3 align="center">April 24th, 2012 </h3>
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+
+This is a collection of examples showing how
+the <font face="helvetica">GAP</font> system&nbsp;[<a href="#GAP" name="CITEGAP">GAP12</a>]
+can be used to compute information about the generating graphs of
+finite groups.
+It includes all examples that were needed for the computational results
+in&nbsp;[<a href="#GMN" name="CITEGMN">BGL<sup>+</sup>10</a>].
+
+<div class="p"><!----></div>
+The purpose of this writeup is twofold.
+On the one hand, the computations are documented this way.
+On the other hand, the <font face="helvetica">GAP</font> code shown for the examples can be used as
+test input for automatic checking of the data and the functions used.
+
+<div class="p"><!----></div>
+A first version of this document, which was based on <font face="helvetica">GAP</font>&nbsp;4.4.12,
+had been accessible in the web since November&nbsp;2009
+and is available in the arXiv (no. 0911.5589) since November&nbsp;2009.
+The differences to the current version are as follows.
+
+<div class="p"><!----></div>
+
+<ul>
+<li>  The format of the <font face="helvetica">GAP</font> output was adjusted to the changed behaviour
+  of <font face="helvetica">GAP</font>&nbsp;4.5.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  The sporadic simple Monster group has exactly one class of maximal
+  subgroups of the type <span class="roman">PSL</span>(2, 41) (see&nbsp;[<a href="#NW12" name="CITENW12">NW</a>]),
+  and has no maximal subgroups which have the socle <span class="roman">PSL</span>(2, 27)
+  (see&nbsp;[<a href="#Wil10" name="CITEWil10">Wil10</a>]).
+  As a consequence, the lower bounds computed in Section&nbsp;<a href="#Monster">4.2</a>
+  have been improved.
+<div class="p"><!----></div>
+</li>
+</ul>
+
+<div class="p"><!----></div>
+
+
+
+<div class="p"><!----></div>
+
+<h1>Contents </h1><a href="#tth_sEc1"
+>1&nbsp; Overview</a><br />
+<a href="#tth_sEc2"
+>2&nbsp; Theoretical Background</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.1"
+>2.1&nbsp; Character-Theoretic Lower Bounds for Vertex Degrees</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.2"
+>2.2&nbsp; Checking the Criteria</a><br />
+<a href="#tth_sEc3"
+>3&nbsp; <font face="helvetica">GAP</font> Functions for the Computations</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc3.1"
+>3.1&nbsp; Computing Vertex Degrees from the Group</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc3.2"
+>3.2&nbsp; Computing Lower Bounds for Vertex Degrees</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc3.3"
+>3.3&nbsp; Evaluating the (Lower Bounds for the) Vertex Degrees</a><br />
+<a href="#tth_sEc4"
+>4&nbsp; Character-Theoretic Computations</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.1"
+>4.1&nbsp; Sporadic Simple Groups, except the Monster</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.2"
+>4.2&nbsp; The Monster</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.3"
+>4.3&nbsp; Nonsimple Automorphism Groups of Sporadic Simple Groups</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.4"
+>4.4&nbsp; Alternating and Symmetric Groups A<sub>n</sub>, S<sub>n</sub>, for 5  &#8804; n  &#8804; 13</a><br />
+<a href="#tth_sEc5"
+>5&nbsp; Computations With Groups</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc5.1"
+>5.1&nbsp; Nonabelian Simple Groups of Order up to 10<sup>7</sup></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc5.2"
+>5.2&nbsp; Nonsimple Groups with Nonsolvable Socle of Order at most 10<sup>6</sup></a><br />
+<a href="#tth_sEc6"
+>6&nbsp; The Groups <span class="roman">PSL</span>(2,q)</a><br />
+
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc1">
+1</a>&nbsp;&nbsp;Overview</h2>
+
+<div class="p"><!----></div>
+The purpose of this note is to document the <font face="helvetica">GAP</font> computations
+that were carried out in order to obtain the computational results
+in&nbsp;[<a href="#GMN" name="CITEGMN">BGL<sup>+</sup>10</a>].
+
+<div class="p"><!----></div>
+In order to keep this note self-contained,
+we first describe the theory needed, in Section&nbsp;<a href="#background">2</a>.
+The translation of the relevant formulae into <font face="helvetica">GAP</font> functions
+can be found in Section&nbsp;<a href="#functions">3</a>.
+Then Section&nbsp;<a href="#chartheor">4</a> describes the computations that only require
+(ordinary) character tables in the
+<font face="helvetica">GAP</font> Character Table Library&nbsp;[<a href="#CTblLib1.2" name="CITECTblLib1.2">Bre12</a>].
+Computations using also the groups are shown in Section&nbsp;<a href="#grouptheor">5</a>.
+
+<div class="p"><!----></div>
+The examples use the <font face="helvetica">GAP</font> Character Table Library
+and the <font face="helvetica">GAP</font> Library of Tables of Marks,
+so we first load these packages in the required versions.
+
+<div class="p"><!----></div>
+Also, we force the assertion level to zero;
+this is the default in interactive <font face="helvetica">GAP</font> sessions
+but the level is automatically set to 1
+when a file is read with <tt>ReadTest</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; if not CompareVersionNumbers( GAPInfo.Version, "4.5" ) then
+    &#62;      Error( "need GAP in version at least 4.5" );
+    &#62;    fi;
+    gap&#62; LoadPackage( "ctbllib", "1.2" );
+    true
+    gap&#62; LoadPackage( "tomlib", "1.1.1" );
+    true
+    gap&#62; SetAssertionLevel( 0 );
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc2">
+2</a>&nbsp;&nbsp;Theoretical Background</h2><a name="background">
+</a>
+
+<div class="p"><!----></div>
+Let G be a finite noncyclic group
+and denote by G<sup>&times;</sup> the set of nonidentity elements in G.
+We define the <em>generating graph</em> &#915;(G) as the undirected graph
+on the vertex set G<sup>&times;</sup> by joining two elements x, y  &#8712; G<sup>&times;</sup>
+by an edge if and only if &#9001;x, y &#9002; =  G holds.
+For x  &#8712; G<sup>&times;</sup>, the <em>vertex degree</em> d(&#915;, x) is
+&#124;{ y  &#8712; G<sup>&times;</sup>; &#9001;x, y &#9002; =  G }&#124;.
+The <em>closure</em> <span class="roman">cl</span>(&#915;) of the graph &#915; with m vertices
+is defined as the graph with the same vertex set as &#915;,
+where the vertices x, y are joined by an edge
+if they are joined by an edge in &#915;
+or if d(&#915;, x) + d(&#915;, y)  &#8805; m.
+We denote iterated closures by <span class="roman">cl</span><sup>(i)</sup>(&#915;) = <span class="roman">cl</span>(<span class="roman">cl</span><sup>(i&#8722;1)</sup>(&#915;)),
+where <span class="roman">cl</span><sup>(0)</sup>(&#915;) = &#915;.
+
+<div class="p"><!----></div>
+In the following, we will show that the generating graphs of the following
+groups contain a Hamiltonian cycle:
+
+<ul>
+<li>    Nonabelian simple groups of orders at most 10<sup>7</sup>,
+<div class="p"><!----></div>
+</li>
+
+<li>
+    groups G containing a unique minimal normal subgroup N
+    such that N has order at most 10<sup>6</sup>, N is nonsolvable,
+    and G/N is cyclic,
+<div class="p"><!----></div>
+</li>
+
+<li>
+    sporadic simple groups and their automorphism groups.
+<div class="p"><!----></div>
+</li>
+</ul>
+
+<div class="p"><!----></div>
+Clearly the condition that G/N is cyclic for all nontrivial normal
+subgroups N of G is necessary for &#915;(G) being connected,
+and&nbsp;[<a href="#GMN" name="CITEGMN">BGL<sup>+</sup>10</a>,Conjecture&nbsp;1.6] states that this condition is also
+sufficient.
+By&nbsp;[<a href="#GMN" name="CITEGMN">BGL<sup>+</sup>10</a>,Proposition&nbsp;1.1],
+this conjecture is true for all solvable groups,
+and the second entry in the above list implies that this conjecture holds
+for all nonsolvable groups of order up to 10<sup>6</sup>.
+
+<div class="p"><!----></div>
+The question whether a graph &#915; contains a Hamiltonian cycle
+(i.&nbsp;e., a closed path in &#915; that visits each vertex exactly once)
+can be answered using the following sufficient criteria (see&nbsp;[<a href="#GMN" name="CITEGMN">BGL<sup>+</sup>10</a>]).
+Let d<sub>1</sub>  &#8804; d<sub>2</sub>  &#8804; &#8230; &#8804; d<sub>m</sub> be the vertex degrees in &#915;.
+
+<div class="p"><!----></div>
+
+<dl compact="compact">
+ <dt><b>P&#243;sa's criterion:</b></dt>
+	<dd>
+    If d<sub>k</sub>  &#8805; k+1 holds for 1  &#8804; k  &lt;  m/2
+    then &#915; contains a Hamiltonian cycle.</dd>
+ <dt><b>Chv&#225;tal's criterion:</b></dt>
+	<dd>
+    If d<sub>k</sub>  &#8805; k+1 or d<sub>m&#8722;k</sub>  &#8805; m&#8722;k holds for 1  &#8804; k  &lt;  m/2
+    then &#915; contains a Hamiltonian cycle.</dd>
+ <dt><b>Closure criterion:</b></dt>
+	<dd>
+    A graph contains a Hamiltonian cycle if and only if its closure
+    contains a Hamiltonian cycle.</dd>
+</dl>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc2.1">
+2.1</a>&nbsp;&nbsp;Character-Theoretic Lower Bounds for Vertex Degrees</h3>
+
+<div class="p"><!----></div>
+Using character-theoretic methods similar to those used to obtain the
+results in&nbsp;[<a href="#BGK" name="CITEBGK">BGK08</a>]
+(the computations for that paper are shown in&nbsp;[<a href="#ProbGenArxiv" name="CITEProbGenArxiv">Breb</a>]),
+we can compute lower bounds for the vertex degrees in generating graphs,
+as follows.
+
+<div class="p"><!----></div>
+Let R be a set of representatives of conjugacy classes of nonidentity
+elements in G,
+fix s  &#8712; G<sup>&times;</sup>,
+let <font face="helvetica"><i>M</i></font>(G,s) denote the set of those maximal subgroups of G
+that contain s,
+let <font face="helvetica"><i>M</i></font>/&#160;&#8764;&#160;(G,s) denote a set of representatives in <font face="helvetica"><i>M</i></font>(G,s)
+w.&nbsp;r.&nbsp;t.&nbsp;conjugacy in G.
+For a subgroup M of G, the <em>permutation character</em> 1<sub>M</sub><sup>G</sup>
+is defined by
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ 1<sub>M</sub><sup>G</sup>(g): = </td><td nowrap="nowrap" align="center">
+&#124;G&#124; &#183;&#124;g<sup>G</sup> &#8745;M&#124;
+<div class="hrcomp"><hr noshade="noshade" size="1"/></div>&#124;M&#124; &#183;&#124;g<sup>G</sup>&#124;<br /></td><td nowrap="nowrap" align="center">
+,</td></tr></table>
+</td></tr></table>
+
+
+where g<sup>G</sup> = { g<sup>x</sup>; x  &#8712; G }, with g<sup>x</sup> = x<sup>&#8722;1</sup> g x,
+denotes the conjugacy class of g in G.
+So we have 1<sub>M</sub><sup>G</sup>(1) = &#124;G&#124;/&#124;M&#124;
+and thus &#124;g<sup>G</sup> &#8745;M&#124; = &#124;g<sup>G</sup>&#124; &#183;1<sub>M</sub><sup>G</sup>(g) / 1<sub>M</sub><sup>G</sup>(1).
+
+<div class="p"><!----></div>
+Doubly counting the set { (s<sup>x</sup>, M<sup>y</sup>); x, y  &#8712; G, s<sup>x</sup>  &#8712; M<sup>y</sup> } yields
+&#124;M<sup>G</sup>&#124; &#183;&#124;s<sup>G</sup> &#8745;M&#124; = &#124;s<sup>G</sup>&#124; &#183;&#124;{ M<sup>x</sup>; x  &#8712; G, s  &#8712; M<sup>x</sup> }&#124;
+and thus
+&#124;{ M<sup>x</sup>; x  &#8712; G, s  &#8712; M<sup>x</sup> }&#124; = &#124;M<sup>G</sup>&#124; &#183;1<sub>M</sub><sup>G</sup>(s) / 1<sub>M</sub><sup>G</sup>(1)  &#8804; 1<sub>M</sub><sup>G</sup>(s).
+(If M is a <em>maximal</em> subgroup of G then either M is normal in G
+or self-normalizing, and in the latter case the inequality is in fact an
+equality.)
+
+<div class="p"><!----></div>
+Let &#928; denote the multiset of <em>primitive</em> permutation characters
+of G, i.&nbsp;e.,
+of the permutation characters 1<sub>M</sub><sup>G</sup> where M ranges over representatives
+of the conjugacy classes of maximal subgroups of G.
+
+<div class="p"><!----></div>
+Define
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ &#948;(s, g<sup>G</sup>): = &#124;g<sup>G</sup>&#124; &#183;</td><td nowrap="nowrap" align="center">
+max<br />
+</td><td nowrap="nowrap"></td><td align="left" class="cl">&#63729;<br />&#63730;<br />
+&#63731;
+</td><td nowrap="nowrap" align="center">
+ 0, 1 &#8722; </td><td nowrap="nowrap" align="center">
+<small></small><!--sup
+--><br /><font size="+3">&#8721;<br />
+</font><small>&#960; &#8712; &#928;</small>&nbsp;<br /></td><td nowrap="nowrap" align="center">
+&#960;(g) &#183;&#960;(s) / &#960;(1) </td><td align="left" class="cl">&#63740;<br />&#63741;<br />
+&#63742;
+</td><td nowrap="nowrap" align="center">
+</td></tr></table>
+</td></tr></table>
+
+
+and d(s, g<sup>G</sup>): = &#124;{ x  &#8712; g<sup>G</sup>; &#9001;s, x &#9002; =  G }&#124;,
+the contribution of the class g<sup>G</sup> to the vertex degree of s.
+Then we have d(&#915;(G), s) = &#8721;<sub>x  &#8712; R</sub> d(s, x<sup>G</sup>) and
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table border="0" cellspacing="0" cellpadding="0">
+ <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ d(s, g<sup>G</sup>) </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ = </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+&#124;g<sup>G</sup>&#124; &#8722; &#124;</td><td nowrap="nowrap" align="center">
+<small></small><!--sup
+--><br /><font size="+3">&#8746;<br />
+</font><small>M  &#8712; <font face="helvetica"><i>M</i></font>(G,s)</small>&nbsp;<br /></td><td nowrap="nowrap" align="center">
+{ x  &#8712; g<sup>G</sup>; &#9001;x, s &#9002; &#8838; M }&#124; </td></tr></table></td><td width="50%"></td></tr>
+ <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ &#8805; </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+</td><td nowrap="nowrap" align="center">
+max<br />
+</td><td nowrap="nowrap"></td><td align="left" class="cl">&#63729;<br />&#63730;<br />
+&#63731;
+</td><td nowrap="nowrap" align="center">
+ 0, &#124;g<sup>G</sup>&#124; &#8722; </td><td nowrap="nowrap" align="center">
+<small></small><!--sup
+--><br /><font size="+3">&#8721;<br />
+</font><small>M  &#8712; <font face="helvetica"><i>M</i></font>(G,s)</small>&nbsp;<br /></td><td nowrap="nowrap" align="center">
+&#124;g<sup>G</sup> &#8745;M&#124; </td><td align="left" class="cl">&#63740;<br />&#63741;<br />
+&#63742;
+</td><td nowrap="nowrap" align="center">
+</td></tr></table></td><td width="50%"></td></tr>
+ <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ = </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+&#124;g<sup>G</sup>&#124; &#183;</td><td nowrap="nowrap" align="center">
+max<br />
+</td><td nowrap="nowrap"></td><td align="left" class="cl">&#63729;<br />&#63730;<br />
+&#63731;
+</td><td nowrap="nowrap" align="center">
+ 0, 1 &#8722; </td><td nowrap="nowrap" align="center">
+<small></small><!--sup
+--><br /><font size="+3">&#8721;<br />
+</font><small>M  &#8712; <font face="helvetica"><i>M</i></font>(G,s)</small>&nbsp;<br /></td><td nowrap="nowrap" align="center">
+1<sub>M</sub><sup>G</sup>(g) / 1<sub>M</sub><sup>G</sup>(1) </td><td align="left" class="cl">&#63740;<br />&#63741;<br />
+&#63742;
+</td><td nowrap="nowrap" align="center">
+</td></tr></table></td><td width="50%"></td></tr>
+ <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ &#8805; </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+&#124;g<sup>G</sup>&#124; &#183;</td><td nowrap="nowrap" align="center">
+max<br />
+</td><td nowrap="nowrap"></td><td align="left" class="cl">&#63729;<br />&#63730;<br />
+&#63731;
+</td><td nowrap="nowrap" align="center">
+ 0, 1 &#8722; </td><td nowrap="nowrap" align="center">
+<small></small><!--sup
+--><br /><font size="+3">&#8721;<br />
+</font><small>M  &#8712; <font face="helvetica"><i>M</i></font>/&#160;&#8764;&#160;(G,s)</small>&nbsp;<br /></td><td nowrap="nowrap" align="center">
+1<sub>M</sub><sup>G</sup>(g) &#183;1<sub>M</sub><sup>G</sup>(s) / 1<sub>M</sub><sup>G</sup>(1) </td><td align="left" class="cl">&#63740;<br />&#63741;<br />
+&#63742;
+</td><td nowrap="nowrap" align="center">
+</td></tr></table></td><td width="50%"></td></tr>
+ <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ </td></tr></table></td><td nowrap="nowrap" align="left">
+<table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">
+ = </td></tr></table></td><td nowrap="nowrap" align="left">
+<table><tr><td nowrap="nowrap" align="right" colspan="1">&#948;(s, g<sup>G</sup>)</td></tr></table></td><td width="50%"></td></tr></table>
+</td></tr></table>
+
+
+
+<div class="p"><!----></div>
+So &#948;(s): = &#8721;<sub>x  &#8712; R</sub> &#948;(s, x<sup>G</sup>) is a lower bound
+for the vertex degree of s; this bound can be computed if &#928; is known.
+
+<div class="p"><!----></div>
+For computing the vertex degrees of the iterated closures of &#915;(G),
+we define d<sup>(0)</sup>(s, g<sup>G</sup>): = d(s, g<sup>G</sup>) and
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ d<sup>(i+1)</sup>(s, g<sup>G</sup>): = </td><td align="left" class="cl">&#63729;<br />&#63732;<br />&#63730;<br />
+&#63732;<br />&#63731;
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#124;g<sup>G</sup>&#124; </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+d<sup>(i)</sup>(&#915;(G), s) + d<sup>(i)</sup>(&#915;(G), g)  &#8805; &#124;G&#124;&#8722;1 </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+d<sup>(i)</sup>(s, g<sup>G</sup>) </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+<span class="roman">otherwise</span> </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+ .</td></tr></table>
+</td></tr></table>
+
+
+Then d(<span class="roman">cl</span><sup>(i)</sup>(&#915;(G)), s) = &#8721;<sub>x  &#8712; R</sub> d<sup>(i)</sup>(s, g<sup>G</sup>) holds.
+
+<div class="p"><!----></div>
+Analogously, we set &#948;<sup>(0)</sup>(s, g<sup>G</sup>): = &#948;(s, g<sup>G</sup>),
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ &#948;<sup>(i+1)</sup>(s, g<sup>G</sup>): = </td><td align="left" class="cl">&#63729;<br />&#63732;<br />&#63730;<br />
+&#63732;<br />&#63731;
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#124;g<sup>G</sup>&#124; </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#948;<sup>(i)</sup>(s) + &#948;<sup>(i)</sup>(g)  &#8805; &#124;G&#124;&#8722;1 </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#948;<sup>(i)</sup>(s, g<sup>G</sup>) </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+<span class="roman">otherwise</span> </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+ </td></tr></table>
+</td></tr></table>
+
+
+and &#948;<sup>(i)</sup>(s): = &#8721;<sub>x  &#8712; R</sub> &#948;<sup>(i)</sup>(s, x<sup>G</sup>),
+a lower bound for d(<span class="roman">cl</span><sup>(i)</sup>(&#915;(G)), s)
+that can be computed if &#928; is known.
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc2.2">
+2.2</a>&nbsp;&nbsp;Checking the Criteria</h3><a name="critcheck">
+</a>
+
+<div class="p"><!----></div>
+Let us assume that we know lower bounds &#946;(s) for the vertex degrees
+d(<span class="roman">cl</span><sup>(i)</sup>(&#915;(G)), s), for some fixed i,
+and let us choose representatives s<sub>1</sub>, s<sub>2</sub>, &#8230;, s<sub>l</sub> of the nonidentity
+conjugacy classes of G
+such that &#946;(s<sub>1</sub>)  &#8804; &#946;(s<sub>2</sub>)  &#8804; &#8230; &#8804; &#946;(s<sub>l</sub>) holds.
+Let c<sub>k</sub> = &#124;s<sub>k</sub><sup>G</sup>&#124; be the class lengths of these representatives.
+
+<div class="p"><!----></div>
+Then the first c<sub>1</sub> vertex degrees, ordered by increasing size,
+are larger than or equal to &#946;(s<sub>1</sub>),
+the next c<sub>2</sub> vertex degrees are larger than or equal to &#946;(s<sub>2</sub>),
+and so on.
+
+<div class="p"><!----></div>
+Then the set of indices in the k-th nonidentity class of G
+for which P&#243;sa's criterion is not guaranteed by the given bounds is
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ { x; c<sub>1</sub> + c<sub>2</sub> + &#8230;+ c<sub>k&#8722;1</sub>  &lt;  x  &#8804; c<sub>1</sub> + c<sub>2</sub> + &#8230;c<sub>k</sub>, x  &lt;  (&#124;G&#124; &#8722; 1) / 2, &#946;(s<sub>k</sub>)  &lt;  x+1 }.</td></tr></table>
+</td></tr></table>
+
+
+This is an interval { L<sub>k</sub>, L<sub>k</sub> + 1, &#8230;, U<sub>k</sub> } with
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ L<sub>k</sub> = </td><td nowrap="nowrap" align="center">
+max<br />
+</td><td nowrap="nowrap">{ 1 + c<sub>1</sub> + c<sub>2</sub> + &#8230;+ c<sub>k&#8722;1</sub>, &#946;(s<sub>k</sub>) }</td></tr></table>
+</td></tr></table>
+
+
+and
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ U<sub>k</sub> = </td><td nowrap="nowrap" align="center">
+min<br />
+</td><td nowrap="nowrap">{ c<sub>1</sub> + c<sub>2</sub> + &#8230;+ c<sub>k</sub>, &#63728; &#124;G&#124;/2 &#63739; &#8722; 1 } .</td></tr></table>
+</td></tr></table>
+
+
+(Note that the generating graph has m = &#124;G&#124;&#8722;1 vertices,
+and that x  &lt;  m/2 is equivalent to
+x  &#8804; &#63728; &#124;G&#124;/2 &#63739; &#8722; 1.)
+
+<div class="p"><!----></div>
+The generating graph &#915;(G) satisfies P&#243;sa's criterion
+if all these intervals are empty,
+i.&nbsp;e., if L<sub>k</sub>  &gt;  U<sub>k</sub> holds for 1  &#8804; k  &#8804; l.
+
+<div class="p"><!----></div>
+The set of indices for which Chv&#225;tal's criterion is not guaranteed
+is the intersection of
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ { m&#8722;k; 1  &#8804; m&#8722;k  &lt;  m/2, d<sub>k</sub>  &lt;  k }</td></tr></table>
+</td></tr></table>
+
+
+with the set of indices for which P&#243;sa's criterion is not guaranteed.
+
+<div class="p"><!----></div>
+Analogously to the above considerations,
+the set of indices m&#8722;x in the former set for which Chv&#225;tal's criterion
+is not guaranteed by the given bounds
+and such that x is an index in the k-th nonidentity class of G
+is
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ { m&#8722;x; c<sub>1</sub> + c<sub>2</sub> + &#8230;+ c<sub>k&#8722;1</sub>  &lt;  x  &#8804; c<sub>1</sub> + c<sub>2</sub> + &#8230;c<sub>k</sub>, 1  &#8804; m&#8722;x  &lt;  (&#124;G&#124; &#8722; 1) / 2, &#946;(s<sub>k</sub>)  &lt;  x }.</td></tr></table>
+</td></tr></table>
+
+
+This is again an interval
+{ L<sup>&#8242;</sup><sub>k</sub>, L<sup>&#8242;</sup><sub>k</sub> + 1, &#8230;, U<sup>&#8242;</sup><sub>k</sub> }
+with
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ L<sup>&#8242;</sup><sub>k</sub> = </td><td nowrap="nowrap" align="center">
+max<br />
+</td><td nowrap="nowrap">{ 1, m &#8722; ( c<sub>1</sub> + c<sub>2</sub> + &#8230;+ c<sub>k</sub> ) }</td></tr></table>
+</td></tr></table>
+
+
+and
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ U<sup>&#8242;</sup><sub>k</sub> = </td><td nowrap="nowrap" align="center">
+min<br />
+</td><td nowrap="nowrap">{ m &#8722; ( c<sub>1</sub> + c<sub>2</sub> + &#8230;+ c<sub>k&#8722;1</sub> ) &#8722; 1, &#63728; &#124;G&#124;/2 &#63739; &#8722; 1, m&#8722;1 &#8722; &#946;(s<sub>k</sub>) } .</td></tr></table>
+</td></tr></table>
+
+
+The generating graph &#915;(G) satisfies Chv&#225;tal's criterion if
+the union of the intervals
+{ L<sup>&#8242;</sup><sub>k</sub>, L<sup>&#8242;</sup><sub>k</sub> + 1, &#8230;, U<sup>&#8242;</sup><sub>k</sub> },
+for 1  &#8804; k  &#8804; l
+is disjoint to the union of the intervals { L<sub>k</sub>, L<sub>k</sub> + 1, &#8230;, U<sub>k</sub> },
+for 1  &#8804; k  &#8804; l.
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc3">
+3</a>&nbsp;&nbsp;<font face="helvetica">GAP</font> Functions for the Computations</h2><a name="functions">
+</a>
+
+<div class="p"><!----></div>
+We describe two approaches to compute, for a given group G,
+vertex degrees for the generating graph of G or lower bounds for them,
+by calculating exact vertex degrees from G itself
+(see Section&nbsp;<a href="#groups">3.1</a>)
+or by deriving lower bounds for the vertex degrees using just
+character-theoretic information about G and its subgroups
+(see Section&nbsp;<a href="#characters">3.2</a>).
+Finally, Section&nbsp;<a href="#clos">3.3</a> deals with deriving lower bounds
+of vertex degrees of iterated closures.
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc3.1">
+3.1</a>&nbsp;&nbsp;Computing Vertex Degrees from the Group</h3><a name="groups">
+</a>
+
+<div class="p"><!----></div>
+In this section,
+the task is to compute the vertex degrees d(s,g<sup>G</sup>) using explicit
+computations with the group G.
+
+<div class="p"><!----></div>
+The function <tt>IsGeneratorsOfTransPermGroup</tt> checks whether the permutations
+in the list <tt>list</tt> generate the permutation group <tt>G</tt>,
+<em>provided that</em> <tt>G</tt> is transitive on its moved points.
+(Note that testing the necessary condition that the elements in <tt>list</tt>
+generate a transitive group is usually much faster than testing generation.)
+This function has been used already in&nbsp;[<a href="#ProbGenArxiv" name="CITEProbGenArxiv">Breb</a>].
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; BindGlobal( "IsGeneratorsOfTransPermGroup", function( G, list )
+    &#62;     local S;
+    &#62; 
+    &#62;     if not IsTransitive( G ) then
+    &#62;       Error( "&lt;G&#62; must be transitive on its moved points" );
+    &#62;     fi;
+    &#62;     S:= SubgroupNC( G, list );
+    &#62; 
+    &#62;     return IsTransitive( S, MovedPoints( G ) ) and Size( S ) = Size( G );
+    &#62; end );
+
+</pre>
+
+<div class="p"><!----></div>
+The function <tt>VertexDegreesGeneratingGraph</tt> takes a
+<em>transitive</em> permutation group <tt>G</tt>
+(in order to be allowed to use <tt>IsGeneratorsOfTransPermGroup</tt>),
+the list <tt>classes</tt> of conjugacy classes of <tt>G</tt>
+(in order to prescribe an ordering of the classes),
+and a list <tt>normalsubgroups</tt> of proper normal subgroups of <tt>G</tt>,
+and returns the matrix [ d(s, g<sup><tt>G</tt></sup>) ]<sub>s, g</sub> of vertex degrees,
+with rows and columns indexed by nonidentity class representatives
+ordered as in the list <tt>classes</tt>.
+(The class containing the identity element may be contained in <tt>classes</tt>.)
+
+<div class="p"><!----></div>
+The following criteria are used in this function.
+
+<ul>
+<li>    The function tests the (non)generation only for representatives of
+    C<sub>G</sub>(g)-C<sub>G</sub>(s)-double cosets,
+    where C<sub>G</sub>(g): = { x  &#8712; G; g x = x g }
+    denotes the centralizer of g in G.
+    Note that for c<sub>1</sub>  &#8712; C<sub>G</sub>(g), c<sub>2</sub>  &#8712; C<sub>G</sub>(s),
+    and a representative r  &#8712; G, we have
+    &#9001;s, g<sup>c<sub>1</sub> r c<sub>2</sub></sup> &#9002; =  &#9001;s, g<sup>r</sup> &#9002;<sup>c<sub>2</sub></sup>.
+    If &#9001;s, g<sup>r</sup> &#9002; =  G then
+    the double coset D = C<sub>G</sub>(g) r C<sub>G</sub>(s) contributes &#124;D&#124;/&#124;C<sub>G</sub>(g)&#124;
+    to the vertex degree d(s, g<sup>G</sup>),
+    otherwise the contribution is zero.
+<div class="p"><!----></div>
+</li>
+
+<li>
+    We have d(s, g<sup>G</sup>) &#183;&#124;C<sub>G</sub>(g)&#124; = d(g, s<sup>G</sup>) &#183;&#124;C<sub>G</sub>(s)&#124;.
+    (To see this,
+    either establish a bijection of the above double cosets,
+    or doubly count the edges between elements of the conjugacy classes
+    of s and g.)
+<div class="p"><!----></div>
+</li>
+
+<li>
+    If &#9001;s<sub>1</sub> &#9002; =  &#9001;s<sub>2</sub> &#9002; and
+    &#9001;g<sub>1</sub> &#9002; =  &#9001;g<sub>2</sub> &#9002; hold then we have
+    d(s<sub>1</sub>, g<sub>1</sub><sup>G</sup>) = d(s<sub>2</sub>, g<sub>1</sub><sup>G</sup>) = d(s<sub>1</sub>, g<sub>2</sub><sup>G</sup>) = d(s<sub>2</sub>, g<sub>2</sub><sup>G</sup>),
+    so only one of these values must be computed.
+<div class="p"><!----></div>
+</li>
+
+<li>
+    If both s and g are contained in one of the normal subgroups given
+    then d(s, g<sup>G</sup>) is zero.
+<div class="p"><!----></div>
+</li>
+
+<li>
+    If G is not a dihedral group and both s and g are involutions
+    then d(s, g<sup>G</sup>) is zero.
+<div class="p"><!----></div>
+</li>
+</ul>
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; BindGlobal( "VertexDegreesGeneratingGraph",
+    &#62;     function( G, classes, normalsubgroups )
+    &#62;     local nccl, matrix, cents, powers, normalsubgroupspos, i, j, g_i, nsg,
+    &#62;           g_j, gen, pair, d, pow;
+    &#62; 
+    &#62;     if not IsTransitive( G ) then
+    &#62;       Error( "&lt;G&#62; must be transitive on its moved points" );
+    &#62;     fi;
+    &#62; 
+    &#62;     classes:= Filtered( classes, C -&#62; Order( Representative( C ) ) &lt;&#62; 1 );
+    &#62;     nccl:= Length( classes );
+    &#62;     matrix:= [];
+    &#62;     cents:= [];
+    &#62;     powers:= [];
+    &#62;     normalsubgroupspos:= [];
+    &#62;     for i in [ 1 .. nccl ] do
+    &#62;       matrix[i]:= [];
+    &#62;       if IsBound( powers[i] ) then
+    &#62;         # The i-th row equals the earlier row `powers[i]'.
+    &#62;         for j in [ 1 .. i ] do
+    &#62;           matrix[i][j]:= matrix[ powers[i] ][j];
+    &#62;           matrix[j][i]:= matrix[j][ powers[i] ];
+    &#62;         od;
+    &#62;       else
+    &#62;         # We have to compute the values.
+    &#62;         g_i:= Representative( classes[i] );
+    &#62;         nsg:= Filtered( [ 1 .. Length( normalsubgroups ) ],
+    &#62;                         i -&#62; g_i in normalsubgroups[i] );
+    &#62;         normalsubgroupspos[i]:= nsg;
+    &#62;         cents[i]:= Centralizer( G, g_i );
+    &#62;         for j in [ 1 .. i ] do
+    &#62;           g_j:= Representative( classes[j] );
+    &#62;           if IsBound( powers[j] ) then
+    &#62;             matrix[i][j]:= matrix[i][ powers[j] ];
+    &#62;             matrix[j][i]:= matrix[ powers[j] ][i];
+    &#62;           elif not IsEmpty( Intersection( nsg, normalsubgroupspos[j] ) )
+    &#62;                or ( Order( g_i ) = 2 and Order( g_j ) = 2
+    &#62;                     and not IsDihedralGroup( G ) ) then
+    &#62;             matrix[i][j]:= 0;
+    &#62;             matrix[j][i]:= 0;
+    &#62;           else
+    &#62;             # Compute $d(g_i, g_j^G)$.
+    &#62;             gen:= 0;
+    &#62;             for pair in DoubleCosetRepsAndSizes( G, cents[j], cents[i] ) do
+    &#62;               if IsGeneratorsOfTransPermGroup( G, [ g_i, g_j^pair[1] ] ) then
+    &#62;                 gen:= gen + pair[2];
+    &#62;               fi;
+    &#62;             od;
+    &#62;             matrix[i][j]:= gen / Size( cents[j] );
+    &#62;             if i &lt;&#62; j then
+    &#62;               matrix[j][i]:= gen / Size( cents[i] );
+    &#62;             fi;
+    &#62;           fi;
+    &#62;         od;
+    &#62; 
+    &#62;         # For later, provide information about algebraic conjugacy.
+    &#62;         for d in Difference( PrimeResidues( Order( g_i ) ), [ 1 ] ) do
+    &#62;           pow:= g_i^d;
+    &#62;           for j in [ i+1 .. nccl ] do
+    &#62;             if not IsBound( powers[j] ) and pow in classes[j] then
+    &#62;               powers[j]:= i;
+    &#62;               break;
+    &#62;             fi;
+    &#62;           od;
+    &#62;         od;
+    &#62;       fi;
+    &#62;     od;
+    &#62; 
+    &#62;     return matrix;
+    &#62; end );
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc3.2">
+3.2</a>&nbsp;&nbsp;Computing Lower Bounds for Vertex Degrees</h3><a name="characters">
+</a>
+
+<div class="p"><!----></div>
+In this section,
+the task is to compute the lower bounds &#948;(s, g<sup>G</sup>) for the
+vertex degrees d(s, g<sup>G</sup>) using character-theoretic methods.
+
+<div class="p"><!----></div>
+We provide <font face="helvetica">GAP</font> functions for computing
+the multiset &#928; of the primitive permutation characters
+of a given group G and
+for computing the lower bounds &#948;(s, g<sup>G</sup>) from &#928;.
+
+<div class="p"><!----></div>
+For many almost simple groups, the <font face="helvetica">GAP</font> libraries of character tables
+and of tables of marks contain information for quickly computing
+the primitive permutation characters of the group in question.
+Therefore, the function <tt>PrimitivePermutationCharacters</tt> takes as its
+argument not the group G but its character table T, say.
+(This function is shown already in&nbsp;[<a href="#ProbGenArxiv" name="CITEProbGenArxiv">Breb</a>].)
+
+<div class="p"><!----></div>
+If T is contained in the <font face="helvetica">GAP</font> Character Table Library
+(see&nbsp;[<a href="#CTblLib1.2" name="CITECTblLib1.2">Bre12</a>])
+then the complete set of primitive permutation characters
+can be easily computed if the character tables of all maximal
+subgroups and their class fusions into T are known
+(in this case, we check whether the attribute <tt>Maxes</tt> of T is bound)
+or if the table of marks of G and the class fusion from T into this
+table of marks are known
+(in this case, we check whether the attribute <tt>FusionToTom</tt> of T is bound).
+If the attribute <tt>UnderlyingGroup</tt> of T is bound then the group
+stored as the value of this attribute
+can be used to compute the primitive permutation characters.
+The latter happens if T was computed from the group G;
+for tables in the <font face="helvetica">GAP</font> Character Table Library,
+this is not the case by default.
+
+<div class="p"><!----></div>
+The <font face="helvetica">GAP</font> function <tt>PrimitivePermutationCharacters</tt> tries to compute
+the primitive permutation characters of a group using this information;
+it returns the required list of characters if this can be computed this way,
+otherwise <tt>fail</tt> is returned.
+(For convenience, we use the <font face="helvetica">GAP</font> mechanism of <em>attributes</em>
+in order to store the permutation characters in the character table object
+once they have been computed.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; DeclareAttribute( "PrimitivePermutationCharacters", IsCharacterTable );
+    gap&#62; InstallMethod( PrimitivePermutationCharacters,
+    &#62;     [ IsCharacterTable ],
+    &#62;     function( tbl )
+    &#62;     local maxes, i, fus, poss, tom, G;
+    &#62; 
+    &#62;     if HasMaxes( tbl ) then
+    &#62;       maxes:= List( Maxes( tbl ), CharacterTable );
+    &#62;       for i in [ 1 .. Length( maxes ) ] do
+    &#62;         fus:= GetFusionMap( maxes[i], tbl );
+    &#62;         if fus = fail then
+    &#62;           fus:= PossibleClassFusions( maxes[i], tbl );
+    &#62;           poss:= Set( List( fus, map -&#62; InducedClassFunctionsByFusionMap(
+    &#62;              maxes[i], tbl, [ TrivialCharacter( maxes[i] ) ], map )[1] ) );
+    &#62;           if Length( poss ) = 1 then
+    &#62;             maxes[i]:= poss[1];
+    &#62;           else
+    &#62;             return fail;
+    &#62;           fi;
+    &#62;         else
+    &#62;           maxes[i]:= TrivialCharacter( maxes[i] )^tbl;
+    &#62;         fi;
+    &#62;       od;
+    &#62;       return maxes;
+    &#62;     elif HasFusionToTom( tbl ) then
+    &#62;       tom:= TableOfMarks( tbl );
+    &#62;       maxes:= MaximalSubgroupsTom( tom );
+    &#62;       return PermCharsTom( tbl, tom ){ maxes[1] };
+    &#62;     elif HasUnderlyingGroup( tbl ) then
+    &#62;       G:= UnderlyingGroup( tbl );
+    &#62;       return List( MaximalSubgroupClassReps( G ),
+    &#62;                    M -&#62; TrivialCharacter( M )^tbl );
+    &#62;     fi;
+    &#62; 
+    &#62;     return fail;
+    &#62; end );
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+The next function computes the lower bounds &#948;(s, g<sup>G</sup>) from
+the two lists <tt>classlengths</tt> of conjugacy class lengths of the group G
+and <tt>prim</tt> of all primitive permutation characters of G.
+(The first entry in <tt>classlengths</tt> is assumed to represent the class
+containing the identity element of G.)
+The return value is the matrix that contains in row i and column j
+the value &#948;(s, g<sup>G</sup>), where s and g are in the conjugacy classes
+represented by the (i+1)-st and (j+1)-st column of <tt>tbl</tt>, respectively.
+So the row sums of this matrix are the values &#948;(s).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; LowerBoundsVertexDegrees:= function( classlengths, prim )
+    &#62;     local sizes, nccl;
+    &#62; 
+    &#62;     nccl:= Length( classlengths );
+    &#62;     return List( [ 2 .. nccl ],
+    &#62;              i -&#62; List( [ 2 .. nccl ],
+    &#62;                     j -&#62; Maximum( 0, classlengths[j] - Sum( prim,
+    &#62;                     pi -&#62; classlengths[j] * pi[j] * pi[i] / pi[1] ) ) ) );
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc3.3">
+3.3</a>&nbsp;&nbsp;Evaluating the (Lower Bounds for the) Vertex Degrees</h3><a name="clos">
+</a>
+
+<div class="p"><!----></div>
+In this section,
+the task is to compute (lower bounds for) the vertex degrees of iterated
+closures of a generating graph from (lower bounds for) the vertex degrees
+of the graph itself,
+and then to check the criteria of P&#243;sa and Chv&#225;tal.
+
+<div class="p"><!----></div>
+The arguments of all functions defined in this section are
+the list <tt>classlengths</tt> of conjugacy class lengths for the group G
+(including the class of the identity element, in the first position)
+and a matrix <tt>bounds</tt> of the values d<sup>(i)</sup>(s, g<sup>G</sup>)
+or &#948;<sup>(i)</sup>(s, g<sup>G</sup>),
+with rows and columns indexed by nonidentity class representatives
+s and g, respectively.
+Such a matrix is returned by the functions <tt>VertexDegreesGeneratingGraph</tt> or
+<tt>LowerBoundsVertexDegrees</tt>, respectively.
+
+<div class="p"><!----></div>
+The function <tt>LowerBoundsVertexDegreesOfClosure</tt> returns the corresponding
+matrix of the values d<sup>(i+1)</sup>(s, g<sup>G</sup>) or &#948;<sup>(i+1)</sup>(s, g<sup>G</sup>),
+respectively.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; LowerBoundsVertexDegreesOfClosure:= function( classlengths, bounds )
+    &#62;     local delta, newbounds, size, i, j;
+    &#62; 
+    &#62;     delta:= List( bounds, Sum );
+    &#62;     newbounds:= List( bounds, ShallowCopy );
+    &#62;     size:= Sum( classlengths );
+    &#62;     for i in [ 1 .. Length( bounds ) ] do
+    &#62;       for j in [ 1 .. Length( bounds ) ] do
+    &#62;         if delta[i] + delta[j] &#62;= size - 1 then
+    &#62;           newbounds[i][j]:= classlengths[ j+1 ];
+    &#62;         fi;
+    &#62;       od;
+    &#62;     od;
+    &#62; 
+    &#62;     return newbounds;
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+Once the values d<sup>(i)</sup>(s, g<sup>G</sup>) or &#948;<sup>(i)</sup>(s, g<sup>G</sup>) are known,
+we can check whether P&#243;sa's or Chv&#225;tal's criterion is satisfied
+for the graph <span class="roman">cl</span><sup>(i)</sup>(&#915;(G)),
+using the function <tt>CheckCriteriaOfPosaAndChvatal</tt> shown below.
+(Of course a <em>negative</em> result is meaningless in the case that only
+lower bounds for the vertex degrees are used.)
+
+<div class="p"><!----></div>
+The idea is to compute the row sums of the given matrix,
+and to compute the intervals { L<sub>k</sub>, L<sub>k</sub> + 1, &#8230;, U<sub>k</sub> }
+and { L<sup>&#8242;</sup><sub>k</sub>, L<sup>&#8242;</sup><sub>k</sub> + 1, &#8230;, U<sup>&#8242;</sup><sub>k</sub> }
+that were introduced in Section&nbsp;<a href="#critcheck">2.2</a>.
+
+<div class="p"><!----></div>
+The function <tt>CheckCriteriaOfPosaAndChvatal</tt> returns,
+given the list of class lengths of G and the matrix of (bounds for the)
+vertex degrees, a record with the components
+<tt>badForPosa</tt> (the list of those pairs [ L<sub>k</sub>, U<sub>k</sub> ] with the property
+L<sub>k</sub>  &#8804; U<sub>k</sub>),
+<tt>badForChvatal</tt> (the list of pairs of lower and upper bounds of
+nonempty intervals where Chv&#225;tal's criterion may be violated),
+and <tt>data</tt> (the sorted list of triples [ &#948;(g<sub>k</sub>), &#124;g<sub>k</sub><sup>G</sup>&#124;, &#953;(k) ],
+where &#953;(k) is the row and column position of g<sub>k</sub> in the matrix
+<tt>bounds</tt>).
+The ordering of class lengths must of course be compatible with the
+ordering of rows and columns of the matrix,
+and the identity element of G must belong to the first entry in the
+list of class lengths.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; CheckCriteriaOfPosaAndChvatal:= function( classlengths, bounds )
+    &#62;     local size, degs, addinterval, badForPosa, badForChvatal1, pos, half,
+    &#62;           i, low1, upp2, upp1, low2, badForChvatal, interval1, interval2;
+    &#62; 
+    &#62;     size:= Sum( classlengths );
+    &#62;     degs:= List( [ 2 .. Length( classlengths ) ],
+    &#62;                  i -&#62; [ Sum( bounds[ i-1 ] ), classlengths[i], i ] );
+    &#62;     Sort( degs );
+    &#62; 
+    &#62;     addinterval:= function( intervals, low, upp )
+    &#62;       if low &lt;= upp then
+    &#62;         Add( intervals, [ low, upp ] );
+    &#62;       fi;
+    &#62;     end;
+    &#62; 
+    &#62;     badForPosa:= [];
+    &#62;     badForChvatal1:= [];
+    &#62;     pos:= 1;
+    &#62;     half:= Int( size / 2 ) - 1;
+    &#62;     for i in [ 1 .. Length( degs ) ] do
+    &#62;       # We have pos = c_1 + c_2 + \cdots + c_{i-1} + 1
+    &#62;       low1:= Maximum( pos, degs[i][1] );  # L_i
+    &#62;       upp2:= Minimum( half, size-1-pos, size-1-degs[i][1] ); # U'_i
+    &#62;       pos:= pos + degs[i][2];
+    &#62;       upp1:= Minimum( half, pos-1 ); # U_i
+    &#62;       low2:= Maximum( 1, size-pos ); # L'_i
+    &#62;       addinterval( badForPosa, low1, upp1 );
+    &#62;       addinterval( badForChvatal1, low2, upp2 );
+    &#62;     od;
+    &#62; 
+    &#62;     # Intersect intervals.
+    &#62;     badForChvatal:= [];
+    &#62;     for interval1 in badForPosa do
+    &#62;       for interval2 in badForChvatal1 do
+    &#62;         addinterval( badForChvatal, Maximum( interval1[1], interval2[1] ),
+    &#62;                                     Minimum( interval1[2], interval2[2] ) );
+    &#62;       od;
+    &#62;     od;
+    &#62; 
+    &#62;     return rec( badForPosa:= badForPosa,
+    &#62;                 badForChvatal:= Set( badForChvatal ),
+    &#62;                 data:= degs );
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+Finally, the function <tt>HamiltonianCycleInfo</tt> assumes that the matrix <tt>bounds</tt>
+contains lower bounds for the vertex degrees in the generating graph
+&#915;, and returns a string that describes the minimal i with the
+property that the given bounds suffice to show that cl<sup>(i)</sup>(&#915;)
+satisfies P&#243;sa's or Chv&#225;tal's criterion,
+if such a closure exists.
+If no closure has this property, the string <tt>"no decision"</tt> is returned.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; HamiltonianCycleInfo:= function( classlengths, bounds )
+    &#62;     local i, result, res, oldbounds;
+    &#62; 
+    &#62;     i:= 0;
+    &#62;     result:= rec( Posa:= fail, Chvatal:= fail );
+    &#62;     repeat
+    &#62;       res:= CheckCriteriaOfPosaAndChvatal( classlengths, bounds );
+    &#62;       if result.Posa = fail and IsEmpty( res.badForPosa ) then
+    &#62;         result.Posa:= i;
+    &#62;       fi;
+    &#62;       if result.Chvatal = fail and IsEmpty( res.badForChvatal ) then
+    &#62;         result.Chvatal:= i;
+    &#62;       fi;
+    &#62;       i:= i+1;
+    &#62;       oldbounds:= bounds;
+    &#62;       bounds:= LowerBoundsVertexDegreesOfClosure( classlengths, bounds );
+    &#62;     until oldbounds = bounds;
+    &#62; 
+    &#62;     if result.Posa &lt;&#62; fail then
+    &#62;       if result.Posa &lt;&#62; result.Chvatal then
+    &#62;         return Concatenation( "Chvatal for ", Ordinal( result.Chvatal ),
+    &#62;             " closure, Posa for ", Ordinal( result.Posa ), " closure" );
+    &#62;       else
+    &#62;         return Concatenation( "Posa for ", Ordinal( result.Posa ),
+    &#62;             " closure" );
+    &#62;       fi;
+    &#62;     elif result.Chvatal &lt;&#62; fail then
+    &#62;       return Concatenation( "Chvatal for ", Ordinal( result.Chvatal ),
+    &#62;                             " closure" );
+    &#62;     else
+    &#62;       return "no decision";
+    &#62;     fi;
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc4">
+4</a>&nbsp;&nbsp;Character-Theoretic Computations</h2><a name="chartheor">
+</a>
+
+<div class="p"><!----></div>
+In this section, we apply the functions introduced in Section&nbsp;<a href="#functions">3</a>
+to character tables of almost simple groups
+that are available in the <font face="helvetica">GAP</font> Character Table Library.
+
+<div class="p"><!----></div>
+Our first examples are the sporadic simple groups, in Section&nbsp;<a href="#spor">4.1</a>,
+then their automorphism groups are considered in Section&nbsp;<a href="#sporaut">4.3</a>.
+Small alternating and symmetric groups are treated in
+Section&nbsp;<a href="#symmalt">4.4</a>.
+
+<div class="p"><!----></div>
+For our convenience, we provide a small function that takes as its
+argument only the character table in question,
+and returns a string, either <tt>"no prim. perm. characters"</tt> or the
+return value of <tt>HamiltonianCycleInfo</tt> for the bounds computed from
+the primitive permutation characters.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; HamiltonianCycleInfoFromCharacterTable:= function( tbl )
+    &#62;     local prim, classlengths, bounds;
+    &#62; 
+    &#62;     prim:= PrimitivePermutationCharacters( tbl );
+    &#62;     if prim = fail then
+    &#62;       return "no prim. perm. characters";
+    &#62;     fi;
+    &#62;     classlengths:= SizesConjugacyClasses( tbl );
+    &#62;     bounds:= LowerBoundsVertexDegrees( classlengths, prim );
+    &#62;     return HamiltonianCycleInfo( classlengths, bounds );
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.1">
+4.1</a>&nbsp;&nbsp;Sporadic Simple Groups, except the Monster</h3><a name="spor">
+</a>
+
+<div class="p"><!----></div>
+The <font face="helvetica">GAP</font> Character Table Library contains the tables of maximal subgroups
+of all sporadic simple groups except M.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+So the function <tt>PrimitivePermutationCharacters</tt>
+can be used to compute all primitive permutation characters
+for 25 of the 26 sporadic simple groups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; spornames:= AllCharacterTableNames( IsSporadicSimple, true,
+    &#62;                    IsDuplicateTable, false );
+    [ "B", "Co1", "Co2", "Co3", "F3+", "Fi22", "Fi23", "HN", "HS", "He", "J1", 
+      "J2", "J3", "J4", "Ly", "M", "M11", "M12", "M22", "M23", "M24", "McL", 
+      "ON", "Ru", "Suz", "Th" ]
+    gap&#62; for tbl in List( spornames, CharacterTable ) do
+    &#62;      info:= HamiltonianCycleInfoFromCharacterTable( tbl );
+    &#62;      if info &lt;&#62; "Posa for 0th closure" then
+    &#62;        Print( Identifier( tbl ), ": ", info, "\n" );
+    &#62;      fi;
+    &#62;    od;
+    M: no prim. perm. characters
+
+</pre>
+
+<div class="p"><!----></div>
+It turns out that only for the Monster group,
+the information available in the <font face="helvetica">GAP</font> Character Table Library
+is not sufficient to prove that the generating graph
+contains a Hamiltonian cycle.
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.2">
+4.2</a>&nbsp;&nbsp;The Monster</h3><a name="Monster">
+</a>
+
+<div class="p"><!----></div>
+Currently 44_known_monster_maxes classes of maximal subgroups of the
+Monster group M are
+known, but there may be more, see&nbsp;[<a href="#NW12" name="CITENW12">NW</a>].
+For some of the known ones, the character table is not known,
+and for some of those with known character table,
+the permutation character is not uniquely determined by the character tables
+involved.
+
+<div class="p"><!----></div>
+Nevertheless, we will show that the generating graph of M satisfies
+P&#243;sa's criterion.
+For that, we use the information that is available.
+
+<div class="p"><!----></div>
+For some of the known maximal subgroups S,
+the character tables are available in the <font face="helvetica">GAP</font> Character Table Library,
+and we derive upper bounds for the values of the primitive
+permutation characters 1<sub>S</sub><sup>M</sup> from the possible class fusions
+from S into M.
+For the other subgroups S, the permutation characters 1<sub>S</sub><sup>M</sup> have been
+computed with other methods.
+
+<div class="p"><!----></div>
+The list <tt>prim</tt> defined below has length 44_known_monster_maxes.
+The entry at position i is a list of length one or two.
+If <tt>prim[</tt>i<tt>]</tt> has length one then its unique entry is the identifier
+of the library character table of the i-th maximal subgroup of M.
+If <tt>prim[</tt>i<tt>]</tt> has length two then its entries are a string describing
+the structure of the i-th maximal subgroup S of M and the
+permutation character 1<sub>S</sub><sup>M</sup>.
+
+<div class="p"><!----></div>
+(The construction of the explicitly given characters in this list
+will be documented elsewhere.
+Some of the constructions can be found in&nbsp;[<a href="#ctblpope" name="CITEctblpope">Brea</a>].)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; m:= CharacterTable( "M" );;
+    gap&#62; primdata:= [
+    &#62; [ "2.B" ],
+    &#62; [ "2^1+24.Co1" ],
+    &#62; [ "3.F3+.2" ],
+    &#62; [ "2^2.2E6(2).3.2" ],
+    &#62; [ "2^(10+16).O10+(2)",
+    &#62;   Character( m, [ 512372707698741056749515292734375,
+    &#62;     405589064025344574375, 29628786742129575, 658201521662685,
+    &#62;     215448838605, 0, 121971774375, 28098354375, 335229607, 108472455,
+    &#62;     164587500, 4921875, 2487507165, 2567565, 26157789, 6593805, 398925, 0,
+    &#62;     437325, 0, 44983, 234399, 90675, 21391, 41111, 12915, 6561, 6561,
+    &#62;     177100, 7660, 6875, 315, 275, 0, 113373, 17901, 57213, 0, 4957, 1197,
+    &#62;     909, 301, 397, 0, 0, 0, 3885, 525, 0, 2835, 90, 45, 0, 103, 67, 43, 28,
+    &#62;     81, 189, 9, 9, 9, 0, 540, 300, 175, 20, 15, 7, 420, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 165, 61, 37, 37, 0, 9, 9, 13, 5, 0, 0, 0, 0, 0, 0, 77, 45, 13, 0, 0,
+    &#62;     45, 115, 19, 10, 0, 5, 5, 9, 9, 1, 1, 0, 0, 4, 0, 0, 9, 9, 3, 1, 0, 0,
+    &#62;     0, 0, 0, 0, 4, 1, 1, 0, 24, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 1, 0,
+    &#62;     4, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 3, 3, 1, 1, 2, 0, 3, 3, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0 ] ) ],
+    &#62; [ "2^(2+11+22).(M24xS3)",
+    &#62;   Character( m, [ 16009115629875684006343550944921875,
+    &#62;     7774182899642733721875, 120168544413337875, 4436049512692980,
+    &#62;     215448838605, 131873639625, 760550656275, 110042727795, 943894035,
+    &#62;     568854195, 1851609375, 0, 4680311220, 405405, 78624756, 14467005,
+    &#62;     178605, 248265, 874650, 0, 76995, 591163, 224055, 34955, 29539, 20727,
+    &#62;     0, 0, 375375, 15775, 0, 0, 0, 495, 116532, 3645, 62316, 1017, 11268,
+    &#62;     357, 1701, 45, 117, 705, 0, 0, 4410, 1498, 0, 3780, 810, 0, 0, 83, 135,
+    &#62;     31, 0, 0, 0, 0, 0, 0, 0, 255, 195, 0, 215, 0, 0, 210, 0, 42, 0, 35, 15,
+    &#62;     1, 1, 160, 48, 9, 92, 25, 9, 9, 5, 1, 21, 0, 0, 0, 0, 0, 98, 74, 42, 0,
+    &#62;     0, 0, 120, 76, 10, 0, 0, 0, 0, 0, 1, 1, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 5, 3, 0, 0, 0, 18, 0, 10, 0, 3, 3, 0, 1, 1, 1, 1, 0, 0, 2,
+    &#62;     0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 6, 12, 0, 0, 2, 0, 0, 0, 2, 0, 0,
+    &#62;     1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0 ] ) ],
+    &#62; [ "3^(1+12).2.Suz.2" ],
+    &#62; [ "2^(5+10+20).(S3xL5(2))",
+    &#62;   Character( m, [ 391965121389536908413379198941796875,
+    &#62;     23914487292951376996875, 474163138042468875, 9500455925885925,
+    &#62;     646346515815, 334363486275, 954161764875, 147339103275, 1481392395,
+    &#62;     1313281515, 0, 8203125, 9827885925, 1216215, 91556325, 9388791, 115911,
+    &#62;     587331, 874650, 0, 79515, 581955, 336375, 104371, 62331, 36855, 0, 0,
+    &#62;     0, 0, 28125, 525, 1125, 0, 188325, 16767, 88965, 2403, 9477, 1155, 891,
+    &#62;     207, 351, 627, 0, 0, 4410, 1498, 0, 0, 0, 30, 150, 91, 151, 31, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 125, 0, 5, 5, 210, 0, 42, 0, 0, 0, 0, 0, 141, 45,
+    &#62;     27, 61, 27, 9, 9, 7, 3, 15, 0, 0, 0, 0, 0, 98, 74, 42, 0, 0, 30, 0, 0,
+    &#62;     0, 6, 6, 6, 3, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     1, 1, 0, 18, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+    &#62;     2, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ) ],
+    &#62; [ "S3xTh" ],
+    &#62; [ "[2^39].(L3(2)x3S6)",
+    &#62;   Character( m, [ 4050306254358548053604918389065234375,
+    &#62;     148844831270071996434375, 2815847622206994375, 14567365753025085,
+    &#62;     3447181417680, 659368198125, 3520153823175, 548464353255, 5706077895,
+    &#62;     3056566695, 264515625, 0, 19572895485, 6486480, 186109245, 61410960,
+    &#62;     758160, 688365, 58310, 0, 172503, 1264351, 376155, 137935, 99127,
+    &#62;     52731, 0, 0, 119625, 3625, 0, 0, 0, 0, 402813, 29160, 185301, 2781,
+    &#62;     21069, 1932, 4212, 360, 576, 1125, 0, 0, 1302, 294, 0, 2160, 810, 0, 0,
+    &#62;     111, 179, 43, 0, 0, 0, 0, 0, 0, 0, 185, 105, 0, 65, 0, 0, 224, 0, 14,
+    &#62;     0, 0, 0, 0, 0, 337, 105, 36, 157, 37, 18, 18, 16, 4, 21, 0, 0, 0, 0, 0,
+    &#62;     70, 38, 14, 0, 0, 0, 60, 40, 10, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 10, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 1, 0, 0, 0, 24, 0, 6, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 6, 8, 0, 0, 2, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 4, 0, 0, 0 ] ) ],
+    &#62; [ "3^8.O8-(3).2_3",
+    &#62;   Character( m, [ 6065553341050124859256025907200000000,
+    &#62;     117457246944126566400000, 2373192769339392000, 4237313863946240,
+    &#62;     1528370386400, 480247040000, 1485622476800, 207447654400, 3523215360,
+    &#62;     1124597760, 2926000000, 0, 4720235520, 18601440, 49864704, 14602080,
+    &#62;     1914720, 645120, 0, 168070, 0, 811008, 133120, 204800, 0, 8192, 3521,
+    &#62;     4250, 308000, 28800, 0, 0, 0, 0, 53504, 1520, 68992, 3584, 2304, 672,
+    &#62;     7216, 240, 192, 960, 156, 0, 0, 0, 70, 7840, 550, 0, 0, 0, 0, 0, 0, 48,
+    &#62;     93, 57, 18, 24, 0, 160, 200, 0, 320, 0, 0, 0, 49, 0, 4, 0, 0, 0, 0,
+    &#62;     144, 0, 0, 80, 0, 20, 64, 20, 0, 8, 0, 12, 0, 2, 2, 0, 0, 0, 6, 0, 0,
+    &#62;     20, 24, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 7, 0, 0, 12, 0,
+    &#62;     0, 0, 20, 8, 0, 0, 5, 0, 4, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     12, 0, 0, 0, 0, 2, 2, 0, 0, 0, 2, 4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0 ] ) ],
+    &#62; [ "(D10xHN).2" ],
+    &#62; [ "(3^2:2xO8+(3)).S4",
+    &#62;   Character( m,
+    &#62;   [ 377694424605514962329798663208960000000, 2359667150587942666240000,
+    &#62;     28756421759729664000, 377826645416419584, 16593035298840,
+    &#62;     5193792576000, 14007297638400, 1715997638656, 5830082560, 2683699200,
+    &#62;     5266800000, 0, 47782831360, 241801560, 626008320, 48633880, 9541080,
+    &#62;     483840, 2332400, 0, 16384, 3964928, 926720, 102400, 16384, 32256,
+    &#62;     51030, 7371, 800800, 41600, 0, 0, 0, 0, 248640, 120480, 200656, 13440,
+    &#62;     13696, 1260, 4708, 1120, 1864, 0, 26, 0, 7840, 336, 0, 4284, 180, 0, 0,
+    &#62;     0, 0, 0, 0, 265, 418, 270, 99, 81, 0, 480, 456, 0, 0, 0, 0, 455, 0, 56,
+    &#62;     0, 0, 0, 0, 0, 680, 64, 4, 16, 32, 18, 26, 16, 4, 0, 0, 10, 0, 9, 0,
+    &#62;     28, 24, 8, 0, 0, 0, 160, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     18, 3, 4, 1, 0, 8, 2, 0, 0, 20, 8, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 4, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 2, 2, 0, 0, 0, 0 ] ) ],
+    &#62; [ "3^(2+5+10).(M11x2S4)",
+    &#62;   Character( m,
+    &#62;   [ 16458603283969466072643078298009600000000, 20359256136981938176000000,
+    &#62;     145987312780574720000, 724314893457326080, 21414300718720,
+    &#62;     18249387520000, 540226355200, 1703254425600, 4697620480, 4771020800,
+    &#62;     23408000000, 0, 43256012800, 98483840, 909246464, 213623680, 8362880,
+    &#62;     4444160, 0, 0, 0, 475136, 998400, 81920, 0, 35840, 25312, 10597, 0,
+    &#62;     128000, 0, 0, 0, 440, 93184, 160, 134400, 1792, 7168, 560, 15888, 160,
+    &#62;     64, 320, 0, 0, 0, 0, 0, 19880, 2240, 0, 0, 0, 0, 0, 0, 301, 148, 200,
+    &#62;     221, 53, 0, 640, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 224, 0, 0, 32,
+    &#62;     32, 20, 156, 8, 0, 8, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 104, 80, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 0, 4, 1, 6, 1, 0, 0, 0, 0, 0, 0, 16, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 4, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ] ) ],
+    &#62; [ "3^(3+2+6+6):(L3(3)xSD16)",
+    &#62;   Character( m,
+    &#62;   [ 69632552355255433384259177414656000000000, 10962676381451812864000000,
+    &#62;     276872489756262400000, 816070626832384000, 52168426710400,
+    &#62;     4994569216000, 29712449536000, 917136998400, 32883343360, 14313062400,
+    &#62;     0, 0, 53947801600, 445244800, 995491840, 268777600, 8579200, 2007040,
+    &#62;     0, 0, 0, 4505600, 588800, 245760, 0, 35840, 24760, 4105, 0, 0, 0, 0, 0,
+    &#62;     0, 148480, 8800, 134400, 1792, 13312, 1680, 20784, 1120, 448, 960, 156,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 241, 304, 184, 121, 49, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 416, 0, 0, 96, 32, 20, 92, 24, 0, 8,
+    &#62;     0, 28, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 4, 1, 12, 1, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    &#62;     0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0 ] ) ],
+    &#62; [ "5^(1+6):2.J2.4" ],
+    &#62; [ "(7:3xHe):2" ],
+    &#62; [ "(A5xA12):2" ],
+    &#62; [ "5^(3+3).(2xL3(5))" ],
+    &#62; [ "(A6xA6xA6).(2xS4)" ],
+    &#62; [ "(A5xU3(8):3):2" ],
+    &#62; [ "5^(2+2+4):(S3xGL2(5))" ],
+    &#62; [ "(L3(2)xS4(4):2).2" ],
+    &#62; [ "7^(1+4):(3x2.S7)" ],
+    &#62; [ "(5^2:[2^4]xU3(5)).S3" ],
+    &#62; [ "(L2(11)xM12):2" ],
+    &#62; [ "(A7x(A5xA5):2^2):2" ],
+    &#62; [ "5^4:(3x2.L2(25)).2" ],
+    &#62; [ "7^(2+1+2):GL2(7)" ],
+    &#62; [ "M11xA6.2^2" ],
+    &#62; [ "(S5xS5xS5):S3" ],
+    &#62; [ "(L2(11)xL2(11)):4" ],
+    &#62; [ "13^2:2.L2(13).4" ],
+    &#62; [ "(7^2:(3x2A4)xL2(7)).2" ],
+    &#62; [ "(13:6xL3(3)).2" ],
+    &#62; [ "13^(1+2):(3x4S4)" ],
+    &#62; [ "L2(71)" ],
+    &#62; [ "L2(59)" ],
+    &#62; [ "11^2:(5x2.A5)" ],
+    &#62; [ "L2(41)" ],
+    &#62; [ "L2(29).2" ],
+    &#62; [ "7^2:2psl(2,7)" ],
+    &#62; [ "L2(19).2" ],
+    &#62; [ "41:40" ],
+    &#62; ];;
+
+</pre>
+
+<div class="p"><!----></div>
+We compute upper bounds for the permutation character values
+in the cases where the characters are not given explicitly.
+(We could improve this by using additional information about the class
+fusions, but this will not be necessary.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; for entry in primdata do
+    &#62;      s:= CharacterTable( entry[1] );
+    &#62;      if not IsBound( entry[2] ) then
+    &#62;        fus:= PossibleClassFusions( s, m );
+    &#62;        poss:= Set( List( fus, x -&#62; InducedClassFunctionsByFusionMap( s, m,
+    &#62;                                      [ TrivialCharacter( s ) ], x )[1] ) );
+    &#62;        entry[2]:= List( [ 1 .. NrConjugacyClasses( m ) ],
+    &#62;                         i -&#62; Maximum( List( poss, x -&#62; x[i] ) ) );
+    &#62;      fi;
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+According to&nbsp;[<a href="#NW12" name="CITENW12">NW</a>],
+any maximal subgroup of the Monster besides the above
+44_known_monster_maxes known classes
+is an almost simple group whose socle is one of
+L<sub>2</sub>(13), Sz(8), U<sub>3</sub>(4), and U<sub>3</sub>(8).
+
+<div class="p"><!----></div>
+We show that the elements of such subgroups are contained in
+the union of 55 conjugacy classes of the Monster
+that cover less than one percent of the elements in the Monster.
+For that, we compute the possible class fusions from the abovementioned
+simple groups S into the Monster, and then the possible class fusions
+from the automorphic extensions of S into the Monster,
+using the possible class fusions of S.
+(This approach is faster than computing each class fusion from scratch.)
+
+<div class="p"><!----></div>
+After the following computations,
+the list <tt>badclasses</tt> will contain the positions of all those classes of M
+that may contain elements in some of the hypothetical maximal subgroups.
+
+<div class="p"><!----></div>
+For each simple group in question, we enter the identifiers of the
+character tables of the automorphic extensions that can occur.
+Note that the automorphism groups of the four groups have the structures
+L<sub>2</sub>(13).2, Sz(8).3, U<sub>3</sub>(4).4, and U<sub>3</sub>(8).(3 &times;S<sub>3</sub>),
+respectively.
+We need not consider the groups U<sub>3</sub>(8).3<sup>2</sup> and U<sub>3</sub>(8).(3 &times;S<sub>3</sub>)
+because already U<sub>3</sub>(8).3<sub>2</sub> does not admit an embedding into M,
+and we need not consider the group U<sub>3</sub>(8).S<sub>3</sub> because its set of elements
+is covered by its subgroups of the types U<sub>3</sub>(8).2 and U<sub>3</sub>(8).3<sub>2</sub>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; PossibleClassFusions( CharacterTable( "U3(8).3_2" ), m );
+    [  ]
+    gap&#62; badclasses:= [];;
+    gap&#62; names:= [
+    &#62;    [ "L2(13)", "L2(13).2" ],
+    &#62;    [ "Sz(8)", "Sz(8).3" ],
+    &#62;    [ "U3(4)", "U3(4).2", "U3(4).4" ],
+    &#62;    [ "U3(8)", "U3(8).2", "U3(8).3_1", "U3(8).3_2", "U3(8).3_3", "U3(8).6" ],
+    &#62;    ];;
+    gap&#62; for list in names do
+    &#62;      t:= CharacterTable( list[1] );
+    &#62;      tfusm:= PossibleClassFusions( t, m );
+    &#62;      UniteSet( badclasses, Flat( tfusm ) );
+    &#62;      for nam in list{ [ 2 .. Length( list ) ] } do
+    &#62;        ext:= CharacterTable( nam );
+    &#62;        for map1 in PossibleClassFusions( t, ext ) do
+    &#62;          inv:= InverseMap( map1 );
+    &#62;          for map2 in tfusm do
+    &#62;            init:= CompositionMaps( map2, inv );
+    &#62;            UniteSet( badclasses, Flat( PossibleClassFusions( ext, m,
+    &#62;                rec( fusionmap:= init ) ) ) );
+    &#62;          od;
+    &#62;        od;
+    &#62;      od;
+    &#62;    od;
+    gap&#62; badclasses;
+    [ 1, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 24, 25, 
+      27, 28, 30, 32, 33, 35, 36, 38, 39, 40, 42, 43, 44, 45, 46, 48, 49, 50, 51, 
+      52, 53, 54, 55, 56, 60, 61, 62, 63, 70, 72, 73, 78, 82, 85, 86 ]
+    gap&#62; Length( badclasses );
+    55
+    gap&#62; classlengths:= SizesConjugacyClasses( m );;
+    gap&#62; bad:= Sum( classlengths{ badclasses } ) / Size( m );;
+    gap&#62; Int( 10000 * bad ); 
+    97
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<em>In the original version of this file, also hypothetical maximal
+subgroups with socle</em> L<sub>2</sub>(27) <em>had been considered.
+As a consequence, the list</em> <tt>badclasses</tt> <em>computed above had length 59
+in the original version;
+the list contained also the classes at the positions 90, 94, 95, and 96,
+that is, the classes</em> <tt>26B</tt>, <tt>28B</tt>, <tt>28C</tt>, <tt>28D</tt>.
+<em>The proportion</em> <tt>bad</tt> <em>of elements in the classes of M
+described by</em>
+<tt>badclasses</tt> <em>was about 2.05 percent of &#124;M&#124;,
+compared to the about 0.98 percent in the current version.</em>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+Now we estimate the lower bounds &#948;(s, g<sup>G</sup>) introduced in
+Section&nbsp;<a href="#characters">3.2</a>.
+Let <font face="helvetica"><i>B</i></font> denote the union of the classes described by <tt>badclasses</tt>,
+and let <font face="helvetica"><i>M</i></font> denote a set of representatives of the
+44_known_monster_maxes known classes of maximal subgroups of M.
+
+<div class="p"><!----></div>
+If s  &#8713; <font face="helvetica"><i>B</i></font> then
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ &#948;(s, g<sup>G</sup>) = &#124;s<sup>G</sup>&#124; &#8722; &#124;s<sup>G</sup>&#124; &#183;</td><td nowrap="nowrap" align="center">
+<small></small><!--sup
+--><br /><font size="+3">&#8721;<br />
+</font><small>S  &#8712; <font face="helvetica"><i>M</i></font></small>&nbsp;<br /></td><td nowrap="nowrap" align="center">
+1<sub>S</sub><sup>M</sup>(s) &#183;1<sub>S</sub><sup>M</sup>(g) / 1<sub>S</sub><sup>M</sup>(1) ,</td></tr></table>
+</td></tr></table>
+
+
+hence &#948;(s) can be computed from the corresponding primitive
+permutation characters,
+and a lower bound for &#948;(s) can be computed from the upper bounds for
+the characters 1<sub>S</sub><sup>G</sup> which are given by the list <tt>primdata</tt>.
+
+<div class="p"><!----></div>
+If s  &#8712; <font face="helvetica"><i>B</i></font> then
+the above equation for &#948;(s, g<sup>G</sup>) holds at least for
+g  &#8713; <font face="helvetica"><i>B</i></font>,
+so &#8721;<sub>g  &#8712; R \<font face="helvetica"><i>B</i></font></sub> &#948;(s, g<sup>G</sup>) is a lower bound
+for &#948;(s).
+So <tt>primdata</tt> yields a lower bound for &#948;(s) also for s  &#8712; <font face="helvetica"><i>B</i></font>,
+by ignoring the pairs (s, g) where both s and g lie in <font face="helvetica"><i>B</i></font>.
+
+<div class="p"><!----></div>
+This means that modifying the output of <tt>LowerBoundsVertexDegrees</tt>
+as follows really yields lower bounds for the vertex degrees.
+(Note that the row and column positions in the matrix returned by
+<tt>LowerBoundsVertexDegrees</tt> are shifted by one, compared to <tt>badclasses</tt>.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; prim:= List( primdata, x -&#62; x[2] );;
+    gap&#62; badpos:= Difference( badclasses, [ 1 ] ) - 1;;
+    gap&#62; bounds:= LowerBoundsVertexDegrees( classlengths, prim );;
+    gap&#62; for i in badpos do
+    &#62;      for j in badpos do
+    &#62;        bounds[i][j]:= 0;
+    &#62;      od;
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+Now we sum up the bounds for the individual classes.
+It turns out that the minimal vertex degree is more than 99 percent
+of &#124;M&#124;.
+This proves that the generating graph of the Monster
+satisfies P&#243;sa's criterion.
+
+<div class="p"><!----></div>
+(And the minimal vertex degree of elements outside <font face="helvetica"><i>B</i></font>
+is more than 99.99998 percent of &#124;M&#124;.)
+
+<div class="p"><!----></div>
+<em>In the original version of this file,
+we got only 97.95 percent of &#124;M&#124; as the lower bound
+for the minimal vertex degree.
+The bound for elements outside <font face="helvetica"><i>B</i></font> was the same
+in the original version.
+The fact that the maximal subgroups of type</em> L<sub>2</sub>(41)
+<em>had been ignored in the original version
+did not affect the lower bound for the minimal vertex degree.</em>
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; degs:= List( bounds, Sum );;
+    gap&#62; Int( 10000 * Minimum( degs ) / Size( m ) );
+    9902
+    gap&#62; goodpos:= Difference( [ 1 .. NrConjugacyClasses( m ) - 1 ], badpos );;
+    gap&#62; Int( 100000000 * Minimum( degs{ goodpos } ) / Size( m ) );
+    99999987
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.3">
+4.3</a>&nbsp;&nbsp;Nonsimple Automorphism Groups of Sporadic Simple Groups</h3><a name="sporaut">
+</a>
+
+<div class="p"><!----></div>
+Next we consider the nonsimple automorphism groups of the sporadic simple
+groups.
+Nontrivial outer automorphisms exist exactly in 12 cases,
+and then the simple group has index 2 in its automorphism group.
+The character tables of the groups and their maximal subgroups are
+available in <font face="helvetica">GAP</font>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; spornames:= AllCharacterTableNames( IsSporadicSimple, true,
+    &#62;                    IsDuplicateTable, false );;
+    gap&#62; sporautnames:= AllCharacterTableNames( IsSporadicSimple, true,
+    &#62;                       IsDuplicateTable, false,
+    &#62;                       OfThose, AutomorphismGroup );;
+    gap&#62; sporautnames:= Difference( sporautnames, spornames );
+    [ "F3+.2", "Fi22.2", "HN.2", "HS.2", "He.2", "J2.2", "J3.2", "M12.2", 
+      "M22.2", "McL.2", "ON.2", "Suz.2" ]
+    gap&#62; for tbl in List( sporautnames, CharacterTable ) do
+    &#62;      info:= HamiltonianCycleInfoFromCharacterTable( tbl );
+    &#62;      Print( Identifier( tbl ), ": ", info, "\n" );
+    &#62;    od;
+    F3+.2: Chvatal for 0th closure, Posa for 1st closure
+    Fi22.2: Chvatal for 0th closure, Posa for 1st closure
+    HN.2: Chvatal for 0th closure, Posa for 1st closure
+    HS.2: Chvatal for 1st closure, Posa for 2nd closure
+    He.2: Chvatal for 0th closure, Posa for 1st closure
+    J2.2: Chvatal for 0th closure, Posa for 1st closure
+    J3.2: Chvatal for 0th closure, Posa for 1st closure
+    M12.2: Chvatal for 0th closure, Posa for 1st closure
+    M22.2: Posa for 1st closure
+    McL.2: Chvatal for 0th closure, Posa for 1st closure
+    ON.2: Chvatal for 0th closure, Posa for 1st closure
+    Suz.2: Chvatal for 0th closure, Posa for 1st closure
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.4">
+4.4</a>&nbsp;&nbsp;Alternating and Symmetric Groups A<sub>n</sub>, S<sub>n</sub>,
+for 5  &#8804; n  &#8804; 13</h3><a name="symmalt">
+</a>
+
+<div class="p"><!----></div>
+For alternating and symmetric groups A<sub>n</sub> and S<sub>n</sub>, respectively,
+with 5  &#8804; n  &#8804; 13,
+the table of marks or the character tables of the group
+and all its maximal subgroups are available in <font face="helvetica">GAP</font>.
+So we can compute the character-theoretic bounds for vertex degrees.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; for tbl in List( [ 5 .. 13 ], i -&#62; CharacterTable(
+    &#62;                 Concatenation( "A", String( i ) ) ) )  do
+    &#62;      info:= HamiltonianCycleInfoFromCharacterTable( tbl );
+    &#62;      if info &lt;&#62; "Posa for 0th closure" then
+    &#62;        Print( Identifier( tbl ), ": ", info, "\n" );
+    &#62;      fi;
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+No messages are printed, so the generating graphs of the alternating
+groups in question satisfy P&#243;sa's criterion.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; for tbl in List( [ 5 .. 13 ], i -&#62; CharacterTable(
+    &#62;                 Concatenation( "S", String( i ) ) ) )  do
+    &#62;      info:= HamiltonianCycleInfoFromCharacterTable( tbl );
+    &#62;      Print( Identifier( tbl ), ": ", info, "\n" );
+    &#62;    od;
+    A5.2: no decision
+    A6.2_1: Chvatal for 4th closure, Posa for 5th closure
+    A7.2: Posa for 1st closure
+    A8.2: Chvatal for 2nd closure, Posa for 3rd closure
+    A9.2: Chvatal for 2nd closure, Posa for 3rd closure
+    A10.2: Chvatal for 2nd closure, Posa for 3rd closure
+    A11.2: Posa for 1st closure
+    A12.2: Chvatal for 2nd closure, Posa for 3rd closure
+    A13.2: Posa for 1st closure
+
+</pre>
+
+<div class="p"><!----></div>
+We see that sufficiently large closures of the generating graphs of the
+symmetric groups in question satisfy P&#243;sa's criterion,
+except that the bounds for the symmetric group S<sub>5</sub> are not sufficient
+for the proof.
+In Section&nbsp;<a href="#smallalmostsimple">5.2</a>, it is shown that the 2nd closure of
+the generating graph of S<sub>5</sub> satisfies P&#243;sa's criterion.
+
+<div class="p"><!----></div>
+(We could find slightly better bounds derived only from character tables
+which suffice to prove that the generating graph for S<sub>5</sub> contains a
+Hamiltonian cycle, but this seems to be not worth while.)
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc5">
+5</a>&nbsp;&nbsp;Computations With Groups</h2><a name="grouptheor">
+</a>
+
+<div class="p"><!----></div>
+We prove in Section&nbsp;<a href="#smallsimp">5.1</a> that the generating graphs of the
+nonabelian simple groups of order up to 10<sup>6</sup> satisfy P&#243;sa's criterion,
+and that the same holds for those nonabelian simple
+groups of order between 10<sup>6</sup> and 10<sup>7</sup> that are not isomorphic
+with some <span class="roman">PSL</span>(2,q).
+(In Section&nbsp;<a href="#psl2q">6</a>, it is shown that the generating graph of
+<span class="roman">PSL</span>(2,q) satifies P&#243;sa's criterion for any prime power q.)
+Nonsimple nonsolvable groups of order up to 10<sup>6</sup>
+are treated in Section&nbsp;<a href="#smallalmostsimple">5.2</a>.
+
+<div class="p"><!----></div>
+(We could increase the bounds 10<sup>6</sup> and 10<sup>7</sup> with more computations
+using the same methods.)
+
+<div class="p"><!----></div>
+For our convenience, we provide a small function that takes as its
+argument only the group in question,
+and returns a string, the
+return value of <tt>HamiltonianCycleInfo</tt> for the vertex degrees computed from
+the group.
+(In order to speed up the computations,
+the function computes the proper normal subgroups that contain the derived
+subgroup of the given group, and enters the list of these groups as the
+third argument of <tt>VertexDegreesGeneratingGraph</tt>.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; HamiltonianCycleInfoFromGroup:= function( G )
+    &#62;     local ccl, nsg, der, degrees, classlengths;
+    &#62;     ccl:= ConjugacyClasses( G );
+    &#62;     if IsPerfect( G ) then
+    &#62;       nsg:= [];
+    &#62;     else
+    &#62;       der:= DerivedSubgroup( G );
+    &#62;       nsg:= Concatenation( [ der ],
+    &#62;                            IntermediateSubgroups( G, der ).subgroups );
+    &#62;     fi;
+    &#62;     degrees:= VertexDegreesGeneratingGraph( G, ccl, nsg );
+    &#62;     classlengths:= List( ccl, Size );
+    &#62;     return HamiltonianCycleInfo( classlengths, degrees );        
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc5.1">
+5.1</a>&nbsp;&nbsp;Nonabelian Simple Groups of Order up to 10<sup>7</sup></h3><a name="smallsimp">
+</a>
+
+<div class="p"><!----></div>
+Representatives of the 56 isomorphism types of nonabelian simple groups
+of order up to 10<sup>6</sup> can be accessed in <font face="helvetica">GAP</font> with the function
+<tt>AllSmallNonabelianSimpleGroups</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; grps:= AllSmallNonabelianSimpleGroups( [ 1 .. 10^6 ] );;         
+    gap&#62; Length( grps );
+    56
+    gap&#62; List( grps, StructureDescription );
+    [ "A5", "PSL(3,2)", "A6", "PSL(2,8)", "PSL(2,11)", "PSL(2,13)", "PSL(2,17)", 
+      "A7", "PSL(2,19)", "PSL(2,16)", "PSL(3,3)", "PSU(3,3)", "PSL(2,23)", 
+      "PSL(2,25)", "M11", "PSL(2,27)", "PSL(2,29)", "PSL(2,31)", "A8", 
+      "PSL(3,4)", "PSL(2,37)", "O(5,3)", "Sz(8)", "PSL(2,32)", "PSL(2,41)", 
+      "PSL(2,43)", "PSL(2,47)", "PSL(2,49)", "PSU(3,4)", "PSL(2,53)", "M12", 
+      "PSL(2,59)", "PSL(2,61)", "PSU(3,5)", "PSL(2,67)", "J1", "PSL(2,71)", "A9", 
+      "PSL(2,73)", "PSL(2,79)", "PSL(2,64)", "PSL(2,81)", "PSL(2,83)", 
+      "PSL(2,89)", "PSL(3,5)", "M22", "PSL(2,97)", "PSL(2,101)", "PSL(2,103)", 
+      "HJ", "PSL(2,107)", "PSL(2,109)", "PSL(2,113)", "PSL(2,121)", "PSL(2,125)", 
+      "O(5,4)" ]
+    gap&#62; for g in grps do                                             
+    &#62;      info:= HamiltonianCycleInfoFromGroup( g );
+    &#62;      if info &lt;&#62; "Posa for 0th closure" then
+    &#62;        Print( StructureDescription( g ), ": ", info, "\n" );
+    &#62;      fi;
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+Nothing is printed during these computations,
+so the generating graphs of all processed groups satisfy
+P&#243;sa's criterion.
+
+<div class="p"><!----></div>
+(On my notebook,
+the above computations needed about 6300 seconds of CPU time.)
+
+<div class="p"><!----></div>
+For simple groups of order larger than 10<sup>6</sup>, there is not such an easy
+way (yet) to access representatives for each isomorphism type.
+Therefore, first we compute the orders of nonabelian simple groups
+between 10<sup>6</sup> and 10<sup>7</sup>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; orders:= Filtered( [ 10^6+4, 10^6+8 .. 10^7 ],
+    &#62;                 n -&#62; IsomorphismTypeInfoFiniteSimpleGroup( n ) &lt;&#62; fail );
+    [ 1024128, 1123980, 1285608, 1342740, 1451520, 1653900, 1721400, 1814400, 
+      1876896, 1934868, 2097024, 2165292, 2328648, 2413320, 2588772, 2867580, 
+      2964780, 3265920, 3483840, 3594432, 3822588, 3940200, 4245696, 4680000, 
+      4696860, 5515776, 5544672, 5663616, 5848428, 6004380, 6065280, 6324552, 
+      6825840, 6998640, 7174332, 7906500, 8487168, 9095592, 9732420, 9951120, 
+      9999360 ]
+    gap&#62; Length( orders );
+    41
+    gap&#62; info:= List( orders, IsomorphismTypeInfoFiniteSimpleGroup );;
+    gap&#62; Number( info, x -&#62; IsBound( x.series ) and x.series = "L"
+    &#62;                       and x.parameter[1] = 2 );
+    31
+
+</pre>
+
+<div class="p"><!----></div>
+We see that there are 31 groups of the type <span class="roman">PSL</span>(2,q) and 10 other
+nonabelian simple groups with order in the range from 10<sup>6</sup> to 10<sup>7</sup>.
+The former groups can be ignored because the generating graphs of any
+group <span class="roman">PSL</span>(2,q) satisfies P&#243;sa's criterion,
+see Section&nbsp;<a href="#psl2q">6</a>.
+For the latter groups, we can apply the character-theoretic method
+to prove that the generating graph satisfies P&#243;sa's criterion.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; info:= Filtered( info, x -&#62; not IsBound( x.series ) or
+    &#62;             x.series &lt;&#62; "L" or x.parameter[1] &lt;&#62; 2 );
+    [ rec( name := "B(3,2) = O(7,2) ~ C(3,2) = S(6,2)", parameter := [ 3, 2 ],
+          series := "B" ), rec( name := "A(10)", parameter := 10, series := "A" ),
+      rec( name := "A(2,7) = L(3,7) ", parameter := [ 3, 7 ], series := "L" ),
+      rec( name := "2A(3,3) = U(4,3) ~ 2D(3,3) = O-(6,3)", parameter := [ 3, 3 ],
+          series := "2A" ), rec( name := "G(2,3)", parameter := 3, series := "G" )
+        ,
+      rec( name := "B(2,5) = O(5,5) ~ C(2,5) = S(4,5)", parameter := [ 2, 5 ],
+          series := "B" ),
+      rec( name := "2A(2,8) = U(3,8)", parameter := [ 2, 8 ], series := "2A" ),
+      rec( name := "2A(2,7) = U(3,7)", parameter := [ 2, 7 ], series := "2A" ),
+      rec( name := "A(3,3) = L(4,3) ~ D(3,3) = O+(6,3) ", parameter := [ 4, 3 ],
+          series := "L" ),
+      rec( name := "A(4,2) = L(5,2) ", parameter := [ 5, 2 ], series := "L" ) ]
+    gap&#62; names:= [ "S6(2)", "A10", "L3(7)", "U4(3)", "G2(3)", "S4(5)", "U3(8)",
+    &#62;              "U3(7)", "L4(3)", "L5(2)" ];;
+    gap&#62; for tbl in List( names, CharacterTable ) do
+    &#62;      info:= HamiltonianCycleInfoFromCharacterTable( tbl );
+    &#62;      if info &lt;&#62; "Posa for 0th closure" then
+    &#62;        Print( Identifier( tbl ), ": ", info, "\n" );
+    &#62;      fi;
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc5.2">
+5.2</a>&nbsp;&nbsp;Nonsimple Groups with Nonsolvable Socle of Order at most 10<sup>6</sup></h3><a name="smallalmostsimple">
+</a>
+
+<div class="p"><!----></div>
+Let G be a nonsolvable group such that G/N is cyclic for all nontrivial
+normal subgroups N of G.
+Then the socle Soc(G) of G is the unique minimal normal subgroup.
+Moreover, Soc(G) is nonsolvable and thus a direct product of isomorphic
+nonabelian simple groups,
+and G is isomorphic to a subgroup of Aut(Soc(G)).
+
+<div class="p"><!----></div>
+In order to deal with all such groups G for which additionally
+&#124;Soc(G)&#124;  &#8804; 10<sup>6</sup> holds,
+it is sufficient to run over the simple groups S of order up to 10<sup>6</sup>
+and to consider those subgroups G of Aut(S<sup>n</sup>),
+with &#124;S&#124;<sup>n</sup>  &#8804; 10<sup>6</sup>, for which Inn(G) is the unique minimal normal
+subgroups and G / Inn(G) is cyclic.
+
+<div class="p"><!----></div>
+We show that for each such group,
+a sufficient closure of the generating graph satisfies P&#243;sa's criterion.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; grps:= AllSmallNonabelianSimpleGroups( [ 1 .. 10^6 ] );;         
+    gap&#62; for simple in grps do
+    &#62;      for n in [ 1 .. LogInt( 10^6, Size( simple ) ) ] do
+    &#62;        # Compute the n-fold direct product S^n.
+    &#62;        soc:= CallFuncList( DirectProduct,
+    &#62;                            ListWithIdenticalEntries( n, simple ) );
+    &#62;        # Compute Aut(S^n) as a permutation group.
+    &#62;        aut:= Image( IsomorphismPermGroup( AutomorphismGroup( soc ) ) );
+    &#62;        aut:= Image( SmallerDegreePermutationRepresentation( aut ) );
+    &#62;        # Compute class representatives of subgroups of Aut(S^n)/Inn(S^n).
+    &#62;        socle:= Socle( aut );
+    &#62;        epi:= NaturalHomomorphismByNormalSubgroup( aut, socle );
+    &#62;        # Compute the candidates for G.
+    &#62;        # (By the above computations, we need not consider simple groups.)
+    &#62;        reps:= List( ConjugacyClassesSubgroups( Image( epi ) ),
+    &#62;                     Representative );
+    &#62;        reps:= Filtered( reps, x -&#62; IsCyclic( x ) and Size( x ) &lt;&#62; 1 );
+    &#62;        greps:= Filtered( List( reps, x -&#62; PreImages( epi, x ) ),
+    &#62;                          x -&#62; Length( MinimalNormalSubgroups( x ) ) = 1 );
+    &#62;        for g in greps do
+    &#62;          # We have to deal with a *transitive* permutation group.
+    &#62;          # (Each group in question acts faithfully on an orbit.)
+    &#62;          if not IsTransitive( g ) then
+    &#62;            g:= First( List( Orbits( g, MovedPoints( g ) ),
+    &#62;                             x -&#62; Action( g, x ) ),
+    &#62;                       x -&#62; Size( x ) = Size( g ) );
+    &#62;          fi;
+    &#62;          # Check this group G.
+    &#62;          info:= HamiltonianCycleInfoFromGroup( g );
+    &#62;          Print( Name( simple ), "^", n, ".", Size( g ) / Size( soc ), ": ",
+    &#62;                 info, "\n" );
+    &#62;        od;
+    &#62;      od;
+    &#62;    od;
+    A5^1.2: Posa for 2nd closure
+    A5^2.2: Posa for 0th closure
+    A5^2.4: Posa for 0th closure
+    A5^3.3: Posa for 0th closure
+    A5^3.6: Chvatal for 1st closure, Posa for 2nd closure
+    PSL(2,7)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,7)^2.2: Posa for 0th closure
+    PSL(2,7)^2.4: Posa for 0th closure
+    A6^1.2: Chvatal for 0th closure, Posa for 1st closure
+    A6^1.2: Chvatal for 4th closure, Posa for 5th closure
+    A6^1.2: Chvatal for 0th closure, Posa for 1st closure
+    A6^2.2: Posa for 0th closure
+    A6^2.4: Posa for 0th closure
+    A6^2.4: Posa for 0th closure
+    A6^2.4: Posa for 0th closure
+    PSL(2,8)^1.3: Posa for 0th closure
+    PSL(2,8)^2.2: Posa for 0th closure
+    PSL(2,8)^2.6: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,11)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,11)^2.2: Posa for 0th closure
+    PSL(2,11)^2.4: Posa for 0th closure
+    PSL(2,13)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,17)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    A7^1.2: Posa for 1st closure
+    PSL(2,19)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,16)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,16)^1.4: Chvatal for 0th closure, Posa for 1st closure
+    PSL(3,3)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSU(3,3)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,23)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,25)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,25)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,25)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,27)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,27)^1.3: Posa for 0th closure
+    PSL(2,27)^1.6: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,29)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,31)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    A8^1.2: Chvatal for 2nd closure, Posa for 3rd closure
+    PSL(3,4)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(3,4)^1.2: Chvatal for 1st closure, Posa for 2nd closure
+    PSL(3,4)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(3,4)^1.3: Posa for 0th closure
+    PSL(3,4)^1.6: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,37)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSp(4,3)^1.2: Chvatal for 1st closure, Posa for 2nd closure
+    Sz(8)^1.3: Posa for 0th closure
+    PSL(2,32)^1.5: Posa for 0th closure
+    PSL(2,41)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,43)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,47)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,49)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,49)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,49)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSU(3,4)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSU(3,4)^1.4: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,53)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    M12^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,59)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,61)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSU(3,5)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSU(3,5)^1.3: Posa for 0th closure
+    PSL(2,67)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,71)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    A9^1.2: Chvatal for 2nd closure, Posa for 3rd closure
+    PSL(2,73)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,79)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,64)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,64)^1.3: Posa for 0th closure
+    PSL(2,64)^1.6: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,81)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,81)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,81)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,81)^1.4: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,81)^1.4: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,83)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,89)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(3,5)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    M22^1.2: Posa for 1st closure
+    PSL(2,97)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,101)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,103)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    J_2^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,107)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,109)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,113)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,121)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,121)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,121)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,125)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSL(2,125)^1.3: Posa for 0th closure
+    PSL(2,125)^1.6: Chvatal for 0th closure, Posa for 1st closure
+    PSp(4,4)^1.2: Chvatal for 0th closure, Posa for 1st closure
+    PSp(4,4)^1.4: Posa for 0th closure
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc6">
+6</a>&nbsp;&nbsp;The Groups <span class="roman">PSL</span>(2,q)</h2><a name="psl2q">
+</a>
+
+<div class="p"><!----></div>
+We show that the generating graph of any group <span class="roman">PSL</span>(2,q), for q  &#8805; 2,
+satisfies P&#243;sa's criterion.
+Throughout this section,
+let q = p<sup>f</sup> for a prime integer p, and G = <span class="roman">PSL</span>(2,q).
+Set k = gcd(q&#8722;1, 2).
+
+<div class="p"><!----></div>
+
+  <b>Lemma 1</b> <em>[see&nbsp;[<a href="#Hup67" name="CITEHup67">Hup67</a>,II., &#167;&nbsp;8]]
+The subgroups of G are
+
+<ul>
+<br />(1)
+    cyclic groups of order dividing (q &#177;1)/k,
+    and their normalizers, which are dihedral groups of order 2 (q &#177;1)/k,
+<br />(2)
+    subgroups of Sylow p normalizers, which are semidirect products of
+    elementary abelian groups of order q with cyclic groups of order
+    (q&#8722;1)/k,
+<br />(3)
+    subgroups isomorphic with <span class="roman">PSL</span>(2, p<sup>m</sup>) if m divides f,
+    and isomorphic with <span class="roman">PGL</span>(2, p<sup>m</sup>) if 2 m divides f,
+<br />(4)
+    subgroups isomorphic with A<sub>4</sub>, S<sub>4</sub>, or A<sub>5</sub>,
+    for appropriate values of q.</ul>
+G contains exactly one conjugacy class of cyclic subgroups of each of
+the orders (q&#8722;1)/k and (q+1)/k,
+and each nonidentity element of G is contained in exactly one of these
+subgroups or in exactly one Sylow p subgroup of G.
+
+<div class="p"><!----></div>
+</em>We estimate the number of elements that are contained in subgroups
+of type&nbsp;(3).
+
+<div class="p"><!----></div>
+
+  <b>Lemma 2</b> <em>
+Let n<sub>sf</sub>(q) denote the number of those nonidentity elements in
+G that are contained in proper subgroups of type&nbsp;(3).
+Then n<sub>sf</sub>(q)  &#8804; q<sup>2</sup> ([2 p/p&#8722;1] (&#8730;q&#8722;1) &#8722; 1).
+If f is a prime then n<sub>sf</sub>(q)  &#8804; (2p&#8722;1) q<sup>2</sup> holds,
+and if p = q then we have of course n<sub>sf</sub>(q) = 0.
+
+<div class="p"><!----></div>
+</em>  P<font size="-2">ROOF</font>.
+The group <span class="roman">PGL</span>(2, p<sup>m</sup>) is equal to <span class="roman">PSL</span>(2, p<sup>m</sup>) for p = 2,
+and contains <span class="roman">PSL</span>(2, p<sup>m</sup>) as a subgroup of index two if p  &#8800; 2.
+So the largest element order in <span class="roman">PGL</span>(2, p<sup>m</sup>) is at most p<sup>m</sup>+1.
+Let C be a cyclic subgroup of order (q + &#949;)/k in G,
+for &#949; &#8712; { &#177;1 }.
+The intersection of C with any subgroup of G isomorphic with
+<span class="roman">PGL</span>(2, p<sup>m</sup>) or <span class="roman">PSL</span>(2, p<sup>m</sup>)
+is contained in the union of the unique subgroups of the orders
+gcd(&#124;C&#124;, p<sup>m</sup> + 1) and gcd(&#124;C&#124;, p<sup>m</sup> &#8722; 1) in C.
+So C contains at most 2 p<sup>m</sup> &#8722; 2 nonidentity elements that can lie inside
+subgroups isomorphic with <span class="roman">PGL</span>(2, p<sup>m</sup>) or <span class="roman">PSL</span>(2, p<sup>m</sup>).
+Hence C contains at most &#8721;<sub>m</sub> (2 p<sup>m</sup> &#8722; 2) nonidentity elements
+in proper subgroups of type&nbsp;(3),
+where m runs over the proper divisors of f.
+This sum is bounded from above by
+&#8721;<sub>m=1</sub><sup>f/2</sup> (2 p<sup>m</sup> &#8722; 2)  &#8804; [2 p/p&#8722;1] (&#8730;q&#8722;1) &#8722; 2.
+
+<div class="p"><!----></div>
+The numbers of cyclic subgroups of the orders (q + &#949;)/k in G
+are q (q &#8722; &#949;) / 2, so G contains altogether q<sup>2</sup> such cyclic
+subgroups.
+They contain at most q<sup>2</sup> ([2 p/p&#8722;1] (&#8730;q&#8722;1) &#8722; 2)
+elements inside proper subgroups of the type (3).
+
+<div class="p"><!----></div>
+All elements of order p in G are contained in subgroups of type&nbsp;(3),
+and there are exactly q<sup>2</sup> &#8722; 1 such elements.
+This yields the claimed bound for n<sub>sf</sub>(q).
+The better bound for the case that f is a prime follows from
+&#8721;<sub>m</sub> (2 p<sup>m</sup> &#8722; 2) = 2 p &#8722; 2 if m ranges over the proper divisors of f.
+
+ <font size="+1"><font size="-2"><sup>[<u>&#175;</u>]</sup></font></font>
+
+<div class="p"><!----></div>
+Using these bounds, we see that the vertex degree of any element in G
+that does not lie in subgroups of type&nbsp;(4) is larger than &#124;G&#124;/2.
+(In fact we could use the calculations below to derive a better
+asymptotic bound, but this is not an issue here.)
+
+<div class="p"><!----></div>
+
+  <b>Lemma 3</b> <em>
+Let s  &#8712; G be an element of order larger than 5.
+Then &#124;{ g  &#8712; G; &#9001;g, s &#9002; =  G }&#124;  &gt;  &#124;G&#124;/2.
+
+<div class="p"><!----></div>
+</em>  P<font size="-2">ROOF</font>.
+First suppose that the order of s divides (q+1)/k or (q&#8722;1)/k.
+If g  &#8712; G such that U = &#9001;s, g &#9002;
+is a proper subgroup of G then U  &#8804; N<sub>G</sub>(&#9001;s &#9002;) or
+U lies in a Sylow p normalizer of G or U lies in a subgroup
+of type&nbsp;(3).
+Since s is contained in at most two Sylow p normalizers
+(each Sylow p normalizer contains q cyclic subgroups of order (q&#8722;1)/k,
+and G contains q+1 Sylow normalizers and q (q+1)/2 cyclic subgroups
+of order (q&#8722;1)/k),
+the number of g  &#8712; G with the property that
+&#9001;s, g &#9002; &#8800; G is at most
+N = 2(q+1)/k + 2 q(q&#8722;1)/k + n<sub>sf</sub>(q) = 2(q<sup>2</sup>+1)/k + n<sub>sf</sub>(q);
+for s of order equal to (q+1)/k or (q&#8722;1)/k, we can set
+N = 2(q<sup>2</sup>+1)/k.
+
+<div class="p"><!----></div>
+Any element s of order p (larger than 5), lies only in a unique
+Sylow p normalizer and in subgroups of type&nbsp;(3), so the bound N
+holds also in this case.
+
+<div class="p"><!----></div>
+For f = 1, N is smaller than &#124;G&#124;/2 = q (q<sup>2</sup>&#8722;1) / (2 k)
+if q  &#8805; 5.
+(The statement of the lemma is trivially true for q  &#8804; 5.)
+
+<div class="p"><!----></div>
+For primes f, N is smaller than &#124;G&#124;/2
+if q<sup>2</sup> (q&#8722;8p)  &gt;  q+4 holds, which is true for p<sup>f</sup>  &gt;  8p.
+Only the following values of p<sup>f</sup> with prime f do not satisfy this
+condition:
+2<sup>2</sup> and 3<sup>2</sup> (where no element of order larger than 5 exists),
+2<sup>3</sup> (where only elements of order equal to q &#177;1 must be considered),
+5<sup>2</sup> and 7<sup>2</sup> (where n<sub>sf</sub>(q)  &lt;  (p&#8722;1) q (q+1) because
+in these cases the cyclic subgroups of order (q+1)/k cannot contain
+nonidentity elements in subgroups of type&nbsp;(3)).
+
+<div class="p"><!----></div>
+Finally, if f is not a prime then N is smaller than &#124;G&#124;/2
+if q<sup>2</sup> (q &#8722; [8p/p&#8722;1] (&#8730;q&#8722;1))  &gt;  q+4 holds, which is true
+for q  &#8805; 256.
+The only values of p<sup>f</sup> with non-prime f that do not satisfy this condition
+are 2<sup>4</sup>, 2<sup>6</sup>, and 3<sup>4</sup>.
+In all three cases, we have in fact N  &lt;  &#124;G&#124;/2,
+where we have to use the better bound n<sub>sf</sub>(q)  &lt;  16 q<sup>2</sup> in the third case.
+
+ <font size="+1"><font size="-2"><sup>[<u>&#175;</u>]</sup></font></font>
+
+<div class="p"><!----></div>
+In order to show that the generating graph of G satisfies
+P&#243;sa's criterion,
+it suffices to show that the vertex degrees of involutions is larger than
+the number of involutions, and that the vertex degrees of elements of orders
+2, 3, 4, and 5 are larger than the number of elements whose order
+is at most 5.
+
+<div class="p"><!----></div>
+
+  <b>Lemma 4</b> <em>
+Let n(q, m) denote the number of elements of order m in G,
+and let &#981;(m) denote the number of prime residues modulo m.
+
+<ul>
+<li>    We have n(q, 2) = q<sup>2</sup> &#8722; 1 if q is even
+    and n(q, 2)  &#8804; q (q+1)/2 if q is odd.
+<div class="p"><!----></div>
+</li>
+
+<li>
+    For m  &#8712; { 3, 4, 5 }, we have n(q, m)  &#8804; &#981;(m) q (q+1)/2.
+<div class="p"><!----></div>
+</li>
+
+<li>
+    We have n(q, (q+1)/k) = &#981;((q+1)/k) q (q&#8722;1)/2.
+<div class="p"><!----></div>
+</li>
+</ul>
+
+<div class="p"><!----></div>
+</em>
+<div class="p"><!----></div>
+
+  <b>Lemma 5</b> <em><a name="order2345">
+</a>
+If q  &gt;  11
+then each involution in G has vertex degree larger than n(q, 2).
+
+<div class="p"><!----></div>
+If &#981;((q+1)/k)  &#8805; 12 then each element of order 3, 4, or 5
+has vertex degree larger than &#8721;<sub>m=2</sub><sup>5</sup> n(q, m).
+
+<div class="p"><!----></div>
+</em>  P<font size="-2">ROOF</font>.
+Let s  &#8712; G of order at most 5.
+For each element g  &#8712; G of order (q+1)/k,
+U = &#9001;g, s &#9002; is either G or contained in the dihedral group
+of order 2(q+1)/k that normalizes &#9001;g &#9002;.
+
+<div class="p"><!----></div>
+If s is an involution then
+the number of such dihedral groups that contain s is at most (q+3)/2,
+and at least
+n(q, (q+1)/k) &#8722; &#981;((q+1)/k) (q+3)/2 = &#981;((q+1)/k) (q<sup>2</sup>&#8722;2q&#8722;3)/2
+elements of order (q+1)/k contribute to the vertex degree of s.
+This number is larger than q<sup>2</sup> &#8722; 1  &#8805; n(q, 2)
+if q  &gt;  11 (and hence &#981;((q+1)/k)  &#8805; 3) holds.
+
+<div class="p"><!----></div>
+If s is an element of order 3, 4, or 5
+then U  &#8800; G means that s  &#8712; &#9001;g &#9002;,
+so at least
+n(q, (q+1)/k) &#8722; 4 elements of order (q+1)/k
+contribute to the vertex degree of s.
+This number is larger than 5 q (q+1)  &gt;  &#8721;<sub>m=2</sub><sup>5</sup> n(q, m)
+if &#981;((q+1)/k)  &#8805; 12.
+
+ <font size="+1"><font size="-2"><sup>[<u>&#175;</u>]</sup></font></font>
+
+<div class="p"><!----></div>
+It remains to deal with the values q where &#981;((q+1)/k)  &lt;  12,
+that is, (q+1)/k  &#8804; 30.
+We compute that the statement of Lemma&nbsp;<a href="#order2345">6.5</a> is true also for
+prime powers q with 11  &lt;  q  &#8804; 59.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; TestL2q:= function( t )
+    &#62;    local name, orders, nccl, cl, prim, bds, n, ord;
+    &#62; 
+    &#62;    name:= Identifier( t );
+    &#62;    orders:= OrdersClassRepresentatives( t );
+    &#62;    nccl:= Length( orders );
+    &#62;    cl:= SizesConjugacyClasses( t );
+    &#62;    prim:= PrimitivePermutationCharacters( t );
+    &#62;    bds:= List( LowerBoundsVertexDegrees( cl, prim ), Sum );
+    &#62;    n:= List( [ 1 .. 5 ], i -&#62; Sum( cl{ Filtered( [ 1 .. nccl ],
+    &#62;                                        x -&#62; orders[x] = i ) } ) );
+    &#62;    if ForAny( Filtered( [ 1 .. nccl ], i -&#62; orders[i] &#62; 5 ),
+    &#62;               i -&#62; bds[i-1] &lt;= Size( t ) / 2 ) then
+    &#62;      Error( "problem with large orders for ", name );
+    &#62;    elif ForAny( Filtered( [ 1 .. nccl ], i -&#62; orders[i] = 2 ),
+    &#62;                 i -&#62; bds[i-1] &lt;= n[2] ) then
+    &#62;      Error( "problem with order 2 for ", name, "\n" );
+    &#62;    elif ForAny( Filtered( [ 1 .. nccl ], i -&#62; orders[i] in [ 3 .. 5 ] ),
+    &#62;                 i -&#62; bds[i-1] &lt;= Sum( n{ [ 2 .. 5 ] } ) ) then
+    &#62;      Error( "problem with order in [ 3 .. 5 ] for ", name );
+    &#62;    fi;
+    &#62; end;;
+    gap&#62; for q in Filtered( [ 13 .. 59 ], IsPrimePowerInt ) do
+    &#62;      TestL2q( CharacterTable( Concatenation( "L2(", String( q ), ")" ) ) );
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+For 2  &#8804; q  &#8804; 11, the statement of Lemma&nbsp;<a href="#order2345">6.5</a> is not true
+but P&#243;sa's criterion is satisfied for the generating graphs of the
+groups <span class="roman">PSL</span>(2,q) with 2  &#8804; q  &#8804; 11.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; for q in Filtered( [ 2 .. 11 ], IsPrimePowerInt ) do
+    &#62;      info:= HamiltonianCycleInfoFromGroup( PSL( 2, q ) );
+    &#62;      if info &lt;&#62; "Posa for 0th closure" then
+    &#62;        Print( q, ": ", info, "\n" );
+    &#62;      fi;
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+
+<h2>References</h2>
+
+<dl compact="compact">
+ <dt><a href="#CITEBGK" name="BGK">[BGK08]</a></dt><dd>
+T.&nbsp;Breuer, R.&nbsp;M. Guralnick, and W.&nbsp;M. Kantor, <em>Probabilistic generation of
+  finite simple groups, II</em>, J. Algebra <b>320</b> (2008), no.&nbsp;2,
+  443-494. MR 2422303 (2010e:20096)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEGMN" name="GMN">[BGL<sup>+</sup>10]</a></dt><dd>
+T.&nbsp;Breuer, R.&nbsp;M. Guralnick, A.&nbsp;Lucchini, A.&nbsp;Mar'oti, and G.&nbsp;P. Nagy,
+  <em>Hamiltonian cycles in the generating graphs of finite groups</em>, Bull.
+  London Math. Soc. <b>42</b> (2010), no.&nbsp;4, 621-633. MR 2669683
+  (2012a:20046)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEctblpope" name="ctblpope">[Brea]</a></dt><dd>
+T.&nbsp;Breuer, <em>Permutation Characters in <font face="helvetica">GAP</font></em>, <a href="http://www.math.rwth-aachen.de/~Thomas.Breuer/ctbllib/doc/ctblpope.pdf"><tt>http://www.math.rwth-aachen.de/</tt>
+<tt><tt>~</tt>Thomas.Breuer/</tt>
+<tt>ctbllib/</tt><tt>doc/</tt>
+<tt>ctblpope.pdf</tt></a>.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEProbGenArxiv" name="ProbGenArxiv">[Breb]</a></dt><dd>
+<br /><table align="left" border="0"><tr><td width="50">
+<hr />
+</td></tr></table><!--hbox-->
+ , <em><font face="helvetica">GAP</font> computations concerning probabilistic generation of
+  finite simple groups</em>, arXiv:0710.3267.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITECTblLib1.2" name="CTblLib1.2">[Bre12]</a></dt><dd>
+<br /><table align="left" border="0"><tr><td width="50">
+<hr />
+</td></tr></table><!--hbox-->
+ , <em>The <font face="helvetica">GAP</font> Character Table Library, Version 1.2</em>,
+  <a href="http://www.math.rwth-aachen.de/~Thomas.Breuer/ctbllib"><tt>http://www.math.rwth-aachen.de/</tt>
+<tt><tt>~</tt>Thomas.Breuer/</tt>
+<tt>ctbllib</tt></a>, May 2012, <font face="helvetica">GAP</font> package.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEGAP" name="GAP">[GAP12]</a></dt><dd>
+<em><font face="helvetica">GAP</font> - Groups, Algorithms, and Programming,
+  Version 4.5.0</em>, <a href="http://www.gap-system.org"><tt>http://www.gap-system.org</tt></a>, Apr 2012.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEHup67" name="Hup67">[Hup67]</a></dt><dd>
+B.&nbsp;Huppert, <em>Endliche Gruppen. I</em>, Die Grundlehren der Mathematischen
+  Wissenschaften, Band 134, Springer-Verlag, Berlin, 1967. MR 0224703 (37
+  #302)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEMoonshine2010" name="Moonshine2010">[LMT10]</a></dt><dd>
+J.&nbsp;Lepowsky, J.&nbsp;McKay, and M.&nbsp;P. Tuite (eds.), <em>Moonshine: the first
+  quarter century and beyond</em>, London Mathematical Society Lecture Note Series,
+  vol. 372, Cambridge, Cambridge University Press, 2010. MR 2724692
+  (2011e:17001)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITENW12" name="NW12">[NW]</a></dt><dd>
+S.&nbsp;P. Norton and R.&nbsp;A. Wilson, <em>A correction to the 41-structure of the
+  Monster, a construction of a new maximal subgroup L<sub>2</sub>(41), and a new
+  Moonshine phenomenon</em>, <a href="http://www.maths.qmul.ac.uk/~raw/pubs_files/ML241sub.pdf"><tt>http://www.maths.qmul.ac.uk/</tt>
+<tt><tt>~</tt>raw/</tt>
+<tt>pubs files/</tt>
+<tt>ML241sub.pdf</tt></a>.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEWil10" name="Wil10">[Wil10]</a></dt><dd>
+R.&nbsp;A. Wilson, <em>New computations in the Monster</em>, in Lepowsky et&nbsp;al.
+  [<a href="#Moonshine2010" name="CITEMoonshine2010">LMT10</a>], p.&nbsp;393-403. MR 2681789 (2011i:20020)</dd>
+</dl>
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<br /><br /><hr /><small>File translated from
+T<sub><font size="-1">E</font></sub>X
+by <a href="http://hutchinson.belmont.ma.us/tth/">
+T<sub><font size="-1">T</font></sub>H</a>,
+version 3.59.<br />On 30 May 2012, 15:35.</small>
+</html>

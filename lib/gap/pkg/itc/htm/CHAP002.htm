@@ -1,0 +1,153 @@
+<html><head><title>[ITC] 2 How to Start?</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>2 How to Start?</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP002.htm#SECT001">Starting XGAP</a>
+<li> <A HREF="CHAP002.htm#SECT002">Starting ITC</a>
+</ol><p>
+<p>
+<p>
+<h2><a name="SECT001">2.1 Starting XGAP</a></h2>
+<p><p>
+You begin an ITC session by starting XGAP. On most systems this
+is done by completing the provided line
+<p>
+<pre>
+user@host:~&gt;
+</pre>
+<p>
+to
+<p>
+<pre>
+user@host:~&gt; xgap
+</pre>
+<p>
+on the command line. Ask your system administrator if this does not
+work. This command will create a new window, the so called <font face="Gill Sans,Helvetica,Arial">GAP</font>
+Window, in which <font face="Gill Sans,Helvetica,Arial">GAP</font> is awaiting your input.
+<p>
+During a typical ITC session various windows will be opened to
+display the involved tables and further information. The size of the
+characters displayed in these windows and hence the sizes of the
+windows themselves are determined by the so-called <strong>fonts</strong> used.
+<p>
+The XGAP package knows five different fonts, <code>tiny</code>, <code>small</code>,
+<code>normal</code>, <code>large</code>, and <code>huge</code> (see the XGAP manual for details), but
+the ITC routines use only two of them, namely <code>small</code> and <code>normal</code>.
+So, if the default ITC window sizes are inconvenient for you, you
+need only to change the values of these two fonts. You may do this by
+starting XGAP with one or two additional arguments of the form
+"<code>-small </code><var>font</var><code></code>" or "<code>-normal </code><var>font</var><code></code>" where <var>font</var> has to be a
+font which is known to your system. You can get a list of all available
+fonts via the command
+<p>
+<pre>
+user@host:~&gt; xlsfonts
+</pre>
+<p>
+Example:
+<p>
+<pre>
+user@host:~&gt; xgap -small 6x12 -normal 8x13
+</pre>
+<p>
+In particular, you should use this option to change the fonts if the
+default fonts of XGAP do not work properly in your local installation
+(this may happen in some rare cases where there are too few or too many
+fonts).
+<p>
+<p>
+<h2><a name="SECT002">2.2 Starting ITC</a></h2>
+<p><p>
+At the top of the <font face="Gill Sans,Helvetica,Arial">GAP</font> Window opened by XGAP you will see a
+``title bar'' with three buttons: <code>GAP</code>, <code>Run</code>, and <code>Help</code>. Clicking
+either of these will pop up a menu, in which you may choose between
+several options.
+<p>
+You can always interrupt a computation by making the <font face="Gill Sans,Helvetica,Arial">GAP</font> Window
+active and pressing <var>CTRL-C</var>. You will get the same effect selecting
+<code>Interrupt</code> in the <code>Run</code> menu.
+<p>
+In the <font face="Gill Sans,Helvetica,Arial">GAP</font> Window, as usual, the <font face="Gill Sans,Helvetica,Arial">GAP</font> prompt
+<p>
+<pre>
+gap&gt;
+</pre>
+<p>
+will indicate that <font face="Gill Sans,Helvetica,Arial">GAP</font> is awaiting your input.
+<p>
+If it is not loaded automatically, first load the ITC package by
+<p>
+<pre>
+gap&gt; RequirePackage( "itc" );
+</pre>
+<p>
+See&nbsp;<a href="badlink:ref:RequirePackage">RequirePackage</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual.
+<p>
+Then you may input a finitely presented group, say <var>g</var>, and a
+subgroup, say <var>h</var>, of it, the cosets of which you want to enumerate
+using ITC. The format of this input is the same as usual in <font face="Gill Sans,Helvetica,Arial">GAP</font>,
+see Chapter <a href="../../../doc/htm/ref/CHAP045.htm">Finitely Presented Groups</a> of the <font face="Gill Sans,Helvetica,Arial">GAP</font> reference
+manual for the details.
+<p>
+ITC will in several of its windows have to display generators of
+the free group which is used to describe the presentation. Note that
+ITC will use the <strong>names</strong> of the generators of this free group, if
+these names consist of at most three symbols. Otherwise ITC will
+use names of the form  <i>g</i>1,  <i>g</i>2, ... up to at most  <i>g</i>99 for the
+generators of the free group (if the group has more than 99
+generators, an error message will be given). A choice of short and
+easily distinguishable names for the generators of the free group is
+hence advisable.
+<p>
+Now you are ready to start the ITC using the command <code>InteractiveTC</code>.
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>InteractiveTC( </code><var>g</var><code>, </code><var>h</var><code> ) F</code>
+<p>
+Called with a group <var>g</var> and a subgroup <var>h</var>,
+this will open the ``Coset Table Window'', which really serves a
+multiple purpose:
+<p>
+<dl compact>
+<p>
+<dt>--<dd>
+  It shows the Coset Table and allows certain operations by mouse click
+  in this Coset Table. We will describe the details in Section <a href="CHAP004.htm#SECT001">The   Coset Table</a> of Chapter <a href="CHAP004.htm">The Tables</a>. In this chapter also a
+  description of all other tables is given that can be shown on the
+  screen by ITC.
+<p>
+<dt>--<dd>
+  Directly below the Coset Table space is left for one row of text in
+  which some warnings will be given (in red) by ITC if the user tries
+  to invoke actions that in the present state are not possible, e.&nbsp;g. if
+  the user tries to call the short-cut function while the tables have
+  not yet closed (see Section&nbsp;<a href="CHAP004.htm#SECT002">Warnings</a>).
+<p>
+<dt>--<dd>
+  It provides up to date information on the state that an interactive
+  coset enumeration has reached in the ``Information Line'' (see&nbsp;<a href="CHAP004.htm#SECT003">The   Information Line</a>).
+<p>
+<dt>--<dd>
+  It also provides a number of buttons which can be used in the
+  interactive handling of a coset enumeration by ITC. We will
+  describe this aspect in a separate chapter ``Buttons and Menus''
+  (Chapter&nbsp;<a href="CHAP005.htm">Buttons and Menus</a>).
+<p>
+</dl>
+<p>
+The initial table size for the ITC Coset Table is set by default to
+1000. You can change this default table size using the menu entry
+<code>change default table size</code> in the menu of the top button <code>Settings</code>,
+(see&nbsp;<a href="CHAP005.htm#SSEC001.3">change default table size</a>). If during a run of a CE the table
+size does not suffice, you can extend it using the menu entry <code>extend
+table size</code> (see&nbsp;<a href="CHAP005.htm#SSEC001.4">extend table size</a>) in the same menu.
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>ITC manual<br>January 2004
+</address></body></html>

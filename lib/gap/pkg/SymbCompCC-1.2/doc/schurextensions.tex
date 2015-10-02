@@ -1,0 +1,230 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  schurextension.tex     GAP documentation      Dörte Feichtenschlager
+%%
+%H  $Id: schurextension.tex, v 0.5 2010/05/31 09:30:00 gap SymbCompCC $
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Schur extensions for p-power-poly-pcp-groups}
+
+In this chapter we describe how the consistent pp-presentations
+of infinite coclass sequences can be used to compute a pp-presentation for 
+the corresponding Schur extensions (see \cite{EF11}).
+
+For a group $G = F/R$ the Schur extension $H$ is defined as $H = F/[F,R]$ 
+(see \cite{EN08}).
+
+So for a parameter <x> that can take values in the positive integers, let 
+$(G_x = F/R_x | x \in \N)$, for $\N$ the positive integers, describe an 
+infinite coclass sequence of finite $p$-groups $G_X$ of coclass $r$. Then for 
+each value for the parameter <x>, the group $G_x$ has a consistent polycyclic 
+presentation with generators $g_1, ..., g_n, t_1, ..., t_d$ and relations
+
+%display{nontext}
+$$
+\eqalign{
+&\, g_i^p = rel[i][i],\cr
+&\, t_i^{expo} = rel[n+i][n+i],\cr
+&\, g_i^{g_j} = rel[j][i],\cr
+&\, t_i^{g_j} = rel[j][n+i],\cr
+&\, t_i^{t_j} = 1.
+}
+$$
+%display{text}
+%g_i^p = rel[i][i],
+%t_i^{expo} = rel[n+i][n+i],
+%g_i^{g_j} = rel[j][i],
+%t_i^{g_j} = rel[j][n+i],
+%t_i^{t_j} = 1.
+%enddisplay
+
+Then we compute a consistent pp-presentation of the corresponding Schur 
+extensions of with generators $g_1, ..., g_n, t_1, ..., t_d, c_1, ... c_m$ and
+relations
+
+%display{nontext}
+$$
+\eqalign{
+&\, g_i^p=rel[i][i],\cr
+&\, t_i^{expo} = rel[n+i][n+i],\cr
+&\, c_i^{expo\_vec[i]} = rel[n+d+i,n+d+i],\cr
+&\, g_i^{g_j} = rel[j][i], \cr
+&\, t_i^{g_j} = rel[j][n+i],\cr
+&\, t_i^{t_j} = rel[n+j][n+i],\cr
+&\, c_i^{g_j} = 1, \cr
+&\, c_i^{t_j} = 1, \cr
+&\, c_i^{c_j} = 1.
+}
+$$
+%display{text}
+%g_i^p=rel[i][i],
+%t_i^{expo}=rel[n+i][n+i],
+%c_i^{expo\_vec[i]}=rel[n+d+i,n+d+i],
+%g_i^{g_j} = rel[j][i], 
+%t_i^{g_j} = rel[j][n+i],
+%t_i^{t_j} = rel[n+j][n+i],
+%c_i^{g_j} = 1, 
+%c_i^{t_j} = 1, 
+%c_i^{c_j} = 1.
+%enddisplay
+
+where the $t_i$'s commute modulo $< c_1, ..., c_m>$ and the $c_i$'s are 
+central. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Computing Schur extensions}
+
+\>SchurExtParPres( <G> ) 
+
+computes the Schur extensions corresponding to the <p>-power-poly-pcp-groups
+<G> and returns them as <p>-power-poly-pcp-groups.
+
+\>SchurExtParPres( <ParPres> ) F
+
+computes a consistent pp-presentation of Schur extensions of the 
+groups defined by the record <ParPres> which describes 
+<p>-power-poly-pcp-groups. The output is a record 
+<rec>(<rel>, <expo>, <n>, <d>, <m>, <prime>, <cc>, <expo\_vec>, <name>), 
+which describes the Schur extensions as <p>-power-poly-pcp-groups; it is 
+encoded in a form that it can be used as input for 
+%display{tex}
+{\tt PPPPcpGroups},
+%enddisplay
+"PPPPcpGroups".
+
+\beginexample
+gap> SchurExtParPres( ParPresGlobalVar_2_1[1] );
+rec( prime := 2, 
+  rel := [ [ [ [ 7, 1 ] ] ], [ [ [ 2, 1 ], [ 3, -1+2*2^x ], [ 6, 1-2*2^x ] ], 
+          [ [ 3, 1 ], [ 5, 1 ] ] ], 
+      [ [ [ 3, -1+2*2^x ], [ 4, 1 ], [ 6, 2-2*2^x ] ], [ [ 3, 1 ] ], 
+          [ [ 4, 1 ], [ 6, 2*2^x ] ] ], 
+      [ [ [ 4, 1 ] ], [ [ 4, 1 ] ], [ [ 4, 1 ] ], [ [ 4, 0 ] ] ], 
+      [ [ [ 5, 1 ] ], [ [ 5, 1 ] ], [ [ 5, 1 ] ], [ [ 5, 1 ] ], [ [ 5, 0 ] ] ]
+        , 
+      [ [ [ 6, 1 ] ], [ [ 6, 1 ] ], [ [ 6, 1 ] ], [ [ 6, 1 ] ], [ [ 6, 1 ] ], 
+          [ [ 6, 0 ] ] ], 
+      [ [ [ 7, 1 ] ], [ [ 7, 1 ] ], [ [ 7, 1 ] ], [ [ 7, 1 ] ], [ [ 7, 1 ] ], 
+          [ [ 7, 1 ] ], [ [ 7, 0 ] ] ] ], n := 2, d := 1, m := 4, 
+  expo := 2*2^x, expo_vec := [ 2, 0, 0, 0 ], cc := fail, name := "SchurExt_D" 
+ )
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Computing other invariants from Schur extensions}
+
+\>SchurMultiplicatorsStructurePPPPcps( <G> ) F
+
+computes the abalian invariants of the Schur multiplicators <M(G)> of the 
+<p>-power-poly-pcp-groups <G>. The output is a list $[d_1, ..., d_k]$ 
+consisting elements $d_i$, depending on the underlying parameter, such that 
+$M(G) \cong C_{d_1} \times \ldots \times C_{d_k}$.
+
+\beginexample
+gap> G := PPPPcpGroups( ParPresGlobalVar_2_1[1] );
+< P-Power-Poly pcp-groups with 3 generators of relative orders [ 2,2,2*2^x ] >
+SchurMultiplicatorsStructurePPPPcps( G );
+[ 2 ]
+\endexample
+
+\>SchurMultiplicator( <G> )!{for p-power-poly-pcp-groups} F
+
+computes the Schur multiplicators of the <p>-power-poly-pcp-groups <G> and 
+then returns the corresponding 
+%display{tex}
+{\tt PPPPcpGroups},
+%enddisplay
+"PPPPcpGroups".
+
+\beginexample
+gap> G := PPPPcpGroup( ParPresGlobalVar_3_1[1] );
+< P-Power-Poly pcp-group with 5 generators of relative orders [ 3,3,3,3*3^x,3*3^x ] >
+gap> SchurMultiplicator( G );
+< P-Power-Poly pcp-groups with 2 generators of relative orders [ 3,9*3^x ] >
+\endexample
+
+\>AbelianInvariants( <G> )!{for p-power-poly-pcp-groups} F
+
+computes the abelian invariants of the <p>-power-poly-pcp-groups <G> and returns
+them as a list of list describing the parametrised elements.
+
+\beginexample
+gap> G := PPPPcpGroups( ParPresGlobalVar_2_1[1] );
+< P-Power-Poly pcp-groups with 3 generators of relative orders [ 2,2,2*2^x ] >
+gap> AbelianInvariants( G );
+[ 2, 2 ]
+\endexample
+
+\>ZeroCohomologyPPPPcps( <G>[, <p>] ) F
+
+computes the zero-th-cohomology groups $H^0(G,R)$ of the 
+<p>-power-poly-pcp-groups <G> with coefficients in $R$, where $R \cong GF(p)$ if
+the prime $p$ is given or $R \cong \Z$ otherwise. The action of $G$ on $R$ is
+taken to be trivial. The function returns a list of integers $[a_1,\ldots,
+a_k]$ where the cohomology group is isomorphic to $C_{a_1} \times \ldots 
+\times C_{a_k}$ with $C_i$ a cyclic group of order $i$ (for $i > 0$) and $C_0$ 
+is interpreted as $\Z$.
+
+\beginexample
+gap> G := PPPPcpGroups( ParPresGlobalVar_2_1[1] );
+< P-Power-Poly pcp-groups with 3 generators of relative orders [ 2,2,2*2^x ] >
+gap> ZeroCohomologyPPPPcp( G, 2 );
+[ 2 ]
+\endexample
+
+\>FirstCohomologyPPPPcps( <G>[, <p>] ) F
+
+computes the first-cohomology groups $H^1(G,R)$ of the 
+<p>-power-poly-pcp-groups <G> with coefficients in $R$, where $R \cong GF(p)$ if
+the prime $p$ is given or $R \cong \Z$ otherwise. The action of $G$ on $R$ is
+taken to be trivial. The function returns a list of integers $[a_1,\ldots,
+a_k]$ where the cohomology group is isomorphic to $C_{a_1} \times \ldots 
+\times C_{a_k}$ with $C_i$ a cyclic group of order $i$ (for $i > 0$) and $C_0$ 
+is interpreted as $\Z$.
+
+\beginexample
+gap> G := PPPPcpGroups( ParPresGlobalVar_2_1[1] );
+< P-Power-Poly pcp-groups with 3 generators of relative orders [ 2,2,2*2^x ] >
+gap> FirstCohomologyPPPPcps( G );
+[  ]
+\endexample
+
+\>SecondCohomologyPPPPcps( <G>[, <p>] ) F
+
+computes the second-cohomology groups $H^2(G,R)$ of the 
+<p>-power-poly-pcp-groups <G> with coefficients in $R$, where $R \cong GF(p)$ if
+the prime $p$ is given or $R \cong \Z$ otherwise. The action of $G$ on $R$ is
+taken to be trivial. The function returns a list of integers $[a_1,\ldots,
+a_k]$ where the cohomology group is isomorphic to $C_{a_1} \times \ldots 
+\times C_{a_k}$ with $C_i$ a cyclic group of order $i$ (for $i > 0$) and $C_0$ 
+is interpreted as $\Z$.
+
+\beginexample
+gap> G := PPPPcpGroups( ParPresGlobalVar_2_1[1] );
+< P-Power-Poly pcp-groups with 3 generators of relative orders [ 2,2,2*2^x ] >
+gap> SecondCohomologyPPPPcps( G, 2 );
+[ 2, 2, 2 ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Info classes for the computation of the Schur extension}
+
+The following info classes are available
+
+\>`InfoConsistencyRelPPowerPoly' V
+
+\beginitems
+`level 1' & shows which consistency relations are computed and gives the 
+result;
+\enditems
+
+the default value is 0.
+
+\>`InfoCollectingPPowerPoly' V
+
+\beginitems
+`level 1' & shows what is done during collecting;
+\enditems
+
+the default value is 0.

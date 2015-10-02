@@ -1,0 +1,271 @@
+% This file was created automatically from usercomm.msk.
+% DO NOT EDIT!
+\Chapter{User Communication}
+
+{\XGAP} has two main means to communicate with the user. The first is the
+normal command processing: The user types commands, they are transmitted to 
+{\GAP}, are executed, and produce output, which is displayed in the command
+window. The second is the mouse and the other parts of the graphical user
+interface. This latter part can be divided into menus, mouse events,
+dialogs, and popups.
+
+\beginitems
+Menus & Most of the windows of {\XGAP} have menus. The user can select
+entries in them and this information is transformed to a function call in
+{\GAP}. Menu entries can be checked or not, so menus can also display
+information. 
+
+Mouse Events & A mouse event is the pressing or releasing of a mouse
+button, together with the position where the mouse pointer is in the exact
+moment this happens and the state of certain keyboard keys (mainly shift
+and control). Such events also trigger {\GAP} function calls and the
+corresponding functions can react on these events and for example wait for
+others. 
+
+Dialogs & Dialogs are windows which display information and into which
+the user can enter information for example in form of text fields.
+
+Popups & Popups are special dialogs where the user can not type text but
+can only click on certain buttons. {\XGAP} has so called ``text selectors'' 
+which are a convenient construct to display textual information and let the
+user select parts of it.
+\enditems
+
+Most of those graphical objects have corresponding {\GAP} objects, which
+are created by constructors and can be used later on by operations.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Menus in Graphic Sheets}
+
+\>`Menu( <sheet>, <title>, <ents>, <fncs> )'{Menu![menu]}@{`Menu'!`[menu]'} O
+\>`Menu( <sheet>, <title>, <zipped> )'{Menu![menu]}@{`Menu'!`[menu]'} O
+
+`Menu' returns a pulldown menu. It is attached to the sheet <sheet>
+under the title <title>. In the first form <ents> is a list of strings
+consisting of the names of the menu entries. <fncs> is a list of
+functions. They are called when the corresponding menu entry is selected
+by the user. The parameters they get are the graphic sheet as first
+parameter, the menu object as second, and the name of the selected entry
+as third parameter. In the second form the entry names and functions are
+all in one list <zipped> in alternating order, meaning first a menu entry,
+then the corresponding function and so on.
+Note that you can delete menus but it is not possible to modify them,
+once they are attached to the sheet.
+If a name of a menu entry begins with a minus sign or the list entry
+in <ents> is not bound, a dummy menu entry is generated, which can sort
+the menu entries within a menu in blocks. The corresponding function
+does not matter.
+
+
+\>Check( <menu>, <entry>, <flag> ) O
+
+Modifies the ``checked'' state of a menu entry. This is visualized by a 
+small check mark behind the menu entry. <menu> must be a menu object,
+<entry> the string exactly as in the definition of the menu, and <flag>
+a boolean value.
+
+
+\>Enable( <menu>, <entry>, <flag> ) O
+\>Enable( <menu>, <boollist> ) O
+
+Modifies the ``enabled'' state of a menu entries. Only enabled menu entries
+can be selected by the user. Disabled menu entries are visualized
+by grey or shaded letters in the menu. <menu> must be a menu object,
+<entry> the string exactly as in the definition of the menu, and <flag>
+a boolean value. <entry> can also be a natural number meaning the index
+of the corresponding menu entry.
+In the second form <boollist> must be a list where each
+entry has either a boolean value or the value `fail' 
+The list must be as long as the 
+number of menu entries in the menu <menu>. All menu entries where a 
+boolean value is provided are enabled or disabled according to this
+value.
+
+
+
+See the explanation of `GraphicSheet' ("Close!Callback") for the ``Close''
+event, which occurs when the user selects the menu entry 
+`close graphic sheet' in the `Sheet' menu.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Mouse Events}
+
+When a mouse event occurs, this is communicated to {\GAP} via a function
+call which in turn triggers a callback. As described in "GraphicSheet" to
+"CtrlRightPBDown" the following callback keys are predefined as reactions
+on mouse events: `LeftPBDown', `RightPBDown', `ShiftLeftPBDown',
+`ShiftRightPBDown', `CtrlLeftPBDown', `CtrlRightPBDown'.
+
+Note that when your function gets called, the mouse button will still be
+pressed. So it can react and for example wait for the release. There is an 
+easy way to find out about the state of the mouse buttons after the event:
+
+\>WcQueryPointer( <id> ) F
+
+<id> must be a `WindowId' of an {\XGAP} sheet. This function returns a
+vector of four integers. The first two are the coordinates of the mouse 
+pointer relative to the {\XGAP} sheet. Values outside the window are 
+represented by $-1$. The third element is a number where the pressed      
+buttons are coded. If no mouse button is pressed, the value is zero.
+`BUTTONS.left' is added to the value, if the left mouse button is pressed
+and `BUTTONS.right' is added, if the right mouse button is pressed. The
+fourth value codes the state of the shift and control. Here the values
+`BUTTONS.shift' and `BUTTONS.ctrl' are used.
+
+
+
+This function is used in
+
+\>Drag( <sheet>, <x>, <y>, <bt>, <func> ) O
+
+Call this function when a button event has occurred, so the button <bt>
+is still pressed. It waits until the user releases the mouse button and
+calls <func> for every change of the mouse position with the new x and
+y position as two integer parameters. You can implement a dragging
+procedure in this way as in the following example: (we assume that a
+`LeftPBDown' event just occurred and x and y contain the current mouse
+pointer position):
+
+\begintt
+  storex := x;
+  storey := y;
+  box := Rectangle(sheet,x,y,0,0);
+  if Drag(sheet,x,y,BUTTONS.left,
+          function(x,y)
+            local bx,by,bw,bh;
+            if x < storex then
+              bx := x;
+              bw := storex - x;
+            else
+              bx := storex;
+              bw := x - storex;
+            fi;
+            if y < storey then
+              by := y;
+              bh := storey - y;
+            else
+              by := storey;
+              bh := y - storey;
+            fi;
+            if bx <> box!.x or by <> box!.y then
+              Move(box,bx,by);
+            fi;
+            if bw <> box!.w or bh <> box!.h then
+              Reshape(box,bw,bh);
+            fi;
+          end) then
+    the box had at one time at least a certain size
+    ... work with box ...
+  else
+    the box was never big enough, we do nothing
+  fi;
+  Delete(box);
+\endtt
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Dialogs}
+
+\>Dialog( <type>, <text> ) O
+
+creates a dialog box and returns a {\GAP} object describing it. There are
+currently two types of dialogs: A file selector dialog (called
+`Filename') and a dialog type called `OKcancel'. <text> is a text that
+appears as a title in the dialog box.
+
+
+
+\>Query( <obj> ) O
+\>Query( <obj>, <default> ) O
+
+Puts a dialog on screen. Returns `false' if the user clicks ``Cancel'' and
+a string value or filename, if the user clicks ``OK'', depending on the
+type of dialog. <default> is an optional initialization value for the 
+string.
+
+
+
+%Puts a dialog on screen. Returns `false' if the user clicks ``Cancel'' and
+%a string value or filename, if the user clicks ``OK'', depending on the
+%type of dialog. <default> is an optional initialization value for the string.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Popups}
+
+\>PopupMenu( <name>, <labels> ) O
+
+creates a new popup menu and returns a {\GAP} object describing it.
+<name> is the title of the menu and <labels> is a list of strings for
+the entries. Use `Query' to actually put the popup on the screen.
+
+
+
+\>`Query'{Query!for popup}@{`Query'!for popup}
+
+actually puts a popup on screen. `Query' returns the string of the
+selected entry or `false' if the user clicks outside the popup. 
+See also `Query' for dialogs in "Query".
+
+\>TextSelector( <name>, <list>, <buttons> ) O
+
+creates a new text selector and returns a {\GAP} object describing it.
+<name> is a title. <list> is an alternating list of strings and
+functions. The strings are displayed and can be selected by the user.
+If this happens the corresponding function is called with two
+parameters.  The first is the text selector object itself, the second
+the string that is selected. A selected string is highlighted and all
+other strings are reset at the same time. Use `Reset' to reset all
+entries.
+
+<buttons> is an analogous list for the buttons that are 
+displayed at the bottom of the text selector. The text selector is 
+displayed immediately and stays on screen until it is closed (use the
+`Close' operation). Buttons can be enabled and disabled by the `Enable'
+operation and the string of a text can be changed via `Relabel'.
+
+
+
+\>Enable( <sel>,<bt>,<flag> )!{for text selectors}
+\>Enable( <sel>,<btindex>,<flag> )!{for text selectors}
+
+Enables or disables the button <bt> (string value) or <btindex>
+(integer index)  of the text selector <sel>, according to <flag>.
+
+\>Relabel( <sel>, <list> )!{for text selectors}
+\>Relabel( <sel>, <index>, <text> )!{for text selectors}
+
+Changes the strings that are displayed in the text selector. In the
+first form <list> must be a list of strings. The second form only
+changes the text at index <index>.
+
+\>SetName( <sel>, <index>, <string> )!{for text selectors}
+
+Every string in a text selector has a name. The names are stored in
+the list `names' component of the text selector. So `sel!.names' ist a 
+list containing the names. The names are initialized with the strings
+from the creation of the text selector.
+
+\>Reset( <sel> )!{for text selectors}
+
+Resets all strings of a text selector, such that they are no longer
+selected. 
+
+\>Close( <sel> )!{for text selectors}
+
+Closes a text selector. It vanishes from screen.
+
+Note that you have access to the indices and names of strings and
+buttons:
+
+\>`IndexOfSelectedText'{IndexOfSelectedText}@{`IndexOfSelectedText'}
+
+Whenever the user clicks on a text in a text selector, the global
+variable is set to the index of the text in the text
+selector. 
+
+\>`IndexOfSelectedButton'{IndexOfSelectedButton}@{`IndexOfSelectedButton'}
+
+Whenever the user clicks on a button in a text selector, the global
+variable is set to the index of the button in the text selector.

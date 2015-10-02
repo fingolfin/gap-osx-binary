@@ -1,0 +1,204 @@
+<!-- 
+  HAPPRIME - derivation.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  Paul Smith
+  National University of Ireland Galway
+
+  $Id: functions.xml.in 200 2008-02-05 14:29:47Z pas $
+-->
+
+<!-- ********************************************************** -->
+<Chapter  Label="Derivation">
+  <Heading>Derivations</Heading>
+
+  A derivation <M>d</M> of a ring <M>R</M> is a map <M>R \to R</M> that obeys 
+  the product rule
+  <Display>
+    d(rs) = d(r)s + rd(s)
+  </Display>
+  for elements <M>r</M>, <M>s</M> in the field, and which is also distributive 
+  over addition in the ring  
+  <Display>
+    d(r+s) = d(r) + d(s)
+  </Display>
+
+  <Section>
+  <Heading>The <K>HAPDerivation</K> datatype</Heading>
+    The <K>HAPDerivation</K> datatype represents a derivation of a polynomial 
+    ring <M>R</M>. Given the product and addition rules above, a derivation
+    can be completely specified in terms of the images of the ring 
+    indeterminates. Consequently, a <K>HAPDerivation</K> is specified by 
+    providing:
+    <List>
+      <Item>a polynomial ring <M>R</M></Item>
+      <Item>a list of images, under the derivation, of each of the ring's
+        indeterminates.</Item>
+    </List>
+    Optionally, you can also provide
+    <List>
+      <Item>a set of relations <M>I</M> (which is assumed to be empty if none
+        is provided).</Item>
+    </List>
+    The support for derivations over quotient rings using <K>HAPDerivation</K>
+    is limited. The ring is always assumed to simply be the polynomial ring
+    <M>R</M>, but when calculating the kernel and homology (see
+    <Ref Oper="KernelOfDerivation"/> and <Ref Oper="HomologyOfDerivation"/>),
+    any relations in <M>I</M> are also included in the result's relations,
+    which is the equivalent of calculating the kernel of homology of the
+    derivation <M>R/I \to R/I</M>.
+  </Section>
+  
+
+  <Section>
+    <Heading>Computing the kernel and homology of a derivation</Heading>
+    
+    Computing the kernel of a derivation is difficult in the general case, but 
+    for polynomial rings over <M>\mathbb{F}_p</M> we have a novel solution which
+    allows derivations to be considered as module homomorphisms.
+    <P/>
+    Consider a ring <M>R</M> over <M>GF(2)</M>. For any <M>r \in R</M>,
+    <Display>
+      d(r^2) = d(rr) = d(r)r + rd(r) = 2d(r) = 0
+    </Display>
+    In general, for a ring <M>R = \mathbb{F}_p[x_1, \ldots, x_n]</M>, the 
+    subring <M>S = \mathbb{F}_p[x_1^p, \ldots, x_n^p]</M> is in the kernel
+    of <M>d</M>. For this choice of <M>S</M>, <M>R</M> can always be written as
+    a free <M>S</M>-module with <M>2^n</M> generators.
+    <P/>
+    Consider now taking the derivation of <M>sr</M> where <M>s \in S</M> and
+    <M>r \in R</M>,
+    <Display>
+      d(sr) = sd(r) + d(s)r = sd(r)
+    </Display>
+    since <M>s</M> is in the kernel of <M>d</M>. In other words, when <M>R</M> 
+    is written as an <M>S</M>-module, the derivation <M>d</M> behaves exactly as 
+    as an <M>S</M>-module homomorphism.
+    <P/>
+    The &Singular; computer algebra system can compute the kernels of module
+    homomorphisms over polynomial rings, and the &singular; package provides
+    an interface between &Singular; and &GAP;. The function 
+    <Ref Func="KernelOfDerivation"/> constructs <M>S</M>, expresses <M>d</M> as 
+    an <M>S</M>-module homomorphism (as well as converting any ideal), and asks 
+    &Singular; for the kernel. &Singular; returns the result as a set of module 
+    generators, which are then reduced to a set of ring generators and a 
+    presentation found. This makes further use of &Singular;, and the 
+    <C>HAPRingHomomorphism</C> datatype (see Chapter 
+    <Ref Chap="RingHomomorphism"/>).
+    <P/>
+    The homology of a derivation is defined to be
+    <Display>
+      Hom(d) = \ker (d) / im (d)
+    </Display>
+    Given the kernel of a derivation and the image (expressed as the images of
+    the module generators), the homology can be readily computed, as is 
+    done by <Ref Func="HomologyOfDerivation"/>. The natural 
+    presentation obtained by concatenating the kernel relations and the image
+    typically contains redundancies and the 
+    <Ref Func="HAPRingReductionHomomorphism" Label="for image of ring homomorphism"/> 
+    is used to generate a nicer presentation involving fewer indeterminates and 
+    relations.
+    
+    
+    
+  </Section>
+
+  <Section>
+    <Heading>Construction function</Heading>
+  </Section>
+
+  <Section>
+    <Heading>Data access function</Heading>
+  
+    <Subsection Label="DerivationExample1">
+      <Heading>Example: Constructing and accessing data of a <K>HAPDerivation</K></Heading>
+      
+      We demonstrate creating a <K>HAPDerivation</K> object and reading back its
+      data by creating a derivation <M>d</M> of the polynomial ring over 
+      the integers with two indeterminates, <M>\mathbb{Z}[x_1, x_2, x_3]</M>, 
+      which has the mapping <M>d(x_1) = d(x_2) = 1</M>, <M>d(x_3) = 0</M>.
+<!--
+gap> ring := PolynomialRing(Integers, 3);;
+gap> d := HAPDerivation(ring, [One(ring), One(ring), Zero(ring)]);
+
+gap> DerivationRing(d);
+gap> DerivationImages(d);
+gap> DerivationRelations(d);
+-->
+<Example><![CDATA[
+gap> ring := PolynomialRing(Integers, 3);;
+gap> d := HAPDerivation(ring, [One(ring), One(ring), Zero(ring)]);
+<Derivation>
+gap> 
+gap> DerivationRing(d);
+Integers[x_1,x_2,x_3]
+gap> DerivationImages(d);
+[ 1, 1, 0 ]
+gap> DerivationRelations(d);
+[  ]
+]]></Example>
+    </Subsection>
+  </Section>
+
+  <Section>
+    <Heading>Image, kernel and homology functions</Heading>
+    
+    <Subsection Label="DerivationExample3">
+      <Heading>Example: Homology of a <K>HAPDerivation</K></Heading>
+      
+      In this example, we wish to calculate the homology of a derivation 
+      <M>d</M> on the ring <M>\mathbb{F}_2[x,y,z]/(yx^2 + xy^2)</M> where 
+      <M>d(x) = d(y) = 0</M> and <M>d(z) = yx^2 + xy^2</M>. To demonstrate
+      some of the other functions, we also calculate the kernel of this 
+      derivation and the image of the element <M>xz</M>.
+<!--
+gap> ring := PolynomialRing(GF(2), 3);;
+gap> x := ring.1;; y := ring.2;; z := ring.3;;
+gap> d := HAPDerivation(ring, [x^2 + x*y + y^2],
+               [Zero(ring), Zero(ring), x^2*y + x*y^2]);
+gap> #
+gap> ImageOfDerivation(d, x*z);
+gap> KernelOfDerivation(d);
+gap> HomologyOfDerivation(d);
+-->
+<Example><![CDATA[
+gap> ring := PolynomialRing(GF(2), 3);;
+gap> x := ring.1;; y := ring.2;; z := ring.3;;
+gap> d := HAPDerivation(ring, [x^2 + x*y + y^2],
+>                [Zero(ring), Zero(ring), x^2*y + x*y^2]);
+<Derivation>
+gap> #
+gap> ImageOfDerivation(d, x*z);
+x_1^3*x_2+x_1^2*x_2^2
+gap> KernelOfDerivation(d);
+[ GF(2)[x_7,x_8,x_9], [ x_7^2+x_7*x_8+x_8^2 ], <Ring homomorphism> ]
+gap> HomologyOfDerivation(d);
+[ GF(2)[x_4,x_5,x_6], [ x_4^2+x_4*x_5+x_5^2, x_5^3 ], <Ring homomorphism> ]
+]]></Example>
+    </Subsection>
+    <P/>
+    The result we were after, the homology of <M>d</M>, can be read from the
+    final result as follows. The first two entries in the list give the 
+    homology group as a quotient ring: the quotient of the polynomial ring 
+    <M>\mathbb{F}_2[x_6,x_7,x_8]</M> with the two relations 
+    <M>(x_7^2+x_7x_8+x_8^2, x_8^3)</M>. The last entry in the list gives the
+    new indeterminates in terms of the original indeterminates, and from this
+    we know that it would be friendlier to write the result as 
+    <Alt Only="LaTeX">
+      <Display>
+        \frac{\mathbb{F}_2[x,y,e^2]}{(x^2+xy+y^2, y^3)}
+      </Display>
+    </Alt>
+    <Alt Not="LaTeX">
+      <Display>
+        F_2[x,y,e^2] / (x^2+xy+y^2, y^3)
+      </Display>
+    </Alt>
+    The kernel of the derivation can read from the result in a similar manner.
+    
+  </Section>
+
+</Chapter>
+

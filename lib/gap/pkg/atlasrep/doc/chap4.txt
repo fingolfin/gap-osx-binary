@@ -1,0 +1,354 @@
+  
+  [1X4 [33X[0;0YCustomizations of the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  
+  [1X4.1 [33X[0;0YInstalling the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YTo  install  the  package, unpack the archive file in a directory in the [11Xpkg[111X
+  directory  of  your  local copy of [5XGAP[105X 4. This might be the [11Xpkg[111X directory of
+  the  [5XGAP[105X 4  root  directory,  see [14X'Reference:  Installing a GAP Package'[114X for
+  details.  It is however also possible to keep an additional [11Xpkg[111X directory in
+  your  private  directories, see Section [14X'Reference: GAP Root Directory'[114X. The
+  latter possibility [13Xmust[113X be chosen if you do not have write access to the [5XGAP[105X
+  root directory.[133X
+  
+  [33X[0;0YData files (in the subdirectories [11Xdatagens[111X and [11Xdataword[111X of the package) that
+  are  available from an earlier version of the package are in principle kept;
+  see [2XAtlasOfGroupRepresentationsTestTableOfContentsRemoteUpdates[102X  ([14X4.2-4[114X) for
+  necessary updates.[133X
+  
+  [33X[0;0YIf  it  is  likely that one will work offline, it makes sense to install the
+  [21Xstarter archive[121X that can be downloaded from the package's homepage.[133X
+  
+  [33X[0;0YThe  package  consists entirely of [5XGAP[105X code, no external binaries need to be
+  compiled  for  the package itself. However, if the [5XGAP[105X package [5XIO[105X [Neu11] is
+  used  to  access  remote  data  files  (see Section [14X4.3-3[114X) then its external
+  binary must be available.[133X
+  
+  [33X[0;0YAfter  unpacking  the  package  archive,  it  should  be checked whether the
+  subdirectories  [11Xdatagens[111X  and  [11Xdataword[111X  of the package directory have write
+  permissions  for  those  users who will download files from the servers. The
+  recommended permissions under UNIX are set as follows.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28Xyou@unix> chmod 1777 atlasrep/data*[128X[104X
+    [4X[28Xyou@unix> ls -ld atlasrep/data*[128X[104X
+    [4X[28Xdrwxrwxrwt   3 you      you          1024 Oct 31 12:34 datagens[128X[104X
+    [4X[28Xdrwxrwxrwt   3 you      you          1024 Oct 31 12:34 dataword[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YFor checking the installation of the package, you should start [5XGAP[105X and call[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage( "atlasrep", "tst/testinst.g" );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIf  the  installation  is  o.k. then the [5XGAP[105X prompt appears without anything
+  else  being  printed;  otherwise  the  output  lines tell you what should be
+  changed.[133X
+  
+  [33X[0;0YMore  test  files  are  available  in  the [11Xtst[111X directory of the package, see
+  Section  [14X7.8[114X for details.[133X
+  
+  [33X[0;0YPDF,  HTML, and text versions of the package manual are available in the [11Xdoc[111X
+  directory of the package.[133X
+  
+  
+  [1X4.2 [33X[0;0YMaintaining the Local Data of the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YThe  current  [13Xtable  of  contents[113X  of  the database is contained in the file
+  [11Xgap/atlasprm.g[111X  of  the  [5XAtlasRep[105X package. This file is read by default when
+  the  package is loaded. It may happen that new data files have been added to
+  the  servers  since  the  last  release  of the [5XAtlasRep[105X package, thus it is
+  useful to update the table of contents of the package from time to time.[133X
+  
+  [33X[0;0YFor  that,  one can fetch the most recent version of the file [11Xgap/atlasprm.g[111X
+  from   the   home   page   of  the  package  (see  Section [14X4.4[114X),  either  by
+  calling [2XReloadAtlasTableOfContents[102X  ([14X4.2-1[114X)  in a [5XGAP[105X session or [21Xby hand[121X. In
+  the  latter  case,  the  new  file can then be read into the [5XGAP[105X session via
+  [2XReplaceAtlasTableOfContents[102X  ([14X4.2-3[114X).  Alternatively,  one can add a line to
+  the  user's [11Xgaprc[111X file (see [14X'Reference: The gap.ini and gaprc files'[114X), which
+  assigns the filename of the current [11Xgap/atlasprm.g[111X file (as an absolute path
+  or   relative  to  the  user's  home  directory,  cf. [2XDirectory[102X  ([14XReference:
+  Directory[114X)) to the global variable [10XATLASREP_TOCFILE[110X; in this case, this file
+  is read instead of the one from the package distribution when the package is
+  loaded.[133X
+  
+  [33X[0;0YUsers  who  have write access to the directory where the [5XAtlasRep[105X package is
+  installed  can  alternatively use the [11Xmaketoc[111X script in the [11Xetc[111X directory of
+  the  package  for  regularly updating the file [11Xgap/atlasprm.g[111X. Users without
+  this  write  access can store the new file in a different place, and read it
+  with [2XReplaceAtlasTableOfContents[102X ([14X4.2-3[114X).[133X
+  
+  [1X4.2-1 ReloadAtlasTableOfContents[101X
+  
+  [29X[2XReloadAtlasTableOfContents[102X( [3Xdirname[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xfail[109X  if  the  required  table  of contents could not be reloaded,
+            otherwise [9Xtrue[109X.[133X
+  
+  [33X[0;0YLet [3Xdirname[103X be a string, which must be one of [10X"remote"[110X, [10X"local"[110X, or the name
+  of a private data directory (see Chapter [14X5[114X).[133X
+  
+  [33X[0;0YIn  the  case of [10X"remote"[110X, the file [11Xatlasprm.g[111X is fetched from the package's
+  home page, and then read into [5XGAP[105X. In the case of [10X"local"[110X, the subset of the
+  data  listed  in  the  [10X"remote"[110X  table  of  contents  is considered that are
+  actually  available  in the local data directories. In the case of a private
+  directory,  its contents is inspected, and the table of contents for [3Xdirname[103X
+  is  replaced  by the one obtained from inspecting the actual contents of the
+  data directories (see Section [14X7.7[114X).[133X
+  
+  [1X4.2-2 StoreAtlasTableOfContents[101X
+  
+  [29X[2XStoreAtlasTableOfContents[102X( [3Xfilename[103X ) [32X function
+  
+  [33X[0;0YLet  [3Xfilename[103X be a string. This function prints the loaded table of contents
+  of the servers to the file with name [3Xfilename[103X.[133X
+  
+  [1X4.2-3 ReplaceAtlasTableOfContents[101X
+  
+  [29X[2XReplaceAtlasTableOfContents[102X( [3Xfilename[103X ) [32X function
+  
+  [33X[0;0YLet   [3Xfilename[103X   be   the  name  of  a  file  that  has  been  created  with
+  [2XStoreAtlasTableOfContents[102X ([14X4.2-2[114X).[133X
+  
+  [33X[0;0Y[2XReplaceAtlasTableOfContents[102X  first  removes  the  information  that  [5XGAP[105X has
+  stored  about  the table of contents of the servers, and then reads the file
+  with  name  [3Xfilename[103X,  thus replacing the previous information by the stored
+  one.[133X
+  
+  [1X4.2-4 AtlasOfGroupRepresentationsTestTableOfContentsRemoteUpdates[101X
+  
+  [29X[2XAtlasOfGroupRepresentationsTestTableOfContentsRemoteUpdates[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  list of names of all locally available data files that should
+            be removed.[133X
+  
+  [33X[0;0YThis  function  fetches  the file [11Xchanges.html[111X from the package's home page,
+  extracts  the  times of changes for the data files in question, and compares
+  them  with  the times of the last changes of the local data files. For that,
+  the  [5XGAP[105X  package [5XIO[105X [Neu11] is needed; if it is not available then an error
+  message is printed, and [9Xfail[109X is returned.[133X
+  
+  [33X[0;0YIf  the time of the last modification of a server file is later than that of
+  the  local  copy  then  the  local  file  must  be updated. (This means that
+  [10Xtouch[110Xing files in the local directories will cheat this function.)[133X
+  
+  [33X[0;0YIt  is  useful  that  a  system  administrator  (i. e.,  someone who has the
+  permission  to  remove  files  from the data directories) runs this function
+  from  time  to  time,  and  afterwards removes the files in the list that is
+  returned.   This   way,   new  versions  of  these  files  will  be  fetched
+  automatically from the servers when a user asks for their data.[133X
+  
+  
+  [1X4.3 [33X[0;0YUser Parameters for the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YThis section lists global parameters for which it might make sense to change
+  their  defaults  by  assignments  to  global  variables, either just for the
+  current  [5XGAP[105X  session  or  as  user  preferences  in  the  user's [11Xgaprc[111X file
+  (see [14X'Reference:  The  gap.ini  and  gaprc files'[114X). For an overview of these
+  parameters, see [2XAtlasOfGroupRepresentationsUserParameters[102X ([14X4.3-8[114X).[133X
+  
+  
+  [1X4.3-1 [33X[0;0YLocal or Remote Access[133X[101X
+  
+  [33X[0;0YThere are two possibilities to use the [5XAtlasRep[105X package.[133X
+  
+  [8X[13XLocal access only (offline)[113X[108X
+        [33X[0;6YYou  can  restrict  the access to the data that are actually stored in
+        the local installation of [5XGAP[105X.[133X
+  
+  [8X[13XRemote access (online)[113X[108X
+        [33X[0;6YIf your computer is connected to a network that provides access to the
+        [5XATLAS[105X  data  (for  example  the  internet)  then  the functions of the
+        package may fetch the requested data automatically from remote servers
+        when  they  are  required  for  the first time; these data are then by
+        default  stored  in  the  local copy, so later access to them needs no
+        network transfer.[133X
+  
+  [33X[0;0YThe  latter  possibility  is presently not used by other [5XGAP[105X packages, so it
+  may  be  regarded as an important feature of the [5XAtlasRep[105X package. Anyhow it
+  requires a few words of explanation.[133X
+  
+  [33X[0;0YThe  possibility  of  online access reflects in particular the fact that the
+  [5XATLAS[105X  of  Group  Representations  is  designed  as  an [13Xopen database[113X, it is
+  expected  to  grow.  As  soon  as  the  developers  of  the  [5XATLAS[105X  of Group
+  Representations  add  new  information  to  the  servers,  these data become
+  available  in  [5XGAP[105X  when remote access is enabled, after one has updated the
+  corresponding table of contents (see Section [14X4.2[114X).[133X
+  
+  [33X[0;0YRemote access is enabled if and only if the value of the [10Xremote[110X component of
+  the  global variable [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X) is [9Xtrue[109X. If one
+  wants  to  work offline, i.e., if one does [13Xnot[113X want [5XGAP[105X to attempt accessing
+  remote data then this value must be set to [9Xfalse[109X.[133X
+  
+  [33X[0;0YConversely,  if  the  default  value  of  the  [10Xremote[110X  component in your [5XGAP[105X
+  installation  is  [9Xfalse[109X  then  changing  this  value  to  [9Xtrue[109X  may  be  not
+  successful.  First,  it  might  be the case that no server is reachable. And
+  second,  if  one can in principle [13Xdownload[113X files from a server then it might
+  be  impossible  to actually [13Xstore[113X these files in the data directories of the
+  installed  package;  in  this  case,  it  is  advisable to install the whole
+  package or just its data directories in a private directory, see [14X'Reference:
+  GAP Root Directory'[114X for details.[133X
+  
+  
+  [1X4.3-2 [33X[0;0YAdding and Removing Servers[133X[101X
+  
+  [33X[0;0YWhen access to remote data is enabled (see Section [14X4.3-1[114X) then the available
+  servers   are  given  by  the  [10Xservers[110X  component  of  the  global  variable
+  [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X).[133X
+  
+  [33X[0;0Y[13XRemoving[113X entries from this list means to disable access to the corresponding
+  servers, [13Xadding[113X entries makes the corresponding servers available. Of course
+  the  latter makes sense only if the new servers really exist, for example in
+  a local network.[133X
+  
+  [33X[0;0YCurrently  there  is just one remote server. As soon as other servers become
+  available,  or  a  server name is changed which makes it necessary to adjust
+  the  [10Xservers[110X  component,  this  will  be  announced  in  the  [5XGAP[105X Forum, cf.
+  [14X'Tutorial:  Further  Information about GAP'[114X. The same holds when upgrades of
+  the package become available.[133X
+  
+  
+  [1X4.3-3 [33X[0;0YAccessing Data Files with the [5XGAP[105X[101X[1X Package [5XIO[105X[101X[1X or with [11Xwget[111X[101X[1X[133X[101X
+  
+  [33X[0;0YWhen  access  to  remote  data is enabled (see Section [14X4.3-1[114X) then one needs
+  either the [5XGAP[105X package [5XIO[105X [Neu11] or the external program [11Xwget[111X for accessing
+  data files.[133X
+  
+  [33X[0;0YThe  chosen  alternative  is given by the value of the [10Xwget[110X component of the
+  global variable [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X).[133X
+  
+  [33X[0;0YIf  this  component has the value [9Xtrue[109X then only [11Xwget[111X is tried, if the value
+  is [9Xfalse[109X then only the [5XIO[105X package is used. If this component is not bound or
+  bound  to  another  value than [9Xtrue[109X or [9Xfalse[109X (this is also the default) then
+  the  [5XIO[105X  package  is  preferred  to  [11Xwget[111X  if this package is available, and
+  otherwise [11Xwget[111X is tried.[133X
+  
+  [33X[0;0YNote  that  the  system  program  [11Xwget[111X may be not available, and that it may
+  require  some  work  to  install it; hints for that can be found on the home
+  page of the [5XAtlasRep[105X package (see Section [14X4.4[114X).[133X
+  
+  
+  [1X4.3-4 [33X[0;0YCompressed or Uncompressed Data Files[133X[101X
+  
+  [33X[0;0YWhen  used with UNIX, [5XGAP[105X can read [11Xgzip[111Xped files, see [14X'Reference: Saving and
+  Loading     a     Workspace'[114X.     If     the     component    [10Xcompress[110X    of
+  [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X) has the value [9Xtrue[109X then each [5XMeatAxe[105X
+  format  file  that  is fetched from a remote server is afterwards compressed
+  with  [11Xgzip[111X.  This  saves  a  lot  of  space if many [5XMeatAxe[105X format files are
+  accessed.  (Note  that  data  files  in  other  formats are very small.) For
+  example,  at  the  time  of the release of version 1.5 there were about [22X8400[122X
+  data  files  in  [5XMeatAxe[105X  format, which needed about [22X1400[122X MB in uncompressed
+  text  format  and  about [22X275[122X MB in compressed text format. The default value
+  for the component [10Xcompress[110X is [9Xfalse[109X.[133X
+  
+  
+  [1X4.3-5 [33X[0;0YCustomizing [10XDisplayAtlasInfo[110X[101X[1X[133X[101X
+  
+  [33X[0;0YThe  way  how  [2XDisplayAtlasInfo[102X  ([14X3.5-1[114X)  shows  the  requested  overview is
+  controlled       by       the       component       [10XdisplayFunction[110X       of
+  [2XAtlasOfGroupRepresentationsInfo[102X   ([14X7.1-6[114X).   The   default  value  is  [2XPrint[102X
+  ([14XReference:  Print[114X),  other  useful values are [2XPrintFormattedString[102X ([14XGAPDoc:
+  PrintFormattedString[114X)  and  [10XAGR.Pager[110X;  the  latter  calls [2XPager[102X ([14XReference:
+  Pager[114X) with the [10Xformatted[110X option, which is necessary for switching off [5XGAP[105X's
+  automatic line breaking.[133X
+  
+  
+  [1X4.3-6 [33X[0;0YCustomizing the Access to Data Files[133X[101X
+  
+  [33X[0;0YBy  default,  local data files are stored in the subdirectories [11Xdatagens[111X and
+  [11Xdataword[111X  of  the package, and the files are exactly the text files provided
+  on the servers. However, a more flexible approach may be useful.[133X
+  
+  [33X[0;0YFirst,  one  may want to use [13Xdifferent file formats[113X, for example the [5XMeatAxe[105X
+  binary  files  that are provided by the servers parallel to the [5XMeatAxe[105X text
+  files.  Second,  one  may  want  to use [13Xa different directory structure[113X, for
+  example  the  same  structure  as  used on the servers –this makes sense for
+  example  if  a  local  mirror of a server is available, because then one can
+  read the server files directly, without transferring/copying them to another
+  directory.[133X
+  
+  [33X[0;0YAs  a  consequence, one would like to customize the meaning of the following
+  three access steps.[133X
+  
+  [8XAre the required files locally available?[108X
+        [33X[0;6YThe  required files may have a different name or a different path, and
+        the data can be available in one file or can be distributed to several
+        files.[133X
+  
+  [8XHow can a file be made locally available?[108X
+        [33X[0;6YA  different  server file may be fetched or some postprocessing may be
+        required.[133X
+  
+  [8XHow is the data of a file accessed by [5XGAP[105X?[108X
+        [33X[0;6YA different function may be needed to read the file.[133X
+  
+  [33X[0;0YDetails how to achieve these customizations can be found in Section [14X7.2[114X.[133X
+  
+  
+  [1X4.3-7 [33X[0;0YReading Large Matrices over Finite Fields[133X[101X
+  
+  [33X[0;0YMatrices over finite fields in [5XGAP[105X can be represented in a compressed format
+  that  needs  less  space  than  the  corresponding text file. Such a [5XMeatAxe[105X
+  format  text file can be read by [2XScanMeatAxeFile[102X ([14X7.3-1[114X) either line by line
+  (which  is  the  default) or as a whole; the latter is faster but needs more
+  space  than  the  former.  For example, a [22X4370[122X by [22X4370[122X matrix over the field
+  with  two  elements (as occurs for an irreducible representation of the Baby
+  Monster)  requires less than [22X3[122X MB space in [5XGAP[105X but the corresponding [5XMeatAxe[105X
+  format  text  file is more than [22X19[122X MB large, which means that when one reads
+  the  file with the fast variant, [5XGAP[105X will temporarily grow by more than this
+  value.   One   can   change   the   mode  by  setting  the  global  variable
+  [2XCMeatAxe.FastRead[102X ([14X7.1-4[114X) to [9Xtrue[109X or [9Xfalse[109X, respectively.[133X
+  
+  [33X[0;0YNote  that this parameter is meaningful only when [2XScanMeatAxeFile[102X ([14X7.3-1[114X) is
+  used.  It  has  no  effect  for  example  if  [5XMeatAxe[105X binary files are read,
+  cf. [2XFFMatOrPermCMtxBinary[102X ([14X7.3-5[114X).[133X
+  
+  [1X4.3-8 AtlasOfGroupRepresentationsUserParameters[101X
+  
+  [29X[2XAtlasOfGroupRepresentationsUserParameters[102X(  ) [32X function
+  
+  [33X[0;0YThis  function  returns  a  string that describes an overview of the current
+  values  of the user parameters introduced in this section. One can use [2XPrint[102X
+  ([14XReference: Print[114X) or [2XPager[102X ([14XReference: Pager[114X) for showing the overview.[133X
+  
+  
+  [1X4.4 [33X[0;0YWeb Services for the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YThe home page of the [5XAtlasRep[105X package is[133X
+  
+  [33X[0;0Y[7Xhttp://www.math.rwth-aachen.de/~Thomas.Breuer/atlasrep[107X.[133X
+  
+  [33X[0;0YBesides package archives and introductory package information, it provides[133X
+  
+  [30X    [33X[0;6Ythe  current  file with the [13Xtable of contents[113X (the file [11Xgap/atlasprm.g[111X
+        of                  the                  package,                  see
+        [7Xhttp://www.math.rwth-aachen.de/~Thomas.Breuer/atlasrep/atlasprm.g[107X),
+        cf. [2XReloadAtlasTableOfContents[102X ([14X4.2-1[114X),[133X
+  
+  [30X    [33X[0;6Ya                 [13Xstarter                 archive[113X                 (see
+        [7Xhttp://www.math.rwth-aachen.de/~Thomas.Breuer/atlasrep/atlasrepdata.tar.gz[107X),
+        containing many small representations and programs,[133X
+  
+  [30X    [33X[0;6Ythe   list   of   [13Xchanges   of   server  files[113X  in  HTML  format  (see
+        [7Xhttp://www.math.rwth-aachen.de/~Thomas.Breuer/atlasrep/htm/data/changes.htm[107X),
+        cf. [2XAtlasOfGroupRepresentationsTestTableOfContentsRemoteUpdates[102X
+        ([14X4.2-4[114X), and[133X
+  
+  [30X    [33X[0;6Yan  [13Xoverview  of the data[113X available via the [5XGAP[105X interface to the [5XATLAS[105X
+        of      Group     Representations,     in     HTML     format     (see
+        [7Xhttp://www.math.rwth-aachen.de/~Thomas.Breuer/atlasrep/htm/data/overview.htm[107X);
+        this  is similar to the information shown by [2XDisplayAtlasInfo[102X ([14X3.5-1[114X),
+        further  information  can  be found on the home page of the [5XATLAS[105X, see
+        [7Xhttp://brauer.maths.qmul.ac.uk/Atlas[107X.[133X
+  
+  
+  [1X4.5 [33X[0;0YExtending the [5XATLAS[105X[101X[1X Database[133X[101X
+  
+  [33X[0;0YUsers  who  have  computed new representations that might be interesting for
+  inclusion  into  the  [5XATLAS[105X  of  Group  representations can send the data in
+  question to [7Xmailto:R.A.Wilson@qmul.ac.uk[107X.[133X
+  
+  [33X[0;0YIt  is  also possible to store [21Xprivate[121X representations and programs in local
+  directories,  and  to  use  them  in  the same way as the [21Xofficial[121X data. See
+  Chapter [14X5[114X for details.[133X
+  

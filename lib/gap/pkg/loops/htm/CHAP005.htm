@@ -1,0 +1,183 @@
+<html><head><title>[loops] 5 Basic methods and attributes</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP004.htm">Previous</a>] [<a href ="CHAP006.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>5 Basic methods and attributes</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP005.htm#SECT001">Basic attributes</a>
+<li> <A HREF="CHAP005.htm#SECT002">Basic arithmetic operations</a>
+<li> <A HREF="CHAP005.htm#SECT003">Powers and inverses</a>
+<li> <A HREF="CHAP005.htm#SECT004">Associators and commutators</a>
+<li> <A HREF="CHAP005.htm#SECT005">Generators</a>
+</ol><p>
+<p>
+We describe the basic core methods and attributes of the <font face="Gill Sans,Helvetica,Arial">LOOPS</font> package in this chapter.
+<p>
+<p>
+<h2><a name="SECT001">5.1 Basic attributes</a></h2>
+<p><p>
+We associate many attributes with quasigroups in order to speed up computation.
+This section lists some basic attributes of quasigroups and loops.
+<p>
+The list of elements of a quasigroup <i>Q</i> is obtained by the usual command
+<p>
+<a name = "SSEC001.1"></a>
+<li><code>Elements( </code><var>Q</var><code> ) A</code>
+<p>
+The Cayley table of a quasigroup <i>Q</i> is returned with
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>CayleyTable( </code><var>Q</var><code> ) A</code>
+<p>
+One can use <code>Display( CayleyTable( </code><var>Q</var><code> ) )</code> for pretty matrix-style output of
+small Cayley tables.
+<p>
+The neutral element of a loop <i>L</i> is obtained via
+<p>
+<a name = "SSEC001.3"></a>
+<li><code>One( </code><var>L</var><code> ) A</code>
+<p>
+If you want to know if a quasigroup <i>Q</i> has a neutral element, you can find out
+with the standard function for magmas
+<p>
+<a name = "SSEC001.4"></a>
+<li><code>MultiplicativeNeutralElement( </code><var>Q</var><code> ) A</code>
+<p>
+The size of a quasigroup <i>Q</i> is calculated by
+<p>
+<a name = "SSEC001.5"></a>
+<li><code>Size( </code><var>Q</var><code> ) A</code>
+<p>
+When <i>L</i> is a <var>power associative loop</var>, i.e., the powers of elements
+are well-defined in <i>L</i>, the <var>exponent</var> of <i>L</i> is the smallest
+positive integer divisible by orders of all elements of <i>L</i>. The following
+attribute calculates the exponent without testing for power-associativity:
+<p>
+<a name = "SSEC001.6"></a>
+<li><code>Exponent( </code><var>L</var><code> ) A</code>
+<p>
+<p>
+<h2><a name="SECT002">5.2 Basic arithmetic operations</a></h2>
+<p><p>
+Each quasigroup element in <font face="Gill Sans,Helvetica,Arial">GAP</font> knows which quasigroup it belongs to. It is
+therefore possible to perform arithmetic operations with quasigroup elements
+without referring to the quasigroup. All elements involved in the calculation
+must belong to the same quasigroup.
+<p>
+Two elements <i>x</i>, <i>y</i> of the same quasigroup are multiplied by <i>x</i>*<i>y</i> in <font face="Gill Sans,Helvetica,Arial">GAP</font>.
+Since multiplication of at least three elements is ambiguous in the
+nonassociative case, we by default parenthesize elements from left to right,
+i.e., <i>x</i>*<i>y</i>*<i>z</i> means ((<i>x</i>*<i>y</i>)*<i>z</i>). Of course, one can specify the order of
+multiplications by providing parentheses.
+<p>
+Universal algebraists introduce two additional operations for quasigroups.
+Namely the <var>left division</var> <i>x</i>\<i>y</i> defined by
+<i>x</i>&#183;(<i>x</i>\<i>y</i>)=<i>y</i>, and the <var>right division</var> <i>x</i>/<i>y</i>
+defined by (<i>x</i>/<i>y</i>)&#183;<i>y</i>=<i>x</i>. These two operations can be found in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> as:
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>LeftDivision( </code><var>x</var><code>, </code><var>y</var><code> ) O</code>
+<a name = "SSEC002.2"></a>
+<li><code>RightDivision( </code><var>x</var><code>, </code><var>y</var><code> ) O</code>
+<p>
+When <i>Q</i> is a quasigroup, <i>x</i> is an element of <i>Q</i>, and <i>S</i> is a list of
+elements of <i>Q</i>, then
+<p>
+<li><code>LeftDivision( </code><var>S</var><code>, </code><var>x</var><code> ) O</code>
+<li><code>LeftDivision( </code><var>x</var><code>, </code><var>S</var><code> ) O</code>
+<li><code>RightDivision( </code><var>S</var><code>, </code><var>x</var><code> ) O</code>
+<li><code>RightDivision( </code><var>x</var><code>, </code><var>S</var><code> ) O</code>
+<p>
+returns the list of elements obtained by performing the respective
+division of <i>S</i> by <i>x</i>, or of <i>x</i> by <i>S</i>, using one element of <i>S</i> at a time.
+<p>
+We also support / in place of <code>RightDivision</code>. But we do not support
+\ in place of <code>LeftDivision</code>.
+<p>
+To obtain the Cayley tables for the operation left division or
+right division, use
+<p>
+<a name = "SSEC002.3"></a>
+<li><code>LeftDivisionCayleyTable( </code><var>Q</var><code> ) O</code>
+<a name = "SSEC002.3"></a>
+<li><code>RightDivisionCayleyTable( </code><var>Q</var><code> ) O</code>
+<p>
+<p>
+<h2><a name="SECT003">5.3 Powers and inverses</a></h2>
+<p><p>
+Powers of elements are generally not well-defined in quasigroups. We say that
+the quasigroup <i>Q</i> is <var>power associative</var>, if for any <i>x</i> &#8712;  <i>Q</i>, the submagma generated by <i>x</i> is associative.
+<p>
+For magmas and positive integer exponents, <font face="Gill Sans,Helvetica,Arial">GAP</font> defines the powers in the
+following way: <i>x</i><sup>1</sup>=<i>x</i>, <i>x</i><sup>2<i>k</i></sup>=(<i>x</i><sup><i>k</i></sup>)&#183;(<i>x</i><sup><i>k</i></sup>) and <i>x</i><sup>2<i>k</i>+1</sup>=(<i>x</i><sup>2<i>k</i></sup>)&#183; <i>x</i>. One can easily see that this returns <i>x</i><sup><i>k</i></sup> in log<sub>2</sub>(<i>k</i>) steps. For
+<font face="Gill Sans,Helvetica,Arial">LOOPS</font>, we have decided to keep this method, hoping that everybody will use
+it with care for quasigroups that are not power associative.
+<p>
+Let <i>x</i> be an element of a loop <i>L</i> with neutral element 1. Then the <var>left
+inverse</var> <i>x</i><sup>&#955;</sup> of <i>x</i> is the unique element of <i>L</i>
+satisfying <i>x</i><sup>&#955;</sup> <i>x</i>=1. Similarly, the <var>right inverse</var> <i>x</i><sup>&#961;</sup> satisfies <i>xx</i><sup>&#961;</sup>=1. If <i>x</i><sup>&#955;</sup>=<i>x</i><sup>&#961;</sup>, we call
+<i>x</i><sup>&#8722;1</sup>=<i>x</i><sup>&#955;</sup>=<i>x</i><sup>&#961;</sup> the <var>inverse</var> of <i>x</i>.
+<p>
+<a name = "SSEC003.1"></a>
+<li><code>LeftInverse( </code><var>x</var><code> ) O</code>
+<a name = "SSEC003.1"></a>
+<li><code>RightInverse( </code><var>x</var><code> ) O</code>
+<a name = "SSEC003.1"></a>
+<li><code>Inverse( </code><var>x</var><code> ) O</code>
+<p>
+The following examples illustrates the concept of inverses for a given loop <i>M</i>
+in which <i>M</i>.<i>i</i> coincides with the <i>i</i>th element:
+<p>
+<pre>
+gap&gt; CayleyTable( M );
+[ [ 1, 2, 3, 4, 5 ],
+  [ 2, 1, 4, 5, 3 ],
+  [ 3, 4, 5, 1, 2 ],
+  [ 4, 5, 2, 3, 1 ],
+  [ 5, 3, 1, 2, 4 ] ]
+gap&gt; [ LeftInverse( M.3 ), RightInverse( M.3 ), Inverse( M.3 ) ];
+[ l5, l4, fail ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">5.4 Associators and commutators</a></h2>
+<p><p>
+Let <i>Q</i> be a quasigroup and <i>x</i>, <i>y</i>, <i>z</i> &#8712; <i>Q</i>. Then the
+<var>associator</var> of <i>x</i>, <i>y</i>, <i>z</i> is the unique element <i>u</i> such
+that (<i>xy</i>)<i>z</i>=(<i>x</i>(<i>yz</i>))<i>u</i>. The <var>commutator</var> of <i>x</i>, <i>y</i> is the
+unique element <i>v</i> such that <i>xy</i>=(<i>yx</i>)<i>v</i>.
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>Associator( </code><var>x</var><code>, </code><var>y</var><code>, </code><var>z</var><code> ) O</code>
+<a name = "SSEC004.1"></a>
+<li><code>Commutator( </code><var>x</var><code>, </code><var>y</var><code> ) O</code>
+<p>
+<p>
+<h2><a name="SECT005">5.5 Generators</a></h2>
+<p><p>
+The following two attributes are synonyms of <code>GeneratorsOfMagma</code>:
+<p>
+<a name = "SSEC005.1"></a>
+<li><code>GeneratorsOfQuasigroup( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC005.1"></a>
+<li><code>GeneratorsOfLoop( </code><var>L</var><code> ) A</code>
+<p>
+As usual in <font face="Gill Sans,Helvetica,Arial">GAP</font>, one can refer to the <i>i</i>th generator of a quasigroup <i>Q</i> by
+<code>Q.i</code>. Note that it is not necessarily the case that <code>Q.i = Elements( Q )[ i
+]</code>, since the set of generators can be a proper subset of the elements.
+<p>
+It is easy to prove that a quasigroup of order <i>n</i> can be generated by a subset
+containing at most log<sub>2</sub><i>n</i> elements. When <i>Q</i> is a quasigroup
+<p>
+<a name = "SSEC005.2"></a>
+<li><code>GeneratorsSmallest( </code><var>Q</var><code> ) A</code>
+<p>
+returns a generating set {<i>q</i><sub>0</sub>, ..., <i>q</i><sub><i>m</i></sub>} of <i>Q</i> such that
+<i>Q</i><sub>0</sub>=&#8709;, <i>Q</i><sub><i>m</i></sub>=<i>Q</i>, <i>Q</i><sub><i>i</i></sub>=&#9001;<i>q</i><sub>1</sub>, ..., <i>q</i><sub><i>i</i></sub> &#9002;, <i>q</i><sub><i>i</i>+1</sub>
+is the least element of <i>Q</i>\<i>Q</i><sub><i>i</i></sub>.
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP004.htm">Previous</a>] [<a href ="CHAP006.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>loops manual<br>July 2012
+</address></body></html>

@@ -1,0 +1,1112 @@
+  
+  [1X4 Constructing forms and basic functionality[0X
+  
+  In  this  chapter,  all  operations  to construct sesquilinear and quadratic
+  forms are listed, along with their basic attributes and properties.
+  
+  
+  [1X4.1 Important filters[0X
+  
+  
+  [1X4.1-1 Categories for forms[0X
+  
+  [2X> IsBilinearForm____________________________________________________[0XCategory
+  [2X> IsHermitianForm___________________________________________________[0XCategory
+  [2X> IsSesquilinearForm________________________________________________[0XCategory
+  [2X> IsQuadraticForm___________________________________________________[0XCategory
+  [2X> IsForm____________________________________________________________[0XCategory
+  [2X> IsForm____________________________________________________________[0XCategory
+  [2X> IsTrivialForm_____________________________________________________[0XCategory
+  
+  The   categories  [10XIsBilinearForm[0m  and  [10XIsHermitianForm[0m  are  categories  for
+  bilinear  and  hermitian forms, respectively. They are disjoint and are both
+  contained in the category [10XIsSesquilinearForm[0m.
+  
+  Quadratic   forms   are  contained  in  the  category  [10XIsQuadraticForm[0m.  The
+  categories  [10XIsSesquilinearForm[0m and [10XIsQuadraticForm[0m are disjoint and are both
+  contained in the category [10XIsForm[0m.
+  
+  The  user  is  allowed to construct the trivial form (mapping all vectors to
+  the  zero  element  of  the  field).  The  trivial  form is an object in the
+  category  [10XIsTrivialForm[0m.  This  category is contained in [10XIsForm[0m and disjoint
+  from [10XIsSesquilinearForm[0m and [10XIsQuadraticForm[0m.
+  
+  
+  [1X4.1-2 Representation for forms[0X
+  
+  [2X> IsFormRep___________________________________________________[0XRepresentation
+  
+  Every  form  is  represented  by  a  matrix,  the  base  field  and a string
+  describing the ``type'' of the form.
+  
+  
+  [1X4.2 Constructing forms using a matrix[0X
+  
+  [1X4.2-1 BilinearFormByMatrix[0m
+  
+  [2X> BilinearFormByMatrix( [0X[3Xmatrix, field[0X[2X ) ___________________________[0Xoperation
+  [2X> BilinearFormByMatrix( [0X[3Xmatrix[0X[2X ) __________________________________[0Xoperation
+  [6XReturns:[0X  a bilinear form
+  
+  The  argument  [3Xmatrix[0m  must be a symmetric, or skew-symmetric, square matrix
+  over the finite field [3Xfield[0m. The argument [3Xfield[0m is an optional argument, and
+  if  it  is not given, then we assume that the [13Xdefining field[0m of the bilinear
+  form  is  the smallest field containing the entries of matrix. Below we give
+  an  example  where  the  defining  field  can  make  a  difference  in  some
+  applications.  As it is only possible to construct reflexive bilinear forms,
+  it  is  checked whether the matrix [3Xmatrix[0m is symmetric or skew symmetric. If
+  matrix  [3Xmatrix[0m is not symmetric nor skew symmetric, then an error message is
+  returned.  The output is a bilinear form (i.e., an object in [10XIsBilinearForm[0m)
+  with  Gram  matrix  [3Xmatrix[0m  and  defining  field [3Xfield[0m. (See [14X3.1[0m for more on
+  bilinear forms).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := IdentityMat(4, GF(9));[0X
+    [4X[ [ Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3) ], [ 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3) ], [ 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0 ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat,GF(9));[0X
+    [4X< bilinear form >[0X
+    [4Xgap> Display(form);[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4X 1 . . .[0X
+    [4X . 1 . .[0X
+    [4X . . 1 .[0X
+    [4X . . . 1[0X
+    [4Xgap> mat := [[0*Z(2),Z(16)^12,0*Z(2),Z(4)^2,Z(16)^13],[0X
+    [4X>    [Z(16)^12,0*Z(2),0*Z(2),Z(16)^11,Z(16)],[0X
+    [4X>    [0*Z(2),0*Z(2),0*Z(2),Z(4)^2,Z(16)^3],[0X
+    [4X>    [Z(4)^2,Z(16)^11,Z(4)^2,0*Z(2),Z(16)^3],[0X
+    [4X>    [Z(16)^13,Z(16),Z(16)^3,Z(16)^3,0*Z(2) ]];[0X
+    [4X[ [ 0*Z(2), Z(2^4)^12, 0*Z(2), Z(2^2)^2, Z(2^4)^13 ], [0X
+    [4X  [ Z(2^4)^12, 0*Z(2), 0*Z(2), Z(2^4)^11, Z(2^4) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), Z(2^2)^2, Z(2^4)^3 ], [0X
+    [4X  [ Z(2^2)^2, Z(2^4)^11, Z(2^2)^2, 0*Z(2), Z(2^4)^3 ], [0X
+    [4X  [ Z(2^4)^13, Z(2^4), Z(2^4)^3, Z(2^4)^3, 0*Z(2) ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat,GF(16));[0X
+    [4X< bilinear form >[0X
+    [4Xgap> Display(form);[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4Xz = Z(16)[0X
+    [4X    . z^12    . z^10 z^13[0X
+    [4X z^12    .    . z^11  z^1[0X
+    [4X    .    .    . z^10  z^3[0X
+    [4X z^10 z^11 z^10    .  z^3[0X
+    [4X z^13  z^1  z^3  z^3    .[0X
+    [4Xgap> mat := [[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]]*Z(7)^0;[0X
+    [4X[ [ Z(7)^0, 0*Z(7), 0*Z(7), 0*Z(7) ], [ 0*Z(7), Z(7)^0, 0*Z(7), 0*Z(7) ], [0X
+    [4X  [ 0*Z(7), 0*Z(7), 0*Z(7), Z(7)^0 ], [ 0*Z(7), 0*Z(7), Z(7)^0, 0*Z(7) ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat);[0X
+    [4X< bilinear form >[0X
+    [4Xgap> WittIndex(form);[0X
+    [4X1[0X
+    [4Xgap> form := BilinearFormByMatrix(mat,GF(49));[0X
+    [4X< bilinear form >[0X
+    [4Xgap> WittIndex(form);[0X
+    [4X2[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.2-2 QuadraticFormByMatrix[0m
+  
+  [2X> QuadraticFormByMatrix( [0X[3Xmatrix, field[0X[2X ) __________________________[0Xoperation
+  [2X> QuadraticFormByMatrix( [0X[3Xmatrix[0X[2X ) _________________________________[0Xoperation
+  [6XReturns:[0X  a quadratic form
+  
+  The argument [3Xmatrix[0m must be a square matrix over the finite field [3Xfield[0m. The
+  argument  [3Xfield[0m  is  an  optional  argument, and if it is not given, then we
+  assume  that  the  [13Xdefining field[0m of the bilinear form is the smallest field
+  containing  the  entries  of  matrix.  Below  we  give  an example where the
+  defining field can make a difference in some applications. Any square matrix
+  determines a quadratic form, but the Gram matrix is recomputed so that it is
+  an upper triangle matrix. The output is a quadratic form (i.e., an object in
+  [10XIsQuadraticForm[0m)  with  defining  field [3Xfield[0m. (See [14X3.2[0m for more on bilinear
+  forms).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[1,0,0,0],[0,3,0,0],[0,0,0,6],[0,0,6,0]]*Z(7)^0;[0X
+    [4X[ [ Z(7)^0, 0*Z(7), 0*Z(7), 0*Z(7) ], [ 0*Z(7), Z(7), 0*Z(7), 0*Z(7) ], [0X
+    [4X  [ 0*Z(7), 0*Z(7), 0*Z(7), Z(7)^3 ], [ 0*Z(7), 0*Z(7), Z(7)^3, 0*Z(7) ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix(mat,GF(7));[0X
+    [4X< quadratic form >[0X
+    [4Xgap> Display(form);[0X
+    [4XQuadratic form[0X
+    [4XGram Matrix:[0X
+    [4X 1 . . .[0X
+    [4X . 3 . .[0X
+    [4X . . . 5[0X
+    [4X . . . .[0X
+    [4Xgap> gf := GF(2^2);[0X
+    [4XGF(2^2)[0X
+    [4Xgap> mat := InvariantQuadraticForm( SO(-1, 4, 4) )!.matrix;[0X
+    [4X[ [ 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), Z(2^2)^2, Z(2)^0 ], [ 0*Z(2), 0*Z(2), 0*Z(2), Z(2^2)^2 ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix( mat, gf );[0X
+    [4X< quadratic form >[0X
+    [4Xgap> Display(form);[0X
+    [4XQuadratic form[0X
+    [4XGram Matrix:[0X
+    [4Xz = Z(4)[0X
+    [4X   .   1   .   .[0X
+    [4X   .   .   .   .[0X
+    [4X   .   . z^2   1[0X
+    [4X   .   .   . z^2[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  following  example  shows how using the argument [3Xfield[0m has influence on
+  the properties of the constructed form.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [0X
+    [4X> [[Z(2)^0,Z(2)^0,0*Z(2),0*Z(2)],[0*Z(2),Z(2)^0,0*Z(2),0*Z(2)], [0X
+    [4X>  [0*Z(2),0*Z(2),0*Z(2),Z(2)^0],[0*Z(2),0*Z(2),0*Z(2),0*Z(2)]];[0X
+    [4X[ [ Z(2)^0, Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix(mat);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> WittIndex(form);[0X
+    [4X1[0X
+    [4Xgap> form := QuadraticFormByMatrix(mat,GF(4));[0X
+    [4X< quadratic form >[0X
+    [4Xgap> WittIndex(form);[0X
+    [4X2[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.2-3 HermitianFormByMatrix[0m
+  
+  [2X> HermitianFormByMatrix( [0X[3Xmatrix, field[0X[2X ) __________________________[0Xoperation
+  [6XReturns:[0X  a quadratic form
+  
+  The  argument [3Xmatrix[0m must be a hermitian square matrix over the finite field
+  [3Xfield[0m, and [3Xfield[0m has square order. The field must be specified, since we can
+  only determine the smallest field containing the entries of [3Xmatrix[0m. As it is
+  only  possible  to  construct  reflexive  sesquilinear  forms, it is checked
+  whether  the  matrix  is a hermitian matrix, and if not, an error message is
+  returned.  The  output  is a hermitian sesquilinear form (i.e., an object in
+  [10XIsHermitianForm[0m)  with Gram matrix [3Xmatrix[0m and defining field [3Xfield[0m. (See [14X3.1[0m
+  for more on hermitian forms).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> gf := GF(3^2);[0X
+    [4XGF(3^2)[0X
+    [4Xgap> mat := IdentityMat(4, gf);[0X
+    [4X[ [ Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3) ], [ 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3) ], [ 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0 ] ][0X
+    [4Xgap> form := HermitianFormByMatrix( mat, gf );[0X
+    [4X< hermitian form >[0X
+    [4Xgap> Display(form);[0X
+    [4XHermitian form[0X
+    [4XGram Matrix:[0X
+    [4X 1 . . .[0X
+    [4X . 1 . .[0X
+    [4X . . 1 .[0X
+    [4X . . . 1[0X
+    [4Xgap> mat := [[Z(11)^0,0*Z(11),0*Z(11)],[0*Z(11),0*Z(11),Z(11)],[0X
+    [4X>     [0*Z(11),Z(11),0*Z(11)]];[0X
+    [4X[ [ Z(11)^0, 0*Z(11), 0*Z(11) ], [ 0*Z(11), 0*Z(11), Z(11) ], [0X
+    [4X  [ 0*Z(11), Z(11), 0*Z(11) ] ][0X
+    [4Xgap> form := HermitianFormByMatrix(mat,GF(121));[0X
+    [4X< hermitian form >[0X
+    [4Xgap> Display(form);[0X
+    [4XHermitian form[0X
+    [4XGram Matrix:[0X
+    [4X  1  .  .[0X
+    [4X  .  .  2[0X
+    [4X  .  2  .[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.3 Constructing forms using a polynomial[0X
+  
+  Suppose  that  f  is  a  sesquilinear  form on an n-dimensional vectorspace.
+  Consider  a  vector  x  with coordinates x_1,...,x_n with x_i indeterminates
+  over  the  field. Then f(x,x) is a polynomial in n indeterminates. When f is
+  alternating,  f(x,x)  is  identically  zero,  but in all other cases, f(x,x)
+  determines f completely.
+  
+  Conversely,  suppose  that  Q  is  a  quadratic  form  on  an  n-dimensional
+  vectorspace.  Consider  a  vector  x  with  coordinates x_1,...,x_n with x_i
+  indeterminates   over   the   field.   Then   Q(x)  is  a  polynomial  in  n
+  indeterminates, and Q(x) determines Q completely.
+  
+  [5XForms[0m  provides functionality to construct bilinear, hermitian and quadratic
+  forms using an appropriate polynomial.
+  
+  [1X4.3-1 BilinearFormByPolynomial[0m
+  
+  [2X> BilinearFormByPolynomial( [0X[3Xpoly, r, n[0X[2X ) __________________________[0Xoperation
+  [2X> BilinearFormByPolynomial( [0X[3Xpoly, r[0X[2X ) _____________________________[0Xoperation
+  [6XReturns:[0X  a bilinear form
+  
+  The  argument  [3Xpoly[0m  must  be  a  polynomial  in  the polynomial ring [3Xr[0m. The
+  (optional) last argument is the dimension for the underlying vector space of
+  the  resulting  form,  which  by  default  is  the  number of indeterminates
+  specified  by  [3Xpoly[0m.  It  is checked whether the polynomial is a homogeneous
+  polynomial  of degree two over the given field, and if not, an error message
+  is returned. It is not possible to construct a nontrivial bilinear form from
+  a  polynomial  in even characteristic. The output is a bilinear (orthogonal)
+  form in the category [10XIsBilinearForm[0m. (See [14X3.1[0m for more on bilinear forms).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> r := PolynomialRing( GF(11), 4);[0X
+    [4XGF(11)[x_1,x_2,x_3,x_4][0X
+    [4Xgap> vars := IndeterminatesOfPolynomialRing( r );[0X
+    [4X[ x_1, x_2, x_3, x_4 ][0X
+    [4Xgap> pol := vars[1]*vars[2]+vars[3]*vars[4];[0X
+    [4Xx_1*x_2+x_3*x_4[0X
+    [4Xgap> form := BilinearFormByPolynomial(pol, r, 4);[0X
+    [4X< bilinear form >[0X
+    [4Xgap> Display(form);[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4X  .  6  .  .[0X
+    [4X  6  .  .  .[0X
+    [4X  .  .  .  6[0X
+    [4X  .  .  6  .[0X
+    [4XPolynomial: x_1*x_2+x_3*x_4[0X
+    [4Xgap> r := PolynomialRing(GF(4),2);[0X
+    [4XGF(2^2)[x_1,x_2][0X
+    [4Xgap> pol := r.1*r.2;[0X
+    [4Xx_1*x_2[0X
+    [4Xgap> form := BilinearFormByPolynomial(pol,r);[0X
+    [4XError, No orthogonal form can be associated with a quadratic polynomial in eve[0X
+    [4Xn characteristic[0X
+    [4X called from[0X
+    [4XBilinearFormByPolynomial( pol, pring, n ) called from[0X
+    [4X<function>( <arguments> ) called from read-eval-loop[0X
+    [4XEntering break read-eval-print loop ...[0X
+    [4Xyou can 'quit;' to quit to outer loop, or[0X
+    [4Xyou can 'return;' to continue[0X
+    [4Xbrk> quit;[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-2 QuadraticFormByPolynomial[0m
+  
+  [2X> QuadraticFormByPolynomial( [0X[3Xpoly, r, n[0X[2X ) _________________________[0Xoperation
+  [2X> QuadraticFormByPolynomial( [0X[3Xpoly, r[0X[2X ) ____________________________[0Xoperation
+  [6XReturns:[0X  a quadratic form
+  
+  The  argument  [3Xpoly[0m  must  be  a  polynomial  in  the polynomial ring [3Xr[0m. The
+  (optional) last argument is the dimension for the underlying vector space of
+  the  resulting  form,  which  by  default  is  the  number of indeterminates
+  specified  by  [3Xpoly[0m.  It  is checked whether the polynomial is a homogeneous
+  polynomial  of degree two over the given field, and if not, an error message
+  is returned. The output is a quadratic form in the category [10XIsQuadraticForm[0m.
+  (See [14X3.2[0m for more on quadratic forms).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> r := PolynomialRing( GF(8), 3);[0X
+    [4XGF(2^3)[x_1,x_2,x_3][0X
+    [4Xgap> poly := r.1^2 + r.2^2 + r.3^2;[0X
+    [4Xx_1^2+x_2^2+x_3^2[0X
+    [4Xgap> form := QuadraticFormByPolynomial(poly, r);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> RadicalOfForm(form);[0X
+    [4X<vector space over GF(2^3), with 63 generators>[0X
+    [4Xgap> r := PolynomialRing(GF(9),4);[0X
+    [4XGF(3^2)[x_1,x_2,x_3,x_4][0X
+    [4Xgap> poly := Z(3)^2*r.1^2+r.2^2+r.3*r.4;[0X
+    [4Xx_1^2+x_2^2+x_3*x_4[0X
+    [4Xgap> qform := QuadraticFormByPolynomial(poly,r);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> Display(qform);[0X
+    [4XQuadratic form[0X
+    [4XGram Matrix:[0X
+    [4X 1 . . .[0X
+    [4X . 1 . .[0X
+    [4X . . . 1[0X
+    [4X . . . .[0X
+    [4XPolynomial: x_1^2+x_2^2+x_3*x_4[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-3 HermitianFormByPolynomial[0m
+  
+  [2X> HermitianFormByPolynomial( [0X[3Xpoly, r, n[0X[2X ) _________________________[0Xoperation
+  [2X> HermitianFormByPolynomial( [0X[3Xpoly, r[0X[2X ) ____________________________[0Xoperation
+  [6XReturns:[0X  an hermitian form
+  
+  The argument [3Xpoly[0m must be a polynomial in the polynomial ring [3Xr[0m defined over
+  a  finite  field  of  square  order  q^2 The (optional) last argument is the
+  dimension  for  the  underlying vector space of the resulting form, which by
+  default  is  the  number  of indeterminates specified by [3Xpoly[0m. It is checked
+  whether  the  polynomial  is  a homogeneous polynomial of degree q+1, and if
+  not,  an  error  message  is returned. The output is a hermitian form in the
+  category [10XIsHermitianForm[0m. (See [14X3.1[0m for more on hermitian forms).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> r := PolynomialRing( GF(9), 4);[0X
+    [4XGF(3^2)[x_1,x_2,x_3,x_4][0X
+    [4Xgap> vars := IndeterminatesOfPolynomialRing( r );[0X
+    [4X[ x_1, x_2, x_3, x_4 ][0X
+    [4Xgap> poly := vars[1]*vars[2]^3+vars[1]^3*vars[2]+[0X
+    [4X>              vars[3]*vars[4]^3+vars[3]^3*vars[4];[0X
+    [4Xx_1^3*x_2+x_1*x_2^3+x_3^3*x_4+x_3*x_4^3[0X
+    [4Xgap> form := HermitianFormByPolynomial(poly,r);[0X
+    [4X< hermitian form >[0X
+    [4Xgap> Display(form);[0X
+    [4XHermitian form[0X
+    [4XGram Matrix:[0X
+    [4X . 1 . .[0X
+    [4X 1 . . .[0X
+    [4X . . . 1[0X
+    [4X . . 1 .[0X
+    [4XPolynomial: x_1^3*x_2+x_1*x_2^3+x_3^3*x_4+x_3*x_4^3[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.4 Switching between bilinear and quadratic forms[0X
+  
+  When  the  characteristic  of  the  field  is  odd,  a homogeneous quadratic
+  polynomial  determines  a  bilinear  form,  and  a  quadratic  form. In some
+  situations,  when  a quadratic form Q is given, it is useful to consider the
+  bilinear  form  f  such  that  f(v,v)=Q(v), i.e., the bilinear form which is
+  determined  by exactly the same polynomial determining the quadratic form Q.
+  [5XForms[0m  provides  functionality  to  construct a bilinear form f from a given
+  quadratic  form  Q  such  that  f(v,v)=Q(v).  Conversely,  we  can extract a
+  quadratic form from a given bilinear form.
+  
+  [1X4.4-1 QuadraticFormByBilinearForm[0m
+  
+  [2X> QuadraticFormByBilinearForm( [0X[3Xform[0X[2X ) _____________________________[0Xoperation
+  [6XReturns:[0X  a quadratic form
+  
+  The  argument  form  is  an orthogonal bilinear form (and thus it belongs to
+  [10XIsBilinearForm[0m),  otherwise  a  ``No  method  found'' error is returned. The
+  output  is  the  quadratic  form Q (an object in [10XIsQuadraticForm[0m), such that
+  Q(v)  = form(v,v) for all vectors v in a vector space equipped with form. An
+  error is returned when the characteristic of the field is even, or when form
+  is not orthogonal.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [ [ Z(3^2)^7, Z(3)^0, Z(3^2)^2, 0*Z(3), Z(3^2)^5 ], [0X
+    [4X>    [ Z(3)^0, Z(3^2)^7, Z(3^2)^6, Z(3^2)^5, Z(3^2)^2 ], [0X
+    [4X>    [ Z(3^2)^2, Z(3^2)^6, Z(3^2)^7, Z(3^2)^2, Z(3^2)^2 ], [0X
+    [4X>    [ 0*Z(3), Z(3^2)^5, Z(3^2)^2, Z(3^2)^6, Z(3^2)^7 ], [0X
+    [4X>    [ Z(3^2)^5, Z(3^2)^2, Z(3^2)^2, Z(3^2)^7, Z(3) ] ];[0X
+    [4X[ [ Z(3^2)^7, Z(3)^0, Z(3^2)^2, 0*Z(3), Z(3^2)^5 ], [0X
+    [4X  [ Z(3)^0, Z(3^2)^7, Z(3^2)^6, Z(3^2)^5, Z(3^2)^2 ], [0X
+    [4X  [ Z(3^2)^2, Z(3^2)^6, Z(3^2)^7, Z(3^2)^2, Z(3^2)^2 ], [0X
+    [4X  [ 0*Z(3), Z(3^2)^5, Z(3^2)^2, Z(3^2)^6, Z(3^2)^7 ], [0X
+    [4X  [ Z(3^2)^5, Z(3^2)^2, Z(3^2)^2, Z(3^2)^7, Z(3) ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat,GF(9));[0X
+    [4X< bilinear form >[0X
+    [4Xgap> Q := QuadraticFormByBilinearForm(form);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> Display(form);[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4Xz = Z(9)[0X
+    [4X z^7   1 z^2   . z^5[0X
+    [4X   1 z^7 z^6 z^5 z^2[0X
+    [4X z^2 z^6 z^7 z^2 z^2[0X
+    [4X   . z^5 z^2 z^6 z^7[0X
+    [4X z^5 z^2 z^2 z^7   2[0X
+    [4Xgap> Display(Q);[0X
+    [4XQuadratic form[0X
+    [4XGram Matrix:[0X
+    [4Xz = Z(9)[0X
+    [4X z^7   2 z^6   . z^1[0X
+    [4X   . z^7 z^2 z^1 z^6[0X
+    [4X   .   . z^7 z^6 z^6[0X
+    [4X   .   .   . z^6 z^3[0X
+    [4X   .   .   .   .   2[0X
+    [4Xgap> Set(List(GF(9)^5),x->[x,x]^form=x^Q);[0X
+    [4X[ true ][0X
+    [4Xgap> PolynomialOfForm(form);[0X
+    [4XZ(3^2)^7*x_1^2-x_1*x_2+Z(3^2)^6*x_1*x_3+Z(3^2)*x_1*x_5+Z(3^2)^7*x_2^2+Z(3^2)^2[0X
+    [4X*x_2*x_3+Z(3^2)*x_2*x_4+Z(3^2)^6*x_2*x_5+Z(3^2)^7*x_3^2+Z(3^2)^6*x_3*x_4+Z(3^2[0X
+    [4X)^6*x_3*x_5+Z(3^2)^6*x_4^2+Z(3^2)^3*x_4*x_5-x_5^2[0X
+    [4Xgap> PolynomialOfForm(Q);[0X
+    [4XZ(3^2)^7*x_1^2-x_1*x_2+Z(3^2)^6*x_1*x_3+Z(3^2)*x_1*x_5+Z(3^2)^7*x_2^2+Z(3^2)^2[0X
+    [4X*x_2*x_3+Z(3^2)*x_2*x_4+Z(3^2)^6*x_2*x_5+Z(3^2)^7*x_3^2+Z(3^2)^6*x_3*x_4+Z(3^2[0X
+    [4X)^6*x_3*x_5+Z(3^2)^6*x_4^2+Z(3^2)^3*x_4*x_5-x_5^2[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  Note  that  the given bilinear form [3Xform[0m is [12Xnot[0m the associated bilinear form
+  of  the constructed quadratic form Q, according to the definition in Section
+  [14X3.2[0m.   We   can   construct   the   associated   bilinear   forms  by  using
+  [2XAssociatedBilinearForm[0m ([14X4.4-3[0m). (See [14X3.2[0m for more on quadratic forms).
+  
+  [1X4.4-2 BilinearFormByQuadraticForm[0m
+  
+  [2X> BilinearFormByQuadraticForm( [0X[3XQ[0X[2X ) ________________________________[0Xoperation
+  [6XReturns:[0X  a bilinear form
+  
+  The   argument  Q  must  be  a  quadratic  form  (and  thus  it  belongs  to
+  [10XIsQuadraticForm[0m). The output is the orthogonal bilinear form f (an object in
+  [10XIsBilinearForm[0m), such that f(v,v) = Q(v) for all vectors v in a vector space
+  equipped  with  Q. An error is returned when the characteristic of the field
+  is even.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> r := PolynomialRing(GF(9),4);[0X
+    [4XGF(3^2)[x_1,x_2,x_3,x_4][0X
+    [4Xgap> poly := -r.1*r.2+Z(3^2)*r.3^2+r.4^2;[0X
+    [4X-x_1*x_2+Z(3^2)*x_3^2+x_4^2[0X
+    [4Xgap> qform := QuadraticFormByPolynomial(poly,r);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> Display( qform );[0X
+    [4XQuadratic form[0X
+    [4XGram Matrix:[0X
+    [4Xz = Z(9)[0X
+    [4X   .   2   .   .[0X
+    [4X   .   .   .   .[0X
+    [4X   .   . z^1   .[0X
+    [4X   .   .   .   1[0X
+    [4XPolynomial: -x_1*x_2+Z(3^2)*x_3^2+x_4^2[0X
+    [4Xgap> form := BilinearFormByQuadraticForm( qform );[0X
+    [4X< bilinear form >[0X
+    [4Xgap> Display(form);[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4Xz = Z(9)[0X
+    [4X   .   1   .   .[0X
+    [4X   1   .   .   .[0X
+    [4X   .   . z^1   .[0X
+    [4X   .   .   .   1[0X
+    [4Xgap> Set(GF(9)^4, x -> [x,x]^form = x^qform);[0X
+    [4X[ true ][0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  Note  that  the  constructed  bilinear form f is [12Xnot[0m the associated bilinear
+  form  of  the given quadratic form Q, according to the definition in Section
+  [14X3.2[0m.   We   can   construct   the   associated   bilinear   forms  by  using
+  [2XAssociatedBilinearForm[0m ([14X4.4-3[0m). (See [14X3.2[0m for more on quadratic forms).
+  
+  [1X4.4-3 AssociatedBilinearForm[0m
+  
+  [2X> AssociatedBilinearForm( [0X[3XQ[0X[2X ) _____________________________________[0Xoperation
+  [6XReturns:[0X  a bilinear form
+  
+  The   argument  Q  must  be  a  quadratic  form  (and  thus  it  belongs  to
+  [10XIsQuadraticForm[0m). The output is the associated bilinear form f (an object in
+  [10XIsBilinearForm[0m),  as  defined  in Section [14X3.2[0m, i.e. the bilinear form f such
+  that  f(v,w)  =  Q(v+w)-Q(v)-Q(w)  for  all  vectors  v,w  in a vector space
+  equipped with Q. (See [14X3.2[0m for more on quadratic forms).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> r:= PolynomialRing(GF(121),6);[0X
+    [4XGF(11^2)[x_1,x_2,x_3,x_4,x_5,x_6][0X
+    [4Xgap> poly := r.1*r.5-r.2*r.6+r.3*r.4;[0X
+    [4Xx_1*x_5-x_2*x_6+x_3*x_4[0X
+    [4Xgap> form := QuadraticFormByPolynomial(poly,r);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> aform := AssociatedBilinearForm(form);[0X
+    [4X< bilinear form >[0X
+    [4Xgap> Display(aform);[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4X  .  .  .  .  1  .[0X
+    [4X  .  .  .  .  . 10[0X
+    [4X  .  .  .  1  .  .[0X
+    [4X  .  .  1  .  .  .[0X
+    [4X  1  .  .  .  .  .[0X
+    [4X  . 10  .  .  .  .[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.5 Evaluating forms[0X
+  
+  [1X4.5-1 EvaluateForm[0m
+  
+  [2X> EvaluateForm( [0X[3Xf, u, v[0X[2X ) _________________________________________[0Xoperation
+  [2X> EvaluateForm( [0X[3Xf, u[0X[2X ) ____________________________________________[0Xoperation
+  [6XReturns:[0X  a finite field element
+  
+  The  argument  [3Xf[0m  is  either a sesquilinear or quadratic form defined over a
+  finite  field GF(q). The other argument is a pair of vectors or matrices, or
+  a  single  vector or matrix, which represent the bases of given subspaces of
+  GF(q)^d.  This  operation  evaluates the form on the given vector or pair of
+  vectors and returns an element in GF(q). There is also an overloading of the
+  operation  [3X\^[0m  where  (u,v)^f  represents  f(u,v)  in  the  case  that  [3Xf[0m is
+  sesquilinear,  and  u^f  stands  for  f(u)  in  the  quadratic  case. So for
+  convenience,  the  user  may  use this compressed version of this operation,
+  which we show in the following example:
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[Z(8),0,0,0],[0,0,Z(8)^4,0],[0,0,0,1],[0,0,0,0]]*Z(8)^0;;[0X
+    [4Xgap> form := QuadraticFormByMatrix(mat,GF(8));[0X
+    [4X< quadratic form >[0X
+    [4Xgap> u := [ Z(2^3)^4, Z(2^3)^4, Z(2)^0, Z(2^3)^3 ];[0X
+    [4X[ Z(2^3)^4, Z(2^3)^4, Z(2)^0, Z(2^3)^3 ][0X
+    [4Xgap> EvaluateForm( form, u );[0X
+    [4XZ(2^3)^6[0X
+    [4Xgap> u^form;[0X
+    [4XZ(2^3)^6[0X
+    [4Xgap> gram := [[0,0,0,0,0,2],[0,0,0,0,2,0],[0,0,0,1,0,0],[0X
+    [4X>               [0,0,1,0,0,0],[0,2,0,0,0,0],[2,0,0,0,0,0]]*Z(3)^0;;[0X
+    [4Xgap> form := BilinearFormByMatrix(gram,GF(3));[0X
+    [4X< bilinear form >[0X
+    [4Xgap> u := [ [ Z(3)^0, 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3), Z(3)^0 ], [0X
+    [4X>   [ 0*Z(3), 0*Z(3), Z(3)^0, Z(3)^0, Z(3), 0*Z(3) ] ];;[0X
+    [4Xgap> v := [ [ Z(3)^0, 0*Z(3), Z(3)^0, Z(3), 0*Z(3), Z(3) ], [0X
+    [4X>   [ 0*Z(3), Z(3)^0, 0*Z(3), Z(3), Z(3), Z(3) ] ];;[0X
+    [4Xgap> EvaluateForm( form, u, v);[0X
+    [4X[ [ Z(3)^0, Z(3)^0 ], [ 0*Z(3), 0*Z(3) ] ][0X
+    [4Xgap> [u,v]^form;[0X
+    [4X[ [ Z(3)^0, Z(3)^0 ], [ 0*Z(3), 0*Z(3) ] ][0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.6   Orthogonality,  totally  isotropic  subspaces,  and  totally  singular[0X
+  [1Xsubspaces[0X
+  
+  [1X4.6-1 OrthogonalSubspaceMat[0m
+  
+  [2X> OrthogonalSubspaceMat( [0X[3Xform, v[0X[2X ) ________________________________[0Xoperation
+  [6XReturns:[0X  a  base  of  the  subspace  orthogonal  to  the  given vector with
+            relation to the given form
+  
+  The argument [3Xform[0m is a sesquilinear or quadratic form. The operation returns
+  a base of the subspace orthogonal to the given vector [3Xv[0m with relation to the
+  sesquilinear  [3Xform[0m  or  with relation to the associated bilinear form of the
+  quadratic form [3Xform[0m
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[0,0,0,-2],[0,0,-3,0],[0,3,0,0],[2,0,0,0]]*Z(7)^0;[0X
+    [4X[ [ 0*Z(7), 0*Z(7), 0*Z(7), Z(7)^5 ], [ 0*Z(7), 0*Z(7), Z(7)^4, 0*Z(7) ], [0X
+    [4X  [ 0*Z(7), Z(7), 0*Z(7), 0*Z(7) ], [ Z(7)^2, 0*Z(7), 0*Z(7), 0*Z(7) ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat);[0X
+    [4X< bilinear form >[0X
+    [4Xgap> v := Random(GF(7)^4);[0X
+    [4X[ Z(7)^3, Z(7)^2, Z(7)^4, Z(7) ][0X
+    [4Xgap> vperp := OrthogonalSubspaceMat(form,v);[0X
+    [4X[ [ Z(7)^5, Z(7)^0, 0*Z(7), 0*Z(7) ], [ Z(7)^0, 0*Z(7), Z(7)^0, 0*Z(7) ], [0X
+    [4X  [ Z(7)^2, 0*Z(7), 0*Z(7), Z(7)^0 ] ][0X
+    [4Xgap> sub := [[1,1,0,0],[0,0,1,2]]*Z(7)^0;[0X
+    [4X[ [ Z(7)^0, Z(7)^0, 0*Z(7), 0*Z(7) ], [ 0*Z(7), 0*Z(7), Z(7)^0, Z(7)^2 ] ][0X
+    [4Xgap> subperp := OrthogonalSubspaceMat(form,sub);[0X
+    [4X[ [ Z(7)^0, Z(7)^0, 0*Z(7), 0*Z(7) ], [ 0*Z(7), 0*Z(7), Z(7)^4, Z(7)^0 ] ][0X
+    [4Xgap> mat := [[1,0,0],[0,0,1],[0,0,0]]*Z(2)^0;[0X
+    [4X[ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), 0*Z(2), Z(2)^0 ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix(mat);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> v := Random(GF(2)^3);[0X
+    [4X<a GF2 vector of length 3>[0X
+    [4Xgap> vperp := OrthogonalSubspaceMat(form,v);[0X
+    [4X[ <an immutable GF2 vector of length 3>, <an immutable GF2 vector of length [0X
+    [4X    3> ][0X
+    [4Xgap> sub := [[1,0,1],[1,0,0]]*Z(2)^0;[0X
+    [4X[ [ Z(2)^0, 0*Z(2), Z(2)^0 ], [ Z(2)^0, 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> subperp := OrthogonalSubspaceMat(form,sub);[0X
+    [4X[ <an immutable GF2 vector of length 3>, <an immutable GF2 vector of length [0X
+    [4X    3> ][0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.6-2 IsIsotropicVector[0m
+  
+  [2X> IsIsotropicVector( [0X[3Xform, v[0X[2X ) ____________________________________[0Xoperation
+  [6XReturns:[0X  true or false
+  
+  The operation return [3Xtrue[0m if and only if [3Xv[0m is isotropic with relation to the
+  sesquilinear or quadratic form [3Xform[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[1,0,0,0],[0,-1,0,0],[0,0,0,1],[0,0,1,0]]*Z(41)^0;[0X
+    [4X[ [ Z(41)^0, 0*Z(41), 0*Z(41), 0*Z(41) ], [0X
+    [4X  [ 0*Z(41), Z(41)^20, 0*Z(41), 0*Z(41) ], [0X
+    [4X  [ 0*Z(41), 0*Z(41), 0*Z(41), Z(41)^0 ], [0X
+    [4X  [ 0*Z(41), 0*Z(41), Z(41)^0, 0*Z(41) ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat);[0X
+    [4X< bilinear form >[0X
+    [4Xgap> v := [1,1,0,0]*Z(41)^0;[0X
+    [4X[ Z(41)^0, Z(41)^0, 0*Z(41), 0*Z(41) ][0X
+    [4Xgap> IsIsotropicVector(form,v);[0X
+    [4Xtrue[0X
+    [4Xgap> mat := [[1,0,0,0,0],[0,0,0,0,1],[0,0,0,0,0],[0,0,1,0,0],[0,0,0,0,0]]*Z(8)^0;[0X
+    [4X[ [ Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix(mat);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> v1 := [1,0,0,0,0]*Z(8)^0;[0X
+    [4X[ Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ][0X
+    [4Xgap> v2 := [0,1,0,0,0]*Z(8)^0;[0X
+    [4X[ 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2) ][0X
+    [4Xgap> IsIsotropicVector(form,v1);[0X
+    [4Xtrue[0X
+    [4Xgap> IsIsotropicVector(form,v2);[0X
+    [4Xtrue[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.6-3 IsSingularVector[0m
+  
+  [2X> IsSingularVector( [0X[3Xform, v[0X[2X ) _____________________________________[0Xoperation
+  [6XReturns:[0X  true or false
+  
+  The  operation return [3Xtrue[0m if and only if [3Xv[0m is singular with relation to the
+  quadratic  form [3Xform[0m. Note that only when the characteristic of the field is
+  odd,  the  singular  vectors  with  relation  to  a  quadratic  form are the
+  isotropic vectors with relation to its associated form.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[1,0,0,0,0],[0,0,0,0,1],[0,0,0,0,0],[0,0,1,0,0],[0,0,0,0,0]]*Z(8)^0;[0X
+    [4X[ [ Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix(mat);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> v1 := [1,0,0,0,0]*Z(8)^0;[0X
+    [4X[ Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ][0X
+    [4Xgap> v2 := [0,1,0,0,0]*Z(8)^0;[0X
+    [4X[ 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2) ][0X
+    [4Xgap> IsSingularVector(form,v1);[0X
+    [4Xfalse[0X
+    [4Xgap> IsSingularVector(form,v2);[0X
+    [4Xtrue[0X
+    [4Xgap> IsIsotropicVector(form,v1);[0X
+    [4Xtrue[0X
+    [4Xgap> IsIsotropicVector(form,v2);[0X
+    [4Xtrue[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.6-4 IsTotallyIsotropicSubspace[0m
+  
+  [2X> IsTotallyIsotropicSubspace( [0X[3Xform, sub[0X[2X ) _________________________[0Xoperation
+  [6XReturns:[0X  true or false
+  
+  The operation return [3Xtrue[0m if and only if the subspace spanned by the vectors
+  in  the  list  [3Xsub[0m is totally isotropic with relation to the sesquilinear or
+  quadratic  form [3Xform[0m. Note that when [3Xform[0m is a quadratic form, it is checked
+  whether  [3Xsub[0m generates a subspace that is totally isotropic with relation to
+  the associated bilinear form of [3Xform[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[1,0,0,0],[0,-1,0,0],[0,0,0,1],[0,0,1,0]]*Z(7)^0;[0X
+    [4X[ [ Z(7)^0, 0*Z(7), 0*Z(7), 0*Z(7) ], [ 0*Z(7), Z(7)^3, 0*Z(7), 0*Z(7) ], [0X
+    [4X  [ 0*Z(7), 0*Z(7), 0*Z(7), Z(7)^0 ], [ 0*Z(7), 0*Z(7), Z(7)^0, 0*Z(7) ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat);[0X
+    [4X< bilinear form >[0X
+    [4Xgap> sub:= [[Z(7)^0,0*Z(7),Z(7)^0,Z(7)],[0*Z(7),Z(7)^0,Z(7)^0,Z(7)^4]];[0X
+    [4X[ [ Z(7)^0, 0*Z(7), Z(7)^0, Z(7) ], [ 0*Z(7), Z(7)^0, Z(7)^0, Z(7)^4 ] ][0X
+    [4Xgap> IsTotallyIsotropicSubspace(form,sub);[0X
+    [4Xtrue[0X
+    [4Xgap> mat := IdentityMat(6,GF(2));[0X
+    [4X[ <a GF2 vector of length 6>, <a GF2 vector of length 6>, [0X
+    [4X  <a GF2 vector of length 6>, <a GF2 vector of length 6>, [0X
+    [4X  <a GF2 vector of length 6>, <a GF2 vector of length 6> ][0X
+    [4Xgap> form := HermitianFormByMatrix(mat,GF(4));[0X
+    [4X< hermitian form >[0X
+    [4Xgap> sub := [[Z(2)^0,0*Z(2),0*Z(2),Z(2)^0,Z(2)^0,Z(2)^0], [0X
+    [4X>   [0*Z(2),Z(2)^0,0*Z(2),Z(2^2)^2,Z(2^2),Z(2)^0], [0X
+    [4X>   [0*Z(2),0*Z(2),Z(2)^0,Z(2)^0,Z(2^2),Z(2^2)^2]];[0X
+    [4X[ [ Z(2)^0, 0*Z(2), 0*Z(2), Z(2)^0, Z(2)^0, Z(2)^0 ], [0X
+    [4X  [ 0*Z(2), Z(2)^0, 0*Z(2), Z(2^2)^2, Z(2^2), Z(2)^0 ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), Z(2)^0, Z(2)^0, Z(2^2), Z(2^2)^2 ] ][0X
+    [4Xgap> IsTotallyIsotropicSubspace(form,sub);[0X
+    [4Xtrue[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.6-5 IsTotallySingularSubspace[0m
+  
+  [2X> IsTotallySingularSubspace( [0X[3Xform, sub[0X[2X ) __________________________[0Xoperation
+  [6XReturns:[0X  true or false
+  
+  The operation return [3Xtrue[0m if and only if the subspace spanned by the vectors
+  in  the  list  [3Xsub[0m is totally singular with relation to quadratic form [3Xform[0m.
+  Note  that  only  when  the  characteristic of the field is odd, the totally
+  singular  subspaces  of  given dimension n with relation to a quadratic form
+  are  exactly the totally isotropic subspaces of dimension n with relation to
+  its associated form.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[1,0,0,0,0],[0,0,0,0,1],[0,0,0,0,0],[0,0,1,0,0],[0,0,0,0,0]]*Z(8)^0;[0X
+    [4X[ [ Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix(mat);[0X
+    [4X< quadratic form >[0X
+    [4Xgap> sub := [[Z(2)^0,0*Z(2),Z(2^3)^6,Z(2^3),Z(2^3)^3],[0X
+    [4X>        [0*Z(2),Z(2)^0,Z(2^3)^6,Z(2^3)^2,Z(2^3)]];[0X
+    [4X[ [ Z(2)^0, 0*Z(2), Z(2^3)^6, Z(2^3), Z(2^3)^3 ], [0X
+    [4X  [ 0*Z(2), Z(2)^0, Z(2^3)^6, Z(2^3)^2, Z(2^3) ] ][0X
+    [4Xgap> IsTotallySingularSubspace(form,sub);[0X
+    [4Xtrue[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.7 Attributes and properties of forms[0X
+  
+  [1X4.7-1 IsReflexiveForm[0m
+  
+  [2X> IsReflexiveForm( [0X[3Xf[0X[2X ) _____________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  A  sesquilinear  form  f  on  a  vector  space V is [13Xreflexive[0m if f(v,w)=0 =>
+  f(w,v)=0  for  all v,w in V. The argument f must be a sesquilinear form (and
+  thus  it  belongs to [10XIsSesquilinearForm[0m). A sesquilinear form f is [13Xreflexive[0m
+  if  whenever  we have f(u,v)=0, for two vectors u,v in the associated vector
+  space,  then  we  also  have f(v,u)=0. This attribute simply returns [3Xtrue[0m or
+  [3Xfalse[0m  according  to  whether  [3Xf[0m  is  reflexive  or  not, and is stored as a
+  property  of  [3Xf[0m.  It  is  not possible in this version of [5XForms[0m to construct
+  non-reflexive forms. (See [14X3.1[0m for more on reflexive sesquilinear forms).
+  
+  [1X4.7-2 IsAlternatingForm[0m
+  
+  [2X> IsAlternatingForm( [0X[3Xf[0X[2X ) ___________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  A sesquilinear form f on a vector space V is [13Xalternating[0m if f(v,v)=0 for all
+  v  in  V. The argument f must be a sesquilinear form (and thus it belongs to
+  [10XIsSesquilinearForm[0m). A bilinear form f is [13Xalternating[0m if f(v,v)=0 for all v.
+  This  method  simply  returns  [3Xtrue[0m  or  [3Xfalse[0m  according  to  whether  [3Xf[0m is
+  alternating  or  not, and is stored as a property of [3Xf[0m. (See [14X3.1[0m for more on
+  alternating sesquilinear forms).
+  
+  [1X4.7-3 IsSymmetricForm[0m
+  
+  [2X> IsSymmetricForm( [0X[3Xf[0X[2X ) _____________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  A  sesquilinear form f on a vector space V is [13Xsymmetric[0m if f(v,w)=f(w,v) for
+  all  v,w  in  V.  The  argument  f  must be a sesquilinear form (and thus it
+  belongs   to   [10XIsSesquilinearForm[0m).  A  bilinear  form  f  is  [13Xsymmetric[0m  if
+  f(u,v)=f(v,u)  for  all  pairs  of  vectors  u  and v. This attribute simply
+  returns  [3Xtrue[0m  or  [3Xfalse[0m  according to whether [3Xf[0m is symmetric or not, and is
+  stored  as  a  property  of  [3Xf[0m.  (See [14X3.1[0m for more on symmetric sesquilinear
+  forms).
+  
+  [1X4.7-4 IsOrthogonalForm[0m
+  
+  [2X> IsOrthogonalForm( [0X[3Xf[0X[2X ) ____________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  The  argument  f  must  be  a  sesquilinear  form  (and  thus  it belongs to
+  [10XIsSesquilinearForm[0m).   A  bilinear  form  f  is  called  [13Xorthogonal[0m  if  the
+  characteristic  of  the  underlying field is odd, and f is a symmetric form.
+  (See  [14X3.1[0m for more on bilinear forms). This operation simply returns [3Xtrue[0m or
+  [3Xfalse[0m  according  to whether [3Xf[0m is an orthogonal bilinear form or not, and is
+  stored as a property of [3Xf[0m.
+  
+  [1X4.7-5 IsPseudoForm[0m
+  
+  [2X> IsPseudoForm( [0X[3Xf[0X[2X ) ________________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  When  the characteristic of the field is odd, we call a form f [13Xorthogonal[0m if
+  and  only  f is symmetric, and when the characteristic of the field is even,
+  we  call  a form f [13Xpseudo[0m if and only if f is symmetric but not alternating.
+  The  argument  f  must  be  a  sesquilinear  form  (and  thus  it belongs to
+  [10XIsSesquilinearForm[0m).  (See [14X3.1[0m for more on pseudo forms). This method simply
+  returns [3Xtrue[0m or [3Xfalse[0m according to whether [3Xf[0m is a pseudo form or not, and is
+  stored as a property of [3Xf[0m.
+  
+  [1X4.7-6 IsSymplecticForm[0m
+  
+  [2X> IsSymplecticForm( [0X[3Xf[0X[2X ) ____________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  We  call  a  bilinear form f [13Xsymplectic[0m if and only if f is alternating. The
+  argument   f   must   be  a  sesquilinear  form  (and  thus  it  belongs  to
+  [10XIsSesquilinearForm[0m).  (See  [14X3.1[0m  for  more on symplectic forms). This method
+  simply  returns  [3Xtrue[0m  or [3Xfalse[0m according to whether [3Xf[0m is symplectic or not,
+  and is stored as a property of [3Xf[0m.
+  
+  [1X4.7-7 IsDegenerateForm[0m
+  
+  [2X> IsDegenerateForm( [0X[3Xf[0X[2X ) ____________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  The  argument  f  must  be  a  form  (and  thus  it  belongs  to  [10XIsForm[0m). A
+  sesquilinear form f is [13Xdegenerate[0m if its radical is non-trivial. A quadratic
+  form  is  degenerate  if  and only if the radical of the associated bilinear
+  form  is  non-trivial.  Note  that  degeneracy  for  quadratic  forms is too
+  restrictive  if the characteristic is even. See also [2XIsSingularForm[0m ([14X4.7-8[0m).
+  This  attribute  simply  returns  [3Xtrue[0m  or  [3Xfalse[0m  according to whether [3Xf[0m is
+  degenerate or not, and is stored as a property of [3Xf[0m.
+  
+  [1X4.7-8 IsSingularForm[0m
+  
+  [2X> IsSingularForm( [0X[3Xf[0X[2X ) ______________________________________________[0Xproperty
+  [6XReturns:[0X  true or false.
+  
+  The   argument  f  must  be  a  quadratic  form  (and  thus  it  belongs  to
+  [10XIsQuadraticForm[0m).  A  quadratic  form  f  is  [13Xsingular[0m  if  its  radical  is
+  non-trivial.  When  the characteristic of the field is odd, a quadratic form
+  is  singular  if and only if it is degenerate. This is not the case when the
+  characteristic  of  the  field  is  even. This method simply returns [3Xtrue[0m or
+  [3Xfalse[0m according to whether [3Xf[0m is singular or not, and is stored as a property
+  of [3Xf[0m.
+  
+  [1X4.7-9 BaseField[0m
+  
+  [2X> BaseField( [0X[3Xf[0X[2X ) __________________________________________________[0Xattribute
+  [6XReturns:[0X  the underlying field of [3Xf[0m.
+  
+  The  argument  f  must be a form (and thus it belongs to [10XIsForm[0m). The method
+  returns  the  field which is stored as the [13Xdefining field[0m of f. We sometimes
+  stipulate  in  [5XForms[0m  that  a  form  have a defining field, for mathematical
+  reasons.  Clearly, to define a hermitian form one needs to specify the field
+  of scalars for the vector space that you wish your hermitian form to act on.
+  The default, if the user has not specified a field on creation of a form, is
+  the  smallest  field  containing the entries or coefficients of the input (a
+  matrix  or polynomial). Having a particular defining field for a form can be
+  very  useful, for example, when one wants to find a change of basis from one
+  form  to  another (isometric) form. In this case, one needs to know in which
+  GL(d,q) the base-transition matrix should be taken.
+  
+  [1X4.7-10 GramMatrix[0m
+  
+  [2X> GramMatrix( [0X[3Xf[0X[2X ) _________________________________________________[0Xattribute
+  [6XReturns:[0X  the Gram matrix of [3Xf[0m.
+  
+  The  argument  f must be a form (and thus it belongs to [10XIsForm[0m). This method
+  returns the Gram matrix of f (see [14X3.1[0m and [14X3.2[0m).
+  
+  [1X4.7-11 RadicalOfForm[0m
+  
+  [2X> RadicalOfForm( [0X[3Xf[0X[2X ) ______________________________________________[0Xattribute
+  [6XReturns:[0X  The radical of the form [3Xf[0m
+  
+  The argument f must be a form (and thus it belongs to [10XIsForm[0m) on some vector
+  space V. The radical of a form f is the subspace consisting of vectors which
+  are orthogonal to every vector, i.e.,
+  
+  
+       Rad(f) = \{v \in V | f(v,w) = 0,\, \forall w \in V\}.
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> r := PolynomialRing( GF(8), 3 );[0X
+    [4XGF(2^3)[x_1,x_2,x_3][0X
+    [4Xgap> poly := r.1^2 + r.2 * r.3;[0X
+    [4Xx_1^2+x_2*x_3[0X
+    [4Xgap> form := QuadraticFormByPolynomial( poly, r );[0X
+    [4X< quadratic form >[0X
+    [4Xgap> r := RadicalOfForm( form );[0X
+    [4X<vector space over GF(2^3), with 0 generators>[0X
+    [4Xgap> Dimension(r);[0X
+    [4X0[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.7-12 PolynomialOfForm[0m
+  
+  [2X> PolynomialOfForm( [0X[3Xf[0X[2X ) ___________________________________________[0Xattribute
+  [6XReturns:[0X  the polynomial associated with [3Xf[0m.
+  
+  The  argument  [3Xf[0m  must be a form (and thus it belongs to [10XIsForm[0m). All forms,
+  except  for  bilinear  forms  in  even  characteristic,  have  an associated
+  polynomial  defining  a  quadratic or hermitian form (see [14X3.1[0m and [14X3.2[0m). This
+  method  returns  the polynomial associated with [3Xf[0m, and if not already bound,
+  stores it as a property of [3Xf[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [ [ Z(8) , 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X>  [ 0*Z(2), Z(2)^0, Z(2^3)^5, 0*Z(2), 0*Z(2) ], [0X
+    [4X>  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X>  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], [0X
+    [4X>  [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ];;[0X
+    [4Xgap> form := QuadraticFormByMatrix(mat,GF(8));[0X
+    [4X< quadratic form >[0X
+    [4Xgap> PolynomialOfForm(form);[0X
+    [4XZ(2^3)*x_1^2+x_2^2+Z(2^3)^5*x_2*x_3+x_4*x_5[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.7-13 DiscriminantOfForm[0m
+  
+  [2X> DiscriminantOfForm( [0X[3Xf[0X[2X ) _________________________________________[0Xattribute
+  [6XReturns:[0X  a string
+  
+  The  argument  f  must  be  a  form (and thus it belongs to [10XIsForm[0m). Given a
+  quadratic  or  bilinear  form  [3Xf[0m of even dimension, this operation returns a
+  string: ``square'' or ``nonsquare''. More specifically, let f be a from over
+  GF(q),  and  let  M  be  the  Gram matrix of f. Define the [13Xdiscriminant[0m of Q
+  (n.b.,  [13Xquasideterminant[0m  in [CCNPW85]) as `square' if det(M) is a square of
+  GF(q),  and  `non-square'  otherwise.  The  discriminant  is an invariant of
+  nondegenerate  orthogonal  spaces  over  finite  fields  of odd order, up to
+  isometry.  Thus, discriminants can be used to delineate the isometry type of
+  an  orthogonal  form  in  even  (algebraic) dimension. The discriminant of a
+  hermitian  form  is  not defined, and applying this operation on a hermitian
+  form, will result in an error message.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> gram := InvariantQuadraticForm(GO(-1,4,5))!.matrix;;[0X
+    [4Xgap> qform := QuadraticFormByMatrix(gram, GF(5));[0X
+    [4X< quadratic form >[0X
+    [4Xgap> DiscriminantOfForm( qform );[0X
+    [4X"nonsquare"[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.8 Recognition of sesquilinear forms preserved by a classical group[0X
+  
+  In  this  section,  we  describe  a function that was initially developed by
+  Frank  Celler  (and which has now been adapted to [5XForms[0m) for the recognition
+  of sesquilinear forms left invariant by a matrix group. More importantly, we
+  should  stress  that  this  routine  differs  to that already offered by the
+  [5XMeatAxe[0m  in  that  it  finds  sesquilinear  forms  preserved  up to [12Xscalars[0m.
+  Eventually, the procedure used for finding preserved sesquilinear forms does
+  use the [5XMeatAxe[0m but in some cases it can rule out the existence of preserved
+  forms  without  calling  the [5XMeatAxe[0m. For more information on the algorithm,
+  please see [CLNNPP08].
+  
+  [1X4.8-1 PreservedSesquilinearForms[0m
+  
+  [2X> PreservedSesquilinearForms( [0X[3Xgroup[0X[2X ) _____________________________[0Xoperation
+  [6XReturns:[0X  a list of forms
+  
+  The  argument  [3Xgroup[0m  is a matrix group. The function uses random methods to
+  find  all  of  the bilinear or unitary forms preserved by [3Xgroup[0m (the trivial
+  form  is also a possibility) up to a scalar. Since the procedure relies on a
+  pseudo-random  generator,  the  user  may need to execute the operation more
+  than once to find all invariant sesquilinear forms.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> g := SU(4,3);[0X
+    [4XSU(4,3)[0X
+    [4Xgap> forms := PreservedSesquilinearForms(g);[0X
+    [4X[ < hermitian form > ][0X
+    [4Xgap> Display( forms[1] );[0X
+    [4XHermitian form[0X
+    [4XGram Matrix:[0X
+    [4X . . . 2[0X
+    [4X . . 2 .[0X
+    [4X . 2 . .[0X
+    [4X 2 . . .[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  Here  is another example which shows that this procedure is suitable in some
+  cases  where  using the [5XMeatAxe[0m is not applicable. Here, our matrix group is
+  the  group  of  similarities  preserving  a  (hyperbolic)  bilinear  form on
+  GF(3)^6.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> a := [ [ -1, 0, 0, -1, 0, 1 ], [ 0, -1, -1, 0, 0, 1 ], [0X
+    [4X>        [ -1, 0, 0, 1, 0, 0 ],  [ 0, -1, 1, 0, 0, -1 ], [0X
+    [4X>        [ 0, 0, 0, 0, 0, -1 ], [ 0, -1, -1, 1, 1, 1 ] ] * One(GF(3));;[0X
+    [4Xgap> b := [ [ 1, -1, 1, -1, 1, -1 ], [ 1, 1, -1, 1, 1, 0 ], [0X
+    [4X>        [ -1, 0, 1, 0, 0, 0 ], [ 0, -1, 0, 0, 0, 1 ], [0X
+    [4X>        [ 1, 1, 1, 1, 1, 1 ], [ -1, 1, 1, 1, -1, 0 ] ] * One(GF(3));;[0X
+    [4Xgap> g := Group( a, b );[0X
+    [4X<matrix group with 2 generators>[0X
+    [4Xgap> forms := PreservedSesquilinearForms( g );[0X
+    [4X[ < bilinear form > ][0X
+    [4Xgap> Display( forms[1] );[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4X . 1 . . . .[0X
+    [4X 1 . . . . .[0X
+    [4X . . . 1 . .[0X
+    [4X . . 1 . . .[0X
+    [4X . . . . . 1[0X
+    [4X . . . . 1 .[0X
+    [4Xgap> m := GModuleByMats( [a,b], GF(3) );;[0X
+    [4Xgap> usemeataxe := MTX.InvariantBilinearForm(m);[0X
+    [4Xfail[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.9 The trivial form and some of its properties[0X
+  
+  It can be useful to work with trivial a quadratic or sesquilinear form, i.e.
+  a  form  mapping  all  vectors, couples of vectors respectively, to the zero
+  element  of  their  basefield. As mentioned in Section [14X4.1[0m, [5XForms[0m allows the
+  construction of an object in the Category [10XIsTrivialForm[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[0,0,0],[0,0,0],[0,0,0]]*Z(7)^0;[0X
+    [4X[ [ 0*Z(7), 0*Z(7), 0*Z(7) ], [ 0*Z(7), 0*Z(7), 0*Z(7) ], [0X
+    [4X  [ 0*Z(7), 0*Z(7), 0*Z(7) ] ][0X
+    [4Xgap> form1 := BilinearFormByMatrix(mat,GF(7));[0X
+    [4X< trivial form >[0X
+    [4Xgap> form2 := QuadraticFormByMatrix(mat,GF(7));[0X
+    [4X< trivial form >[0X
+    [4Xgap> form1 = form2;[0X
+    [4Xtrue[0X
+    [4Xgap> IsQuadraticForm(form1);[0X
+    [4Xfalse[0X
+    [4Xgap> IsSesquilinearForm(form1);[0X
+    [4Xfalse[0X
+    [4Xgap> mat := [[0,0],[0,0]]*Z(4)^0;[0X
+    [4X[ [ 0*Z(2), 0*Z(2) ], [ 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> form3 := BilinearFormByMatrix(mat,GF(4));[0X
+    [4X< trivial form >[0X
+    [4Xgap> form3 = form1;[0X
+    [4Xfalse[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  As  we  have seen by the above example, there is only one trivial form for a
+  given  vector  space over a finite field, and such a trivial form can result
+  from  the  construction  of a quadratic form or a sesquilinear form, but the
+  trivial  form  itself  is  none  of  these,  although  it  can  behave  as a
+  sesquilinear or a quadratic form, depending on its arguments.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]*Z(3)^0;[0X
+    [4X[ [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ] ][0X
+    [4Xgap> form := BilinearFormByMatrix(mat,GF(3));[0X
+    [4X< trivial form >[0X
+    [4Xgap> v := Random(GF(3)^4);[0X
+    [4X[ Z(3), Z(3), 0*Z(3), Z(3) ][0X
+    [4Xgap> [v,v]^form;[0X
+    [4X0*Z(3)[0X
+    [4Xgap> v^form;[0X
+    [4X0*Z(3)[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  The attributes and properties described in Section [14X4.7[0m are all applicable to
+  trivial forms.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> mat := [[0,0,0],[0,0,0],[0,0,0]]*Z(11)^0;[0X
+    [4X[ [ 0*Z(11), 0*Z(11), 0*Z(11) ], [ 0*Z(11), 0*Z(11), 0*Z(11) ], [0X
+    [4X  [ 0*Z(11), 0*Z(11), 0*Z(11) ] ][0X
+    [4Xgap> form := QuadraticFormByMatrix(mat,GF(121));[0X
+    [4X< trivial form >[0X
+    [4Xgap> IsReflexiveForm(form);[0X
+    [4Xtrue[0X
+    [4Xgap> IsAlternatingForm(form);[0X
+    [4Xtrue[0X
+    [4Xgap> IsSymmetricForm(form);[0X
+    [4Xtrue[0X
+    [4Xgap> IsOrthogonalForm(form);[0X
+    [4Xfalse[0X
+    [4Xgap> IsPseudoForm(form);[0X
+    [4Xfalse[0X
+    [4Xgap> IsSymplecticForm(form);[0X
+    [4Xtrue[0X
+    [4Xgap> IsDegenerateForm(form);[0X
+    [4Xtrue[0X
+    [4Xgap> IsSingularForm(form);[0X
+    [4Xtrue[0X
+    [4Xgap> BaseField(form);[0X
+    [4XGF(11^2)[0X
+    [4Xgap> GramMatrix(form);[0X
+    [4X[ [ 0*Z(11), 0*Z(11), 0*Z(11) ], [ 0*Z(11), 0*Z(11), 0*Z(11) ], [0X
+    [4X  [ 0*Z(11), 0*Z(11), 0*Z(11) ] ][0X
+    [4Xgap> RadicalOfForm(form);[0X
+    [4X<vector space over GF(11^2), with 3 generators>[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  

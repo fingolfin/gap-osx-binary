@@ -1,0 +1,166 @@
+<html><head><title>[SONATA-tutorial] 8 Designs</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP007.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<h1>8 Designs</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP008.htm#SECT001">Designs from planar nearrings</a>
+<li> <A HREF="CHAP008.htm#SECT002">Information on designs</a>
+</ol><p>
+<p>
+Various designs can be obtained from nearrings. The design structure and 
+basic functions for the manipulation of designs have been implemented within 
+SONATA, as well as the means to construct the most popular nearring designs.
+Please see the reference manual for other ways to generate designs, e.g.
+by a set of blocks or by an incidence matrix.
+<p>
+<p>
+<h2><a name="SECT001">8.1 Designs from planar nearrings</a></h2>
+<p><p>
+We are going to generate a design with a feasible parameter set from a planar 
+nearring, respectively from a Ferrero pair.
+For notations and definitions we refer to <a href="biblio.htm#Clay:Nearrings"><[>Clay:Nearrings</cite></a>].
+<p>
+Let <var>N</var> be a (left) planar nearring. Then we can define a design
+<var>(N,B<sup>*</sup>,in)</var> with <var>N</var> as the set of points and
+<var>{N<sup>*</sup>cdota+b | a,binN, a not= 0 }</var> as set of blocks.
+Here <var>N<sup>*</sup> = { xinN | xcdotN = N }</var>.
+We note that such a design is always a BIB-design. Suppose that the planar
+nearring <var>N</var> is obtained from the Ferrero pair <var>(G,Phi)</var> as described in the
+previous chapter with <var>v := |G|</var>, <var>k := |Phi|</var>. 
+We can identify <var>G</var> and the additive group of the nearring <var>N</var>.
+Then <var>N<sup>*</sup>cdota = Phi(a)</var> for all <var>ainN</var>. The number of points of
+<var>(N,B<sup>*</sup>,in)</var> is <var>v</var>, each block has size <var>k</var>, and any <var>2</var> distinct points
+are together incident with precisely <var>k-1</var> blocks. We say that <var>(N,B<sup>*</sup>,in)</var>
+is a <var>2-(v,k,k-1)</var> design. Note that <var>k</var> divides <var>v-1</var>.
+<p>
+<strong>The problem:</strong>
+Find a <var>2-(16,5,4)</var> design <var>(N,B<sup>*</sup>,in)</var> if possible.
+<p>
+<strong>The solution:</strong>
+Since our design should have <var>16</var> points, we need a planar nearring of size 
+<var>16</var>. Furthermore, this planar nearring has an underlying Ferrero pair with
+a fixed-point-free (fpf) automorphism group of order <var>5</var>, since the blocks 
+should be of that size. 
+<p>
+Let <var>(G,Phi)</var> be such a Ferrero pair.
+We note that <var>Phi</var> is fpf on all characteristic subgroups of <var>G</var>, in 
+particular, on the center of <var>G</var>. For our example the size of the center
+modulo <var>5</var> has to be congruent to <var>1</var>. Therefore the center has order <var>16</var>,
+and <var>G</var> is abelian.
+Since <var>Phi</var> is also fpf on any factor of <var>G</var> by a characteristic subgroup,
+<var>Phi</var> is fpf on the factor of <var>G</var> by its Frattini subgroup. 
+Thus <var>G</var> is elementary abelian.
+<p>
+Now we compute an fpf automorphism group of order 5 on the elementary abelian
+group of order 16:
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroupsCyclic( [2,2,2,2], 5 );
+    [ [ [ f1, f2, f3, f4 ] -&gt; [ f4, f1*f2, f2*f3, f3*f4 ] ], 
+      &lt;pc group of size 16 with 4 generators&gt; ]
+    gap&gt; a := aux[1][1];
+    [ f1, f2, f3, f4 ] -&gt; [ f4, f1*f2, f2*f3, f3*f4 ]
+    gap&gt; phi := Group( a );;
+    gap&gt; G := aux[2];;
+</pre>
+<p>
+Up to conjugacy there is only one fpf automorphism group of order 5.
+We note that all planar nearrings obtained from a fixed Ferrero pair 
+<var>(G,Phi)</var> yield the same design. We build the blocks <var>Phi(a)+b</var> for
+<var>a,binG, anot=0</var>, of <var>(N,B<sup>*</sup>,in)</var> directly from <var>(G,Phi)</var> without
+actually generating a nearring.
+<p>
+<pre>
+    gap&gt; D := DesignFromFerreroPair( G, phi, "*" );
+    &lt;a 2 - ( 16, 5, 4 ) nearring generated design&gt;
+</pre>
+<p>
+The reference manual describes other options for <code>DesignFromFerreroPair</code> 
+besides <code>"*"</code> and the correponding designs as well.
+<p>
+<p>
+<h2><a name="SECT002">8.2 Information on designs</a></h2>
+<p><p>
+We investigate the design <code>D</code>, which we have generated from a planar
+nearring in the last section.
+<p>
+<pre>
+    gap&gt; D;
+    &lt;a 2 - ( 16, 5, 4 ) nearring generated design&gt;
+    gap&gt; DesignParameter( D );
+    [ 2, 16, 48, 15, 5, 4 ]
+</pre>
+<p>
+<code>DesignParameter( D )</code> returns the set of parameters <var>t, v, b, r, k, lambda</var> 
+of the design <code>D</code>. Here there are 16 points, 48 blocks,
+every point is incident with precisely 15 blocks, every block is incident 
+with precisely 5 points, every 2 distinct points are together incident
+with precisely 4 blocks. The design can be visualized by printing the
+incidence matrix. The rows are labelled by the points, the columns by
+the blocks. The point of number <var>i</var> is incident with the block of number <var>j</var> 
+if and only if the entry in the <var>i</var>-th row, <var>j</var>-th column is 1. 
+<p>
+<pre>
+    gap&gt; PrintIncidenceMat( D );
+    ...1...1...11...1...1..1..11..1...1..1..1...11..
+    1......1...1..1.1...11...1..1..1...11..1..1....1
+    .1..1......11..1...1..1...11....1..1..11..1...1.
+    ..1..1..1...1...1.1...1..1...11...1.1....11...1.
+    1....11..1......1..1.1....1.1...11...1...1..1.1.
+    .1..1.1...1..1......11....1..11....11....1.1.1..
+    ..1..1.1.1...1...1...1...1.1....1.1...11...1.1..
+    ..11...1..1.1..1..1.....1...1...1..1.1...1.1...1
+    ..1.1...1.1...1..1.1.1.....1..1..1...1..1.1....1
+    1...1.1....1.1...11...1.1.......1.1.1...1...1..1
+    1...1...11....11....1..11....1....1..1.1...1..1.
+    .1...1..1.1.1....1.1...11...1..1....1..1....11..
+    .1.1....11...1.1....1.1..1.1...1.1.......1..1..1
+    .1.1..1....1..1..11....1.1..1.1..1....1....1..1.
+    ..11..1..1....1.1..1..1.1....1.1...1..1.1....1..
+    1....1.1..1..1.1..1....1..1..1.1.1....1.1.1.....
+</pre>
+<p>
+By checking the entries in the incidence matrix we realize this design is
+circular, that is, any <var>2</var> distinct blocks have at most <var>2</var> points in common.
+Actually, this is not so easy to see. We prefer to do it like this:
+<p>
+<pre>
+    gap&gt; IsCircularDesign( D );
+    true
+</pre>
+<p>
+There are convenient functions to check which points are incident with
+a given set of blocks and vice versa.
+<p>
+<pre>
+    gap&gt; PointsIncidentBlocks( D, [2,7] );
+    [ 6, 14 ]
+    gap&gt; BlocksIncidentPoints( D, [6,14] );
+    [ 2, 7, 31, 44 ]
+</pre>
+<p>
+Here the 6-th and the 14-th point are incident with the given blocks with
+numbers 2 and 7. The numbering corresponds to that of the columns and rows of
+the incidence matrix. Blocks 2, 7, 31, and 44 are incident with points 6 and
+14.
+<p>
+The cardinalities of the intersections of one block with all the others,
+e.g. of the 4-th block with all 48 blocks are given like this. 
+<p>
+<pre>
+    gap&gt; BlockIntersectionNumbers( D, 4 );
+    [ 0, 2, 2, 5, 0, 0, 2, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 0, 
+      2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 1, 2, 0, 2, 2, 0, 2, 2, 0, 2, 
+      2, 2, 1, 2 ]
+</pre>
+<p>
+Of course, all these functions can be applied to all kinds of designs no
+matter how they have been generated.
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP007.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>SONATA-tutorial manual<br>November 2012
+</address></body></html>

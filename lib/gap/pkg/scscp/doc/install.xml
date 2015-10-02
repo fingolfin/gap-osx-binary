@@ -1,0 +1,116 @@
+<Chapter Label="Intro">
+<Heading>Installation</Heading>    
+
+<Section Label="Install">
+<Heading>Installation and system requirements</Heading>
+
+The &SCSCP; client for &GAP; is fully functional under &GAP; 4.4
+and works in UNIX/Linux environments, Mac OS X (UNIX installation)
+and MS Windows. 
+<P/>
+
+The &SCSCP; server for &GAP; works in UNIX/Linux environments and
+Mac OS X (UNIX installation), but does not work under MS Windows.
+It is fully functional with the &GAP; development version and goes 
+automatically into the compatibility mode to work with &GAP; 4.4.12 
+and earlier versions. The only limitation of this compatibility mode 
+is that in the case of an error the break loop occurs on the server 
+and can not be transmitted to the client (however, if the service 
+consumer is the service provider himself/herself, then this is not 
+as crucial as it might be in the general case). After the &GAP; 4.5 
+release the package will fully be compatible with the official &GAP; 
+releases.
+<P/>
+
+To use the &SCSCP; package it is necessary to install recent versions of
+&GAP;4 packages &IO; <Cite Key="IO"/>, &GAPDoc; <Cite Key="GAPDoc"/> 
+and &OpenMath; <Cite Key="openmath"/>.
+<P/> 
+
+The &SCSCP; package is distributed in standard formats (<File>tar.gz</File>, 
+<File>tar.bz2</File>) and can be obtained from 
+<URL>http://www.cs.st-andrews.ac.uk/~alexk/scscp.htm</URL> or from the &GAP; 
+web site (the latter also offers <File>zoo</File>- and <File>win.zip</File>-archives.
+To unpack the <File>zoo</File>-archive the program <File>unzoo</File> is needed,
+which can be obtained from the &GAP; homepage <URL>http://www.gap-system.org/</URL> 
+(see section `Distribution'). To install &SCSCP; package, put its <File>zoo</File>-archive
+into the <File>pkg</File> subdirectory of your &GAP;4.4 installation and 
+enter the command <C>unzoo -x scscp-X.X.X.zoo</C>, then the subdirectory <File>scscp</File> 
+(containing subdirectories <File>doc</File>, <File>lib</File> etc.) will be created in 
+the <File>pkg</File> subdirectory. Installation using other archive formats is performed 
+in a similar way.
+<P/>
+
+When there are no access rights to the root directory of the main &GAP; 
+installation, it is also possible to install the package 
+<E>outside the &GAP; main directory</E> by unpacking it inside a 
+directory <File>MYGAPDIR/pkg</File>. Then to load the package
+&GAP; should be started with <C>-l ";MYGAPDIR"</C> option.
+
+</Section>
+
+<Section Label="Config">
+<Heading>Configuration files</Heading>
+
+There are four files in the package which may need to be modified
+to setup and customise the package.
+
+The first three files are related with the server's functionality:
+
+<List>
+
+<Item>
+<File>scscp/config.g</File> specifies:
+<List>
+<Item>
+default <C>InfoLevel</C> for the <Ref InfoClass="InfoSCSCP" /> class;
+</Item>
+<Item>
+default &SCSCP; server name and port to be used by <Ref Func="RunSCSCPserver" /> if &GAP;
+is started with the <File>scscp/example/myserver.g</File> file;
+</Item>
+<Item>
+whether the server accepts calls to procedures which are standard &OpenMath; symbols, 
+or only procedures installed in the transient content dictionary (see <Ref Func="InstallSCSCPprocedure" />);
+</Item>
+<Item>
+service description to be returned to the client by <Ref Func="GetServiceDescription" />.
+</Item>
+</List>
+</Item>
+
+<Item>
+<File>scscp/gapd.sh</File> is the script to start the &GAP; &SCSCP; server
+as a daemon. To use it, adjust the local call of &GAP; and, if necessary,
+call options (for example, memory usage, startup from the workspace etc.)
+and the location of the root directory of the &SCSCP; package in section 1
+of this script.
+</Item>
+
+<Item>
+<File>scscp/example/myserver.g</File> is an example of the server configuration 
+file which loads all necessary packages, reads all needed code, installs
+all procedures which will be exposed to the client and finally starts the
+&SCSCP; server (see Chapter <Ref Chap="Server" />).
+</Item>
+
+</List>
+
+The fourth file is related with the client's functionality for parallel computations:
+
+<List>
+<Item>
+The file <File>scscp/configpar.g</File> assigns the global variable 
+<C>SCSCPservers</C> which specifies a list of hosts and ports to 
+search for &SCSCP; services (which may be not only represented by 
+&GAP; services, but also by another &SCSCP;-compliant systems). 
+It will be used to run parallel computations with the &SCSCP; 
+package (see Chapter <Ref Chap="Parallel" />). 
+</Item>
+</List>
+
+See comments in these configuration files for further details and examples.
+
+</Section>
+
+</Chapter>

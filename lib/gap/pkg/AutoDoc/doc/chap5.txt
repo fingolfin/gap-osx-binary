@@ -1,0 +1,364 @@
+  
+  [1X5 [33X[0;0YThe main functions[133X[101X
+  
+  
+  [1X5.1 [33X[0;0YThe main function[133X[101X
+  
+  [1X5.1-1 CreateAutomaticDocumentation[101X
+  
+  [29X[2XCreateAutomaticDocumentation[102X( [3Xpackage_name[103X, [3Xpath_to_xml_file[103X[, [3Xsection_intros[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YAfter  loading  the package, run it with the name of the package you want to
+  create  a  documentation  of  as first argument. Make sure you have included
+  this  file  as  source if you run your [5XGAPDoc[105X documentation creating script.
+  The second argument is a path to the directory where it can store the [5XGAPDoc[105X
+  XML  files.  It  will  produce  several  files  out  of  the Declare*WithDoc
+  declarations  you  have  used  in  your  package [3Xpackage_name[103X, and one named
+  AutoDocMainFile.xml,  which  you  can  simply include to your documentation.
+  [3Xsection_intros[103X  is optional, it must be a list containing lists of of either
+  two  or  three strings. If two are given, first one must be a chapter title,
+  with  underscores  instead of spaces, and the second one a string which will
+  be  displayed in the documentation at the beginning of the chapter. If three
+  are  given,  first  one  must  be  a  chapter,  second  a section, third the
+  description.[133X
+  
+  
+  [1X5.2 [33X[0;0YGlobal variable[133X[101X
+  
+  [1X5.2-1 AUTOMATIC_DOCUMENTATION[101X
+  
+  [29X[2XAUTOMATIC_DOCUMENTATION[102X[32X global variable
+  
+  [33X[0;0YThis  global  variable stores all the streams and some additional data, like
+  chapter names.[133X
+  
+  
+  [1X5.3 [33X[0;0YThe declare functions[133X[101X
+  
+  [1X5.3-1 DeclareOperationWithDocumentation[101X
+  
+  [29X[2XDeclareOperationWithDocumentation[102X( [3Xname[103X, [3Xlist_of_filters[103X, [3Xdescription[103X, [3Xreturn_value[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis   method   declares   an   operation,   like   DeclareOperation(  [3Xname[103X,
+  [3Xlist_of_filters[103X  )  would  do. In addition, it specifies various information
+  documenting  the  declared  operation.  They  can be used to generate [5XGAPDoc[105X
+  documentation  files  by  calling  [2XCreateAutomaticDocumentation[102X ([14X5.1-1[114X) in a
+  suitable way.[133X
+  [33X[0;0YThe additional parameters have the following meaning:[133X
+  
+  [8X[3Xdescription[103X[108X
+        [33X[0;6YThis  contains  a  descriptive  text  which  is added to the generated
+        documentation.  It  can either be a string or a list of strings. If it
+        is a list of strings, then these strings are concatenated with a space
+        between them.[133X
+  
+  [8X[3Xreturn_value[103X[108X
+        [33X[0;6YA string displayed as description of the return value.[133X
+  
+  [8X[3Xarguments[103X[108X
+        [33X[0;6YAn  optional  string  which  is  displayed  in  the  documentation  as
+        arguments list of the operation.[133X
+  
+  [8X[3Xchapter_and_section[103X[108X
+        [33X[0;6YAn optional argument which, if present, must be a list of two strings,
+        naming   the   chapter   and   the  section  in  which  the  generated
+        documentation  for the operation should be placed. There are no spaces
+        allowed in this string, underscores will be converted to spaces in the
+        header of the chapter or the section.[133X
+  
+  [8X[3Xoption_record[103X[108X
+        [33X[0;6Y[3Xoption_record[103X  can  be  a  record  with  some  additional options. The
+        following are currently supported:[133X
+  
+        [8X[3Xgroup[103X[108X
+              [33X[0;12YThis  must  be  a string and is used to group functions with the
+              same group name together in the documentation. Their description
+              will  be  concatenated,  chapter  and  section info of the first
+              element in the group will be used.[133X
+  
+        [8X[3Xfunction_label[103X[108X
+              [33X[0;12YThis   sets   the   label   of   the   function  to  the  string
+              [3Xfunction_label[103X.  It might be useful for reference purposes, also
+              this  string  is  displayed  as  argument  of this method in the
+              manual.  This  really  sets  the  label of the function, not the
+              label  of  the  ManItem.  Please  see the [5XGAPDoc[105X manual for more
+              infos on labels and references.[133X
+  
+  [1X5.3-2 DeclareCategoryWithDocumentation[101X
+  
+  [29X[2XDeclareCategoryWithDocumentation[102X( [3Xname[103X, [3Xfilter[103X, [3Xdescription[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method declares a category, like DeclareCategory( [3Xname[103X, [3Xfilter[103X ) would
+  do.[133X
+  [33X[0;0YThe      remaining      parameters      behave      as     described     for
+  [2XDeclareOperationWithDocumentation[102X ([14X5.3-1[114X).[133X
+  
+  [1X5.3-3 DeclareRepresentationWithDocumentation[101X
+  
+  [29X[2XDeclareRepresentationWithDocumentation[102X( [3Xname[103X, [3Xfilter[103X, [3Xlist_of_req_entries[103X, [3Xdescription[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  declares  a  representation, like DeclareRepresentation( [3Xname[103X,
+  [3Xfilter[103X, [3Xlist_of_req_entries[103X ) would do.[133X
+  [33X[0;0YThe      remaining      parameters      behave      as     described     for
+  [2XDeclareOperationWithDocumentation[102X ([14X5.3-1[114X).[133X
+  
+  [1X5.3-4 DeclareAttributeWithDocumentation[101X
+  
+  [29X[2XDeclareAttributeWithDocumentation[102X( [3Xname[103X, [3Xfilter[103X, [3Xdescription[103X, [3Xreturn_value[103X[, [3Xargument[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  declares  an  attribute, like DeclareAttribute( [3Xname[103X, [3Xfilter[103X )
+  would do.[133X
+  [33X[0;0YThe      remaining      parameters      behave      as     described     for
+  [2XDeclareOperationWithDocumentation[102X ([14X5.3-1[114X).[133X
+  
+  [1X5.3-5 DeclarePropertyWithDocumentation[101X
+  
+  [29X[2XDeclarePropertyWithDocumentation[102X( [3Xname[103X, [3Xfilter[103X, [3Xdescription[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method declares a property, like DeclareProperty( [3Xname[103X, [3Xfilter[103X ) would
+  do.[133X
+  [33X[0;0YThe      remaining      parameters      behave      as     described     for
+  [2XDeclareOperationWithDocumentation[102X ([14X5.3-1[114X).[133X
+  
+  [1X5.3-6 DeclareGlobalFunctionWithDocumentation[101X
+  
+  [29X[2XDeclareGlobalFunctionWithDocumentation[102X( [3Xname[103X, [3Xdescription[103X, [3Xreturn_value[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  declares  a global function like DeclareGlobalFunction( [3Xname[103X )
+  would do.[133X
+  [33X[0;0YThe      remaining      parameters      behave      as     described     for
+  [2XDeclareOperationWithDocumentation[102X ([14X5.3-1[114X).[133X
+  
+  [1X5.3-7 DeclareGlobalVariableWithDocumentation[101X
+  
+  [29X[2XDeclareGlobalVariableWithDocumentation[102X( [3Xname[103X, [3Xdescription[103X[, [3Xchapter_and_section[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  declares  a global variable like DeclareGlobalVariable( [3Xname[103X )
+  would do.[133X
+  [33X[0;0YThe      remaining      parameters      behave      as     described     for
+  [2XDeclareOperationWithDocumentation[102X ([14X5.3-1[114X).[133X
+  
+  [1X5.3-8 DeclareOperationWithDoc[101X
+  
+  [29X[2XDeclareOperationWithDoc[102X( [3Xname[103X, [3Xlist_of_filters:[103X [3Xdescription[103X, [3Xreturn_value[103X, [3Xarguments[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis   method   declares   an   operation,   like   DeclareOperation(  [3Xname[103X,
+  [3Xlist_of_filters[103X  )  would  do. In addition, it specifies various information
+  documenting  the  declared  operation.  There can be used to generate [5XGAPDoc[105X
+  documentation  files  by  calling  [2XCreateAutomaticDocumentation[102X ([14X5.1-1[114X) in a
+  suitable way.[133X
+  [33X[0;0YThe  remaining parameters are all optional and are passed via GAP's [21Xfunction
+  call with options[121X syntax. For example, you might write[133X
+  
+  [4X[32X[104X
+    [4X    DeclareOperationWithDoc( "SomeOp", [IsInt] : description := "desc" )[104X
+    [4X    [104X
+  [4X[32X[104X
+  
+  [33X[0;0Yin  order  to  declare  an  operation  with  a certain description text. For
+  details  on the options syntax, see [14X'Reference: Function Call With Options'[114X.
+  All  of them are optional, a documentation entry will be created even if you
+  specify none of them. The additional parameters have the following meaning:[133X
+  
+  [8X[3Xdescription[103X[108X
+        [33X[0;6YThis  contains  a  descriptive  text  which  is added to the generated
+        documentation.  It  can either be a string or a list of strings. If it
+        is a list of strings, then these strings are concatenated with a space
+        between them.[133X
+  
+  [8X[3Xreturn_value[103X[108X
+        [33X[0;6YA string displayed as description of the return value.[133X
+  
+  [8X[3Xarguments[103X[108X
+        [33X[0;6YAn  optional  string  which  is  displayed  in  the  documentation  as
+        arguments list of the operation.[133X
+  
+  [8X[3Xchapter_info[103X[108X
+        [33X[0;6YAn optional argument which, if present, must be a list of two strings,
+        naming   the   chapter   and   the  section  in  which  the  generated
+        documentation  for the operation should be placed. There are no spaces
+        allowed in this string, underscores will be converted to spaces in the
+        header of the chapter or the section.[133X
+  
+  [8X[3Xgroup[103X[108X
+        [33X[0;6YThis  must  be  a  string and is used to group functions with the same
+        group  name  together  in the documentation. Their description will be
+        concatenated,  chapter  and  section  info of the first element in the
+        group will be used.[133X
+  
+  [8X[3Xfunction_label[103X[108X
+        [33X[0;6YThis  sets  the label of the function to the string [3Xfunction_label[103X. It
+        might  be useful for reference purposes, also this string is displayed
+        as  argument  of this method in the manual. This really sets the label
+        of  the  function, not the label of the ManItem. Please see the [5XGAPDoc[105X
+        manual for more infos on labels and references.[133X
+  
+  [1X5.3-9 DeclareCategoryWithDoc[101X
+  
+  [29X[2XDeclareCategoryWithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xarguments[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis method declares a category, like DeclareCategory( [3Xarg[103X ) would do.[133X
+  [33X[0;0YThe  remaining  options  behave  as  described  for  [2XDeclareOperationWithDoc[102X
+  ([14X5.3-8[114X).[133X
+  
+  [1X5.3-10 DeclareRepresentationWithDoc[101X
+  
+  [29X[2XDeclareRepresentationWithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xarguments[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  declares  a  representation, like DeclareRepresentation( [3Xarg[103X )
+  would do.[133X
+  [33X[0;0YThe  remaining  options  behave  as  described  for  [2XDeclareOperationWithDoc[102X
+  ([14X5.3-8[114X).[133X
+  
+  [1X5.3-11 DeclareAttributeWithDoc[101X
+  
+  [29X[2XDeclareAttributeWithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xreturn_value[103X, [3Xargument[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis method declares an attribute, like DeclareAttribute( [3Xarg[103X ) would do.[133X
+  [33X[0;0YThe  remaining  options  behave  as  described  for  [2XDeclareOperationWithDoc[102X
+  ([14X5.3-8[114X).[133X
+  
+  [1X5.3-12 DeclarePropertyWithDoc[101X
+  
+  [29X[2XDeclarePropertyWithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xarguments[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis method declares a property, like DeclareProperty( [3Xarg[103X ) would do.[133X
+  [33X[0;0YThe  remaining  parameters  behave  as described for [2XDeclareOperationWithDoc[102X
+  ([14X5.3-8[114X).[133X
+  
+  [1X5.3-13 DeclareGlobalFunctionWithDoc[101X
+  
+  [29X[2XDeclareGlobalFunctionWithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xreturn_value[103X, [3Xarguments[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  declares  a  global function like DeclareGlobalFunction( [3Xarg[103X )
+  would do.[133X
+  [33X[0;0YThe  remaining  parameters  behave  as described for [2XDeclareOperationWithDoc[102X
+  ([14X5.3-8[114X).[133X
+  
+  [1X5.3-14 DeclareGlobalVariableWithDoc[101X
+  
+  [29X[2XDeclareGlobalVariableWithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  declares  a  global variable like DeclareGlobalVariable( [3Xarg[103X )
+  would do.[133X
+  [33X[0;0YThe  remaining  parameters  behave  as described for [2XDeclareOperationWithDoc[102X
+  ([14X5.3-8[114X).[133X
+  
+  
+  [1X5.4 [33X[0;0YThe install functions[133X[101X
+  
+  [1X5.4-1 InstallMethodWithDocumentation[101X
+  
+  [29X[2XInstallMethodWithDocumentation[102X( [3Xname[103X, [3Xshort_descr[103X, [3Xlist_of_filters[103X, [3Xdescription[103X, [3Xreturn_value[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X], [3Xfunc[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  method  installs  a  method,  like  InstallMethod(  [3Xname[103X, [3Xshort_descr[103X,
+  [3Xlist_of_filters[103X, [3Xfunc[103X ) would do.[133X
+  [33X[0;0YThe      remaining      parameters      behave      as     described     for
+  [2XDeclareOperationWithDocumentation[102X ([14X5.3-1[114X).[133X
+  
+  [1X5.4-2 InstallMethodWithDoc[101X
+  
+  [29X[2XInstallMethodWithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xreturn_value[103X, [3Xarguments[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis method installs a method, like InstallMethod( [3Xarg[103X ) would do.[133X
+  [33X[0;0YThe  remaining  parameters  behave  as described for [2XDeclareOperationWithDoc[102X
+  ([14X5.3-8[114X).[133X
+  
+  
+  [1X5.5 [33X[0;0YThe create functions[133X[101X
+  
+  [1X5.5-1 CreateDocEntryForCategory[101X
+  
+  [29X[2XCreateDocEntryForCategory[102X( [3Xname[103X, [3Xfilter[103X, [3Xdescription[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis works like [2XDeclareCategoryWithDocumentation[102X ([14X5.3-2[114X) except that it does
+  not call DeclareCategory.[133X
+  
+  [1X5.5-2 CreateDocEntryForRepresentation[101X
+  
+  [29X[2XCreateDocEntryForRepresentation[102X( [3Xname[103X, [3Xfilter[103X, [3Xlist_of_req_entries[103X, [3Xdescription[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  works  like [2XDeclareRepresentationWithDocumentation[102X ([14X5.3-3[114X) except that
+  it does not call DeclareRepresentation.[133X
+  
+  [1X5.5-3 CreateDocEntryForOperation[101X
+  
+  [29X[2XCreateDocEntryForOperation[102X( [3Xname[103X, [3Xlist_of_filters[103X, [3Xdescription[103X, [3Xreturn_value[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  works  like  [2XDeclareOperationWithDocumentation[102X  ([14X5.3-1[114X) except that it
+  does not call DeclareOperation.[133X
+  
+  [1X5.5-4 CreateDocEntryForAttribute[101X
+  
+  [29X[2XCreateDocEntryForAttribute[102X( [3Xname[103X, [3Xfilter[103X, [3Xdescription[103X, [3Xreturn_value[103X[, [3Xargument[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  works  like  [2XDeclareAttributeWithDocumentation[102X  ([14X5.3-4[114X) except that it
+  does not call DeclareAttribute.[133X
+  
+  [1X5.5-5 CreateDocEntryForProperty[101X
+  
+  [29X[2XCreateDocEntryForProperty[102X( [3Xname[103X, [3Xfilter[103X, [3Xdescription[103X[, [3Xarguments[103X][, [3Xchapter_and_section[103X][, [3Xoption_record[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis works like [2XDeclarePropertyWithDocumentation[102X ([14X5.3-5[114X) except that it does
+  not call DeclareProperty.[133X
+  
+  [1X5.5-6 CreateDocEntryForCategory_WithOptions[101X
+  
+  [29X[2XCreateDocEntryForCategory_WithOptions[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [29X[2XCreateDocEntryForRepresentation_WithOptions[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [29X[2XCreateDocEntryForProperty_WithOptions[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [29X[2XCreateDocEntryForAttribute_WithOptions[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [29X[2XCreateDocEntryForOperation_WithOptions[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [29X[2XCreateDocEntryForGlobalFunction_WithOptions[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [29X[2XCreateDocEntryForGlobalVariable_WithDoc[102X( [3Xarg:[103X [3Xdescription[103X, [3Xchapter_info[103X, [3Xlabel[103X, [3Xfunction_label[103X, [3Xgroup[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YDoes the same as Declare*WithDoc but without declaring anything.[133X
+  
+  
+  [1X5.6 [33X[0;0YAdditional functions[133X[101X
+  
+  [1X5.6-1 SetCurrentAutoDocChapter[101X
+  
+  [29X[2XSetCurrentAutoDocChapter[102X( [3Xname[103X ) [32X function
+  [29X[2XResetCurrentAutoDocChapter[102X(  ) [32X function
+  [29X[2XSetCurrentAutoDocSection[102X( [3Xname[103X ) [32X function
+  [29X[2XResetCurrentAutoDocSection[102X(  ) [32X function
+  
+  [33X[0;0YThese  functions  set  or  reset a current chapter or section, which will be
+  applied  to  entries without a [3Xchapter_info[103X instead of the default one. Note
+  that  setting  a  section  without  a chapter does nothing, and reseting the
+  chapter also resets the section.[133X
+  
+  [1X5.6-2 WriteStringIntoDoc[101X
+  
+  [29X[2XWriteStringIntoDoc[102X( [3Xdescription:[103X [3Xchapter_info[103X ) [32X function
+  
+  [33X[0;0YWrites a string or a list of strings given as argument [3Xdescription[103X into doc.
+  [3Xchapter_info[103X  is  optional,  but  without  a current chapter set, this would
+  cause  an  error. Also it is possible here to only give the chapter, not the
+  section.  It will be written in the chapter at the current point, i.e. after
+  the last written section.[133X
+  

@@ -1,0 +1,600 @@
+  
+  [1X9 Internal functions[0X
+  
+  
+  [1X9.1 Matrices as G-generators of a FG-module vector space[0X
+  
+  Both [9XFpGModuleGF[0m (Chapter [14X5[0m) and [9XFpGModuleHomomorphismGF[0m (Chapter [14X6[0m) store a
+  matrix whose rows are G-generators for a module vector space (the module and
+  the  homomorphism's  image respectively). The internal functions listed here
+  provide common operations for dealing with these matrices.
+  
+  [1X9.1-1 HAPPRIME_ValueOptionMaxFGExpansionSize[0m
+  
+  [2X> HAPPRIME_ValueOptionMaxFGExpansionSize( [0X[3Xfield, group[0X[2X ) __________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  Returns   the   maximum  matrix  expansion  size.  This  is  read  from  the
+  [10XMaxFGExpansionSize[0m  option  from  the  [5XGAP[0m options stack [14X'Reference: Options
+  Stack'[0m, computed using the [10XMaxFGExpansionMemoryLimit[0m option.
+  
+  [1X9.1-2 HAPPRIME_KernelOfGeneratingRowsDestructive[0m
+  
+  [2X> HAPPRIME_KernelOfGeneratingRowsDestructive( [0X[3Xgens, rowlengths, GA[0X[2X ) [0Xoperation
+  [6XReturns:[0X  List
+  
+  Returns  a  list  of  generating  vectors  for  the  kernel of the FG-module
+  homomorphism  defined by the generating rows [3Xgens[0m using the group and action
+  [3XGA[0m.
+  
+  This function computes the kernel recursively by partitioning the generating
+  rows into
+  
+  
+       [ B 0 ] [ C D ]
+  
+  
+  doing  column reduction if necessary to get the zero block at the top right.
+  The matrices B> and C are small enough to be expanded, while the kernel of D
+  is  calculated  by  recursion.  The  argument [3Xrowlengths[0m lists the number of
+  non-zero  blocks in each row; the rest of each row is taken to be zero. This
+  allows  the  partitioning  to  be  more  efficiently  performed (i.e. column
+  reduction is not always required).
+  
+  The [5XGAP[0m options stack [14X'Reference: Options Stack'[0m variable [10XMaxFGExpansionSize[0m
+  can  be  used  to  specify  the maximum allowable expanded matrix size. This
+  governs  the size of the B and C matrices, and thus the number of recursions
+  before  the kernel of D is also computed by recursion. A high value for will
+  allow  larger  expansions  and  so  faster  computation  at the cost of more
+  memory.  The  [10XMaxFGExpansionMemoryLimit[0m  option can also be used, which sets
+  the  maximum  amount  of  memory  that  [5XGAP[0m  is  allowed to use (as a string
+  containing  an  integer  with  the  suffix  [10Xk[0m,  [10XM[0m or [10XG[0m to indicate kilobyes,
+  megabytes  or  gigabytes  respectively). In this case, the function looks at
+  the  free  memory  available  to  [5XGAP[0m  and computes an appropriate value for
+  [10XMaxFGExpansionSize[0m.
+  
+  [1X9.1-3 HAPPRIME_GActMatrixColumns[0m
+  
+  [2X> HAPPRIME_GActMatrixColumns( [0X[3Xg, Vt, GA[0X[2X ) _________________________[0Xoperation
+  [2X> HAPPRIME_GActMatrixColumnsOnRight( [0X[3Xg, Vt, GA[0X[2X ) __________________[0Xoperation
+  [6XReturns:[0X  Matrix
+  
+  Returns  the matrix that results from the applying the group action u=gv (or
+  u=vg  in  the  case  of the [10XOnRight[0m version of this function) to each [13Xcolumn[0m
+  vector  in  the  matrix  [3XVt[0m.  By  acting  on  [13Xcolumns[0m  of a matrix (i.e. the
+  transpose  of  the  normal  [5XGAP[0m  representation), the group action is just a
+  permutation  of the rows of the matrix, which is a fast operation. The group
+  and action are passed in [3XGA[0m using the [2XModuleGroupAndAction[0m ([14X5.4-5[0m) record.
+  
+  If  the  input  matrix [3XVt[0m is in a compressed matrix representation, then the
+  returned matrix will also be in compressed matrix representation.
+  
+  [1X9.1-4 HAPPRIME_ExpandGeneratingRow[0m
+  
+  [2X> HAPPRIME_ExpandGeneratingRow( [0X[3Xgen, GA[0X[2X ) _________________________[0Xoperation
+  [2X> HAPPRIME_ExpandGeneratingRows( [0X[3Xgens, GA[0X[2X ) _______________________[0Xoperation
+  [2X> HAPPRIME_ExpandGeneratingRowOnRight( [0X[3Xgen, GA[0X[2X ) __________________[0Xoperation
+  [2X> HAPPRIME_ExpandGeneratingRowsOnRight( [0X[3Xgens, GA[0X[2X ) ________________[0Xoperation
+  [6XReturns:[0X  List
+  
+  Returns  a list of G-generators for the vector space that corresponds to the
+  of G-generator [3Xgen[0m (or generators [3Xgens[0m). This space is formed by multiplying
+  each  generator  by  each  element  of [3XG[0m in turn, using the group and action
+  specified  in  [3XGA[0m  (see  [2XModuleGroupAndAction[0m ([14X5.4-5[0m)). The returned list is
+  thus |G| times larger than the input.
+  
+  For    a    list    of    generators    [3Xgens[0m    [v_1,    v_2,   ...,   v_n],
+  [2XHAPPRIME_ExpandGeneratingRows[0m returns the list [g_1v_1, g_2v_1, ..., g_1v_2,
+  g_2v_2,  ...,  g_|G|v_n]  In other words, the form of the returned matrix is
+  block-wise,  with the expansions of each row given in turn. This function is
+  more  efficient  than  repeated use of [2XHAPPRIME_ExpandGeneratingRow[0m since it
+  uses  the  efficient [2XHAPPRIME_GActMatrixColumns[0m ([14X9.1-3[0m) to perform the group
+  action on the whole set of generating rows at a time.
+  
+  The  function [2XHAPPRIME_ExpandGeneratingRowsOnRight[0m is the same as above, but
+  the group action operates on the right instead.
+  
+  [1X9.1-5 HAPPRIME_AddGeneratingRowToSemiEchelonBasisDestructive[0m
+  
+  [2X> HAPPRIME_AddGeneratingRowToSemiEchelonBasisDestructive( [0X[3Xbasis, gen, GA[0X[2X ) [0Xoperation
+  [6XReturns:[0X  Record with elements [10Xvectors[0m and [10Xbasis[0m
+  
+  This  function  augments  a  vector  space  basis with another generator. It
+  returns  a record consisting of two elements: [10Xvectors[0m, a set of semi-echelon
+  basis vectors for the vector space spanned by the sum of the input [3Xbasis[0m and
+  all  G-multiples of the generating vector [3Xgen[0m; and [10Xheads[0m, a list of the head
+  elements,  in  the  same  format  as  returned by [2XSemiEchelonMat[0m ([14XReference:
+  SemiEchelonMat[0m).  The  generator  [3Xgen[0m is expanded according to the group and
+  action specified in the [3XGA[0m record (see [2XModuleGroupAndAction[0m ([14X5.4-5[0m)).
+  
+  If  the input [3Xbasis[0m is not zero, it is also modified by this function, to be
+  the new basis (i.e. the same as the [10Xvectors[0m element of the returned record).
+  
+  [1X9.1-6 HAPPRIME_ReduceVectorDestructive[0m
+  
+  [2X> HAPPRIME_ReduceVectorDestructive( [0X[3Xv, basis, heads[0X[2X ) _____________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Reduces  the vector [3Xv[0m (in-place) using the semi-echelon set of vectors [3Xbasis[0m
+  with    heads    [3Xheads[0m    (as   returned   by   [2XSemiEchelonMat[0m   ([14XReference:
+  SemiEchelonMat[0m)).  Returns [9Xtrue[0m if the vector is completely reduced to zero,
+  or [9Xfalse[0m otherwise.
+  
+  
+  [1X9.1-7 HAPPRIME_ReduceGeneratorsOfModuleByXX[0X
+  
+  [2X> HAPPRIME_ReduceGeneratorsOfModuleBySemiEchelon( [0X[3Xgens, GA[0X[2X ) ______[0Xoperation
+  [2X> HAPPRIME_ReduceGeneratorsOfModuleBySemiEchelonDestructive( [0X[3Xgens, GA[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_ReduceGeneratorsOfModuleByLeavingOneOut( [0X[3Xgens, GA[0X[2X ) ____[0Xoperation
+  [2X> HAPPRIME_ReduceGeneratorsOnRightByLeavingOneOut( [0X[3Xgens, GA[0X[2X ) _____[0Xoperation
+  [6XReturns:[0X  List of vectors
+  
+  Returns  a  subset  of the module generators [3Xgens[0m over the group with action
+  specified  in  the  [3XGA[0m  record  (see [2XModuleGroupAndAction[0m ([14X5.4-5[0m)) that will
+  still generate the module.
+  
+  The  [10XBySemiEchelon[0m functions gradually expand out the module generators into
+  an  F-basis,  using  that  F-basis to reduce the other generators, until the
+  full  vector  space  of the module is spanned. The generators needed to span
+  the space are returned, and should be a small set, although not minimal. The
+  [10XDestructive[0m  version  of this function will modify the input [3Xgens[0m parameter.
+  The  non-destructive  version  makes  a  copy  first,  so  leaves  the input
+  arguments unchanged, at the expense of more memory.
+  
+  The [10XByLeavingOneOut[0m function is tries repeatedly leaving out generators from
+  the list [3Xgens[0m to find a small subset that still generates the module. If the
+  generators  are from the field GF(2), this is guaranteed to be a minimal set
+  of generators. The [10XOnRight[0m version computes a minimal subset which generates
+  the module under group multiplication on the right.
+  
+  [1X9.1-8 HAPPRIME_DisplayGeneratingRows[0m
+  
+  [2X> HAPPRIME_DisplayGeneratingRows( [0X[3Xgens, GA[0X[2X ) ______________________[0Xoperation
+  [6XReturns:[0X  nothing
+  
+  Displays  a  set of G-generating rows a human-readable form. The elements of
+  each  generating vector are displayed, with each block marked by a separator
+  (since the group action on a module vector will only permute elements within
+  a block).
+  
+  This    function   is   used   by   [9XDisplay[0m   for   both   [9XFpGModuleGF[0m   and
+  [9XFpGModuleHomomorphismGF[0m.
+  
+  NOTE: This is currently only implemented for GF(2)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> HAPPRIME_DisplayGeneratingRows([0X
+    [4X>  ModuleGenerators(M), HAPPRIME_ModuleGroupAndAction(M));[0X
+    [4X[...1..11|........|.......1|........|........][0X
+    [4X[........|........|........|.1....11|........][0X
+    [4X[........|........|........|........|..1.1.1.][0X
+    [4X[........|.1.1..1.|........|........|........][0X
+    [4X[........|........|......11|........|........][0X
+    [4X[........|........|1......1|........|........][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X9.1-9 HAPPRIME_GeneratingRowsBlockStructure[0m
+  
+  [2X> HAPPRIME_GeneratingRowsBlockStructure( [0X[3Xgens, GA[0X[2X ) _______________[0Xoperation
+  [6XReturns:[0X  Matrix
+  
+  Returns a matrix detailing the block structure of a set of module generating
+  rows.  The  group  action  on  a  generator permutes the vector in blocks of
+  length  [10XGA.actionBlockSize[0m:  any  block that contains non-zero elements will
+  still  contain  non-zero  elements after the group action; any block that is
+  all  zero  will remain all zero. This operation returns a matrix giving this
+  block structure: it has a one where the block is non-zero and zero where the
+  block is all zero.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> b := HAPPRIME_GeneratingRowsBlockStructure([0X
+    [4X>  ModuleGenerators(M), ModuleActionBlockSize(M));[0X
+    [4X[ [ 1, 0, 1, 1, 1 ], [ 1, 0, 1, 1, 1 ], [ 0, 1, 1, 1, 1 ], [ 0, 0, 1, 1, 1 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X9.1-10 HAPPRIME_DisplayGeneratingRowsBlocks[0m
+  
+  [2X> HAPPRIME_DisplayGeneratingRowsBlocks( [0X[3Xgens, actionBlockSize[0X[2X ) ___[0Xoperation
+  [6XReturns:[0X  nothing
+  
+  Displays  a  set  of  G-generating  rows a compact human-readable form. Each
+  generating  rows  can  be divided into blocks of length [3XactionBlockSize[0m. The
+  generating  rows  are  displayed in a per-block form: a [9X*[0m where the block is
+  non-zero and [9X.[0m where the block is all zero.
+  
+  This  function  is  used  by  [2XDisplayBlocks[0m  ([14X5.4-10[0m)  (for [9XFpGModuleGF[0m) and
+  [2XDisplayBlocks[0m ([14X6.5-4[0m) (for [9XFpGModuleHomomorphismGF[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> HAPPRIME_DisplayGeneratingRowsBlocks([0X
+    [4X>  ModuleGenerators(M), HAPPRIME_ModuleGroupAndAction(M));[0X
+    [4X[*.*..][0X
+    [4X[...*.][0X
+    [4X[....*][0X
+    [4X[.*...][0X
+    [4X[..*..][0X
+    [4X[..*..] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X9.1-11 HAPPRIME_IndependentGeneratingRows[0m
+  
+  [2X> HAPPRIME_IndependentGeneratingRows( [0X[3Xblocks[0X[2X ) ____________________[0Xoperation
+  [6XReturns:[0X  List of lists
+  
+  Given a block structure as returned by [2XHAPPRIME_GeneratingRowsBlockStructure[0m
+  ([14X9.1-9[0m),  this  decomposes a set of generating rows into sets of independent
+  rows.  These  are  returned as a list of row indices, where each set of rows
+  share no blocks with any other set.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> DisplayBlocks(M);[0X
+    [4XModule over the group ring of Group( [ f1, f2, f3 ] )[0X
+    [4X in characteristic 2 with 6 generators in FG^5.[0X
+    [4X[**...][0X
+    [4X[.*...][0X
+    [4X[.**..][0X
+    [4X[.**..][0X
+    [4X[...*.][0X
+    [4X[....*][0X
+    [4XGenerators are in minimal echelon form.[0X
+    [4Xgap> gens := ModuleGenerators(M);;[0X
+    [4Xgap> G := ModuleGroup(M);;[0X
+    [4Xgap> blocks := HAPPRIME_GeneratingRowsBlockStructure(gens, G);[0X
+    [4X[ [ 1, 1, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 1, 1, 0, 0 ], [ 0, 1, 1, 0, 0 ],[0X
+    [4X  [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ] ][0X
+    [4Xgap> HAPPRIME_IndependentGeneratingRows(blocks);[0X
+    [4X[ [ 1, 2, 3, 4 ], [ 5 ], [ 6 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X9.1-12 HAPPRIME_GactFGvector[0m
+  
+  [2X> HAPPRIME_GactFGvector( [0X[3Xg, v, MT[0X[2X ) _______________________________[0Xoperation
+  [6XReturns:[0X  Vector
+  
+  Returns  the  vector  that  is  the  result  of the action u=gv of the group
+  element  [3Xg[0m on a module vector [3Xv[0m (according to the group multiplication table
+  [3XMT[0m.  This  operation  is the quickest current method for a single vector. To
+  perform  the same action on a set of vectors, it is faster write the vectors
+  as columns of a matrix and use [2XHAPPRIME_GActMatrixColumns[0m ([14X9.1-3[0m) instead.
+  
+  
+  [1X9.1-13 HAPPRIME_CoefficientsOfGeneratingRowsXX[0X
+  
+  [2X> HAPPRIME_CoefficientsOfGeneratingRows( [0X[3Xgens, GA, v[0X[2X ) ____________[0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRows( [0X[3Xgens, GA, coll[0X[2X ) _________[0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsDestructive( [0X[3Xgens, GA, v[0X[2X ) _[0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsDestructive( [0X[3Xgens, GA, coll[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsGF( [0X[3Xgens, GA, v[0X[2X ) __________[0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsGF( [0X[3Xgens, GA, coll[0X[2X ) _______[0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive( [0X[3Xgens, GA, v[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive( [0X[3Xgens, GA, coll[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive2( [0X[3Xgens, GA, v[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive2( [0X[3Xgens, GA, coll[0X[2X ) [0Xoperation
+  [6XReturns:[0X  Vector, or list of vectors
+  
+  For  a  single  vector  [3Xv[0m,  this  function  returns  a  vector  x giving the
+  G-coefficients  from  [3Xgens[0m  needed  to  generate [3Xv[0m, i.e. the solution to the
+  equation  x*A=v,  where A is the expansion of [3Xgens[0m. If there is no solution,
+  [9Xfail[0m is returned. If a list of vectors, [3Xcoll[0m, then a vector is returned that
+  lists  the solution for each vector (any of which may be [9Xfail[0m). The standard
+  forms  of  this  function  use  standard  linear  algebra  to  solve for the
+  coefficients.  The  [10XDestructive[0m version will corrupt both [3Xgens[0m and [3Xv[0m. The [10XGF[0m
+  versions  use  the block structure of the generating rows to expand only the
+  blocks  that are needed to find the solution before using linear algebra. If
+  the generators are in echelon form, this can save memory, but is slower.
+  
+  The [10XGFDestructive2[0m functions also assume an echelon form for the generators,
+  but use back-substitution to find a set of coefficients. This can save a lot
+  of memory but is again slower.
+  
+  
+  [1X9.1-14 HAPPRIME_GenerateFromGeneratingRowsCoefficientsXX[0X
+  
+  [2X> HAPPRIME_GenerateFromGeneratingRowsCoefficients( [0X[3Xgens, GA, c[0X[2X ) __[0Xoperation
+  [2X> HAPPRIME_GenerateFromGeneratingRowsCoefficients( [0X[3Xgens, GA, coll[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_GenerateFromGeneratingRowsCoefficientsGF( [0X[3Xgens, GA, c[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_GenerateFromGeneratingRowsCoefficientsGF( [0X[3Xgens, GA, coll[0X[2X ) [0Xoperation
+  [6XReturns:[0X  Vector, or list of vectors
+  
+  For  a  vector  [3Xc[0m,  returns  (as  a vector), the module element generated by
+  multiplying  [3Xc[0m  by  the  expansion  of  the  generators  [3Xgens[0m. For a list of
+  coefficient vectors [3Xcoll[0m, this returns a list of generating vectors.
+  
+  The  standard  versions of this function use standard linear algebra. The [10XGF[0m
+  versions  only performs the expansion of necessary generating rows, and only
+  expands  by one group element at a time, so will only need at most twice the
+  amount  of  memory  as  that  to  store  [3Xgens[0m,  which is a large saving over
+  expanding  the  generators  by every group element at the same time, as in a
+  naive implementation. It may also be faster.
+  
+  [1X9.1-15 HAPPRIME_RemoveZeroBlocks[0m
+  
+  [2X> HAPPRIME_RemoveZeroBlocks( [0X[3Xgens, GA[0X[2X ) ___________________________[0Xoperation
+  [6XReturns:[0X  Vector
+  
+  Removes  from  a  set  of generating vectors [3Xgens[0m (with [2XModuleGroupAndAction[0m
+  ([14X5.4-5[0m)  [3XGA[0m) any blocks that are zero in every generating vector. Removal is
+  done  in-place,  i.e. the input argument [3Xgens[0m will be modified to remove the
+  zero  blocks.  Zero blocks are unaffected by any row or expansion operation,
+  and  can be removed to save time or memory in those operations. The function
+  returns  the  original  block structure as a vector, and this can be used in
+  the  function  [2XHAPPRIME_AddZeroBlocks[0m  ([14X9.1-16[0m) to reinstate the zero blocks
+  later,  if required. See the documentation for that function for more detail
+  of the block structure vector.
+  
+  [1X9.1-16 HAPPRIME_AddZeroBlocks[0m
+  
+  [2X> HAPPRIME_AddZeroBlocks( [0X[3Xgens, blockStructure, GA[0X[2X ) ______________[0Xoperation
+  [6XReturns:[0X  List of vectors
+  
+  Adds  zero  blocks  to  a set of generating vectors [3Xgens[0m to make it have the
+  block  structure  given  in [3XblockStructure[0m (for a given [2XModuleGroupAndAction[0m
+  ([14X5.4-5[0m) [3XGA[0m). The generators [3Xgens[0m are modified in place, and also returned.
+  
+  The  [3XblockStructure[0m  parameter  is  a  vector  of which is the length of the
+  required  output  vector  and  has zeros where zero blocks should be, and is
+  non-zero  elsewhere. Typically, an earlier call to [2XHAPPRIME_RemoveZeroBlocks[0m
+  ([14X9.1-15[0m)  will  have  been used to remove the zero blocks, and this function
+  and   such   a   [3XblockStructure[0m   vector   is  returned  by  this  function.
+  [2XHAPPRIME_AddZeroBlocks[0m can be used to reinstate these zero blocks.
+  
+  
+  [1X9.2 FG-modules[0X
+  
+  FG-modules in [5XHAPprime[0m use the datatype [9XFpGModuleGF[0m (Chapter [14X5[0m). Internally,
+  this  uses many of the functions listed in Section [14X9.1[0m, and further internal
+  functions are listed below.
+  
+  [1X9.2-1 HAPPRIME_DirectSumForm[0m
+  
+  [2X> HAPPRIME_DirectSumForm( [0X[3Xcurrent, new[0X[2X ) __________________________[0Xoperation
+  [6XReturns:[0X  String
+  
+  Returns  a  string containing the form of the generator matrix if the direct
+  sum  is formed between a [9XFpGModuleGF[0m with the form [3Xcurrent[0m and a [9XFpGModuleGF[0m
+  with  the  form  [3Xnew[0m.  The  direct  sum  is formed by placing the two module
+  generating  matrices  in diagonal form. Given the form of the two generating
+  matrices,  this  allows  the  form  of  the  direct  sum  to  be stated. See
+  [2XModuleGeneratorsForm[0m ([14X5.5-5[0m) for information about form strings.
+  
+  [1X9.2-2 HAPPRIME_PrintModuleDescription[0m
+  
+  [2X> HAPPRIME_PrintModuleDescription( [0X[3XM, func[0X[2X ) ______________________[0Xoperation
+  [6XReturns:[0X  nothing
+  
+  Used  by  [2XPrintObj[0m  ([14XReference:  PrintObj[0m),  [2XViewObj[0m  ([14XReference:  ViewObj[0m),
+  [2XDisplay[0m   ([14XReference:  Display[0m)  and  [2XDisplayBlocks[0m  ([14X5.4-10[0m),  this  helper
+  function prints a description of the module [3XM[0m. The parameter [3Xfunc[0m can be one
+  of  the strings [10X"print"[0m, [10X"view"[0m, [10X"display"[0m or [10X"displayblocks"[0m, corresponding
+  to the print different functions that might be called.
+  
+  
+  [1X9.2-3 HAPPRIME_ModuleGeneratorCoefficients[0X
+  
+  [2X> HAPPRIME_ModuleGeneratorCoefficients( [0X[3XM, elm[0X[2X ) __________________[0Xoperation
+  [2X> HAPPRIME_ModuleGeneratorCoefficientsDestructive( [0X[3XM, elm[0X[2X ) _______[0Xoperation
+  [2X> HAPPRIME_ModuleGeneratorCoefficients( [0X[3XM, coll[0X[2X ) _________________[0Xoperation
+  [2X> HAPPRIME_ModuleGeneratorCoefficientsDestructive( [0X[3XM, coll[0X[2X ) ______[0Xoperation
+  [6XReturns:[0X  Vector
+  
+  Returns  the  coefficients needed to make the module element [3Xelm[0m as a linear
+  and  G-combination  of  the  module  generators  of  the  [9XFpGModuleGF[0m [3XM[0m. The
+  coefficients  are  returned  in  standard  vector  form,  or  if there is no
+  solution  then [10Xfail[0m is returned. If a list of elements is given, then a list
+  of  coefficients  (or  [10Xfails[0m)  is  returned.  The  [10XDestructive[0m  form of this
+  function  might  change  the  elements  of  of [3XM[0m or [3Xelm[0m. The non-[10XDestructive[0m
+  version makes copies to ensure that they are not changed.
+  
+  See also [2XHAPPRIME_ModuleElementFromGeneratorCoefficients[0m ([14X9.2-4[0m).
+  
+  
+  [1X9.2-4 HAPPRIME_ModuleElementFromGeneratorCoefficients[0X
+  
+  [2X> HAPPRIME_ModuleElementFromGeneratorCoefficients( [0X[3XM, c[0X[2X ) _________[0Xoperation
+  [2X> HAPPRIME_ModuleElementFromGeneratorCoefficients( [0X[3XM, coll[0X[2X ) ______[0Xoperation
+  [6XReturns:[0X  Vector
+  
+  Returns  an  element from the module [3XM[0m, constructed as a linear and G-sum of
+  the module generators as specified in [3Xc[0m. If a list of coefficient vectors is
+  given, a list of corresponding module elements is returned.
+  
+  See also [2XHAPPRIME_ModuleGeneratorCoefficients[0m ([14X9.2-3[0m)
+  
+  [1X9.2-5 HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsDestructive[0m
+  
+  [2X> HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsDestructive( [0X[3Xvgens, GA[0X[2X ) [0Xoperation
+  [2X> HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsOnRightDestructive( [0X[3Xvgens, GA[0X[2X ) [0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Returns a module with minimal generators that is equal to the FG-module with
+  [13Xvector  space[0m  basis  [3Xvgens[0m and [2XModuleGroupAndAction[0m ([14X5.4-5[0m) as specified in
+  [3XGA[0m.  The solution is computed by the module radical method, which is fast at
+  the expense of memory. This function will corrupt the matrix [3Xgens[0m.
+  
+  This is a helper function for [2XMinimalGeneratorsModuleRadical[0m ([14X5.5-9[0m) that is
+  also     used     by    [2XExtendResolutionPrimePowerGroupRadical[0m    ([14XHAPprime:
+  ExtendResolutionPrimePowerGroupRadical[0m)  (which  knows  that  its  module is
+  already in vector-space form).
+  
+  [1X9.2-6 HAPPRIME_IsGroupAndAction[0m
+  
+  [2X> HAPPRIME_IsGroupAndAction( [0X[3Xobj[0X[2X ) ________________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns   [10Xtrue[0m   if   [3Xobj[0m   appears  to  be  a  [10XgroupAndAction[0m  record  (see
+  [2XModuleGroupAndAction[0m ([14X5.4-5[0m)), or [10Xfalse[0m otherwise.
+  
+  
+  [1X9.3 Resolutions[0X
+  
+  For  details  of the main resolution functions in [5XHAPprime[0m, see Chapter [14X2[0m of
+  this datatypes reference manual, and [14X'HAPprime: Resolutions'[0m in the [5XHAPprime[0m
+  user guide. This section describes the internal helper functions used by the
+  higher-level functions.
+  
+  [1X9.3-1 HAPPRIME_WordToVector[0m
+  
+  [2X> HAPPRIME_WordToVector( [0X[3Xw, dim, orderG[0X[2X ) ____________________________[0Xmethod
+  [6XReturns:[0X  [5XHAP[0m word (list of lists)
+  
+  Returns  the  boundary  map vector that corresponds to the [5XHAP[0m word vector [3Xw[0m
+  with  module ambient dimension [3Xdim[0m and group order [3XorderG[0m (assumed to be the
+  [10XactionBlockSize[0m).  A  [5XHAP[0m  word  vector  has the following format: [10X[ [block,
+  elm],  [block,  elm], ... ][0m where [10Xblock[0m is a block number and [10Xelm[0m is a group
+  element index (see example below).
+  
+  See also [2XHAPPRIME_VectorToWord[0m ([14X9.3-2[0m)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := CyclicGroup(4);;[0X
+    [4Xgap> v := HAPPRIME_WordToVector([ [1,2],[2,3] ], 2, Order(G));[0X
+    [4X<a GF2 vector of length 8>[0X
+    [4Xgap> HAPPRIME_DisplayGeneratingRows([v], CanonicalGroupAndAction(G));[0X
+    [4X[.1..|..1.][0X
+    [4Xgap> HAPPRIME_VectorToWord(v, Order(G));[0X
+    [4X[ [ 1, 2 ], [ 2, 3 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X9.3-2 HAPPRIME_VectorToWord[0m
+  
+  [2X> HAPPRIME_VectorToWord( [0X[3Xvec, orderG[0X[2X ) _____________________________[0Xfunction
+  [6XReturns:[0X  Vector
+  
+  The  [5XHAP[0m word format vector that corresponds to the boundary vector [3Xvec[0m with
+  [10XactionBlockSize[0m assumed to be [3XorderG[0m.
+  
+  See [2XHAPPRIME_WordToVector[0m ([14X9.3-1[0m) for a few more details and an example.
+  
+  [1X9.3-3 HAPPRIME_BoundaryMatrices[0m
+  
+  [2X> HAPPRIME_BoundaryMatrices( [0X[3XR[0X[2X ) __________________________________[0Xattribute
+  [6XReturns:[0X  List of matrices
+  
+  If [3XR[0m is a resolution which stores its boundaries as a list of matrices (e.g.
+  one created by [5XHAPprime[0m, this list is returned. Otherwise, [10Xfail[0m is returned.
+  Note  that  the  first matrix in this list corresponds to the zeroth degree:
+  for  resolutions  of  modules,  this  is  the  generators of the module; for
+  resolutions  of  groups,  this  is  the  empty  matrix.  The  second  matrix
+  corresponds to the first degree, and so on.
+  
+  [1X9.3-4 HAPPRIME_AddNextResolutionBoundaryMapMatNC[0m
+  
+  [2X> HAPPRIME_AddNextResolutionBoundaryMapMatNC( [0X[3XR, BndMat[0X[2X ) _________[0Xoperation
+  [6XReturns:[0X  [10XHapResolution[0m
+  
+  Returns  the  resolution [3XR[0m extended by one term, where that term is given by
+  the  boundary  map  matrix  [3XBndMat[0m.  If  [3XBndMat[0m is not already in compressed
+  matrix form, it will be converted into this form, and if the boundaries in [3XR[0m
+  are not already in matrix form, they are all converted into this form.
+  
+  [1X9.3-5 HAPPRIME_CreateResolutionWithBoundaryMapMatsNC[0m
+  
+  [2X> HAPPRIME_CreateResolutionWithBoundaryMapMatsNC( [0X[3XG, BndMats[0X[2X ) ____[0Xoperation
+  [6XReturns:[0X  [10XHapResolution[0m
+  
+  Returns  a  [5XHAP[0m resolution object for group [3XG[0m where the module homomorphisms
+  are given by the boundary matrices in the list [3XBndMats[0m. This list is indexed
+  with  the  boundary  matrix  for  degree  [13Xzero[0m  as the first element. If the
+  resolution  is  the  resolution of a module, the module's minimal generators
+  are  this  first boundary matrix, otherwise (for the resolution of a group),
+  this should be set to be the empty matrix [10X[][0m.
+  
+  
+  [1X9.4 Polynomial rings[0X
+  
+  Ths  internal  functions  in  this  section  implement  isomorphisms between
+  polynomial rings via maps from one set of indeterminates to another.
+  
+  
+  [1X9.5 Gröbner Bases[0X
+  
+  Ths  internal  functions  in this section provide a transparent way of using
+  Singular's  Gröbner basis functions, if they are available. See the [5Xsingular[0m
+  package  documentation  [14X'singular:  singular: the GAP interface to Singular'[0m
+  for further details.
+  
+  
+  [1X9.6 Presentations of graded algebras[0X
+  
+  For  the  main  functions dealing with presentations of graded algebras, and
+  details  of  the  datatype  see Chapter [14X4[0m. This section details the internal
+  functions used by the higher-level functions.
+  
+  
+  [1X9.7 Derivations[0X
+  
+  The  kernel of a derivation is efficiently computed by writing the ring R as
+  an  S-module  where  S is the subring of squares (or some larger ring in the
+  kernel).  The  internal  function  in  this section is used to describe this
+  S-module  and  allow  conversion  between  elements of R and elements of the
+  S-module.
+  
+  
+  [1X9.8 Test functions[0X
+  
+  Internal helper functions for testing [5XHAPprime[0m.
+  
+  [1X9.8-1 HAPPRIME_VersionWithSVN[0m
+  
+  [2X> HAPPRIME_VersionWithSVN( [0X[3X[0X[2X ) ______________________________________[0Xfunction
+  [6XReturns:[0X  String
+  
+  Returns   a  string  giving  a  current  version  number  for  the  HAPprime
+  installation  assuming  that it is checked out from a subversion repository.
+  This  fetches  the current version number from [10XPackageInfo.g[0m and appends the
+  return  of the [10Xsvnversion[0m program to this, returning the resulting composite
+  string.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> HAPPRIME_VersionWithSVN();[0X
+    [4X"0.2.1.302:319M"[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X9.8-2 HAPPRIME_SingularIsAvailable[0m
+  
+  [2X> HAPPRIME_SingularIsAvailable( [0X[3X[0X[2X ) _________________________________[0Xfunction
+  [6XReturns:[0X  Boolean
+  
+  The  [5XSingular[0m  package  can  be  succesfully  loaded  whether  the  [11Xsingular[0m
+  executable  is  present  or  not, so this function attempts to check for the
+  presence of this executable by searching on the system path and checking for
+  global variables set by the [5XSingular[0m.
+  
+  Whether this function returns [9Xtrue[0m or [9Xfalse[0m will not affect the rest of this
+  package:  it  only  affects  which  tests  are  run  by the [11Xhapprime.txt[0m and
+  [11Xtestall.g[0m test routines.
+  
+  [1X9.8-3 HAPPRIME_Random2Group[0m
+  
+  [2X> HAPPRIME_Random2Group( [0X[3X[orderG][0X[2X ) _______________________________[0Xoperation
+  [2X> HAPPRIME_Random2GroupAndAction( [0X[3X[orderG][0X[2X ) ______________________[0Xoperation
+  [6XReturns:[0X  Group or [10XgroupAndAction[0m record
+  
+  Returns    a    random    2-group,   or   a   [10XgroupAndAction[0m   record   (see
+  [2XModuleGroupAndAction[0m  ([14X5.4-5[0m))  with  the canonical action. The order may be
+  specified  as an argument, or if not then a group is chosen randomly (from a
+  uniform  distribution)  over all of the possible groups with order from 2 to
+  128.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> HAPPRIME_Random2Group();[0X
+    [4X<pc group of size 8 with 3 generators>[0X
+    [4Xgap> HAPPRIME_Random2Group();[0X
+    [4X<pc group of size 32 with 5 generators>[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X9.8-4 HAPPRIME_TestResolutionPrimePowerGroup[0m
+  
+  [2X> HAPPRIME_TestResolutionPrimePowerGroup( [0X[3X[ntests][0X[2X ) ______________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns       [9Xtrue[0m       if      [2XResolutionPrimePowerGroupGF[0m      ([14XHAPprime:
+  ResolutionPrimePowerGroupGF            (for            group)[0m)           and
+  [2XResolutionPrimePowerGroupRadical[0m ([14XHAPprime: ResolutionPrimePowerGroupRadical
+  (for  group)[0m)  appear  to  be  working  correctly,  or [9Xfalse[0m otherwise. This
+  repeatedly  creates resolutions of length 6 for random 2-groups (up to order
+  128)  using  both  of  the [5XHAPprime[0m resolution algorithms, and compares them
+  both    with    the    original    [5XHAP[0m    [2XResolutionPrimePowerGroup[0m    ([14XHAP:
+  ResolutionPrimePowerGroup[0m)  and  checks  that  they  are equal. The optional
+  argument [3Xntests[0m specifies how many resolutions to try: the default is 25.
+  

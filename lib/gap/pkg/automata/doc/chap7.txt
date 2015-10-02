@@ -1,0 +1,109 @@
+  
+  [1m[4m[31m7. Computating the commutative image of a rational language[0m
+  
+  
+  [1m[4m[31m7.1 Semilinear Sets[0m
+  
+  The  commutative  image  of a rational language is a semilinear set. One may
+  adapt  the  functions  to  compute  a  rational  expression for the language
+  recognized  by  an  automaton  in  order to compute directly the commutative
+  image of the language recognized by the automaton. Further improvement leads
+  to  the  direct  computation  of  the  closure in Bbb Z^n, for the profinite
+  topology,  of  that  commutative image. (See [D01] for the correction of the
+  algorithms.)  Recall  that  (see  [D98])  if  a  semilinear set given by the
+  semilinear  expression  a+b_1Bbb  N+ cdots +b_pBbb N, then a+b_1Bbb Z+ cdots
+  +b_pBbb  Z  is  a  Bbb  Z-semilinear  expression  for  the closure under the
+  profinite  topology  of  the  semilinear  set  given. We use the terminology
+  [22m[32mcommutative  language[0m  and  [22m[32mAbelian  language[0m for subsets of Bbb N and Bbb Z
+  respectively.    \index{commutative!language}\index{Abelian!language}    The
+  [22m[32mcommutative   language  recognized  by  an  automaton[0m  (resp.  GTG)  is  the
+  commutative  image  of the language recognized by the automaton (resp. GTG).
+  The  [22m[32mAbelian  language recognized by an automaton[0m (resp. GTG) is the closure
+  under  the  profinite  topology  of  the  commutative  image of the language
+  recognized by the automaton (resp. GTG).
+  
+  [1m[4m[31m7.1-1  RemoveStateCom[0m
+  
+  [1m[34m>  RemoveStateCom( [0m[22m[34mgtg[0m[1m[34m ) ___________________________________________[0mfunction
+  
+  The  first  state  of  generalized  transition graph [22m[32mgtg[0m is removed. The GTG
+  obtained recognizes the same commutative language than the original.
+  
+  [1m[4m[31m7.1-2  DDAtoGTGCom[0m
+  
+  [1m[34m>  DDAtoGTGCom( [0m[22m[34mA[0m[1m[34m ) ________________________________________________[0mfunction
+  
+  Transforms  a  dense  deterministic  finite  automaton  into  a  finite  GTG
+  recognizing the same commutative language.
+  
+  [1m[4m[31m7.1-3  LangGTGCom[0m
+  
+  [1m[34m>  LangGTGCom( [0m[22m[34mgtg[0m[1m[34m ) _______________________________________________[0mfunction
+  
+  Computes the commutative language recognized by a GTG.
+  
+  [1m[4m[31m7.1-4  LanguageCom[0m
+  
+  [1m[34m>  LanguageCom( [0m[22m[34maut[0m[1m[34m ) ______________________________________________[0mfunction
+  
+  Computes  the  commutative  language  recognized  by  a  dense deterministic
+  automaton.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m gap> aut := Automaton("det",5,2,[[1,2,4,2,1],[1,1,1,5,1]],[3],[2,3,4,5]);[0m
+    [22m[35m      |  1  2  3  4  5 [0m
+    [22m[35m   -  -  -  -  -  -  - [0m
+    [22m[35m   a  |  1  2  4  2  1 [0m
+    [22m[35m   b  |  1  1  1  5  1 [0m
+    [22m[35mInitial state: [ 3 ][0m
+    [22m[35mAccepting states: [ 2, 3, 4, 5 ][0m
+    [22m[35m[0m
+    [22m[35mgap> AutomatonToRatExp(aut);[0m
+    [22m[35m1UabUa(1Uaa*)[0m
+    [22m[35mgap> LanguageCom(aut);[0m
+    [22m[35m[ [ 1, 1 ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 3, 0 ] + [ 1, 0 ] N  ][0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  It  is  obvious that not all possible simplifications have been carried out.
+  The  case of Bbb Z-semilinear sets is similar, but some more simplifications
+  are done.
+  
+  [1m[4m[31m7.1-5  RemoveStateAb[0m
+  
+  [1m[34m>  RemoveStateAb( [0m[22m[34mgtg[0m[1m[34m ) ____________________________________________[0mfunction
+  
+  The  first state of generalized transition graph [22m[32mgtg[0m is removed. The Abelian
+  language  recognized  by  the  GTG  is  the  same  than the Abelian language
+  recognized   by   the   original  GTG.  Several  simplifications  are  done.
+  Computations  of  normal  forms  of  matrices  aiming to determine basis for
+  subgroups  of  Bbb  Z^n  are  made.  These  computations of normal forms are
+  carried out using functions that are part of \GAP.
+  
+  [1m[4m[31m7.1-6  DDAtoGTGAb[0m
+  
+  [1m[34m>  DDAtoGTGAb( [0m[22m[34maut[0m[1m[34m ) _______________________________________________[0mfunction
+  
+  Transforms  a  dense  deterministic  finite  automaton  into  a  finite  GTG
+  recognizing  the  same Abelian language than the Abelian language recognized
+  by the original automaton.
+  
+  [1m[4m[31m7.1-7  LangGTGAb[0m
+  
+  [1m[34m>  LangGTGAb( [0m[22m[34mgtg[0m[1m[34m ) ________________________________________________[0mfunction
+  
+  Computes  the Abelian language recognized by a GTG. It uses the fact that if
+  when  removing  a  state  we  obtain  an  edge  labeled by Bbb Z^n, then the
+  resulting language is Bbb Z^n.
+  
+  [1m[4m[31m7.1-8  LanguageAb[0m
+  
+  [1m[34m>  LanguageAb( [0m[22m[34mA[0m[1m[34m ) _________________________________________________[0mfunction
+  
+  Computes  the  Abelian language recognized by a deterministic automaton. For
+  the automaton considered above, we obtain
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35mgap> LanguageAb(aut); [0m
+    [22m[35m[ [ 1, 1 ], [ 0, 0 ] + [ 1, 0 ] Z  ][0m
+  [22m[35m------------------------------------------------------------------[0m
+  

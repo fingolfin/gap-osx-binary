@@ -1,0 +1,233 @@
+  
+  [1X1 Introduction[0X
+  
+  
+  [1X1.1 Introduction to the [5Xtoric[1X package[0X
+  
+  This  manual describes the [5Xtoric[0m package for working with toric varieties in
+  [5XGAP[0m.  Toric  varieties  can be dealt with more easily than general varieties
+  since  often  times  questions  about a toric variety can be reformulated in
+  terms  of  combinatorial  geometry.  Some  coding theory commands related to
+  toric  varieties  are  contained in the error-correcting codes [5XGUAVA[0m package
+  (for  example,  the  command [10XToricCode[0m). We refer to the [5XGUAVA[0m manual [CM09]
+  and the expository paper [JV02] for more details.
+  
+  The  [5Xtoric[0m  package  also  contains  several  commands  unrelated  to  toric
+  varieties  (mostly  for  list manipulations). These will not be described in
+  this documention but they are briefly documented in the [10Xlib/util.gd[0m file.
+  
+  [5Xtoric[0m  is implemented in the [5XGAP[0m language, and runs on any system supporting
+  [5XGAP[0m4.3 and above. The [5Xtoric[0m package is loaded with the command
+  
+   gap> LoadPackage( "toric" ); 
+  
+  Please  send  bug  reports,  suggestions  and  other comments about [5Xtoric[0m to
+  [7Xmailto:support@gap-system.org[0m.
+  
+  
+  [1X1.2 Introduction to constructing toric varieties[0X
+  
+  Rather  than  sketch  the  theory of toric varieties, we refer to [JV02] and
+  [Ful93]  for  details.  However,  we  briefly  describe some terminology and
+  notation.
+  
+  
+  [1X1.2-1 Generalities[0X
+  
+  Let  F  denote  a  field  and  R=F [x_1,...,x_n] be a ring in n variables. A
+  [12Xbinomial equation[0m in R is one of the form
+  
+  
+       x_1^{k_1}...x_n^{k_n}=x_1^{\ell_1}...x_n^{\ell_n},
+  
+  
+  where  k_i >= 0, ell_j >= 0 are integers. A binomial variety is a subvariety
+  of  affine n-space A_F^n defined by a finite set of binomial equations (such
+  a  variety  need  not  be  normal). A typical ``toric variety'' is binomial,
+  though they will be introduced via an [13Xa priori[0m independent construction. The
+  basic  idea of the construction is to replace each such binomial equation as
+  above  by  a relation in a semigroup contained in a lattice and replace R by
+  the  ``group  algebra''  of  this  semigroup. By the way, a toric variety is
+  always normal (see for example, [Ful93], page 29).
+  
+  
+  [1X1.2-2 Basic combinatorial geometry constructions[0X
+  
+  Let Q denote the field of rational numbers and Z denote the set of integers.
+  Let n>1 denote an integer.
+  
+  Let   $V=Q^n$   having  basis  f_1=(1,0,...,0),  ...,  f_n=(0,...,0,1).  Let
+  L_0=Z^nsubset  V be the standard lattice in V. We identify V and L_0otimes_Z
+  Q. We use < , > to denote the (standard) inner product on V. Let
+  
+  
+       L_0^*={\rm Hom}(L_0,Z)=\{ v\in V\ |\ \langle v,w \rangle \in Z, \
+       \forall w\in L_0\}
+  
+  
+  denote  the [12Xdual lattice[0m, so (fixing the standard basis e_1^*,...,e_n^* dual
+  to the f_1,...,f_n) L_0^* may be identified with Z^n.
+  
+  A [12Xcone[0m in V is a set sigma of the form
+  
+  
+       \sigma=\{a_1v_1+...+a_mv_m\ |\ a_i\geq 0\}\subset V,
+  
+  
+  where  v_1,...,v_m in V is a given collection of vectors, called (semigroup)
+  [12Xgenerators[0m  of  sigma.  A  [12Xrational  cone[0m is one where v_1,...,v_m in L_0. A
+  [12Xstrongly convex[0m cone is one which contains no lines through the origin.
+  
+  [13X  By  abuse  of  terminology, from now on a [12Xcone[0m[13X of L_0 is a strongly convex
+  rational cone. [0m
+  
+  A  [12Xface[0m  of a cone sigma is either sigma itself or a subset of the form Hcap
+  sigma,  where H is a codimension one subspace of V which intersects the cone
+  non-trivially  and such that the cone is contained in exactly one of the two
+  half-spaces  determined by H. A [12Xray[0m (or edge) of a cone is a one-dimensional
+  face.  Typically,  cones  are  represented  in  [5Xtoric[0m by the list of vectors
+  defining  their rays. The [12Xdimension[0m of a cone is the dimension of the vector
+  space  it  spans. The [5Xtoric[0m package can test if a given vector is in a given
+  cone (see [10XInsideCone[0m).
+  
+  If sigma is a cone then the [12Xdual cone[0m is defined by
+  
+  
+       \sigma^* =\{w \in L_0^*\otimes Q \ |\ \langle v,w \rangle \geq 0,\
+       \forall v\in \sigma\}.
+  
+  
+  The  [5Xtoric[0m  package can test if a vector is in the dual of a given cone (see
+  [10XInDualCone[0m).
+  
+  Associate to the dual cone sigma^* is the semigroup
+  
+  
+       S_\sigma =\sigma^*\cap L_0^* =\{w\in L_0^* \ |\ \langle v,w\rangle
+       \geq 0,\ \forall v\in \sigma\}.
+  
+  
+  Though  L_0^*  has  $n$ generators [13Xas a lattice[0m, typically S_sigma will have
+  more  than  n  generators  [13Xas  a  semigroup[0m. The [5Xtoric[0m package can compute a
+  minimal     list     of     semigroup    generators    of    S_sigma    (see
+  [10XDualSemigroupGenerators[0m).
+  
+  A  fan is a collection of cones which ``fit together'' well. A [12Xfan[0m in L_0 is
+  a  set  Delta={sigma  } of rational strongly convex cones in V= L_0 otimes Q
+  such that
+  
+  --    if  sigma in Delta and tau subset sigma is a face of sigma then tau in
+        Delta,
+  
+  --    if sigma_1, sigma_2 in Delta then the intersection sigma_1 cap sigma_2
+        is a face of both sigma_1 and sigma_2 (and hence belongs to Delta).
+  
+  In particular, the face of a cone in a fan is a cone is the fan.
+  
+  If V is the (set-theoretic) union of the cones in Delta then we call the fan
+  [12Xcomplete[0m.  We  shall assume that all fans are finite. A fan is determined by
+  its list of maximal cones.
+  
+  [13XNotation[0m: A fan Delta is represented in [5Xtoric[0m as a set of maximal cones. For
+  example,  if  Delta  is  the  fan  with  maximal cones sigma_1=Q_+* f_1+Q_+*
+  (-f_1+f_2),    sigma_2=Q_+*    (-f_1+f_2)+Q_+*    (-f_1-f_2),   sigma_3=Q_+*
+  (-f_1-f_2)+Q_+*      f_1,      then      Delta     is     represented     by
+  [[[1,0],[-1,1]],[[-1,1],[-1,-1]],[[-1,-1],[1,0]]].
+  
+  The  [5Xtoric[0m  package can compute all cones in a fan of a given dimension (see
+  [10XConesOfFan[0m).  Moreover,  [5Xtoric[0m  can compute the set of all normal vectors to
+  the faces (i.e., hyperplanes) of a cone (see [10XFaces[0m).
+  
+  The  [12Xstar[0m  of a cone sigma in a fan Delta is the set Delta_sigma of cones in
+  Delta  containing  sigma as a face. The [5Xtoric[0m package can compute stars (see
+  [10XToricStar[0m).
+  
+  
+  [1X1.2-3 Basic affine toric variety constructions[0X
+  
+  Let
+  
+  
+       R_\sigma = F [S_\sigma]
+  
+  
+  denote  the  ``group algebra'' of this semigroup. It is a finitely generated
+  commutative  F-algebra.  It is in fact integrally closed ([Ful93], page 29).
+  We  may  interprete  R_sigma  as  a subring of R=F [x_1,...,x_n] as follows:
+  First, identify each e_i^* with the variable x_i. If S_sigma is generated as
+  a  semigroup by vectors of the form ell_1 e_1^*+...+ell_n e_n^*, where ell_i
+  is  an  integer,  then  its image in R is generated by monomials of the form
+  x_1^ell_1dots  x_n^ell_n.  The  [5Xtoric[0m  package  can compute these generating
+  monomials  (see  [10XEmbeddingAffineToricVariety[0m).  See Lemma 2.14 in [JV02] for
+  more details. This embedding can also be used to resolve singularities - see
+  section 5 of [JV02] for more details.
+  
+  Let
+  
+  
+       U_\sigma={\rm Spec}\ R_\sigma.
+  
+  
+  This defines an [12Xaffine toric variety[0m (associated to sigma). It is known that
+  the coordinate ring R_sigma of the affine toric variety U_sigma has the form
+  R_sigma  =  F[x_1,...,x_n]/J,  where  J  is  an ideal. The [5Xtoric[0m package can
+  compute generators of this ideal (see [10XIdealAffineToricVariety[0m).
+  
+  Roughly  speaking, the toric variety X(Delta) associated to the fan Delta is
+  given        by        a       collection       of       affine       pieces
+  $U_{\sigma_1},U_{\sigma_2},\dots,U_{\sigma_d}$   which   ``glue''   together
+  (where  Delta  = {sigma_i}). The affine pieces are given by the zero sets of
+  polynomial equations in some affine spaces and the gluings are given by maps
+  phi_i,j  : U_sigma_i -> U_sigma_j which are defined by ratios of polynomials
+  on  open  subsets  of the $U_{\sigma_i}$. The [5Xtoric[0m package does [13Xnot[0m compute
+  these gluings or work directly with these (non-affine) varieties X(Delta).
+  
+  A  cone  sigma subset V is said to be [12Xnonsingular[0m if it is generated by part
+  of  a  basis  for  the  lattice  L_0.  A  fan  Delta  of cones is said to be
+  [12Xnonsingular[0m  if  all  its cones are nonsingular. It is known that U_sigma is
+  nonsingular  if  and  only  if  sigma  is  nonsingular  (Proposition  2.1 in
+  [Ful93]).
+  
+  [12XExample:[0m      In      three      dimensions,      consider     the     cones
+  sigma_epsilon_1,epsilon_2,epsilon_3,i,j     generated     by     (epsilon_1*
+  1,epsilon_2*  1,epsilon_3*  1) and the standard basis vectors f_i,f_j, where
+  epsilon_i=pm  1  and  1<=  inot=  j<= 3. There are 8 cones per octant, for a
+  total  of  64  cones.  Let Delta denote the fan in V=Q^3 determined by these
+  maximal cones. The toric variety X(Delta) is nonsingular.
+  
+  
+  [1X1.2-4 Riemann-Roch spaces and related constructions[0X
+  
+  Although  the  [5Xtoric[0m package does not work directly with the toric varieties
+  X(Delta),  it  can  compute  objects associated with it. For example, it can
+  compute  the  Euler  characteristic (see [10XEulerCharacteristic[0m), Betti numbers
+  (see  [10XBettiNumberToric[0m),  and  the  number  of  GF(q)-rational  points  (see
+  [10XCardinalityOfToricVariety[0m) of X(Delta), [13X provided Delta is nonsingular.[0m
+  
+  For  an  algebraic  variety X the group of [12XWeil divisors[0m on X is the abelian
+  group  Div(X) generated (additively) by the irreducible subvarieties of X of
+  codimension  1. For a toric variety X(Delta) with dense open torus T, a Weil
+  divisor  D  is [12XT-invariant[0m if D=T* D. The group of T-invariant Weil divisors
+  is denoted TDiv(X). This is finitely generated by an explicitly given finite
+  set of divisors {D_1,...,D_r} which correspond naturally to certain cones in
+  Delta  (see  [Ful93]  for  details).  In particular, we may represent such a
+  divisor D in TDiv(X) by an k-tuple (d_1,...,d_k) of integers.
+  
+  Let  Delta  denote a fan in V=Q^n with rays (or edges) tau_i, 1<= i<= k, and
+  let  v_i  denote  the  first  lattice  point  on  tau_i.  Associated  to the
+  T-invariant Weil divisor D=d_1D_1+...+d_kD_k, is the [12Xpolytope[0m
+  
+  
+       P_D = \{ x=(x_1,...,x_n)\ |\ \langle x,v_i \rangle \geq -d_i, \
+       \forall 1 \leq i \leq k\}.
+  
+  
+  The  [5Xtoric[0m package can compute P_D (see [10XDivisorPolytope[0m), as well as the set
+  of    all    lattice    points    contained    in    this    polytope   (see
+  [10XDivisorPolytopeLatticePoints[0m).  Also  associated  to  the  T-invariant  Weil
+  divisor  D=d_1D_1+...+d_kD_k,  is  the  Riemann-Roch  space, L(D). This is a
+  space of functions on X(Delta) whose zeros and poles are ``controlled'' by D
+  (for  a more precise definition, see [Ful93]). The [5Xtoric[0m package can compute
+  a  basis  for  L(D)  (see [10XRiemannRochBasis[0m), [13X provided Delta is complete and
+  nonsingular.[0m
+  

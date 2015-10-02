@@ -1,0 +1,1199 @@
+  
+  [1X3 FG-modules[0X
+  
+  Let FG be the group ring of the group G over the field F. In this package we
+  only consider the case where G is a finite p-groups and F = F_p is the field
+  of p elements. In addition, we only consider free FG-modules.
+  
+  
+  [1X3.1 The [9XFpGModuleGF[1X datatype[0X
+  
+  Modules  and submodules of free FG-modules are represented in [5XHAPprime[0m using
+  the  [9XFpGModuleGF[0m  datatype, where the `[10XGF[0m' stands for `Generator Form'. This
+  defines  a  module using a group G and a set of G-generating vectors for the
+  module's  vector space, together with a group action which operates on those
+  vectors. A free FG-module FG can be considered as a vector space F^|G| whose
+  basis  is  the  elements  of  G. An element of (FG)^n is the direct sum of n
+  copies  of  FG and, as an element of [9XFpGModuleGF[0m, is represented as a vector
+  of  length  n|G| with coefficients in F. Representing our FG-module elements
+  as  vectors  is  ideal  for  our  purposes  since  [5XGAP[0m's  representation and
+  manipulation  of  vectors  and  matrices  over  small  prime  fields is very
+  efficient in both memory and computation time.
+  
+  The  [5XHAP[0m  package  defines a [9XFpGModule[0m object, which is similar but stores a
+  vector  space  basis  rather than a G-generating set for the module's vector
+  space.  Storing a G-generating set saves memory, both in passive storage and
+  in allowing more efficient versions of some computation algorithms.
+  
+  There are a number of construction functions for [9XFpGModuleGF[0ms: see [14X3.3-1[0m for
+  details. A FG-module is defined by the following:
+  
+  --    [10Xgens[0m,  a list of G-generating vectors for the underlying vector space.
+        These  do  not  need to be minimal - they could even be a vector space
+        basis.  The  [10XMinimalGeneratorsModule[0m  functions ([14X3.5-9[0m) can be used to
+        convert a module to one with a minimal set of generators.
+  
+  --    [10Xgroup[0m, the group G for the module
+  
+  --    [10Xaction[0m,  a  function  [10Xaction(g,  u)[0m that represents the module's group
+        action  on  vectors. It takes a group element g in G and a vector [10Xu[0m of
+        length [10XactionBlockSize[0m and returns another vector [10Xv[0m of the same length
+        that  is  the product v = gu. If [10Xaction[0m is not provided, the canonical
+        group  permutation  action  is  used.  If  the  vector [10Xu[0m is an integer
+        multiple  of  [10XactionBlockSize[0m  in  length,  the  function  [10Xaction[0m acts
+        block-wise on the vector.
+  
+  --    [10XactionBlockSize[0m,  the  length  of  vectors upon which [10Xaction[0m operates.
+        This  is  usually  the  order  of  the group, |G| (for example for the
+        canonical action), but it is possible to specify this to support other
+        possible   group   actions   that   might   act   on  larger  vectors.
+        [10XactionBlockSize[0m  will  always be equal to the ambient dimension of the
+        module FG^1.
+  
+  The  group,  action  and  block size are internally wrapped up into a record
+  [10XgroupAndAction[0m, with entries [10Xgroup[0m, [10Xaction[0m and [10XactionBlockSize[0m. This is used
+  to simplify the passing of parameters to some functions.
+  
+  Some  additional  information  is  sometimes  needed to construct particular
+  classes of [9XFpGModuleGF[0m:
+  
+  --    [10XambientDimension[0m,  the  length of vectors in the generating set: for a
+        module  (FG)^n,  this is equal to nx[10XactionBlockSize[0m. This is needed in
+        the case when the list of generating vectors is empty.
+  
+  --    [10Xform[0m,  a  string  detailing  whether  the  generators  are known to be
+        minimal or not, and if so in which format. It can be one of [10X"unknown"[0m,
+        [10X"fullcanonical"[0m,   [10X"minimal"[0m,   [10X"echelon"[0m   or   [10X"semiechelon"[0m.   Some
+        algorithms   require   a  particular  form,  and  algorithms  such  as
+        [2XEchelonModuleGenerators[0m  ([14X3.6-1[0m) that manipulate a module's generators
+        to create these forms set this entry.
+  
+  
+  [1X3.2 Implementation details: Block echelon form[0X
+  
+  
+  [1X3.2-1 Generating vectors and their block structure[0X
+  
+  Consider  the  vector  representation of an element in the FG-module (FG)^2,
+  where G is a group of order four:
+  
+  
+       v in (FG)^2 = (g_1 + g_3, g_1 + g_2 + g_4) = [1 0 1 0 | 1 1 0 1]
+  
+  
+  The  first  block  of  four entries in the vector correspond to the first FG
+  summand  and  the second block to the second summand (and the group elements
+  are  numbered in the order provided by the [5XGAP[0m function [2XElements[0m ([14XReference:
+  Elements[0m)).
+  
+  Given  a  G-generating  set for a FG-module, the usual group action permutes
+  the  group  elements,  and  thus  the effect on the vector is to permute the
+  equivalent vector elements. Each summand is independent, and so elements are
+  permuted within the blocks (normally of size |G|) seen in the example above.
+  A  consequence of this is that if any block (i.e. summand) in a generator is
+  entirely zero, then it remains zero under group (or F) multiplication and so
+  that  generator  contributes  nothing to that part of the vector space. This
+  fact  enables  some  of  the  structure  of  the module's vector space to be
+  inferred  from the G-generators, without needing a full vector space basis .
+  A  desirable  set of G-generators is one that has many zero blocks, and what
+  we call the `block echelon' form is one that has this property.
+  
+  
+  [1X3.2-2 Matrix echelon reduction and head elements[0X
+  
+  The  block  echelon  form  of a FG-module generating set is analagous to the
+  echelon  form  of matrices, used as a first stage in many matrix algorithms,
+  and  we  first  briefly  review matrix echelon form. In a (row) echelon-form
+  matrix,  the  head  element  in  each  row (the first non-zero entry) is the
+  identity, and is to the right of the head in the previous row. A consequence
+  of  this  is that the values below each head are all zero. All zero rows are
+  at  the  bottom  of  the  matrix  (or  are  removed).  [5XGAP[0m  also  defines  a
+  semi-echelon form, in which it is guaranteed that all values below each head
+  is zero, but not that each head is to the right of those above it.
+  
+  Matrices  can  be  converted  into  (semi-)echelon  form  by  using Gaussian
+  elimination   to  perform  row  reduction  (for  example  the  [5XGAP[0m  function
+  [2XSemiEchelonMat[0m  ([14XReference:  SemiEchelonMat[0m)). A typical algorithm gradually
+  builds  up a list of matrix rows with unique heads, which will eventually be
+  an  echelon-form set of basis elements for the row space of the matrix. This
+  set  is  initialised  with the first row of the matrix, and the algorithm is
+  then  applied  to each subsequent row in turn. The basis rows in the current
+  set  are  used to reduce the next row of the matrix: if, after reduction, it
+  is  non-zero  then  it  will  have a unique head and is added to the list of
+  basis  rows;  if it is zero then it may be removed. The final set of vectors
+  will be a semi-echelon basis for the row space of the original matrix, which
+  can then be permuted to give an echelon basis if required.
+  
+  
+  [1X3.2-3 Echelon block structure and minimal generators[0X
+  
+  In the same way that the echelon form is useful for vector space generators,
+  we  can  convert  a  set of FG-module generators into echelon form. However,
+  unlike  multiplication  by  a  field element, the group action on generating
+  vectors  also permutes the vector elements, so a strict echelon form is less
+  useful.  Instead,  we  define a `block echelon' form, treating the blocks in
+  the  vector  (see  example  above)  as  the FG-elements to be converted into
+  echelon form. In block-echelon form, the first non-zero block in each row is
+  as  far  to  the right as possible. Often, the first non-zero block in a row
+  will  be to the right of the first non-zero block in the row above, but when
+  several  generating vectors are needed in a block, this may not be the case.
+  The  following  example creates a random submodule of (FG)^n by picking five
+  generating  vectors  at  random.  This  module  is  first displayed with the
+  original generators, and then they are converted to block echelon form using
+  the   the   [5XHAPprime[0m   function  [2XEchelonModuleGenerators[0m  ([14X3.6-1[0m).  The  two
+  generating  sets  both span the same vector space (i.e. the same FG module),
+  but the latter representation is much more useful.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := FpGModuleGF(RandomMat(5, 32, GF(2)), DihedralGroup(8));;[0X
+    [4Xgap> Display(M);[0X
+    [4XModule over the group ring of Group( [ f1, f2, f3 ] )[0X
+    [4X in characteristic 2 with 5 generators in FG^4.[0X
+    [4X[.1..1.1.|.1....1.|1111.11.|11.1111.][0X
+    [4X[11.1..1.|1....11.|1...111.|1...11..][0X
+    [4X[11..1.1.|1.1.1...|11...1..|.11.11..][0X
+    [4X[11111111|111...1.|.11...1.|.1..1111][0X
+    [4X[.1111111|1.1.111.|..1..1..|1.111...][0X
+    [4Xgap> echM := EchelonModuleGenerators(M);[0X
+    [4Xrec( module := Module over the group ring of <pc group of size 8 with[0X
+    [4X    3 generators> in characteristic 2 with 4 generators in FG^[0X
+    [4X    4. Generators are in minimal echelon form., headblocks := [ 1, 2, 3, 4 ] )[0X
+    [4Xgap> Display(echM.module);[0X
+    [4XModule over the group ring of Group( [ f1, f2, f3 ] )[0X
+    [4X in characteristic 2 with 4 generators in FG^4.[0X
+    [4X[.1..1.1.|.1....1.|1111.11.|11.1111.][0X
+    [4X[........|.1111..1|111.1...|.11.11.1][0X
+    [4X[........|........|.1..1.1.|.1.1.111][0X
+    [4X[........|........|........|..1111.1][0X
+    [4XGenerators are in minimal echelon form.gap>[0X
+    [4Xgap> M = echM.module;[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  main  algorithm for converting a set of generators into echelon form is
+  [2XSemiEchelonModuleGeneratorsDestructive[0m  ([14X3.6-1[0m).  The  generators for the FG
+  module  are represented as rows of a matrix, and (with the canonical action)
+  the first |G| columns of this matrix correspond to the first block, the next
+  |G| columns to the second block, and so on. The first block of the matrix is
+  taken  and  the  vector space V_b spanned by the rows of that block is found
+  (which  will  be a a subspace of F^|G|). Taking the rows in the first block,
+  find  (by  gradually  leaving out rows) a minimal subset that generates V_b.
+  The  rows of the full matrix that correspond to this minimal subset form the
+  first  rows of the block-echelon form generators. Taking those rows, and all
+  G-multiples of them, now calculate a semi-echelon basis for the vector space
+  that    they    generate    (using   [2XSemiEchelonMatDestructive[0m   ([14XReference:
+  SemiEchelonMatDestructive[0m)).  This  is  used  to  reduce  all  of  the other
+  generators. Since the rows we have chosen span the space of the first block,
+  the  first  block  in all the other rows will be reduced to zero. We can now
+  move on to the second block.
+  
+  We  now look at the rows of the matrix that start (have their first non-zero
+  entry) in the second block. In addition, some of the generators used for the
+  first  block might additionally give rise to vector space basis vectors with
+  head  elements  in  the second blocks. The rows need to be stored during the
+  first  stage  and reused here. We find a minimal set of the matrix rows with
+  second-block  heads  that,  when  taken with any second-block heads from the
+  first  stage,  generate  the  entire  space spanned by the second block. The
+  vector-space basis from this new minimal set is then used to reduce the rest
+  of  the  generating  rows  as before, reducing all of the other rows' second
+  blocks  to  zero.  The  process  is  then repeated for each other block. Any
+  generators  that  are  completely  zero  are  then removed. The algorithm is
+  summarised in the following pseudocode:
+  
+  Let X be the list of generators still to convert (initially all the generators)
+  Let Xe = [] be the list of generators already in block-echelon form
+  Define X{b} to represent the $b$th block from generators X
+  Define V(X) to represent the vector space generated by generators X
+  -------------------------------------------------------------------------------
+  for b in [1..blocks] 
+    1. Find a minimal set of generators Xm from X such that 
+       V(Xm{b} + Xe{b}) = V(X{b} + Xe{b})
+    2. Remove Xm from X and add them to Xe
+    3. Find a semi-echelon basis for V(Xe) and use this to reduce the elements 
+       of block b in remaining vectors of X to zero
+  end for
+        
+  
+  The  result of this algorithm is a new generating set for the module that is
+  minimal in the sense that no vector can be removed from the set and leave it
+  still  spanning  the  same  vector  space.  In  the case of a FG-module with
+  F=GF(2),  this  is  a globally minimal set: there is no possible alternative
+  set with fewer generators.
+  
+  
+  [1X3.2-4 Intersection of two modules[0X
+  
+  Knowing  the  block structure of the modules enables the intersection of two
+  modules to be calculated more efficiently. Consider two modules U and V with
+  the block structure as given in this example:
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> DisplayBlocks(U);[0X
+    [4X[*..][0X
+    [4X[**.][0X
+    [4X[.*.][0X
+    [4Xgap> DisplayBlocks(V);[0X
+    [4X[.**][0X
+    [4X[.**][0X
+    [4X[..*][0X
+  [4X------------------------------------------------------------------[0X
+  
+  To calculate the intersection of the two modules, it is normal to expand out
+  the  two modules to find the vector space U_F and V_F of the two modules and
+  calculate the intersection as a standard vector-space intersection. However,
+  in  this  case,  since  U  has  no  elements in the last block, and V has no
+  elements in the first block, the intersection must only have elements in the
+  middle  block.  This  means  that  the  first  generator  of  U and the last
+  generator  of  V  can  not be in the intersection and can be ignored for the
+  purposes  of the intersection calculation. In general, rather than expanding
+  the entirety of U and V into an F-basis to calculate their intersection, one
+  can  expand  U and V more intelligently into F-bases U'_F and V'_F which are
+  smaller than U_F and V_F but have the same intersection.
+  
+  Having  determined  (by  comparing the block structure of U and V) that only
+  the  middle  block  in  our example contributes to the intersection, we only
+  need  to  expand  out the rows of U and V that have heads in that block. The
+  first  generator  of  U  generates  no  elements  in  the  middle block, and
+  trivially  be  ignored. The second row of U may or may not contribute to the
+  intersection: this will need expanding out and echelon reduced. The expanded
+  rows  that don't have heads in the central block can then be discarded, with
+  the  other  rows  forming  part  of  the  basis of U'_F. Likewise, the third
+  generator of U is expanded and echelon reduced to give the rest of the basis
+  for  U'_F. To find V'_F, the first two generators are expanded, semi-echelon
+  reduced  and  the  rows  with  heads  in  the  middle  block kept. The third
+  generator  can  be  ignored.  Finally, the intersection of U'_F and V'_F can
+  found using, for example, [2XSumIntersectionMatDestructive[0m ([14XHAPprime Datatypes:
+  SumIntersectionMatDestructive[0m).
+  
+  This  algorithm,  implemented in the function [2XIntersectionModulesGF[0m ([14X3.7-3[0m),
+  will (for modules whose generators have zero columns) use less memory than a
+  full  vector-space  expansion,  and  in  the  case  where  U  and  V have no
+  intersection,  may  need  to perform no expansion at all. In the worst case,
+  both U and V will need a full expansion, using no more memory than the naive
+  implementation.  Since  any  full expansion is done row-by-row, with echelon
+  reduction  each time, it will in general still require less memory (but will
+  be slower).
+  
+  
+  [1X3.3 Construction functions[0X
+  
+  
+  [1X3.3-1 FpGModuleGF construction functions[0X
+  
+  [2X> FpGModuleGF( [0X[3Xgens, G[, action, actionBlockSize][0X[2X ) _______________[0Xoperation
+  [2X> FpGModuleGF( [0X[3Xgens, groupAndAction[0X[2X ) _____________________________[0Xoperation
+  [2X> FpGModuleGF( [0X[3XambientDimension, G[, action, actionBlockSize][0X[2X ) ___[0Xoperation
+  [2X> FpGModuleGF( [0X[3XambientDimension, groupAndAction[0X[2X ) _________________[0Xoperation
+  [2X> FpGModuleGF( [0X[3XG, n[0X[2X ) _____________________________________________[0Xoperation
+  [2X> FpGModuleGF( [0X[3XgroupAndAction, n[0X[2X ) ________________________________[0Xoperation
+  [2X> FpGModuleGF( [0X[3XHAPmod[0X[2X ) ___________________________________________[0Xoperation
+  [2X> FpGModuleGFNC( [0X[3Xgens, G, form, action, actionBlockSize[0X[2X ) _________[0Xoperation
+  [2X> FpGModuleGFNC( [0X[3XambientDimension, G, action, actionBlockSize[0X[2X ) ___[0Xoperation
+  [2X> FpGModuleGFNC( [0X[3Xgens, groupAndAction[, form][0X[2X ) ___________________[0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Creates  and  returns  a  [9XFpGModuleGF[0m  module object. The most commonly-used
+  constructor  requires  a  list  of  generators [3Xgens[0m and a group [3XG[0m. The group
+  action  and block size can be specified using the [3Xaction[0m and [3XactionBlockSize[0m
+  parameters,  or  if  these are omitted then the canonical action is assumed.
+  These  parameters  can  also  be  wrapped up in a [10XgroupAndAction[0m record (see
+  [14X3.1[0m).
+  
+  An  empty  [9XFpGModuleGF[0m  can  be  constructed  by  specifying  a group and an
+  [3XambientDimension[0m  instead  of  a set of generators. A module spanning (FG)^n
+  with  canonical generators and action can be constructed by giving a group [3XG[0m
+  and  a  rank  [3Xn[0m.  A [9XFpGModuleGF[0m can also be constructed from a [5XHAP[0m [9XFpGModule[0m
+  [3XHAPmod[0m.
+  
+  The generators in a [9XFpGModuleGF[0m do not need to be a minimal set. If you wish
+  to  create  a  module  with  minimal generators, construct the module from a
+  non-minimal  set  [3Xgens[0m  and  then  use  one  of  the [10XMinimalGeneratorsModule[0m
+  functions ([14X3.5-9[0m). When constructing a [9XFpGModuleGF[0m from a [9XFpGModule[0m, the [5XHAP[0m
+  function  [2XGeneratorsOfFpGModule[0m  ([14XHAP:  GeneratorsOfFpGModule[0m)  is  used  to
+  provide a set of generators, so in this case the generators will be minimal.
+  
+  Most  of the forms of this function perform a few (cheap) tests to make sure
+  that  the arguments are self-consistent. The [10XNC[0m versions of the constructors
+  are  provided for internal use, or when you know what you are doing and wish
+  to skip the tests. See Section [14X3.3-5[0m below for an example of usage.
+  
+  [1X3.3-2 FpGModuleFromFpGModuleGF[0m
+  
+  [2X> FpGModuleFromFpGModuleGF( [0X[3XM[0X[2X ) ___________________________________[0Xoperation
+  [6XReturns:[0X  FpGModule
+  
+  Returns  a  [5XHAP[0m [9XFpGModule[0m that represents the same module as the [9XFpGModuleGF[0m
+  [3XM[0m.  This  uses [2XModuleVectorSpaceBasis[0m ([14X3.5-7[0m) to find the vector space basis
+  for  [3XM[0m  and constructs a [9XFpGModule[0m with this vector space and the same group
+  and action as [3XM[0m See Section [14X3.3-5[0m below for an example of usage.
+  
+  [13XTODO:  This  currently  constructs an FpGModule object explicitly. It should
+  use a constructor once one is provided[0m
+  
+  [1X3.3-3 MutableCopyModule[0m
+  
+  [2X> MutableCopyModule( [0X[3XM[0X[2X ) __________________________________________[0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Returns  a  copy  of  the  module  [3XM[0m  where the generating vectors are fully
+  mutable.  The group and action in the new module is identical to that in [3XM[0m -
+  only  the  list of generators is copied and made mutable. (The assumption is
+  that  this  function used in situations where you just want a new generating
+  set.)
+  
+  [1X3.3-4 CanonicalAction[0m
+  
+  [2X> CanonicalAction( [0X[3XG[0X[2X ) ____________________________________________[0Xattribute
+  [2X> CanonicalActionOnRight( [0X[3XG[0X[2X ) _____________________________________[0Xattribute
+  [2X> CanonicalGroupAndAction( [0X[3XG[0X[2X ) ____________________________________[0Xattribute
+  [6XReturns:[0X  Function  [10Xaction(g,v)[0m  or  a  record with elements [10X(group, action,
+            actionOnRight, actionBlockSize)[0m
+  
+  Returns a function of the form [10Xaction(g,v)[0m that performs the canonical group
+  action  of  an element [10Xg[0m of the group [3XG[0m on a vector [10Xv[0m (acting on the left by
+  default,  or  on  the  right  with  the [10XOnRight[0m version). The [10XGroupAndAction[0m
+  version  of  this function returns the actions in a record together with the
+  group  and  the action block size. Under the canonical action, a free module
+  FG is represented as a vector of length |G| over the field F, and the action
+  is a permutation of the vector elements.
+  
+  Note  that  these functions are attributes of a group, so that the canonical
+  action  for  a  particular group object will always be an identical function
+  (which is desirable for comparing and combining modules and submodules).
+  
+  
+  [1X3.3-5 Example: Constructing a [9XFpGModuleGF[1X[0X
+  
+  The  example  below  constructs  four  different  FG-modules, where G is the
+  quaternion  group  of order eight, and the action is the canonical action in
+  each case:
+  
+  (1)   [10XM[0m is the module (FG)^3
+  
+  (2)   [10XS[0m is the submodule of (FG)^3 with elements only in the first summand
+  
+  (3)   [10XT[0m is a random submodule [10XM[0m generated by five elements
+  
+  (4)   [10XU[0m is the trivial (zero) submodule of (FG)^4
+  
+  We  check  whether  [10XS[0m, [10XT[0m and [10XU[0m are submodules of [10XM[0m, examine a random element
+  from  [10XM[0m, and convert [10XS[0m into a [5XHAP[0m [9XFpGModule[0m. For the other functions used in
+  this example, see Section [14X3.8[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := SmallGroup(8, 4);;[0X
+    [4Xgap> M := FpGModuleGF(G, 3);[0X
+    [4XFull canonical module FG^3 over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2[0X
+    [4Xgap> gen := ListWithIdenticalEntries(24, Zero(GF(2)));;[0X
+    [4Xgap> gen[1] := One(GF(2));;[0X
+    [4Xgap> S := FpGModuleGF([gen], G);[0X
+    [4XModule over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2 with 1 generator in FG^[0X
+    [4X3. Generators are in minimal echelon form.[0X
+    [4Xgap> T := RandomSubmodule(M, 5);[0X
+    [4XModule over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2 with 5 generators in FG^3.[0X
+    [4Xgap> U := FpGModuleGF(32, CanonicalGroupAndAction(G));[0X
+    [4XModule over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2 with 0 generators in FG^[0X
+    [4X4. Generators are in minimal echelon form.[0X
+    [4Xgap>[0X
+    [4Xgap> IsSubModule(M, S);[0X
+    [4Xtrue[0X
+    [4Xgap> IsSubModule(M, T);[0X
+    [4Xtrue[0X
+    [4Xgap> IsSubModule(M, U);[0X
+    [4Xfalse[0X
+    [4Xgap>[0X
+    [4Xgap> e := RandomElement(M);[0X
+    [4X<a GF2 vector of length 24>[0X
+    [4Xgap> Display([e]);[0X
+    [4X . 1 1 . . 1 . . . . . 1 . . 1 1 . . 1 . 1 . . 1[0X
+    [4Xgap> IsModuleElement(S, e);[0X
+    [4Xfalse[0X
+    [4Xgap> IsModuleElement(T, e);[0X
+    [4Xtrue[0X
+    [4Xgap>[0X
+    [4Xgap> FpGModuleFromFpGModuleGF(S);[0X
+    [4XModule of dimension 8 over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.4 Data access functions[0X
+  
+  [1X3.4-1 ModuleGroup[0m
+  
+  [2X> ModuleGroup( [0X[3XM[0X[2X ) ________________________________________________[0Xoperation
+  [6XReturns:[0X  Group
+  
+  Returns  the  group of the module [3XM[0m. See Section [14X3.4-11[0m below for an example
+  of usage.
+  
+  [1X3.4-2 ModuleGroupOrder[0m
+  
+  [2X> ModuleGroupOrder( [0X[3XM[0X[2X ) ___________________________________________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  Returns  the  order of the group of the module [3XM[0m. This function is identical
+  to  [10XOrder(ModuleGroup(M))[0m,  and  is  provided  for  convenience. See Section
+  [14X3.4-11[0m below for an example of usage.
+  
+  [1X3.4-3 ModuleAction[0m
+  
+  [2X> ModuleAction( [0X[3XM[0X[2X ) _______________________________________________[0Xoperation
+  [6XReturns:[0X  Function
+  
+  Returns  the  group  action  function  of  the  module [3XM[0m. This is a function
+  [10Xaction(g,  v)[0m  that  takes  a  group  element [10Xg[0m and a vector [10Xv[0m and returns a
+  vector  [10Xw[0m  that  is  the  result  of w = gv. See Section [14X3.4-11[0m below for an
+  example of usage.
+  
+  [1X3.4-4 ModuleActionBlockSize[0m
+  
+  [2X> ModuleActionBlockSize( [0X[3XM[0X[2X ) ______________________________________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  Returns  the  block  size  of  the group action of the module [3XM[0m. This is the
+  length  of vectors (or the factor of the length) upon which the group action
+  function acts. See Section [14X3.4-11[0m below for an example of usage.
+  
+  [1X3.4-5 ModuleGroupAndAction[0m
+  
+  [2X> ModuleGroupAndAction( [0X[3XM[0X[2X ) _______________________________________[0Xoperation
+  [6XReturns:[0X  Record    with    elements    [10X(group,    action,    actionOnRight,
+            actionBlockSize)[0m
+  
+  Returns  details  of  the  module's  group  and  action in a record with the
+  following elements:
+  
+  --    [10Xgroup[0m The module's group
+  
+  --    [10Xaction[0m  The module's group action, as a function of the form [10Xaction(g,
+        v)[0m that takes a vector [10Xv[0m and returns the vector w = gv
+  
+  --    [10XactionOnRight[0m The module's group action when acting on the right, as a
+        function  of  the  form [10Xaction(g, v)[0m that takes a vector [10Xv[0m and returns
+        the vector w = vg
+  
+  --    [10XactionBlockSize[0m  The  module's  group  action  block size. This is the
+        ambient dimension of vectors in the module FG
+  
+  This  function  is  provided  for  convenience,  and  is used by a number of
+  internal functions. The canonical groups and action can be constructed using
+  the  function  [2XCanonicalGroupAndAction[0m ([14X3.3-4[0m). See Section [14X3.4-11[0m below for
+  an example of usage.
+  
+  [1X3.4-6 ModuleCharacteristic[0m
+  
+  [2X> ModuleCharacteristic( [0X[3XM[0X[2X ) _______________________________________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  Returns  the  characteristic  of the field F of the FG-module [3XM[0m. See Section
+  [14X3.4-11[0m below for an example of usage.
+  
+  [1X3.4-7 ModuleField[0m
+  
+  [2X> ModuleField( [0X[3XM[0X[2X ) ________________________________________________[0Xoperation
+  [6XReturns:[0X  Field
+  
+  Returns  the  field  F  of  the FG-module [3XM[0m. See Section [14X3.4-11[0m below for an
+  example of usage.
+  
+  [1X3.4-8 ModuleAmbientDimension[0m
+  
+  [2X> ModuleAmbientDimension( [0X[3XM[0X[2X ) _____________________________________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  Returns  the  ambient dimension of the module [3XM[0m. The module [3XM[0m is represented
+  as  a  submodule  of  FG^n using generating vectors for a vector space. This
+  function  returns  the  dimension  of  this underlying vector space. This is
+  equal  to  the length of each generating vector, and also nx[10XactionBlockSize[0m.
+  See Section [14X3.4-11[0m below for an example of usage.
+  
+  [1X3.4-9 AmbientModuleDimension[0m
+  
+  [2X> AmbientModuleDimension( [0X[3XM[0X[2X ) _____________________________________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  The  module  [3XM[0m  is  represented  a submodule embedded within the free module
+  FG^n.  This function returns n, the dimension of the ambient module. This is
+  the same as the number of blocks. See Section [14X3.4-11[0m below for an example of
+  usage.
+  
+  [1X3.4-10 DisplayBlocks[0m
+  
+  [2X> DisplayBlocks( [0X[3XM[0X[2X ) ______________________________________________[0Xoperation
+  [6XReturns:[0X  nothing
+  
+  Displays   the  structure  of  the  module  generators  [3Xgens[0m  in  a  compact
+  human-readable  form.  Since the group action permutes generating vectors in
+  blocks  of length [10XactionBlockSize[0m, any block that contains non-zero elements
+  will  still  contain  non-zero  elements after the group action, but a block
+  that  is  all  zero will remain all zero. This operation displays the module
+  generators  in  a per-block form, with a [10X*[0m where the block is non-zero and [10X.[0m
+  where the block is all zero.
+  
+  The  standard  [5XGAP[0m  methods [2XView[0m ([14XReference: View[0m), [2XPrint[0m ([14XReference: Print[0m)
+  and  [2XDisplay[0m  ([14XReference:  Display[0m)  are  also available.) See Section [14X3.6-3[0m
+  below for an example of usage.
+  
+  
+  [1X3.4-11 Example: Accessing data about a [9XFpGModuleGF[1X[0X
+  
+  In the following example, we construct three terms of a (minimal) resolution
+  of  the  dihedral  group  of  order  eight,  which  is  a  chain  complex of
+  FG-modules.
+  
+  
+       (FG)^3 -> (FG)^2 -> FG -> F -> 0
+  
+  
+  We  obtain  the  last  homomorphism  in this chain complex and calculate its
+  kernel,  returning  this  as  a  [9XFpGModuleGF[0m.  We  can  use  the data access
+  functions described above to extract information about this module.
+  
+  See  Chapters  [14X4[0m  and  [14X2[0m  respectively  for more information about FG-module
+  homomorphisms and resolutions in [5XHAPprime[0m
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R := ResolutionPrimePowerGroupRadical(DihedralGroup(8), 2);[0X
+    [4XResolution of length 2 in characteristic 2 for <pc group of size 8 with[0X
+    [4X3 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> phi := BoundaryFpGModuleHomomorphismGF(R, 2);[0X
+    [4X<Module homomorphism>[0X
+    [4X[0X
+    [4Xgap> M := KernelOfModuleHomomorphism(phi);[0X
+    [4XModule over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2 with 15 generators in FG^3.[0X
+    [4X[0X
+    [4Xgap> # Now find out things about this module M[0X
+    [4Xgap> ModuleGroup(M);[0X
+    [4X<pc group of size 8 with 3 generators>[0X
+    [4Xgap> ModuleGroupOrder(M);[0X
+    [4X8[0X
+    [4Xgap> ModuleAction(M);[0X
+    [4Xfunction( g, v ) ... end[0X
+    [4Xgap> ModuleActionBlockSize(M);[0X
+    [4X8[0X
+    [4Xgap> ModuleGroupAndAction(M);[0X
+    [4Xrec( group := <pc group of size 8 with 3 generators>,[0X
+    [4X  action := function( g, v ) ... end,[0X
+    [4X  actionOnRight := function( g, v ) ... end, actionBlockSize := 8 )[0X
+    [4Xgap> ModuleCharacteristic(M);[0X
+    [4X2[0X
+    [4Xgap> ModuleField(M);[0X
+    [4XGF(2)[0X
+    [4Xgap> ModuleAmbientDimension(M);[0X
+    [4X24[0X
+    [4Xgap> AmbientModuleDimension(M);[0X
+    [4X3[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.5 Generator and vector space functions[0X
+  
+  [1X3.5-1 ModuleGenerators[0m
+  
+  [2X> ModuleGenerators( [0X[3XM[0X[2X ) ___________________________________________[0Xoperation
+  [6XReturns:[0X  List of vectors
+  
+  Returns,  as  the  rows  of  a matrix, a list of the set of currently-stored
+  generating  vectors for the vector space of the module [3XM[0m. Note that this set
+  is  not necessarily minimal. The function [2XModuleGeneratorsAreMinimal[0m ([14X3.5-2[0m)
+  will   return   [9Xtrue[0m   if   the   set  is  known  to  be  minimal,  and  the
+  [10XMinimalGeneratorsModule[0m  functions  ([14X3.5-9[0m)  can be used to ensure a minimal
+  set, if necessary. See Section [14X3.5-11[0m below for an example of usage.
+  
+  [1X3.5-2 ModuleGeneratorsAreMinimal[0m
+  
+  [2X> ModuleGeneratorsAreMinimal( [0X[3XM[0X[2X ) _________________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns  [10Xtrue[0m  if  the  module  generators are known to be minimal, or [10Xfalse[0m
+  otherwise.   Generators   are  known  to  be  minimal  if  the  one  of  the
+  [10XMinimalGeneratorsModule[0m  functions ([14X3.5-9[0m) have been previously used on this
+  module,  or  if  the  module  was  created from a [5XHAP[0m [9XFpGModule[0m. See Section
+  [14X3.5-11[0m below for an example of usage.
+  
+  [1X3.5-3 ModuleGeneratorsAreEchelonForm[0m
+  
+  [2X> ModuleGeneratorsAreEchelonForm( [0X[3XM[0X[2X ) _____________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Return  [9Xtrue[0m  if  the  module generators are known to be in echelon form, or
+  (i.e.  [2XEchelonModuleGenerators[0m  ([14X3.6-1[0m) has been called for this module), or
+  [9Xfalse[0m  otherwise. Some algorithms work more efficiently if (or require that)
+  the  generators of the module are in block-echelon form, i.e. each generator
+  in  the module's list of generators has its first non-zero block in the same
+  location  or  later  than  the  generator before it in the list. See Section
+  [14X3.5-11[0m below for an example of usage.
+  
+  [1X3.5-4 ModuleIsFullCanonical[0m
+  
+  [2X> ModuleIsFullCanonical( [0X[3XM[0X[2X ) ______________________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns  [9Xtrue[0m if the module is known to represent the full module FG^n, with
+  canonical  generators and group action, or [9Xfalse[0m otherwise. A module is only
+  known  to  be  canonical  if  it  was constructed using the canonical module
+  [9XFpGModuleGF[0m  constructor  ([2XFpGModuleGF[0m ([14X3.3-1[0m)). If this is true, the module
+  is  displayed  in  a  concise  form,  and  some  functions  have  a  trivial
+  implementation. See Section [14X3.5-11[0m below for an example of usage.
+  
+  [1X3.5-5 ModuleGeneratorsForm[0m
+  
+  [2X> ModuleGeneratorsForm( [0X[3XM[0X[2X ) _______________________________________[0Xoperation
+  [6XReturns:[0X  String
+  
+  Returns  a  string giving the form of the module generators. This may be one
+  of the following:
+  
+  --    [10X"unknown"[0m The form is not known
+  
+  --    [10X"minimal"[0m  The  generators  are  known  to  be minimal, but not in any
+        particular form
+  
+  --    [10X"fullcanonical"[0m   The  generators  are  the  canonical  (and  minimal)
+        generators for FG^n
+  
+  --    [10X"semiechelon"[0m The generators are minimal and in semi-echelon form.
+  
+  --    [10X"echelon"[0m The generators are minimal and in echelon form
+  
+  See Section [14X3.5-11[0m below for an example of usage.
+  
+  [1X3.5-6 ModuleRank[0m
+  
+  [2X> ModuleRank( [0X[3XM[0X[2X ) _________________________________________________[0Xoperation
+  [2X> ModuleRankDestructive( [0X[3XM[0X[2X ) ______________________________________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  Returns  the rank of the module [3XM[0m, i.e. the number of minimal generators. If
+  the     module    is    already    in    minimal    form    (according    to
+  [2XModuleGeneratorsAreMinimal[0m   ([14X3.5-2[0m))  then  the  number  of  generators  is
+  returned  with  no calculation. Otherwise, [2XMinimalGeneratorsModuleGF[0m ([14X3.5-9[0m)
+  or  [2XMinimalGeneratorsModuleGFDestructive[0m  ([14X3.5-9[0m)  respectively  are used to
+  find a set of minimal generators. See Section [14X3.5-11[0m below for an example of
+  usage.
+  
+  [1X3.5-7 ModuleVectorSpaceBasis[0m
+  
+  [2X> ModuleVectorSpaceBasis( [0X[3XM[0X[2X ) _____________________________________[0Xoperation
+  [6XReturns:[0X  List of vectors
+  
+  Returns  a  matrix  whose  rows  are  a  basis  for  the vector space of the
+  [9XFpGModuleGF[0m  module  [3XM[0m.  Since  [9XFpGModuleGF[0m  stores  modules  as  a  minimal
+  G-generating  set,  this  function  has to calculate all G-multiples of this
+  generating set and row-reduce this to find a basis. See Section [14X3.5-11[0m below
+  for an example of usage.
+  
+  [13XTODO: A GF version of this one [0m
+  
+  [1X3.5-8 ModuleVectorSpaceDimension[0m
+  
+  [2X> ModuleVectorSpaceDimension( [0X[3XM[0X[2X ) _________________________________[0Xoperation
+  [6XReturns:[0X  Integer
+  
+  Returns the dimension of the vector space of the module [3XM[0m. Since [9XFpGModuleGF[0m
+  stores modules as a minimal G-generating set, this function has to calculate
+  all  G-multiples of this generating set and row-reduce this to find the size
+  of the basis. See Section [14X3.5-11[0m below for an example of usage.
+  
+  [13XTODO: A GF version of this function [0m
+  
+  
+  [1X3.5-9 MinimalGeneratorsModule[0X
+  
+  [2X> MinimalGeneratorsModuleGF( [0X[3XM[0X[2X ) __________________________________[0Xoperation
+  [2X> MinimalGeneratorsModuleGFDestructive( [0X[3XM[0X[2X ) _______________________[0Xoperation
+  [2X> MinimalGeneratorsModuleRadical( [0X[3XM[0X[2X ) _____________________________[0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Returns  a module equal to the [9XFpGModuleGF[0m [3XM[0m, but which has a minimal set of
+  generators. Two algorithms are provided:
+  
+  --    The   two   [10XGF[0m   versions   use  [2XEchelonModuleGenerators[0m  ([14X3.6-1[0m)  and
+        [2XEchelonModuleGeneratorsDestructive[0m     ([14X3.6-1[0m)     respectively.    In
+        characteristic  two, these return a set of minimal generators, and use
+        less  memory  than  the  [10XRadical[0m  version,  but  take  longer.  If the
+        characteristic    is    not    two,    these   functions   revert   to
+        [2XMinimalGeneratorsModuleRadical[0m.
+  
+  --    The [10XRadical[0m version uses the radical of the module in a manner similar
+        to  the  function [14XHAP: GeneratorsOfFpGModule[0m. This is much faster, but
+        requires a considerable amount of temporary storage space.
+  
+  See Section [14X3.5-11[0m below for an example of usage.
+  
+  [1X3.5-10 RadicalOfModule[0m
+  
+  [2X> RadicalOfModule( [0X[3XM[0X[2X ) ____________________________________________[0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Returns  radical  of  the  [9XFpGModuleGF[0m  module [3XM[0m as another [9XFpGModuleGF[0m. The
+  radical  is the module generated by the vectors v-gv for all v in the set of
+  generating  vectors  for [3XM[0m and all g in a set of generators for the module's
+  group.
+  
+  The  generators  for  the  returned  module will not be in minimal form: the
+  [10XMinimalGeneratorsModule[0m  functions ([14X3.5-9[0m) can be used to convert the module
+  to  a  minimal form if necessary. See Section [14X3.5-11[0m below for an example of
+  usage.
+  
+  
+  [1X3.5-11 Example: Generators and basis vectors of a [9XFpGModuleGF[1X[0X
+  
+  Starting with the same module as in the earlier example (Section [14X3.4-11[0m), we
+  now  investigate  the generators of the module [10XM[0m. The generating vectors (of
+  which  there  are  15)  returned  by the function [2XKernelOfModuleHomomorphism[0m
+  ([14X4.6-3[0m)  are  not  a minimal set, but the function [2XMinimalGeneratorsModuleGF[0m
+  ([14X3.5-9[0m)  creates  a  new object [10XN[0m representing the same module, but now with
+  only  four  generators.  The vector space spanned by these generators has 15
+  basis  vectors,  so representing the module by a G-generating set instead is
+  much  more  efficient.  (The  original  generating  set  in [10XM[0m was in fact an
+  F-basis, so the dimension of the vector space should come as no surprise.)
+  
+  We  can also find the radical of the module, and this is used internally for
+  the faster, but more memory-hungry, [2XMinimalGeneratorsModuleRadical[0m ([14X3.5-9[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R := ResolutionPrimePowerGroupRadical(DihedralGroup(8), 2);;[0X
+    [4Xgap> phi := BoundaryFpGModuleHomomorphismGF(R, 2);;[0X
+    [4Xgap> M := KernelOfModuleHomomorphism(phi);;[0X
+    [4Xgap> #[0X
+    [4Xgap> ModuleGenerators(M);[0X
+    [4X[ <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24> ][0X
+    [4Xgap> ModuleGeneratorsAreMinimal(M);[0X
+    [4Xfalse[0X
+    [4Xgap> ModuleGeneratorsForm(M);[0X
+    [4X"unknown"[0X
+    [4Xgap> #[0X
+    [4Xgap> N := MinimalGeneratorsModuleGF(M);[0X
+    [4XModule over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2 with 4 generators in FG^[0X
+    [4X3. Generators are in minimal echelon form.[0X
+    [4X[0X
+    [4Xgap> M = N;    # Check that the new module spans the same space[0X
+    [4Xtrue[0X
+    [4Xgap> ModuleGeneratorsAreEchelonForm(N);[0X
+    [4Xtrue[0X
+    [4Xgap> ModuleIsFullCanonical(N);[0X
+    [4Xfalse[0X
+    [4Xgap> M = N;[0X
+    [4Xtrue[0X
+    [4Xgap> ModuleVectorSpaceBasis(N);[0X
+    [4X[ <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24>, <a GF2 vector of length 24>,[0X
+    [4X  <a GF2 vector of length 24> ][0X
+    [4Xgap> ModuleVectorSpaceDimension(N);[0X
+    [4X15[0X
+    [4Xgap> #[0X
+    [4Xgap> N2 := MinimalGeneratorsModuleRadical(M);[0X
+    [4XModule over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2 with 4 generators in FG^[0X
+    [4X3. Generators are minimal.[0X
+    [4X[0X
+    [4Xgap> #[0X
+    [4Xgap> R := RadicalOfModule(M);[0X
+    [4XModule over the group ring of <pc group of size 8 with[0X
+    [4X3 generators> in characteristic 2 with 120 generators in FG^3.[0X
+    [4X[0X
+    [4Xgap> N2 = N;[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.6 Block echelon functions[0X
+  
+  [1X3.6-1 EchelonModuleGenerators[0m
+  
+  [2X> EchelonModuleGenerators( [0X[3XM[0X[2X ) ____________________________________[0Xoperation
+  [2X> EchelonModuleGeneratorsDestructive( [0X[3XM[0X[2X ) _________________________[0Xoperation
+  [2X> SemiEchelonModuleGenerators( [0X[3XM[0X[2X ) ________________________________[0Xoperation
+  [2X> SemiEchelonModuleGeneratorsDestructive( [0X[3XM[0X[2X ) _____________________[0Xoperation
+  [2X> EchelonModuleGeneratorsMinMem( [0X[3XM[0X[2X ) ______________________________[0Xoperation
+  [2X> EchelonModuleGeneratorsMinMemDestructive( [0X[3XM[0X[2X ) ___________________[0Xoperation
+  [2X> SemiEchelonModuleGeneratorsMinMem( [0X[3XM[0X[2X ) __________________________[0Xoperation
+  [2X> SemiEchelonModuleGeneratorsMinMemDestructive( [0X[3XM[0X[2X ) _______________[0Xoperation
+  [6XReturns:[0X  Record [10X(module, headblocks)[0m
+  
+  Returns a record with two components:
+  
+  --    [9Xmodule[0m A module whose generators span the same vector space as that of
+        the  input  module  [3XM[0m, but whose generators are in a block echelon (or
+        semi-echelon) form
+  
+  --    [9Xheadblocks[0m  A  list giving, for each generating vector in [3XM[0m, the block
+        in which the head for that generating row lies
+  
+  In  block-echelon  form. each generator is row-reduced using Gg-multiples of
+  the other other generators to produce a new, equivalent generating set where
+  the  first  non-zero  block  in  each  generator  is  as far to the right as
+  possible.  The  resulting  form,  with  many  zero  blocks,  can  allow more
+  memory-efficient  operations  on the module. See Section [14X3.2[0m for details. In
+  addition,  the  standard  (non-[10XMinMem[0m)  form  guarantees  that  the  set  of
+  generators  are  minimal  in the sense that no generator can be removed from
+  the  set while leaving the spanned vector space the same. In the GF(2) case,
+  this is the global minimum.
+  
+  Several versions of this algorithm are provided. The [10XSemiEchelon[0m versions of
+  these  functions do not guarantee a particular generator ordering, while the
+  [10XEchelon[0m  versions  sort the generators into order of increasing initial zero
+  blocks.  The  non-[10XDestructive[0m  versions of this function return a new module
+  and  do  not  modify  the  input module; the [10XDestructive[0m versions change the
+  generators  of  the  input  module  in-place,  and  return  this module. All
+  versions  are  memory-efficient,  and do not need a full vector-space basis.
+  The  [10XMinMem[0m  versions are guaranteed to expand at most two generators at any
+  one time, while the standard version may, in the (unlikely) worst-case, need
+  to  expand half of the generating set. As a result of this difference in the
+  algorithm,  the  [10XMinMem[0m  version  is  likely  to  return a greater number of
+  generators  (which will not be minimal), but those generators typically have
+  a  greater  number  of  zero  blocks  after  the first non-zero block in the
+  generator.  The  [10XMinMem[0m  operations are currently only implemented for GF(2)
+  modules. See Section [14X3.6-3[0m below for an example of usage.
+  
+  [1X3.6-2 ReverseEchelonModuleGenerators[0m
+  
+  [2X> ReverseEchelonModuleGenerators( [0X[3XM[0X[2X ) _____________________________[0Xoperation
+  [2X> ReverseEchelonModuleGeneratorsDestructive( [0X[3XM[0X[2X ) __________________[0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Returns an [9XFpGModuleGF[0m module whose vector space spans the same space as the
+  input  module  [3XM[0m, but whose generating vectors are modified to try to get as
+  many  zero  blocks  as  possible  at  the  end of each vector. This function
+  performs  echelon  reduction  of  generating  rows  in  a  manner similar to
+  [2XEchelonModuleGenerators[0m  ([14X3.6-1[0m), but working from the bottom upwards. It is
+  guaranteed  that  this function will not change the head block (the location
+  of  the  first  non-zero  block)  in  each  generating row, and hence if the
+  generators are already in an upper-triangular form (e.g. following a call to
+  [2XEchelonModuleGenerators[0m  ([14X3.6-1[0m)) then it will not disturb that form and the
+  resulting generators will be closer to a diagonal form.
+  
+  The  [10XDestructive[0m  version  of  this  function  modifies  the  input module's
+  generators  in-place  and  then  returns  that  module;  the non-[10XDestructive[0m
+  version  works  on  a  copy  of  the input module and so will not modify the
+  original module.
+  
+  This  operation is currently only implemented for GF(2) modules. See Section
+  [14X3.5-11[0m below for an example of usage.
+  
+  
+  [1X3.6-3 Example: Converting a [9XFpGModuleGF[1X to block echelon form[0X
+  
+  We  can  construct  a  larger  module than in the earlier examples (Sections
+  [14X3.4-11[0m  and  [14X3.5-11[0m) by taking the kernel of the third boundary homomorphism
+  of  a  minimal  resolution  of a group of order 32, which as returned by the
+  function  [2XKernelOfModuleHomomorphism[0m  ([14X4.6-3[0m) has a generating set with many
+  redundant  generators.  We  display the block structure of the generators of
+  this module after applying various block echelon reduction functions.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R := ResolutionPrimePowerGroupRadical(SmallGroup(32, 10), 3);;[0X
+    [4Xgap> phi := BoundaryFpGModuleHomomorphismGF(R, 3);;[0X
+    [4Xgap> #[0X
+    [4Xgap> M := KernelOfModuleHomomorphism(phi);[0X
+    [4XModule over the group ring of <pc group of size 32 with[0X
+    [4X5 generators> in characteristic 2 with 65 generators in FG^4.[0X
+    [4X[0X
+    [4Xgap> #[0X
+    [4Xgap> N := SemiEchelonModuleGenerators(M);[0X
+    [4Xrec( module := Module over the group ring of <pc group of size 32 with[0X
+    [4X    5 generators> in characteristic 2 with 5 generators in FG^[0X
+    [4X    4. Generators are in minimal semi-echelon form.[0X
+    [4X    , headblocks := [ 2, 3, 1, 1, 3 ] )[0X
+    [4Xgap> DisplayBlocks(N.module);[0X
+    [4XModule over the group ring of Group( [ f1, f2, f3, f4, f5 ] )[0X
+    [4X in characteristic 2 with 5 generators in FG^4.[0X
+    [4X[.*.*][0X
+    [4X[..**][0X
+    [4X[***.][0X
+    [4X[****][0X
+    [4X[..**][0X
+    [4XGenerators are in minimal semi-echelon form.[0X
+    [4Xgap> N2 := SemiEchelonModuleGeneratorsMinMem(M);[0X
+    [4Xrec( module := Module over the group ring of <pc group of size 32 with[0X
+    [4X    5 generators> in characteristic 2 with 9 generators in FG^4. [0X
+    [4X    , headblocks := [ 2, 1, 3, 1, 1, 4, 1, 3, 4 ] )[0X
+    [4Xgap> DisplayBlocks(N2.module);[0X
+    [4XModule over the group ring of Group( [ f1, f2, f3, f4, f5 ] )[0X
+    [4X in characteristic 2 with 9 generators in FG^4.[0X
+    [4X[.*..][0X
+    [4X[**..][0X
+    [4X[..**][0X
+    [4X[****][0X
+    [4X[****][0X
+    [4X[...*][0X
+    [4X[****][0X
+    [4X[..**][0X
+    [4X[...*][0X
+    [4X[0X
+    [4Xgap> #[0X
+    [4Xgap> EchelonModuleGeneratorsDestructive(M);;[0X
+    [4Xgap> DisplayBlocks(M);[0X
+    [4XModule over the group ring of Group( [ f1, f2, f3, f4, f5 ] )[0X
+    [4X in characteristic 2 with 5 generators in FG^4.[0X
+    [4X[***.][0X
+    [4X[****][0X
+    [4X[.*.*][0X
+    [4X[..**][0X
+    [4X[..**][0X
+    [4XGenerators are in minimal echelon form.[0X
+    [4Xgap> ReverseEchelonModuleGeneratorsDestructive(M);[0X
+    [4XModule over the group ring of <pc group of size 32 with[0X
+    [4X5 generators> in characteristic 2 with 5 generators in FG^[0X
+    [4X4. Generators are in minimal echelon form.[0X
+    [4X[0X
+    [4Xgap> DisplayBlocks(M);[0X
+    [4XModule over the group ring of Group( [ f1, f2, f3, f4, f5 ] )[0X
+    [4X in characteristic 2 with 5 generators in FG^4.[0X
+    [4X[***.][0X
+    [4X[****][0X
+    [4X[.*..][0X
+    [4X[..*.][0X
+    [4X[..**][0X
+    [4XGenerators are in minimal echelon form.[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.7 Sum and intersection functions[0X
+  
+  
+  [1X3.7-1 DirectSumOfModules[0X
+  
+  [2X> DirectSumOfModules( [0X[3XM, N[0X[2X ) ______________________________________[0Xoperation
+  [2X> DirectSumOfModules( [0X[3Xcoll[0X[2X ) ______________________________________[0Xoperation
+  [2X> DirectSumOfModules( [0X[3XM, n[0X[2X ) ______________________________________[0Xoperation
+  [6XReturns:[0X  FpGModule
+  
+  Returns  the  [9XFpGModuleGF[0m  module  that  is  the direct sum of the specified
+  modules (which must have a common group and action). The input can be either
+  two modules [3XM[0m and [3XN[0m, a list of modules [3Xcoll[0m, or one module [3XM[0m and an exponent
+  [3Xn[0m  specifying  the number of copies of [3XM[0m to sum. See Section [14X3.7-5[0m below for
+  an example of usage.
+  
+  If  the  input  modules all have minimal generators and/or echelon form, the
+  construction  of the direct sum guarantees that the output module will share
+  the same form.
+  
+  [1X3.7-2 DirectDecompositionOfModule[0m
+  
+  [2X> DirectDecompositionOfModule( [0X[3XM[0X[2X ) ________________________________[0Xoperation
+  [2X> DirectDecompositionOfModuleDestructive( [0X[3XM[0X[2X ) _____________________[0Xoperation
+  [6XReturns:[0X  List of FpGModuleGFs
+  
+  Returns  a  list  of  [9XFpGModuleGF[0ms  whose  direct  sum is equal to the input
+  [9XFpGModuleGF[0m  module  [3XM[0m.  The  list  may consist of one element: the original
+  module.
+  
+  This function relies on the block structure of a set of generators that have
+  been   converted   to   both   echelon   and   reverse-echelon   form   (see
+  [2XEchelonModuleGenerators[0m ([14X3.6-1[0m) and [2XReverseEchelonModuleGenerators[0m ([14X3.6-2[0m)),
+  and  calls  these functions if the module is not already in echelon form. In
+  this  form,  it can be possible to trivially identify direct summands. There
+  is no guarantee either that this function will return a decomposition if one
+  is available, or that the modules returned in a decomposition are themselves
+  indecomposable. See Section [14X3.7-5[0m below for an example of usage.
+  
+  The  [10XDestructive[0m  version  of this function uses the [10XDestructive[0m versions of
+  the  echelon functions, and so modifies the input module and returns modules
+  who  share  generating rows with the modified [3XM[0m. The non-[10XDestructive[0m version
+  operates on a copy of [3XM[0m, and returns modules with unique rows.
+  
+  [1X3.7-3 IntersectionModules[0m
+  
+  [2X> IntersectionModules( [0X[3XM, N[0X[2X ) _____________________________________[0Xoperation
+  [2X> IntersectionModulesGF( [0X[3XM, N[0X[2X ) ___________________________________[0Xoperation
+  [2X> IntersectionModulesGFDestructive( [0X[3XM, N[0X[2X ) ________________________[0Xoperation
+  [2X> IntersectionModulesGF2( [0X[3XM, N[0X[2X ) __________________________________[0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Returns the [9XFpGModuleGF[0m module that is the intersection of the modules [3XM[0m and
+  [3XN[0m.  This  function  calculates  the  intersection using vector space methods
+  (i.e.        [2XSumIntersectionMatDestructive[0m        ([14XHAPprime       Datatypes:
+  SumIntersectionMatDestructive[0m)).  The standard version works on the complete
+  vector  space bases of the input modules. The [10XGF[0m version considers the block
+  structure  of  the generators of [3XM[0m and [3XN[0m and only expands the necessary rows
+  and  blocks.  This  can  lead to a large saving and memory if [3XM[0m and [3XN[0m are in
+  echelon  form  and have a small intersection. See Section [14X3.2-4[0m for details.
+  See  Section  [14X3.7-5[0m  below for an example of usage. The [10XGF2[0m version computes
+  the  intersection  by  a  G-version  of the standard vector space algorithm,
+  using  [2XEchelonModuleGenerators[0m  ([14X3.6-1[0m)  to  perform echelon reduction on an
+  augmented  set  of  generators. This is much slower than the [10XGF[0m version, but
+  may use less memory.
+  
+  The  vector spaces in [9XFpGModuleGF[0ms are assumed to all be with respect to the
+  same  canonical  basis, so it is assumed that modules are compatible if they
+  have the same group and the same ambient dimension.
+  
+  The  [10XDestructive[0m  version  of  the  [10XGF[0m  function  corrupts  or  permutes the
+  generating  vectors  of  [3XM[0m  and  [3XN[0m,  leaving it invalid; the non-destructive
+  version operates on copies of them, leaving the original modules unmodified.
+  The  generating  vectors in the module returned by this function are in fact
+  also  a  [13Xvector  space[0m  basis  for  the  module, so will not be minimal. The
+  returned module can be converted to a set of minimal generators using one of
+  the [10XMinimalGeneratorsModule[0m functions ([14X3.5-9[0m).
+  
+  This operation is currently only defined for GF(2).
+  
+  [1X3.7-4 SumModules[0m
+  
+  [2X> SumModules( [0X[3XM, N[0X[2X ) ______________________________________________[0Xoperation
+  [6XReturns:[0X  FpGModuleGF
+  
+  Returns the [9XFpGModuleGF[0m module that is the sum of the input modules [3XM[0m and [3XN[0m.
+  This  function simply concatenates the generating vectors of the two modules
+  and  returns  the result. If a set of minimal generators are needed then use
+  one  of  the  [10XMinimalGeneratorsModule[0m  functions  ([14X3.5-9[0m) on the result. See
+  Section [14X3.7-5[0m below for an example of usage.
+  
+  The  vector  spaces in [9XFpGModuleGF[0m are assumed to all be with respect to the
+  same  canonical  basis, so it is assumed that modules are compatible if they
+  have the same group and the same ambient dimension.
+  
+  
+  [1X3.7-5 Example: Sum and intersection of [9XFpGModuleGF[1Xs[0X
+  
+  We  can construct the direct sum of FG-modules, and (attempt to) calculate a
+  direct decomposition of a module. For example, we can show that
+  
+  
+       (FG)^2 (+) FG = FG (+) FG (+) FG
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := CyclicGroup(64);;[0X
+    [4Xgap> FG := FpGModuleGF(G, 1);[0X
+    [4XFull canonical module FG^1 over the group ring of <pc group of size 64 with[0X
+    [4X6 generators> in characteristic 2[0X
+    [4X[0X
+    [4Xgap> FG2 := FpGModuleGF(G, 2);[0X
+    [4XFull canonical module FG^2 over the group ring of <pc group of size 64 with[0X
+    [4X6 generators> in characteristic 2[0X
+    [4X[0X
+    [4Xgap> M := DirectSumOfModules(FG2, FG);[0X
+    [4XFull canonical module FG^3 over the group ring of <pc group of size 64 with[0X
+    [4X6 generators> in characteristic 2[0X
+    [4X[0X
+    [4Xgap> DirectDecompositionOfModule(M);[0X
+    [4X[ Module over the group ring of <pc group of size 64 with[0X
+    [4X    6 generators> in characteristic 2 with 1 generator in FG^[0X
+    [4X    1. Generators are in minimal echelon form.[0X
+    [4X    , Module over the group ring of <pc group of size 64 with[0X
+    [4X    6 generators> in characteristic 2 with 1 generator in FG^[0X
+    [4X    1. Generators are in minimal echelon form.[0X
+    [4X    , Module over the group ring of <pc group of size 64 with[0X
+    [4X    6 generators> in characteristic 2 with 1 generator in FG^[0X
+    [4X    1. Generators are in minimal echelon form.[0X
+    [4X     ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  We  can  also compute the sum and intersection of FG-modules. In the example
+  below  we  construct  two submodules of FG, where G is the dihedral group of
+  order  four:  [10XM[0m  is  the  submodule  generated  by  g_1  + g_2, and [10XN[0m is the
+  submodule  generated  by  g_1  + g_2 + g_3 + g_4. We calculate their sum and
+  intersection.  Since  [10XN[0m is in this case a submodule of [10XM[0m it is easy to check
+  that the correct results are obtained.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := DihedralGroup(4);;[0X
+    [4Xgap> M := FpGModuleGF([[1,1,0,0]]*One(GF(2)), G);[0X
+    [4XModule over the group ring of <pc group of size 4 with[0X
+    [4X2 generators> in characteristic 2 with 1 generator in FG^[0X
+    [4X1. Generators are in minimal echelon form.[0X
+    [4X[0X
+    [4Xgap> N := FpGModuleGF([[1,1,1,1]]*One(GF(2)), G);[0X
+    [4XModule over the group ring of <pc group of size 4 with[0X
+    [4X2 generators> in characteristic 2 with 1 generator in FG^[0X
+    [4X1. Generators are in minimal echelon form.[0X
+    [4X[0X
+    [4Xgap> #[0X
+    [4Xgap> S := SumModules(M,N);[0X
+    [4XModule over the group ring of <pc group of size 4 with[0X
+    [4X2 generators> in characteristic 2 with 2 generators in FG^1.[0X
+    [4X[0X
+    [4Xgap> I := IntersectionModules(M,N);[0X
+    [4XModule over the group ring of <pc group of size 4 with[0X
+    [4X2 generators> in characteristic 2 with 1 generator in FG^1.[0X
+    [4X[0X
+    [4Xgap> #[0X
+    [4Xgap> S = M and I = N;[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.8 Miscellaneous functions[0X
+  
+  [1X3.8-1 =[0m
+  
+  [2X> =( [0X[3XM, N[0X[2X ) _______________________________________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns [9Xtrue[0m if the modules are equal, [9Xfalse[0m otherwise. This checks that the
+  groups  and  actions in each module are equal (i.e. identical), and that the
+  vector  space spanned by the two modules are the same. (All vector spaces in
+  [9XFpGModuleGF[0ms of the same ambient dimension are assumed to be embedded in the
+  same canonical basis.) See Section [14X3.5-11[0m above for an example of usage.
+  
+  
+  [1X3.8-2 IsModuleElement[0X
+  
+  [2X> IsModuleElement( [0X[3XM, elm[0X[2X ) _______________________________________[0Xoperation
+  [2X> IsModuleElement( [0X[3XM, coll[0X[2X ) ______________________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns  [9Xtrue[0m  if  the  vector  [3Xelm[0m  can be interpreted as an element of the
+  module  [3XM[0m,  or  [9Xfalse[0m otherwise. If a collection of elements is given as the
+  second  argument  then a list of responses is returned, one for each element
+  in the collection. See Section [14X3.3-5[0m above for an example of usage.
+  
+  [1X3.8-3 IsSubModule[0m
+  
+  [2X> IsSubModule( [0X[3XM, N[0X[2X ) _____________________________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns  [9Xtrue[0m  if  the  module  [3XN[0m  is a submodule of [3XM[0m. This checks that the
+  modules have the same group and action, and that the generators for module [3XN[0m
+  are elements of the module [3XM[0m. (All vector spaces in [9XFpGModuleGF[0ms of the same
+  ambient  dimension  are assumed to be embedded in the same canonical basis.)
+  See Section [14X3.3-5[0m above for an example of usage.
+  
+  [1X3.8-4 RandomElement[0m
+  
+  [2X> RandomElement( [0X[3XM[, n][0X[2X ) _________________________________________[0Xoperation
+  [6XReturns:[0X  Vector
+  
+  Returns  a  vector  which is a random element from the module [3XM[0m. If a second
+  argument,  [3Xn[0m  is  give,  then  a  list of [3Xn[0m random elements is returned. See
+  Section [14X3.3-5[0m above for an example of usage.
+  
+  
+  [1X3.8-5 Random Submodule[0X
+  
+  [2X> RandomSubmodule( [0X[3XM, ngens[0X[2X ) _____________________________________[0Xoperation
+  [6XReturns:[0X  [9XFpGModuleGF[0m
+  
+  Returns a [9XFpGModuleGF[0m module that is a submodule of [3XM[0m, with [3Xngens[0m generators
+  selected  at  random from elements of [3XM[0m. These generators are not guaranteed
+  to be minimal, so the rank of the submodule will not necessarily be equal to
+  [3Xngens[0m.   If   a   module   with   minimal   generators   is   required,  the
+  [10XMinimalGeneratorsModule[0m  functions ([14X3.5-9[0m) can be used to convert the module
+  to a minimal form See Section [14X3.3-5[0m above for an example of usage.
+  

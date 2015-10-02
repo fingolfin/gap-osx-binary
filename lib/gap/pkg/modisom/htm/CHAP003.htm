@@ -1,0 +1,109 @@
+<html><head><title>[ModIsom] 3 Automorphism groups and Canonical Forms</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>3 Automorphism groups and Canonical Forms</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP003.htm#SECT001">Automorphism groups</a>
+<li> <A HREF="CHAP003.htm#SECT002">Canonical forms</a>
+<li> <A HREF="CHAP003.htm#SECT003">Example of canonical form computation</a>
+</ol><p>
+<p>
+We refer to <a href="biblio.htm#Eic07"><cite>Eic07</cite></a> for background on the algorithms used in this 
+Chapter. Throughout the chapter, we assume that <i>F</i> is a finite field.
+<p>
+<p>
+<h2><a name="SECT001">3.1 Automorphism groups</a></h2>
+<p><p>
+Let <i>T</i> be a nilpotent table over <i>F</i>. The following function can be used 
+to determine the automorphism group of the algebra described by <i>T</i>. The
+automorphism group is determined as subgroup of <i>GL</i>(<i>T</i>&#183;<i>dim</i>, <i>T</i>&#183;<i>fld</i>) given 
+by generators and its order. There is a variation available to determine
+the automorphism group of a modular group algebra <i>FG</i>, where <i>F</i> is a finite
+field and <i>G</i> is a <i>p</i>-group.
+<p>
+<a name = "SSEC001.1"></a>
+<li><code>AutGroupOfTable( T ) F</code>
+<a name = "SSEC001.1"></a>
+<li><code>AutGroupOfRad( FG ) F</code>
+<p>
+In both cases, the automorphism group is described by a record. The
+matrices in the lists <i>glAutos</i> and <i>agAutos</i> generate together the 
+automorphism group. The matrices in <i>agAutos</i> generate a <i>p</i>-group.
+The entry <i>size</i> contains the order of the automorphism group.
+<p>
+<p>
+<h2><a name="SECT002">3.2 Canonical forms</a></h2>
+<p><p>
+Let <i>T</i> be a nilpotent table. The following function can be used to determine
+the automorphism group of <i>T</i> if the underlying field of <i>T</i> is finite. The
+canonical form is a nilpotent table which is unique for the isomorphism type
+of the algebra defined by <i>T</i>. Again there a variation available for modular
+group algebras. 
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>CanonicalFormOfTable( T ) F</code>
+<a name = "SSEC002.1"></a>
+<li><code>CanonicalFormOfRad( FG ) F</code>
+<p>
+The automorphism group of <i>T</i> is determined as a side-product of computing
+the canonical form. The following functions can be used to return both.
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>CanoFormWithAutGroupOfTable( T ) F</code>
+<a name = "SSEC002.2"></a>
+<li><code>CanoFormWithAutGroupOfRad( FG ) F</code>
+<p>
+In both cases, these functions return a record with entries <i>cano</i> and
+<i>auto</i>.
+<p>
+<p>
+<h2><a name="SECT003">3.3 Example of canonical form computation</a></h2>
+<p><p>
+We compute the automorphism group and a canonical form for the 
+modular group algebra of the dihedral group of order 8.
+<p>
+<pre>
+gap&gt; A := GroupRing(GF(2), SmallGroup(8,3));;
+gap&gt; T := TableByWeightedBasisOfRad(A);;
+gap&gt; C := CanoFormWithAutGroupOfTable(T);;
+
+# check that the canonical form is not equal to T
+gap&gt; CompareTables(C.cano, T);
+false
+
+# the order of the automorphism group
+gap&gt; C.auto.size;
+512
+
+# the entries of the canonical table as far as they are bounded
+gap&gt; C.cano.tab;
+[ [ &lt;a GF2 vector of length 7&gt;, &lt;a GF2 vector of length 7&gt;, 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] ], 
+  [ &lt;a GF2 vector of length 7&gt;, &lt;a GF2 vector of length 7&gt;, 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ] ]
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>ModIsom manual<br>November 2013
+</address></body></html>

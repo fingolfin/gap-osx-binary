@@ -1,0 +1,16 @@
+LoadPackage("genss");
+Print("GL(20,2) natural:\n\n");
+g := GL(20,2);
+gg := Group(GeneratorsOfGroup(g));
+ti := Runtime();
+S := StabilizerChain(gg);
+ti2 := Runtime();
+if Size(S) <> Size(g) then Error("wrong size"); fi;
+Print("\n");
+ti3 := Runtime();
+S := StabilizerChain(g);
+ti4 := Runtime();
+Print("\nStabChain:\n");
+ViewObj(S);
+Print("\n\nTime with random verification: ",ti2-ti,"\n");
+Print("Time with known size: ",ti4-ti3,"\n");

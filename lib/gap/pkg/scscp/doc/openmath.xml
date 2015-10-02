@@ -1,0 +1,84 @@
+<Chapter Label="SCSCPmessages">
+<Heading>Message exchange by &SCSCP;</Heading>    
+
+To ensure the message exchange as required by &SCSCP; specification, the 
+&SCSCP; package extends the global record <C>OMsymRecord</C> from the 
+&OpenMath; package with new entries to support &scscp1; and &scscp2; 
+content dictionaries (<Cite Key="scscp1cd"/>, <Cite Key="scscp2cd"/>), 
+and also service-dependent transient private content dictionaries 
+(see Chapter <Ref Label="Server"/> for details about transient content 
+dictionaries). It also overwrites some &OpenMath; functions by their 
+extended (but backwards compatible) versions, and adds some new 
+&OpenMath;-related functions to send and receive &SCSCP; messages, 
+documented below.
+<P/>
+
+Note that functions documented in this chapter belong to the middle-level 
+interface, and the user may find it more convenient to use functions 
+developed on top of them and explained in next chapters.
+
+<Section Label="SCSCPclient">
+<Heading>Communication with the &SCSCP; server</Heading>
+
+<#Include Label="StartSCSCPsession">
+<#Include Label="OMPutProcedureCall">
+<#Include Label="SCSCPwait">
+<#Include Label="OMGetObjectWithAttributes">
+
+</Section> 
+
+<Section Label="SCSCPserver">
+<Heading>Communication with the &SCSCP; client</Heading>
+
+<#Include Label="OMPutProcedureCompleted">
+<#Include Label="OMPutProcedureTerminated">
+
+</Section>
+
+
+<Section Label="SCSCPsession">
+<Heading>Example: &SCSCP; session</Heading>
+
+In the following example we start an &SCSCP; session and perform ten
+procedure calls in a loop before closing that session. Note that we
+demonstrate the usage of the session ID <C>sid</C> and the function 
+<C>RandomString</C> from the &OpenMath; package to produce some unique 
+call identifier.
+The call ID is a mandatory attribute for any procedure call, however, 
+it is not nesessarily random; for example, it may be just a string 
+with the number of the procedure call.
+<Example>
+<![CDATA[
+gap> stream:=InputOutputTCPStream( "localhost", 26133 );
+< input/output TCP stream to localhost:26133 >
+gap> sid := StartSCSCPsession( stream );
+"localhost:26133:5541"
+gap> res:=[];
+[  ]
+gap> for i in [1..10] do
+>     OMPutProcedureCall( stream, "WS_Factorial", 
+>       rec( object := [ i ], 
+>        attributes := [ [ "call_id", 
+>          Concatenation( sid, ":", RandomString(8) ) ] ] ) );
+>     SCSCPwait( stream );
+>     res[i]:=OMGetObjectWithAttributes( stream ).object;
+> od;
+gap> CloseStream(stream);
+gap> res;
+[ 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800 ]
+]]>
+</Example>
+Also note the usage of <Ref Func="SCSCPwait"/> to wait
+until the result of the computation will be available from 
+<C>stream</C>.
+<P/>
+
+In this example we assumed that there is an &SCSCP; server running 
+at <C>localhost</C>, port 26133. In the next chapter we will explain
+how to configure and run a &GAP; &SCSCP; server and how to interrogate
+it from a &GAP; client to learn about its functionality. After that,
+we will proceed with the &SCSCP; client functionality for the end-user.
+
+</Section>
+
+</Chapter>

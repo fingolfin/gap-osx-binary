@@ -1,0 +1,1243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta name="GENERATOR" content="TtH 3.59">
+ <style type="text/css"> div.p { margin-top: 7pt;}</style>
+ <style type="text/css"><!--
+ td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}
+ td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}
+ td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}
+ td div.norm {line-height:normal;}
+ span.roman {font-family: serif; font-style: normal; font-weight: normal;} 
+ span.overacc2 {position: relative;  left: .8em; top: -1.2ex;}
+ span.overacc1 {position: relative;  left: .6em; top: -1.2ex;} --></style>
+ 
+
+               
+<title> GAP Computations with O+(8,5).S3 and O+(8,2).S3</title>
+ 
+<h1 align="center">GAP Computations with O+(8,5).S3 and O+(8,2).S3 </h1>
+  <body bgcolor="FFFFFF"> 
+
+<div class="p"><!----></div>
+
+<h3 align="center"> T<font size="-2">HOMAS</font> B<font size="-2">REUER</font> <br />
+<i>Lehrstuhl D f&#252;r Mathematik</i> <br />
+<i>RWTH, 52056 Aachen, Germany</i> </h3>
+
+<div class="p"><!----></div>
+
+<h3 align="center">October 08th, 2006 </h3>
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+
+This note shows how to construct a representation of the automorphic
+extension G of the simple group S = O<sub>8</sub><sup>+</sup>(5)
+by a symmetric group on three points,
+together with an embedding of the normalizer H of an O<sub>8</sub><sup>+</sup>(2) type
+subgroup of O<sub>8</sub><sup>+</sup>(5).
+
+<div class="p"><!----></div>
+As an application, it is shown that the permutation representation of G
+on the cosets of H has a base of length two.
+This question arose in&nbsp;[<a href="#BGS11" name="CITEBGS11">BGS11</a>].
+
+<div class="p"><!----></div>
+
+
+
+<div class="p"><!----></div>
+
+<h1>Contents </h1><a href="#tth_sEc1"
+>1&nbsp; Overview</a><br />
+<a href="#tth_sEc2"
+>2&nbsp; Constructing Representations of M.2 and S.2</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.1"
+>2.1&nbsp; A Matrix Representation of the Weyl Group of Type E<sub>8</sub></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.2"
+>2.2&nbsp; Embedding the Weyl group of Type E<sub>8</sub> into <span class="roman">GO</span><sup>+</sup>(8,5)</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.3"
+>2.3&nbsp; Compatible Generators of M, M.2, S, and S.2</a><br />
+<a href="#tth_sEc3"
+>3&nbsp; Constructing Representations of M.3 and S.3</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc3.1"
+>3.1&nbsp; The Action of M.3 on M</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc3.2"
+>3.2&nbsp; The Action of S.3 on S</a><br />
+<a href="#tth_sEc4"
+>4&nbsp; Constructing Compatible Generators of H and G</a><br />
+<a href="#tth_sEc5"
+>5&nbsp; Application: Regular Orbits of H on G/H</a><br />
+<a href="#tth_sEc6"
+>6&nbsp; Appendix: The Permutation Character (1<sub>H</sub><sup>G</sup>)<sub>H</sub></a><br />
+<a href="#tth_sEc7"
+>7&nbsp; Appendix: The Data File</a><br />
+
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc1">
+1</a>&nbsp;&nbsp;Overview</h2>
+
+<div class="p"><!----></div>
+Let S denote the simple group O<sub>8</sub><sup>+</sup>(5)  &#8773; <span class="roman">P</span>&#8486;<sup>+</sup>(8,5),
+that is, the nonabelian simple group that occurs as a composition factor
+of the general orthogonal group <span class="roman">GO</span><sup>+</sup>(8,5) of 8 &times;8 matrices
+over the field with five elements.
+
+<div class="p"><!----></div>
+The outer automorphism group of S is isomorphic to the symmetric group
+on four points.
+Let G be an automorphic extension of S by the symmetric group
+on three points.
+By&nbsp;[<a href="#Kle87" name="CITEKle87">Kle87</a>],
+the group S contains a maximal subgroup M of the type O<sub>8</sub><sup>+</sup>(2)
+such that the normalizer H, say, of M in G is an automorphic extension
+of M by a symmetric group on three points.
+(In fact, H is isomorphic to the full automorphism group of O<sub>8</sub><sup>+</sup>(2).)
+
+<div class="p"><!----></div>
+Let S.2 and S.3 denote intermediate subgroups between S and G,
+in which S has the indices 2 and 3, respectively.
+Analogously, let M.2 = H &#8745;S.2 and M.3 = H &#8745;S.3.
+
+<div class="p"><!----></div>
+In Section&nbsp;<a href="#sect2">2</a>,
+we use the following approach to construct representations of M.2 and
+S.2.
+By&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;85],
+the Weyl group W of type E<sub>8</sub> is a double cover of M.2,
+and the reduction of its rational 8-dimensional representation modulo 5
+embeds into the general orthogonal group <span class="roman">GO</span><sup>+</sup>(8,5),
+which has the structure 2.O<sub>8</sub><sup>+</sup>(5).2<sup>2</sup>.
+Then the actions of <span class="roman">GO</span><sup>+</sup>(8,5) and
+an isomorphic image of W in <span class="roman">GO</span><sup>+</sup>(8,5) on 1-spaces in the
+natural module of <span class="roman">GO</span><sup>+</sup>(8,5) yield M.2 as a subgroup of
+(a supergroup of) S.2,
+where both groups are represented as permutation groups on N = 19&nbsp;656
+points.
+
+<div class="p"><!----></div>
+In Section&nbsp;<a href="#sect3">3</a>,
+first we use <font face="helvetica">GAP</font> to compute the automorphism group of M.
+Then we take an outer automorphism &#945; of M, of order three,
+and extend &#945; to an automorphism of S.
+Concretely, we compute the images of generating sets of S and M
+under &#945; and &#945;<sup>2</sup>.
+This yields permutation representations of S.3 and its subgroup M.3
+on 3 N = 58&nbsp;968 points.
+
+<div class="p"><!----></div>
+In Section&nbsp;<a href="#sect4">4</a>,
+we put the above information together,
+in order to construct permutation representations of G and M,
+on 3 N points.
+
+<div class="p"><!----></div>
+As an application, it is shown in Section&nbsp;<a href="#appl">5</a>
+that the permutation representation of G on the cosets of H
+has a base of length two;
+this question arose in&nbsp;[<a href="#BGS11" name="CITEBGS11">BGS11</a>].
+
+<div class="p"><!----></div>
+In two appendices, it is discussed how to derive a part of this result
+from the permutation character (1<sub>H</sub><sup>G</sup>)<sub>H</sub> (see Section&nbsp;<a href="#permchar">6</a>),
+and a file containing the data used in the earlier sections is described
+(see Section&nbsp;<a href="#data">7</a>).
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc2">
+2</a>&nbsp;&nbsp;Constructing Representations of M.2 and S.2</h2><a name="sect2">
+</a>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc2.1">
+2.1</a>&nbsp;&nbsp;A Matrix Representation of the Weyl Group of Type E<sub>8</sub></h3>
+
+<div class="p"><!----></div>
+Following the recipe listed in&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;85, Section Weyl],
+we can generate the Weyl group W of type E<sub>8</sub> as a group of rational
+8 &times;8 matrices generated by the reflections in the vectors
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ (&#177;1/2, &#177;1/2, 0, 0, 0, 0, 0, 0)</td></tr></table>
+</td></tr></table>
+
+
+plus the vectors obtained from these by permuting the coordinates,
+plus those those vectors of the form
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ ( &#177;1/2, &#177;1/2, &#177;1/2, &#177;1/2, &#177;1/2, &#177;1/2, &#177;1/2, &#177;1/2 )</td></tr></table>
+</td></tr></table>
+
+
+that have an even number of negative signs.
+(Clearly it is sufficient to consider only one vector form a pair &#177;v.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; rootvectors:= [];;
+    gap&#62; for i in Combinations( [ 1 .. 8 ], 2 ) do
+    &#62;      v:= 0 * [ 1 .. 8 ];
+    &#62;      v{i}:= [ 1, 1 ];
+    &#62;      Add( rootvectors, v );
+    &#62;      v:= 0 * [ 1 .. 8 ];
+    &#62;      v{i}:= [ 1, -1 ];
+    &#62;      Add( rootvectors, v );
+    &#62;    od;
+    gap&#62; Append( rootvectors,
+    &#62;         1/2 * Filtered( Tuples( [ -1, 1 ], 8 ),
+    &#62;                   x -&#62; x[1] = 1 and Number( x, y -&#62; y = 1 ) mod 2 = 0 ) );
+    gap&#62; we8:= Group( List( rootvectors, ReflectionMat ) );
+    &lt;matrix group with 120 generators&#62;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc2.2">
+2.2</a>&nbsp;&nbsp;Embedding the Weyl group of Type E<sub>8</sub> into <span class="roman">GO</span><sup>+</sup>(8,5)</h3>
+
+<div class="p"><!----></div>
+The elements in the group constructed above respect the symmetric bilinear
+form that is given by the identity matrix.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; I:= IdentityMat( 8 );;
+    gap&#62; ForAll( GeneratorsOfGroup( we8 ), x -&#62; x * TransposedMat(x) = I );
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+So the reduction of the matrices modulo 5 yields a group W<sup>&#8727;</sup>
+of orthogonal matrices w.&nbsp;r.&nbsp;t.&nbsp;the identity matrix.
+The group <span class="roman">GO</span><sup>+</sup>(8,5) returned by the <font face="helvetica">GAP</font> function <tt>GO</tt> leaves
+a different bilinear form invariant.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; largegroup:= GO(1,8,5);;
+    gap&#62; Display( InvariantBilinearForm( largegroup ).matrix );
+     . 1 . . . . . .
+     1 . . . . . . .
+     . . 2 . . . . .
+     . . . 2 . . . .
+     . . . . 2 . . .
+     . . . . . 2 . .
+     . . . . . . 2 .
+     . . . . . . . 2
+
+</pre>
+
+<div class="p"><!----></div>
+In order to conjugate W<sup>&#8727;</sup> into this group,
+we need a 2 &times;2 matrix T over the field with five elements
+with the property that T T<sup>tr</sup>
+is half of the upper left 2 &times;2 matrix in the above matrix.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; T:= [ [ 1, 2 ], [ 4, 2 ] ] * One( GF(5) );;
+    gap&#62; Display( 2 * T * TransposedMat( T ) );
+     . 1
+     1 .
+    gap&#62; I:= IdentityMat( 8, GF(5) );;
+    gap&#62; I{ [ 1, 2 ] }{ [ 1, 2 ] }:= T;;
+    gap&#62; conj:= List( GeneratorsOfGroup( we8 ), x -&#62; I * x * I^-1 );;
+    gap&#62; IsSubset( largegroup, conj );
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc2.3">
+2.3</a>&nbsp;&nbsp;Compatible Generators of M, M.2, S, and S.2</h3><a name="120pt">
+</a>
+
+<div class="p"><!----></div>
+For the next computations,
+we switch from the natural matrix representation of <span class="roman">GO</span><sup>+</sup>(8,5)
+to a permutation representation of <span class="roman">PGO</span><sup>+</sup>(8,5),
+of degree N = 19&nbsp;656,
+which is given by the action of <span class="roman">GO</span><sup>+</sup>(8,5) on the smallest orbit
+of 1-spaces in its natural module.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; orbs:= OrbitsDomain( largegroup, NormedRowVectors( GF(5)^8 ), OnLines );;
+    gap&#62; List( orbs, Length );
+    [ 39000, 39000, 19656 ]
+    gap&#62; N:= Length( orbs[3] );
+    19656
+    gap&#62; orbN:= SortedList( orbs[3] );;
+    gap&#62; largepermgroup:= Action( largegroup, orbN, OnLines );;
+
+</pre>
+
+<div class="p"><!----></div>
+In the same way,
+permutation representations of the subgroup M.2  &#8773; <span class="roman">SO</span><sup>+</sup>(8,2)
+and of its derived subgroup M are obtained.
+But first we compute a smaller generating set of the simple group M,
+using a permutation representation on 120 points.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; orbwe8:= SortedList( Orbit( we8, rootvectors[1], OnLines ) );;
+    gap&#62; Length( orbwe8 );
+    120
+    gap&#62; we8_to_m2:= ActionHomomorphism( we8, orbwe8, OnLines );;
+    gap&#62; m2_120:= Image( we8_to_m2 );;
+    gap&#62; m_120:= DerivedSubgroup( m2_120 );;
+    gap&#62; sml:= SmallGeneratingSet( m_120 );;  Length( sml );
+    2
+    gap&#62; gens_m:= List( sml, x -&#62; PreImagesRepresentative( we8_to_m2, x ) );;
+
+</pre>
+
+<div class="p"><!----></div>
+Now we compute the actions of M and M.2
+on the above orbit of length N.
+For generating M.2, we choose an element b<sub>N</sub>  &#8712; M.2 \M,
+which is obtained from the action of a matrix b  &#8712; 2.M.2 \2.M.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; gens_m_N:= List( gens_m,
+    &#62;      x -&#62; Permutation( I * x * I^-1, orbN, OnLines ) );;
+    gap&#62; m_N:= Group( gens_m_N );;
+    gap&#62; b:= I * we8.1 * I^-1;;
+    gap&#62; DeterminantMat( b );
+    Z(5)^2
+    gap&#62; b_N:= Permutation( b, orbN, OnLines );;
+    gap&#62; m2_N:= ClosureGroup( m_N, b_N );;
+
+</pre>
+
+<div class="p"><!----></div>
+(Note that M.2 is not contained in <span class="roman">PSO</span><sup>+</sup>(8,5),
+since the determinant of b is &#8722;1 in the field with five elements.)
+
+<div class="p"><!----></div>
+The group S is the derived subgroup of <span class="roman">PSO</span><sup>+</sup>(8,5),
+and S.2 is generated by S together with b<sub>N</sub>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; s_N:= DerivedSubgroup( largepermgroup );;
+    gap&#62; s2_N:= ClosureGroup( s_N, b_N );;
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc3">
+3</a>&nbsp;&nbsp;Constructing Representations of M.3 and S.3</h2><a name="sect3">
+</a>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc3.1">
+3.1</a>&nbsp;&nbsp;The Action of M.3 on M</h3>
+
+<div class="p"><!----></div>
+Let &#945; be an automorphism of M, of order three.
+Then a representation of the semidirect product M.3 of M by
+&#9001;&#945;&#9002; can be constructed as follows.
+
+<div class="p"><!----></div>
+If M is given by a matrix representation then we map g  &#8712; M
+to the block diagonal matrix
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63726;<br />&#63727;<br />&#63727;<br />
+&#63727;<br />&#63728;
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+g </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+g<sup>&#945;</sup> </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+g<sup>(&#945;<sup>2</sup>)</sup> </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63737;<br />&#63738;<br />&#63738;<br />
+&#63738;<br />&#63739;
+</td><td nowrap="nowrap" align="center">
+,</td></tr></table>
+</td></tr></table>
+
+
+and we represent &#945; by the block permutation matrix
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63726;<br />&#63727;<br />&#63727;<br />
+&#63727;<br />&#63728;
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+I </td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+I </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+I </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63737;<br />&#63738;<br />&#63738;<br />
+&#63738;<br />&#63739;
+</td><td nowrap="nowrap" align="center">
+,</td></tr></table>
+</td></tr></table>
+
+
+where I is the identity element in M.
+
+<div class="p"><!----></div>
+So what we need is the action of &#945; on M.
+More precisely, we need images of the chosen generators of M
+under &#945; and &#945;<sup>2</sup>.
+
+<div class="p"><!----></div>
+The group M is small enough for asking <font face="helvetica">GAP</font> to compute
+its automorphism group, which is isomorphic with O<sup>+</sup><sub>8</sub>(2).S<sub>3</sub>;
+for that, we use the permutation representation of degree 120
+that was constructed in Section&nbsp;<a href="#120pt">2.3</a>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; aut_m:= AutomorphismGroup( m_120 );;
+
+</pre>
+
+<div class="p"><!----></div>
+We pick an outer automorphism &#945; of order three.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; nice_aut_m:= NiceMonomorphism( aut_m );;
+    gap&#62; der:= DerivedSubgroup( Image( nice_aut_m ) );;
+    gap&#62; der2:= DerivedSubgroup( der );;
+    gap&#62; repeat x:= Random( der );
+    &#62;      ord:= Order( x );
+    &#62;    until ord mod 3 = 0 and ord mod 9 &lt;&#62; 0 and not x in der2;
+    gap&#62; x:= x^( ord / 3 );;
+    gap&#62; alpha_120:= PreImagesRepresentative( nice_aut_m, x );;
+
+</pre>
+
+<div class="p"><!----></div>
+Next we compute the images of the generators <tt>sml</tt> under &#945; and
+&#945;<sup>2</sup>,
+and the corresponding elements in the action of M on N points.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; sml_alpha:= List( sml, x -&#62; Image( alpha_120, x ) );;
+    gap&#62; sml_alpha_2:= List( sml_alpha, x -&#62; Image( alpha_120, x ) );;
+    gap&#62; gens_m_alpha:= List( sml_alpha,
+    &#62;                         x -&#62; PreImagesRepresentative( we8_to_m2, x ) );;
+    gap&#62; gens_m_alpha_2:= List( sml_alpha_2,
+    &#62;                         x -&#62; PreImagesRepresentative( we8_to_m2, x ) );;
+    gap&#62; gens_m_N_alpha:= List( gens_m_alpha,
+    &#62;      x -&#62; Permutation( I * x * I^-1, orbN, OnLines ) );;
+    gap&#62; gens_m_N_alpha_2:= List( gens_m_alpha_2,
+    &#62;      x -&#62; Permutation( I * x * I^-1, orbN, OnLines ) );;
+
+</pre>
+
+<div class="p"><!----></div>
+Finally, we use the construction descibed in the beginning of this section,
+and obtain a permutation representation of M.3 on 3 N = 58&nbsp;968
+points.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; alpha_3N:= PermList( Concatenation( [ [ 1 .. N ] + 2*N,
+    &#62;                                          [ 1 .. N ],
+    &#62;                                          [ 1 .. N ] + N ] ) );;
+    gap&#62; gens_m_3N:= List( [ 1 .. Length( gens_m_N ) ],
+    &#62;      i -&#62; gens_m_N[i] *
+    &#62;           ( gens_m_N_alpha[i]^alpha_3N ) *
+    &#62;           ( gens_m_N_alpha_2[i]^(alpha_3N^2) ) );;
+    gap&#62; m_3N:= Group( gens_m_3N );;
+    gap&#62; m3_3N:= ClosureGroup( m_3N, alpha_3N );;
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc3.2">
+3.2</a>&nbsp;&nbsp;The Action of S.3 on S</h3><a name="M.3andS.3">
+</a>
+
+<div class="p"><!----></div>
+Our approach is to extend the automorphism &#945; of M to S;
+we can do this because in the full automorphism group of S,
+<em>any</em> O<sup>+</sup><sub>8</sub>(2) type subgroup extends
+to a group of the type O<sup>+</sup><sub>8</sub>(2).3, and this extension lies in a subgroup
+of the type O<sup>+</sup><sub>8</sub>(5).3 (see&nbsp;[<a href="#Kle87" name="CITEKle87">Kle87</a>]).
+
+<div class="p"><!----></div>
+The group M is maximal in S,
+so S is generated by M together with any element s  &#8712; S \M.
+Having fixed such an element s, what we have to is to find the images
+of s under the automorphisms that extend &#945; and &#945;<sup>2</sup>.
+
+<div class="p"><!----></div>
+For that, we first choose x  &#8712; M such that C<sub>S</sub>(x) is a small group
+that is not contained in M.
+Then we choose s  &#8712; C<sub>S</sub>(x) \M,
+and using that s<sup>&#945;</sup> must lie in C<sub>S</sub>(C<sub>M</sub>(s)<sup>&#945;</sup>),
+we then check which elements of this small subgroup can be the desired
+image.
+
+<div class="p"><!----></div>
+Each element x of order nine in M has a root s of order 63 in S,
+and C<sub>S</sub>(x) has order 189.
+For suitable such x,
+exactly one element y  &#8712; C<sub>S</sub>(C<sub>M</sub>(s)<sup>&#945;</sup>) has order 63 and satisfies
+the necessary conditions
+that the orders of the products of s and the generators of M are equal
+to the orders of the product of y and the images of these generators
+under &#945;.
+In other words, we have s<sup>&#945;</sup> = y.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; alpha:= GroupHomomorphismByImagesNC( m_N, m_N,
+    &#62;                gens_m_N, gens_m_N_alpha );;
+    gap&#62; CheapTestForHomomorphism:= function( gens, genimages, x, cand )
+    &#62;        return Order( x ) = Order( cand ) and
+    &#62;               ForAll( [ 1 .. Length( gens ) ],
+    &#62;            i -&#62; Order( gens[i] * x ) = Order( genimages[i] * cand ) );
+    &#62; end;;
+    gap&#62; repeat
+    &#62;      repeat
+    &#62;        x:= Random( m_N );
+    &#62;      until Order( x ) = 9;
+    &#62;      c_s:= Centralizer( s_N, x );
+    &#62;      repeat
+    &#62;        s:= Random( c_s );
+    &#62;      until Order( s ) = 63;
+    &#62;      c_m_alpha:= Images( alpha, Centralizer( m_N, s ) );
+    &#62;      good:= Filtered( Elements( Centralizer( s_N, c_m_alpha ) ),
+    &#62;        x -&#62; CheapTestForHomomorphism( gens_m_N, gens_m_N_alpha, s, x ) );
+    &#62;    until Length( good ) = 1;
+    gap&#62; s_alpha:= good[1];;
+    gap&#62; c_m_alpha_2:= Images( alpha, c_m_alpha );;
+    gap&#62; good:= Filtered( Elements( Centralizer( s_N, c_m_alpha_2 ) ),
+    &#62;      x -&#62; CheapTestForHomomorphism( gens_m_N_alpha, gens_m_N_alpha_2,
+    &#62;                                     s_alpha, x ) );;
+    gap&#62; s_alpha_2:= good[1];;
+
+</pre>
+
+<div class="p"><!----></div>
+Using the notation of the previous section,
+this means that the permutation representation of M.3 on 3 N
+points can be extended to S.3 by choosing the permutation corresponding
+to the block diagonal matrix
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63726;<br />&#63727;<br />&#63727;<br />
+&#63727;<br />&#63728;
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+s </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+s<sup>&#945;</sup> </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+s<sup>(&#945;<sup>2</sup>)</sup> </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63737;<br />&#63738;<br />&#63738;<br />
+&#63738;<br />&#63739;
+</td><td nowrap="nowrap" align="center">
+,</td></tr></table>
+</td></tr></table>
+
+
+as an additional generator.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; outer:= s * ( s_alpha^alpha_3N ) * ( s_alpha_2^(alpha_3N^2) );;
+    gap&#62; s3_3N:= ClosureGroup( m3_3N, outer );;
+
+</pre>
+
+<div class="p"><!----></div>
+(And of course we have S = &#9001;M, s &#9002;,
+which yields generators for S that are compatible with those of M.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; s_3N:= ClosureGroup( m_3N, outer );;
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc4">
+4</a>&nbsp;&nbsp;Constructing Compatible Generators of H and G</h2><a name="sect4">
+</a>
+
+<div class="p"><!----></div>
+After having constructed compatible representations of M.2 and G.2
+on N points (see Section&nbsp;<a href="#120pt">2.3</a>)
+and of M.3 and S.3 on 3 N points (see Section&nbsp;<a href="#M.3andS.3">3.2</a>),
+the last construction step is to find a permutation on 3 N points
+with the following properties:
+
+<ul>
+<li>    The induced automorphism &#946; of M extends to M.3
+    such that the automorphism &#945; of M is inverted,
+    modulo inner automorphisms of M.
+<div class="p"><!----></div>
+</li>
+
+<li>
+    The action on the first N points coicides with that of the element
+    b<sub>N</sub>  &#8712; M.2 \M that was constructed in Section&nbsp;<a href="#120pt">2.3</a>.
+<div class="p"><!----></div>
+</li>
+</ul>
+
+<div class="p"><!----></div>
+Using the notation of the previous sections,
+we represent &#946; by a block diagonal matrix
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63726;<br />&#63727;<br />&#63727;<br />
+&#63727;<br />&#63728;
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+b </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+b d </td></tr></table></td></tr>
+<tr><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+b g </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+</td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+ </td><td align="left" class="cl">&#63737;<br />&#63738;<br />&#63738;<br />
+&#63738;<br />&#63739;
+</td><td nowrap="nowrap" align="center">
+,</td></tr></table>
+</td></tr></table>
+
+
+where b describes the action of &#946; on M (on N points),
+g describes the inner automorphism &#947; of M that is defined by
+the condition &#946;&#945; =  &#945;<sup>2</sup> &#946;&#947;,
+and d describes &#947;&#947;<sup>&#945;</sup>.
+
+<div class="p"><!----></div>
+So we compute an element in M that induces the conjugation automorphism
+&#947;, and its image under &#945;.
+We do this in the representation of M on 120 points,
+and carry over the result to the representation on N points,
+via the rational matrix representation;
+this approach had been used already in Section&nbsp;<a href="#120pt">2.3</a>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; b_120:= Permutation( we8.1, orbwe8, OnLines );;
+    gap&#62; g_120:= RepresentativeAction( m_120, List( sml_alpha_2, x -&#62; x^b_120 ),
+    &#62;                List( sml, x -&#62; (x^b_120)^alpha_120 ), OnTuples );;
+    gap&#62; g_120_alpha:= g_120^alpha_120;;
+    gap&#62; g_N:= Permutation( I * PreImagesRepresentative( we8_to_m2, g_120 )
+    &#62;                         * I^-1, orbN, OnLines );;
+    gap&#62; g_N_alpha:= Permutation( I * PreImagesRepresentative( we8_to_m2,
+    &#62;                                     g_120_alpha ) * I^-1, orbN, OnLines );;
+    gap&#62; inv:= PermList( Concatenation( ListPerm( b_N ),
+    &#62;                                   ListPerm( b_N * g_N ) + 2*N,
+    &#62;                                   ListPerm( b_N * g_N * g_N_alpha ) + N ) );;
+
+</pre>
+
+<div class="p"><!----></div>
+So we have constructed compatible generators for H and G.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; h:= ClosureGroup( m3_3N, inv );;
+    gap&#62; g:= ClosureGroup( s3_3N, inv );;
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc5">
+5</a>&nbsp;&nbsp;Application: Regular Orbits of H on G/H</h2><a name="appl">
+</a>
+
+<div class="p"><!----></div>
+We want to show that H has regular orbits on the right cosets G/H.
+The stabilizer in H of the coset H g is H &#8745;H<sup>g</sup>,
+so we compute that there are elements s  &#8712; S with the property
+&#124;H &#8745;H<sup>s</sup>&#124; = 1.
+
+<div class="p"><!----></div>
+(Of course this implies that also in the permutation representations of
+the subgroups S, S.2, and S.3 of G on the cosets of the intersection
+with H, the point stabilizers have regular orbits.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; repeat
+    &#62;      conj:= Random( s_3N );
+    &#62;      inter:= Intersection( h, h^conj );
+    &#62;    until Size( inter ) = 1;
+
+</pre>
+
+<div class="p"><!----></div>
+Eventually <font face="helvetica">GAP</font> will return from this loop,
+so there are elements c with the required property.
+
+<div class="p"><!----></div>
+(Computing one such intersection takes about six minutes
+on a 2.5 GHz Pentium 4,
+so one may have to be a bit patient.)
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc6">
+6</a>&nbsp;&nbsp;Appendix: The Permutation Character (1<sub>H</sub><sup>G</sup>)<sub>H</sub></h2><a name="permchar">
+</a>
+
+<div class="p"><!----></div>
+As an alternative to the computation of &#124;H &#8745;H<sup>s</sup>&#124; for suitable
+s  &#8712; S, we can try to derive information from the permutation character
+(1<sub>H</sub><sup>G</sup>)<sub>H</sub>.
+Unfortunately, there seems to be no easy way to prove the existence of
+regular H-orbits on G/H (cf.&nbsp;Section&nbsp;<a href="#appl">5</a>)
+only by means of this character.
+
+<div class="p"><!----></div>
+However, it is not difficult to show that regular orbits
+of M, M.2, and M.3 exist.
+For that, we compute (1<sub>H</sub><sup>G</sup>)<sub>H</sub>,
+by computing class representatives of H,
+their centralizer orders in G,
+and the class fusion of H-classes in G.
+
+<div class="p"><!----></div>
+We want to compute the class representatives in a small permutation
+representation of H;
+this could be done using the degree 360 representation that was
+implicitly constructed above,
+but it is technically easier to use a degree 405 representation
+that is obtained from the degree 58&nbsp;968 representation
+by the action of H on blocks in an orbit of length 22&nbsp;680.
+(One could get this also using the <font face="helvetica">GAP</font> function
+<tt>SmallerDegreePermutationRepresentation</tt>.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; orbs:= Orbits( h, MovedPoints( h ) );;
+    gap&#62; List( orbs, Length );
+    [ 22680, 36288 ]
+    gap&#62; orb:= orbs[1];;
+    gap&#62; bl:= Blocks( h, orb );;  Length( bl[1] );
+    2
+    gap&#62; actbl:= Action( h, bl, OnSets );;
+    gap&#62; bll:= Blocks( actbl, MovedPoints( actbl ) );;  Length( bll );  
+    405
+    gap&#62; oneblock:= Union( bl{ bll[1] } );;
+    gap&#62; orb:= SortedList( Orbit( h, oneblock, OnSets ) );;
+    gap&#62; acthom:= ActionHomomorphism( h, orb, OnSets );;
+    gap&#62; ccl:= ConjugacyClasses( Image( acthom ) );;
+    gap&#62; reps:= List( ccl, x -&#62; PreImagesRepresentative( acthom,
+    &#62;                               Representative( x ) ) );;
+
+</pre>
+
+<div class="p"><!----></div>
+Then we carry back class representatives to the degree 58&nbsp;968
+representation, and compute the class fusion and the centralizer orders
+in G.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; reps:= List( ccl, x -&#62; PreImagesRepresentative( acthom,
+    &#62;                               Representative( x ) ) );;
+    gap&#62; fusion:= [];;
+    gap&#62; centralizers:= [];;
+    gap&#62; fusreps:= [];;
+    gap&#62; for i in [ 1 .. Length( reps ) ] do
+    &#62;      found:= false;
+    &#62;      cen:= Size( Centralizer( g, reps[i] ) );
+    &#62;      for j in [ 1 .. Length( fusreps ) ] do
+    &#62;        if cen = centralizers[j] and
+    &#62;           IsConjugate( g, fusreps[j], reps[i] ) then
+    &#62;          fusion[i]:= j;
+    &#62;          found:= true;
+    &#62;          break;
+    &#62;        fi;
+    &#62;      od;
+    &#62;      if not found then
+    &#62;        Add( fusreps, reps[i] );
+    &#62;        Add( fusion, Length( fusreps ) );
+    &#62;        Add( centralizers, cen );
+    &#62;      fi;
+    &#62;    od;
+
+</pre>
+
+<div class="p"><!----></div>
+Next we compute the permutation character values,
+using the formula
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ (1<sub>H</sub>)<sup>G</sup>(g) = (&#124;C<sub>G</sub>(g)&#124; </td><td nowrap="nowrap" align="center">
+<small></small><!--sup
+--><br /><font size="+3">&#8721;<br />
+</font><small>h</small>&nbsp;<br /></td><td nowrap="nowrap" align="center">
+&#124;h<sup>H</sup>&#124;) /&#124;H&#124; ,</td></tr></table>
+</td></tr></table>
+
+
+where the summation runs over class representatives h  &#8712; H
+that are G-conjugate to g.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; pi:= 0 * [ 1 .. Length( fusreps ) ];;
+    gap&#62; for i in [ 1 .. Length( ccl ) ] do
+    &#62;      pi[ fusion[i] ]:= pi[ fusion[i] ] + centralizers[ fusion[i] ] *
+    &#62;                                              Size( ccl[i] );
+    &#62;    od;
+    gap&#62; pi:= pi{ fusion } / Size( h );;
+
+</pre>
+
+<div class="p"><!----></div>
+In order to write the permutation character w.r.t.&nbsp;the ordering of classes
+in the <font face="helvetica">GAP</font> character table, we use the <font face="helvetica">GAP</font> function
+<tt>CompatibleConjugacyClasses</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; tblh:= CharacterTable( "O8+(2).S3" );;
+    gap&#62; map:= CompatibleConjugacyClasses( Image( acthom ), ccl, tblh );;
+    gap&#62; pi:= pi{ map }; 
+    [ 51162109375, 69375, 1259375, 69375, 568750, 1750, 4000, 375, 135, 975, 135, 
+      625, 150, 650, 30, 72, 80, 72, 27, 27, 3, 7, 25, 30, 6, 12, 25, 484375, 
+      1750, 375, 375, 30, 40, 15, 15, 15, 6, 6, 3, 3, 3, 157421875, 121875, 4875, 
+      475, 75, 3875, 475, 13000, 1750, 300, 400, 30, 60, 15, 15, 15, 125, 10, 30, 
+      4, 8, 6, 9, 7, 5, 6, 5 ]
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+Now we consider the restrictions of this permutation character to
+M, M.2, and M.3.
+Note that
+(1<sub>H</sub><sup>G</sup>)<sub>M</sub> = (1<sub>M</sub><sup>S</sup>)<sub>M</sub>,
+(1<sub>H</sub><sup>G</sup>)<sub>M.2</sub> = (1<sub>M.2</sub><sup>S.2</sup>)<sub>M.2</sub>, and
+(1<sub>H</sub><sup>G</sup>)<sub>M.3</sub> = (1<sub>M.3</sub><sup>S.3</sup>)<sub>M.3</sub>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; tblm2:= CharacterTable( "O8+(2).2" );;
+    gap&#62; tblm3:= CharacterTable( "O8+(2).3" );;
+    gap&#62; tblm:= CharacterTable( "O8+(2)" );;
+    gap&#62; pi_m2:= pi{ GetFusionMap( tblm2, tblh ) };;
+    gap&#62; pi_m3:= pi{ GetFusionMap( tblm3, tblh ) };;
+    gap&#62; pi_m:= pi_m3{ GetFusionMap( tblm, tblm3 ) };;
+
+</pre>
+
+<div class="p"><!----></div>
+The permutation character (1<sub>M</sub><sup>S</sup>)<sub>M</sub> decomposes
+into 483 transitive permutation characters,
+and regular M-orbits on S/M correspond to regular constituents
+in this decomposition.
+If there is no regular transitive constituent in (1<sub>M</sub><sup>S</sup>)<sub>M</sub> then
+the largest degree of a transitive constituent is &#124;M&#124;/2;
+but then the degree of 1<sub>M</sub><sup>S</sup> is less than 483 &#124;M&#124;/2,
+which is smaller than [S:M].
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; n:= ScalarProduct( tblm, pi_m, TrivialCharacter( tblm ) );
+    483
+    gap&#62; n * Size( tblm ) / 2;
+    42065049600
+    gap&#62; pi[1];
+    51162109375
+
+</pre>
+
+<div class="p"><!----></div>
+For the case of M.2  &lt;  S.2, this argument turns out to be not sufficient.
+So we first compute a lower bound on the number of regular M-orbits
+on S/M.
+For involutions g  &#8712; M, the number of transitive constituents
+1<sub>&#9001;g &#9002;</sub><sup>M</sup> in (1<sub>M</sub><sup>S</sup>)<sub>M</sub> is at most the integral part of
+1<sub>M</sub><sup>S</sup>(g) / 1<sub>&#9001;g &#9002;</sub><sup>M</sup>(g) = 2 &#183;1<sub>M</sub><sup>S</sup>(g) / &#124;C<sub>M</sub>(g)&#124;;
+from this we compute that there are at most 208 such constituents.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; inv:= Filtered( [ 1 .. NrConjugacyClasses( tblm ) ],
+    &#62;              i -&#62; OrdersClassRepresentatives( tblm )[i] = 2 );
+    [ 2, 3, 4, 5, 6 ]
+    gap&#62; n2:= List( inv, i -&#62; Int( 2 * pi_m[i] / SizesCentralizers( tblm )[i] ) );
+    [ 1, 54, 54, 54, 45 ]
+    gap&#62; Sum( n2 );
+    208
+
+</pre>
+
+<div class="p"><!----></div>
+As a consequence, M has at least 148 regular orbits on S/M.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; First( [ 1 .. 483 ],                                           
+    &#62;           i -&#62; i * Size( tblm ) + 208 * Size( tblm ) / 2
+    &#62;                + ( 483 - i - 208 - 1 ) * Size( tblm ) / 3 + 1 &#62;= pi[1] );
+    148
+
+</pre>
+
+<div class="p"><!----></div>
+Now we consider the action of M.2 on S.2/M.2.
+If M.2 has no regular orbit then the 148 regular orbits of M
+must arise from the restriction of transitive constituents 1<sub>U</sub><sup>M.2</sup>
+to M with &#124;U&#124; = 2 and such that U is not contained in M.
+(This follows from the fact that the restriction of a transitive constituent
+of (1<sub>M.2</sub><sup>S.2</sup>)<sub>M.2</sub> to M is either itself a transitive constituent
+of (1<sub>M</sub><sup>S</sup>)<sub>M</sub> or the sum of two such constituents;
+the latter case occurs if and only if the point stabilizer is contained
+in M.)
+However, the number of these constituents is at most  134.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; inv:= Filtered( [ 1 .. NrConjugacyClasses( tblm2 ) ],
+    &#62;              i -&#62; OrdersClassRepresentatives( tblm2 )[i] = 2 and
+    &#62;                   not i in ClassPositionsOfDerivedSubgroup( tblm2 ) );
+    [ 41, 42 ]
+    gap&#62; n2:= List( inv,
+    &#62;               i -&#62; Int( 2 * pi_m2[i] / SizesCentralizers( tblm2 )[i] ) );
+    [ 108, 26 ]
+    gap&#62; Sum( n2 );
+    134
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+Finally, we consider the action of M.3 on S.3/M.3.
+We compute that (1<sub>M.3</sub><sup>S.3</sup>)<sub>M.3</sub> has 205 transitive constituents,
+and at most 69 of them can be induced from subgroups of order two.
+This is already sufficient to show that there must be regular constituents.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; n:= ScalarProduct( tblm3, pi_m3, TrivialCharacter( tblm3 ) );
+    205
+    gap&#62; inv:= Filtered( [ 1 .. NrConjugacyClasses( tblm3 ) ],
+    &#62;              i -&#62; OrdersClassRepresentatives( tblm3 )[i] = 2 );
+    [ 2, 3, 4 ]
+    gap&#62; n2:= List( inv,
+    &#62;               i -&#62; Int( 2 * pi_m3[i] / SizesCentralizers( tblm3 )[i] ) );
+    [ 0, 54, 15 ]
+    gap&#62; Sum( n2 );
+    69
+    gap&#62; 69 * Size( tblm3 ) / 2 + ( n - 69 - 1 ) * Size( tblm3 ) / 3 + 1;
+    41542502401
+    gap&#62; pi[1];
+    51162109375
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc7">
+7</a>&nbsp;&nbsp;Appendix: The Data File</h2><a name="data">
+</a>
+
+<div class="p"><!----></div>
+The file <tt>o8p2s3_o8p5s3.g</tt> that can be found at
+
+<div class="p"><!----></div>
+<a href="http://www.math.rwth-aachen.de/~Thomas.Breuer/ctbllib/data/o8p2s3_o8p5s3.g"><tt>http://www.math.rwth-aachen.de/~Thomas.Breuer/ctbllib/data/o8p2s3_o8p5s3.g</tt></a>
+
+<div class="p"><!----></div>
+contains the relevant data used in the above computations.
+This covers the representations for the groups
+and the permutation character of O<sup>+</sup><sub>8</sub>(2).S<sub>3</sub>
+computed in Section&nbsp;<a href="#permchar">6</a>.
+
+<div class="p"><!----></div>
+Reading the file into <font face="helvetica">GAP</font> will define a global variable
+<tt>o8p2s3_o8p5s3_data</tt>, a record with the following components.
+
+<div class="p"><!----></div>
+
+<dl compact="compact">
+ <dt><b><tt>pi</tt></b></dt>
+	<dd>
+    the list of values of the permutation character of G = O<sup>+</sup><sub>8</sub>(5).S<sub>3</sub>
+    on the cosets of its subgroup H = O<sup>+</sup><sub>8</sub>(2).S<sub>3</sub>,
+    restricted to H,
+    corresponding to the ordering of classes in the character table of H
+    in the <font face="helvetica">GAP</font> Character Table Library
+    (this table has the <tt>Identifier</tt> value <tt>"O8+(2).3.2"</tt>),</dd>
+ <dt><b><tt>dim8Q</tt></b></dt>
+	<dd>
+    a record with generators for 2.M and 2.M.2,
+    matrices of dimension eight over the Rationals,</dd>
+ <dt><b><tt>deg120</tt></b></dt>
+	<dd>
+    a record with generators for M and M.2,
+    permutations of degree 120,</dd>
+ <dt><b><tt>deg360</tt></b></dt>
+	<dd>
+    a record with generators for M, M.2, M.3, and H,
+    permutations of degree 360,</dd>
+ <dt><b><tt>dim8f5</tt></b></dt>
+	<dd>
+    a record with generators for 2.M, 2.M.2, 2.S, and 2.S.2,
+    matrices of dimension eight over the field with five elements,</dd>
+ <dt><b><tt>deg19656</tt></b></dt>
+	<dd>
+    a record with generators for M, M.2, S, and S.2,
+    permutations of degree 19&nbsp;656,</dd>
+ <dt><b><tt>deg58968</tt></b></dt>
+	<dd>
+    a record with generators for M, M.2, M.3, H,
+    S, S.2, S.3, and G,
+    permutations of degree 58&nbsp;968,</dd>
+ <dt><b><tt>seed405</tt></b></dt>
+	<dd>
+    a block whose H-orbit in the representation on 58&nbsp;968 points,
+    w.r.t.&nbsp;the action <tt>OnSets</tt>,
+    yields a representation of H on 405 points.</dd>
+</dl>
+
+<div class="p"><!----></div>
+For each of the permutation representations, we have (where applicable)
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+M </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub> &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+M.2 </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, b &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+M.3 </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, t &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+H </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, t, b &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+S </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, c &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+S.2 </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, c, b &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+S.3 </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, c, t &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+G </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, c, t, b &#9002;, </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+</td></tr></table>
+</td></tr></table>
+
+
+where a<sub>1</sub>, a<sub>2</sub>, b, t, c are the values of the record components
+<tt>a1</tt>, <tt>a2</tt>, <tt>b</tt>, <tt>t</tt>, and <tt>c</tt>.
+
+<div class="p"><!----></div>
+Analogously,
+for the matrix representations, we have (where applicable)
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2.M </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub> &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2.M.2 </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, b &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2.S </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, c &#9002;, </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2.S.2 </td></tr></table></td><td align="center"><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+ &#8773; </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+&#9001;a<sub>1</sub>, a<sub>2</sub>, c, b &#9002;, </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+</td></tr></table>
+</td></tr></table>
+
+
+
+<div class="p"><!----></div>
+Additional components are used for deriving the representations from
+initial data, as in the constructions in the previous sections.
+
+<div class="p"><!----></div>
+For example, most of the permutations needed arise as the induced actions
+of matrices on orbits of vectors;
+these orbits are computed when the file is read,
+and are then stored in the components <tt>orb120</tt> and <tt>orb19656</tt>.
+
+<div class="p"><!----></div>
+The file <tt>o8p2s3_o8p5s3.g</tt> does not contain the generators
+explicitly,
+but it is self-contained in the sense that only a few <font face="helvetica">GAP</font> functions
+are actually needed to produce the data;
+for example, it should not be difficult to translate the contents of
+the file into the language of other computer algebra systems.
+
+<div class="p"><!----></div>
+Advantages of this way to store the data are that the relations between
+the representations become explicit,
+and also that only very little space is needed to describe
+the representations -the size of the file is less than 10 kB,
+whereas storing (explicitly) one of the permutations on 58&nbsp;968 points
+requires already about 350 kB.
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+
+<h2>References</h2>
+
+<dl compact="compact">
+ <dt><a href="#CITEBGS11" name="BGS11">[BGS11]</a></dt><dd>
+T.&nbsp;C. Burness, R.&nbsp;M. Guralnick, and J.&nbsp;Saxl, <em>On base sizes for symmetric
+  groups</em>, Bull. Lond. Math. Soc. <b>43</b> (2011), no.&nbsp;2,
+  386-391. MR 2781219 (2012d:20003)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITECCN85" name="CCN85">[CCN<sup>+</sup>85]</a></dt><dd>
+J.&nbsp;H. Conway, R.&nbsp;T. Curtis, S.&nbsp;P. Norton, R.&nbsp;A. Parker, and R.&nbsp;A. Wilson,
+  <em>Atlas of finite groups</em>, Oxford University Press, Eynsham, 1985,
+  Maximal subgroups and ordinary characters for simple groups, With
+  computational assistance from J. G. Thackray. MR 827219 (88g:20025)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEKle87" name="Kle87">[Kle87]</a></dt><dd>
+P.&nbsp;B. Kleidman, <em>The maximal subgroups of the finite 8-dimensional
+  orthogonal groups P&#8486;<sup>+</sup><sub>8</sub>(q) and of their automorphism groups</em>, J.
+  Algebra <b>110</b> (1987), no.&nbsp;1, 173-242. MR 904187
+  (88i:20070)</dd>
+</dl>
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<br /><br /><hr /><small>File translated from
+T<sub><font size="-1">E</font></sub>X
+by <a href="http://hutchinson.belmont.ma.us/tth/">
+T<sub><font size="-1">T</font></sub>H</a>,
+version 3.59.<br />On  5 May 2012, 09:04.</small>
+</html>

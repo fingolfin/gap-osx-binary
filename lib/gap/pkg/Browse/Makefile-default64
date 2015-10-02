@@ -1,0 +1,52 @@
+GAPPATH=../..
+CONFIGNAME=default64
+# makefile prototype for the Browse package                    Frank Lübeck
+
+CONFIGNAME=default64
+
+GAP = $(GAPPATH)/bin/x86_64-apple-darwin10.0.0-clang-default64/gap -b -r -l $(GAPPATH)
+
+GAPINCL=-I$(GAPPATH)/src -I$(GAPPATH)/bin/x86_64-apple-darwin10.0.0-clang-default64
+
+PKGROOT=$(shell pwd)
+
+LOPTS=-lpanel -lncurses
+
+.PHONY: clean doc test
+
+default:  bin/x86_64-apple-darwin10.0.0-clang-default64/ncurses.so
+
+# this target creates a bin-directory
+bin/x86_64-apple-darwin10.0.0-clang-default64:
+	if test ! -d bin;  then mkdir bin;  fi
+	if test ! -d bin/x86_64-apple-darwin10.0.0-clang-default64;  then mkdir -p bin/x86_64-apple-darwin10.0.0-clang-default64;  fi
+
+bin/x86_64-apple-darwin10.0.0-clang-default64/ncurses.so: bin/x86_64-apple-darwin10.0.0-clang-default64 src/ncurses.c Makefile-$(CONFIGNAME)
+	$(GAPPATH)/bin/x86_64-apple-darwin10.0.0-clang-default64/gac -p "$(CFLAGS)" -d -o bin/x86_64-apple-darwin10.0.0-clang-default64/ncurses.so \
+        src/ncurses.c -L "${LOPTS}"
+
+# just make it again when called with 'manual'
+##  manual: doc/manual.six
+##  doc/manual.six: doc/main.xml doc/browsebib.xml doc/appl.xml doc/browse.xml \
+##                  doc/curses.xml doc/intro.xml doc/util.xml
+manual:
+	($(GAP) -l "../../;" < makedocrel.g)
+	echo "LaTeX warnings:"
+	grep "\(^LaTeX Warning\|^Overfull \\hbox\)" doc/main.log; exit 0
+
+clean:
+	rm -rf bin/x86_64-apple-darwin10.0.0-clang-default64 Makefile Makefile-${CONFIGNAME} *~
+distclean:
+	rm -rf bin/* Makefile Makefile-*
+
+doc:
+	($(GAP)  < makedocrel.g)
+
+docclean:
+	(cd  doc; ./clean)
+
+# experimental so far
+WIDECHARS:
+	$(GAPPATH)/bin/x86_64-apple-darwin10.0.0-clang-default64/gac -d -o bin/x86_64-apple-darwin10.0.0-clang-default64/ncurses.so \
+        src/ncurses.c -p -DWIDECHARS -L "-lpanelw  -lncursesw"
+

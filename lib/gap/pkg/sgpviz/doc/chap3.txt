@@ -1,0 +1,229 @@
+  
+  [1X3 Drawings of semigroups[0X
+  
+  There  are  some  pictures  that  may  give  a  lot  of  information about a
+  semigroup.  This  is  the  case of the egg-box picture of the D-classes, the
+  right  Cayley  graph  of  a finite monoid and the Schutzenberger graphs of a
+  finite inverse monoid.
+  
+  
+  [1X3.1 Drawing the D-class of an element of a semigroup[0X
+  
+  [1X3.1-1 DrawDClassOfElement[0m
+  
+  [2X> DrawDClassOfElement( [0X[3Xarg[0X[2X ) _______________________________________[0Xfunction
+  
+  This  function  takes  as arguments a semigroup followed by a transformation
+  which  is  the  element  whose D-class will be drawn. Optionally we can then
+  specify  n  lists of elements and the elements of each list will be drawn in
+  different  colours. Finally, we may specify a string name the file that will
+  be  used to write the drawing of the class (in PostScript format) and if the
+  last   argument   is  the  integer  [10X1[0m  then  the  elements  will  appear  as
+  transformations,  otherwise  they will appear as words. The idempotents will
+  be marked with a * before them.
+  
+  This  last  optional argument may also be the integer [10X2[0m and in this case the
+  elements   will   appear   as  integers,  where  [10Xi[0m  represents  the  element
+  [10XElements(S)[i][0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> DrawDClassOfElement(poi3, Transformation([1,4,3,4]));[0X
+    [4Xgap> DrawDClassOfElement(poi3, Transformation([1,4,3,4]),1);[0X
+    [4Xgap> DrawDClassOfElement(poi3, Transformation([1,4,3,4]),[0X
+    [4X [Transformation( [ 2, 3, 4, 4 ] )],1);[0X
+    [4Xgap> DrawDClassOfElement(poi3, Transformation([1,4,3,4]),[0X
+    [4X [Transformation( [ 2, 3, 4, 4 ] ), Transformation( [ 2, 4, 3, 4 ] )],[0X
+    [4X [Transformation( [ 2, 4, 3, 4 ] )],1);[0X
+    [4Xgap> DrawDClassOfElement(poi3, Transformation([1,4,3,4]), [0X
+    [4X [Transformation( [ 2, 4, 3, 4 ] )],"Dclass",1);[0X
+    [4X      [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.2 Drawing the D-classes of a semigroup[0X
+  
+  [1X3.2-1 DrawDClasses[0m
+  
+  [2X> DrawDClasses( [0X[3Xarg[0X[2X ) ______________________________________________[0Xfunction
+  
+  This function is similar to the previous one, except that this one draws all
+  the  D-classes  of  the semigroup given as the first argument. It then takes
+  optionally  n  lists of elements and the elements of each list will be drawn
+  in  different  colours.  It also accepts a string specifying the name of the
+  file  in which the drawing will be written and the last, optional, argument,
+  the  integer  [10X1[0m,  to specify whether the elements will appear as words or as
+  transformations  as in the previous function. The idempotents will be marked
+  with a * before them.
+  
+  This  last  optional argument may also be the integer [10X2[0m and in this case the
+  elements   will   appear   as  integers,  where  [10Xi[0m  represents  the  element
+  [10XElements(S)[i][0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> DrawDClasses(poi3,"DClasses");[0X
+    [4Xgap> DrawDClasses(poi3, [Transformation( [ 2, 3, 4, 4 ] ),[0X
+    [4X  Transformation( [ 2, 4, 3, 4 ] )],[0X
+    [4X  [Transformation( [ 2, 4, 3, 4 ] )],1);[0X
+    [4X      [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.3 Cayley graphs[0X
+  
+  [1X3.3-1 DrawRightCayleyGraph[0m
+  
+  [2X> DrawRightCayleyGraph( [0X[3XS[0X[2X ) ________________________________________[0Xfunction
+  
+  Draws the right Cayley graph of a finite monoid or semigroup [3XS[0m.
+  
+  [1X3.3-2 DrawCayleyGraph[0m
+  
+  [2X> DrawCayleyGraph( [0X[3XS[0X[2X ) _____________________________________________[0Xfunction
+  
+  This function is a synonym of [2XDrawRightCayleyGraph[0m ([14X3.3-1[0m).
+  
+  For  example,  the command [10XDrawCayleyGraph(b21);[0m would produce the following
+  image  (where  state  [10Xi[0m  represents  the element [10XElements(S)[i][0m, the neutral
+  element  is colored in "light blue" and all other idempotents are colored in
+  "light coral"):
+  
+  
+  [1X3.4 Schutzenberger graphs[0X
+  
+  [1X3.4-1 DrawSchutzenbergerGraphs[0m
+  
+  [2X> DrawSchutzenbergerGraphs( [0X[3XS[0X[2X ) ____________________________________[0Xfunction
+  
+  Draws the Schutzenberger graphs of the inverse semigroup [3XS[0m.
+  
+  For example, [10XDrawSchutzenbergerGraphs(poi3);[0m would produce the following:
+  
+  
+  [1X3.5 Drawings output formats[0X
+  
+  By  default,  when  a  drawing  is  requested, it is outputted in PostScript
+  format.    Since    [10Xgraphviz[0m    allows    other    output    formats    (see
+  [7Xhttp://www.graphviz.org/doc/info/output.html[0m),   it   is  possible  to  also
+  request a drawing in a format other than PostScript.
+  
+  [1X3.5-1 DrawingsListOfExtraFormats[0m
+  
+  [2X> DrawingsListOfExtraFormats_________________________________[0Xglobal variable
+  
+  This  is  a  global  variable  which  holds  the  valid output formats for a
+  drawing.  It  currently  has  the  value: [10X["dia", "fig", "gd", "gd2", "gif",
+  "hpgl", "jpg", "mif", "mp", "pcl", "pic", "plain", "plain-ext", "png", "ps",
+  "ps2",    "svg",    "svgz",    "vrml",    "vtx",    "wbmp",   "none"][0m   (see
+  [7Xhttp://www.graphviz.org/doc/info/output.html[0m for their description).
+  
+  [1X3.5-2 DrawingsExtraFormat[0m
+  
+  [2X> DrawingsExtraFormat________________________________________[0Xglobal variable
+  
+  This  is  a  global variable which holds the alternative output format for a
+  drawing. By default its value is [10X"none"[0m which indicates that just PostScript
+  will be used as the output format.
+  
+  If  its  value  becomes  one of those in [2XDrawingsListOfExtraFormats[0m ([14X3.5-1[0m),
+  then  besides  the  PostScript  file,  it will also be created a file in the
+  alternative format.
+  
+  To change this variable's value, please use [2XSetDrawingsExtraFormat[0m ([14X3.5-3[0m).
+  
+  [1X3.5-3 SetDrawingsExtraFormat[0m
+  
+  [2X> SetDrawingsExtraFormat( [0X[3Xf[0X[2X ) ______________________________________[0Xfunction
+  
+  This function is used to set the value of [2XDrawingsExtraFormat[0m ([14X3.5-2[0m) to the
+  format [3Xf[0m which is one of [2XDrawingsListOfExtraFormats[0m ([14X3.5-1[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> DrawingsExtraFormat;[0X
+    [4X"none"[0X
+    [4Xgap> SetDrawingsExtraFormat("jpg");[0X
+    [4Xgap> DrawingsExtraFormat;[0X
+    [4X"jpg"[0X
+    [4X[0X
+    [4Xgap> DrawRightCayleyGraph(poi3);[0X
+    [4XDisplaying file: /tmp/tmp.tpJqvI/cayleygraph.dot.ps[0X
+    [4XThe extra output format file: /tmp/tmp.tpJqvI/cayleygraph.dot.jpg[0X
+    [4Xhas also been created.[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.6 Drawings extra graph attributes[0X
+  
+  The  functions  described in this subsection are intended to give the user a
+  finer  control  over  the  final  drawing.  They  allow  to define the graph
+  attributes  described in [7Xhttp://graphviz.org/doc/info/attrs.html[0m. (Note that
+  only  graph  attributes  are  allowed  to  be  defined,  not  edge  nor node
+  attributes are supported yet.)
+  
+  [1X3.6-1 DrawingsExtraGraphAttributes[0m
+  
+  [2X> DrawingsExtraGraphAttributes_______________________________[0Xglobal variable
+  
+  This  is  a  global  variable  which  holds a list of strings, each of which
+  defines  a [13Xdot[0m graph attribute. This variable is [13Xnot[0m intended to be modified
+  by  the  user  directly, but can be used to check which extra attributes are
+  currently     defined.     To     set    the    attributes,    please    use
+  [2XSetDrawingsExtraGraphAttributes[0m   ([14X3.6-2[0m).  If  [10XDrawingsExtraGraphAttributes[0m
+  holds  the  value  [10X"none"[0m  then  the  default [13Xdot[0m settings will be used. Use
+  [2XClearDrawingsExtraGraphAttributes[0m ([14X3.6-3[0m) to set it to [10X"none"[0m.
+  
+  [1X3.6-2 SetDrawingsExtraGraphAttributes[0m
+  
+  [2X> SetDrawingsExtraGraphAttributes( [0X[3XL[0X[2X ) _____________________________[0Xfunction
+  
+  This  is  the  function  to  define  the  drawing's  graph  attributes  (see
+  [7Xhttp://graphviz.org/doc/info/attrs.html[0m for a list and explanation of them).
+  the  argument  [3XL[0m  is  a  list  of strings, each of which defines a [13Xdot[0m graph
+  attribute.  For example, if we wanted to define the graph size to be 7x9 (in
+  inches), we would call [10XSetDrawingsExtraGraphAttributes(["size=7,9"]);[0m.
+  
+  If  we  also wanted to define the graph to be displayed in landscape mode we
+  would  call [10XSetDrawingsExtraGraphAttributes(["size=7,9", "rotate=90"]);[0m. If,
+  in  addition  we  wanted  to define the background color to be, for example,
+  pink,    we    would    call    [10XSetDrawingsExtraGraphAttributes(["size=7,9",
+  "rotate=90", "bgcolor=pink"]);[0m.
+  
+  After  defining  the attributes, any command that creates a drawing will use
+  the  last  defined  attributes. To set them back to the defaults, please use
+  [2XClearDrawingsExtraGraphAttributes[0m ([14X3.6-3[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> DrawingsExtraGraphAttributes;[0X
+    [4X"none"[0X
+    [4X[0X
+    [4X[0X
+    [4Xgap> SetDrawingsExtraGraphAttributes(["size=7,9"]);[0X
+    [4X[0X
+    [4Xgap> DrawingsExtraGraphAttributes;[0X
+    [4X[ "size=7,9" ][0X
+    [4X[0X
+    [4X[0X
+    [4Xgap> SetDrawingsExtraGraphAttributes(["size=7,9", "rotate=90"]);[0X
+    [4X[0X
+    [4Xgap> DrawingsExtraGraphAttributes;[0X
+    [4X[ "size=7,9", "rotate=90" ][0X
+    [4X[0X
+    [4X[0X
+    [4Xgap> SetDrawingsExtraGraphAttributes(["size=7,9", "rotate=90", "bgcolor=pink"]);[0X
+    [4X[0X
+    [4Xgap> DrawingsExtraGraphAttributes;[0X
+    [4X[ "size=7,9", "rotate=90", "bgcolor=pink" ][0X
+    [4X[0X
+    [4X[0X
+    [4Xgap> ClearDrawingsExtraGraphAttributes();[0X
+    [4X[0X
+    [4Xgap> DrawingsExtraGraphAttributes;[0X
+    [4X"none"[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.6-3 ClearDrawingsExtraGraphAttributes[0m
+  
+  [2X> ClearDrawingsExtraGraphAttributes( [0X[3X[0X[2X ) ____________________________[0Xfunction
+  
+  This function sets the graph drawing attributes back to [13Xdot[0m's defaults.
+  

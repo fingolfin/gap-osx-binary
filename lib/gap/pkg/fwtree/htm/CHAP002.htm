@@ -1,0 +1,155 @@
+<html><head><title>[fwtree] 2 Methods and functions</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<h1>2 Methods and functions</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP002.htm#SECT001">Functions for finite $p$-groups</a>
+<li> <A HREF="CHAP002.htm#SECT002">Functions to generate groups and trees</a>
+<li> <A HREF="CHAP002.htm#SECT003">Example</a>
+</ol><p>
+<p>
+This chapter describes all the main methods and functions of this
+package. 
+<p>
+<p>
+<h2><a name="SECT001">2.1 Functions for finite $p$-groups</a></h2>
+<p><p>
+Let <i>G</i> be a finite <i>p</i>-group given by a consistent polycyclic 
+presentation as Pc group.
+<p>
+<a name = "SSEC001.1"></a>
+<li><code>LCSFactorTypes( G )</code>
+<p>
+returns the abelian invariants of the lower central series factors of <i>G</i>.
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>LCSFactorSizes( G )</code>
+<p>
+returns the orders of the lower central series factors of <i>G</i>.
+<p>
+<a name = "SSEC001.3"></a>
+<li><code>WidthPGroup( G )</code>
+<p>
+returns the width of <i>G</i>.
+<p>
+<a name = "SSEC001.4"></a>
+<li><code>SubgroupRank( G )</code>
+<p>
+returns the (subgroup-)rank of <i>G</i>.
+<p>
+<a name = "SSEC001.5"></a>
+<li><code>Obliquity( G )</code>
+<p>
+returns the obliquity of <i>G</i>.
+<p>
+<a name = "SSEC001.6"></a>
+<li><code>HasObliquityZero( G )</code>
+<p>
+checks whether <i>G</i> has obliquity 0 and returns true or false.
+<p>
+<p>
+<h2><a name="SECT002">2.2 Functions to generate groups and trees</a></h2>
+<p><p>
+Let <i>G</i>(<i>p</i>,<i>rwo</i>) denote the full tree of all finite <i>p</i>-groups with
+rank <i>rwo</i>[1], width <i>rwo</i>[2] and obliquity <i>rwo</i>[3]. This tree can be
+finite or infinite; if it is infinite, then the infinite
+pro-<i>p</i>-groups of the considered rank, width and obliquity specify
+infinite subtrees of the full tree. The groups not contained in such
+an infinite subtree are called sporadic.
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>GroupsByRankWidthObliquity( p, d, rwo, roots, limit )</code>
+<p>
+determines all <i>p</i>-groups <i>G</i> with <i>G</i>/<font face="symbol">F</font>(<i>G</i>) of order <i>p</i><sup><i>d</i></sup> and
+rank, width and obliquity as prescribed in <i>rwo</i> up to order <i>limit</i>.
+Here <i>p</i> and <i>d</i> are integers, <i>rwo</i> is a list of three integers and
+<i>limit</i> is an integer. 
+<p>
+The parameter <i>roots</i> is a list of groups described by their id's 
+with respect to the small groups library. The descendants of the 
+groups described in <i>roots</i> are excluded from the output of this 
+function. This option can be used to prune the tree of groups 
+determined by this function.
+<p>
+If there are only finitely many sporadic <i>p</i>-groups with given rank,
+width and obliquity, then this function can be used to generate them;
+in this case <i>roots</i> must contain a complete list of all id's of roots
+of infinite subtrees and <i>limit</i> can be set to infinity.
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>BranchRWO( G, i, rwo )</code>
+<p>
+for a stable  quotient (see <a href="biblio.htm#ER09"><cite>ER09</cite></a>) <i>G</i> of a pro-<i>p</i>-group of
+rank <i>rwo</i>[1], <i>rwo</i>[2] and obliquity <i>rwo</i>[3], this function returns
+the <i>i</i>-th branch of its corresponding tree. The structure of the tree
+is encoded in a list. If one of the global parameters <code>CHECK_RANK</code> or 
+<code>CHECK_OBLIQUITY</code> is set to false, then checking the corresponding
+invariant is omitted and hence a potentially larger tree is returned. 
+<p>
+The user is advised not to perform any other computations using ANUPQ
+or the <code>pq</code>-program while using this or the following function,
+because such computations will be terminated.
+<p>
+<a name = "SSEC002.3"></a>
+<li><code>BoundedDescendantsRWO( G, i, c, rwo)</code>
+<p>
+returns the tree of all descendants of <i>G</i>/<font face="symbol">g</font><sub><i>i</i></sub>(<i>G</i>) of rank <i>rwo</i>[1],
+width <i>rwo</i>[2], obliquity <i>rwo</i>[3] and class at most <i>c</i>.
+<p>
+<a name = "SSEC002.4"></a>
+<li><code>DrawBranch( branch )</code>
+<p>
+if the package is run under XGap, then this function can be used to draw
+a branch as output by the above two functions in the case of width 2.
+The user may wish to improve the quality of the output by modifying
+the file <code>gap/xbranch.gi</code>.
+<p>
+Vertices drawn on the same level correspond to groups of the same
+class. If <i>G</i> is a descendant of <i>H</i> in the branch, then <i>G</i> is drawn
+as a filled circle if <font face="symbol">|</font><i>G</i><font face="symbol">|</font> =  <font face="symbol">|</font><i>H</i><font face="symbol">|</font><i>p</i> and as a solid
+box if <font face="symbol">|</font><i>G</i><font face="symbol">|</font> =  <font face="symbol">|</font><i>H</i><font face="symbol">|</font><i>p</i><sup>2</sup>.
+<p>
+<p>
+<h2><a name="SECT003">2.3 Example</a></h2>
+<p><p>
+When run under XGap, the following code constructs and draws the
+branch with root <i>G</i>/<font face="symbol">g</font><sub>5</sub>(<i>G</i>) in the graph of finite 5-groups of
+rank 3, width 2 and obliquity 0, where <i>G</i> is the Sylow
+pro-<i>p</i>-subgroup of <span class="roman">Aut</span>(<i>sl</i><sub>2</sub>(<b>Q</b><sub>5</sub>)).
+<p>
+<pre>
+gap&gt; g := ProPSylowGroupOfPSL(2,5,6);
+Pcp-group with orders [ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 ]
+gap&gt; branch := BranchRWO(g,5,[3,2,0]);;
+ConstructBranch: root-p-class: 4
+Constructed 3 1-step descendants.
+ConstructBranch: root-p-class: 5
+Constructed 0 1-step descendants.
+Constructed 0 2-step descendants.
+ConstructBranch: root-p-class: 5
+Constructed 0 1-step descendants.
+Constructed 0 2-step descendants.
+ConstructBranch: root-p-class: 5
+Constructed 0 1-step descendants.
+Constructed 0 2-step descendants.
+Constructed 3 2-step descendants.
+ConstructBranch: root-p-class: 5
+Constructed 0 1-step descendants.
+Constructed 0 2-step descendants.
+ConstructBranch: root-p-class: 5
+Constructed 0 1-step descendants.
+Constructed 0 2-step descendants.
+time:  0:00:16.525
+gap&gt; DrawBranch(branch);
+</pre>
+<p>
+A window with the following graph should appear.
+<p>
+epsfxsize=8cm epsfboxbranch.ps
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>fwtree manual<br>April 2009
+</address></body></html>

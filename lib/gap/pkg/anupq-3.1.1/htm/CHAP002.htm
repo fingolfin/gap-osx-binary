@@ -1,0 +1,417 @@
+<html><head><title>[ANUPQ] 2 Mathematical Background and Terminology</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>2 Mathematical Background and Terminology</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP002.htm#SECT001">Basic notions</a>
+<li> <A HREF="CHAP002.htm#SECT002">The p-quotient Algorithm</a>
+<li> <A HREF="CHAP002.htm#SECT003">The p-group generation Algorithm, Standard Presentation, Isomorphism Testing</a>
+</ol><p>
+<p>
+In this chapter  we will give a brief  description of the mathematical
+notions used  in the  algorithms implemented in  the ANU  <code>pq</code> program
+that are made accessible from  <font face="Gill Sans,Helvetica,Arial">GAP</font> through this package. For proofs
+and  details  we  will  point  to relevant  places  in  the  published
+literature. Also we  will try to give some  explanation of terminology
+that may help to use the ``low-level'' interactive functions described
+in Section&nbsp;<a href="CHAP005.htm#SECT004">Low-level Interactive ANUPQ  Functions based on menu items of the pq program</a>.  However,  users who intend to use these functions
+are  strongly  advised to  acquire  a  thorough  understanding of  the
+algorithms from the quoted literature.  There is little or no checking
+done in these functions and naive use may result in incorrect results.
+<p>
+<p>
+<h2><a name="SECT001">2.1 Basic notions</a></h2>
+<p><p>
+<strong>pc Presentations and Consistency</strong>
+<p>
+For details, see e.g.&nbsp;<a href="biblio.htm#NNN98"><cite>NNN98</cite></a>.
+<p>
+Every finite <var>p</var>-group <var>G</var> has a presentation of the form: 
+<p><var>
+{a<sub>1</sub>,...,a<sub>n</sub> mida<sub>i</sub><sup>p</sup> = v<sub>ii</sub>, 1 lei len, 
+               [a<sub>k</sub>, a<sub>j</sub>] = v<sub>jk</sub>, 1 lej &lt; k len }.  
+<p></var>
+where <var>v<sub>jk</sub></var> is a word in the elements <var>a<sub>k+1</sub>,...,a<sub>n</sub></var> for 
+<var>1 lej leqk len</var>.
+<p>
+<a name = "I0"></a>
+
+<a name = "I0"></a>
+<a name = "I1"></a>
+
+<a name = "I0"></a>
+<a name = "I1"></a>
+<a name = "I2"></a>
+
+<a name = "I3"></a>
+
+<a name = "I3"></a>
+<a name = "I4"></a>
+
+This is called a <strong>power-commutator</strong> presentation (or <strong>pc presentation</strong>
+or <strong>pcp</strong>) of <var>G</var>, generators from such a presentation will be referred
+to as <strong>pc generators</strong>. In terms of such pc generators every element of
+<var>G</var> can  be written  in a ``normal  form'' <var>a<sub>1</sub><sup>e_1</sup>...a<sub>n</sub><sup>e_n</sup></var>
+with <var>0  lee<sub>i</sub> &lt; p</var>.  Moreover any given product  of the generators
+can be brought into such a normal form using the defining relations in
+the above presentation  as rewrite rules.  Any such  process is called
+<strong>collection</strong>.  For the  discussion of  various collection  methods see
+<a href="biblio.htm#LGS90"><cite>LGS90</cite></a> and <a href="biblio.htm#VL90a"><cite>VL90a</cite></a>.
+<p>
+<a name = "I5"></a>
+
+<a name = "I5"></a>
+<a name = "I6"></a>
+
+<a name = "I5"></a>
+<a name = "I6"></a>
+<a name = "I7"></a>
+
+Every <var>p</var>-group of order <var>p<sup>n</sup></var> has such a pcp on  <var>n</var>  generators  and
+conversely every such presentation  defines  a  <var>p</var>-group.  However  a
+<var>p</var>-group defined by a pcp on <var>n</var> generators can be of  smaller  order
+<var>p<sup>m</sup></var> with <var>m&lt;n</var>. A pcp on <var>n</var> generators that does in fact define  a
+<var>p</var>-group of order <var>p<sup>n</sup></var> is called <strong>consistent</strong>  in  this  manual,  in
+line with most of the literature on the algorithms occurring  here.  A
+consistent   pcp   determines   a   <strong>confluent    rewriting    system</strong>
+(see&nbsp;<a href="../../../doc/ref/chap38.html#X8006790B86328CE8">IsConfluent</a> of the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual) for  the  group
+it defines and for this reason often  (in  particular  in  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>
+Reference Manual) such a pcp presentation is also called <strong>confluent</strong>.
+<p>
+Consistency of a pcp is tantamount to the fact that for any given word
+in the generators any two collections will yield the same normal form.
+<p>
+<a name = "I8"></a>
+
+Consistency of a pcp can be checked by a finite  set  of  <strong>consistency
+conditions</strong>, demanding that collection of the left hand  side  and  of
+the right hand side of certain equations,  starting  with  subproducts
+indicated by bracketing, will result in the same  normal  form.  There
+are 3 types of such  equations  (that  will  be  referred  to  in  the
+manual):
+<p><var>
+matrix
+(a<sup>n</sup>)a = a(a<sup>n</sup>)                                 (Type 1)<br>
+(b<sup>n</sup>)a = b<sup>(n-1)</sup>(ba), b(a<sup>n</sup>) = (ba)a<sup>(n-1)</sup>  (Type 2)<br>
+ c(ba) = (cb)a                                  (Type 3)<br>
+
+<p></var>
+See <a href="biblio.htm#VL84"><cite>VL84</cite></a> for a description of a sufficient set of consistency
+conditions in the context of the <var>p</var>-quotient algorithm.
+<p>
+<strong>Exponent-<var>p</var> Central Series and Weighted pc Presentations</strong>
+<p>
+For details, see <a href="biblio.htm#NNN98"><cite>NNN98</cite></a>.
+<p>
+<a name = "I9"></a>
+
+The (<strong>descending</strong> or <strong>lower</strong>) (<strong>exponent-</strong>)<strong><var>p</var>-central series</strong> of  an
+arbitrary group <var>G</var> is defined by
+<p><var>
+P<sub>0</sub>(G)  := G,  P<sub>i</sub>(G) := [G, P<sub>i-1</sub>(G)] P<sub>i-1</sub>(G)<sup>p</sup>.
+<p></var>
+For a <var>p</var>-group <var>G</var> this series terminates with the trivial group. <var>G</var>
+<a name = "I10"></a>
+
+<a name = "I10"></a>
+<a name = "I11"></a>
+
+has <strong><var>p</var>-class</strong> <var>c</var> if <var>c</var> is the smallest integer such that  <var>P<sub>c</sub>(G)</var>
+is the trivial group. In this manual,  as  well  as  in  much  of  the
+literature about the <code>pq</code>- and related algorithms,  the  <var>p</var>-class  is
+often referred to simply by <strong>class</strong>.
+<p>
+Let  the  <var>p</var>-group <var>G</var>  have  a consistent  pcp  as  above. Then  the
+subgroups
+<p><var>
+    &lt; ...&lt; langlea<sub>n</sub>,...,a<sub>i</sub>rangle&lt; ...&lt; G
+<p></var>
+form a central series of <var>G</var>. If this refines  the <var>p</var>-central series,
+<a name = "I12"></a>
+
+we can define the <strong>weight function</strong>  <var>w</var>  for  the  pc  generators  by
+<var>w(a<sub>i</sub>) = k</var>, if  <var>a<sub>i</sub></var>  is  contained  in  <var>P<sub>k-1</sub>(G)</var>  but  not  in
+<var>P<sub>k</sub>(G)</var>.
+<p>
+<a name = "I13"></a>
+
+The pair of such a weight function and a pcp allowing it, is called  a
+<strong>weighted pcp</strong>.
+<p>
+<strong><var>p</var>-Cover, <var>p</var>-Multiplicator</strong>
+<p>
+For details, see <a href="biblio.htm#NNN98"><cite>NNN98</cite></a>.
+<p>
+<a name = "I14"></a>
+
+<a name = "I14"></a>
+<a name = "I15"></a>
+
+<a name = "I16"></a>
+
+<a name = "I17"></a>
+
+<a name = "I18"></a>
+
+Let <var>d</var> be the minimal number of generators of the  <var>p</var>-group  <var>G</var>  of
+<var>p</var>-class <var>c</var>. Then <var>G</var> is isomorphic to a factor  group  <var>F/R</var>  of  a
+free group <var>F</var> of rank <var>d</var>. We denote <var>[F, R] R<sup>p</sup></var> by <var>R^*</var>.  It  can
+be proved (see e.g.&nbsp;<a href="biblio.htm#OBr90"><cite>OBr90</cite></a>) that the isomorphism type  of  <var>G^*
+:= F/R^*</var> depends only on <var>G</var>. <var>G^*</var>  is  called  the  <strong><var>p</var>-covering
+group</strong> or <strong><var>p</var>-cover</strong> of <var>G</var>, and <var>R/R^*</var> the <strong><var>p</var>-multiplicator</strong>  of
+<var>G</var>. The  <var>p</var>-multiplicator  is,  of  course,  an  elementary  abelian
+<var>p</var>-group;  its  minimal  number   of   generators   is   called   the
+<strong>(<var>p</var>-)multiplicator rank</strong>.
+<p>
+<strong>Descendants, Capable, Terminal, Nucleus</strong>
+<p>
+For details, see <a href="biblio.htm#New77"><cite>New77</cite></a> and  <a href="biblio.htm#OBr90"><cite>OBr90</cite></a>.
+<p>
+<a name = "I19"></a>
+
+<a name = "I19"></a>
+<a name = "I20"></a>
+
+<a name = "I19"></a>
+<a name = "I20"></a>
+<a name = "I21"></a>
+
+<a name = "I22"></a>
+
+<a name = "I22"></a>
+<a name = "I23"></a>
+
+Let again  <var>G</var> be  a <var>p</var>-group  of <var>p</var>-class <var>c</var>  and <var>d</var>  the minimal
+number of generators of <var>G</var>.  A <var>p</var>-group <var>H</var> is a <strong>descendant</strong> of <var>G</var>
+if the  minimal number of generators  of <var>H</var> is <var>d</var>  and <var>H/P<sub>c</sub>(H)</var> is
+isomorphic  to  <var>G</var>.   A  descendant  <var>H</var>  of  <var>G</var>  is  an  <strong>immediate
+descendant</strong> if it has <var>p</var>-class  <var>c+1</var>.  <var>G</var> is called <strong>capable</strong> if it
+has immediate descendants; otherwise it is <strong>terminal</strong>.
+<p>
+Let <var>G^* = F/R^*</var> again be the <var>p</var>-cover  of  <var>G</var>.  Then  the  group
+<var>P<sub>c</sub>(G^*)</var> is called the <strong>nucleus</strong> of <var>G</var>. Note that  <var>P<sub>c</sub>(G^*)</var>  is
+contained in the <var>p</var>-multiplicator <var>R/R^*</var>.
+<p>
+
+<a name = "I24"></a>
+
+It is proved (e.g.&nbsp;in <a href="biblio.htm#OBr90"><cite>OBr90</cite></a>) that the immediate descendants  of
+<var>G</var> are obtained  as  factor  groups  of  the  <var>p</var>-cover  by  (proper)
+supplements   of   the   nucleus   in   the    (elementary    abelian)
+<var>p</var>-multiplicator. These are also called <strong>allowable</strong>.
+<p>
+<a name = "I25"></a>
+
+<a name = "I25"></a>
+<a name = "I26"></a>
+
+It is further  proved there that every automorphism  <var>alpha</var> of <var>F/R</var>
+extends to  an automorphism <var>alpha^*</var> of the  <var>p</var>-cover <var>F/R^*</var> and
+that the  restriction of <var>alpha^*</var> to the  multiplicator <var>R/R^*</var> is
+uniquely  determined   by  <var>alpha</var>.   Each   <strong>extended  automorphism</strong>
+<var>alpha^*</var> induces a permutation of the allowable subgroups. Thus the
+extended automorphisms determine a  group <var>P</var> of <strong>permutations</strong> on the
+set <var>A</var>  of allowable  subgroups (The group  <var>P</var> of  permutations will
+appear in  the description of some interactive  functions). Choosing a
+representative <var>S</var>  from each orbit of  <var>P</var> on <var>A</var>, the  set of factor
+groups <var>F/S</var> contains each  (isomorphism type of) immediate descendant
+of <var>G</var> exactly once.  For  each immediate descendant, the procedure of
+computing the <var>p</var>-cover, extending the automorphisms and computing the
+orbits  on allowable  subgroups can  be repeated.   Iteration  of this
+procedure can in  principle be used to determine  all descendants of a
+<var>p</var>-group.
+<p>
+<strong>Laws</strong>
+<p>
+<a name = "I27"></a>
+
+<a name = "I27"></a>
+<a name = "I28"></a>
+
+<a name = "I27"></a>
+<a name = "I28"></a>
+<a name = "I29"></a>
+
+<a name = "I30"></a>
+
+<a name = "I30"></a>
+<a name = "I31"></a>
+
+Let <var>l(x<sub>1</sub>, ..., x<sub>n</sub>)</var> be a word in the free generators <var>x<sub>1</sub>, ...,
+x<sub>n</sub></var> of a free group of rank <var>n</var>. Then <var>l(x<sub>1</sub>, ...,  x<sub>n</sub>)  =  1</var>  is
+called a <strong>law</strong> or <strong>identical relation</strong>  in  a  group  <var>G</var>  if  <var>l(g<sub>1</sub>,
+..., g<sub>n</sub>) = 1</var> for any choice of elements <var>g<sub>1</sub>, ..., g<sub>n</sub></var> in  <var>G</var>.
+In particular, <var>x<sup>e</sup> = 1</var> is called an <strong>exponent law</strong>, <var>[[x,y],[u,v]] =
+1</var> the <strong>metabelian law</strong>, and <var>[...[[x<sub>1</sub>,x<sub>2</sub>],x<sub>2</sub>],..., x<sub>2</sub>] =  1</var>
+an <strong>Engel identity</strong>.
+<p>
+<p>
+<h2><a name="SECT002">2.2 The p-quotient Algorithm</a></h2>
+<p><p>
+For details,  see  <a href="biblio.htm#HN80"><cite>HN80</cite></a>,  <a href="biblio.htm#NO96"><cite>NO96</cite></a>  and  <a href="biblio.htm#VL84"><cite>VL84</cite></a>.  Other
+descriptions of the algorithm are given in <a href="biblio.htm#Sims94"><cite>Sims94</cite></a>.
+<p>
+The <code>pq</code> algorithm successively determines the factor  groups  of  the
+groups of the <var>p</var>-central series of a finitely  presented  (fp)  group
+<var>G</var>. If a bound <var>b</var> for the <var>p</var>-class is  given,  the  algorithm  will
+determine those factor groups up to at  most  <var>p</var>-class  <var>b</var>.  If  the
+<var>p</var>-central series terminates with a subgroup <var>P<sub>k</sub>(G)</var> with <var>k &lt;  b</var>,
+the algorithm will stop with that group. If no such bound is given, it
+will try to find the biggest such factor group.
+<p>
+<var>G/P<sub>1</sub>(G)</var> is  the largest elementary abelian <var>p</var>-factor  group of <var>G</var>
+and this  can be found  from the relation  matrix of <var>G</var>  using matrix
+diagonalisation   modulo  <var>p</var>.   So   it  suffices   to  explain   how
+<var>G/P<sub>i+1</sub>(G)</var> is found from <var>G</var> and <var>G/P<sub>i</sub>(G)</var> for some <var>i ge1</var>.
+<p>
+This  is  done, in  principle,  in  two  steps:  first  the  <var>p</var>-cover
+of <var>G<sub>i</sub> := G/P<sub>i</sub>(G)</var> is determined (which depends only on
+<var>G<sub>i</sub></var>, not on  <var>G</var>) and then <var>G/P<sub>i+1</sub>(G)</var> as a  factor group of this
+<var>p</var>-cover.
+<p>
+<strong>Finding the <var>p</var>-cover</strong>
+<p>
+A very detailed description of  the first step is given in <a href="biblio.htm#NNN98"><cite>NNN98</cite></a>,
+from which  we just extract  some passages in  order to point  to some
+terms occurring in this manual.
+<p>
+<a name = "I32"></a>
+
+<a name = "I32"></a>
+<a name = "I33"></a>
+
+Let <var>H</var> be a <var>p</var>-group and <var>p<sup>d(b)</sup></var> be the order of  <var>H/P<sub>b</sub>(H)</var>.  So
+<var>d := d(1)</var> is the minimal number of generators of <var>H</var>. A weighted pcp
+of <var>H</var> will be called <strong>labelled</strong> if for each generator <var>a<sub>k</sub></var>, <var>k &gt;  d</var>
+one relation, having this generator as its right hand side, is  marked
+as <strong>definition</strong> of this generator.
+<p>
+As described in <a href="biblio.htm#NNN98"><cite>NNN98</cite></a>, a weighted labelled pcp of  a  <var>p</var>-group
+can be obtained stepping down its <var>p</var>-central series.
+<p>
+So let us assume that a weighted labelled pcp of  <var>G<sub>i</sub></var>  is  given.  A
+straightforward way of of writing down a (not necessarily  consistent)
+pcp for its <var>p</var>-cover is to add  generators,  one  for  each  relation
+which is not a definition, and modify the right hand side of each such
+relation by multiplying it on the right by one of the  new  generators
+-- a different generator for each such relation. Further relations are
+then added to make the new generators central and of order  <var>p</var>.  This
+procedure is called <strong>adding tails</strong>. A more formal description of it is
+again given in <a href="biblio.htm#NNN98"><cite>NNN98</cite></a>.
+<p>
+<a name = "I34"></a>
+
+It is important  to realise that the ``new''  generators will generate
+an elementary abelian  group, that is, in additive  notation, a vector
+space  over the  field  of <var>p</var>  elements.   As said,  the  pcp of  the
+<var>p</var>-cover obtained in  this way need not be  consistent. Since the pcp
+of <var>G<sub>i</sub></var>  was consistent, applying  the consistency conditions  to the
+pcp of the <var>p</var>-cover, in  case the presentation obtained for <var>p</var>-cover
+is not  consistent, will  produce a set  of equations between  the new
+generators, that,  written additively,  are linear equations  over the
+field  of <var>p</var>  elements  and can  hence  be used  to remove  redundant
+generators until a consistent pcp is obtained.
+<p>
+In  reality,  to  follow  this  straightforward  procedure  would   be
+forbiddingly inefficient except for very  small  examples.  There  are
+many ways of a priori reducing the number of ``new generators'' to  be
+introduced, using e.g.&nbsp;the weights attached to the generators, and the
+main part of <a href="biblio.htm#NNN98"><cite>NNN98</cite></a> is devoted to  a  detailed  discussion  with
+proofs of these possibilities.
+<p>
+<strong>Imposing the Relations of the fp Group</strong>
+<p>
+In order to obtain <var>G/P<sub>i+1</sub>(G)</var> from the pcp  of  the  <var>p</var>-cover  of
+<var>G<sub>i</sub>  =  G/P<sub>i</sub>(G)</var>,  the  defining   relations   from   the   original
+presentation of <var>G</var> must be imposed.  Since  <var>G<sub>i</sub></var>  is  a  homomorphic
+image of <var>G</var>, these relations again yield relations between the  ``new
+generators'' in the presentation of the <var>p</var>-cover of <var>G<sub>i</sub></var>.
+<p>
+<strong>Imposing Laws</strong>
+<p>
+While we have so far only considered the  computation  of  the  factor
+groups of a given fp group by the groups of its descending <var>p</var>-central
+series, the <var>p</var>-quotient algorithm allows a very important variant  of
+this idea: laws can be prescribed that  should  be  fulfilled  by  the
+<var>p</var>-factor groups computed by the algorithm. The key observation  here
+is the fact that at each step down the descending  <var>p</var>-central  series
+it suffices to impose these laws only for a finite  number  of  words.
+Again for efficiency of the method it is crucial to keep the number of
+such words small, and much of <a href="biblio.htm#NO96"><cite>NO96</cite></a> and the literature quoted in
+this paper is devoted to this problem.
+<p>
+<a name = "I35"></a>
+
+In this form, starting with a free group and imposing an exponent  law
+(also referred to as an <strong>exponent check</strong>) the  <code>pq</code>  program  has,  in
+fact, found  its  most  noted  application  in  the  determination  of
+(restricted)  Burnside  groups  (as  reported   in   e.g.&nbsp;<a href="biblio.htm#HN80"><cite>HN80</cite></a>,
+<a href="biblio.htm#NO96"><cite>NO96</cite></a> and <a href="biblio.htm#VL90b"><cite>VL90b</cite></a>).
+<p>
+Via a <font face="Gill Sans,Helvetica,Arial">GAP</font> program using the ``local'' interactive functions of  the
+<code>pq</code> program made available through this interface also arbitrary laws
+can be imposed via the option <code>Identities</code> (see&nbsp;<a href="CHAP006.htm#SSEC001.8">option Identities</a>).
+<p>
+<p>
+<h2><a name="SECT003">2.3 The p-group generation Algorithm, Standard Presentation, Isomorphism Testing</a></h2>
+<p><p>
+For details, see <a href="biblio.htm#New77"><cite>New77</cite></a> and <a href="biblio.htm#OBr90"><cite>OBr90</cite></a>.
+<p>
+<a name = "I36"></a>
+
+<a name = "I36"></a>
+<a name = "I37"></a>
+
+The  <var>p</var>-group   generation   algorithm   determines   the   immediate
+descendants of a given <var>p</var>-group <var>G</var> up to isomorphism. From what  has
+been explained in Section&nbsp;<a href="CHAP002.htm#SECT001">Basic  Notions</a>,  it  is  clear  that  this
+amounts to the construction of the <var>p</var>-cover,  the  extension  of  the
+automorphisms of  <var>G</var>  to  the  <var>p</var>-cover  and  the  determination  of
+representatives of the orbits of the action of these automorphisms  on
+the set of supplements of the nucleus in the <var>p</var>-multiplicator.
+<p>
+The  main  practical  problem  here  is  the  determination  of  these
+representatives. <a href="biblio.htm#OBr90"><cite>OBr90</cite></a> describes methods for this and the  <code>pq</code>
+program allows choices according to whether space or time  limitations
+must be met.
+<p>
+As well as the descendants of <var>G</var>, the <code>pq</code>  program  determines their
+automorphism  groups  from  that of <var>G</var>  (see&nbsp;<a href="biblio.htm#OBr95"><cite>OBr95</cite></a>),  which is
+important  for  an iteration of the process;  this has  been  used  by
+Eamonn O'Brien, e.g.&nbsp;in the classification of the <var>2</var>-groups that  are
+now also part of the <strong>Small Groups</strong> library available through <font face="Gill Sans,Helvetica,Arial">GAP</font>.
+<p>
+<a name = "I38"></a>
+
+<a name = "I38"></a>
+<a name = "I39"></a>
+
+<a name = "I40"></a>
+
+A variant of the <var>p</var>-group generation algorithm is also used to define
+a <strong>standard presentation</strong> of  a  given  <var>p</var>-group.  This  is  done  by
+constructing an isomorphic copy of the given group through a chain  of
+descendants  and  at  each  step  making  a  choice  of  a  particular
+representative for the respective orbit of capable groups. In a fairly
+delicate process, subgroups of the <var>p</var>-multiplicator  are  represented
+by <strong>echelonised matrices</strong> and a first among the <strong>labels  for  standard
+matrices</strong> is chosen (this is described in detail in <a href="biblio.htm#OBr94"><cite>OBr94</cite></a>).
+<p>
+<a name = "I41"></a>
+
+<a name = "I41"></a>
+<a name = "I42"></a>
+
+Finally, the standard presentation provides a way of  testing  if  two
+given <var>p</var>-groups are isomorphic: the  standard  presentations  of  the
+groups are  computed,  for  practical  purposes  <strong>compacted</strong>  and  the
+results compared for being identical, i.e.&nbsp;the groups  are  isomorphic
+if and only if their standard presentations are identical.
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>ANUPQ manual<br>November 2013
+</address></body></html>

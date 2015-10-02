@@ -1,0 +1,103 @@
+<html><head><title>[ModIsom] 4 The modular isomorphism problem</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>4 The modular isomorphism problem</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP004.htm#SECT001">Computing and checking bins</a>
+<li> <A HREF="CHAP004.htm#SECT002">Example for groups of order 64</a>
+</ol><p>
+<p>
+An application of the methods in this package has been the checking
+of the modular isomorphism problems for the groups of order dividing
+2<sup>8</sup>, 3<sup>6</sup> and 2<sup>9</sup> <a href="biblio.htm#Eic07,EKo10"><cite>Eic07,EKo10</cite></a>. This section contains the 
+functions used for this purpose. 
+<p>
+<p>
+<h2><a name="SECT001">4.1 Computing and checking bins</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>BinsByGT( p, n ) F</code>
+<p>
+returns a partion of the list [1&#183;.<i>NumberSmallGroups</i>(<i>p</i><sup><i>n</i></sup>)] into 
+sublists so that the modular group algebras of two groups 
+SmallGroup(<i>p</i><sup><i>n</i></sup>, <i>i</i>) and SmallGroup(<i>p</i><sup><i>n</i></sup>, <i>j</i>) can not be
+isomorphic if <i>i</i> and <i>j</i> are in different lists. The function
+BinsByGT uses various group theoretic invariants to split the
+groups of order <i>p</i><sup><i>n</i></sup> in bins.
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>CheckBin( p, n, k, bin ) F</code>
+<p>
+For <i>i</i>  &#8712; <i>bin</i> let <i>G</i><sub><i>i</i></sub> denote SmallGroup(<i>p</i><sup><i>n</i></sup>, <i>i</i>) and let <i>A</i><sub><i>i</i></sub>
+be the augementation ideal of <i>F</i> <i>G</i><sub><i>i</i></sub>. This function computes and
+compares the canonical forms of the algebras <i>A</i><sub><i>i</i></sub> / <i>A</i><sub><i>i</i></sub><sup><i>j</i></sup> for every
+<i>i</i>  &#8712; <i>bin</i> and increasing <i>j</i>  &#8712; {1, &#8230;, <i>k</i>+1}. 
+<p>
+At each level <i>j</i> it splits the current bins into sub-bins according 
+to the different canonical forms of <i>A</i><sub><i>i</i></sub>/<i>A</i><sub><i>i</i></sub><sup><i>j</i></sup>. Bins of length 1 are 
+then discarded.
+<p>
+The function returns if no further bins are available or if <i>j</i>=<i>k</i>+1 is
+reached. In the later case the function returns the remaining bins. 
+<p>
+<p>
+<h2><a name="SECT002">4.2 Example for groups of order 64</a></h2>
+<p><p>
+We show how to check the modular isomorphism problem for the groups
+of order 64. We first use BinsByGT to determine bins and we then check
+the first of the resulting bins with CheckBin. The fact that CheckBin
+ends with an empty list of bins shows that all groups are splitted.
+<p>
+<pre>
+gap&gt; bins := BinsByGT(2,6);
+refine by abelian invariants of group (Sehgal/Ward) 
+13 bins with 256 groups 
+refine by abelian invariants of center (Sehgal/Ward) 
+30 bins with 237 groups 
+refine by lower central series (Sandling) 
+32 bins with 127 groups 
+refine by jennings series (Passi+Sehgal/Ritter+Sehgal) 
+36 bins with 123 groups 
+refine by conjugacy classes (Roggenkamp/Wursthorn) 
+16 bins with 36 groups 
+refine by elem-ab subgroups (Quillen) 
+  start bin 1 of 16
+  start bin 2 of 16
+  start bin 3 of 16
+  start bin 4 of 16
+  start bin 5 of 16
+  start bin 6 of 16
+  start bin 7 of 16
+  start bin 8 of 16
+  start bin 9 of 16
+  start bin 10 of 16
+  start bin 11 of 16
+  start bin 12 of 16
+  start bin 13 of 16
+  start bin 14 of 16
+  start bin 15 of 16
+  start bin 16 of 16
+9 bins with 21 groups 
+[ [ 13, 14 ], [ 18, 19 ], [ 20, 22 ], [ 97, 101 ], [ 108, 110 ], 
+  [ 155, 157, 159 ], [ 156, 158, 160 ], [ 173, 176 ], [ 179, 180, 181 ] ]
+
+gap&gt; CheckBin(2,6,bins[1]);
+compute tables through power series 
+  determined table for 1
+  determined table for 2
+
+refine bin 
+  weights yields bins [ [ 1, 2 ] ]
+  layer 1 yields bins [ [ 1, 2 ] ]
+  layer 2 yields bins [ [ 1, 2 ] ]
+  layer 3 yields bins [ [ 1, 2 ] ]
+  layer 4 yields bins [  ]
+</pre>
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>ModIsom manual<br>November 2013
+</address></body></html>

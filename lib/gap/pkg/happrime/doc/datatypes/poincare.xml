@@ -1,0 +1,142 @@
+<!-- 
+  HAPPRIME - poincare.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  Paul Smith
+  National University of Ireland Galway
+
+  $Id: functions.xml.in 200 2008-02-05 14:29:47Z pas $
+-->
+
+<!-- ********************************************************** -->
+<Chapter  Label="Poincare">
+  <Heading>Poincaré series</Heading>
+    The Poincaré series for the mod-&p; cohomology ring <M>H^*(G, \mathbb{F})</M>
+    is the infinite series
+    <Display>
+      a_0 + a_1x + a_2x^2 + a_3x^3 + ...
+    </Display>
+    where <M>a_k</M> is the dimension of the vector space <M>H^k(G, \mathbb{F})</M>.
+    The Poincaré function is a rational function <M>P(x)/Q(x)</M> which is
+    equal to the Poincaré series. 
+    
+    <Section>
+      <Heading>Computing the Poincaré series using spectral sequences</Heading>
+      
+      &HAPprime; can calculate a provably-correct Poincaré series for the
+      mod-&p; cohomology ring of a small &p;-group using spectral sequences, 
+      without having to compute the actual cohomology ring. The limiting sheet of a
+      Lyndon-Hochschild-Serre spectral sequence for a group &G; will be a ring 
+      with the same additive structure as the cohomology ring for &G;, and thus 
+      the same Poincaré series. This is implemented in the &HAPprime; 
+      function <Ref Oper="PoincareSeriesLHS" BookName="HAPprime"/>. See
+      the documentation for that function in the user guide for more details.
+    </Section>
+    
+    <Section>
+      <Heading>Computing the Poincaré series using a minimal resolution</Heading>
+      Given a resolution <M>R</M> of length <M>n</M>
+      for a group &G;, the &HAP; function
+      <Ref Func="PoincareSeries" BookName="HAP"/> calculates a quotient of
+      polynomials such that the coefficient of <M>x^k</M> equals the dimension of
+      <M>H^k(G, \mathbb{F})</M> for <M>k = 1</M> to <M>k = n</M>. Given a
+      sufficiently long resolution <M>R</M>, this quotient should equal the 
+      true Poincaré series. The function can also automatically find a suitable
+      value for <M>n</M> by trying resolutions of increasing length until a
+      consistent estimate is found for the Poincaré series. This is likely to be
+      correct, but we have no proof that this will always be the case.
+      <P/>
+      The function 
+      <Ref Oper="ExtendResolutionPrimePowerGroupAutoMem" BookName="HAPprime"/> 
+      allows &HAPprime; to provide a simplified implementation for calculating
+      Poincaré series in the case where <M>n</M> is not specified (since
+      extending existing resolutions is difficult in
+      &HAP;). The &HAPprime; function <Ref Oper="PoincareSeriesAutoMem"  BookName="HAPprime Datatypes"/> is a 
+      replacement for &HAP;'s <Ref Func="PoincareSeries" BookName="HAP"/>
+      in the case where &G; is a &p;-group and the optimal <M>n</M> is not
+      known. 
+      <P/>
+      By using the &HAPprime; resolution-calculation functions,
+      <Ref Oper="PoincareSeriesAutoMem" BookName="HAPprime Datatypes"/> saves memory when storing resolution,
+      and switches to the <C>GF</C> algorithm when memory is low. As a result, it
+      can calculate the Poincaré series for groups that would be impossible
+      using &HAP; without having about five times the memory available to the
+      machine.
+    
+    <!-- ********************************************************** -->
+    </Section>
+    
+    <Section Label="PoincareExample">
+      <Heading>Example Poincaré series computations</Heading>
+      
+        This example compares the time taken by 
+        <Ref Func="PoincareSeries" BookName="HAP"/> and 
+        <Ref Oper="PoincareSeriesAutoMem" BookName="HAPprime Datatypes"/>, and shows that the times are
+        roughly comparable:
+<!--
+gap> G := SmallGroup(64, 210);;
+gap> # Compute the Poincare series using HAP
+gap> P1 := PoincareSeries(G);time;
+gap> # Compute the Poincare series using HAPprime
+gap> P2 := PoincareSeriesAutoMem(G);time;
+gap> P1 = P2;
+-->
+<Log><![CDATA[
+gap> G := SmallGroup(64, 210);;
+gap> # Compute the Poincare series using HAP
+gap> P1 := PoincareSeries(G);time;
+(x_1^4+x_1^2+x_1+1)/(-x_1^7+3*x_1^6-5*x_1^5+7*x_1^4-7*x_1^3+5*x_1^2-3*x_1+1)
+51355
+gap> # Compute the Poincare series using HAPprime
+gap> P2 := PoincareSeriesAutoMem(G);time;
+(x_1^4+x_1^2+x_1+1)/(-x_1^7+3*x_1^6-5*x_1^5+7*x_1^4-7*x_1^3+5*x_1^2-3*x_1+1)
+39774
+gap> P1 = P2;
+true]]></Log>
+
+      The &HAPprime; function <Ref Oper="PoincareSeriesLHS" BookName="HAPprime"/>
+      uses an alternative approach to compute Poincaré series which are 
+      guaranteed to be correct. In many cases it is also faster, as we
+      see if we compute the Poincaré series for the same group using this
+      function:
+<!--
+gap> G := SmallGroup(64, 210);;
+gap> P3 := PoincareSeriesLHS(G);time;
+-->
+<Log><![CDATA[
+gap> G := SmallGroup(64, 210);;
+gap> P3 := PoincareSeriesLHS(G);time;
+(x_1^4+x_1^2+x_1+1)/(-x_1^7+3*x_1^6-5*x_1^5+7*x_1^4-7*x_1^3+5*x_1^2-3*x_1+1)
+3564]]></Log>
+      
+    </Section>
+    
+    <Section>
+      <Heading>The Poincaré series of groups of order 64 and 128</Heading>
+    
+      Using &HAPprime;, on a dual-processor AMD Opteron 250 machine, we have 
+      calculated the Poincaré series for all of the groups of order 64 using 
+      the resolution-based technique. Most
+      computed within a few seconds using only a few Mb of memory. With a 
+      maximum of 1Gb of memory available to &GAP;, four groups 
+      (numbers 4, 60, 242 and 266 from the &GAP; <K>SmallGroup</K> library)
+      needed to switch to using <Ref Oper="ExtendResolutionPrimePowerGroupGF" BookName="HAPprime"/>.
+      Calculating the Poincaré series of the most difficult group,
+      <C>SmallGroup(64, 60)</C>, took 24 days, computing a resolution whose last
+      term was <M>M_{16} = (\mathbb{F}G)^{2445}</M>. The complete list of the
+      Poincaré series for all groups of order 64 is available
+      on the &HAPprime; website 
+      <URL>http://www.maths.nuigalway.ie/~pas/CHA/HAPprime/HAPprimeindex.html</URL>
+      <P/>
+      There is an on-going programme of calculating the Poincaré series for
+      the groups of order 128. To date, using the same constraints as for the
+      groups of order 64 above, we have computed the Poincaré series for
+      about half of them. For latest details, again please see the
+      &HAPprime; website.
+    </Section>
+      
+
+</Chapter>
+

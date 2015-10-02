@@ -1,0 +1,1916 @@
+<html><head><title>[ANUPQ] 5 Interactive ANUPQ functions</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP004.htm">Previous</a>] [<a href ="CHAP006.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>5 Interactive ANUPQ functions</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP005.htm#SECT001">Starting and Stopping Interactive ANUPQ Processes</a>
+<li> <A HREF="CHAP005.htm#SECT002">Interactive ANUPQ Process Utility Functions</a>
+<li> <A HREF="CHAP005.htm#SECT003">Interactive Versions of Non-interactive ANUPQ Functions</a>
+<li> <A HREF="CHAP005.htm#SECT004">Low-level Interactive ANUPQ Functions based on menu items of the pq program</a>
+<li> <A HREF="CHAP005.htm#SECT005">Primitive Interactive ANUPQ Process Read/Write Functions</a>
+</ol><p>
+<p>
+Here we describe  the  interactive  functions  defined  by  the  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>
+package, i.e.&nbsp;the functions  that  manipulate  and  initiate  interactive
+<font face="Gill Sans,Helvetica,Arial">ANUPQ</font> processes. These are functions that extract  information  via  a
+dialogue with a running <code>pq</code> process (process used in  the  UNIX  sense).
+Occasionally, a user needs the ``next step''; the functions  provided  in
+this chapter make use of data from previous steps retained  by  the  <code>pq</code>
+program, thus allowing the user to interact with the  <code>pq</code>  program  like
+one can when one uses the <code>pq</code> program as a stand-alone  (see&nbsp;<code>guide.dvi</code>
+in the <code>standalone-doc</code> directory).
+<p>
+An interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process is initiated by <code>PqStart</code> and  terminated
+via <code>PqQuit</code>; these functions  are  described  in  Section&nbsp;<a href="CHAP005.htm#SECT001">Starting  and Stopping Interactive ANUPQ Processes</a>.
+<p>
+Each interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> function that manipulates  an  already  started
+interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, has a form where the first argument is  the
+integer <var>i</var> returned by the initiating <code>PqStart</code> command,  and  a  second
+form with one argument fewer (where the integer <var>i</var> is  discovered  by  a
+default mechanism, namely by determining the least integer <var>i</var> for  which
+there is a currently active interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process). We  will  thus
+commonly say that ``for  the  <var>i</var>th  (or  default)  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>
+process'' a certain function performs a given action. In each case, it is
+an error if <var>i</var> is not the index of an  active  interactive  process,  or
+there are no current active interactive processes.
+<p>
+<strong>Notes</strong>: 
+The global method of passing options (via <code>PushOptions</code>), should  not  be
+used with any of the interactive functions. In fact,  the  <code>OptionsStack</code>
+should be empty at the time any of the interactive functions is called.
+<p>
+On <code>quit</code>ting  <font face="Gill Sans,Helvetica,Arial">GAP</font>, <code>PqQuitAll();</code>  is executed, which  terminates all
+active  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> processes.   If  <font face="Gill Sans,Helvetica,Arial">GAP</font>  is killed  without
+<code>quit</code>ting,  before all  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  processes  are terminated,
+<strong>zombie</strong> processes  (still living <strong>child</strong> processes  whose <strong>parents</strong> have
+died), may result. Since zombie processes do consume resources,  in  such
+an event, the responsible computer user should  seek  out  and  terminate
+those zombie processes (e.g.&nbsp;on  Linux:  <code>ps xw  |  grep  pq</code>  gives  you
+information on  the  <code>pq</code>  processes  corresponding  to  any  interactive
+<font face="Gill Sans,Helvetica,Arial">ANUPQ</font> processes started in a <font face="Gill Sans,Helvetica,Arial">GAP</font> session; you  can  then  do  <code>kill
+</code><var>N</var><code></code> for each number <var>N</var> appearing in the first column of this output).
+<p>
+<p>
+<h2><a name="SECT001">5.1 Starting and Stopping Interactive ANUPQ Processes</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>PqStart( </code><var>G</var><code>, </code><var>workspace</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqStart( </code><var>G</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqStart( </code><var>workspace</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqStart(: </code><var>options</var><code> ) F</code>
+<p>
+activate an iostream for an interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process (i.e.  <code>PqStart</code>
+starts up a <code>pq</code> process and  opens a <font face="Gill Sans,Helvetica,Arial">GAP</font> iostream to ``talk'' to that
+process) and  returns an integer  <var>i</var> that can  be used to  identify that
+process.  The argument <var>G</var> should be an <strong>fp group</strong> or <strong>pc group</strong> that the
+user intends to manipulate  using interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> functions.  If the
+function is  called without  specifying <var>G</var>,  a group can  be read  in by
+using the function <code>PqRestorePcPresentation</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.12">PqRestorePcPresentation</a>).
+If <code>PqStart</code> is given an integer  argument  <var>workspace</var>,  then  the  <code>pq</code>
+program is started up  with  a  workspace  (an  integer  array)  of  size
+<var>workspace</var> (i.e. <var>4 times<var>workspace</var></var> bytes in a 32-bit  environment);
+otherwise, the <code>pq</code> program sets a default workspace of <var>10000000</var>.
+<p>
+The  only  <var>options</var>  currently  recognised  by  <code>PqStart</code>  are  <code>Prime</code>,
+<code>Exponent</code> and  <code>Relators</code>  (see  Chapter&nbsp;<a href="CHAP006.htm">ANUPQ  options</a>  for  detailed
+descriptions of these options)  and  if  provided  they  are  essentially
+global for the interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, except that any  interactive
+function interacting with the process and passing new  values  for  these
+options will over-ride the global values.
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>PqQuit( </code><var>i</var><code> ) F</code>
+<li><code>PqQuit() F</code>
+<p>
+closes the stream of the <var>i</var>th or default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process
+and unbinds its <code>ANUPQData.io</code> record.
+<p>
+<strong>Note:</strong>
+It can happen that the  <code>pq</code>  process,  and  hence  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  iostream
+assigned to communicate with it, can  die,  e.g.&nbsp;by  the  user  typing  a
+<code>Ctrl-C</code> while the  <code>pq</code>  process  is  engaged  in  a  long  calculation.
+<code>IsPqProcessAlive</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.3">IsPqProcessAlive</a>)  is  provided  to  check  the
+status of the <font face="Gill Sans,Helvetica,Arial">GAP</font> iostream (and hence the status of the  <code>pq</code>  process
+it was communicating with).
+<p>
+<a name = "SSEC001.3"></a>
+<li><code>PqQuitAll() F</code>
+<p>
+is provided  as  a  convenience,  to  terminate  all  active  interactive
+<font face="Gill Sans,Helvetica,Arial">ANUPQ</font> processes with a single command. It is equivalent  to  executing
+<code>PqQuit(</code><var>i</var><code>)</code>  for  all  active  interactive   <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>   processes   <var>i</var>
+(see&nbsp;<a href="CHAP005.htm#SSEC001.2">PqQuit</a>).
+<p>
+<p>
+<h2><a name="SECT002">5.2 Interactive ANUPQ Process Utility Functions</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>PqProcessIndex( </code><var>i</var><code> ) F</code>
+<li><code>PqProcessIndex() F</code>
+<p>
+With argument <var>i</var>, which must be  a  positive  integer,  <code>PqProcessIndex</code>
+returns <var>i</var> if it corresponds to an active interactive process, or raises
+an error. With no arguments it returns  the  default  active  interactive
+process or returns <code>fail</code> and  emits  a  warning  message  to  <code>Info</code>  at
+<code>InfoANUPQ</code> or <code>InfoWarning</code> level 1.
+<p>
+<strong>Note:</strong>
+Essentially,  an  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process  <var>i</var>  is  ``active''  if
+<code>ANUPQData.io[</code><var>i</var><code>]</code> is bound (i.e.&nbsp;we still have  some  data  telling  us
+about it). Also see&nbsp;<a href="CHAP005.htm#SSEC001.1">PqStart</a>.
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>PqProcessIndices() F</code>
+<p>
+returns the list of integer indices of all  active  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>
+processes (see&nbsp;<a href="CHAP005.htm#SSEC002.1">PqProcessIndex</a> for the meaning of ``active'').
+<p>
+<a name = "SSEC002.3"></a>
+<li><code>IsPqProcessAlive( </code><var>i</var><code> ) F</code>
+<li><code>IsPqProcessAlive() F</code>
+<p>
+return  <code>true</code>  if  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>  iostream  of  the  <var>i</var>th  (or   default)
+interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process started  by  <code>PqStart</code>  is  alive  (i.e.&nbsp;can
+still be written to), or <code>false</code>, otherwise. (See the notes for&nbsp;<a href="CHAP005.htm#SSEC001.1">PqStart</a>
+and&nbsp;<a href="CHAP005.htm#SSEC001.2">PqQuit</a>.)
+<p>
+<a name = "I0"></a>
+
+If the user does not yet have a  <code>gap&gt;</code>  prompt  then  usually  the  <code>pq</code>
+program is still away doing something and an <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  interface  function
+is still waiting for a reply. Typing a <code>Ctrl-C</code>  (i.e.&nbsp;holding  down  the
+<code>Ctrl</code> key and typing <code>c</code>) will stop the waiting and send <font face="Gill Sans,Helvetica,Arial">GAP</font>  into  a
+<code>break</code>-loop, from which one has no option but to <code>quit;</code>. The typing  of
+<code>Ctrl-C</code>, in such a  circumstance,  usually  causes  the  stream  of  the
+interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process  to  die;  to  check   this   we   provide
+<code>IsPqProcessAlive</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.3">IsPqProcessAlive</a>).
+<p>
+The <font face="Gill Sans,Helvetica,Arial">GAP</font> iostream of an interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process will also  die  if
+the <code>pq</code> program has a segmentation fault. We do  hope  that  this  never
+happens to you, but if it does and the failure is reproducible, then it's
+a bug and we'd like to know about it. Please read the <code>README</code> that comes
+with the <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> package to find out what to include in a bug report and
+who to email it to.
+<p>
+<p>
+<h2><a name="SECT003">5.3 Interactive Versions of Non-interactive ANUPQ Functions</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>Pq( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>Pq( : </code><var>options</var><code> ) F</code>
+<p>
+return, for the fp  or pc group (let us call it  <var>F</var>), of the <var>i</var>th or
+default  interactive   <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,  the   <var>p</var>-quotient  of  <var>F</var>
+specified by <var>options</var>,  as a pc group; <var>F</var>  must previously have been
+given  (as  first argument)  to  <code>PqStart</code>  to  start the  interactive
+<font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process  (see&nbsp;<a href="CHAP005.htm#SSEC001.1">PqStart</a>) or  restored  from  file using  the
+function  <code>PqRestorePcPresentation</code>  (see&nbsp;<a href="CHAP005.htm#SSEC004.12">PqRestorePcPresentation</a>).  
+Following the colon <var>options</var> is a selection of the options listed for
+the non-interactive <code>Pq</code> function (see&nbsp;<a href="CHAP004.htm#SSEC001.1">Pq</a>), separated by commas like
+record components (see Section&nbsp;<a href="badlink:ref:function call!with options">function call!with options</a> in the
+<font face="Gill Sans,Helvetica,Arial">GAP</font>  Reference  Manual), except  that  the  options <code>SetupFile</code>  or
+<code>PqWorkspace</code> are ignored by the interactive <code>Pq</code>, and <code>RedoPcp</code> is an
+option  only recognised  by  the interactive  <code>Pq</code> i.e.&nbsp;the  following
+options are recognised by the interactive <code>Pq</code> function:
+<p>
+<ul>
+<p>
+<a name = "I1"></a>
+
+<li><code>Prime := </code><var>p</var><code></code>
+<p>
+<a name = "I2"></a>
+
+<li><code>ClassBound := </code><var>n</var><code></code>
+<p>
+<a name = "I3"></a>
+
+<li><code>Exponent := </code><var>n</var><code></code>
+<p>
+<a name = "I4"></a>
+
+<li><code>Relators := </code><var>rels</var><code></code>
+<p>
+<a name = "I5"></a>
+
+<li><code>Metabelian</code>
+<p>
+<a name = "I6"></a>
+
+<li><code>Identities := </code><var>funcs</var><code></code>
+<p>
+<a name = "I7"></a>
+
+<li><code>GroupName := </code><var>name</var><code></code>
+<p>
+<a name = "I8"></a>
+
+<li><code>OutputLevel := </code><var>n</var><code></code>
+<p>
+<a name = "I9"></a>
+
+<li><code>RedoPcp</code>
+<p>
+</ul>
+<p>
+Detailed descriptions of the above options may be found in Chapter&nbsp;<a href="CHAP006.htm">ANUPQ options</a>.
+<p>
+As a minimum the <code>Pq</code> function  <strong>must</strong>  have  a  value  for  the  <code>Prime</code>
+option, though <code>Prime</code> need not be  passed  again  in  the  case  it  has
+previously been provided, e.g. to <code>PqStart</code> (see&nbsp;<a href="CHAP005.htm#SSEC001.1">PqStart</a>) when starting
+the interactive process.
+<p>
+The behaviour of the interactive <code>Pq</code> function  depends  on  the  current
+state of the pc presentation stored by the <code>pq</code> program:
+<p>
+<ol>
+<p>
+<li>
+If no pc presentation has yet been computed (the case  immediately  after
+the <code>PqStart</code> call initiating the process) then the quotient group of the
+input group of the process of largest lower exponent-<var>p</var> class bounded by
+the  value  of  the  <code>ClassBound</code>  option  (see&nbsp;<a href="CHAP006.htm#SSEC001.2">option  ClassBound</a>)  is
+returned.
+<p>
+<li>
+If the current pc  presentation  of  the  process  was  determined  by  a
+previous call to <code>Pq</code> or <code>PqEpimorphism</code>, and  the  current  call  has  a
+larger value <code>ClassBound</code> then the  class  is  extended  as  much  as  is
+possible and the quotient group of the input group of the process of  the
+new lower exponent-<var>p</var> class is returned.
+<p>
+<li>
+If the current pc  presentation  of  the  process  was  determined  by  a
+previous call to <code>PqPCover</code>  then  a  consistent  pc  presentation  of  a
+quotient for the current class is determined before proceeding as in 2.
+<p>
+<li>
+If the <code>RedoPcp</code> option  is  supplied  the  current  pc  presentation  is
+scrapped, all options must be re-supplied (in particular, <code>Prime</code>  <strong>must</strong>
+be supplied) and then the <code>Pq</code> function proceeds as in 1.
+<p>
+</ol>
+<p>
+See Section&nbsp;<a href="CHAP003.htm#SECT005">Attributes and a Property for fp and pc  p-groups</a>  for  the
+attributes   and   property   <code>NuclearRank</code>,   <code>MultiplicatorRank</code>    and
+<code>IsCapable</code> which may be applied to the group returned by <code>Pq</code>.
+<p>
+The following is one of the examples for the non-interactive <code>Pq</code>  redone
+with the interactive version. Also, we set the option <code>OutputLevel</code> to  1
+(see&nbsp;<a href="CHAP006.htm#SSEC001.9">option   Outputlevel</a>), in order to see the orders of the quotients
+of all the classes determined, and we set  the  <code>InfoANUPQ</code>  level  to  2
+(see&nbsp;<a href="CHAP007.htm#SSEC003.1">InfoANUPQ</a>), so that we catch the timing information.
+<p>
+<pre>
+gap&gt; F := FreeGroup("a", "b");; a := F.1;; b := F.2;;
+gap&gt; G := F / [a^4, b^4];
+&lt;fp group on the generators [ a, b ]&gt;
+gap&gt; PqStart(G);
+1
+gap&gt; SetInfoLevel(InfoANUPQ, 2); #To see timing information               
+gap&gt; Pq(: Prime := 2, ClassBound := 3, OutputLevel := 1 );
+#I  Lower exponent-2 central series for [grp]
+#I  Group: [grp] to lower exponent-2 central class 1 has order 2^2
+#I  Group: [grp] to lower exponent-2 central class 2 has order 2^5
+#I  Group: [grp] to lower exponent-2 central class 3 has order 2^8
+#I  Computation of presentation took 0.00 seconds
+&lt;pc group of size 256 with 8 generators&gt;
+</pre>
+<p>
+<a name = "SSEC003.2"></a>
+<li><code>PqEpimorphism( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqEpimorphism( : </code><var>options</var><code> ) F</code>
+<p>
+return, for  the fp  or pc group (let us  call it <var>F</var>),  of the  <var>i</var>th or
+default interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, an  epimorphism from <var>F</var>  onto the
+<var>p</var>-quotient of <var>F</var> specified by <var>options</var>; <var>F</var> must previously have been
+given (as first argument) to  <code>PqStart</code> to start the interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>
+process (see&nbsp;<a href="CHAP005.htm#SSEC001.1">PqStart</a>). Since the  underlying interactions with the <code>pq</code>
+program  effected by  the  interactive <code>PqEpimorphism</code>  are identical  to
+those  effected by the  interactive <code>Pq</code>,  everything said  regarding the
+requirements   and   behaviour   of   the   interactive   <code>Pq</code>   function
+(see&nbsp;<a href="CHAP005.htm#SSEC003.1">Pq!interactive</a>)   is   also   the   case   for   the   interactive
+<code>PqEpimorphism</code>.
+<p>
+<strong>Note:</strong>
+See Section&nbsp;<a href="CHAP003.htm#SECT005">Attributes and a Property for fp and pc  p-groups</a>  for  the
+attributes   and   property   <code>NuclearRank</code>,   <code>MultiplicatorRank</code>    and
+<code>IsCapable</code> which may be applied to the image group  of  the  epimorphism
+returned by <code>PqEpimorphism</code>.
+<p>
+<a name = "SSEC003.3"></a>
+<li><code>PqPCover( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqPCover( : </code><var>options</var><code> ) F</code>
+<p>
+return,  for the  fp or  pc  group of  the <var>i</var>th  or default  interactive
+<font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  the <var>p</var>-covering group  of the <var>p</var>-quotient  <code>Pq(</code><var>i</var><code> :
+</code><var>options</var><code>)</code> or <code>Pq(: </code><var>options</var><code>)</code>, modulo the following:
+<p>
+<ol>
+<p>
+<li>
+If no pc presentation has yet been computed (the case  immediately  after
+the <code>PqStart</code> call initiating the process)  and  the  group  <var>F</var>  of  the
+process is already a <var>p</var>-group, in the sense that  <code>HasIsPGroup(</code><var>F</var><code>)  and
+IsPGroup(</code><var>F</var><code>)</code> is <code>true</code>, then
+<p>
+</ol>
+<p>
+<dl compact>
+<p>
+<dt><code>Prime</code><dd> 
+defaults to <code>PrimePGroup(</code><var>F</var><code>)</code>, if not supplied and  <code>HasPrimePGroup(</code><var>F</var><code>)
+= true</code>; and
+<p>
+<dt><code>ClassBound</code><dd>
+defaults to <code>PClassPGroup(</code><var>F</var><code>)</code> if <code>HasPClassPGroup(</code><var>F</var><code>) =  true</code>  if  not
+supplied, or to the usual default of 63, otherwise.
+<p>
+</dl>
+<ol type=1 start=2>
+<p>
+<li>
+If a pc presentation has been computed and none of <var>options</var> is <code>RedoPcp</code>
+or if no pc presentation has yet been computed but 1. does not apply then
+<code>PqPCover(</code><var>i</var><code> : </code><var>options</var><code>);</code> is equivalent to:
+<p>
+<code>Pq(</code><var>i</var><code> : </code><var>options</var><code>);</code>
+<br><code>PqPCover(</code><var>i</var><code>);</code>
+<p>
+<li>
+If the <code>RedoPcp</code> option  is  supplied  the  current  pc  presentation  is
+scrapped, and <code>PqPCover</code>  proceeds  as  in  1.  or  2.  but  without  the
+<code>RedoPcp</code> option.
+<p>
+</ol>
+<p>
+<a name = "I10"></a>
+
+<a name = "SSEC003.4"></a>
+<li><code>PqStandardPresentation([ </code><var>i</var><code> ]: </code><var>options</var><code> ) F</code>
+<a name = "SSEC003.4"></a>
+<li><code>StandardPresentation([ </code><var>i</var><code> ]: </code><var>options</var><code> ) M</code>
+<p>
+return, for the  <var>i</var>th  or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,  the
+<var>p</var>-quotient of the group <var>F</var> of the process, specified by <var>options</var>,  as
+an <strong>fp group</strong> which has a standard  presentation.  Here  <var>options</var>  is  a
+selection of the options from  the  following  list  (see  Chapter&nbsp;<a href="CHAP006.htm">ANUPQ options</a> for detailed descriptions); this list is the  same  as  for  the
+non-interactive  version  of  <code>PqStandardPresentation</code>  except  for   the
+omission     of      options      <code>SetupFile</code>      and      <code>PqWorkspace</code>
+(see&nbsp;<a href="CHAP004.htm#SSEC002.1">PqStandardPresentation</a>).
+<p>
+<ul>
+<p>
+
+<li><code>Prime := </code><var>p</var><code></code>
+<p>
+<a name = "I11"></a>
+
+<li><code>pQuotient := </code><var>Q</var><code></code>
+<p>
+
+<li><code>ClassBound := </code><var>n</var><code></code>
+<p>
+
+<li><code>Exponent := </code><var>n</var><code></code>
+<p>
+
+<li><code>Metabelian</code>
+<p>
+
+<li><code>GroupName := </code><var>name</var><code></code>
+<p>
+
+<li><code>OutputLevel := </code><var>n</var><code></code>
+<p>
+<a name = "I12"></a>
+
+<li><code>StandardPresentationFile := </code><var>filename</var><code></code>
+<p>
+</ul>
+<p>
+Unless <var>F</var> is a pc <var>p</var>-group, or the option <code>Prime</code> has been passed to  a
+previous interactive function for the process to compute  a  <var>p</var>-quotient
+for <var>F</var>, the user <strong>must</strong> supply either the option <code>Prime</code> or  the  option
+<code>pQuotient</code> (if both <code>Prime</code> and <code>pQuotient</code> are supplied, the prime  <var>p</var>
+is determined by applying  <code>PrimePGroup</code>  (see&nbsp;<a href="../../../doc/ref/chap39.html#X87356BAA7E9E2142">PrimePGroup</a>  in  the
+Reference Manual) to the value of <code>pQuotient</code>).
+<p>
+Taking  one  of  the  examples  for  the   non-interactive   version   of
+<code>StandardPresentation</code>  (see&nbsp;<a href="CHAP004.htm#SSEC002.1">StandardPresentation</a>)  that  required  two
+separate calls to the <code>pq</code> program, we now show how it  can  be  done  by
+setting up  a  dialogue  with  just  the  one  <code>pq</code>  process,  using  the
+interactive version of <code>StandardPresentation</code>:
+<p>
+<pre>
+gap&gt; F4 := FreeGroup( "a", "b", "c", "d" );;
+gap&gt; a := F4.1;; b := F4.2;; c := F4.3;; d := F4.4;;
+gap&gt; G4 := F4 / [ b^4, b^2 / Comm(Comm (b, a), a), d^16,
+&gt;                 a^16 / (c * d), b^8 / (d * c^4) ];
+&lt;fp group on the generators [ a, b, c, d ]&gt;
+gap&gt; SetInfoLevel(InfoANUPQ, 1); #Only essential Info please
+gap&gt; PqStart(G4); #Start a new interactive process for a new group
+2
+gap&gt; K := Pq( 2 : Prime := 2, ClassBound := 1 ); #`pq' process no. is 2
+&lt;pc group of size 4 with 2 generators&gt;
+gap&gt; StandardPresentation( 2 : pQuotient := K, ClassBound := 14 );
+&lt;fp group with 53 generators&gt;
+</pre>
+<p>
+<strong>Notes</strong>
+<p>
+In contrast  to the  function <code>Pq</code> (see&nbsp;<a href="CHAP004.htm#SSEC001.1">Pq</a>)  which returns a  pc group,
+<code>PqStandardPresentation</code> or <code>StandardPresentation</code> returns an  fp  group.
+This is because the output is mainly used  for  isomorphism  testing  for
+which an fp group is enough. However, the presentation  is  a  polycyclic
+presentation and if you need to do  any  further  computation  with  this
+group (e.g.&nbsp;to find the order) you can use the function  <code>PcGroupFpGroup</code>
+(see&nbsp;<a href="../../../doc/ref/chap46.html#X84C10D1F7CB5274F">PcGroupFpGroup</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual) to  form  a  pc
+group.
+<p>
+If  the user  does  not supply  a  <var>p</var>-quotient <var>Q</var>  via the  <code>pQuotient</code>
+option, and  the prime  <var>p</var> is either  supplied, stored,  or <var>F</var> is  a pc
+<var>p</var>-group, then a  <var>p</var>-quotient <var>Q</var> is computed. (The  value of the prime
+<var>p</var>  is  stored if  passed  initially to  <code>PqStart</code>  or  to a  subsequent
+interactive process.)  Note that a  stored value for <code>pQuotient</code>  (from a
+prior call to <code>Pq</code>) does <strong>not</strong> have precedence over a value for the prime
+<var>p</var>.  If the  user does  supply a  <var>p</var>-quotient <var>Q</var>  via  the <code>pQuotient</code>
+option,  the package  <font face="Gill Sans,Helvetica,Arial">AutPGrp</font> is  called to  compute  the automorphism
+group  of <var>Q</var>; an  error will  occur that  asks the  user to  install the
+package <font face="Gill Sans,Helvetica,Arial">AutPGrp</font> if the automorphism group cannot be computed.
+<p>
+If   any   of   the   interactive   functions   <code>PqStandardPresentation</code>,
+<code>StandardPresentation</code>,      <code>EpimorphismPqStandardPresentation</code>       or
+<code>EpimorphismStandardPresentation</code>  has  been  called  previously  for  an
+interactive process, a subsequent call to any of these functions for  the
+same process returns the previously computed value. Note that  all  these
+functions compute both an epimorphism and  an  fp  group  and  store  the
+results in the <code>SPepi</code> and <code>SP</code> fields of the data record associated with
+the    process.    See    the     example     for     the     interactive
+<code>EpimorphismStandardPresentation</code>
+(<a href="CHAP005.htm#SSEC003.5">EpimorphismStandardPresentation!interactive</a>).
+<p>
+The  attributes  and  property  <code>NuclearRank</code>,  <code>MultiplicatorRank</code>   and
+<code>IsCapable</code> are set for the group returned by <code>PqStandardPresentation</code> or
+<code>StandardPresentation</code> (see Section&nbsp;<a href="CHAP003.htm#SECT005">Attributes and a Property for fp and   pc p-groups</a>).
+<p>
+<a name = "SSEC003.5"></a>
+<li><code>EpimorphismPqStandardPresentation([ </code><var>i</var><code> ]: </code><var>options</var><code> ) F</code>
+<a name = "SSEC003.5"></a>
+<li><code>EpimorphismStandardPresentation([ </code><var>i</var><code> ]: </code><var>options</var><code> ) M</code>
+<p>
+Each of the above functions accepts the same arguments and options as the
+interactive           form           of            <code>StandardPresentation</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.4">StandardPresentation!interactive</a>) and returns an epimorphism  from
+the fp or pc group <var>F</var> of  the  <var>i</var>th  or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>
+process  onto  the  finitely  presented  group  given   by   a   standard
+presentation, i.e.&nbsp;if <var>S</var> is the standard presentation computed  for  the
+<var>p</var>-quotient     of     <var>F</var>      by      <code>StandardPresentation</code>      then
+<code>EpimorphismStandardPresentation</code> returns the epimorphism from <var>F</var> to the
+group with presentation <var>S</var>. The group <var>F</var> must have been given (as first
+argument)  to  <code>PqStart</code>  to  start  the  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>   process
+(see&nbsp;<a href="CHAP005.htm#SSEC001.1">PqStart</a>).
+<p>
+Taking        our         earlier         non-interactive         example
+(see&nbsp;<a href="CHAP004.htm#SSEC002.2">EpimorphismPqStandardPresentation</a>) and modifying it a  little,  we
+illustrate,    as    for    the    interactive     <code>StandardPresentation</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.4">StandardPresentation!interactive</a>), how something that required two
+separate calls to the <code>pq</code> program can now be achieved  with  a  dialogue
+with just one <code>pq</code> process. Also,  observe  that  calls  to  one  of  the
+standard   presentation   functions   (as   mentioned   in   the    notes
+of&nbsp;<a href="CHAP005.htm#SSEC003.4">StandardPresentation!interactive</a>) computes and  stores  both  an  fp
+group with a standard presentation and an epimorphism;  subsequent  calls
+to a standard presentation function for the same  process  simply  return
+the appropriate stored value.
+<p>
+<pre>
+gap&gt; F := FreeGroup(6, "F");;
+gap&gt; x := F.1;; y := F.2;; z := F.3;; w := F.4;; a := F.5;; b := F.6;;
+gap&gt; R := [x^3 / w, y^3 / w * a^2 * b^2, w^3 / b,
+&gt;          Comm (y, x) / z, Comm (z, x), Comm (z, y) / a, z^3 ];
+[ F1^3*F4^-1, F2^3*F4^-1*F5^2*F6^2, F4^3*F6^-1, F2^-1*F1^-1*F2*F1*F3^-1, 
+  F3^-1*F1^-1*F3*F1, F3^-1*F2^-1*F3*F2*F5^-1, F3^3 ]
+gap&gt; Q := F / R;
+&lt;fp group on the generators [ F1, F2, F3, F4, F5, F6 ]&gt;
+gap&gt; PqStart( Q );
+3
+gap&gt; G := Pq( 3 : Prime := 3, ClassBound := 3 );
+&lt;pc group of size 729 with 6 generators&gt;
+gap&gt; lev := InfoLevel(InfoANUPQ);; # Save current InfoANUPQ level
+gap&gt; SetInfoLevel(InfoANUPQ, 2); # To see computation times
+gap&gt; # It is not necessary to pass the `Prime' option to
+gap&gt; # `EpimorphismStandardPresentation' since it was previously
+gap&gt; # passed to `Pq':
+gap&gt; phi := EpimorphismStandardPresentation( 3 : ClassBound := 3 );
+#I  Class 1 3-quotient and its 3-covering group computed in 0.00 seconds
+#I  Order of GL subgroup is 48
+#I  No. of soluble autos is 0
+#I    dim U = 1  dim N = 3  dim M = 3
+#I    nice stabilizer with perm rep
+#I  Computing standard presentation for class 2 took 0.00 seconds
+#I  Computing standard presentation for class 3 took 0.01 seconds
+[ F1, F2, F3, F4, F5, F6 ] -&gt; [ f1*f2^2*f3*f4^2*f5^2, f1*f2*f3*f5, f3^2, 
+  f4*f6^2, f5, f6 ]
+gap&gt; # Image of phi should be isomorphic to G ...
+gap&gt; # let's check the order is correct:
+gap&gt; Size( Image(phi) );
+729
+gap&gt; # `StandardPresentation' and `EpimorphismStandardPresentation'
+gap&gt; # behave like attributes, so no computation is done when
+gap&gt; # either is called again for the same process ...
+gap&gt; StandardPresentation( 3 : ClassBound := 3 );
+&lt;fp group of size 729 on the generators [ f1, f2, f3, f4, f5, f6 ]&gt;
+gap&gt; # No timing data was Info-ed since no computation was done
+gap&gt; SetInfoLevel(InfoANUPQ, lev); # Restore previous InfoANUPQ level
+</pre>
+<p>
+A very similar (essential details are the same) example to the above may
+be executed live, by typing:
+<code>PqExample( "EpimorphismStandardPresentation-i" );</code>.
+<p>
+<strong>Note:</strong>
+The  notes   for   <code>PqStandardPresentation</code>   or   <code>StandardPresentation</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.4">PqStandardPresentation!interactive</a>)      apply       also       to
+<code>EpimorphismPqStandardPresentation</code> or  <code>EpimorphismStandardPresentation</code>
+except that their return value is an  <strong>epimorphism  onto</strong>  an  fp  group,
+i.e.&nbsp;one should interpret the phrase ``returns an fp group'' as ``returns
+an epimorphism onto an fp group'' etc.
+<p>
+<a name = "SSEC003.6"></a>
+<li><code>PqDescendants( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqDescendants( : </code><var>options</var><code> ) F</code>
+<p>
+return for the pc group <var>G</var> of the <var>i</var>th or default interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>
+process, which  must  be  of  prime  power  order  with  a  confluent  pc
+presentation (see&nbsp;<a href="badlink:ref:IsConfluent!for pc groups">IsConfluent!for pc groups</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference
+Manual), a list of descendants (pc groups)  of  <var>G</var>.  The  group  <var>G</var>  is
+usually  given  as  first  argument  to  <code>PqStart</code>  when   starting   the
+interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process  (see&nbsp;<a href="CHAP005.htm#SSEC001.1">PqStart</a>).  Alternatively,  one  may
+initiate  the  process  with  an  fp  group,   use   <code>Pq</code>   interactively
+(see&nbsp;<a href="CHAP005.htm#SSEC003.1">Pq!interactive</a>)    to    create    a    pc    group    and     use
+<code>PqSetPQuotientToGroup</code>  (see&nbsp;<a href="CHAP005.htm#SSEC003.7">PqSetPQuotientToGroup</a>),  which   involves
+<strong>no</strong> computation, to set the pc group returned by <code>Pq</code> as  the  group  of
+the process. Note that repeating a call to <code>PqDescendants</code> for  the  same
+interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process  simply  returns  the  list  of  descendants
+originally calculated; a  warning  is  emitted  at  <code>InfoANUPQ</code>  level  1
+reminding you of this should you do this.
+<p>
+After the colon,  <var>options</var>   a selection of the options listed  for  the
+non-interactive <code>PqDescendants</code> function (see&nbsp;<a href="CHAP004.htm#SSEC004.1">PqDescendants</a>), should be
+given,   separated   by    commas    like    record    components    (see
+Section&nbsp;<a href="badlink:ref:function call!with options">function call!with options</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> Reference Manual),
+except that the options <code>SetupFile</code> or <code>PqWorkspace</code> are ignored  by  the
+interactive <code>PqDescendants</code>, i.e.&nbsp;the following options are recognised by
+the interactive <code>PqDescendants</code> function:
+<p>
+<ul>
+<p>
+
+<li><code>ClassBound := </code><var>n</var><code></code>
+<p>
+
+<li><code>Relators := </code><var>rels</var><code></code>
+<p>
+<a name = "I13"></a>
+
+<li><code>OrderBound := </code><var>n</var><code></code>
+<p>
+<a name = "I14"></a>
+
+<li><code>StepSize := </code><var>n</var><code></code>, <code>StepSize := </code><var>list</var><code></code>
+<p>
+<a name = "I15"></a>
+
+<li><code>RankInitialSegmentSubgroups := </code><var>n</var><code></code>
+<p>
+<a name = "I16"></a>
+
+<li><code>SpaceEfficient</code>
+<p>
+<a name = "I17"></a>
+
+<li><code>CapableDescendants</code>
+<p>
+<a name = "I18"></a>
+
+<li><code>AllDescendants := false</code>
+<p>
+
+<li><code>Exponent := </code><var>n</var><code></code>
+<p>
+
+<li><code>Metabelian</code>
+<p>
+
+<li><code>GroupName := </code><var>name</var><code></code>
+<p>
+<a name = "I19"></a>
+
+<li><code>SubList := </code><var>sub</var><code></code>
+<p>
+<a name = "I20"></a>
+
+<li><code>BasicAlgorithm</code>
+<p>
+<a name = "I21"></a>
+
+<li><code>CustomiseOutput := </code><var>rec</var><code></code>
+<p>
+</ul>
+<p>
+<strong>Notes:</strong> The function <code>PqDescendants</code>  uses the automorphism group of <var>G</var>
+which it computes via the package <font face="Gill Sans,Helvetica,Arial">AutPGrp</font> if the automorphism group of
+<var>G</var> is not already present.  If  <font face="Gill Sans,Helvetica,Arial">AutPGrp</font> is not installed an error may
+be  raised.  If  the  automorphism group  of  <var>G</var> is  insoluble the  <code>pq</code>
+program will call <font face="Gill Sans,Helvetica,Arial">GAP</font> together with the <font face="Gill Sans,Helvetica,Arial">AutPGrp</font> package for certain
+orbit-stabilizer calculations.
+<p>
+The  attributes  and  property  <code>NuclearRank</code>,  <code>MultiplicatorRank</code>   and
+<code>IsCapable</code>  are  set  for  each  group   of   the   list   returned   by
+<code>PqDescendants</code> (see Section&nbsp;<a href="CHAP003.htm#SECT005">Attributes and a Property  for  fp  and  pc p-groups</a>).
+<p>
+Let us now repeat the examples previously given for  the  non-interactive
+<code>PqDescendants</code>,  but  this  time  with  the   interactive   version   of
+<code>PqDescendants</code>:
+<p>
+<pre>
+gap&gt; F := FreeGroup( "a", "b" );; a := F.1;; b := F.2;;
+gap&gt; G := PcGroupFpGroup( F / [ a^2, b^2, Comm(b, a) ] );
+&lt;pc group of size 4 with 2 generators&gt;
+gap&gt; PqStart(G); #This will now be the 4th interactive process running
+4
+gap&gt; des := PqDescendants( 4 : OrderBound := 6, ClassBound := 5 );;
+gap&gt; Length(des);
+83
+gap&gt; List(des, Size);
+[ 8, 8, 8, 16, 16, 16, 32, 16, 16, 16, 16, 16, 32, 32, 64, 64, 32, 32, 32, 
+  32, 32, 32, 32, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 32, 32, 32, 32, 
+  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 32, 32, 32, 32, 32, 64, 64, 64, 
+  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 
+  64, 64, 64, 64, 64, 64, 64 ]
+gap&gt; List(des, d -&gt; Length( PCentralSeries( d, 2 ) ) - 1 );
+[ 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 
+  4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 
+  4, 4, 4, 5, 5, 5, 5, 5 ]
+</pre>
+<p>
+In the second example we compute all  capable descendants of order  27 of
+the  elementary abelian group of order 9.  
+<p>
+<pre>
+gap&gt; F := FreeGroup( 2, "g" );;                                 
+gap&gt; G := PcGroupFpGroup( F / [ F.1^3, F.2^3, Comm(F.1, F.2) ] );
+&lt;pc group of size 9 with 2 generators&gt;
+gap&gt; PqStart(G); #This will now be the 5th interactive process running
+5
+gap&gt; des := PqDescendants( 5 : OrderBound := 3, ClassBound := 2,
+&gt;                              CapableDescendants );
+[ &lt;pc group of size 27 with 3 generators&gt;, 
+  &lt;pc group of size 27 with 3 generators&gt; ]
+gap&gt; List(des, d -&gt; Length( PCentralSeries( d, 3 ) ) - 1 );
+[ 2, 2 ]
+gap&gt; # For comparison let us now compute all descendants
+gap&gt; # (using the non-interactive Pq function)
+gap&gt; PqDescendants( G : OrderBound := 3, ClassBound := 2);
+[ &lt;pc group of size 27 with 3 generators&gt;, 
+  &lt;pc group of size 27 with 3 generators&gt;, 
+  &lt;pc group of size 27 with 3 generators&gt; ]
+</pre>
+<p>
+In  the  third  example,  we  compute  all  capable  descendants  of  the
+elementary abelian group of order  <var>5<sup>2</sup></var> which have exponent-<var>5</var> class at
+most <var>3</var>, exponent <var>5</var>, and are metabelian.
+<p>
+<pre>
+gap&gt; F := FreeGroup( 2, "g" );;
+gap&gt; G := PcGroupFpGroup( F / [ F.1^5, F.2^5, Comm(F.2, F.1) ] );
+&lt;pc group of size 25 with 2 generators&gt;
+gap&gt; PqStart(G); #This will now be the 6th interactive process running
+6
+gap&gt; des := PqDescendants( 6 : Metabelian, ClassBound := 3,
+&gt;                              Exponent := 5, CapableDescendants );
+[ &lt;pc group of size 125 with 3 generators&gt;, 
+  &lt;pc group of size 625 with 4 generators&gt;, 
+  &lt;pc group of size 3125 with 5 generators&gt; ]
+gap&gt; List(des, d -&gt; Length( PCentralSeries( d, 5 ) ) - 1 );
+[ 2, 3, 3 ]
+gap&gt; List(des, d -&gt; Length( DerivedSeries( d ) ) );
+[ 3, 3, 3 ]
+gap&gt; List(des, d -&gt; Maximum( List( Elements(d), Order ) ) );
+[ 5, 5, 5 ]
+</pre>
+<p>
+<a name = "SSEC003.7"></a>
+<li><code>PqSetPQuotientToGroup( </code><var>i</var><code> ) F</code>
+<li><code>PqSetPQuotientToGroup() F</code>
+<p>
+for  the  <var>i</var>th  or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,   set   the
+<var>p</var>-quotient  previously  computed  by  the  interactive  <code>Pq</code>   function
+(see&nbsp;<a href="CHAP005.htm#SSEC003.1">Pq!interactive</a>) to be the group of the process. This  function  is
+supplied to enable the computation of descendants of a <var>p</var>-quotient  that
+is already known to the <code>pq</code> program, via the interactive  <code>PqDescendants</code>
+function (see&nbsp;<a href="CHAP005.htm#SSEC003.6">PqDescendants!interactive</a>), thus  avoiding  the  need  to
+re-submit it and have the <code>pq</code> program recompute it.
+<p>
+<strong>Note:</strong>       See       the       function       <code>PqPGSetDescendantToPcp</code>
+(<a href="CHAP005.htm#SSEC004.48">PqPGSetDescendantToPcp</a>) for  a mechanism to make (the  <var>p</var>-cover of) a
+particular descendants the current group of the process.
+<p>
+The following example of the usage of <code>PqSetPQuotientToGroup</code>,  which  is
+essentially   equivalent    to    what    is    obtained    by    running
+<code>PqExample("PqDescendants-1-i");</code>,   redoes   the   first   example    of
+<a href="CHAP005.htm#SSEC003.6">PqDescendants!interactive</a> (which computes the descendants of the  Klein
+four group).
+<p>
+<pre>
+gap&gt; F := FreeGroup( "a", "b" );
+&lt;free group on the generators [ a, b ]&gt;
+gap&gt; procId := PqStart( F : Prime := 2 );
+7
+gap&gt; Pq( procId : ClassBound := 1 );
+&lt;pc group of size 4 with 2 generators&gt;
+gap&gt; PqSetPQuotientToGroup( procId );
+gap&gt; des := PqDescendants( procId : OrderBound := 6, ClassBound := 5 );;
+gap&gt; Length(des);
+83
+gap&gt; List(des, Size);
+[ 8, 8, 8, 16, 16, 16, 32, 16, 16, 16, 16, 16, 32, 32, 64, 64, 32, 32, 32, 
+  32, 32, 32, 32, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 32, 32, 32, 32, 
+  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 32, 32, 32, 32, 32, 64, 64, 64, 
+  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 
+  64, 64, 64, 64, 64, 64, 64 ]
+gap&gt; List(des, d -&gt; Length( PCentralSeries( d, 2 ) ) - 1 );
+[ 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 
+  4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 
+  4, 4, 4, 5, 5, 5, 5, 5 ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">5.4 Low-level Interactive ANUPQ Functions based on menu items of the pq program</a></h2>
+<p><p>
+The <code>pq</code> program has 5 menus, the details of which  the  reader  will  not
+normally need to know, but if she wishes to know the details they may  be
+found in the standalone manual: <code>guide.dvi</code>.  Both  <code>guide.dvi</code>  and  the
+<code>pq</code> program refer to the items of these 5 menus as ``options'', which  do
+<strong>not</strong> correspond in any way to the options used  by  any  of  the  <font face="Gill Sans,Helvetica,Arial">GAP</font>
+functions that interface with the <code>pq</code> program.
+<p>
+<strong>Warning:</strong>
+The commands provided in this section are intended to  provide  something
+like the interactive functionality one has when running  the  standalone,
+from within <font face="Gill Sans,Helvetica,Arial">GAP</font>. The <code>pq</code> standalone (in particular, its  ``advanced''
+menus) assumes some expertise of the user; doing the ``wrong'' thing  can
+cause the program to crash.  While  a  number  of  safeguards  have  been
+provided in the <font face="Gill Sans,Helvetica,Arial">GAP</font> interface to the <code>pq</code>  program,  these  are  <strong>not</strong>
+foolproof, and the user should exercise care and ensure pre-requisites of
+the various commands are met.
+<p>
+<strong>General commands</strong>
+<p>
+The following commands either use a  menu  item  from  whatever  menu  is
+``current'' for the <code>pq</code> program, or have general application and are  not
+associated with just one menu item of the <code>pq</code> program.
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>PqNrPcGenerators( </code><var>i</var><code> ) F</code>
+<li><code>PqNrPcGenerators() F</code>
+<p>
+for the <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, return the number
+of pc  generators of the lower  exponent <var>p</var>-class quotient  of the group
+currently  determined  by the  process.   This  also  applies if  the  pc
+presentation is not consistent.
+<p>
+<a name = "SSEC004.2"></a>
+<li><code>PqFactoredOrder( </code><var>i</var><code> ) F</code>
+<li><code>PqFactoredOrder() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, return an  integer
+pair <code>[</code><var>p</var><code>, </code><var>n</var><code>]</code> where <var>p</var> is a prime  and  <var>n</var>  is  the  number  of  pc
+generators  (see&nbsp;<a href="CHAP005.htm#SSEC004.1">PqNrPcGenerators</a>)  in  the  pc  presentation  of   the
+quotient group currently determined by the process. If this  presentation
+is consistent, then <var>p<sup>n</sup></var> is the order of the quotient  group.  Otherwise
+(if tails have been added but the necessary consistency checks,  relation
+collections, exponent law checks  and  redundant  generator  eliminations
+have not yet been done), <var>p<sup>n</sup></var> is an upper bound for  the  order  of  the
+group.
+<p>
+<a name = "SSEC004.3"></a>
+<li><code>PqOrder( </code><var>i</var><code> ) F</code>
+<li><code>PqOrder() F</code>
+<p>
+for the <var>i</var>th or default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,  return  <var>p<sup>n</sup></var>
+where  <code>[</code><var>p</var><code>,  </code><var>n</var><code>]</code>  is  the  pair  as  returned  by   <code>PqFactoredOrder</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC004.2">PqFactoredOrder</a>).
+<p>
+<a name = "SSEC004.4"></a>
+<li><code>PqPClass( </code><var>i</var><code> ) F</code>
+<li><code>PqPClass() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, return  the  lower
+exponent <var>p</var>-class of the quotient  group  currently  determined  by  the
+process.
+<p>
+<a name = "SSEC004.5"></a>
+<li><code>PqWeight( </code><var>i</var><code>, </code><var>j</var><code> ) F</code>
+<li><code>PqWeight( </code><var>j</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, return the  weight
+of the <var>j</var>th pc generator of the lower exponent <var>p</var>-class quotient of the
+group currently determined by the process, or <code>fail</code> if there is no  such
+numbered pc generator.
+<p>
+<a name = "SSEC004.6"></a>
+<li><code>PqCurrentGroup( </code><var>i</var><code> ) F</code>
+<li><code>PqCurrentGroup() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, return  the  group
+whose pc presentation is determined by the process as a <font face="Gill Sans,Helvetica,Arial">GAP</font>  pc  group
+(either a lower exponent <var>p</var>-class quotient of the  start  group  or  the
+<var>p</var>-cover of such a quotient).
+<p>
+<strong>Notes:</strong>
+See Section&nbsp;<a href="CHAP003.htm#SECT005">Attributes and a Property for fp and pc  p-groups</a>  for  the
+attributes   and   property   <code>NuclearRank</code>,   <code>MultiplicatorRank</code>    and
+<code>IsCapable</code>  which  may   be   applied   to   the   group   returned   by
+<code>PqCurrentGroup</code>.
+<p>
+<a name = "SSEC004.7"></a>
+<li><code>PqDisplayPcPresentation( </code><var>i</var><code> [: OutputLevel := </code><var>lev</var><code> ]) F</code>
+<li><code>PqDisplayPcPresentation([: OutputLevel := </code><var>lev</var><code> ]) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to display the pc presentation of  the  lower  exponent  <var>p</var>-class
+quotient of the group currently determined by the process.
+<p>
+Except if the last command communicating  with  the  <code>pq</code>  program  was  a
+<var>p</var>-group generation command (for which there is only  a  verbose  output
+level), to set the amount of information this command  displays  you  may
+wish  to  call  <code>PqSetOutputLevel</code>  first  (see&nbsp;<a href="CHAP005.htm#SSEC004.8">PqSetOutputLevel</a>),   or
+equivalently pass the option <code>OutputLevel</code> (see&nbsp;<a href="CHAP006.htm#SSEC001.9">option OutputLevel</a>).
+<p>
+<strong>Note:</strong>
+For  those  familiar  with  the  <code>pq</code>  program,  <code>PqDisplayPcPresentation</code>
+performs menu item 4 of the current menu of the <code>pq</code> program.
+<p>
+<a name = "SSEC004.8"></a>
+<li><code>PqSetOutputLevel( </code><var>i</var><code>, </code><var>lev</var><code> ) F</code>
+<li><code>PqSetOutputLevel( </code><var>lev</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to set the output level of the <code>pq</code> program to <var>lev</var>.
+<p>
+<strong>Note:</strong> For those  familiar  with  the  <code>pq</code>  program,  <code>PqSetOutputLevel</code>
+performs menu item 5 of the main (or advanced) <var>p</var>-Quotient menu, or  the
+Standard Presentation menu.
+<p>
+<a name = "SSEC004.9"></a>
+<li><code>PqEvaluateIdentities( </code><var>i</var><code> [: Identities := </code><var>funcs</var><code> ]) F</code>
+<li><code>PqEvaluateIdentities([: Identities := </code><var>funcs</var><code> ]) F</code>
+<p>
+for the  <var>i</var>th  or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,  invoke  the
+evaluation  of  identities  defined  by  the  <code>Identities</code>  option,   and
+eliminate any redundant pc generators formed. Since a previous  value  of
+<code>Identities</code>  is  saved  in  the  data  record  of  the  process,  it  is
+unnecessary to pass the <code>Identities</code> if set previously.
+<p>
+<strong>Note:</strong> This function is mainly implemented at the <font face="Gill Sans,Helvetica,Arial">GAP</font> level. It  does
+not correspond to a menu item of the <code>pq</code> program.
+<p>
+<strong>Commands from the Main <var>p</var>-Quotient menu</strong>
+<p>
+<a name = "SSEC004.10"></a>
+<li><code>PqPcPresentation( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqPcPresentation( : </code><var>options</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to compute the pc presentation of  the  quotient  (determined  by
+<var>options</var>) of the group of the process, which for process <var>i</var>  is  stored
+as <code>ANUPQData.io[</code><var>i</var><code>].group</code>.
+<p>
+The  possible  <var>options</var>  are  the  same  as  for  the  interactive  <code>Pq</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.1">Pq!interactive</a>) function, except  for  <code>RedoPcp</code>  (which,  in  any
+case, would be superfluous), namely: <code>Prime</code>,  <code>ClassBound</code>,  <code>Exponent</code>,
+<code>Relators</code>, <code>GroupName</code>,  <code>Metabelian</code>,  <code>Identities</code>  and  <code>OutputLevel</code>
+(see  Chapter&nbsp;<a href="CHAP006.htm">ANUPQ  options</a>  for  a  detailed  description  for  these
+options). The option <code>Prime</code>  is  required  unless  already  provided  to
+<code>PqStart</code>.
+<p>
+<strong>Notes</strong> 
+<p>
+The pc presentation is held by the <code>pq</code>  program.  In  contrast  to  <code>Pq</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.1">Pq!interactive</a>),    no    <font face="Gill Sans,Helvetica,Arial">GAP</font>    pc    group    is    returned;
+see&nbsp;<code>PqCurrentGroup</code> (<a href="CHAP005.htm#SSEC004.6">PqCurrentGroup</a>) if  you  need  the  corresponding
+<font face="Gill Sans,Helvetica,Arial">GAP</font> pc group.
+<p>
+<code>PqPcPresentation(</code><var>i</var><code>:  </code><var>options</var><code>);</code>  is  roughly   equivalent   to   the
+following sequence of low-level commands:
+<p>
+<code>PqPcPresentation(</code><var>i</var><code>: </code><var>opts</var><code>); #class 1 call</code>
+<br><code>for c in [2 .. </code><var>class</var><code>] do</code>
+<br><code>&nbsp;PqNextClass(</code><var>i</var><code>);</code>
+<br><code>od;</code>
+<p>
+where <var>opts</var> is <var>options</var> except with the <code>ClassBound</code> option set  to  1,
+and <var>class</var> is either the maximum class of a <var>p</var>-quotient of the group of
+the process  or  the  user-supplied  value  of  the  option  <code>ClassBound</code>
+(whichever is smaller). If the <code>Identities</code> option has been set, both the
+first <code>PqPcPresentation</code> class 1 call and the <code>PqNextClass</code> calls  invoke
+<code>PqEvaluateIdentities(</code><var>i</var><code>);</code> as their final step.
+<p>
+For those familiar with the  <code>pq</code>  program,  <code>PqPcPresentation</code>  performs
+menu item 1 of the main <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.11"></a>
+<li><code>PqSavePcPresentation( </code><var>i</var><code>, </code><var>filename</var><code> ) F</code>
+<li><code>PqSavePcPresentation( </code><var>filename</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to save the pc presentation previously computed for the  quotient
+of the group of that process to the file with  name  <var>filename</var>.  If  the
+first character of the  string  <var>filename</var>  is  not  <code>/</code>,  <var>filename</var>  is
+assumed to be the path of a writable file relative to  the  directory  in
+which  <font face="Gill Sans,Helvetica,Arial">GAP</font>  was  started.  A   saved   file   may   be   restored   by
+<code>PqRestorePcPresentation</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.12">PqRestorePcPresentation</a>).
+<p>
+<strong>Note:</strong> For those familiar with the <code>pq</code>  program,  <code>PqSavePcPresentation</code>
+performs menu item 2 of the main <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.12"></a>
+<li><code>PqRestorePcPresentation( </code><var>i</var><code>, </code><var>filename</var><code> ) F</code>
+<li><code>PqRestorePcPresentation( </code><var>filename</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to restore the pc presentation previously saved to <var>filename</var>, by
+<code>PqSavePcPresentation</code>   (see&nbsp;<a href="CHAP005.htm#SSEC004.11">PqSavePcPresentation</a>).   If   the   first
+character of the string <var>filename</var> is not <code>/</code>, <var>filename</var> is  assumed  to
+be the path of a readable file relative to the directory in which  <font face="Gill Sans,Helvetica,Arial">GAP</font>
+was started.
+<p>
+<strong>Note:</strong>
+For  those  familiar  with  the  <code>pq</code>  program,  <code>PqRestorePcPresentation</code>
+performs menu item 3 of the main <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.13"></a>
+<li><code>PqNextClass( </code><var>i</var><code> [: QueueFactor ]) F</code>
+<li><code>PqNextClass([: QueueFactor ]) F</code>
+<p>
+for the <var>i</var>th or default interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code> 
+program to calculate the next class of <code>ANUPQData.io[</code><var>i</var><code>].group</code>.
+<p>
+<a name = "I22"></a>
+
+<code>PqNextClass</code>  accepts  the  option   <code>QueueFactor</code>   (see   also&nbsp;<a href="CHAP006.htm#SSEC001.27">option QueueFactor</a>) which should be a positive integer  if  automorphisms  have
+been previously supplied. If the <code>pq</code> program requires a queue factor  and
+none is supplied via the option <code>QueueFactor</code> a default of 15 is taken.
+<p>
+<strong>Notes</strong>
+<p>
+The single command: <code>PqNextClass(</code><var>i</var><code>);</code> is equivalent to executing
+<p>
+<code>PqComputePCover(</code><var>i</var><code>);</code>
+<br><code>PqCollectDefiningRelations(</code><var>i</var><code>);</code>
+<br><code>PqDoExponentChecks(</code><var>i</var><code>);</code>
+<br><code>PqEliminateRedundantGenerators(</code><var>i</var><code>);</code>
+<p>
+If the <code>Identities</code> option is set the <code>PqEliminateRedundantGenerators(</code><var>i</var><code>);</code>
+step is essentially replaced by <code>PqEvaluateIdentities(</code><var>i</var><code>);</code> (which invokes
+its own elimination of redundant generators).
+<p>
+For those familiar with the <code>pq</code> program, <code>PqNextClass</code> performs menu item
+6 of the main <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.14"></a>
+<li><code>PqComputePCover( </code><var>i</var><code> ) F</code>
+<li><code>PqComputePCover() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> processi,  directi, the  <code>pq</code>
+program to compute  the  <var>p</var>-covering group  of  <code>ANUPQData.io[</code><var>i</var><code>].group</code>.
+In contrast to the function <code>PqPCover</code> (see&nbsp;<a href="CHAP004.htm#SSEC001.3">PqPCover</a>), this function does
+not return a <font face="Gill Sans,Helvetica,Arial">GAP</font> pc group.
+<p>
+<strong>Notes</strong>
+<p>
+The single command: <code>PqComputePCover(</code><var>i</var><code>);</code> is equivalent to executing
+<p>
+<code>PqSetupTablesForNextClass(</code><var>i</var><code>);</code>
+<br><code>PqTails(</code><var>i</var><code>, 0);</code>
+<br><code>PqDoConsistencyChecks(</code><var>i</var><code>, 0, 0);</code>
+<br><code>PqEliminateRedundantGenerators(</code><var>i</var><code>);</code>
+<p>
+For those familiar with the <code>pq</code> program, <code>PqComputePCover</code> performs  menu
+item 7 of the main <var>p</var>-Quotient menu.
+<p>
+<strong>Commands from the Advanced <var>p</var>-Quotient menu</strong>
+<p>
+<a name = "SSEC004.15"></a>
+<li><code>PqCollect( </code><var>i</var><code>, </code><var>word</var><code> ) F</code>
+<li><code>PqCollect( </code><var>word</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, instruct the  <code>pq</code>
+program to do a collection on <var>word</var>, a word in the current pc generators
+(the form of <var>word</var> required is described below). <code>PqCollect</code> returns the
+resulting word of the collection as a list of generator number,  exponent
+pairs (the same form as the second allowed  input  form  of  <var>word</var>;  see
+below).
+<p>
+The argument <var>word</var> may be input in either of the following ways:
+<p>
+<ol>
+<p>
+<li>
+<var>word</var> may be a string, where the <var>i</var>th pc generator  is  represented  by
+<code>x</code><var>i</var><code></code>, e.g.&nbsp;<code>"x3*x2^2*x1"</code>. This way is quite versatile  as  parentheses
+and left-normed commutators -- using square brackets, in the same way  as
+<code>PqGAPRelators</code> (see&nbsp;<a href="CHAP007.htm#SSEC004.2">PqGAPRelators</a>) -- are permitted; <var>word</var> is checked
+for correct syntax via <code>PqParseWord</code> (see&nbsp;<a href="CHAP003.htm#SSEC004.3">PqParseWord</a>).
+<p>
+<li>
+Otherwise, <var>word</var> must be a list of generator number, exponent  pairs  of
+integers, i.e.&nbsp; each pair represents a ``syllable'' so that  <code>[  [3,  1],
+[2, 2], [1, 1] ]</code> represents the same word as that of the  example  given
+for the first allowed form of <var>word</var>.
+<p>
+</ol>
+<p>
+<strong>Note:</strong> For those familiar with the  <code>pq</code>  program,  <code>PqCollect</code>  performs
+menu item 1 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.16"></a>
+<li><code>PqSolveEquation( </code><var>i</var><code>, </code><var>a</var><code>, </code><var>b</var><code> ) F</code>
+<li><code>PqSolveEquation( </code><var>a</var><code>, </code><var>b</var><code> ) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+program to solve <var><var>a</var>  * <var>x</var> = <var>b</var></var> for <var>x</var>, where  <var>a</var> and <var>b</var> are words
+in the pc generators. For the  representation  of  these  words  see  the
+description of the function <code>PqCollect</code> (<a href="CHAP005.htm#SSEC004.15">PqCollect</a>).
+<p>
+<strong>Note:</strong> 
+For those familiar  with  the  <code>pq</code>  program,  <code>PqSolveEquation</code>  performs
+menu item 2 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.17"></a>
+<li><code>PqCommutator( </code><var>i</var><code>, </code><var>words</var><code>, </code><var>pow</var><code> ) F</code>
+<li><code>PqCommutator( </code><var>words</var><code>, </code><var>pow</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, instruct the  <code>pq</code>
+program to compute the left normed commutator  of  the  list  <var>words</var>  of
+words in the current pc generators raised to the integer power <var>pow</var>, and
+return the resulting word as a list of generator number, exponent  pairs.
+The form required for each word of <var>words</var> is the same as  that  required
+for the <var>word</var> argument of <code>PqCollect</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.15">PqCollect</a>). The form of the
+output word is also the same as for <code>PqCollect</code>.
+<p>
+<strong>Note:</strong>
+For those familiar with the <code>pq</code> program,  <code>PqCommutator</code>  performs  menu
+item 3 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.18"></a>
+<li><code>PqSetupTablesForNextClass( </code><var>i</var><code> ) F</code>
+<li><code>PqSetupTablesForNextClass() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program  to  set  up  tables  for  the  next  class.  As  as  side-effect,
+after   <code>PqSetupTablesForNextClass(</code><var>i</var><code>)</code>   the    value    returned    by
+<code>PqPClass(</code><var>i</var><code>)</code> will be one more than it was previously.
+<p>
+<strong>Note:</strong> 
+For those familiar  with  the  <code>pq</code>  program,  <code>PqSetupTablesForNextClass</code>
+performs menu item 6 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.19"></a>
+<li><code>PqTails( </code><var>i</var><code>, </code><var>weight</var><code> ) F</code>
+<li><code>PqTails( </code><var>weight</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to compute and add tails of weight <var>weight</var> if <var>weight</var> is in  the
+integer range <code>[2 .. PqPClass(</code><var>i</var><code>)]</code> (assuming <var>i</var> is the number  of  the
+process, even in the default case) or for all weights if <code></code><var>weight</var><code> = 0</code>.
+<p>
+If <var>weight</var> is non-zero, then tails that  introduce  new  generators  for
+only weight <var>weight</var> are computed and added, and  in  this  case  and  if
+<code></code><var>weight</var><code> &lt; PqPClass(</code><var>i</var><code>)</code>, it is assumed that the tails that  introduce
+new generators for  each  weight  from  <code>PqPClass(</code><var>i</var><code>)</code>  down  to  weight
+<code></code><var>weight</var><code>  +  1</code>  have  already  been  added.  You  may  wish   to   call
+<code>PqSetMetabelian</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.30">PqSetMetabelian</a>) prior to calling <code>PqTails</code>.
+<p>
+<strong>Notes</strong>
+<p>
+For its use in the context of finding the next class  see  <a href="CHAP005.htm#SSEC004.13">PqNextClass</a>;
+in     particular,     a     call     to      <code>PqSetupTablesForNextClass</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC004.18">PqSetupTablesForNextClass</a>)  needs  to  have  been  made  prior  to
+calling <code>PqTails</code>.
+<p>
+The single command: <code>PqTails(</code><var>i</var><code>, </code><var>weight</var><code>);</code> is equivalent to
+<p>
+<code>PqComputeTails(</code><var>i</var><code>, </code><var>weight</var><code>);</code>
+<br><code>PqAddTails(</code><var>i</var><code>, </code><var>weight</var><code>);</code>
+<p>
+For those familiar with the <code>pq</code> program, <code>PqTails</code> uses menu  item  7  of
+the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.20"></a>
+<li><code>PqComputeTails( </code><var>i</var><code>, </code><var>weight</var><code> ) F</code>
+<li><code>PqComputeTails( </code><var>weight</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to compute tails of weight <var>weight</var> if <var>weight</var> is in the  integer
+range <code>[2 .. PqPClass(</code><var>i</var><code>)]</code> (assuming <var>i</var> is the number of the  process,
+even in the default case) or for all  weights  if  <code></code><var>weight</var><code>  =  0</code>.  See
+<code>PqTails</code> (<a href="CHAP005.htm#SSEC004.19">PqTails</a>) for more details.
+<p>
+<strong>Note:</strong>
+For those familiar with the <code>pq</code> program, <code>PqComputeTails</code> uses menu  item
+7 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.21"></a>
+<li><code>PqAddTails( </code><var>i</var><code>, </code><var>weight</var><code> ) F</code>
+<li><code>PqAddTails( </code><var>weight</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to add the  tails  of  weight  <var>weight</var>,  previously  computed  by
+<code>PqComputeTails</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.20">PqComputeTails</a>), if <var>weight</var> is  in  the  integer
+range <code>[2 .. PqPClass(</code><var>i</var><code>)]</code> (assuming <var>i</var> is the number of the  process,
+even in the default case) or for all  weights  if  <code></code><var>weight</var><code>  =  0</code>.  See
+<code>PqTails</code> (<a href="CHAP005.htm#SSEC004.19">PqTails</a>) for more details.
+<p>
+<strong>Note:</strong>
+For those familiar with the <code>pq</code> program, <code>PqAddTails</code> uses menu item 7 of
+the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.22"></a>
+<li><code>PqDoConsistencyChecks( </code><var>i</var><code>, </code><var>weight</var><code>, </code><var>type</var><code> ) F</code>
+<li><code>PqDoConsistencyChecks( </code><var>weight</var><code>, </code><var>type</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,  do  consistency
+checks for weight <var>weight</var> if <var>weight</var> is in the  integer  range  <code>[3  ..
+PqPClass(</code><var>i</var><code>)]</code> (assuming <var>i</var> is the number of the process)  or  for  all
+weights if <code></code><var>weight</var><code> = 0</code>, and for type <var>type</var> if <var>type</var> is in the  range
+<code>[1, 2, 3]</code> (see below) or for all types if <code></code><var>type</var><code> = 0</code>. (For its use in
+the context of finding the next class see <a href="CHAP005.htm#SSEC004.13">PqNextClass</a>.)
+<p>
+The  <strong>type</strong>   of   a   consistency   check   is   defined   as   follows.
+<code>PqDoConsistencyChecks(</code><var>i</var><code>, </code><var>weight</var><code>, </code><var>type</var><code>)</code> for  <var>weight</var>  in  <code>[3  ..
+PqPClass(</code><var>i</var><code>)]</code> and the given value of <var>type</var> invokes the  equivalent  of
+the following <code>PqDoConsistencyCheck</code> calls (see&nbsp;<a href="CHAP005.htm#SSEC004.31">PqDoConsistencyCheck</a>):
+<p>
+<p>
+<dl compact>
+<p>
+<dt><code></code><var>type</var><code> = 1</code>:<dd>
+<code>PqDoConsistencyCheck(</code><var>i</var><code>, </code><var>a</var><code>, </code><var>a</var><code>, </code><var>a</var><code>)</code> checks <code>2 * PqWeight(</code><var>i</var><code>, </code><var>a</var><code>)
++ 1 = </code><var>weight</var><code></code>, for pc generators of index <var>a</var>.
+<p>
+<dt><code></code><var>type</var><code> = 2</code>:<dd>
+<code>PqDoConsistencyCheck(</code><var>i</var><code>, </code><var>b</var><code>, </code><var>b</var><code>, </code><var>a</var><code>)</code> checks for  pc  generators  of
+indices <var>b</var>, <var>a</var>  satisfyingx  both <code></code><var>b</var><code> &gt; </code><var>a</var><code></code> and <code>PqWeight(</code><var>i</var><code>, </code><var>b</var><code>) +
+PqWeight(</code><var>i</var><code>, </code><var>a</var><code>) + 1 = </code><var>weight</var><code></code>.
+<p>
+<dt><code></code><var>type</var><code> = 3</code>:<dd>
+<code>PqDoConsistencyCheck(</code><var>i</var><code>, </code><var>c</var><code>, </code><var>b</var><code>, </code><var>a</var><code>)</code> checks for  pc  generators  of
+indices <var>c</var>, <var>b</var>, <var>a</var> satisfying <code></code><var>c</var><code> &gt; </code><var>b</var><code> &gt; </code><var>a</var><code></code> and  the  sum  of  the
+weights of these generators equals <var>weight</var>.
+<p>
+</dl>
+<p>
+<strong>Notes</strong>
+<p>
+<code>PqWeight(</code><var>i</var><code>, </code><var>j</var><code>)</code> returns the weight of the <var>j</var>th  pc  generator,  for
+process <var>i</var> (see&nbsp;<a href="CHAP005.htm#SSEC004.5">PqWeight</a>).
+<p>
+It is assumed that tails for the given weight (or weights)  have  already
+been added (see&nbsp;<a href="CHAP005.htm#SSEC004.19">PqTails</a>).
+<p>
+For those familiar with the <code>pq</code> program, <code>PqDoConsistencyChecks</code> performs
+menu item 8 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.23"></a>
+<li><code>PqCollectDefiningRelations( </code><var>i</var><code> ) F</code>
+<li><code>PqCollectDefiningRelations() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to collect the images of the defining relations of the original fp
+group of the process, with respect to the current pc presentation, in the
+context of finding the  next  class  (see&nbsp;<a href="CHAP005.htm#SSEC004.13">PqNextClass</a>).  If  the  tails
+operation  is  not  complete  then  the  relations   may   be   evaluated
+incorrectly.
+<p>
+<strong>Note:</strong>
+For those familiar with  the  <code>pq</code>  program,  <code>PqCollectDefiningRelations</code>
+performs menu item 9 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.24"></a>
+<li><code>PqCollectWordInDefiningGenerators( </code><var>i</var><code>, </code><var>word</var><code> ) F</code>
+<li><code>PqCollectWordInDefiningGenerators( </code><var>word</var><code> ) F</code>
+<p>
+for  the   <var>i</var>th  or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>   process,  take   a
+user-defined word <var>word</var> in  the  defining  generators  of  the  original
+presentation of the fp or pc group of  the  process.  Each  generator  is
+mapped into the current  pc  presentation,  and  the  resulting  word  is
+collected with respect to the current pc presentation. The result of  the
+collection is returned as a list of generator number, exponent pairs.
+<p>
+The <var>word</var> argument may be input  in either of the two ways described for
+<code>PqCollect</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.15">PqCollect</a>).
+<p>
+<strong>Note:</strong>
+For those familiar with the  <code>pq</code>  program,  <code>PqCollectDefiningGenerators</code>
+performs menu item 23 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.25"></a>
+<li><code>PqCommutatorDefiningGenerators( </code><var>i</var><code>, </code><var>words</var><code>, </code><var>pow</var><code> ) F</code>
+<li><code>PqCommutatorDefiningGenerators( </code><var>words</var><code>, </code><var>pow</var><code> ) F</code>
+<p>
+for the <var>i</var>th or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,  take  a  list
+<var>words</var> of user-defined words in the defining generators of the  original
+presentation of the fp or pc group of the process, and an  integer  power
+<var>pow</var>. Each generator is mapped into the  current  pc  presentation.  The
+list <var>words</var> is interpreted as a left-normed  commutator  which  is  then
+raised  to  <var>pow</var>  and  collected  with  respect  to   the   current   pc
+presentation. The result of the collection  is  returned  as  a  list  of
+generator number, exponent pairs.
+<p>
+<strong>Note</strong>
+For those familiar with the <code>pq</code> program, <code>PqCommutatorDefiningGenerators</code>
+performs menu item 24 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.26"></a>
+<li><code>PqDoExponentChecks( </code><var>i</var><code> [: Bounds := </code><var>list</var><code> ]) F</code>
+<li><code>PqDoExponentChecks([: Bounds := </code><var>list</var><code> ]) F</code>
+<p>
+for the  <var>i</var>th or  default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process, direct  the <code>pq</code>
+program to do exponent checks for weights (inclusively) between the bounds
+of <code>Bounds</code> or for all weights  if <code>Bounds</code> is not given. The value <var>list</var>
+of <code>Bounds</code> (assuming the interactive process is numbered <var>i</var>) should be a
+list of two integers <var>low</var>, <var>high</var>  satisfying <var>1 le<var>low</var> le<var>high</var> le
+<code>PqPClass(</code><var>i</var><code>)</code></var> (see&nbsp;<a href="CHAP005.htm#SSEC004.4">PqPClass</a>).  If no exponent law has been specified,
+no exponent checks are performed.
+<p>
+<strong>Note:</strong>
+For those familiar with the <code>pq</code>  program,  <code>PqDoExponentChecks</code>  performs
+menu item 10 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.27"></a>
+<li><code>PqEliminateRedundantGenerators( </code><var>i</var><code> ) F</code>
+<li><code>PqEliminateRedundantGenerators() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the  <code>pq</code>
+program to eliminate redundant generators of the current <var>p</var>-quotient.
+<p>
+<strong>Note:</strong> 
+For those familiar with the <code>pq</code> program, <code>PqEliminateRedundantGenerators</code>
+performs menu item 11 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.28"></a>
+<li><code>PqRevertToPreviousClass( </code><var>i</var><code> ) F</code>
+<li><code>PqRevertToPreviousClass() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the  <code>pq</code>
+program to abandon the current class and revert to the previous class.
+<p>
+<strong>Note:</strong>
+For  those  familiar  with  the  <code>pq</code>  program,  <code>PqRevertToPreviousClass</code>
+performs menu item 12 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.29"></a>
+<li><code>PqSetMaximalOccurrences( </code><var>i</var><code>, </code><var>noccur</var><code> ) F</code>
+<li><code>PqSetMaximalOccurrences( </code><var>noccur</var><code> ) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+program  to set maximal  occurrences of  the weight  1 generators  in the
+definitions of pcp  generators of the group of the  process.  This can be
+used  to  avoid the  definition  of generators  of  which  one knows  for
+theoretical reasons that they would be eliminated later on.
+<p>
+The argument <var>noccur</var>  must be a list of  non-negative integers of length
+the  number  of  weight  1  generators  (i.e.&nbsp;the rank  of  the  class  1
+<var>p</var>-quotient  of  the group  of  the  process). An  entry  of  <code>0</code> for  a
+particular generator  indicates that there is  no limit on  the number of
+occurrences for the generator.
+<p>
+<strong>Note:</strong>
+For  those  familiar  with  the  <code>pq</code>  program,  <code>PqSetMaximalOccurrences</code>
+performs menu item 13 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.30"></a>
+<li><code>PqSetMetabelian( </code><var>i</var><code> ) F</code>
+<li><code>PqSetMetabelian() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to enforce metabelian-ness.
+<p>
+<strong>Note:</strong> 
+For those familiar  with  the  <code>pq</code>  program,  <code>PqSetMetabelian</code>  performs
+menu item 14 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.31"></a>
+<li><code>PqDoConsistencyCheck( </code><var>i</var><code>, </code><var>c</var><code>, </code><var>b</var><code>, </code><var>a</var><code> ) F</code>
+<li><code>PqDoConsistencyCheck( </code><var>c</var><code>, </code><var>b</var><code>, </code><var>a</var><code> ) F</code>
+<a name = "SSEC004.31"></a>
+<li><code>PqJacobi( </code><var>i</var><code>, </code><var>c</var><code>, </code><var>b</var><code>, </code><var>a</var><code> ) F</code>
+<li><code>PqJacobi( </code><var>c</var><code>, </code><var>b</var><code>, </code><var>a</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to do the consistency check for the  pc  generators  with  indices
+<var>c</var>, <var>b</var>, <var>a</var> which should be non-increasing positive integers, i.e.&nbsp;<var><var>c</var>
+ge<var>b</var> ge<var>a</var></var>.
+<p>
+There are 3 types of consistency checks:
+<p><var>
+matrix
+(a<sup>n</sup>)a = a(a<sup>n</sup>)                                (Type 1)<br>
+(b<sup>n</sup>)a = b<sup>(n-1)</sup>(ba), b(a<sup>n</sup>) = (ba)a<sup>(n-1)</sup> (Type 2)<br>
+c(ba)  = (cb)a                                 (Type 3)<br>
+
+<p></var>
+The reason some people talk about Jacobi relations instead of consistency
+checks becomes clear when one looks at the consistency check of type 3:
+<p><var>
+matrix
+c(ba) = a c[c,a] b[b,a] = acb [c,a][c,a,b][b,a] = ... <br>
+(cb)a = b c[c,b] a = a b[b,a] c[c,a] [c,b][c,b,a] 
+                     = abc [b,a] [b,a,c] [c,a] [c,b] [c,b,a] = ... <br>
+
+<p></var>
+Each collection  would  normally  carry  on  further.  But  one  can  see
+already that no other commutators of weight 3 will occur. After all terms
+of weight one and weight two have been moved to the left we end up with:
+<p><var>
+matrix
+  abc [b,a] [c,a] [c,b] [c,a,b] ... <br>
+= abc [b,a] [c,a] [c,b] [c,b,a] [b,a,c] ... <br>
+
+<p></var>
+Modulo terms of weight 4 this is equivalent to
+<p><var>
+[c,a,b] [b,c,a] [a,b,c] = 1
+<p></var>
+which is the Jacobi identity.
+<p>
+See also <code>PqDoConsistencyChecks</code> (<a href="CHAP005.htm#SSEC004.22">PqDoConsistencyChecks</a>).
+<p>
+<strong>Note:</strong>
+For those familiar  with  the  <code>pq</code>  program,  <code>PqDoConsistencyCheck</code>  and
+<code>PqJacobi</code> perform menu item 15 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.32"></a>
+<li><code>PqCompact( </code><var>i</var><code> ) F</code>
+<li><code>PqCompact() F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+program to do  a compaction of its work space.  This  function is safe to
+perform only at certain points in time.
+<p>
+<strong>Note:</strong>
+For those familiar with the <code>pq</code> program, <code>PqCompact</code> performs  menu  item
+16 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.33"></a>
+<li><code>PqEchelonise( </code><var>i</var><code> ) F</code>
+<li><code>PqEchelonise() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to echelonise the word most recently collected by <code>PqCollect</code>  or
+<code>PqCommutator</code> against the relations of the current pc presentation,  and
+return the number of  the  generator  made  redundant  or  <code>fail</code>  if  no
+generator was made redundant. A call to <code>PqCollect</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.15">PqCollect</a>)  or
+<code>PqCommutator</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.17">PqCommutator</a>) needs to be performed prior to  using
+this command.
+<p>
+<strong>Note:</strong>
+For those familiar with the <code>pq</code>  program,  <code>PqEchelonise</code>  performs  menu
+item 17 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.34"></a>
+<li><code>PqSupplyAutomorphisms( </code><var>i</var><code>, </code><var>mlist</var><code> ) F</code>
+<li><code>PqSupplyAutomorphisms( </code><var>mlist</var><code> ) F</code>
+<p>
+for  the  <var>i</var>th  or  default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process,  supply  the
+automorphism  data  provided  by   the  list  <var>mlist</var>  of  matrices  with
+non-negative integer coefficients.  Each  matrix in <var>mlist</var> describes one
+automorphism in the following way.
+<p>
+<ul>
+<li>The rows of each matrix  correspond  to  the  pc  generators  of
+weight one.
+<p>
+<li>Each  row  is  the  exponent  vector  of  the   image   of   the
+corresponding weight one generator under the respective automorphism.
+<p>
+</ul>
+<p>
+<strong>Note:</strong> 
+For those familiar with the  <code>pq</code>  program,  <code>PqSupplyAutomorphisms</code>  uses
+menu item 18 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.35"></a>
+<li><code>PqExtendAutomorphisms( </code><var>i</var><code> ) F</code>
+<li><code>PqExtendAutomorphisms() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to extend automorphisms of the <var>p</var>-quotient of the previous class
+to the <var>p</var>-quotient of the present class.     
+<p>
+<strong>Note:</strong>
+For those familiar with the  <code>pq</code>  program,  <code>PqExtendAutomorphisms</code>  uses
+menu item 18 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.36"></a>
+<li><code>PqApplyAutomorphisms( </code><var>i</var><code>, </code><var>qfac</var><code> ) F</code>
+<li><code>PqApplyAutomorphisms( </code><var>qfac</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to apply automorphisms; <var>qfac</var> is the queue factor e.g. <code>15</code>.
+<p>
+<strong>Note:</strong> 
+For those familiar with  the  <code>pq</code>  program,  <code>PqCloseRelations</code>  performs
+menu item 19 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.37"></a>
+<li><code>PqDisplayStructure( </code><var>i</var><code> [: Bounds := </code><var>list</var><code> ]) F</code>
+<li><code>PqDisplayStructure([: Bounds := </code><var>list</var><code> ]) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program  to  display  the  structure  for  the  pcp  generators   numbered
+(inclusively) between the bounds of <code>Bounds</code> or  for  all  generators  if
+<code>Bounds</code> is not  given.  The  value  <var>list</var>  of  <code>Bounds</code>  (assuming  the
+interactive process is numbered <var>i</var>) should be a  list  of  two  integers
+<var>low</var>,   <var>high</var>   satisfying   <var>1    le<var>low</var>    le<var>high</var>    le
+<code>PqNrPcGenerators(</code><var>i</var><code>)</code></var>  (see&nbsp;<a href="CHAP005.htm#SSEC004.1">PqNrPcGenerators</a>).  <code>PqDisplayStructure</code>
+also accepts the option <code>OutputLevel</code> (see <a href="CHAP006.htm#SSEC001.9">option OutputLevel</a>).
+<p>
+<strong>Explanation of output</strong>
+<p>
+New  generators are  defined as  commutators of  previous  generators and
+generators  of  class 1  or  as <var>p</var>-th  powers  of  generators that  have
+themselves been defined as <var>p</var>-th powers. A generator is never defined as
+<var>p</var>-th power of a commutator.
+<p>
+Therefore, there are two cases: all the numbers on the righthand side are
+either the same or  they  differ.  Below,  <code>g</code><var>i</var><code></code>  refers  to  the  <var>i</var>th
+defining generator.
+<p>
+<ul>
+<p>
+<li>
+If the righthand side numbers are all the same, then the generator  is  a
+<var>p</var>-th power (of a <var>p</var>-th power of a <var>p</var>-th power, etc.). The  number  of
+repeated digits say how often a <var>p</var>-th power has to be taken.
+<p>
+In the following example, the generator number 31 is the  eleventh  power
+of generator 17 which in turn is an eleventh power and so on:
+<p>
+<pre>
+#I  31 is defined on 17^11 = 1 1 1 1 1 
+</pre>
+<p>
+So generator 31 is obtained by taking the eleventh power of  generator  1
+five times.
+<p>
+<li>
+If the numbers are not all the same, the generator is defined by a
+commutator.   If the first two generator numbers differ, the generator is
+defined as a left-normed commutator of the weight one generators, e.g.
+<p>
+<pre>
+#I  19 is defined on [11, 1] = 2 1 1 1 1    
+</pre>
+<p>
+Here, generator 19 is defined as  the  commutator  of  generator  11  and
+generator  1  which  is  the   same   as   the   left-normed   commutator
+<code>[x2, x1, x1, x1, x1]</code>. One can check this by tracing back the definition
+of generator 11 until one gets to a generator of class 1.
+<p>
+<li>
+If the first two generator numbers are identical, then the left most
+component of the left-normed commutator is a <var>p</var>-th power, e.g.
+<p>
+<pre>
+#I  25 is defined on [14, 1] = 1 1 2 1 1 
+</pre>
+<p>
+In this example, generator 25 is defined as commutator  of  generator  14
+and generator 1. The left-normed commutator is
+<p><var>
+[(<code>x1</code><sup>11</sup>)<sup>11</sup>, <code>x2</code>, <code>x1</code>, <code>x1</code>]
+<p></var>
+Again, this can be verified by tracing back the definitions.
+<p>
+</ul>
+<p>
+<strong>Note:</strong>
+For those familiar with the <code>pq</code>  program,  <code>PqDisplayStructure</code>  performs
+menu item 20 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.38"></a>
+<li><code>PqDisplayAutomorphisms( </code><var>i</var><code> [: Bounds := </code><var>list</var><code> ]) F</code>
+<li><code>PqDisplayAutomorphisms([: Bounds := </code><var>list</var><code> ]) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to display the automorphism actions on the pcp generators numbered
+(inclusively) between the bounds of <code>Bounds</code> or  for  all  generators  if
+<code>Bounds</code> is not  given.  The  value  <var>list</var>  of  <code>Bounds</code>  (assuming  the
+interactive process is numbered <var>i</var>) should be a  list  of  two  integers
+<var>low</var>,   <var>high</var>   satisfying   <var>1    le<var>low</var>    le<var>high</var>    le
+<code>PqNrPcGenerators(</code><var>i</var><code>)</code></var>  (see&nbsp;<a href="CHAP005.htm#SSEC004.1">PqNrPcGenerators</a>).  <code>PqDisplayStructure</code>
+also accepts the option <code>OutputLevel</code> (see <a href="CHAP006.htm#SSEC001.9">option OutputLevel</a>).
+<p>
+<strong>Note:</strong>
+For  those  familiar  with  the  <code>pq</code>  program,   <code>PqDisplayAutomorphisms</code>
+performs menu item 21 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<a name = "SSEC004.39"></a>
+<li><code>PqWritePcPresentation( </code><var>i</var><code>, </code><var>filename</var><code> ) F</code>
+<li><code>PqWritePcPresentation( </code><var>filename</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to write a pc presentation of a previously-computed  quotient  of
+the group of that process, to the file with  name  <var>filename</var>.  Here  the
+group of a process is the one given as first argument when <code>PqStart</code>  was
+called to initiate that process (for process <var>i</var> the group is  stored  as
+<code>ANUPQData.io[</code><var>i</var><code>].group</code>).  If  the  first  character  of   the   string
+<var>filename</var> is not <code>/</code>, <var>filename</var> is assumed to be the path of a writable
+file relative to the directory in which  <font face="Gill Sans,Helvetica,Arial">GAP</font>  was  started.  If  a  pc
+presentation has not been previously computed by the <code>pq</code>  program,  then
+<code>pq</code>   is   called   to   compute   it   first,   effectively    invoking
+<code>PqPcPresentation</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.10">PqPcPresentation</a>).
+<p>
+<strong>Note:</strong> For those familiar with the <code>pq</code> program, <code>PqPcWritePresentation</code>
+performs menu item 25 of the Advanced <var>p</var>-Quotient menu.
+<p>
+<strong>Commands from the Standard Presentation menu</strong>
+<p>
+<a name = "SSEC004.40"></a>
+<li><code>PqSPComputePcpAndPCover( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqSPComputePcpAndPCover( : </code><var>options</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, directs  the  <code>pq</code>
+program to compute for the group of that process a pc presentation  up  to
+the <var>p</var>-quotient of maximum class or the value of the option <code>ClassBound</code>
+and the <var>p</var>-cover of that  quotient,  and  sets  up  tabular  information
+required for computation of a standard presentation. Here the group of  a
+process is the one given as first argument when <code>PqStart</code> was  called  to
+initiate  that  process  (for  process  <var>i</var>  the  group  is   stored   as
+<code>ANUPQData.io[</code><var>i</var><code>].group</code>).
+<p>
+The possible <var>options</var> are <code>Prime</code>, <code>ClassBound</code>, <code>Relators</code>, <code>Exponent</code>,
+<code>Metabelian</code> and <code>OutputLevel</code> (see Chapter&nbsp;<a href="CHAP006.htm">ANUPQ Options</a> for  detailed
+descriptions of these options). The option <code>Prime</code> is normally determined
+via <code>PrimePGroup</code>, and so is not required unless the group  doesn't  know
+it's a <var>p</var>-group and <code>HasPrimePGroup</code> returns <code>false</code>.
+<p>
+<strong>Note:</strong>
+For  those  familiar  with  the  <code>pq</code>  program,  <code>PqSPComputePcpAndPCover</code>
+performs option 1 of the Standard Presentation menu.
+<p>
+<a name = "SSEC004.41"></a>
+<li><code>PqSPStandardPresentation( </code><var>i</var><code>[, </code><var>mlist</var><code>][: </code><var>options</var><code>]) F</code>
+<li><code>PqSPStandardPresentation( [</code><var>mlist</var><code>][: </code><var>options</var><code>]) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, inputs data  given
+by <var>options</var> to compute a standard presentation for  the  group  of  that
+process.  If  argument  <var>mlist</var>  is  given  it  is  assumed  to  be   the
+automorphism group data required. Otherwise it is assumed that a call  to
+either      <code>Pq</code>      (see&nbsp;<a href="CHAP005.htm#SSEC003.1">Pq!interactive</a>)      or      <code>PqEpimorphism</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.2">PqEpimorphism!interactive</a>) has generated a <var>p</var>-quotient  and  that
+<font face="Gill Sans,Helvetica,Arial">GAP</font> can compute  its  automorphism  group  from  which  the  necessary
+automorphism group data can be derived. The group of the process  is  the
+one given as first argument when <code>PqStart</code> was  called  to  initiate  the
+process (for process <var>i</var> the group is stored as <code>ANUPQData.io[</code><var>i</var><code>].group</code>
+and     the     <var>p</var>-quotient     if     existent     is     stored     as
+<code>ANUPQData.io[</code><var>i</var><code>].pQuotient</code>).  If  <var>mlist</var>   is   not   given   and   a
+<var>p</var>-quotient of the group has not been  previously  computed  a  class  1
+<var>p</var>-quotient is computed.
+<p>
+<code>PqSPStandardPresentation</code> accepts three options, all optional:
+<p>
+<ul>
+<p>
+<a name = "I23"></a>
+
+<li><code>ClassBound := </code><var>n</var><code></code>
+<p>
+<a name = "I24"></a>
+
+<li><code>PcgsAutomorphisms</code>
+<p>
+<a name = "I25"></a>
+
+<li><code>StandardPresentationFile := </code><var>filename</var><code></code>
+<p>
+</ul>
+<p>
+If <code>ClassBound</code> is omitted it defaults to 63.
+<p>
+Detailed descriptions of the above options may be found in Chapter&nbsp;<a href="CHAP006.htm">ANUPQ options</a>.
+<p>
+<strong>Note:</strong> For those familiar with  the  <code>pq</code>  program,  <code>PqSPPcPresentation</code>
+performs menu item 2 of the Standard Presentation menu.
+<p>
+<a name = "SSEC004.42"></a>
+<li><code>PqSPSavePresentation( </code><var>i</var><code>, </code><var>filename</var><code> ) F</code>
+<li><code>PqSPSavePresentation( </code><var>filename</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, directs  the  <code>pq</code>
+program to save the standard  presentation  previously  computed  for  the
+group of that process to the file with name <var>filename</var>, where  the  group
+of a process is the one given as first argument when <code>PqStart</code> was called
+to initiate that process. If the first character of the string <var>filename</var>
+is not <code>/</code>, <var>filename</var> is assumed to be  the  path  of  a  writable  file
+relative to the directory in which <font face="Gill Sans,Helvetica,Arial">GAP</font> was started.
+<p>
+<strong>Note:</strong> For those familiar with the <code>pq</code>  program,  <code>PqSPSavePresentation</code>
+performs menu item 3 of the Standard Presentation menu.
+<p>
+<a name = "SSEC004.43"></a>
+<li><code>PqSPCompareTwoFilePresentations( </code><var>i</var><code>, </code><var>f1</var><code>, </code><var>f2</var><code> ) F</code>
+<li><code>PqSPCompareTwoFilePresentations( </code><var>f1</var><code>, </code><var>f2</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the  <code>pq</code>
+program to compare the presentations in the files with names <var>f1</var> and <var>f2</var>
+and returns <code>true</code> if they are identical and <code>false</code> otherwise. For  each
+of the strings <var>f1</var> and <var>f2</var>, if the first character is not a <code>/</code> then it
+is assumed to be the path of a readable file relative to the directory in
+which <font face="Gill Sans,Helvetica,Arial">GAP</font> was started.
+<p>
+<strong>Notes</strong>
+<p>
+The presentations in files <var>f1</var> and  <var>f2</var> must have been generated by the
+<code>pq</code> program but they do <strong>not</strong> need to be <strong>standard</strong> presentations. If If
+the  presentations  in files  <var>f1</var>  and  <var>f2</var>  <strong>have</strong> been  generated  by
+<code>PqSPStandardPresentation</code>    (see&nbsp;<a href="CHAP005.htm#SSEC004.41">PqSPStandardPresentation</a>)   then   a
+<code>false</code> response  from <code>PqSPCompareTwoFilePresentations</code> says  the groups
+defined by those presentations are <strong>not</strong> isomorphic.
+<p>
+For      those      familiar      with       the       <code>pq</code>       program,
+<code>PqSPCompareTwoFilePresentations</code> performs menu item 6  of  the  Standard
+Presentation menu.
+<p>
+<a name = "SSEC004.44"></a>
+<li><code>PqSPIsomorphism( </code><var>i</var><code> ) F</code>
+<li><code>PqSPIsomorphism() F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to compute the isomorphism mapping  from  the  <var>p</var>-group  of  the
+process  to  its  standard  presentation.  This   function   provides   a
+description      only;      for      a      <font face="Gill Sans,Helvetica,Arial">GAP</font>      object,       use
+<code>EpimorphismStandardPresentation</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.5">EpimorphismStandardPresentation!interactive</a>).
+<p>
+<strong>Note:</strong> For  those  familiar  with  the  <code>pq</code>  program,  <code>PqSPIsomorphism</code>
+performs menu item 8 of the Standard Presentation menu.
+<p>
+<strong>Commands from the Main <var>p</var>-Group Generation menu</strong>
+<p>
+Note that the <var>p</var>-group generation commands can only be applied once  the
+<code>pq</code> program has produced a pc presentation of some quotient group of the
+``group of the process''.
+<p>
+<a name = "SSEC004.45"></a>
+<li><code>PqPGSupplyAutomorphisms( </code><var>i</var><code>[, </code><var>mlist</var><code>] : </code><var>options</var><code> ) F</code>
+<li><code>PqPGSupplyAutomorphisms([</code><var>mlist</var><code>] : </code><var>options</var><code> ) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, supply  the <code>pq</code>
+program with the automorphism group  data needed for the current quotient
+of the  group of  that process (for  process <var>i</var>  the group is  stored as
+<code>ANUPQData.io[</code><var>i</var><code>].group</code>).  For  a description of the  format of <var>mlist</var>
+see&nbsp;<a href="CHAP005.htm#SSEC004.34">PqSupplyAutomorphisms</a>.      The      options      possible      are
+<code>NumberOfSolubleAutomorphisms</code>    and     <code>RelativeOrders</code>.     (Detailed
+descriptions of these options may be found in Chapter&nbsp;<a href="CHAP006.htm">ANUPQ Options</a>.)
+<p>
+If <var>mlist</var> is omitted, the automorphism data is determined from the group
+of  the process  which must  have been  a <var>p</var>-group  in  pc presentation.
+<p>
+<strong>Note:</strong>
+For  those  familiar  with  the  <code>pq</code>  program,  <code>PqPGSupplyAutomorphisms</code>
+performs menu item 1 of the main <var>p</var>-Group Generation menu.
+<p>
+<a name = "SSEC004.46"></a>
+<li><code>PqPGExtendAutomorphisms( </code><var>i</var><code> ) F</code>
+<li><code>PqPGExtendAutomorphisms() F</code>
+<p>
+for the <var>i</var>th  or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the <code>pq</code>
+program  to   compute  the  extensions   of  the  automorphisms   of  the
+<var>p</var>-quotient of  the previous  class to the  <var>p</var>-quotient of  the current
+class.  You may wish to set the <code>InfoLevel</code> of <code>InfoANUPQ</code> to 2 (or more)
+in order to see the output from the <code>pq</code> program (see&nbsp;<a href="CHAP007.htm#SSEC003.1">InfoANUPQ</a>).
+<p>
+<strong>Note:</strong>    
+For  those  familiar  with  the  <code>pq</code>  program,  <code>PqPGExtendAutomorphisms</code>
+performs menu item 2 of the main or advanced <var>p</var>-Group Generation menu. 
+<p>
+<a name = "SSEC004.47"></a>
+<li><code>PqPGConstructDescendants( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqPGConstructDescendants( : </code><var>options</var><code> ) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+program to construct descendants  prescribed by <var>options</var>, and return the
+number of descendants constructed (compare function&nbsp;<a href="CHAP004.htm#SSEC004.1">PqDescendants</a> which
+returns the list of descendants).  The options possible are <code>ClassBound</code>,
+<code>OrderBound</code>,               <code>StepSize</code>,              <code>PcgsAutomorphisms</code>,
+<code>RankInitialSegmentSubgroups</code>,   <code>SpaceEfficient</code>,  <code>CapableDescendants</code>,
+<code>AllDescendants</code>,     <code>Exponent</code>,     <code>Metabelian</code>,     <code>BasicAlgorithm</code>,
+<code>CustomiseOutput</code>.  (Detailed descriptions of  these options may be found
+in Chapter&nbsp;<a href="CHAP006.htm">ANUPQ Options</a>.)
+<p>
+<code>PqPGConstructDescendants</code> requires that the <code>pq</code> program  has  previously
+computed a pc presentation and a <var>p</var>-cover for  a  <var>p</var>-quotient  of  some
+class of the group of the process.
+<p>
+<strong>Note:</strong> 
+For those  familiar  with  the  <code>pq</code>  program,  <code>PqPGConstructDescendants</code>
+performs menu item 5 of the main <var>p</var>-Group Generation menu.
+<p>
+<a name = "SSEC004.48"></a>
+<li><code>PqPGSetDescendantToPcp( </code><var>i</var><code>, </code><var>cls</var><code>, </code><var>n</var><code> ) F</code>
+<li><code>PqPGSetDescendantToPcp( </code><var>cls</var><code>, </code><var>n</var><code> ) F</code>
+<li><code>PqPGSetDescendantToPcp( </code><var>i</var><code> [: Filename := </code><var>name</var><code> ]) F</code>
+<li><code>PqPGSetDescendantToPcp([: Filename := </code><var>name</var><code> ]) F</code>
+<a name = "SSEC004.48"></a>
+<li><code>PqPGRestoreDescendantFromFile(</code><var>i</var><code>, </code><var>cls</var><code>, </code><var>n</var><code>) F</code>
+<li><code>PqPGRestoreDescendantFromFile( </code><var>cls</var><code>, </code><var>n</var><code> ) F</code>
+<li><code>PqPGRestoreDescendantFromFile( </code><var>i</var><code> [: Filename := </code><var>name</var><code> ]) F</code>
+<li><code>PqPGRestoreDescendantFromFile([: Filename := </code><var>name</var><code> ]) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+program to restore group <var>n</var> of class <var>cls</var> from a temporary file,  where
+<var>cls</var> and <var>n</var> are positive integers,  or  the  group  stored  in  <var>name</var>.
+<code>PqPGSetDescendantToPcp</code>    and    <code>PqPGRestoreDescendantFromFile</code>    are
+synonyms;  they  make  sense  only  after  a  prior  call  to   construct
+descendants          by          say           <code>PqPGConstructDescendants</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC004.47">PqPGConstructDescendants</a>)  or  the   interactive   <code>PqDescendants</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC003.6">PqDescendants!interactive</a>). In the <code>Filename</code>  option  forms,  the
+option defaults to the last filename in which a presentation  was  stored
+by the <code>pq</code> program.
+<p>
+<strong>Notes</strong>
+<p>
+Since the  <code>PqPGSetDescendantToPcp</code>  and  <code>PqPGRestoreDescendantFromFile</code>
+are intended to be used in calculation of further  descendants  the  <code>pq</code>
+program computes  the  <var>p</var>-cover  of  the  restored  descendant.   Hence,
+<code>PqCurrentGroup</code> used immediately after one of these commands returns the
+<var>p</var>-cover of the restored descendant rather than the descendant itself.
+<p>
+For those familiar with the <code>pq</code>  program,  <code>PqPGSetDescendantToPcp</code>  and
+<code>PqPGRestoreDescendantFromFile</code> perform  menu  item  3  of  the  main  or
+advanced <var>p</var>-Group Generation menu.
+<p>
+<strong>Commands from the Advanced <var>p</var>-Group Generation menu</strong>
+<p>
+The   functions   below   perform    the    component    algorithms    of
+<code>PqPGConstructDescendants</code> (see&nbsp;<a href="CHAP005.htm#SSEC004.47">PqPGConstructDescendants</a>). You can  get
+some idea of their usage by  trying  <code>PqExample("Nott-APG-Rel-i");</code>.  You
+can get some idea of the  breakdown  of  <code>PqPGConstructDescendants</code>  into
+these   functions    by    comparing    the    previous    output    with
+<code>PqExample("Nott-PG-Rel-i");</code>. 
+<p>
+These functions are intended for  use only by ``experts''; please contact
+the authors of the package if you genuinely have a need for them and need
+any amplified descriptions.
+<p>
+<a name = "SSEC004.49"></a>
+<li><code>PqAPGDegree( </code><var>i</var><code>, </code><var>step</var><code>, </code><var>rank</var><code> [: Exponent := </code><var>n</var><code> ]) F</code>
+<li><code>PqAPGDegree( </code><var>step</var><code>, </code><var>rank</var><code> [: Exponent := </code><var>n</var><code> ]) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+program to invoke menu item  6 of the Advanced <var>p</var>-Group Generation menu.
+Here the step-size  <var>step</var> and the rank <var>rank</var>  are positive integers and
+are the  arguments required by  the <code>pq</code> program.   See&nbsp;<a href="CHAP006.htm#SSEC001.4">option Exponent</a>
+for the one recognised option <code>Exponent</code>.
+<p>
+<a name = "SSEC004.50"></a>
+<li><code>PqAPGPermutations( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqAPGPermutations( : </code><var>options</var><code> ) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+program to perform menu item 7 of the Advanced <var>p</var>-Group Generation menu.
+Here   the   options   <var>options</var>  recognised   are   <code>PcgsAutomorphisms</code>,
+<code>SpaceEfficient</code>,   <code>PrintAutomorphisms</code>  and   <code>PrintPermutations</code>  (see
+Chapter&nbsp;<a href="CHAP006.htm">ANUPQ Options</a> for details).
+<p>
+<a name = "SSEC004.51"></a>
+<li><code>PqAPGOrbits( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqAPGOrbits( : </code><var>options</var><code> ) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+to perform menu item 8 of the Advanced <var>p</var>-Group Generation menu.
+<p>
+Here   the   options   <var>options</var>  recognised   are   <code>PcgsAutomorphisms</code>,
+<code>SpaceEfficient</code>  and <code>CustomiseOutput</code>  (see Chapter&nbsp;<a href="CHAP006.htm">ANUPQ Options</a> for
+details).   For the  <code>CustomiseOutput</code>  option only  the  setting of  the
+<code>orbit</code> is recognised (all other fields if set are ignored).
+<p>
+<a name = "SSEC004.52"></a>
+<li><code>PqAPGOrbitRepresentatives( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqAPGOrbitRepresentatives(: </code><var>options</var><code> ) F</code>
+<p>
+for the  <var>i</var>th or default  interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, direct  the <code>pq</code>
+to perform item 9 of the Advanced <var>p</var>-Group Generation menu.
+<p>
+The  options  <var>options</var>  may  be  any   selection   of   the   following:
+<code>PcgsAutomorphisms</code>,    <code>SpaceEfficient</code>,    <code>Exponent</code>,    <code>Metabelian</code>,
+<code>CapableDescendants</code> (or <code>AllDescendants</code>), <code>CustomiseOutput</code> (where only
+the <code>group</code> and <code>autgroup</code> fields are  recognised)  and  <code>Filename</code>  (see
+Chapter&nbsp;<a href="CHAP006.htm">ANUPQ Options</a>  for  details).  If  <code>Filename</code>  is  omitted  the
+reduced <var>p</var>-cover is written to the file <code>"redPCover"</code> in  the  temporary
+directory whose name is stored in <code>ANUPQData.tmpdir</code>.
+<p>
+<a name = "SSEC004.53"></a>
+<li><code>PqAPGSingleStage( </code><var>i</var><code> : </code><var>options</var><code> ) F</code>
+<li><code>PqAPGSingleStage( : </code><var>options</var><code> ) F</code>
+<p>
+for the <var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process,  direct  the  <code>pq</code>
+to perform option 5 of the Advanced <var>p</var>-Group Generation menu.
+<p>
+The    possible     options    are    <code>StepSize</code>,    <code>PcgsAutomorphisms</code>,
+<code>RankInitialSegmentSubgroups</code>,   <code>SpaceEfficient</code>,  <code>CapableDescendants</code>,
+<code>AllDescendants</code>,   <code>Exponent</code>,    <code>Metabelian</code>,   <code>BasicAlgorithm</code>   and
+<code>CustomiseOutput</code>. (Detailed  descriptions of these options  may be found
+in Chapter&nbsp;<a href="CHAP006.htm">ANUPQ Options</a>.)
+<p>
+<p>
+<h2><a name="SECT005">5.5 Primitive Interactive ANUPQ Process Read/Write Functions</a></h2>
+<p><p>
+For those familiar with using the <code>pq</code> program as a standalone we  provide
+primitive read/write tools to communicate directly  with  an  interactive
+<font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, started via <code>PqStart</code>. For the most part, it is  up  to
+the user to translate the output strings from <code>pq</code>  program  into  a  form
+useful in <font face="Gill Sans,Helvetica,Arial">GAP</font>.
+<p>
+<a name = "SSEC005.1"></a>
+<li><code>PqRead( </code><var>i</var><code> ) F</code>
+<li><code>PqRead() F</code>
+<p>
+read a complete line of  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  output,  from  the  <var>i</var>th  or  default
+interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, if there is output to be read  and  returns
+<code>fail</code> otherwise. When successful, the  line  is  returned  as  a  string
+complete with trailing newline, colon, or question-mark character. Please
+note that it is possible to be ``too  quick''  (i.e.&nbsp;the  return  can  be
+<code>fail</code> purely because the output from <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> is not there yet), but  if
+<code>PqRead</code> finds any output at all, it waits for a complete line.  <code>PqRead</code>
+also writes the line read via <code>Info</code> at <code>InfoANUPQ</code> level 2.  It  doesn't
+try to distinguish banner and menu output from other output of  the  <code>pq</code>
+program.
+<p>
+<a name = "SSEC005.2"></a>
+<li><code>PqReadAll( </code><var>i</var><code> ) F</code>
+<li><code>PqReadAll() F</code>
+<p>
+read and return as many <strong>complete</strong> lines of  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  output,  from  the
+<var>i</var>th or default interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, as there are to  be  read,
+<strong>at the time of the call</strong>,  as  a  list  of  strings  with  any  trailing
+newlines removed and returns the empty list otherwise.  <code>PqReadAll</code>  also
+writes each line read via <code>Info</code> at <code>InfoANUPQ</code> level 2. It  doesn't  try
+to distinguish banner and menu output  from  other  output  of  the  <code>pq</code>
+program. Whenever <code>PqReadAll</code> finds only a partial line, it waits for  the
+complete line, thus increasing the probability that it has  captured  all
+the output to be had from <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>.
+<p>
+<a name = "SSEC005.3"></a>
+<li><code>PqReadUntil( </code><var>i</var><code>, </code><var>IsMyLine</var><code> ) F</code>
+<li><code>PqReadUntil( </code><var>IsMyLine</var><code> ) F</code>
+<li><code>PqReadUntil( </code><var>i</var><code>, </code><var>IsMyLine</var><code>, </code><var>Modify</var><code> ) F</code>
+<li><code>PqReadUntil( </code><var>IsMyLine</var><code>, </code><var>Modify</var><code> ) F</code>
+<p>
+read complete lines  of  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  output,  from  the  <var>i</var>th  or  default
+interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, ``chomps'' them (i.e.&nbsp;removes any  trailing
+newline character), emits them to <code>Info</code> at <code>InfoANUPQ</code> level 2  (without
+trying to distinguish banner and menu output from  other  output  of  the
+<code>pq</code> program), and applies the function <var>Modify</var> (where <var>Modify</var>  is  just
+the identity map/function for the first two forms)  until  a  ``chomped''
+line  <var>line</var>  for  which  <code></code><var>IsMyLine</var><code>(  </code><var>Modify</var><code>(</code><var>line</var><code>)  )</code>   is   true.
+<code>PqReadUntil</code> returns the list of <var>Modify</var>-ed ``chomped'' lines read.
+<p>
+<strong>Notes:</strong> 
+When provided by the user, <var>Modify</var> should be a function that  accepts  a
+single string argument.
+<p>
+<var>IsMyLine</var> should be a function that is able  to  accept  the  output  of
+<var>Modify</var> (or take a single string argument when <var>Modify</var> is not provided)
+and should return a boolean.
+<p>
+If <code></code><var>IsMyLine</var><code>( </code><var>Modify</var><code>(</code><var>line</var><code>) )</code> is  never  true,  <code>PqReadUntil</code>  will
+wait indefinitely.
+<p>
+<a name = "SSEC005.4"></a>
+<li><code>PqWrite( </code><var>i</var><code>, </code><var>string</var><code> ) F</code>
+<li><code>PqWrite( </code><var>string</var><code> ) F</code>
+<p>
+write <var>string</var> to the <var>i</var>th  or  default  interactive  <font face="Gill Sans,Helvetica,Arial">ANUPQ</font>  process;
+<var>string</var> must be in exactly the form the <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> standalone expects. The
+command is echoed via <code>Info</code> at <code>InfoANUPQ</code> level 3 (with a  ``<code>ToPQ&gt; </code>''
+prompt); i.e.&nbsp;do <code>SetInfoLevel(InfoANUPQ, 3);</code> to see what is transmitted
+to the <code>pq</code> program. <code>PqWrite</code> returns <code>true</code> if successful in writing  to
+the stream of the interactive <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process, and <code>fail</code> otherwise.
+<p>
+<strong>Note:</strong>
+If <code>PqWrite</code> returns <code>fail</code> it means that the <font face="Gill Sans,Helvetica,Arial">ANUPQ</font> process has died.
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP004.htm">Previous</a>] [<a href ="CHAP006.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>ANUPQ manual<br>November 2013
+</address></body></html>

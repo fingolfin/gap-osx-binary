@@ -1,0 +1,209 @@
+<html><head><title>[loops] 3 How the package works</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>3 How the package works</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP003.htm#SECT001">Representing quasigroups</a>
+<li> <A HREF="CHAP003.htm#SECT002">Conversions between magmas, quasigroups, loops and groups</a>
+<li> <A HREF="CHAP003.htm#SECT003">Calculating with quasigroups</a>
+<li> <A HREF="CHAP003.htm#SECT004">Naming, viewing and printing quasigroups and their elements</a>
+</ol><p>
+<p>
+The package consists of three complementary components:
+<ul>
+<li> the core algorithms for quasigroup theoretical notions
+    (see Chapters <a href="CHAP004.htm">Creating quasigroups and loops</a>,
+    <a href="CHAP005.htm">Basic methods and attributes</a>,
+    <a href="CHAP006.htm">Methods based on permutation groups</a> and
+    <a href="CHAP007.htm">Testing properties of quasigroups and loops</a>),
+<li> some specific algorithms, mostly for Moufang loops
+    (see Chapter <a href="CHAP008.htm">Specific methods</a>),
+<li> the library of small loops (see Chapter
+    <a href="CHAP009.htm">Libraries of small loops</a>).
+</ul>
+Although we do not explain the algorithms in detail here, we describe the
+overarching ideas so that the user should be able to anticipate the
+capabilities and behavior of <font face="Gill Sans,Helvetica,Arial">LOOPS</font> during computation.
+<p>
+<p>
+<h2><a name="SECT001">3.1 Representing quasigroups</a></h2>
+<p><p>
+Since the permutation representation in the usual sense is impossible for
+nonassociative structures, and since the theory of nonassociative presentations
+is not well understood, we had to resort to multiplication tables to represent
+quasigroups in <font face="Gill Sans,Helvetica,Arial">GAP</font>.
+<p>
+In order to save storage space, we sometimes use one multiplication table to
+represent several quasigroups (for instance when a quasigroup is a
+subquasigroup of another quasigroup).
+<p>
+Consequently, <var>the package is intended primarily for quasigroups and loops of
+small order</var>, say up to 1000.
+<p>
+The <font face="Gill Sans,Helvetica,Arial">GAP</font> categories <code>IsQuasigroupElement</code>, <code>IsLoopElement</code>, <code>IsQuasigroup</code>,
+and <code>IsLoop</code> are declared in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> as follows:
+<p>
+<pre>
+DeclareCategory( "IsQuasigroupElement", IsMultiplicativeElement );
+DeclareRepresentation( "IsQuasigroupElmRep",
+    IsPositionalObjectRep and IsMultiplicativeElement, [1] );
+DeclareCategory( "IsLoopElement",
+    IsQuasigroupElement and IsMultiplicativeElementWithInverse );
+DeclareRepresentation( "IsLoopElmRep",
+    IsPositionalObjectRep and IsMultiplicativeElementWithInverse, [1] );
+## latin (auxiliary category for GAP to tell apart IsMagma and IsQuasigroup)
+DeclareCategory( "IsLatin", IsObject );
+DeclareCategory( "IsQuasigroup", IsMagma and IsLatin );
+DeclareCategory( "IsLoop", IsQuasigroup and
+    IsMultiplicativeElementWithInverseCollection);
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">3.2 Conversions between magmas, quasigroups, loops and groups</a></h2>
+<p><p>
+Whether an object is considered a magma, quasigroup, loop or group is a matter
+of declaration in <font face="Gill Sans,Helvetica,Arial">LOOPS</font>. Loops are automatically quasigroups, and both
+groups and quasigroups are automatically magmas. All standard <font face="Gill Sans,Helvetica,Arial">GAP</font> commands
+for magmas are therefore available for quasigroups and loops, too.
+<p>
+In <font face="Gill Sans,Helvetica,Arial">GAP</font>, functions of the type <code>AsSomething(</code><var>X</var><code>)</code> convert the domain <var>X</var> into
+<code>Something</code>, if possible, without changing the underlying domain <var>X</var>. For
+example, if <var>X</var> is declared as magma but is associative and has neutral element
+and inverses, <code>AsGroup( </code><var>X</var><code> )</code> returns the corresponding group with the
+underlying domain <var>X</var>.
+<p>
+We have opted for a more general kind of conversions in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> (starting with
+version 2.1.0), using functions of the type <code>IntoSomething(</code><var>X</var><code>)</code>. The two main
+features that distinguish <code>IntoSomething</code> from <code>AsSomething</code> are:
+<p>
+<ul>
+<li>
+    The function <code>IntoSomething( </code><var>X</var><code> )</code> does not necessarily return the same
+    domain as <var>X</var>. The reason is that <var>X</var> can be a group, for instance, defined on
+    one of many possible domains, while <code>IntoLoop( </code><var>X</var><code> )</code> must result in a loop,
+    and hence be defined on a subset of some interval <code>[1,..,n]</code> (see Section
+    <a href="CHAP004.htm#SECT001">About Cayley tables</a>).
+<li>
+    In some special situations, the function <code>IntoSomething( </code><var>X</var><code> )</code> allows to
+    convert <var>X</var> into <code>Something</code> even though <var>X</var> does not have all the properties
+    of <code>Something</code>. For instance, every quasigroup is isotopic to a loop, so it
+    makes sense to allow conversions of the type <code>IntoLoop( </code><var>Q</var><code> )</code> even if the
+    quasigroup <var>Q</var> does not posses a neutral element.
+</ul>
+<p>
+Details of all conversions in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> can be found in Section <a href="CHAP004.htm#SECT009">Conversions</a>.
+<p>
+<p>
+<h2><a name="SECT003">3.3 Calculating with quasigroups</a></h2>
+<p><p>
+Although the quasigroups are ultimately represented by multiplication tables,
+the algorithms are efficient because nearly all calculations are delegated to
+groups. The connection between quasigroups and groups is facilitated via the
+above-mentioned translations, and we illustrate it with a few examples:
+<p>
+<p>
+<strong>Example 1:</strong> This example shows how properties of quasigroups can be translated
+into properties of translations in a straightforward way.
+<p>
+Let <i>Q</i> be a quasigroup. We ask if <i>Q</i> is associative. We can either test if
+(<i>xy</i>)<i>z</i>=<i>x</i>(<i>yz</i>) for every <i>x</i>, <i>y</i>, <i>z</i> &#8712; <i>Q</i>, or we can ask if <i>L</i><sub><i>xy</i></sub>=<i>L</i><sub><i>x</i></sub><i>L</i><sub><i>y</i></sub>
+for every <i>x</i>, <i>y</i> &#8712; <i>Q</i>. Note that since <i>L</i><sub><i>xy</i></sub>, <i>L</i><sub><i>x</i></sub>, <i>L</i><sub><i>y</i></sub> are elements of
+a permutation group, we do not have to refer directly to the multiplication
+table once the left translations of <i>Q</i> are known.
+<p>
+<strong>Example 2:</strong> This example shows how properties of loops can be translated into
+properties of translations in a way that requires some theory.
+<p>
+A left Bol loop is a loop satisfying <i>x</i>(<i>y</i>(<i>xz</i>)) = (<i>x</i>(<i>yx</i>))<i>z</i>. We claim (without proof) that a loop <i>L</i> is left Bol if and only
+if <i>L</i><sub><i>x</i></sub><i>L</i><sub><i>y</i></sub><i>L</i><sub><i>x</i></sub> is a left translation for every <i>x</i>, <i>y</i> &#8712; <i>L</i>.
+<p>
+<strong>Example 3:</strong> This example shows that many properties of loops become purely
+group-theoretical once they are expresses in terms of translations.
+<p>
+A loop is simple if it has no nontrivial
+congruences. Then it is easy to see that a loop is simple if and only if its
+multiplication group is a primitive permutation group.
+<p>
+<p>
+The main idea of the package is therefore to:
+<ul>
+<li> calculate the translations and the associated permutation
+    groups when they are needed,
+<li> store them as attributes,
+<li> use them in algorithms as often as possible.
+</ul>
+<p>
+<p>
+<h2><a name="SECT004">3.4 Naming, viewing and printing quasigroups and their elements</a></h2>
+<p><p>
+<font face="Gill Sans,Helvetica,Arial">GAP</font> displays information about objects in two modes:
+<ul>
+<li>
+    <code>View</code> (default, short),
+<li>
+    <code>Print</code> (longer).
+</ul>
+Moreover, when the name of an object is set, it is always shown, no matter
+which display mode is used.
+<p>
+Only loops contained in the libraries of <font face="Gill Sans,Helvetica,Arial">LOOPS</font> are named. For instance, the
+loop obtained via <code>MoufangLoop( 32, 4 )</code>, the 4th Moufang loop of order 32,
+is named <code>Moufang loop 32/4</code>.
+<p>
+When <i>Q</i> is a quasigroup of order <i>n</i>, it is displayed as <code>&lt;quasigroup of
+order n&gt;</code>. Similarly, a loop of order <i>n</i> appears as <code>&lt;loop of order n&gt;</code>.
+<p>
+The displayed information for a loop <i>L</i> is enhanced when it is known that <i>L</i>
+has certain additional properties. At this point, we support:
+<pre>
+    &lt;associative loop ...&gt;
+    &lt;extra loop ...&gt;
+    &lt;Moufang loop ...&gt;
+    &lt;C loop ...&gt;
+    &lt;left Bol loop ...&gt;
+    &lt;right Bol loop ...&gt;
+    &lt;LC loop ...&gt;
+    &lt;RC loop ...&gt;
+    &lt;alternative loop ...&gt;
+    &lt;left alternative loop ...&gt;
+    &lt;right alternative loop ...&gt;
+    &lt;flexible loop ...&gt;
+</pre>
+The corresponding mathematical definitions and an example can be found in
+Section <a href="CHAP007.htm#SECT004">Loops of Bol-Moufang type</a>.
+<p>
+It is possible for a loop to have several of the above properties. In such a
+case, we display the first property on the list that is satisfied.
+<p>
+By default, elements of a quasigroup appear as <code>q</code><var>n</var><code></code> and elements of a loop
+appear as <code>l</code><var>n</var><code></code> in both display modes. The neutral element of a loop is always
+denoted by <code>l1</code>. However, one can change the names of elements of a quasigroup
+<i>Q</i> or loop <i>L</i> to <var>name</var> with
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>SetQuasigroupElmName( </code><var>Q</var><code>, </code><var>name</var><code> ) O</code>
+<a name = "SSEC004.1"></a>
+<li><code>SetLoopElmName( </code><var>L</var><code>, </code><var>name</var><code> ) O</code>
+<p>
+For quasigroups and loops in the <code>Print</code> mode, we display the multiplication
+table (if it is known), or we display the elements.
+<p>
+In the following example, <i>L</i> is a loop with two elements.
+<p>
+<pre>
+gap&gt; L;
+&lt;loop of order 2&gt;
+gap&gt; Print( L );
+&lt;loop with multiplication table [ [ 1,  2 ], [  2,  1 ] ]&gt;
+gap&gt; Elements( L );
+[ l1, l2 ]
+gap&gt; SetLoopElmName( L, "loop_element" );; Elements( L );
+[ loop_element1, loop_element2 ]
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>loops manual<br>July 2012
+</address></body></html>

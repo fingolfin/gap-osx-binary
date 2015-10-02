@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>GAP (AutMan) - Appendix E: Commutative image of a rational language</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<meta name="generator" content="GAPDoc2HTML">
+<link rel=stylesheet type="text/css" href="manual.css">
+</head>
+<body>
+
+
+<div class="pcenter"><table class="chlink"><tr><td class="chlink1">Goto Chapter: </td><td><a href="chap0.html">Top</a></td><td><a href="chap1.html">1</a></td><td><a href="chap2.html">2</a></td><td><a href="chap3.html">3</a></td><td><a href="chap4.html">4</a></td><td><a href="chap5.html">5</a></td><td><a href="chapA.html">A</a></td><td><a href="chapB.html">B</a></td><td><a href="chapBib.html">Bib</a></td><td><a href="chapC.html">C</a></td><td><a href="chapD.html">D</a></td><td><a href="chapE.html">E</a></td><td><a href="chapInd.html">Ind</a></td></tr></table><br></div>
+<p><a name="s0ss0"></a></p>
+
+<h3>E. Commutative image of a rational language</h3>
+
+<p>The commutative image of a rational language is a semilinear set, i.e. a finite union of semilinear sets. One may adapt the function to compute a rational expression for the language recognized by an automaton in order to compute directly the commutative image of the language recognized by the automaton. Further improvement leads to the direct computation of the closure in Bbb Z^n, for the profinite topology, of that commutative image. (See <a href="chapBib.html#biBDel:01">[D01]</a> for the correction of the algorithms.) Recall that (see <a href="chapBib.html#biBDel:98">[D98]</a>) if a linear set given by the linear expression a+b_1Bbb N+ cdots +b_pBbb N, then a+b_1Bbb Z+ cdots +b_pBbb Z is a Bbb Z-semilinear expression for the closure under the profinite topology of the semilinear set given. We use the terminology <code class="code">commutative language</code> and <code class="code">Abelian language</code> for subsets of Bbb N^n and Bbb Z^n respectively. The <code class="code">commutative language recognized by an automaton</code> is the commutative image of the language recognized by the automaton. The <code class="code">Abelian language recognized by an automaton</code> is the closure under the profinite topology of the commutative image of the language recognized by the automaton.</p>
+
+<p><a name="s1ss0"></a></p>
+
+<h4>E.1 Commutative image</h4>
+
+<p>A semilinear expression for the commutative image of a rational language given through a rational expression can be computed using the following function. The algorithm used is described in <a href="chapBib.html#biBDel:01">[D01]</a>.</p>
+
+<p><a name="s1ss1"></a></p>
+
+<h5>E.1-1 CommutativeImageOfRatExp</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CommutativeImageOfRatExp</code>( <var>rat</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p><code class="code">rat</code> is a rational expression. A semilinear expression for its commutative image is returned.</p>
+
+
+<table class="example">
+<tr><td><pre>
+
+gap&gt; r5;
+(a(aUb))*
+gap&gt; CommutativeImageOfRatExp(r5); 
+[ [ 0, 0 ], [ 1, 1 ] + [ 1, 1 ] N , [ 2, 0 ] + [ 2, 0 ] N , 
+  [ 3, 1 ] + [ 1, 1 ] N  + [ 2, 0 ] N  ]
+
+</pre></td></tr></table>
+
+<p><a name="s1ss2"></a></p>
+
+<h5>E.1-2 LanguageCom</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; LanguageCom</code>( <var>aut</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FAtosml</code>( <var>aut</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Computes the commutative language recognized by the automaton <var>A</var>. The functions are synonyms.</p>
+
+
+<table class="example">
+<tr><td><pre>
+
+ gap&gt; aut := Automaton("det",5,2,[[1,2,4,2,1],[1,1,1,5,1]],[3],[2,3,4,5]);
+      |  1  2  3  4  5 
+   -  -  -  -  -  -  - 
+   a  |  1  2  4  2  1 
+   b  |  1  1  1  5  1 
+Initial state: [ 3 ]
+Accepting states: [ 2, 3, 4, 5 ]
+
+gap&gt; AutomatonToRatExp(aut);
+1UabUa(1Uaa*)
+gap&gt; LanguageCom(aut);
+[ [ 1, 1 ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 3, 0 ] + [ 1, 0 ] N  ]
+
+</pre></td></tr></table>
+
+<p>The expression is simplified, but it is obvious that not all possible simplifications have been carried out.</p>
+
+<p><a name="s2ss0"></a></p>
+
+<h4>E.2 Abelian image</h4>
+
+<p>A Bbb Z-semilinear expression for the profinite closure of the commutative image of a rational language given through a rational expression can be computed using the following function. The algorithm used is described in <a href="chapBib.html#biBDel:01">[D01]</a>.</p>
+
+<p><a name="s2ss1"></a></p>
+
+<h5>E.2-1 AbelianImageOfRatExp</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; AbelianImageOfRatExp</code>( <var>rat</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p><code class="code">rat</code> is a rational expression. A Bbb Z-semilinear expression for the profinite closure of the commutative image of <code class="code">rat</code> is returned.</p>
+
+
+<table class="example">
+<tr><td><pre>
+
+gap&gt; AbelianImageOfRatExp(r5);
+[ [ 0, 0 ] + [ 1, 1 ] Z  + [ 0, 2 ] Z  ]
+
+</pre></td></tr></table>
+
+<p>The case of Bbb Z-semilinear languages is similar to that of semilinear languages, but some more simplifications are done. Computations of normal forms of matrices aiming to determine basis for subgroups of Bbb Z^n are made. These computations of normal forms are carried out using functions that are part of \GAP.</p>
+
+<p><a name="s2ss2"></a></p>
+
+<h5>E.2-2 LanguageAb</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; LanguageAb</code>( <var>A</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FAtoclsml</code>( <var>A</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p><code class="code">FAtoclsml</code> computes an expression for the abelian language recognized by the automaton <var>A</var>.</p>
+
+<p><code class="code">LanguageAb</code> does the same thing that <code class="code">FAtoclsml</code> but returns <code class="keyw">true</code> when the expression returned corresponds to Bbb Z^n.</p>
+
+
+<table class="example">
+<tr><td><pre>
+
+gap&gt; LanguageAb(aut); 
+[ [ 1, 1 ], [ 0, 0 ] + [ 1, 0 ] Z  ]
+
+</pre></td></tr></table>
+
+
+<div class="pcenter">
+<table class="chlink"><tr><td><a href="chap0.html">Top of Book</a></td><td><a href="chapD.html">Previous Chapter</a></td><td><a href="chapInd.html">Next Chapter</a></td></tr></table>
+<br>
+
+
+<div class="pcenter"><table class="chlink"><tr><td class="chlink1">Goto Chapter: </td><td><a href="chap0.html">Top</a></td><td><a href="chap1.html">1</a></td><td><a href="chap2.html">2</a></td><td><a href="chap3.html">3</a></td><td><a href="chap4.html">4</a></td><td><a href="chap5.html">5</a></td><td><a href="chapA.html">A</a></td><td><a href="chapB.html">B</a></td><td><a href="chapBib.html">Bib</a></td><td><a href="chapC.html">C</a></td><td><a href="chapD.html">D</a></td><td><a href="chapE.html">E</a></td><td><a href="chapInd.html">Ind</a></td></tr></table><br></div>
+
+</div>
+
+<hr>
+<p class="foot">generated by GAPDoc2HTML</p>
+</body>
+</html>

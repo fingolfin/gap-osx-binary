@@ -1,0 +1,136 @@
+<html><head><title>[SymbCompCC] 2 Introduction</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>2 Introduction</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP002.htm#SECT001">Overview</a>
+<li> <A HREF="CHAP002.htm#SECT002">Background on (polycyclic) parametrised presentations</a>
+<li> <A HREF="CHAP002.htm#SECT003">Computation of Schur multiplicators</a>
+<li> <A HREF="CHAP002.htm#SECT004">Computation of low-dimensional cohomology</a>
+<li> <A HREF="CHAP002.htm#SECT005">Example</a>
+</ol><p>
+<p>
+<p>
+<h2><a name="SECT001">2.1 Overview</a></h2>
+<p><p>
+The coclass of a finite <i>p</i>-group of order <i>p</i><sup><i>n</i></sup> and nilpotency class <i>c</i> is 
+defined as <i>n</i>&#8722;<i>c</i>. This invariant of finite <i>p</i>-groups has been introduced by
+Leedham-Green and Newman in <a href="biblio.htm#LGN80"><cite>LGN80</cite></a> and it became of major importance
+in <i>p</i>-group theory. 
+<p>
+A first tool in the classification of all <i>p</i>-groups of coclass <i>r</i> is the
+coclass graph <i>G</i>(<i>p</i>,<i>r</i>). Its vertices are the isomorphism types of finite 
+<i>p</i>-groups of coclass <i>r</i>. Two vertices <i>G</i> and <i>H</i> are joined by an edge if
+<i>G</i> is isomorphic to the quotient <i>H</i>/&#947;(<i>H</i>) where &#947;(<i>H</i>) is the last
+non-trivial term of the lower series of <i>H</i>. 
+<p>
+Du Sautoy <a href="biblio.htm#dS00"><cite>dS00</cite></a> and Eick and Leedham-Green <a href="biblio.htm#ELG08"><cite>ELG08</cite></a> proved that
+<i>G</i>(<i>p</i>,<i>r</i>) contains certain periodic patterns. Eick and Leedham-Green 
+<a href="biblio.htm#ELG08"><cite>ELG08</cite></a> define infinite coclass sequences of finite <i>p</i>-groups of 
+coclass <i>r</i> which underpin this periodic pattern. In <i>G</i>(2,<i>r</i>) and <i>G</i>(3,1)
+almost all groups are contained in an infinite coclass sequence. 
+<p>
+Eick and Leedham-Green <a href="biblio.htm#ELG08"><cite>ELG08</cite></a> also proved that the infinitely many
+<i>p</i>-groups in an infinite coclass sequence can be defined by a single 
+parametrised presentation.
+<p>
+The first aim of this package is the definition of polycyclic parametrised
+presentations; these are parametrised presentations as defined by Eick
+and Leedham-Green <a href="biblio.htm#ELG08"><cite>ELG08</cite></a> and additionally they have various features
+of polycyclic presentations. Each such presentation defines all the 
+infinitely many finite <i>p</i>-groups in an infinite coclass sequence.
+<p>
+We then provide some algorithms to compute with polycyclic parametrised
+presentations. In particular, we introduce a generalisation of the
+collection algorithm for polycyclic parametrised presentations. Based
+on this, we describe algorithms to compute polycyclic parametrised
+presentations for Schur extensions, for the Schur multiplicator and
+for some low-dimensional cohomology groups. We refer to <a href="biblio.htm#EF11"><cite>EF11</cite></a>
+for details on the underlying algorithms and further references.
+<p>
+Finally, we exhibit a database of polycyclic parametrised presentations
+for the infinite coclass families of the finite 2-groups of coclass at
+most 2 and the finite 3-groups of coclass 1.
+<p>
+<p>
+<h2><a name="SECT002">2.2 Background on (polycyclic) parametrised presentations</a></h2>
+<p><p>
+In this section we describe the polycyclic parametrised presentations 
+(pp-presentations) for infinite coclass sequences.
+<p>
+Let (<i>G</i><sub><i>x</i></sub> &#124; <i>x</i> &#8712; <b>N</b>), where <b>N</b> denotes the natural numbers, be an 
+infinite coclass sequence; <i>x</i> is the parameter of this infinite coclass 
+sequence. Then every group <i>G</i><sub><i>x</i></sub> is an extension of a finite <i>p</i>-group <i>P</i> 
+of order <i>p</i><sup><i>n</i></sup> by an abelian <i>p</i>-group <i>T</i><sub><i>x</i></sub> of rank <i>d</i>. Furthermore, every  
+<i>G</i><sub><i>x</i></sub> has a polycyclic presentation (short pp-presentation) on generators 
+<i>g</i><sub>1</sub>, &#8230;, <i>g</i><sub><i>n</i></sub>, <i>t</i><sub>1</sub>, &#8230;, <i>t</i><sub><i>d</i></sub> with relations of the form
+<br clear="all" /><table border="0" width="100%"><tr><td> <table border="0" cellspacing="0" cellpadding="0"> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"><i>g</i><sub><i>i</i></sub><sup><i>p</i></sup> = <i>g</i><sub><i>i</i>+1</sub><sup><i>a</i><sub><i>i</i>,<i>i</i>,<i>i</i>+1</sub></sup> &#8230;<i>g</i><sub><i>n</i></sub><sup><i>a</i><sub><i>i</i>,<i>i</i>,<i>n</i></sub></sup><i>t</i><sub>1</sub><sup>&#945;<sub><i>i</i>,<i>i</i>,1</sub>(<i>x</i>)</sup> &#8230;<i>t</i><sub><i>d</i></sub><sup>&#945;<sub><i>i</i>,<i>i</i>,<i>d</i></sub>(<i>x</i>)</sup>, </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"><i>g</i><sub><i>i</i></sub><sup><i>g</i><sub><i>j</i></sub></sup> = <i>g</i><sub><i>j</i>+1</sub><sup><i>a</i><sub><i>i</i>,<i>j</i>,<i>j</i>+1</sub></sup> &#8230;<i>g</i><sub><i>n</i></sub><sup><i>a</i><sub><i>i</i>,<i>j</i>,<i>n</i></sub></sup><i>t</i><sub>1</sub><sup>&#945;<sub><i>i</i>,<i>j</i>,1</sub>(<i>x</i>)</sup> &#8230;<i>t</i><sub><i>d</i></sub><sup>&#945;<sub><i>i</i>,<i>j</i>,<i>d</i></sub>(<i>x</i>)</sup>, </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"><i>t</i><sub><i>k</i></sub><sup><i>g</i><sub><i>i</i></sub></sup> = <i>t</i><sub>1</sub><sup><i>b</i><sub><i>k</i>,<i>i</i>,1</sub>(<i>x</i>)</sup> &#8230;<i>t</i><sub><i>d</i></sub><sup><i>b</i><sub><i>k</i>,<i>i</i>,<i>d</i></sub>(<i>x</i>)</sup>, </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"><i>t</i><sub><i>k</i></sub><sup><i>t</i><sub><i>l</i></sub></sup> = <i>t</i><sub><i>k</i></sub>, </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table><tr><td nowrap="nowrap" align="right" colspan="1"><i>t</i><sub><i>k</i></sub><sup><i>p</i><sup><i>x</i>+<i>e</i></sup></sup> = 1, </td></tr></table></td></tr></table> </td></tr></table>
+where 1 &#8804; <i>j</i>  &lt;  <i>i</i> &#8804; <i>n</i> and 1  &#8804; <i>k</i>  &lt;  <i>l</i> &#8804; <i>d</i>; certain <i>a</i><sub><i>i</i>,<i>j</i>,<i>m</i></sub> &#8712; {0, &#8230;, <i>p</i>&#8722;1}, a non-negative integer <i>e</i>, &#945;<sub><i>k</i>,<i>l</i>,<i>m</i></sub>(<i>x</i>) of the form 
+<i>c</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub>+<i>p</i><sup><i>x</i></sup><i>d</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub> and <i>b</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub> with <i>b</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub>,<i>c</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub>,<i>d</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub> 
+certain <i>p</i>-adic integers. The <i>p</i>-adic exponents arising in the relations
+can be reduced modulo the relative orders of the involved elements and thus 
+can be reduced to integers for every specific <i>x</i>. 
+<p>
+We call such a pp-presentation <i>integral</i> if
+all the <i>p</i>-adic numbers <i>b</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub>, <i>c</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub>, <i>d</i><sub><i>k</i>,<i>l</i>,<i>m</i></sub> are integers.
+Our algorithms introduced in this package compute with integral 
+pp-presentations only.
+<p>
+We call such an pp-presentation <i>consistent</i> if for every <i>x</i>  &#8712; <b>N</b>
+the presentation is consistent as a polycyclic presentation; where we 
+possibly reduce the exponents in the presentation modulo the relative
+orders of the generators. 
+<p>
+<p>
+<h2><a name="SECT003">2.3 Computation of Schur multiplicators</a></h2>
+<p><p>
+In this section we recall briefly the method of <a href="biblio.htm#EF11"><cite>EF11</cite></a> to determine
+the Schur multiplicators of almost all groups <i>G</i><sub><i>x</i></sub> in an infinite coclass 
+sequence.
+<p>
+Suppose we are given a consistent integral pp-presentation <i>F</i>/<i>R</i><sub><i>x</i></sub> for the
+groups <i>G</i><sub><i>x</i></sub> in an infinite coclass sequence, where <i>F</i> is a free group and
+<i>R</i><sub><i>x</i></sub> is generated by parametrised relations as above. Note that the 
+exponents in these relations depend on <i>x</i>, while the number of generators
+and the number of relations does not depend on the parameter.
+<p>
+Using this presentation we can define a parametrised presentation for the
+Schur extensions <i>G</i><sub><i>x</i></sub><sup>*</sup> = <i>F</i>/[<i>F</i>,<i>R</i><sub><i>x</i></sub>], corresponding to the parametrised
+presentation <i>F</i>/<i>R</i><sub><i>x</i></sub>. The next step is to find the isomorphism types of
+<i>Y</i><sub><i>x</i></sub> = <i>R</i><sub><i>x</i></sub>/[<i>F</i>,<i>R</i><sub><i>x</i></sub>] since <i>M</i>(<i>G</i><sub><i>x</i></sub>)  &#8773; (<i>F</i>&#8242;&#8745;<i>R</i><sub><i>x</i></sub>)/[<i>F</i>,<i>R</i><sub><i>x</i></sub>] are the
+torsion subgroups of <i>Y</i><sub><i>x</i></sub> as all <i>G</i><sub><i>x</i></sub> are finite <var>p</var>-groups.
+<p>
+Then <i>Y</i><sub><i>x</i></sub> = <i>R</i><sub><i>x</i></sub>/[<i>F</i>,<i>R</i><sub><i>x</i></sub>] are generated by certain so-called
+consistency relations. Using this we can compute the isomorphism types of
+<i>Y</i><sub><i>x</i></sub> and thus the isomorphism types of <i>M</i>(<i>G</i><sub><i>x</i></sub>) for almost all <i>G</i><sub><i>x</i></sub> in the
+chosen infinite coclass sequence.
+<p>
+<p>
+<h2><a name="SECT004">2.4 Computation of low-dimensional cohomology</a></h2>
+<p><p>
+From the parametrised presentation <i>F</i>/<i>R</i><sub><i>x</i></sub> we can see that the Abelian
+invariants are the same for all groups <i>G</i><sub><i>x</i></sub> in an infinite coclass sequence,
+and we can compute them. Using this and the computation of the Schur
+multiplicators one obtains <i>H</i><sup><i>n</i></sup>(<i>G</i><sub><i>x</i></sub>,<b>Z</b>) and <i>H</i><sup><i>n</i></sup>(<i>G</i><sub><i>x</i></sub>,<i>GF</i>(<i>p</i>)) for 0  &#8804; <i>n</i>  &#8804; 2, where the <i>G</i><sub><i>x</i></sub> act trivially on <b>Z</b> and <i>GF</i>(<i>p</i>), respectively.
+<p>
+<p>
+<h2><a name="SECT005">2.5 Example</a></h2>
+<p><p>
+In this section we present the well-known example of quaternion groups 
+<i>Q</i><sub>2<sup><i>x</i>+3</sup></sub>. It is well known that they have a parametrised presentation of 
+the following form:
+<p>
+<br clear="all" /><table border="0" width="100%"><tr><td> <table border="0" cellspacing="0" cellpadding="0"> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> { <i>g</i><sub>1</sub>,<i>g</i><sub>2</sub>,<i>t</i><sub>1</sub> &#124; </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub>1</sub><sup>2</sup> = <i>t</i><sub>1</sub><sup>2<sup><i>x</i></sup></sup>, &nbsp;<i>g</i><sub>2</sub><sup><i>g</i><sub>1</sub></sup> = <i>g</i><sub>2</sub><i>t</i><sub>1</sub><sup>&#8722;1+2<sup><i>x</i>+1</sup></sup>,</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub>2</sub><sup>2</sup> = <i>t</i><sub>1</sub>, &nbsp;<i>t</i><sub>1</sub><sup><i>g</i><sub>1</sub></sup> = <i>t</i><sub>1</sub><sup>&#8722;1+2<sup><i>x</i>+1</sup></sup>,</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table><tr><td nowrap="nowrap" align="right" colspan="1">&nbsp;<i>t</i><sub>1</sub><sup>2<sup><i>x</i>+1</sup></sup> = 1 }&#183;</td></tr></table></td></tr></table> </td></tr></table>
+<p>
+Using this we can define the Schur extensions <i>Q</i><sub>2<sup><i>x</i>+3</sup></sub><sup>*</sup>
+<p>
+<br clear="all" /><table border="0" width="100%"><tr><td> <table border="0" cellspacing="0" cellpadding="0"> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> { <i>g</i><sub>1</sub>,<i>g</i><sub>2</sub>,<i>t</i><sub>1</sub>,<i>c</i><sub>1</sub>, <i>c</i><sub>2</sub>, <i>c</i><sub>3</sub> &#124; </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"><i>g</i><sub>1</sub><sup>2</sup> = <i>t</i><sub>1</sub><sup>2<sup><i>x</i></sup></sup><i>c</i><sub>3</sub>, &nbsp;<i>g</i><sub>2</sub><sup><i>g</i><sub>1</sub></sup> = <i>g</i><sub>2</sub><i>t</i><sub>1</sub><sup>&#8722;1+2<sup><i>x</i>+1</sup></sup><i>c</i><sub>2</sub><sup>1&#8722;2<sup><i>x</i>+1</sup></sup>,</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub>2</sub><sup>2</sup> = <i>t</i><sub>1</sub><i>c</i><sub>1</sub>,&nbsp;<i>t</i><sub>1</sub><sup><i>g</i><sub>1</sub></sup> = <i>t</i><sub>1</sub><sup>&#8722;1+2<sup><i>x</i>+1</sup></sup><i>c</i><sub>2</sub><sup>2&#8722;2<sup><i>x</i>+1</sup></sup>,</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>t</i><sub>1</sub><sup>2<sup><i>x</i>+1</sup></sup> = <i>c</i><sub>2</sub><sup>2<sup><i>x</i>+1</sup></sup>, </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table><tr><td nowrap="nowrap" align="right" colspan="1">&nbsp;<i>c</i><sub>1</sub>,<i>c</i><sub>2</sub>,<i>c</i><sub>3</sub> <i>central</i> }&#183;</td></tr></table></td></tr></table> </td></tr></table>
+<p>
+This yields <i>M</i>(<i>Q</i><sub>2<sup><i>x</i>+3</sup></sub>) = 1. 
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>SymbCompCC manual<br>November 2011
+</address></body></html>

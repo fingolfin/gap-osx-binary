@@ -1,0 +1,95 @@
+  
+  [1m[4m[31m1. The theory[0m
+  
+  The  [1mSophus[0m  package  was  originally designed to aid the author to classify
+  some  small-dimensional  nilpotent  Lie  algebras  over  small  fields.  The
+  classification follows the ideas that were used to classify small $p$-groups
+  by O'Brien [O90]. The theory developed by O'Brien could easily be adopted to
+  Lie  algebras,  and the details of this new theory can be found in [S]. Here
+  we  only  summarise  the  main  ideas,  so  that the user can understand the
+  procedures  implemented  in  this  package.  In  this  section $L$ denotes a
+  finitely  generated,  and  hence  finite-dimensional, nilpotent Lie algebra.
+  Suppose  that  $L$  has  nilpotency  class  $c$, and hence the lower central
+  series is as follows:
+  
+  \[
+       L= \gamma_1(L)>\gamma_2(L)=L'>\gamma_3(L)>\cdots
+       >\gamma_c(L)>\gamma_{c+1}(L)=0.
+  \]
+  
+  We  say  that  a basis $\mathcal B=\{b_1,\ldots,b_n\}$ for $L$ is [22m[36mcompatible
+  with     the     lower    central    series[0m    if    there    are    indices
+  $1=i_1<i_2<\cdots<i_{c}<n$  such that $\{b_{i_k},\ldots,b_n\}$ is a basis of
+  $\gamma_k(L)$  for  $k\in\{1,\ldots,c\}$. We compute the structure constants
+  table  with  respect  to  this  basis,  that  is,  we  compute  coefficients
+  $\alpha_{i,j}^k$ for $1\leq i<j<k\leq n$ such that
+  
+  \[
+       [b_i,b_j]=\sum_{k=j+1}^n\alpha_{i,j}^k b_k.
+  \]
+  
+  Suppose  that  $b_i\in\gamma_j(L)\setminus\gamma_{j+1}(L)$. Then we say that
+  the number $j$ is the [22m[36mweight[0m of the basis element $b_i$.
+  
+  Note  that in the nilpotent Lie algebra $L$ minimal generating sets have the
+  same size, namely the dimension of $L/L'$. If $\dim L/L'=d$ then we call $L$
+  a  $d$[22m[36m-generator  algebra[0m. We call a basis $\mathcal B$ a [22m[36mnilpotent basis[0m if
+  the following hold.
+  
+  --    The basis $\mathcal B$ is compatible with the lower central series.
+  
+  --    For  each  $b_i\in  \mathcal  B$  with  weight  $w\geq  2$  there  are
+        $b_{j_1},\ b_{j_2}\in\mathcal B$ with weight 1 and $w-1$, respectively
+        such  that $b_i=[b_{j_1},b_{j_2}]$. The product $[b_{j_1},b_{j_2}]$ is
+        called the definition of $b_i$.
+  
+  A  Lie  algebra $K$ is said to be a [22m[36mcentral extension[0m of $L$ if $L\cong K/I$
+  for  some  ideal $I$ such that $I\leq Z(K)\cap K'$. Suppose that $c$ denotes
+  the  nilpotency  class  of  $L$.  Then  a  Lie  algebra  $K$ is an [22m[36mimmediate
+  descendant[0m  of $L$ if $K$ has class $c+1$ and $K/\gamma_{c+1}(K)\cong L$. As
+  in this case $\gamma_{c+1}(K)\leq Z(K)\cap K'$, it follows that an immediate
+  descendant  $K$  is  a central extension of $L$. If $s=\dim \gamma_{c+1}(K)$
+  then $K$ is said to be a [22m[36mstep-$s$[0m immediate descendant of $L$.
+  
+  Let $L$ be a $d$-generator nilpotent Lie algebra with class $c$, and let $F$
+  be  a  free  Lie  algebra  of rank $d$. Choose an ideal $I$ of $F$ such that
+  $L\cong  F/I$. Then the Lie algebra $L^*=F/[I,F]$ is called the [22m[36mLie cover[0m of
+  $L$.  The  [22m[36mLie  multiplicator[0m in $L^*$ is the subspace $I/[I,F]$ and the [22m[36mLie
+  nucleus[0m  is  $\gamma_c(L^*)$.  It clear from the definition that $L^*/M\cong
+  L$.  It  is  verified in [S] that, up to isomorphism, the Lie cover, the Lie
+  multiplicator  and the Lie nucleus are determined by the isomorphism type of
+  $L$.  Further,  each central extension of the nilpotent Lie algebra $L$ is a
+  quotient  of  the  Lie  cover  $L^*$. Thus it is possible to obtain all such
+  descendants by first computing the Lie cover; this procedure is explained in
+  [S].  Similar  ideas  can  be  used  to  compute the automorphism group of a
+  nilpotent  Lie  algebra, and to verify isomorphism between two nilpotent Lie
+  algebras; see [S] for details.
+  
+  The main functions in [1mSophus[0m are thus able to compute
+  
+  --    a nilpotent basis for a nilpotent Lie algebra;
+  
+  --    the cover of a nilpotent Lie algebra;
+  
+  --    the immediate descendants of a nilpotent Lie algebra;
+  
+  --    the full automorphism group of a nilpotent Lie algebra.
+  
+  There  is  also  a  function  in  the  package to check if two nilpotent Lie
+  algebras  are  isomorphic.  After  repeated  applications  of  the immediate
+  descendants  algorithm, it is, in theory, possible to list all nilpotent Lie
+  algebras  of  a given dimension over a prime field $\mathbb F_p$. Of course,
+  this  computation  requires  relatively  large  computational resources, and
+  quickly becomes unfeasible as the dimension or the characteristic $p$ grows.
+  
+  The  [1mSophus[0m  package  was  written for the GAP~4 computer algebra system. In
+  many procedures it is very important that we can compute the stabiliser of a
+  subspace  under  some  matrix  group  action.  This is carried out using the
+  procedures  implemented  in  the [22m[34mautpgrp[0m package [EO]. Hence this package is
+  required to run [1mSophus[0m.
+  
+  The current version of [1mSophus[0m deals with general nilpotent Lie algebras over
+  finite  prime  fields. If you are to compute with Lie algebras obtained from
+  group  algebras  via  the bracket operation, then another GAP package LAGUNA
+  [VS] may also offer some very efficient methods.
+  

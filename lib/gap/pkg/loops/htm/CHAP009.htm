@@ -1,0 +1,295 @@
+<html><head><title>[loops] 9 Libraries of small loops</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP008.htm">Previous</a>] [<a href ="CHAP00A.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>9 Libraries of small loops</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP009.htm#SECT001">A typical library</a>
+<li> <A HREF="CHAP009.htm#SECT002">Left Bol loops</a>
+<li> <A HREF="CHAP009.htm#SECT003">Moufang loops</a>
+<li> <A HREF="CHAP009.htm#SECT004">Code loops</a>
+<li> <A HREF="CHAP009.htm#SECT005">Steiner loops</a>
+<li> <A HREF="CHAP009.htm#SECT006">CC-loops</a>
+<li> <A HREF="CHAP009.htm#SECT007">Small loops</a>
+<li> <A HREF="CHAP009.htm#SECT008">Paige loops</a>
+<li> <A HREF="CHAP009.htm#SECT009">Nilpotent loops</a>
+<li> <A HREF="CHAP009.htm#SECT010">Automorphic loops</a>
+<li> <A HREF="CHAP009.htm#SECT011">Interesting loops</a>
+<li> <A HREF="CHAP009.htm#SECT012">Libraries of loops up to isotopism</a>
+</ol><p>
+<p>
+labellib Libraries of small loops form an integral part of <font face="Gill Sans,Helvetica,Arial">LOOPS</font>. Loops
+in libraries are stored up to isomorphism or up to isotopism. The name of a
+library up to isotopism starts with <var>itp</var>.
+<p>
+<p>
+<h2><a name="SECT001">9.1 A typical library</a></h2>
+<p><p>
+A library named <var>my Library</var> is stored in file <code>data/mylibrary.tbl</code>, and the
+corresponding data structure is named <code>LOOPS_my_library_data</code>.
+<p>
+In most cases, the array <code>my_library_data</code> consists of three lists
+<ul>
+<li>
+    <code>LOOPS_my_library_data[ 1 ]</code> is a list of orders for which there is at
+    least one loop in the library,
+<li>
+    <code>LOOPS_my_library_data[ 2 ][ k ]</code> is the number of loops of order
+    <code>LOOPS_my_library_data[ 1 ][ k ]</code> in the library,
+<li>
+    <code>LOOPS_my_library_data[ 3 ][ s ]</code> contains data necessary to produce the
+    <i>s</i>th loop in the library.
+</ul>
+The format of <code>LOOPS_my_library_data[ 3 ]</code> depends on the particular library and is
+not standardized in any way.
+<p>
+The user can retrieve the <i>m</i>th loop of order <i>n</i> from library named <var>my
+Library</var> according to the template
+<p>
+<a name = "SSEC001.1"></a>
+<li><code>MyLibraryLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+It is also possible to obtain the same loop with
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>LibraryLoop( </code><var>name</var><code>, </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+where <var>name</var> is the name of the library.
+<p>
+For example, when the library is called <var>left Bol</var>, the corresponding data file
+is called <code>data/leftbol.tbl</code>, the corresponding data structure is named
+<code>LOOPS_left_bol_data</code>, and the <i>m</i>th left Bol loop of order <i>n</i> is obtained via
+<p>
+<code>LeftBolLoop( </code><var>n</var><code>, </code><var>m</var><code> )</code>
+<p>
+or via
+<p>
+<code>LibraryLoop("left Bol", </code><var>n</var><code>, </code><var>m</var><code> )</code>
+<p>
+We are now going to describe the individual libraries in detail. A brief
+information about the library named <var>name</var> can also be obtained in <font face="Gill Sans,Helvetica,Arial">LOOPS</font>
+with
+<p>
+<a name = "SSEC001.3"></a>
+<li><code>DisplayLibraryInfo( </code><var>name</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT002">9.2 Left Bol loops</a></h2>
+<p><p>
+The library named <var>left Bol</var> contains all nonassociative left Bol loops of
+order less than 17, including Moufang loops. There are 6 such loops of
+order 8, 1 of order 12, 2 of order 15, and 2038 of order 16. (The
+classification of left Bol loops of order 16 was first accomplished by
+Moorhouse <a href="biblio.htm#Mo"><cite>Mo</cite></a>. Our library was generated independently, and agrees with
+Moorhouse's results.)
+<p>
+Following the general pattern, the <i>m</i>th nonassociative left Bol loop of order
+<i>n</i> is obtained by
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>LeftBolLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT003">9.3 Moufang loops</a></h2>
+<p><p>
+The library named <var>Moufang</var> contains all nonassociative Moufang loops of order
+<i>n</i> &#8804; 64 and <i>n</i> &#8712; {81,243}.
+<p>
+The <i>m</i>th nonassociative Moufang loop of order <i>n</i> is obtained by
+<p>
+<a name = "SSEC003.1"></a>
+<li><code>MoufangLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+For <i>n</i> &#8804; 63, our catalog numbers coincide with those of Goodaire et al.
+<a href="biblio.htm#Go"><cite>Go</cite></a>. The classification of Moufang loops of order 64 and 81 was
+carried out in <a href="biblio.htm#NaVo2007"><cite>NaVo2007</cite></a>. The classification of Moufang loops of order 243
+was carried out by Slattery and Zenisek <a href="biblio.htm#SlZe2011"><cite>SlZe2011</cite></a>.
+<p>
+The extent of the library is summarized below:
+<p>
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> <span class="roman">order</span></td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">12 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">16 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">20 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">24 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">28 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">32 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">36 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">40 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">42 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">44 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">48 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">52 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">54 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">56 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">60 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">64 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">81 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">243</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> <span class="roman">loops</span>&nbsp;<span class="roman">in</span>&nbsp;<span class="roman">the</span>&nbsp;<span class="roman">libary</span></td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">5 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">5 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">71</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">4 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">5 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">51</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">2 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">4 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">5 </td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">4262</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">5 </td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1">72 </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table>
+<p>
+The <var>octonion loop</var> of order 16
+(i.e., the multiplication loop of the &#177; basis elements in the
+8-dimensional standard real octonion algebra) is <code>MoufangLoop( 16, 3 )</code>.
+<p>
+<p>
+<h2><a name="SECT004">9.4 Code loops</a></h2>
+<p><p>
+The library named <var>code</var> contains all nonassociative code loops of order less
+than 65. There are 5 such loops of order 16, 16 of order 32, and 80
+of order 64, all Moufang. The library merely points to the corresponding
+Moufang loops. See <a href="biblio.htm#NaVo2007"><cite>NaVo2007</cite></a> for a classification of small code loops.
+<p>
+The <i>m</i>th nonassociative code loop of order <i>n</i> is obtained by
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>CodeLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT005">9.5 Steiner loops</a></h2>
+<p><p>
+Here is how the libary <var>Steiner</var> is described within <font face="Gill Sans,Helvetica,Arial">LOOPS</font>:
+<p>
+<pre>
+gap&gt; DisplayLibraryInfo( "Steiner" );
+The library contains all nonassociative Steiner loops of order less or equal to 16.
+It also contains the associative Steiner loops of order 4 and 8.
+------
+Extent of the library:
+   1 loop of order 4
+   1 loop of order 8
+   1 loop of order 10
+   2 loops of order 14
+   80 loops of order 16
+true
+</pre>
+<p>
+The <i>m</i>th Steiner loop of order <i>n</i> is obtained by
+<p>
+<a name = "SSEC005.1"></a>
+<li><code>SteinerLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+Our catalog numbers coincide with those of Colbourn and Rosa <a href="biblio.htm#CoRo"><cite>CoRo</cite></a>.
+<p>
+<p>
+<h2><a name="SECT006">9.6 CC-loops</a></h2>
+<p><p>
+By results of Kunen <a href="biblio.htm#Ku"><cite>Ku</cite></a>, for every odd prime <i>p</i> there are precisely 3
+nonassociative conjugacy closed loops of order <i>p</i><sup>2</sup>. Cs&ouml;rg&ouml; and
+Dr&aacute;pal <a href="biblio.htm#CsDr"><cite>CsDr</cite></a> described these 3 loops by multiplicative formulas on
+<b>Z</b><sub><i>p</i><sup>2</sup></sub> and <b>Z</b><sub><i>p</i></sub> &times;<b>Z</b><sub><i>p</i></sub>.
+<p>
+<strong>Case <i>m</i> = 1:</strong> Let <i>k</i> be the smallest positive integer relatively prime to <i>p</i>
+and such that <i>k</i> is a square modulo <i>p</i> (i.e., <i>k</i>=1). Define multiplication
+on <b>Z</b><sub><i>p</i><sup>2</sup></sub> by <i>x</i>&#183;<i>y</i> = <i>x</i> + <i>y</i> + <i>kpx</i><sup>2</sup><i>y</i>.
+<p>
+<strong>Case <i>m</i> = 2:</strong> Let <i>k</i> be the smallest positive integer relatively prime to <i>p</i>
+and such that <i>k</i> is not a square modulo <i>p</i>. Define multiplication on
+<b>Z</b><sub><i>p</i><sup>2</sup></sub> by <i>x</i>&#183;<i>y</i> = <i>x</i> + <i>y</i> + <i>kpx</i><sup>2</sup><i>y</i>.
+<p>
+<strong>Case <i>m</i> = 3:</strong> Define multiplication on <b>Z</b><sub><i>p</i></sub> &times;<b>Z</b><sub><i>p</i></sub> by
+(<i>x</i>,<i>a</i>)(<i>y</i>,<i>b</i>) = (<i>x</i>+<i>y</i>, <i>a</i>+<i>b</i>+<i>x</i><sup>2</sup><i>y</i> ).
+<p>
+Moreover, Wilson <a href="biblio.htm#Wi"><cite>Wi</cite></a> constructed a nonassociative CC-loop of order 2<i>p</i>
+for every odd prime p, and Kunen <a href="biblio.htm#Ku"><cite>Ku</cite></a> showed that there are no other
+nonassociative CC-loops of this order. Here is the construction:
+<p>
+Let <i>N</i> be an additive cyclic group of order <i>n</i> &gt; 2, <i>N</i> = &#9001;1&#9002;.
+Let <i>G</i> be the additive cyclic group of order 2. Define multiplication on
+<i>L</i> = <i>G</i> &times;<i>N</i> as follows:
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> (0,<i>m</i>)(0,<i>n</i>) = ( 0, <i>m</i> + <i>n</i> ),</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">(0,<i>m</i>)(1,<i>n</i>) = ( 1, &#8722;<i>m</i> + <i>n</i> ),</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> (1,<i>m</i>)(0,<i>n</i>) = ( 1, <i>m</i> + <i>n</i> ),</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1">(1,<i>m</i>)(1,<i>n</i>) = ( 0, 1 &#8722; <i>m</i> + <i>n</i> )&#183; </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table>
+<p>
+The CC-loops described above can be obtained by
+<p>
+<a name = "SSEC006.1"></a>
+<li><code>CCLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT007">9.7 Small loops</a></h2>
+<p><p>
+The library named <var>small</var> contains all nonassociative loops of order 5 and 6.
+There are 5 and 107 such loops, respectively. The loops are obtained by
+<p>
+<a name = "SSEC007.1"></a>
+<li><code>SmallLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT008">9.8 Paige loops</a></h2>
+<p><p>
+<var>Paige loops</var> are nonassociative finite
+simple Moufang loops. By <a href="biblio.htm#Li"><cite>Li</cite></a>, there is precisely one Paige loop for every
+finite field <span class="roman">GF</span>(<i>q</i>).
+<p>
+The library named <var>Paige</var> contains the smallest nonassociative simple Moufang
+loop
+<p>
+<a name = "SSEC008.1"></a>
+<li><code>PaigeLoop( </code><var>2</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT009">9.9 Nilpotent loops</a></h2>
+<p><p>
+The library named <var>nilpotent</var> contains all nonassociative nilpotent loops of
+order less than 12, up to isomorphism. There are 2 nonassociative nilpotent
+loops of order 6, 134 of order 8, 8 of order 9 and 1043 of order
+10. They are obtained as usual with
+<p>
+<a name = "SSEC009.1"></a>
+<li><code>NilpotentLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+See <a href="biblio.htm#DaVo"><cite>DaVo</cite></a> for more on enumeration of nilpotent loops. For instance, there
+are 2623755 nilpotent loops of order 12, and 123794003928541545927226368
+nilpotent loops of order 22.
+<p>
+<p>
+<h2><a name="SECT010">9.10 Automorphic loops</a></h2>
+<p><p>
+The library named <var>automorphic</var> contains all nonassociative automorphic loops of order
+less that 16, up to isomorphism. There is 1 such loop of order 6, 7 of
+order 8, 3 of order 10, 2 of order 12, 5 of order 14, and 2 of order 15.
+They are obtained as usual with
+<p>
+<a name = "SSEC010.1"></a>
+<li><code>AutomorphicLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT011">9.11 Interesting loops</a></h2>
+<p><p>
+The library named <var>interesting</var> contains some loops that are illustrative for
+the theory of loops. At this point, the library contains a nonassociative loop
+of order 5, a nonassociative nilpotent loop of order 6, a nonMoufang left
+Bol loop of order 16, and the loop of sedenions of order 32 (sedenions generalize octonions).
+<p>
+The loops are obtained with
+<p>
+<a name = "SSEC011.1"></a>
+<li><code>InterestingLoop( </code><var>n</var><code>, </code><var>m</var><code> ) F</code>
+<p>
+<p>
+<h2><a name="SECT012">9.12 Libraries of loops up to isotopism</a></h2>
+<p><p>
+For the library <var>small</var> we also provide the corresponding library of loops up
+to isotopism.
+<p>
+In general, given a library named <var>lib</var>, the corresponding library up to
+isotopism is named <var>itp lib</var>, and the loops can be retrieved by the template
+function <code>ItpLibLoop( n, m )</code>. Thus we have
+<p>
+<a name = "SSEC012.1"></a>
+<li><code>ItpSmallLoop( n, m ) O</code>
+<p>
+Here is an example:
+<p>
+<pre>
+gap&gt; SmallLoop( 6, 14 );
+&lt;small loop 6/14&gt;
+gap&gt; ItpSmallLoop( 6, 14 );
+&lt;small loop 6/42&gt;
+gap&gt; LibraryLoop( "itp small", 6, 14 );
+&lt;small loop 6/42&gt;
+</pre>
+<p>
+Note that loops up to isotopism form a subset of the corresponding library of
+loops up to isomorphism. For instance, the above example shows that the 14th
+small loop of order 6 up to isotopism is in fact the 42nd small loop of
+order 6 up to isomorphism.
+<p>
+Here is the list of all supported libraries up to isotopism and their extent,
+as displayed by <font face="Gill Sans,Helvetica,Arial">LOOPS</font>:
+<p>
+<pre>
+gap&gt; DisplayLibraryInfo("itp small");
+The library contains all nonassociative loops of order less than 7 up to
+isotopism.
+------
+Extent of the library:
+   1 loop of order 5
+   20 loops of order 6
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP008.htm">Previous</a>] [<a href ="CHAP00A.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>loops manual<br>July 2012
+</address></body></html>

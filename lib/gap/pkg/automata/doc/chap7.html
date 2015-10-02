@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>GAP (AutMan) - Chapter 7: Computating the commutative image of a rational language</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<meta name="generator" content="GAPDoc2HTML">
+<link rel=stylesheet type="text/css" href="manual.css">
+</head>
+<body>
+
+
+<div class="pcenter"><table class="chlink"><tr><td class="chlink1">Goto Chapter: </td><td><a href="chap0.html">Top</a></td><td><a href="chap1.html">1</a></td><td><a href="chap2.html">2</a></td><td><a href="chap3.html">3</a></td><td><a href="chap4.html">4</a></td><td><a href="chap5.html">5</a></td><td><a href="chap6.html">6</a></td><td><a href="chap7.html">7</a></td><td><a href="chap8.html">8</a></td><td><a href="chap9.html">9</a></td><td><a href="chapBib.html">Bib</a></td><td><a href="chapInd.html">Ind</a></td></tr></table><br></div>
+<p><a name="s0ss0"></a></p>
+
+<h3>7. Computating the commutative image of a rational language</h3>
+
+<p><a name="s1ss0"></a></p>
+
+<h4>7.1 Semilinear Sets</h4>
+
+<p>The commutative image of a rational language is a semilinear set. One may adapt the functions to compute a rational expression for the language recognized by an automaton in order to compute directly the commutative image of the language recognized by the automaton. Further improvement leads to the direct computation of the closure in Bbb Z^n, for the profinite topology, of that commutative image. (See <a href="chapBib.html#biBDel:01">[D01]</a> for the correction of the algorithms.) Recall that (see <a href="chapBib.html#biBDel:98">[D98]</a>) if a semilinear set given by the semilinear expression a+b_1Bbb N+ cdots +b_pBbb N, then a+b_1Bbb Z+ cdots +b_pBbb Z is a Bbb Z-semilinear expression for the closure under the profinite topology of the semilinear set given. We use the terminology <code class="code">commutative language</code> and <code class="code">Abelian language</code> for subsets of Bbb N and Bbb Z respectively. \index{commutative!language}\index{Abelian!language} The <code class="code">commutative language recognized by an automaton</code> (resp. GTG) is the commutative image of the language recognized by the automaton (resp. GTG). The <code class="code">Abelian language recognized by an automaton</code> (resp. GTG) is the closure under the profinite topology of the commutative image of the language recognized by the automaton (resp. GTG).</p>
+
+<p><a name="s1ss1"></a></p>
+
+<h5>7.1-1  RemoveStateCom</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  RemoveStateCom</code>( <var>gtg</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>The first state of generalized transition graph <code class="code">gtg</code> is removed. The GTG obtained recognizes the same commutative language than the original.</p>
+
+<p><a name="s1ss2"></a></p>
+
+<h5>7.1-2  DDAtoGTGCom</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  DDAtoGTGCom</code>( <var>A</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Transforms a dense deterministic finite automaton into a finite GTG recognizing the same commutative language.</p>
+
+<p><a name="s1ss3"></a></p>
+
+<h5>7.1-3  LangGTGCom</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  LangGTGCom</code>( <var>gtg</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Computes the commutative language recognized by a GTG.</p>
+
+<p><a name="s1ss4"></a></p>
+
+<h5>7.1-4  LanguageCom</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  LanguageCom</code>( <var>aut</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Computes the commutative language recognized by a dense deterministic automaton.</p>
+
+
+<table class="example">
+<tr><td><pre>
+
+ gap&gt; aut := Automaton("det",5,2,[[1,2,4,2,1],[1,1,1,5,1]],[3],[2,3,4,5]);
+      |  1  2  3  4  5 
+   -  -  -  -  -  -  - 
+   a  |  1  2  4  2  1 
+   b  |  1  1  1  5  1 
+Initial state: [ 3 ]
+Accepting states: [ 2, 3, 4, 5 ]
+
+gap&gt; AutomatonToRatExp(aut);
+1UabUa(1Uaa*)
+gap&gt; LanguageCom(aut);
+[ [ 1, 1 ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 3, 0 ] + [ 1, 0 ] N  ]
+
+</pre></td></tr></table>
+
+<p>It is obvious that not all possible simplifications have been carried out. The case of Bbb Z-semilinear sets is similar, but some more simplifications are done.</p>
+
+<p><a name="s1ss5"></a></p>
+
+<h5>7.1-5  RemoveStateAb</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  RemoveStateAb</code>( <var>gtg</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>The first state of generalized transition graph <code class="code">gtg</code> is removed. The Abelian language recognized by the GTG is the same than the Abelian language recognized by the original GTG. Several simplifications are done. Computations of normal forms of matrices aiming to determine basis for subgroups of Bbb Z^n are made. These computations of normal forms are carried out using functions that are part of \GAP.</p>
+
+<p><a name="s1ss6"></a></p>
+
+<h5>7.1-6  DDAtoGTGAb</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  DDAtoGTGAb</code>( <var>aut</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Transforms a dense deterministic finite automaton into a finite GTG recognizing the same Abelian language than the Abelian language recognized by the original automaton.</p>
+
+<p><a name="s1ss7"></a></p>
+
+<h5>7.1-7  LangGTGAb</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  LangGTGAb</code>( <var>gtg</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Computes the Abelian language recognized by a GTG. It uses the fact that if when removing a state we obtain an edge labeled by Bbb Z^n, then the resulting language is Bbb Z^n.</p>
+
+<p><a name="s1ss8"></a></p>
+
+<h5>7.1-8  LanguageAb</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt;  LanguageAb</code>( <var>A</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Computes the Abelian language recognized by a deterministic automaton. For the automaton considered above, we obtain</p>
+
+
+<table class="example">
+<tr><td><pre>
+
+gap&gt; LanguageAb(aut); 
+[ [ 1, 1 ], [ 0, 0 ] + [ 1, 0 ] Z  ]
+
+</pre></td></tr></table>
+
+
+<div class="pcenter">
+<table class="chlink"><tr><td><a href="chap0.html">Top of Book</a></td><td><a href="chap6.html">Previous Chapter</a></td><td><a href="chap8.html">Next Chapter</a></td></tr></table>
+<br>
+
+
+<div class="pcenter"><table class="chlink"><tr><td class="chlink1">Goto Chapter: </td><td><a href="chap0.html">Top</a></td><td><a href="chap1.html">1</a></td><td><a href="chap2.html">2</a></td><td><a href="chap3.html">3</a></td><td><a href="chap4.html">4</a></td><td><a href="chap5.html">5</a></td><td><a href="chap6.html">6</a></td><td><a href="chap7.html">7</a></td><td><a href="chap8.html">8</a></td><td><a href="chap9.html">9</a></td><td><a href="chapBib.html">Bib</a></td><td><a href="chapInd.html">Ind</a></td></tr></table><br></div>
+
+</div>
+
+<hr>
+<p class="foot">generated by GAPDoc2HTML</p>
+</body>
+</html>

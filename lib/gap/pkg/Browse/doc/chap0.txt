@@ -1,0 +1,173 @@
+  
+  
+                                     [1X[5XBrowse[105X[101X
+  
+  
+                               ( Version 1.8.5 )
+  
+  
+                                 February 2014
+  
+  
+                                 Thomas Breuer
+  
+                                  Frank Lübeck
+  
+  
+  
+  Thomas Breuer
+      Email:    [7Xmailto:Thomas.Breuer@Math.RWTH-Aachen.De[107X
+      Homepage: [7Xhttp://www.math.rwth-aachen.de/~Thomas.Breuer[107X
+  Frank Lübeck
+      Email:    [7Xmailto:Frank.Luebeck@Math.RWTH-Aachen.De[107X
+      Homepage: [7Xhttp://www.math.rwth-aachen.de/~Frank.Luebeck[107X
+  
+  -------------------------------------------------------
+  [1XCopyright[101X
+  [33X[0;0Y© 2006-2014 by Thomas Breuer and Frank Lübeck[133X
+  
+  [33X[0;0YThis  package  may  be distributed under the terms and conditions of the GNU
+  Public License Version 3 or later, see [7Xhttp://www.gnu.org/licenses[107X.[133X
+  
+  
+  -------------------------------------------------------
+  
+  
+  [1XContents (Browse)[101X
+  
+  1 [33X[0;0YIntroduction and Overview[133X
+    1.1 [33X[0;0YIntroduction[133X
+    1.2 [33X[0;0YOverview[133X
+      1.2-1 [33X[0;0YThe [10Xncurses[110X interface[133X
+      1.2-2 [33X[0;0YApplications of [10Xncurses[110X[133X
+      1.2-3 [33X[0;0YThe interface to browse two-dimensional arrays[133X
+      1.2-4 [33X[0;0YApplications of the generic function [10XNCurses.BrowseGeneric[110X[133X
+    1.3 [33X[0;0YUser preferences provided by the [5XBrowse[105X package[133X
+      1.3-1 [33X[0;0YThe user preference [10XEnableMouseEvents[110X[133X
+      1.3-2 [33X[0;0YThe user preference [10XSelectHelpMatches[110X[133X
+      1.3-3 [33X[0;0YThe user preference [10XSelectPackageName[110X[133X
+  2 [33X[0;0YInterface to the [10Xncurses[110X Library[133X
+    2.1 [33X[0;0YThe [10Xncurses[110X Library[133X
+      2.1-1 [33X[0;0YSetting the terminal[133X
+      2.1-2 [33X[0;0YManipulating windows[133X
+      2.1-3 [33X[0;0YManipulating panels[133X
+      2.1-4 [33X[0;0YGetting keyboard input[133X
+      2.1-5 [33X[0;0YWriting to windows[133X
+      2.1-6 [33X[0;0YLine drawing characters[133X
+      2.1-7 [33X[0;0YText attributes and colors[133X
+      2.1-8 [33X[0;0YLow level [10Xncurses[110X mouse support[133X
+      2.1-9 [33X[0;0YMiscellaneous function[133X
+    2.2 [33X[0;0YThe [10Xncurses[110X [5XGAP[105X functions[133X
+      2.2-1 NCurses.ColorAttr
+      2.2-2 NCurses.SetTerm
+      2.2-3 NCurses.IsAttributeLine
+      2.2-4 NCurses.ConcatenationAttributeLines
+      2.2-5 NCurses.RepeatedAttributeLine
+      2.2-6 NCurses.PutLine
+      2.2-7 NCurses.WidthAttributeLine
+      2.2-8 NCurses.Grid
+      2.2-9 NCurses.WBorder
+      2.2-10 [33X[0;0YMouse support in [10Xncurses[110X applications[133X
+      2.2-11 NCurses.SaveWin
+  3 [33X[0;0YUtilities using [10Xncurses[110X[133X
+    3.1 [33X[0;0Y[10Xncurses[110X utilities[133X
+      3.1-1 NCurses.Alert
+      3.1-2 NCurses.Select
+      3.1-3 NCurses.GetLineFromUser
+      3.1-4 NCurses.Pager
+      3.1-5 [33X[0;0YSelection of help matches[133X
+      3.1-6 [33X[0;0YSelection of package names[133X
+    3.2 [33X[0;0YA Demo Function[133X
+      3.2-1 NCurses.Demo
+  4 [33X[0;0YBrowsing Tables in [5XGAP[105X using [10Xncurses[110X –The User Interface[133X
+    4.1 [33X[0;0YFeatures Supported by the Function [10XNCurses.BrowseGeneric[110X[133X
+    4.2 [33X[0;0YData Structures used by [10XNCurses.BrowseGeneric[110X[133X
+      4.2-1 BrowseData.IsBrowseTableCellData
+      4.2-2 BrowseData.BlockEntry
+      4.2-3 BrowseData.IsBrowseTable
+    4.3 [33X[0;0YThe Function [10XNCurses.BrowseGeneric[110X[133X
+      4.3-1 NCurses.BrowseGeneric
+  5 [33X[0;0YBrowsing Tables in [5XGAP[105X using [10Xncurses[110X –The Programming Interface[133X
+    5.1 [33X[0;0YNavigation Steps in Browse Tables[133X
+    5.2 [33X[0;0YModes in Browse Tables[133X
+    5.3 [33X[0;0YBrowse Applications[133X
+    5.4 [33X[0;0YPredefined Browse Functionalities[133X
+      5.4-1 BrowseData
+      5.4-2 BrowseData.SetReplay
+      5.4-3 BrowseData.AlertWithReplay
+      5.4-4 BrowseData.actions.ShowHelp
+      5.4-5 BrowseData.actions.SaveWindow
+      5.4-6 BrowseData.actions.QuitMode
+      5.4-7 BrowseData.actions.Error
+  6 [33X[0;0YExamples of Applications based on [10XNCurses.BrowseGeneric[110X[133X
+    6.1 [33X[0;0YThe Operation [10XBrowse[110X[133X
+      6.1-1 Browse
+    6.2 [33X[0;0YMatrix Display[133X
+      6.2-1 NCurses.BrowseDenseList
+      6.2-2 Browse
+    6.3 [33X[0;0YCharacter Table Display[133X
+      6.3-1 Browse
+      6.3-2 BrowseDecompositionMatrix
+    6.4 [33X[0;0YTable of Marks Display[133X
+      6.4-1 Browse
+    6.5 [33X[0;0YTable of Contents of [5XAtlasRep[105X[133X
+      6.5-1 [33X[0;0YBrowseAtlasInfo[133X
+    6.6 [33X[0;0YAccess to [5XGAP[105X Manuals–a Variant[133X
+      6.6-1 BrowseGapManuals
+    6.7 [33X[0;0YOverview of the [5XGAP[105X Bibliography[133X
+      6.7-1 BrowseBibliography
+      6.7-2 BrowseMSC
+    6.8 [33X[0;0YProfiling [5XGAP[105X functions–a Variant[133X
+      6.8-1 BrowseProfile
+    6.9 [33X[0;0YVariables defined in [5XGAP[105X packages–a Variant[133X
+      6.9-1 BrowsePackageVariables
+    6.10 [33X[0;0YConfiguring User preferences–a Variant[133X
+      6.10-1 BrowseUserPreferences
+    6.11 [33X[0;0YOverview of [5XGAP[105X Data[133X
+      6.11-1 BrowseGapData
+      6.11-2 BrowseGapDataAdd
+    6.12 [33X[0;0YNavigating in a Directory Tree[133X
+      6.12-1 BrowseDirectory
+    6.13 [33X[0;0YA Puzzle[133X
+      6.13-1 BrowsePuzzle
+    6.14 [33X[0;0YPeg Solitaire[133X
+      6.14-1 PegSolitaire
+    6.15 [33X[0;0YRubik's Cube[133X
+      6.15-1 BrowseRubiksCube
+    6.16 [33X[0;0YChanging Sides[133X
+      6.16-1 BrowseChangeSides
+    6.17 [33X[0;0YSudoku[133X
+      6.17-1 Sudoku.Init
+      6.17-2 Sudoku.Place
+      6.17-3 Sudoku.RandomGame
+      6.17-4 Sudoku.SimpleDisplay
+      6.17-5 Sudoku.DisplayString
+      6.17-6 Sudoku.OneSolution
+      6.17-7 Sudoku.UniqueSolution
+      6.17-8 PlaySudoku
+      6.17-9 Sudoku.HTMLGame
+  A [33X[0;0YSome Tools for Database Handling[133X
+    A.1 [33X[0;0Y[5XGAP[105X Objects for Database Handling[133X
+      A.1-1 [33X[0;0YDatabase Id Enumerators[133X
+      A.1-2 [33X[0;0YDatabase Attributes[133X
+      A.1-3 [33X[0;0YHow to Deal with Database Id Enumerators and Database Attributes[133X
+      A.1-4 DatabaseIdEnumerator
+      A.1-5 DatabaseAttributeAdd
+      A.1-6 DatabaseAttributeValueDefault
+      A.1-7 DatabaseIdEnumeratorUpdate
+      A.1-8 DatabaseAttributeCompute
+      A.1-9 DatabaseAttributeSetData
+    A.2 [33X[0;0YUsing Database Attributes for Browse Tables[133X
+      A.2-1 [33X[0;0YBrowse Relevant Components of Database Attributes[133X
+      A.2-2 BrowseTableFromDatabaseIdEnumerator
+    A.3 [33X[0;0YExample: Database Id Enumerators and Database Attributes[133X
+    A.4 [33X[0;0YExample: An Overview of the [5XGAP[105X Library of Transitive Groups[133X
+      A.4-1 BrowseTransitiveGroupsInfo
+      A.4-2 TransitiveGroupsData.AllTransitiveGroups
+      A.4-3 TransitiveGroupsData
+      A.4-4 [33X[0;0YAdditional Database Attributes for Transitive Groups[133X
+    A.5 [33X[0;0YExample: An Overview of the [5XGAP[105X Library of Tables of Marks[133X
+      A.5-1 BrowseTomLibInfo
+  
+  
+  [32X

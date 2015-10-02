@@ -1,0 +1,83 @@
+<html><head><title>[CARAT] 2 Installation</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>2 Installation</h1><p>
+<p>
+This package must be installed in the <code>pkg</code> subdirectory of any of
+the <font face="Gill Sans,Helvetica,Arial">GAP</font> 4 root directories. We assume here that this is <code>/gap4/pkg</code>.
+<p>
+<pre>
+cd /gap4/pkg
+tar zpxf carat-2.1.4.tar.gz
+</pre>
+<p>
+This creates a subdirectory <code>carat</code>, the home directory of the present
+interface package. <font face="Gill Sans,Helvetica,Arial">CARAT</font> itself can be installed anywhere on your 
+system. You only have to make sure <font face="Gill Sans,Helvetica,Arial">GAP</font> finds the <font face="Gill Sans,Helvetica,Arial">CARAT</font> binaries, 
+by making a symbolic link from the <code>bin</code> subdirectory in <code>pkg/carat</code> to 
+the <code>bin</code> subdirectory of <font face="Gill Sans,Helvetica,Arial">CARAT</font> itself. In our example, we install 
+<font face="Gill Sans,Helvetica,Arial">CARAT</font> in <code>/gap4/pkg/carat</code> (the <font face="Gill Sans,Helvetica,Arial">CARAT</font> tar file should already be 
+there):
+<p>
+<pre>
+cd /gap4/pkg/carat
+zcat carat-2.1b1.tgz | tar pxf -
+ln -s carat-2.1b1/bin bin
+cd carat-2.1b1
+</pre>
+<p>
+This creates a subdirectory <code>carat-2.1b1</code>, the <font face="Gill Sans,Helvetica,Arial">CARAT</font> top level directory. 
+You have to edit the Makefile in that directory. In particular, you have 
+to set the variables TOPDIR (to <code>/gap4/pkg/carat/carat-2.1b1</code>), CC, and 
+CFLAGS (to your favourite set of compiler options). Then do 
+<p>
+<pre>
+make
+</pre>
+<p>
+If you build for more than one architecture, make sure to do a 
+'make clean' in between.
+<p>
+You now have to check which subdirectory containing the CARAT 
+binaries has been created in the bin directory. The name of this
+subdirectory must be the same as that in the main GAP bin directory,
+'/gap4/bin'. If the names differ, you might have to add a symbolic
+link to correct this. For instance, if the CARAT bin directory
+contains 'i686-pc-linux-gnu-gcc', but in the GAP bin directory,
+you find 'i686-pc-linux-gnu-gcc-default32', you would have to do this:
+<p>
+<pre>
+cd bin
+ln -s i686-pc-linux-gnu-gcc i686-pc-linux-gnu-gcc-default32
+</pre>
+<p>
+Like any other <font face="Gill Sans,Helvetica,Arial">GAP</font> 4 package, <font face="Gill Sans,Helvetica,Arial">CARAT</font> is then loaded in <font face="Gill Sans,Helvetica,Arial">GAP</font> with
+<p>
+<pre>
+gap&gt; LoadPackage("carat");
+true
+</pre>
+<p>
+This package, together with <font face="Gill Sans,Helvetica,Arial">CARAT</font> itself, takes some 208Mb of disk space,
+or more, depending on the system. Some 170Mb is taken by the catalog
+of Q-classes if integer matrix groups up to dimension 6. If you want
+to avoid unpacking this catalog, you can create empty subdirectories
+<p>
+<pre>
+cd /gap4/pkg/carat/carat-2.1b1
+mkdir tables
+mkdir tables/qcatalog
+</pre>
+<p>
+before making <font face="Gill Sans,Helvetica,Arial">CARAT</font>. If you want to unpack the catalog later, just
+remove the empty directory <code>tables/qcatalog</code>, and do
+<p>
+<pre>
+make Qcatalog
+</pre>
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>CARAT manual<br>May 2012
+</address></body></html>

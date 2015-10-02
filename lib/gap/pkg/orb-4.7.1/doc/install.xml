@@ -1,0 +1,134 @@
+<!-- 
+
+  install.xml            orb package documentation
+                                                               Juergen Mueller
+                                                               Max Neunhoeffer
+                                                                  Felix Noeske
+
+         Copyright (C) 2005-2008 by the authors
+
+This is the chapter of the documentation describing the installation.
+
+-->
+
+<Chapter Label="install">
+<Heading>Installation of the <Package>orb</Package>-Package</Heading>
+<Index><Package>orb</Package></Index>
+
+To install this  package just extract the package's  archive file to
+the  GAP  <F>pkg</F>  directory.<P/>
+
+By default the <Package>orb</Package> package is not automatically
+loaded by &GAP; when it is installed. You must load the package with
+<C>LoadPackage("orb");</C> before its functions become available.<P/>
+
+As of version 3.0, the <Package>orb</Package> package has a &GAP; kernel
+component which should be compiled. This component does not actually contain
+new functionality but will improve the performance of AVL trees and hash
+tables significantly since many core routines are implemented in the C
+language at kernel level.<P/>
+
+To compile the C part of the package do (in the <F>pkg</F> directory)
+
+<Verb>
+    cd orb
+    ./configure
+    make
+</Verb>
+
+If you installed the package in another <Q><F>pkg</F></Q> directory than
+the standard <Q><F>pkg</F></Q> directory in your &GAP; 4 installation,
+then you have to do two things. Firstly during compilation 
+you have to use the option
+<C>--with-gaproot=PATH</C> of the <F>configure</F> script
+where <Q>PATH</Q> is a path to the main &GAP; root directory 
+(if not given the
+default <Q><F>../..</F></Q> is assumed). <P/>
+Secondly you have to 
+specify the path to the directory containing your
+<Q><F>pkg</F></Q>
+directory to &GAP;'s list of directories. This can be done by starting
+&GAP; with the <Q><F>-l</F></Q> command line option followed by the name
+of the directory and a semicolon. Then your directory is prepended to
+the list of directories searched. Otherwise the package is not found by
+&GAP;. Of course, you can add this option to your &GAP; startup script.
+<P/>
+
+If you installed &GAP; on several architectures, you must execute the
+configure/make step for each of the architectures. You can either
+do this immediately after
+configuring and compiling &GAP; itself on this architecture, or alternatively (when
+using version 4.5 of &GAP; or newer) set the environment variable
+<C>CONFIGNAME</C> to the name of the configuration you used when
+compiling &GAP; before running <C>./configure</C>. 
+Note however that your compiler choice and flags
+(environment variables <C>CC</C> and <C>CFLAGS</C>) need to be
+chosen to match the setup of the original &GAP; compilation. For
+example you have to specify 32-bit or 64-bit mode correctly!<P/>
+
+
+<!--
+<Section>
+<Heading>Static linking</Heading>
+
+This feature does not work in this version of the package.
+We leave the old documentation here for the case that the
+feature will be reenabled inthe future.<P/>
+
+This might be interesting for M&dollar; Windows users, as
+dynamic loading of binary modules does not always work there.
+You can also create a new statically linked <Q><F>gap</F></Q> binary as follows:
+<P/>
+
+Go into the main &GAP; directory and then into <F>bin/BINDIR</F>. Here
+<F>BINDIR</F> means the directory containing the <Q><F>gap</F></Q> 
+executable after
+compiling <Q><F>gap</F></Q>. This directory also contains the &GAP; compiler script
+<Q><F>gac</F></Q>. Assuming <Package>orb</Package> 
+in the standard location you can then say
+
+<Verb>
+    ./gac -o gap-static -p "-DORBSTATIC" -P "-static" ../../pkg/orb/src/orb.c
+</Verb>
+
+Then copy your <Q><F>gap</F></Q> start script to, say, <Q><F>gaps</F></Q> and change the
+references to the &GAP; binary to <Q><F>gap-static</F></Q>.<P/>
+
+Note that you have to replace <F>BINDIR</F> by the name containing the 
+<Q><F>gap</F></Q>
+executable after compiling GAP as above. If you have installed the
+package in a different place than the standard, you have to replace
+<Q><F>../..</F></Q> in the above command by the path to the directory containing
+the <Q><F>pkg</F></Q> directory into which you installed
+<Package>orb</Package>.
+
+If you want to install more than one package with a C-part like this
+package, you can still create a statically linked &GAP; executable by
+combining all the compile and link options and all the .c files as
+in the ./gac command above. For the <Package>orb</Package> 
+package, you have to add
+<Verb>
+    -DORBSTATIC
+</Verb>
+to the string of the -p option and the file
+<Verb>
+  ../../pkg/orb/src/orb.c
+</Verb>
+somewhere on the command line. As above, <Q><F>../..</F></Q> and 
+<Q><F>BINDIR</F></Q> have to be replaced if you installed in a
+non-standard location.
+</Section>
+-->
+
+<Section>
+<Heading>Recompiling the documentation</Heading>
+
+Recompiling the documentation is possible by the command <Q><F>gap
+makedoc.g</F></Q>
+in the <F>orb</F> directory. But this should not be necessary.
+
+</Section>
+
+<!-- ############################################################ -->
+
+</Chapter>

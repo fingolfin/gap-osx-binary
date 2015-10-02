@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (Forms) - Chapter 2: Examples</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+</head>
+<body>
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap1.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap3.html">Next Chapter</a>&nbsp;  </div>
+
+<p><a id="X7A489A5D79DA9E5C" name="X7A489A5D79DA9E5C"></a></p>
+<div class="ChapSects"><a href="chap2.html#X7A489A5D79DA9E5C">2 <span class="Heading">Examples</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X83510E647FBB2475">2.1 <span class="Heading">A conic of PG(2,8)</span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X781F69578636E8C5">2.2 <span class="Heading">A form for W(5,3)</span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X78638D21797AC9A0">2.3 <span class="Heading">What is the form preserved by this group?</span></a>
+<div class="ContSSBlock">
+</div></div>
+</div>
+
+<h3>2 <span class="Heading">Examples</span></h3>
+
+<p>Here we give some simple examples that display some of the functionality of <strong class="pkg">Forms</strong>.</p>
+
+<p><a id="X83510E647FBB2475" name="X83510E647FBB2475"></a></p>
+
+<h4>2.1 <span class="Heading">A conic of PG(2,8)</span></h4>
+
+<p>Consider the three-dimensional vector space V := V(3,GF(8)), and consider the following quadratic polynomial in 3 variables:</p>
+
+<p class="pcenter">x<sub>1</sub><sup>2</sup>+x<sub>2</sub>x<sub>3</sub>.</p>
+
+<p>Then this polynomial defines a quadratic form on V and the zeros form a <em>conic</em> of the associated projective plane. So in particular, our quadratic form defines a degenerate parabolic quadric of Witt Index 1. We will see now how we can use <strong class="pkg">Forms</strong> to view this example.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; gf := GF(8);
+GF(2^3)
+gap&gt; vec := gf^3;
+( GF(2^3)^3 )
+gap&gt; r := PolynomialRing( gf, 3);
+PolynomialRing(..., [ x_1, x_2, x_3 ])
+gap&gt; poly := r.1^2 + r.2 * r.3;
+x_1^2+x_2*x_3
+gap&gt; form := QuadraticFormByPolynomial( poly, r );
+&lt; quadratic form &gt;
+gap&gt; Display( form );
+Quadratic form
+Gram Matrix:
+ 1 . .
+ . . 1
+ . . .
+Polynomial: x_1^2+x_2*x_3
+gap&gt; IsDegenerateForm( form );
+#I  Testing degeneracy of the *associated bilinear form*
+true
+gap&gt; IsSingularForm( form );
+false
+gap&gt; WittIndex( form );
+1
+gap&gt; IsParabolicForm( form );
+true
+gap&gt; RadicalOfForm( form );
+&lt;vector space over GF(2^3), with 0 generators&gt;
+</pre></td></tr></table>
+
+<p>Now our conic is stabilised by a group isomorphic to GO(3,8), but not identical to the group returned by the GAP command <code class="code">GO(3,8)</code>. However, our conic is the canonical conic given in <strong class="pkg">Forms</strong>.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; canonical := IsometricCanonicalForm( form );
+&lt; parabolic quadratic form &gt;
+gap&gt; form = canonical;
+true
+</pre></td></tr></table>
+
+<p>So we ``change forms''...</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; go := GO(3,8);
+GO(0,3,8)
+gap&gt; mat := InvariantQuadraticForm( go )!.matrix;
+[ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), 0*Z(2), 0*Z(2) ], 
+  [ 0*Z(2), Z(2)^0, 0*Z(2) ] ]
+gap&gt; gapform := QuadraticFormByMatrix( mat, GF(8) );
+&lt; quadratic form &gt;
+gap&gt; b := BaseChangeToCanonical( gapform );
+[ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), Z(2)^0, 0*Z(2) ], 
+  [ 0*Z(2), 0*Z(2), Z(2)^0 ] ]
+gap&gt; hom := BaseChangeHomomorphism( b, GF(8) );
+^[ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), Z(2)^0, 0*Z(2) ], 
+  [ 0*Z(2), 0*Z(2), Z(2)^0 ] ]
+gap&gt; newgo := Image(hom, go);
+Group(
+[ [ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), Z(2^3), 0*Z(2) ], [ 0*Z(2), 0*Z(2),
+           Z(2^3)^6 ] ], 
+  [ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ Z(2)^0, Z(2)^0, Z(2)^0 ], 
+      [ 0*Z(2), Z(2)^0, 0*Z(2) ] ] ])
+</pre></td></tr></table>
+
+<p>Now we look at the action of our new GO(3,8) on the conic.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; conic := Filtered(vec, x -&gt; IsZero( x^form ));;
+gap&gt; Size(conic);
+64
+gap&gt; orbs := Orbits(newgo, conic, OnRight);;
+gap&gt; List(orbs,Size);
+[ 1, 63 ]
+</pre></td></tr></table>
+
+<p>So we see that there is a fixed point, which is actually the <em>nucleus</em> of the conic, or in other words, the radical of the form.</p>
+
+<p><a id="X781F69578636E8C5" name="X781F69578636E8C5"></a></p>
+
+<h4>2.2 <span class="Heading">A form for W(5,3)</span></h4>
+
+<p>The symplectic polar space W(5,q) is defined by an alternating reflexive bilinear form on the six-dimensional vector space GF(q)<sup>6</sup>. Any invertible 6 x 6 matrix A which satisfies A+A<sup>T</sup>=0 is a candidate for the Gram matrix of a symplectic polarity. The canonical form we adopt in <strong class="pkg">Forms</strong> for an alternating form is</p>
+
+<p class="pcenter">
+f(x,y)=x<sub>1</sub>y<sub>2</sub><font face="symbol">-</font
+>x<sub>2</sub>y<sub>1</sub>+x<sub>3</sub>y<sub>4</sub><font face="symbol">-</font
+>x<sub>4</sub>y<sub>3</sub>+ ... +x<sub>2n<font face="symbol">-</font
+>1</sub>y<sub>2n</sub><font face="symbol">-</font
+>x<sub>2n</sub>y<sub>2n<font face="symbol">-</font
+>1</sub></p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; f := GF(3);
+GF(3)
+gap&gt; gram := [
+&gt; [0,0,0,1,0,0], 
+&gt; [0,0,0,0,1,0],
+&gt; [0,0,0,0,0,1],
+&gt; [-1,0,0,0,0,0],
+&gt; [0,-1,0,0,0,0],
+&gt; [0,0,-1,0,0,0]] * One(f);;
+gap&gt; form := BilinearFormByMatrix( gram, f );
+&lt; bilinear form &gt;
+gap&gt; IsSymplecticForm( form );
+true
+gap&gt; Display( form );
+Symplectic form
+Gram Matrix:
+ . . . 1 . .
+ . . . . 1 .
+ . . . . . 1
+ 2 . . . . .
+ . 2 . . . .
+ . . 2 . . .
+gap&gt; b := BaseChangeToCanonical( form );
+[ [ Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], 
+  [ 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3) ], 
+  [ 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], 
+  [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3) ], 
+  [ 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3) ], 
+  [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0 ] ]
+gap&gt; Display( b );
+ 1 . . . . .
+ . . . 1 . .
+ . 1 . . . .
+ . . . . 1 .
+ . . 1 . . .
+ . . . . . 1
+gap&gt; Display( b * gram * TransposedMat(b) );
+ . 1 . . . .
+ 2 . . . . .
+ . . . 1 . .
+ . . 2 . . .
+ . . . . . 1
+ . . . . 2 .
+ 
+</pre></td></tr></table>
+
+<p><a id="X78638D21797AC9A0" name="X78638D21797AC9A0"></a></p>
+
+<h4>2.3 <span class="Heading">What is the form preserved by this group?</span></h4>
+
+<p>Here we start with a matrix group which is available in GAP, namely GO(5,5). We then conjugate this group by an element of GL(5,5), and then we find the forms left invariant by this copy of GO(5,5) (which we expect to be a symmetric bilinear form).</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; go := GO(5, 5);
+GO(0,5,5)
+gap&gt; x := 
+&gt; [ [ Z(5)^0, Z(5)^3, 0*Z(5), Z(5)^3, Z(5)^3 ], 
+&gt;   [ Z(5)^2, Z(5)^3, 0*Z(5), Z(5)^2, Z(5) ], 
+&gt;   [ Z(5)^2, Z(5)^2, Z(5)^0, Z(5), Z(5)^3 ],
+&gt;   [ Z(5)^0, Z(5)^3, Z(5), Z(5)^0, Z(5)^3 ], 
+&gt;   [ Z(5)^3, 0*Z(5), Z(5)^0, 0*Z(5), Z(5) ] 
+&gt;  ];;
+gap&gt; go2 := go^x;
+&lt;matrix group of size 18720000 with 2 generators&gt;
+gap&gt; forms := PreservedSesquilinearForms( go2 );
+[ &lt; bilinear form &gt; ]
+gap&gt; Display( forms[1] );
+Bilinear form
+Gram Matrix:
+ 4 2 4 3 3
+ 2 2 2 3 3
+ 4 2 3 1 4
+ 3 3 1 2 4
+ 3 3 4 4 3
+ 
+</pre></td></tr></table>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap1.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap3.html">Next Chapter</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Chapter Label="visualisation">
+  <Heading>Visualization of the pictures created</Heading>
+  This chapter describes two easy ways to visualize the images created by using the &IntPic; package. Both require &LaTeX; and some &LaTeX; packages, such as <Package>Tikz</Package> and <Package>pgf</Package>, to be installed and working. One of the ways we will describe is almost completely automatic, but requires the &Viz; package. The other is not so automatic but has the advantage of not requiring other packages, besides the &LaTeX; ones.
+  
+  <P />
+<!--  <Section>
+    <Heading>Visualization</Heading>-->
+    <Section>
+      <Heading>Viewing using <Package>Viz</Package></Heading>
+      If you have a working copy of the &Viz; package, you may produce and display a picture from a <C>tikz</C> string <A>tkz</A> just by typing the following:
+    <P />
+    <P />
+    <Listing Type="Splash"><![CDATA[
+Splash(tkz);
+]]></Listing>
+    A picture is popped up after this use of the function <Ref Func="Splash" BookName="viz"/>. To see the name of the temporary directory created to perform the computations, and thus being able to copy the files involved to any other place, one should set the info level <C>InfoViz</C> to <M>1</M> or more. The following example illustrates this and the use of some options of the <Ref Func="Splash" BookName="viz"/> function of the &Viz; package. Setting the option <C>papersize</C> to "a0paper" may be convenient for the visualization of large images. The <C>pdf</C> viewer can also be changed.   
+    
+    <Listing Type="infoviz: temporary directory"><![CDATA[
+gap> SetInfoLevel(InfoViz,1);
+gap> Splash(tkz,rec(latexpoints:="10pt",papersize:="a0paper",viewer:="okular")); 
+#I  The temporary directory used is: /tmp/tmJcpphI/
+]]></Listing>
+    
+    The temporary directory /tmp/tmJcpphI/ contains the files vizpicture1.tex and 
+    vizpicture.tex. The file vizpicture1.tex contains the tikz code and the file vizpicture.tex is the &LaTeX; document to be processed. Other files, namely the <C>vizpicture.pdf</C> are created by the <C>pdflatex</C> command that is called by the  <Ref Func="Splash" BookName="viz"/>
+     function. 
+   </Section>    
+    <Section>
+      <Heading>Viewing without using <Package>Viz</Package></Heading>
+      This section describes a way to visualize images without sing &Viz;. Besides being useful in the case of not having a working copy of &Viz;, it is rather convenient when the decision of where to save the pictures is made. In this case, you may start your gap session in the desired place, the working directory. Furthermore, if your intention is, for instance, to  include the images in a document, you may just decide the name for the file containing the <C>tikz</C> code and let your document input it.
+
+The glogal variables <C>IP_Preamble</C> and <C>Closing</C> can be used to pruduce a complete &LaTeX; document rather than only the <C>tizk</C> code for the picture. The document may then be processed by using <C>pdflatex</C> and the picture viewed by using some <C>pdf</C> viewer. The <C>pdf</C> produced can be included in a &LaTeX; document instead of the <C>tizk</C> code. In the later case, the code is processed each time the document is processed, which should perhaps be avoided in the case of large images.
+<P/>
+Note the use of the <C>preview</C> package, which is used to produce the complete picture without having to pay attention to the paper size nor to crop the image. It is useful for viewing purposes and also to include the <C>pdf</C> file produced in a &LaTeX; document to be processed with <C>pdflatex</C>.
+<Listing Type="Preamble"><![CDATA[      
+gap> Print(IP_Preamble);
+\documentclass{minimal}
+\usepackage{amsmath}
+\usepackage[active,tightpage]{preview}
+\setlength\PreviewBorder{1pt}
+\usepackage{pgf}
+\usepackage{tikz}
+\usepgfmodule{plot}
+\usepgflibrary{plothandlers}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shadings}
+\begin{document}
+\begin{preview}
+]]></Listing>
+<Listing Type="Closing"><![CDATA[      
+gap> Print(IP_Closing);
+\end{preview}
+\end{document}
+]]></Listing>
+    <Subsection>
+      <Heading>A complete example</Heading>
+Admit you want to produce a document which contains the picture corresponding to the <C>tikz</C> code obtained through the instructions  
+<Listing Type="instructions to obtain some tikz code"><![CDATA[      
+arr := [[1,2,3,4,5,6],[1,2,3,4,5],[1,2,3,4],[1,2,3],[1,2],[1]];;
+tkz := IP_TikzArrayOfIntegers([1..10],5,rec(highlights:=arr));;
+]]></Listing>
+The picture is:
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/pic_for_complete_document.pdf}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/pic_for_complete_document.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+The elements of the set 
+<M>[1,2,3,4,5,6]</M> are highlighted using the first color (red); those of the set
+<M>[1,2,3,4,5]</M> are highlighted using the second color (green); those of the set
+<M>[1,2,3,4]</M> are highlighted using the third color (blue); those of the set
+<M>[1,2,3]</M> are highlighted using the fourth color (cyan); those of the set
+<M>[1,2]</M> are highlighted using the fifth color (magenta); those of the set
+<M>[1]</M> is highlighted using the sixth color (yellow).
+    <P/>
+Let us explain how the six colors used for the cell containing <M>1</M> are distributed: 
+upper left corner -- red;
+upper right corner -- green;
+lower left corner -- blue;
+lower right corner -- cyan;
+the number -- magenta;
+the border -- yellow.
+ <P/>
+The colors of  the cell containing <M>2</M> and <M>3</M> are distributed in a similar way.
+  <P/>
+The colors of  the cell containing <M>4</M>:
+left -- red;
+middle -- blue;
+right -- green.
+ <P/>
+After the session listed below, the files <C>tikz_pic_for_complete_document.tex</C> and <C>pic_for_complete_document.tex</C> have been created in the current directory (that is, the one where the &GAP; session has started). For other directories, complete paths may have to be given.
+<Listing Type="the GAP session"><![CDATA[      
+gap> tikzfile := "tikz_pic_for_complete_document.tex";;
+gap> file := "pic_for_complete_document.tex";;
+gap> 
+gap> arr := [[1,2,3,4,5,6],[1,2,3,4,5],[1,2,3,4],[1,2,3],[1,2],[1]];;
+gap> tkz := IP_TikzArrayOfIntegers([1..10],5,rec(highlights:=arr));;
+gap> 
+gap> FileString(tikzfile,tkz);
+642
+gap> FileString(file,Concatenation(IP_Preamble,tkz,IP_Closing));
+961
+]]></Listing>
+Executing something like 
+<Listing Type="the pdf and the jpg of the picture"><![CDATA[      
+pdflatex pic_for_complete_document.tex
+convert pic_for_complete_document.pdf pic_for_complete_document.jpg
+]]></Listing>
+the <C>pdf</C> and the <C>jpg</C> formats of the image have been created. The <C>jpg</C> format is usefull to be included into an html document, for instance. 
+<P/>
+Note that the tikz code has been saved into the file  <C>tikz_pic_for_complete_document.tex</C>. A complete example of a &LaTeX; document follows.
+<Listing Type="a LaTeX document"><![CDATA[      
+\documentclass{article}
+\usepackage{amsmath}
+%\usepackage[active,tightpage]{preview}
+%\setlength\PreviewBorder{1pt}
+\usepackage{pgf}
+\usepackage{tikz}
+\usepgfmodule{plot}
+\usepgflibrary{plothandlers}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shadings}
+\usepackage{graphicx}
+\author{Author}
+\title{How to include images in a \LaTeX\ document}
+\date{June, 2013}
+\begin{document}
+%\begin{preview}
+\maketitle
+Using the pdf file:
+
+\begin{center}
+  \includegraphics[width=0.80\textwidth]{../images/pic_for_complete_document.pdf}
+\end{center}
+
+Using the PGF/TikZ code:
+
+\begin{center}
+\input{../images/tikz_pic_for_complete_document.tex}
+\end{center}
+If you want to scale this immage, please chang the ``scale'' in the file
+\textt{tikz_pic_for_complete_document.tex} 
+%\end{preview}
+\end{document}
+]]></Listing>
+The output, after processing with <C>pdflatex</C> is as follows:
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/complete_latex_document.pdf}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/complete_latex_document.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+
+
+    </Subsection>
+  </Section>
+  <Section>
+    <Heading>Other examples of use of the <Package>IntPic</Package> package</Heading>
+    
+    <Subsection>
+      <Heading>Varia</Heading>
+      
+      The following example shows how to produce <C>tikz</C> code for a picture containing the odd integers from <M>801</M> to <M>999</M>. Each line (except the highest) contains <M>15</M> cells.
+      <Example><![CDATA[
+gap> rg := Filtered([801..889],u->(u mod 2)<>0);;
+gap> flen := 15;;
+gap> twins := Filtered(Primes, p -> p + 2 in Primes);;
+gap> arr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;
+gap> tkz := IP_TikzArrayOfIntegers(rg,flen,rec(highlights:=arr));;
+]]></Example> 
+      The picture obtained highlights the primes, the twin primes and the multiples of <M>3</M>. As the twins are also primes, a gradient is used to highlight them. In this example the default list of colors is used.
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/primesandtwinsamongodd}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/primesandtwinsamongodd.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+      The same computations, but defining other color lists.
+      <Example><![CDATA[
+gap> cls := IP_ColorsCompRedTones;;
+gap> rg := Filtered([801..889],u->(u mod 2)<>0);;
+gap> flen := 15;;
+gap> twins := Filtered(Primes, p -> p + 2 in Primes);;
+gap> arr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;
+gap> tkz := IP_TikzArrayOfIntegers(rg,flen,rec(colors := cls,highlights:=arr));;
+]]></Example> 
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/primesandtwinsamongodd_comp_red}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/primesandtwinsamongodd_comp_red.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+      <Example><![CDATA[
+gap> cls := IP_ColorsDGrayTones;;
+gap> rg := Filtered([801..889],u->(u mod 2)<>0);;
+gap> flen := 15;;
+gap> twins := Filtered(Primes, p -> p + 2 in Primes);;
+gap> arr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;
+gap> tkz := IP_TikzArrayOfIntegers(rg,flen,rec(colors := cls,highlights:=arr));;
+]]></Example> 
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/primesandtwinsamongodd_dark_gray}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/primesandtwinsamongodd_dark_gray.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+      <Example><![CDATA[
+gap> cls := ["blue","-blue","black"];;
+gap> rg := Filtered([801..889],u->(u mod 2)<>0);;
+gap> flen := 15;;
+gap> twins := Filtered(Primes, p -> p + 2 in Primes);;
+gap> arr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;
+gap> tkz := IP_TikzArrayOfIntegers(rg,flen,rec( colors := cls,highlights:=arr));;
+]]></Example> 
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/primesandtwinsamongodd_other}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/primesandtwinsamongodd_other.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+      The following example uses the 
+      <Alt Not='Text'>
+        <URL
+   Text='NumericalSgps'>http://www.fc.up.pt/cmup/mdelgado/numericalsgps</URL>
+      </Alt>
+      <Alt Only='Text'>
+        <Package>NumericalSgps</Package>
+      </Alt>
+      package.
+      <Example><![CDATA[
+
+gap> #LoadPackage("numericalsgps");
+gap> 
+gap> ns := NumericalSemigroup(11,19,30,42,59);;
+gap> cls := ShuffleIP_Colors([IP_ColorsGreenTones,IP_ColorsCompBlueTones]);;
+gap> flen := 20;;
+gap> #some notable elements
+gap> arr := [SmallElementsOfNumericalSemigroup(ns),
+>         GapsOfNumericalSemigroup(ns),
+>         MinimalGeneratingSystemOfNumericalSemigroup(ns),
+>         FundamentalGapsOfNumericalSemigroup(ns),
+>         [ConductorOfNumericalSemigroup(ns)],
+>         PseudoFrobeniusOfNumericalSemigroup(ns)];;
+gap> 
+gap> tkz := IP_TikzArrayOfIntegers(flen,rec(colors := cls,highlights:=arr));;
+]]></Example> 
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/numericalsgp_notable}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/numericalsgp_notable.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+      Using the default colors
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.95\textwidth]{../images/numericalsgp_notable_df_colors}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/numericalsgp_notable_df_colors.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+    </Subsection>
+    <Subsection>
+      <Heading>The banner</Heading>
+      The code in the following example has been used to produce one possible banner for the homepage of the &IntPic; package. It is a nice picture that gives an idea about the primes less than <M>10000</M>. Of course, other ranges could have been chosen. I warn the user that pictures involving a large amount of data may face the problem of exceeding &TeX; capacity...
+      <Example><![CDATA[
+gap> row_length := 200;; # the legth of each row
+gap> columns := 50;; # the number of colums
+gap> n := row_length*columns;
+10000
+gap> 
+gap> ##compute the primes less than n
+gap> # Primes is a GAP variable representing the list of primes less than 1000
+gap> mp := Maximum(Primes);
+997
+gap> newprimes := [];;
+gap> while mp < n do
+>   mp := NextPrimeInt(mp);
+>   Add(newprimes, mp);
+> od;
+gap> small_primes := Union(Primes, newprimes);;
+gap> ##compute the first element of each pair of twin primes less than n
+gap> twins := Filtered(small_primes, p -> IsPrime(p+2));;
+gap> 
+gap> rg := [1..n];;
+gap> 
+gap> arr := [Intersection(small_primes,rg),[],[], 
+>         Intersection(Union(twins,twins+2),rg),[],[],[],[],[],[],[],
+>         [],[],[],[],[],[],Difference(rg,small_primes)];;
+gap> 
+gap> tkz:=IP_TikzArrayOfIntegers([1..n],row_length,rec(highlights:=arr,
+>              cell_width := "6",colsep:="0",rowsep:="0",inner_sep:="2",
+>              shape_only:=" ",line_width:="0",line_color:="black!20" ));;
+]]></Example> 
+      <Alt Only="LaTeX">
+        \begin{center}
+        \includegraphics[width=0.99\textwidth]{../images/intpic_banner.pdf}
+        \end{center}
+      </Alt>
+      <Alt Only="HTML">
+        &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/intpic_banner.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+      </Alt>
+      
+    </Subsection>
+  </Section>
+</Chapter>

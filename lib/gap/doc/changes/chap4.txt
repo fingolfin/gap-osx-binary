@@ -1,0 +1,1042 @@
+  
+  [1X4 [33X[0;0YChanges between [5XGAP[105X[101X[1X 4.4 and [5XGAP[105X[101X[1X 4.5[133X[101X
+  
+  [33X[0;0YThis  chapter  lists most important changes between [5XGAP[105X 4.4.12 and the first
+  public  release  of  [5XGAP[105X  4.5. It also contains information about subsequent
+  update  releases for [5XGAP[105X 4.5. It is not meant to serve as a complete account
+  on  all improvements; instead, it should be viewed as an introduction to [5XGAP[105X
+  4.5, accompanying its release announcement.[133X
+  
+  
+  [1X4.1 [33X[0;0YChanges in the core [5XGAP[105X[101X[1X system introduced in [5XGAP[105X[101X[1X 4.5[133X[101X
+  
+  [33X[0;0YIn this section we list most important new features and bugfixes in the core
+  system  introduced  in  [5XGAP[105X  4.5.  For  the list of changes in the interface
+  between  the  core system and packages as well as for an overview of new and
+  updated packages, see Section [14X4.2[114X.[133X
+  
+  
+  [1X4.1-1 [33X[0;0YImproved functionality[133X[101X
+  
+  [33X[0;0YPerformance improvements:[133X
+  
+  [30X    [33X[0;6YThe  [5XGAP[105X  kernel  now  uses  [5XGMP[105X  (GNU  multiple  precision arithmetic
+        library, [7Xhttp://gmplib.org/[107X) for faster large integer arithmetic.[133X
+  
+  [30X    [33X[0;6YImproved performance for records with large number of components.[133X
+  
+  [30X    [33X[0;6YSpeedup of hash tables implementation at the [5XGAP[105X library level.[133X
+  
+  [30X    [33X[0;6Y[2XMemoryUsage[102X  ([14XReference:  MemoryUsage[114X)  is now much more efficient, in
+        particular for large objects.[133X
+  
+  [30X    [33X[0;6YSpeedups   in   the   computation   of  low  index  subgroups,  Tietze
+        transformations,  calculating  high  powers  of  matrices  over finite
+        fields, [2XFactorial[102X ([14XReference: Factorial[114X), etc.[133X
+  
+  [33X[0;0YNew and improved kernel functionality:[133X
+  
+  [30X    [33X[0;6YBy  default,  the  [5XGAP[105X  kernel  compiles  with  the  [5XGMP[105X  and [5Xreadline[105X
+        libraries.  The [5XGMP[105X library is supplied with [5XGAP[105X and we recommend that
+        you use the version we supply. There are some problems with some other
+        versions.  It  is  also  possible  to  compile the [5XGAP[105X kernel with the
+        system  [5XGMP[105X  if  your  system  has  it.  The  [5Xreadline[105X library must be
+        installed on your system in advance to be used with [5XGAP[105X.[133X
+  
+  [30X    [33X[0;6YFloating  point  literals  are  now  supported in the [5XGAP[105X language, so
+        that,  floating  point  numbers can be entered in [5XGAP[105X expressions in a
+        natural  way.  Support  for  floats  is  now  properly documented, see
+        [14X'Reference: Floats'[114X. [5XGAP[105X has an interface using which packages may add
+        new floating point implementations and integrate them with the parser.
+        In  particular,  we  expect  that  there  will  soon be a package that
+        implements arbitrary precision floating point arithmetic.[133X
+  
+  [30X    [33X[0;6YThe Mersenne twister random number generator has been made independent
+        of  endianness,  so  that  random seeds can now be transferred between
+        architectures. See [14X'Reference: GlobalMersenneTwister'[114X for details.[133X
+  
+  [30X    [33X[0;6YDefaults  for [10X-m[110X and [10X-o[110X options have been increased. Changes have been
+        made  to the way that [5XGAP[105X obtains memory from the Operating System, to
+        make  [5XGAP[105X  more  compatible with C libraries. A new [10X-s[110X option has been
+        introduced  to  control or turn off the new behaviour, see [14X'Reference:
+        Command Line Options'[114X.[133X
+  
+  [30X    [33X[0;6YThe  filename  and  lines  from  which  a function was read can now be
+        recovered  using [2XFilenameFunc[102X ([14XReference: FilenameFunc[114X), [2XStartlineFunc[102X
+        ([14XReference:  StartlineFunc[114X)  and [2XEndlineFunc[102X ([14XReference: EndlineFunc[114X).
+        This  allows  you,  for  example,  to  implement  a  function  such as
+        [2XPageSource[102X  ([14XReference:  PageSource[114X)  to  show the file containing the
+        source  code  of  a  function  or  a  method  in  a  pager,  see [2XPager[102X
+        ([14XReference: Pager[114X).[133X
+  
+  [30X    [33X[0;6Y[2XCallFuncList[102X  ([14XReference:  CallFuncList[114X) was made into an operation so
+        that  it can be used to define behaviour of a non-function when called
+        as a function.[133X
+  
+  [30X    [33X[0;6YImprovements to the cyclotomic number arithmetic for fields with large
+        conductors.[133X
+  
+  [30X    [33X[0;6YBetter and more flexible viewing of some large objects.[133X
+  
+  [30X    [33X[0;6YOpportunity   to   interrupt   some  long  kernel  computations,  e.g.
+        multiplication   of   compressed   matrices,  intercepting  [10XCtrl-C[110X  in
+        designated  places  in  the  kernel  code by means of a special kernel
+        function for that purpose.[133X
+  
+  [30X    [33X[0;6Y[10XELM_LIST[110X  now  allows you to install methods where the second argument
+        is NOT a positive integer.[133X
+  
+  [30X    [33X[0;6YKernel  function  [2XDirectoryContents[102X  ([14XReference: DirectoryContents[114X) to
+        get the list of names of files and subdirectories in a directory.[133X
+  
+  [30X    [33X[0;6YKernel  functions  for  Kronecker  product of compressed matrices, see
+        [2XKroneckerProduct[102X ([14XReference: KroneckerProduct[114X).[133X
+  
+  [33X[0;0YNew and improved library functionality:[133X
+  
+  [30X    [33X[0;6YExtensions of data libraries:[133X
+  
+        [30X    [33X[0;12YFunctions   and  iterators  are  now  available  to  create  and
+              enumerate  simple  groups  by  their  order  up  to isomorphism:
+              [2XSimpleGroup[102X     ([14XReference:    SimpleGroup[114X),    [2XSmallSimpleGroup[102X
+              ([14XReference:  SmallSimpleGroup[114X), [2XSimpleGroupsIterator[102X ([14XReference:
+              SimpleGroupsIterator[114X)     and     [2XAllSmallNonabelianSimpleGroups[102X
+              ([14XReference: AllSmallNonabelianSimpleGroups[114X).[133X
+  
+        [30X    [33X[0;12YSee  also  packages  [5XCTblLib[105X,  [5XIRREDSOL[105X  and [5XSmallsemi[105X listed in
+              Section [14X4.2-2[114X.[133X
+  
+  [30X    [33X[0;6YMany  more  methods  are now available for the built-in floating point
+        numbers, see [14X'Reference: Floats'[114X.[133X
+  
+  [30X    [33X[0;6YThe  bound  for  the  proper  primality test in [2XIsPrimeInt[102X ([14XReference:
+        IsPrimeInt[114X) increased up to [22X10^18[122X.[133X
+  
+  [30X    [33X[0;6YImproved   code   for   determining   transversal   and  double  coset
+        representatives in large groups.[133X
+  
+  [30X    [33X[0;6YImprovements in [2XNormalizer[102X ([14XReference: Normalizer[114X) for [22XS_n[122X.[133X
+  
+  [30X    [33X[0;6YSmith normal form of a matrix may be computed over arbitrary euclidean
+        rings, see [2XNormalFormIntMat[102X ([14XReference: NormalFormIntMat[114X).[133X
+  
+  [30X    [33X[0;6YImproved  algorithms  to determine the subgroup lattice of a group, as
+        well    as    the    function    [2XDotFileLatticeSubgroups[102X   ([14XReference:
+        DotFileLatticeSubgroups[114X) to save the lattice structure in [11X.dot[111X file to
+        view it e.g. with [5XGraphViz[105X.[133X
+  
+  [30X    [33X[0;6YSpecial  teaching  mode which simplifies some output and provides more
+        basic functionality, see [14X'Reference: Teaching Mode'[114X.[133X
+  
+  [30X    [33X[0;6YFunctionality  specific  for  use  in  undergraduate  abstract algebra
+        courses,  e.g.  checksums  ([14X'Reference: Check Digits'[114X); string/integer
+        list  conversion;  rings  of  small orders; the function [2XSetNameObject[102X
+        ([14XReference:  SetNameObject[114X)  to set display names for objects for more
+        informative  examples,  e.g.  constructing  groups from [21Xnamed[121X objects,
+        such as, for example, [10XR90[110X for a 90-degree rotation).[133X
+  
+  [30X    [33X[0;6YFunctions    [2XDirectoryDesktop[102X    ([14XReference:   DirectoryDesktop[114X)   and
+        [2XDirectoryHome[102X  ([14XReference: DirectoryHome[114X) which provide uniform access
+        to default directories under Windows, Mac OS X and Unix.[133X
+  
+  [30X    [33X[0;6YImproved methods for hashing when computing orbits.[133X
+  
+  [30X    [33X[0;6YFunctionality to call external binaries under Windows.[133X
+  
+  [30X    [33X[0;6YSymplectic  groups  over  residue  class  rings,  see  [2XSymplecticGroup[102X
+        ([14XReference: SymplecticGroup[114X).[133X
+  
+  [30X    [33X[0;6YBasic version of the simplex algorithm for matrices.[133X
+  
+  [30X    [33X[0;6YNew  functions,  operations  and attributes: [2XPrimeDivisors[102X ([14XReference:
+        PrimeDivisors[114X),    [2XShuffle[102X    ([14XReference:    Shuffle[114X)    for    lists,
+        [2XIteratorOfPartitions[102X         ([14XReference:        IteratorOfPartitions[114X),
+        [2XIteratorOfCombinations[102X       ([14XReference:      IteratorOfCombinations[114X),
+        [2XEnumeratorOfCombinations[102X   ([14XReference:  EnumeratorOfCombinations[114X)  and
+        others.[133X
+  
+  [30X    [33X[0;6YThe  behaviour  of  [2XInfo[102X  ([14XReference:  Info[114X)  statements  can  now  be
+        configured  per  info class, this applies to the way the arguments are
+        printed and to the output stream, see [14X'Reference: Info Functions'[114X.[133X
+  
+  [30X    [33X[0;6YNew  function  [2XTest[102X  ([14XReference:  Test[114X)  which  is a more flexible and
+        informative substitute of [2XReadTest[102X ([14XReference: ReadTest[114X) operation.[133X
+  
+  [30X    [33X[0;6Y[10XConnectGroupAndCharacterTable[110X  is  replaced  by  more  robust function
+        [2XCharacterTableWithStoredGroup[102X                              ([14XReference:
+        CharacterTableWithStoredGroup[114X).[133X
+  
+  [33X[0;0YMany problems in [5XGAP[105X have have been fixed, among them the following:[133X
+  
+  [30X    [33X[0;6YPolynomial  factorisation  over rationals could miss factors of degree
+        greater  than [22Xdeg(f)/2[122X if they have very small coefficients, while the
+        cofactor has large coefficients.[133X
+  
+  [30X    [33X[0;6Y[2XIntermediateSubgroups[102X  ([14XReference:  IntermediateSubgroups[114X) called on a
+        group  and  a  normal  subgroup  did  not  properly  calculate maximal
+        inclusion relationships.[133X
+  
+  [30X    [33X[0;6Y[2XCentreOfCharacter[102X       ([14XReference:       CentreOfCharacter[114X)       and
+        [2XClassPositionsOfCentre[102X   ([14XReference:   ClassPositionsOfCentre  (for  a
+        character)[114X)  called  for  a group character could return a perhaps too
+        large result.[133X
+  
+  [30X    [33X[0;6Y[2XTrace[102X ([14XReference: Traces of field elements and matrices[114X) called for an
+        element  of  a  finite  field that was created with [2XAlgebraicExtension[102X
+        ([14XReference: AlgebraicExtension[114X) ran into an error.[133X
+  
+  [30X    [33X[0;6Y[2XIrreducibleRepresentationsDixon[102X                            ([14XReference:
+        IrreducibleRepresentationsDixon[114X)  did  not  accept  a  list  with  one
+        character as a second argument.[133X
+  
+  [30X    [33X[0;6YComposing  a  homomorphism  from  a  permutation  group  to a finitely
+        presented group with another homomorphism could give wrong results.[133X
+  
+  [30X    [33X[0;6YFor  certain arguments, the function [2XEU[102X ([14XReference: EU[114X) returned wrong
+        results.[133X
+  
+  [30X    [33X[0;6YIn  the  table  of  marks of cyclic groups, [2XNormalizersTom[102X ([14XReference:
+        NormalizersTom[114X) value was wrong.[133X
+  
+  [30X    [33X[0;6YThe function [2XPermChars[102X ([14XReference: PermChars[114X) returned a perhaps wrong
+        result  when the second argument was a positive integer (not a record)
+        and  the  trivial  character of the character table given as the first
+        argument was not the first in the list of irreducibles.[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X crashed when the intersection of ranges became empty.[133X
+  
+  [30X    [33X[0;6Y[10XIsPSL[110X,     and     in     turn     [2XStructureDescription[102X    ([14XReference:
+        StructureDescription[114X),  erroneously  recognised  non-PSL groups of the
+        right order as PSL.[133X
+  
+  [30X    [33X[0;6YThe  semidirect  product  method  for pcgs computable groups sometimes
+        tried  to  use  finite  presentations  which were not polycyclic. This
+        usually  happened  when the groups were not pc groups, and there was a
+        very low risk of getting a wrong result.[133X
+  
+  [30X    [33X[0;6YThe  membership  test for a group of finite field elements ran into an
+        error  if  the  zero  element  of  the  field  was  given as the first
+        argument.[133X
+  
+  [30X    [33X[0;6YConstant   polynomials  were  not  recognised  as  univariate  in  any
+        variable.[133X
+  
+  [30X    [33X[0;6YThe kernel recursion depth counter was not reset properly when running
+        into many break loops.[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X  did  not  behave  well  when  printing  of  a  (large) object was
+        interrupted with [10XCtrl-C[110X. Now the object is no longer corrupted and the
+        indentation level is reset.[133X
+  
+  [33X[0;0YPotentially incompatible changes:[133X
+  
+  [30X    [33X[0;6YThe    zero    polynomial    now    has    degree    [10X-infinity[110X,    see
+        [2XDegreeOfLaurentPolynomial[102X ([14XReference: DegreeOfLaurentPolynomial[114X).[133X
+  
+  [30X    [33X[0;6YMultiple  unary [10X+[110X or [10X-[110X signs are no longer allowed (to avoid confusion
+        with increment/decrement operators from other programming languages).[133X
+  
+  [30X    [33X[0;6YDue to changes to improve the performance of records with large number
+        of  components,  the  ordering of record components in [10XView[110X'ed records
+        has changed.[133X
+  
+  [30X    [33X[0;6YDue  to  improvements  for vectors over finite fields, certain objects
+        have  more  limitations on changing their base field. For example, one
+        can  not  create  a  compressed  matrix  over [22XGF(2)[122X and then assign an
+        element of [22XGF(4)[122X to one of its entries.[133X
+  
+  [33X[0;0YNo longer supported:[133X
+  
+  [30X    [33X[0;6YCompletion files mechanism.[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X 3 compatibility mode.[133X
+  
+  [33X[0;0YIn  addition,  we  no longer recommend using the [5XGAP[105X compiler [11Xgac[111X to compile
+  [5XGAP[105X  code  to  [5XC[105X, and may withdraw it in future releases. Compiling [5XGAP[105X code
+  only   ever  gave  a  substantial  speedup  for  rather  specific  types  of
+  calculation,  and  much more benefit can usually be achieved quite easily by
+  writing  a  small  number  of  key  functions in [5XC[105X and loading them into the
+  kernel as described in [2XLoadDynamicModule[102X ([14XReference: LoadDynamicModule[114X). The
+  [11Xgac[111X  script  will  remain  available  as  a convenient way of compiling such
+  kernel modules from [5XC[105X.[133X
+  
+  [33X[0;0YAlso,   the   following   functions   and  operations  were  made  obsolete:
+  [10XAffineOperation[110X,         [10XAffineOperationLayer[110X,         [10XFactorCosetOperation[110X,
+  [10XDisplayRevision[110X, [10XProductPol[110X, [10XTeXObj[110X, [10XLaTeXObj[110X.[133X
+  
+  
+  [1X4.1-2 [33X[0;0YChanges in distribution formats[133X[101X
+  
+  [33X[0;0YThe  [5XGAP[105X 4.5 source distribution has the form of a single archive containing
+  the  core  system  and  the  most  recent  [21Xstable[121X  versions of all currently
+  redistributed  packages.  There  are  no  optional archives to download: the
+  [5XTomLib[105X  package  now  contains all its tables of marks in one archive; we do
+  not  provide  separate  versions  of  manuals for Internet Explorer, and the
+  former  [11Xtools[111X archive is now included as an archive in the [11Xetc[111X directory. To
+  unpack and install the archive, user the script [11Xetc/install-tools.sh[111X.[133X
+  
+  [33X[0;0YWe  no  longer  distribute separate bugfix archives when the core [5XGAP[105X system
+  changes,  or  updated  packages  archives  when  a  redistributed package is
+  updated.  Instead,  the  single  [5XGAP[105X  source  distribution  archive  will be
+  labelled by the version of the core [5XGAP[105X system and also by a timestamp. This
+  archive  contains  the  core  system and the stable versions of the relevant
+  packages  on  that  date. To upgrade, you simply replace the whole directory
+  containing the [5XGAP[105X installation, and rebuild binaries for the [5XGAP[105X kernel and
+  packages.   For   new  versions  of  packages,  we  will  also  continue  to
+  redistribute  individual package archives so it will be possible to update a
+  single package without changing the rest of the [5XGAP[105X installation.[133X
+  
+  [33X[0;0YFurthermore,  by default [5XGAP[105X will now automatically read a user-specific [5XGAP[105X
+  root  directory (unless [5XGAP[105X is called with the [10X-r[110X option). All user settings
+  can  be  made in that directory, so there will be no risk of them being lost
+  during  an  update  (see  Section  [14X4.1-3[114X  below  for  more details). Private
+  packages can also be installed in this directory for the same reason.[133X
+  
+  [33X[0;0YThere  are  some  changes  in  archive formats used for the distribution: we
+  continue  to  provide [11X.tar.gz[111X, [11X.tar.bz2[111X and [11X-win.zip[111X archives. We have added
+  [11X.zip[111X, and stopped providing [11X.zoo[111X archives. We no longer provide GAP binaries
+  for  Mac  OS 9 (Classic) any more. For installations from source on Mac OS X
+  one may follow the instructions for UNIX.[133X
+  
+  [33X[0;0YWith  the release of [5XGAP[105X 4.5, we also encourage more users to take advantage
+  of  the  increasingly  mature  binary distributions which are now available.
+  These include:[133X
+  
+  [30X    [33X[0;6YThe binary [11Xrsync[111X distribution for [5XGAP[105X on Linux PCs with i686 or x86_64
+        compatible     processors    provided    by    Frank    Lübeck,    see
+        [7Xhttp://www.math.rwth-aachen.de/~Frank.Luebeck/gap/rsync[107X.[133X
+  
+  [30X    [33X[0;6Y[5XBOB[105X,  a  tool for Linux and Mac OS X to download and build [5XGAP[105X and its
+        packages     from     source     provided     by     M.    Neunhöffer:
+        [7Xhttp://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/bob.html[107X.[133X
+  
+  [30X    [33X[0;6YThe  [5XGAP[105X  installer  for  Windows  provided  by  Alexander  Konovalov:
+        [7Xhttp://www.gap-system.org/ukrgap/wininst/[107X.[133X
+  
+  [33X[0;0YIn the near future, we also hope to have a binary distribution for Mac OS X.[133X
+  
+  [33X[0;0YInternally,  we  now have infrastructure to support more robust and frequent
+  releases,  and  an  improved  system  to  fetch and test new versions of the
+  increasingly  large  number  of  packages.  The  [5XExample[105X  package  documents
+  technical requirements for packages, many of which are checked automatically
+  by  our  systems.  This will allow us to check the compatibility of packages
+  with  the  system  and with other packages more thoroughly before publishing
+  them on the [5XGAP[105X website.[133X
+  
+  
+  [1X4.1-3 [33X[0;0YImprovements to the user interface[133X[101X
+  
+  [33X[0;0YBy  default,  [5XGAP[105X now uses the [5Xreadline[105X library for command line editing. It
+  provides  such  advantages as working with unicode terminals, nicer handling
+  of long input lines, improved TAB-completion and flexible configuration. For
+  further details, see [14X'Reference: Editing using the readline library'[114X.[133X
+  
+  [33X[0;0YWe have extended facilities for user interface customisation. By default [5XGAP[105X
+  automatically scans a user specific [5XGAP[105X root directory (unless [5XGAP[105X is called
+  with the [10X-r[110X option). The name of this user specific directory depends on the
+  operating system and is contained in [10XGAPInfo.UserGapRoot[110X. This directory can
+  be  used  to  tell  [5XGAP[105X  about personal preferences, to load some additional
+  code,  to  install  additional packages, or to overwrite some [5XGAP[105X files, see
+  [14X'Reference:  GAP  Root  Directories'[114X. Instead of a single [11X.gaprc[111X file we now
+  use  more  flexible setup based on two files: [11Xgap.ini[111X which is read early in
+  the  startup process, and [11Xgaprc[111X which is read after the startup process, but
+  before  the  first  input file given on the command line. These files may be
+  located in the user specific [5XGAP[105X root directory [10XGAPInfo.UserGapRoot[110X which by
+  default  is  the  first  [5XGAP[105X root directory, see [14X'Reference: The gap.ini and
+  gaprc  files'[114X.  For  compatibility,  the  [11X.gaprc[111X  file  is still read if the
+  directory  [10XGAPInfo.UserGapRoot[110X  does  not  exist. See [14X'Reference: The former
+  .gaprc file'[114X for the instructions how to migrate your old setup.[133X
+  
+  [33X[0;0YFurthermore, there are functions to deal with user preferences, for example,
+  to  specify  how  [5XGAP[105X's  online help is shown or whether the coloured prompt
+  should  be  used.  Calls  to  set  user preferences may appear in the user's
+  [11Xgap.ini[111X file, as explained in [14X'Reference: Configuring User preferences'[114X.[133X
+  
+  [33X[0;0YIn  the  Windows  version,  we  include  a  new  shell which uses the [5Xmintty[105X
+  terminal in addition to the two previously used shells (Windows command line
+  and [5XRXVT[105X). The [5Xmintty[105X shell is now recommended. It supports Unicode encoding
+  and  has flexible configurations options. Also, [5XGAP[105X under Windows now starts
+  in  the [11X%HOMEDRIVE%%HOMEPATH%[111X directory, which is the user's home directory.
+  Besides  this,  a larger workspace is now permitted without a need to modify
+  the Windows registry.[133X
+  
+  [33X[0;0YOther changes in the user interface include:[133X
+  
+  [30X    [33X[0;6Ythe  command  line history is now implemented at the [5XGAP[105X level, it can
+        be  stored  on  quitting  a [5XGAP[105X session and reread when starting a new
+        session, see [14X'Reference: The command line history'[114X.[133X
+  
+  [30X    [33X[0;6Y[10XSetPrintFormattingStatus("stdout",false);[110X  may  be  used to switch off
+        the    automatic    line    breaking    in    terminal   output,   see
+        [2XSetPrintFormattingStatus[102X ([14XReference: SetPrintFormattingStatus[114X).[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X  supports terminals with up to 4096 columns (extendable at compile
+        time).[133X
+  
+  [30X    [33X[0;6YDirectories  in  [10X-l[110X  command-line option can now be specified starting
+        with [10X~/[110X, see [14X'Reference: Command Line Options'[114X.[133X
+  
+  [30X    [33X[0;6YLarge  integers  are now displayed by a short string showing the first
+        and  last  few  digits, and the threshold to trigger this behaviour is
+        user  configurable  (call  [10XUserPreference("MaxBitsIntView")[110X to see the
+        default value).[133X
+  
+  [30X    [33X[0;6YThe [5XGAP[105X banner has been made more compact and informative.[133X
+  
+  [30X    [33X[0;6Y[2XSetHelpViewer[102X  ([14XReference:  SetHelpViewer[114X)  now  supports  the  Google
+        Chrome browser.[133X
+  
+  [30X    [33X[0;6YMultiple  matches  in the [5XGAP[105X online help are displayed via a function
+        from the [5XBrowse[105X package, which is loaded in the default configuration.
+        This feature can be replaced by the known pager using the command[133X
+  
+  SetUserPreference( "browse", "SelectHelpMatches", false );
+  
+  
+  [1X4.1-4 [33X[0;0YBetter documentation[133X[101X
+  
+  [33X[0;0YThe  main  [5XGAP[105X  manuals have been converted to the [5XGAPDoc[105X format provided by
+  the    [5XGAPDoc[105X    package    by    Frank    Lübeck    and    Max   Neunhöffer
+  ([7Xhttp://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc[107X).  This  documentation
+  format  is  already used by many packages and is now recommended for all [5XGAP[105X
+  documentation.[133X
+  
+  [33X[0;0YBesides  improvements  to the documentation layout in all formats (text, PDF
+  and  HTML),  the  new [5XGAP[105X manuals incorporate a large number of corrections,
+  clarifications, additions and updated examples.[133X
+  
+  [33X[0;0YWe  now  provide  two  HTML versions of the manual, one of them with [5XMathJax[105X
+  ([7Xhttp://www.mathjax.org[107X) support for better display of mathematical symbols.
+  Also, there are two PDF versions of the manual - a coloured and a monochrome
+  one.[133X
+  
+  [33X[0;0YSeveral separate manuals now became parts of the [5XGAP[105X Reference manual. Thus,
+  now there are three main [5XGAP[105X manual books:[133X
+  
+  [30X    [33X[0;6Y[13X[5XGAP[105X Tutorial[113X[133X
+  
+  [30X    [33X[0;6Y[13X[5XGAP[105X Reference manual[113X[133X
+  
+  [30X    [33X[0;6Y[13X[5XGAP[105X - Changes from Earlier Versions[113X (this manual)[133X
+  
+  [33X[0;0YNote  that  there is no index file combining these three manuals. Instead of
+  that,  please  use  the  [5XGAP[105X  help system which will search all of these and
+  about 100 package manuals.[133X
+  
+  
+  [1X4.2 [33X[0;0YPackages in [5XGAP[105X[101X[1X 4.5[133X[101X
+  
+  [33X[0;0YHere  we  list  most important changes affecting packages and present new or
+  essentially  changed  packages.  For the changes in the core [5XGAP[105X system, see
+  Section [14X4.1[114X.[133X
+  
+  
+  [1X4.2-1 [33X[0;0YInterface between the core system and packages[133X[101X
+  
+  [33X[0;0YThe  package  loading  mechanism  has  been improved. The most important new
+  feature  is  that all dependencies are evaluated in advance and then used to
+  determine  the  order  in  which  package files are read. This allows [5XGAP[105X to
+  handle  cyclic  dependencies  as well as situations where package A requires
+  package  B  to be loaded completely before any file of package A is read. To
+  avoid  distortions  of  the  order in which packages will be loaded, package
+  authors  are  strongly  discouraged  from  calling  [2XLoadPackage[102X  ([14XReference:
+  LoadPackage[114X)         and         [2XTestPackageAvailability[102X         ([14XReference:
+  TestPackageAvailability[114X)  in  a  package  code in order to determine whether
+  some  other  package  will  be  loaded  before  or together with the current
+  package  -  instead,  one  should  use [2XIsPackageMarkedForLoading[102X ([14XReference:
+  IsPackageMarkedForLoading[114X).  In  addition,  there  is  now  a  better  error
+  management   if  package  loading  fails  for  packages  that  use  the  new
+  functionality  to log package loading messages (see [2XDisplayPackageLoadingLog[102X
+  ([14XReference:   DisplayPackageLoadingLog[114X)   and   the   rest  of  the  Chapter
+  [14X'Reference:  Using  GAP  Packages'[114X which documents how to [13Xuse[113X [5XGAP[105X packages),
+  and   package  authors  are  very  much  encouraged  to  use  these  logging
+  facilities.[133X
+  
+  [33X[0;0YIn  [5XGAP[105X  4.4 certain packages were marked as [13Xautoloaded[113X and would be loaded,
+  if  present,  when  [5XGAP[105X  started up. In [5XGAP[105X 4.5, this notion is divided into
+  three.  Certain packages are recorded as [13Xneeded[113X by the [5XGAP[105X system and others
+  as  [13Xsuggested[113X,  in  the  same  way  that  packages may [13Xneed[113X or [13Xsuggest[113X other
+  packages. If a needed package is not loadable, [5XGAP[105X will not start. Currently
+  only  [5XGAPDoc[105X  is  needed.  If  a  suggested  package is loadable, it will be
+  loaded.  Typically  these  are  packages  which  install  better methods for
+  Operations and Objects already present in [5XGAP[105X. Finally, the user preferences
+  mechanism  can  be used to specify additional packages that should be loaded
+  if  possible. By default this includes most packages that were autoloaded in
+  [5XGAP[105X 4.4.12, see [2XShowUserPreferences[102X ([14XReference: ShowUserPreferences[114X).[133X
+  
+  [33X[0;0Y[5XGAP[105X  packages  may now use local [13Xnamespaces[113X to avoid name clashes for global
+  variables   introduced  in  other  packages  or  in  the  [5XGAP[105X  library,  see
+  [14X'Reference: Namespaces for GAP packages'[114X.[133X
+  
+  [33X[0;0YAll  guidance  on  how to [13Xdevelop[113X a [5XGAP[105X package has been consolidated in the
+  [5XExample[105X  package which also contains a checklist for upgrading a [5XGAP[105X package
+  to [5XGAP[105X 4.5, see [14X'Example: Guidelines for Writing a GAP Package'[114X.[133X
+  
+  
+  [1X4.2-2 [33X[0;0YNew and updated packages since [5XGAP[105X[101X[1X 4.4.12[133X[101X
+  
+  [33X[0;0YAt   the  time  of  the  release  of  [5XGAP[105X  4.4.12  there  were  75  packages
+  redistributed  with  [5XGAP[105X  (including the [5XTomLib[105X which was distributed in the
+  core [5XGAP[105X archive). The first public release of [5XGAP[105X 4.5 contains precisely 99
+  packages.[133X
+  
+  [33X[0;0YThe  new  packages  that  have  been  added  to the redistribution since the
+  release of [5XGAP[105X 4.4.12 are:[133X
+  
+  [30X    [33X[0;6Y[5XCitrus[105X  package  by J.D. Mitchell for computations with transformation
+        semigroups  and  monoids  (this package is a replacement of the [5XMonoid[105X
+        package).[133X
+  
+  [30X    [33X[0;6Y[5Xcvec[105X  package by M. Neunhöffer, providing an implementation of compact
+        vectors over finite fields.[133X
+  
+  [30X    [33X[0;6Y[5Xfwtree[105X  package by B. Eick and T. Rossmann for computing trees related
+        to some pro-[22Xp[122X-groups of finite width.[133X
+  
+  [30X    [33X[0;6Y[5XGBNP[105X  package by A.M. Cohen and J.W. Knopper, providing algorithms for
+        computing Grobner bases of noncommutative polynomials over fields with
+        respect to the [21Xtotal degree first then lexicographical[121X ordering.[133X
+  
+  [30X    [33X[0;6Y[5Xgenss[105X  package  by  M.  Neunhöffer  and  F.  Noeske,  implementing the
+        randomised Schreier-Sims algorithm to compute a stabiliser chain and a
+        base and a strong generating set for arbitrary finite groups.[133X
+  
+  [30X    [33X[0;6Y[5XHAPprime[105X  package  by  P.  Smith,  extending  the  [5XHAP[105X package with an
+        implementation  of  memory-efficient algorithms for the calculation of
+        resolutions of small prime-power groups.[133X
+  
+  [30X    [33X[0;6Y[5Xhecke[105X  package  by  D.  Traytel,  providing  functions for calculating
+        decomposition  matrices  of Hecke algebras of the symmetric groups and
+        [22Xq[122X-Schur  algebras  (this package is a port of the [5XGAP[105X 3 package [5XSpecht
+        2.4[105X to [5XGAP[105X 4).[133X
+  
+  [30X    [33X[0;6Y[5XHomalg[105X  project  by M. Barakat, S. Gutsche, M. Lange-Hegermann et al.,
+        containing the following packages for the homological algebra: [5Xhomalg[105X,
+        [5XExamplesForHomalg[105X,      [5XGauss[105X,      [5XGaussForHomalg[105X,     [5XGradedModules[105X,
+        [5XGradedRingForHomalg[105X, [5XHomalgToCAS[105X, [5XIO_ForHomalg[105X, [5XLocalizeRingForHomalg[105X,
+        [5XMatricesForHomalg[105X,    [5XModules[105X,    [5XRingsForHomalg[105X    and    [5XSCO[105X    (see
+        [7Xhttp://homalg.math.rwth-aachen.de/[107X).[133X
+  
+  [30X    [33X[0;6Y[5XMapClass[105X  package  by  A.  James,  K.  Magaard  and  S.  Shpectorov to
+        calculate the mapping class group orbits for a given finite group.[133X
+  
+  [30X    [33X[0;6Y[5Xrecogbase[105X  package  by  M.  Neunhöffer  and  A.  Seress,  providing  a
+        framework  to  implement  group  recognition  methods in a generic way
+        (suitable,  in  particular,  for  permutation  groups,  matrix groups,
+        projective groups and black box groups).[133X
+  
+  [30X    [33X[0;6Y[5Xrecog[105X  package  by  M.  Neunhöffer,  A.  Seress,  N.  Ankaralioglu, P.
+        Brooksbank,  F.  Celler,  S.  Howe,  M.  Law,  S. Linton, G. Malle, A.
+        Niemeyer,  E.  O'Brien  and C.M. Roney-Dougal, extending the [5Xrecogbase[105X
+        package  and  provides  a  collection  of methods for the constructive
+        recognition  of groups (mostly intended for permutation groups, matrix
+        groups and projective groups).[133X
+  
+  [30X    [33X[0;6Y[5XSCSCP[105X package by A. Konovalov and S. Linton, implementing the Symbolic
+        Computation    Software    Composability    Protocol    ([5XSCSCP[105X,    see
+        [7Xhttp://www.symbolic-computation.org/scscp[107X)  for  [5XGAP[105X,  which  provides
+        interfaces  to  link  a [5XGAP[105X instance with another copy of [5XGAP[105X or other
+        [5XSCSCP[105X-compliant system running locally or remotely.[133X
+  
+  [30X    [33X[0;6Y[5Xsimpcomp[105X  package  by  F.  Effenberger  and J. Spreer for working with
+        simplicial complexes.[133X
+  
+  [30X    [33X[0;6Y[5XSmallsemi[105X package by A. Distler and J.D. Mitchell, containing the data
+        library  of  all semigroups with at most 8 elements as well as various
+        information about them.[133X
+  
+  [30X    [33X[0;6Y[5XSymbCompCC[105X  package  by  D.  Feichtenschlager  for  computations  with
+        parametrised presentations for finite [22Xp[122X-groups of fixed coclass.[133X
+  
+  [33X[0;0YFurthermore,  some  packages  have  been  upgraded  substantially  since the
+  [5XGAP[105X 4.4.12 release:[133X
+  
+  [30X    [33X[0;6Y[5XAlnuth[105X package by B. Assmann, A. Distler and B. Eick uses an interface
+        to  PARI/GP  system  instead  of  the  interface to KANT (thanks to B.
+        Allombert  for  the  GP  code  for the new interface and help with the
+        transition) and now also works under Windows.[133X
+  
+  [30X    [33X[0;6Y[5XCTblLib[105X  package  (the  [5XGAP[105X  Character Table Library) by T. Breuer has
+        been  extended  by  many  new  character  tables, a few bugs have been
+        fixed,  and  new  features have been added, for example concerning the
+        relation  to  [5XGAP[105X's  group  libraries,  better  search facilities, and
+        interactive overviews. For details, see the package manual.[133X
+  
+  [30X    [33X[0;6Y[5XDESIGN[105X package by L.H. Soicher:[133X
+  
+        [30X    [33X[0;12YThe  functions [10XPointBlockIncidenceMatrix[110X, [10XConcurrenceMatrix[110X, and
+              [10XInformationMatrix[110X   compute   matrices   associated  with  block
+              designs.[133X
+  
+        [30X    [33X[0;12YThe  function [10XBlockDesignEfficiency[110X computes certain statistical
+              efficiency measures of a [22X1-(v,k,r)[122X design, using exact algebraic
+              computation.[133X
+  
+  [30X    [33X[0;6Y[5XExample[105X  package  by  W. Nickel, G. Gamble and A. Konovalov has a more
+        detailed  and  up-to-date  guidance  on  developing a [5XGAP[105X package, see
+        [14X'Example: Guidelines for Writing a GAP Package'[114X.[133X
+  
+  [30X    [33X[0;6Y[5XFR[105X  package by L. Bartholdi now uses floating-point numbers to compute
+        approximations  of  rational  maps  given  by  their group-theoretical
+        description.[133X
+  
+  [30X    [33X[0;6YThe  [5XGAPDoc[105X  package  by  F. Lübeck and M. Neunhöffer provides various
+        improvements, for example:[133X
+  
+        [30X    [33X[0;12YThe  layout of the text version of the manuals can be configured
+              quite  freely, several standard [21Xthemes[121X are provided. The display
+              is now adjusted to the current screen width.[133X
+  
+        [30X    [33X[0;12YSome  details  of  the layout of the HTML version of the manuals
+              can  now  be  configured  by the user. All manuals are available
+              with  and  without  MathJax  support for display of mathematical
+              formulae.[133X
+  
+        [30X    [33X[0;12YThe  text  and HTML versions of manuals make more use of unicode
+              characters  (but  the text version is also still reasonably good
+              on terminals with latin1 or ASCII encoding).[133X
+  
+        [30X    [33X[0;12YThe PDF version of the manuals uses better fonts.[133X
+  
+        [30X    [33X[0;12YOf course, there are various improvements for authors of manuals
+              as  well,  for  example  new  functions [2XExtractExamples[102X ([14XGAPDoc:
+              ExtractExamples[114X)   and  [2XRunExamples[102X  ([14XGAPDoc:  RunExamples[114X)  for
+              automatic testing and correcting of manual examples.[133X
+  
+  [30X    [33X[0;6Y[5XGpd[105X  package  by  E.J.  Moore  and C.D. Wensley has been substantially
+        rewritten. The main extensions provide functions for:[133X
+  
+        [30X    [33X[0;12YSubgroupoids  of  a direct product with complete graph groupoid,
+              specified by a root group and choice of rays.[133X
+  
+        [30X    [33X[0;12YAutomorphisms  of  finite groupoids - by object permutations; by
+              root group automorphisms; and by ray images.[133X
+  
+        [30X    [33X[0;12YThe  automorphism  group  of  a finite groupoid together with an
+              isomorphism to a quotient of permutation groups.[133X
+  
+        [30X    [33X[0;12YHomogeneous groupoids (unions of isomorphic groupoids) and their
+              morphisms,  in  particular  homogeneous  discrete groupoids: the
+              latter  are used in constructing crossed modules of groupoids in
+              the [5XXMod[105X package.[133X
+  
+  [30X    [33X[0;6Y[5XGRAPE[105X package by L.H. Soicher:[133X
+  
+        [30X    [33X[0;12YWith  much  help from A. Hulpke, the interface between [5XGRAPE[105X and
+              [11Xdreadnaut[111X is now done entirely in [5XGAP[105X code.[133X
+  
+        [30X    [33X[0;12YA  32-bit  [11Xnauty/dreadnaut[111X  binary for Windows (XP and later) is
+              included  with  [5XGRAPE[105X,  so now [5XGRAPE[105X provides full functionality
+              under Windows, with no installation necessary.[133X
+  
+        [30X    [33X[0;12YGraphs   with   ordered   partitions   of  their  vertices  into
+              [21Xcolour-classes[121X  are  now handled by the graph automorphism group
+              and  isomorphism  testing  functions. An automorphism of a graph
+              with  colour-classes  is  an  automorphism  of  the  graph which
+              additionally  preserves  the list of colour-classes (classwise),
+              and  an  isomorphism  from  one  graph  with colour-classes to a
+              second is a graph isomorphism from the first graph to the second
+              which  additionally maps the first list of colour-classes to the
+              second (classwise).[133X
+  
+        [30X    [33X[0;12YThe  [5XGAP[105X  code  and old standalone programs for the undocumented
+              functions  [10XEnum[110X  and  [10XEnumColadj[110X  have  been  removed  as  their
+              functionality  can  now largely be handled by current documented
+              [5XGAP[105X and [5XGRAPE[105X functions.[133X
+  
+  [30X    [33X[0;6Y[5XIO[105X package by M. Neunhöffer:[133X
+  
+        [30X    [33X[0;12YNew build system to allow for more flexibility regarding the use
+              of compiler options and adjusting to [5XGAP[105X 4.5.[133X
+  
+        [30X    [33X[0;12YNew functions to access time like [10XIO_gettimeofday[110X, [10XIO_gmtime[110X and
+              [10XIO_localtime[110X.[133X
+  
+        [30X    [33X[0;12YSome  parallel  skeletons  built  on  [10Xfork[110X  like: [10XParListByFork[110X,
+              [10XParMapReduceByFork[110X,         [10XParTakeFirstResultByFork[110X         and
+              [10XParWorkerFarmByFork[110X.[133X
+  
+        [30X    [33X[0;12Y[10XIOHub[110X objects for automatic I/O multiplexing.[133X
+  
+        [30X    [33X[0;12YNew functions [10XIO_gethostbyname[110X and [10XIO_getsockname[110X.[133X
+  
+  [30X    [33X[0;6Y[5XIRREDSOL[105X  package  by  B.  Höfling  now covers all irreducible soluble
+        subgroups   of  [22XGL(n,q)[122X  for  [22Xq^n  <  1000000[122X  and  primitive  soluble
+        permutation  groups  of  degree  [22X<  1000000[122X (previously, the bound was
+        [22X65536[122X).  It also has faster group recognition and adds a few omissions
+        for [22XGL(3,8)[122X and [22XGL(6,5)[122X.[133X
+  
+  [30X    [33X[0;6Y[5XParGAP[105X package by G. Cooperman is now compiled using a system-wide MPI
+        implementation by default to facilitate running it on proper clusters.
+        There  is  also  an option to build it with the [5XMPINU[105X library which is
+        still  supplied  with  the  package  (thanks to P. Smith for upgrading
+        [5XParGAP[105X build process).[133X
+  
+  [30X    [33X[0;6Y[5XOpenMath[105X  package  by  M.  Costantini, A. Konovalov, M. Nicosia and A.
+        Solomon   now  supports  much  more  OpenMath  symbols  to  facilitate
+        communication by the remote procedure call protocol implemented in the
+        [5XSCSCP[105X  package. Also, a third-party external library to support binary
+        OpenMath  encoding  has  been replaced by a proper implementation made
+        entirely in [5XGAP[105X.[133X
+  
+  [30X    [33X[0;6Y[5XOrb[105X package by J. Müller, M. Neunhöffer and F. Noeske:[133X
+  
+        [33X[0;6YThere have been numerous improvements to this package:[133X
+  
+        [30X    [33X[0;12YA  new  fast implementation of AVL trees (balanced binary trees)
+              in C.[133X
+  
+        [30X    [33X[0;12YNew  interface to hash table functionality and implementation in
+              C for speedup.[133X
+  
+        [30X    [33X[0;12YSome   new   hash   functions  for  various  object  types  like
+              transformations.[133X
+  
+        [30X    [33X[0;12YNew function [10XORB_EstimateOrbitSize[110X using the birthday paradox.[133X
+  
+        [30X    [33X[0;12YImproved functionality for product replacer objects.[133X
+  
+        [30X    [33X[0;12YNew [21Xtree hash tables[121X.[133X
+  
+        [30X    [33X[0;12YNew   functionality  to  compute  weak  and  strong  orbits  for
+              semigroups and monoids.[133X
+  
+        [30X    [33X[0;12Y[10XOrbitGraph[110X for Orb orbits.[133X
+  
+        [30X    [33X[0;12YFast C kernel methods for the following functions:[133X
+  
+              [33X[0;12Y[10XPermLeftQuoTransformationNC[110X,                  [10XMappingPermSetSet[110X,
+              [10XMappingPermListList[110X,        [10XImageSetOfTransformation[110X,        and
+              [10XKernelOfTransformation[110X.[133X
+  
+        [30X    [33X[0;12YNew build system to allow for more flexibility regarding the use
+              of compiler options and to adjust to [5XGAP[105X 4.5.[133X
+  
+  [30X    [33X[0;6Y[5XRCWA[105X  package by S. Kohl among the new features and other improvements
+        has the following:[133X
+  
+        [30X    [33X[0;12YA   database   of   all   52394  groups  generated  by  3  class
+              transpositions  of  [22Xℤ[122X  which  interchange  residue  classes with
+              modulus  less  than  or  equal  to 6. This database contains the
+              orders  and  the moduli of all of these groups. Also it provides
+              information  on  what  is  known about which of these groups are
+              equal and how their finite and infinite orbits on [22Xℤ[122X look like.[133X
+  
+        [30X    [33X[0;12YMore  routines  for investigating the action of an rcwa group on
+              [22Xℤ[122X.  Examples  are a routine which attempts to find out whether a
+              given  rcwa  group  acts  transitively on the set of nonnegative
+              integers  in  its  support  and a routine which looks for finite
+              orbits on the set of all residue classes of [22Xℤ[122X.[133X
+  
+        [30X    [33X[0;12YAbility to deal with rcwa permutations of [22Xℤ^2[122X.[133X
+  
+        [30X    [33X[0;12YImportant  methods  have  been  made  more efficient in terms of
+              runtime and memory consumption.[133X
+  
+        [30X    [33X[0;12YThe output has been improved. For example, rcwa permutations are
+              now [10XDisplay[110X'ed in ASCII text resembling LaTeX output.[133X
+  
+  [30X    [33X[0;6YThe  [5XXGAP[105X  package  by  F. Celler and M. Neunhöffer can now be used on
+        64-bit  architectures  (thanks  to N. Eldredge and M. Horn for sending
+        patches).  Furthermore,  there is now an export to XFig option (thanks
+        to  Russ  Woodroofe  for this patch). The help system in [5XXGAP[105X has been
+        adjusted to [5XGAP[105X 4.5.[133X
+  
+  [30X    [33X[0;6YAdditionally,  some  packages with kernel modules or external binaries
+        are  now  available  in  Windows.  The  [11X-win.zip[111X  archive  and the [5XGAP[105X
+        installer  for  Windows  include  working  versions  of  the following
+        packages: [5XBrowse[105X, [5Xcvec[105X, [5XEDIM[105X, [5XGRAPE[105X, [5XIO[105X and [5Xorb[105X, which were previously
+        unavailable for Windows users.[133X
+  
+  [33X[0;0YFinally, the following packages are withdrawn:[133X
+  
+  [30X    [33X[0;6Y[5XIF[105X package by M. Costantini is unmaintained and no longer usable. More
+        advanced  functionality  for  interfaces  to  other  computer  algebra
+        systems  is  now available in the [5XSCSCP[105X package by A. Konovalov and S.
+        Linton.[133X
+  
+  [30X    [33X[0;6Y[5XMonoid[105X  package  by J. Mitchell is superseded by the [5XCitrus[105X package by
+        the same author.[133X
+  
+  [30X    [33X[0;6Y[5XNQL[105X package by R. Hartung has been withdrawn by the author.[133X
+  
+  
+  [1X4.3 [33X[0;0Y[5XGAP[105X[101X[1X 4.5.5 (July 2012)[133X[101X
+  
+  [33X[0;0YFixed bugs which could lead to crashes:[133X
+  
+  [30X    [33X[0;6YFor  small  primes  (compact  fields)  [10XZmodnZObj(r,p)[110X  now returns the
+        corresponding FFE to avoid crashes when compacting matrices. [Reported
+        by Ignat Soroko][133X
+  
+  [33X[0;0YOther fixed bugs:[133X
+  
+  [30X    [33X[0;6YFixed  a bug in [2XCommutatorSubgroup[102X ([14XReference: CommutatorSubgroup[114X) for
+        fp  groups  causing  infinite  recursion, which could, for example, be
+        triggered by computing automorphism groups.[133X
+  
+  [30X    [33X[0;6YPreviously, the list of factors of a polynomial was mutable, and hence
+        could   be   accidentally  corrupted  by  callers.  Now  the  list  of
+        irreducible  factors  is  stored  immutable.  To  deal  with  implicit
+        reliance  on old code, always a shallow copy is returned. [reported by
+        Jakob Kroeker][133X
+  
+  [30X    [33X[0;6YComputing  high  powers  of matrices ran into an error for matrices in
+        the  format  of  the [5Xcvec[105X package. Now the library function also works
+        with these matrices. [reported by Klaus Lux][133X
+  
+  [30X    [33X[0;6YThe pseudo tty code which is responsible for spawning subprocesses has
+        been  partially  rewritten  to  allow  more  than  128 subprocesses on
+        certain  systems.  This  mechanism is for example used by [5XANUPQ[105X and [5Xnq[105X
+        packages   to   compute  group  quotients  via  an  external  program.
+        Previously,  on  Mac  OS X this could be done precisely 128 times, and
+        then  an  error  would  occur.  That  is,  one  could e.g. compute 128
+        nilpotent quotients, and then had to restart [5XGAP[105X to compute more. This
+        also  affected other systems, such as OpenBSD, where it now also works
+        correctly.[133X
+  
+  [30X    [33X[0;6YOn Mac OS X, using [5XGAP[105X compiled against GNU readline 6.2, pasting text
+        into  the  terminal  session  would result in this text appearing very
+        slowly,  with  a 0.1 sec delay between each [21Xkeystroke[121X. This is not the
+        case  with  versions  6.1  and older, and has been reported to the GNU
+        readline  team.  In  the  meantime,  we work around this issue in most
+        situations  by  setting  [10Xrl_event_hook[110X only if [10XOnCharReadHookActive[110X is
+        set.[133X
+  
+  [30X    [33X[0;6Y[2XShowUserPreferences[102X  ([14XReference: ShowUserPreferences[114X) ran into a break
+        loop  in  case  of  several  undeclared user preferences. [Reported by
+        James Mitchell][133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X    did    not    start    correctly   if   the   user   preference
+        [10X"InfoPackageLoadingLevel"[110X was set to a number [22X>= 3[122X. The reason is that
+        [10XPrintFormattedString[110X  was  called before it was installed. The current
+        fix is a temporary solution.[133X
+  
+  [30X    [33X[0;6YThe [10X"hints"[110X member of [10XTypOutputFile[110X used to contain 3*100 entries, yet
+        [10XaddLineBreakHint[110X  would  write  entries with index up to and including
+        3*99+3=300,   leading   to  a  buffer  overflow.  This  would  end  up
+        overwriting  the  [10X"stream"[110X  member  with -1. Fixed by incrementing the
+        size of [10X"hints"[110X to 301. [Reported by Jakob Kroeker][133X
+  
+  [30X    [33X[0;6YThe  function  [10XIsDocumentedWord[110X  tested the given word against strings
+        obtained by splitting help matches at non-letter characters. This way,
+        variable  names  containing underscores or digits were erroneously not
+        regarded  as  documented,  and  certain substrings of these names were
+        erroneously regarded as documented.[133X
+  
+  [30X    [33X[0;6YOn  Windows, an error occurred if one tried to use the default Windows
+        browser    as   a   help   viewer   (see   [2XSetHelpViewer[102X   ([14XReference:
+        SetHelpViewer[114X)).  Now  the  browser  opens the top of the correspoding
+        manual  chapter.  The  current  fix  is a temporary solution since the
+        problem remains with the positioning at the required manual section.[133X
+  
+  [33X[0;0YImproved functionality:[133X
+  
+  [30X    [33X[0;6Y[2XWriteGapIniFile[102X  ([14XReference:  WriteGapIniFile[114X) on Windows now produces
+        the [11Xgap.ini[111X file with Windows style line breaks. Also, an info message
+        is  now printed if an existing [11Xgap.ini[111X file was moved to a backup file
+        [11Xgap.ini.bak[111X.[133X
+  
+  [30X    [33X[0;6YThe [5XCTblLib[105X and [5XTomLib[105X packages are removed from the list of suggested
+        packages  of  the  core  part  of  [5XGAP[105X.  Instead they are added to the
+        default  list  of the user preference [10X"PackagesToLoad"[110X. This way it is
+        possible  to configure [5XGAP[105X to not load these packages via changing the
+        default value of [10X"PackagesToLoad"[110X.[133X
+  
+  [30X    [33X[0;6YThe  conjugacy  test  in  [22XS_n[122X for intransitive subgroups was improved.
+        This  deals  with  inefficiency  issue  in the case reported by Stefan
+        Kohl.[133X
+  
+  [30X    [33X[0;6YAdded   [10XInstallAndCallPostRestore[110X  to  [11Xlib/system.g[111X  and  call  it  in
+        [11Xlib/init.g[111X  instead of [10XCallAndInstallPostRestore[110X for the function that
+        reads  the  files  listed  in [5XGAP[105X command line. This fixes the problem
+        reported    by   Yevgen   Muntyan   when   [2XSaveWorkspace[102X   ([14XReference:
+        SaveWorkspace[114X)  was used in a file listed in [5XGAP[105X command line (before,
+        according    to    the    documentation,   [2XSaveWorkspace[102X   ([14XReference:
+        SaveWorkspace[114X) was only allowed at the main [5XGAP[105X prompt).[133X
+  
+  [30X    [33X[0;6YThere   is   now   a   new   user   preference  [10XPackagesToIgnore[110X,  see
+        [2XSetUserPreference[102X  ([14XReference:  SetUserPreference[114X). It contains a list
+        of names of packages that shall be regarded as not available at all in
+        the  current  session,  both  for  autoloading  and for later calls of
+        [2XLoadPackage[102X  ([14XReference:  LoadPackage[114X).  This preference is useful for
+        testing purposes if one wants to run some code without loading certain
+        packages.[133X
+  
+  
+  [1X4.4 [33X[0;0Y[5XGAP[105X[101X[1X 4.5.6 (September 2012)[133X[101X
+  
+  [33X[0;0YImproved functionality:[133X
+  
+  [30X    [33X[0;6YThe argument of [2XSaveWorkspace[102X ([14XReference: SaveWorkspace[114X) can now start
+        with [10X~/[110X which is expanded to the users home directory.[133X
+  
+  [30X    [33X[0;6YAdded    the   method   for   [2XIterator[102X   ([14XReference:   Iterator[114X)   for
+        [2XPositiveIntegers[102X  ([14XReference:  PositiveIntegers[114X). [Suggested by Attila
+        Egri-Nagy].[133X
+  
+  [30X    [33X[0;6YChanged   kernel  tables  such  that  list  access  functionality  for
+        [10XT_SINGULAR[110X objects can be installed by methods at the [5XGAP[105X level.[133X
+  
+  [30X    [33X[0;6YIn  case  of  saved  history,  [21XUP[121X arrow after starting [5XGAP[105X yields last
+        stored  line.  The  user  preference  [10XHistoryMaxLines[110X is now used when
+        storing   and   saving   history  (see  [2XSetUserPreference[102X  ([14XReference:
+        SetUserPreference[114X)).[133X
+  
+  [33X[0;0YFixed bugs which could lead to crashes:[133X
+  
+  [30X    [33X[0;6YA  crash  occuring  during  garbage  collection  following  a  call to
+        [10XAClosVec[110X for a [10XGF(2)[110X code. [Reported by Volker Braun][133X
+  
+  [30X    [33X[0;6YA  crash when parsing certain syntactically invalid code. [Reported by
+        multiple users][133X
+  
+  [30X    [33X[0;6YFixed  and  improved  command  line  editing without readline support.
+        Fixed  a  segfault which could be triggered by a combination of [21XUP[121X and
+        [21XDOWN[121X arrows. [Reported by James Mitchell][133X
+  
+  [30X    [33X[0;6YFixed a bug in the kernel code for floats that caused a crash on SPARC
+        Solaris in 32-bit mode. [Reported by Volker Braun][133X
+  
+  [33X[0;0YOther fixed bugs:[133X
+  
+  [30X    [33X[0;6YVery  large  (more  than  1024  digit)  integers  were not being coded
+        correctly in function bodies unless the integer limb size was 16 bits.
+        [Reported by Stefan Kohl][133X
+  
+  [30X    [33X[0;6YAn  old  variable was used in assertion, causing errors in a debugging
+        compilation. [Reported by Volker Braun][133X
+  
+  [30X    [33X[0;6YThe  environment  variable  [10XPAGER[110X is now correctly interpreted when it
+        contains  the  full  path  to  the  pager program. Furthermore, if the
+        external pager [10Xless[110X is found from the environment it is made sure that
+        the  option  [10X-r[110X  is  used  (same  for  [10Xmore -f[110X). [Reported by Benjamin
+        Lorenz][133X
+  
+  [30X    [33X[0;6YFixed a bug in [10XPermliftSeries[110X. [Reported by Aiichi Yamasaki][133X
+  
+  [30X    [33X[0;6YFixed discarder function in lattice computation to distinguish general
+        and zuppo discarder. [Reported by Leonard Soicher][133X
+  
+  [30X    [33X[0;6YThe  [2XGL[102X  ([14XReference: GL (for dimension and a ring)[114X) and [2XSL[102X ([14XReference:
+        SL  (for  dimension and a ring)[114X) constructors did not correctly handle
+        [10XGL(filter,dim,ring)[110X.[133X
+  
+  [30X    [33X[0;6YThe names of two primitive groups of degree 64 were incorrect.[133X
+  
+  [30X    [33X[0;6YThe  [2X\in[102X  ([14XReference: \in operation for testing membership[114X) method for
+        groups handled by a nice monomorphism sometimes could produce an error
+        in  situations  where  it should return false. This only happened when
+        using [10XSeedFaithfulAction[110X to influence how [2XNiceMonomorphism[102X ([14XReference:
+        NiceMonomorphism[114X) builds the nice monomorphims for a matrix groups.[133X
+  
+  [30X    [33X[0;6YWrong  [2XPrintObj[102X  ([14XReference:  PrintObj[114X)  method  was  removed  to  fix
+        delegations accordingly to [14X'Reference: View and Print'[114X.[133X
+  
+  [30X    [33X[0;6YFixed a method for [2XCoefficients[102X ([14XReference: Coefficients[114X) which, after
+        Gaussian elimination, did not check that the coefficients actually lie
+        in  the  left-acting-domain  of the vector space. This could lead to a
+        wrong  answer  in  a  vector space membership test. [Reported by Kevin
+        Watkins][133X
+  
+  [33X[0;0YImproved documentation:[133X
+  
+  [30X    [33X[0;6YRemoved    outdated    statements    from    the    documentation   of
+        [2XStructureDescription[102X   ([14XReference:   StructureDescription[114X)  which  now
+        non-ambiguosly  states that [10XStructureDescription[110X is not an isomorphism
+        invariant:  non-isomorphic  groups can have the same string value, and
+        two   isomorphic  groups  in  different  representations  can  produce
+        different strings.[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X  now  allows  overloading of a loaded help book by another one. In
+        this  case,  only  a  warning  is printed and no error is raised. This
+        makes sense if a book of a not loaded package is loaded in a workspace
+        and  then  [5XGAP[105X  is  started  with  a  root  path that contains a newer
+        version. [Reported by Sebastian Gutsche][133X
+  
+  [30X    [33X[0;6YProvided   a   better   description   of  user  preferences  mechanism
+        ([14X'Reference:  Configuring User preferences'[114X) and a hint to familiarise
+        with  them using [2XWriteGapIniFile[102X ([14XReference: WriteGapIniFile[114X) function
+        to  create  a  file  which  contains  descriptions  of  all known user
+        preferences  and  also  sets those user preferences which currently do
+        not have their default value. One can then edit that file to customize
+        (further) the user preferences for future [5XGAP[105X sessions.[133X
+  
+  [33X[0;0YNew packages added for the redistribution with [5XGAP[105X:[133X
+  
+  [30X    [33X[0;6Y[5XAutoDoc[105X   package   by  S.  Gutsche,  providing  tools  for  automated
+        generation of [5XGAPDoc[105X manuals.[133X
+  
+  [30X    [33X[0;6Y[5XConvex[105X package by S. Gutsche, which provides structures and algorithms
+        for convex geometry.[133X
+  
+  [30X    [33X[0;6Y[5XPolymakeInterface[105X  package  by T. Baechler and S. Gutsche, providing a
+        link    to    the    callable   library   of   the   [5Xpolymake[105X   system
+        ([7Xhttp://www.polymake.org[107X).[133X
+  
+  [30X    [33X[0;6Y[5XToolsForHomalg[105X   package   by   M.   Barakat,   S.   Gutsche   and  M.
+        Lange-Hegermann,  which  provides some auxiliary functionality for the
+        [5Xhomalg[105X project ([7Xhttp://homalg.math.rwth-aachen.de/[107X).[133X
+  
+  
+  [1X4.5 [33X[0;0Y[5XGAP[105X[101X[1X 4.5.7 (December 2012)[133X[101X
+  
+  [33X[0;0YFixed bugs which could lead to crashes:[133X
+  
+  [30X    [33X[0;6YClosing  with  [10XLogInputTo[110X (or [10XLogOutputTo[110X) a logfile opened with [2XLogTo[102X
+        ([14XReference:  LogTo[114X) left the data structures corrupted, resulting in a
+        crash.[133X
+  
+  [30X    [33X[0;6YOn  32-bit systems we can have long integers [10Xn[110X such that [10XLog2Int(n)[110X is
+        not  an  immediate  integer.  In  such  cases  [10XLog2Int[110X  gave  wrong or
+        corrupted results which in turn could crash [5XGAP[105X, e.g., in [10XViewObj(n)[110X.[133X
+  
+  [30X    [33X[0;6YSome   patterns  of  use  of  [2XUpEnv[102X  ([14XReference:  UpEnv[114X)  and  [2XDownEnv[102X
+        ([14XReference: DownEnv[114X) were leading to a segfault.[133X
+  
+  [33X[0;0YOther fixed bugs:[133X
+  
+  [30X    [33X[0;6YViewing  of  long negative integers was broken, because it went into a
+        break loop.[133X
+  
+  [30X    [33X[0;6YDivision  by zero in [2XZmodnZ[102X ([14XReference: ZmodnZ[114X) ([22Xn[122X not prime) produced
+        invalid objects. [Reported by Mark Dickinson][133X
+  
+  [30X    [33X[0;6YFixed   a  bug  in  determining  multiplicative  inverse  for  a  zero
+        polynomial.[133X
+  
+  [30X    [33X[0;6YFixed      a      bug      causing      infinite      recursion     in
+        [2XNaturalHomomorphismByNormalSubgroup[102X                        ([14XReference:
+        NaturalHomomorphismByNormalSubgroup[114X).[133X
+  
+  [30X    [33X[0;6YA workaround was added to deal with a package method creating pcgs for
+        permutation groups for which the entry [10XpermpcgsNormalSteps[110X is missing.[133X
+  
+  [30X    [33X[0;6YFor a semigroup of associative words that is not the full semigroup of
+        all  associative  words,  the  methods  for [2XSize[102X ([14XReference: Size[114X) and
+        [2XIsTrivial[102X  ([14XReference:  IsTrivial[114X) called one another causing infinite
+        recursion.[133X
+  
+  [30X    [33X[0;6YThe  64-bit  version  of  the  [11Xgac[111X script produced wrong (>= 2^31) CRC
+        values because of an integer conversion problem.[133X
+  
+  [30X    [33X[0;6YIt  was  not possible to compile [5XGAP[105X on some systems where [10XHAVE_SELECT[110X
+        detects as false.[133X
+  
+  [30X    [33X[0;6YNumbers in memory options on the command line exceeding 2^32 could not
+        be  parsed  correctly,  even  on  64-bit  systems. [Reported by Volker
+        Braun][133X
+  
+  [33X[0;0YNew packages added for the redistribution with [5XGAP[105X:[133X
+  
+  [30X    [33X[0;6Y[5XFloat[105X  package  by  L.  Bartholdi,  which  extends  [5XGAP[105X floating-point
+        capabilities    by   providing   new   floating-point   handlers   for
+        high-precision real, interval and complex arithmetic using MPFR, MPFI,
+        MPC   or   CXSC   external   libraries.   It   also  contains  a  very
+        high-performance  implementation  of  the LLL (Lenstra-Lenstra-Lovász)
+        lattice reduction algorithm via the external library FPLLL.[133X
+  
+  [30X    [33X[0;6Y[5XToricVarieties[105X  package  by S. Gutsche, which provides data structures
+        to  handle  toric varieties by their commutative algebra structure and
+        by their combinatorics.[133X
+  

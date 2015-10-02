@@ -1,0 +1,121 @@
+<html><head><title>[FGA] 1 Introduction</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>1 Introduction</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP001.htm#SECT001">Overview</a>
+<li> <A HREF="CHAP001.htm#SECT002">Implementation and background</a>
+<li> <A HREF="CHAP001.htm#SECT003">Integration of the package</a>
+<li> <A HREF="CHAP001.htm#SECT004">License</a>
+</ol><p>
+<p>
+<a name = "I0"></a>
+
+<p>
+<h2><a name="SECT001">1.1 Overview</a></h2>
+<p><p>
+This manual describes the <font face="Gill Sans,Helvetica,Arial">FGA</font> (<strong>Free Group Algorithms</strong>) package,
+a <font face="Gill Sans,Helvetica,Arial">GAP</font> package for computations with finitely generated subgroups of
+free groups.
+<p>
+This package allows you to (constructively) test membership and
+conjugacy, and to compute free generators, the rank, the index,
+normalizers, centralizers, and intersections
+where the groups involved are finitely generated subgroups of free groups.
+In addition, it provides generators and a finite presentation for the
+automorphism group of a finitely generated free group and allows to
+write any such automorphism as word in these generators.
+<p>
+See Chapter <a href="CHAP002.htm">Functionality of the FGA Package</a> for details.
+<p>
+Chapter <a href="CHAP003.htm">Installing and Loading the FGA Package</a> explains
+how to install and load the <font face="Gill Sans,Helvetica,Arial">FGA</font> package.
+<p>
+<p>
+<h2><a name="SECT002">1.2 Implementation and background</a></h2>
+<p><p>
+The methods which are used work mainly with inverse finite automata,
+a variation of an idea known from theoretical computer science.
+An inverse finite automaton is a finite state automaton over a
+symmetric alphabet, i.e. one in which every letter has an inverse,
+such that each transition between two states for a letter corresponds
+to a transition in the opposite direction for the inverse letter.
+<p>
+Most of these techniques are described in Chapter 4 of <a href="biblio.htm#Sims94"><cite>Sims94</cite></a>,
+where the same concept is called coset automaton.
+The method to obtain this automaton is called basic coset enumeration,
+and in fact it is coset enumeration where only important cosets are
+defined.  Here a coset <var>Gg</var> is called important when there
+are words <var>w</var> and <var>v</var> such that <var>wv</var> is reduced and denotes an element
+of <var>G</var> and <var>w</var> denotes an element of <var>Gg</var>.
+<p>
+In <a href="biblio.htm#BirgetEtAl00"><cite>BirgetEtAl00</cite></a>, the connection between finitely generated
+subgroups of free groups and inverse finite automata is used to transfer
+results about the space complexity of problems concerning inverse finite
+automata to analogous results about finitely generated subgroups of free
+groups.
+<p>
+Chapter 6 of <a href="biblio.htm#Sims94"><cite>Sims94</cite></a> describes the Reidemeister-Schreier
+procedure and a variant called extended coset enumeration which yields
+a presentation in the given generators.  The <font face="Gill Sans,Helvetica,Arial">FGA</font> package uses a
+variation thereof for its constructive membership test: it leaves out the
+part of the algorithm that fills in relations and interprets the
+resulting extended coset table differently.
+This algorithm might be called extended basic coset enumeration.
+<p>
+Some word oriented algorithms in the <font face="Gill Sans,Helvetica,Arial">FGA</font> package use basic facts about
+free groups.  These can, for example, be found in <a href="biblio.htm#LyndonSchupp77"><cite>LyndonSchupp77</cite></a>.
+<p>
+The presentation of the automorphism groups follows <a href="biblio.htm#Neumann33"><cite>Neumann33</cite></a>.
+The algorithm for writing an automorphism in the generators works
+first at the level of Nielsen generators and uses relations from
+<a href="biblio.htm#Nielsen"><cite>Nielsen</cite></a>.
+<p>
+The theoretical background for most of this implementation is
+explained in <a href="biblio.htm#Sievers03"><cite>Sievers03</cite></a>.
+<p>
+<p>
+<h2><a name="SECT003">1.3 Integration of the package</a></h2>
+<p><p>
+The <font face="Gill Sans,Helvetica,Arial">FGA</font> package mainly installs new methods for operations that are
+already known to <font face="Gill Sans,Helvetica,Arial">GAP</font>.  They overlap with methods in the <font face="Gill Sans,Helvetica,Arial">GAP</font>
+library in the case of groups of finite index.  In this case, <font face="Gill Sans,Helvetica,Arial">GAP</font>s
+methods are usually faster, and the <font face="Gill Sans,Helvetica,Arial">FGA</font> package tries to recognize
+such cases and to refer to <font face="Gill Sans,Helvetica,Arial">GAP</font>.
+<p>
+The methods of the <font face="Gill Sans,Helvetica,Arial">FGA</font> package will only be selected when the groups
+involved know they are finitely generated.  This may not always be the
+case for groups that were not created by methods of the <font face="Gill Sans,Helvetica,Arial">FGA</font>
+package.  In such a case you will get a <code>no method found</code> error, or
+<font face="Gill Sans,Helvetica,Arial">GAP</font> may try a coset enumeration that stops with the message
+<code>the coset enumeration has defined more than 256000 cosets</code>.
+You may then call <code>GeneratorsOfGroup</code>, and try again.
+<p>
+Please inform the package author if you observe any remaining problems.
+<p>
+<p>
+<h2><a name="SECT004">1.4 License</a></h2>
+<p><p>
+Like the <font face="Gill Sans,Helvetica,Arial">GAP</font> system itself, the <font face="Gill Sans,Helvetica,Arial">FGA</font> package is free software;
+you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation;
+either version 2 of the License, or (at your option) any later
+version.
+<p>
+This package is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+<p>
+You can find the GNU General Public License in the file <code>COPYING</code> of
+the <font face="Gill Sans,Helvetica,Arial">FGA</font> package, and also in the file <code>GPL</code> in the <code>etc</code> directory
+of the main <font face="Gill Sans,Helvetica,Arial">GAP</font> distribution, or see
+<a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>FGA manual<br>November 2012
+</address></body></html>

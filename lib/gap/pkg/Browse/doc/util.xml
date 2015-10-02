@@ -1,0 +1,82 @@
+
+<Chapter Label="ch:util">
+<Heading>Utilities using <C>ncurses</C></Heading>
+
+In this chapter we describe the usage of some example applications of
+the <C>ncurses</C> interface provided by the &Browse; package. They may
+be of interest by themselves, or they may be used as utility functions 
+within larger applications. 
+
+
+<Section Label="sect:ncurses_utils">
+<Heading><C>ncurses</C> utilities</Heading>
+
+If you call the functions
+<Ref Func="NCurses.Alert"/>,
+<Ref Func="NCurses.Select"/>,
+<Ref Func="NCurses.GetLineFromUser"/>,
+or
+<Ref Func="NCurses.Pager"/>
+from another <C>ncurses</C> application in visual mode,
+you should refresh the windows that are still open,
+by calling <C>NCurses.update_panels</C> and
+<C>NCurses.doupdate</C> afterwards,
+see Section <Ref Subsect="ssec:ncursesPan"/>
+and <Ref Subsect="ssec:ncursesWin"/>.
+Also, if the cursor shall be hidden after that,
+you should call <C>curs_set</C> with argument <C>0</C>,
+see Section <Ref Subsect="ssec:ncursesTermset"/>,
+since the cursor is automatically made visible in <C>NCurses.endwin</C>.
+
+
+<#Include Label="Alert_man">
+
+<#Include Label="NCurses.Select">
+
+<#Include Label="NCurses.GetLineFromUser">
+
+<#Include Label="NCurses.Pager">
+
+<Subsection Label="ssec:selhelpmatch">
+<Heading>Selection of help matches</Heading>
+After loading the <Package>Browse</Package> package &GAP;'s help system
+behaves slightly different when a request yields several matches. 
+The matches are shown via <Ref Func="NCurses.Select"/>,
+the list can be searched and filtered,
+and one can choose one match for immediate display.
+It is possible to not choose a match
+and the <C>?&lt;nr&gt;</C> syntax still works.
+<P/>
+If you want the original behavior call
+<C>SetUserPreference( "Browse", "SelectHelpMatches", false );</C>
+in your &GAP; session or <F>gap.ini</F> file,
+see&nbsp;<Ref Subsect="Configuring User preferences" BookName="ref"/>.
+
+</Subsection>
+
+<Subsection Label="ssec:selpackagename">
+<Heading>Selection of package names</Heading>
+
+The function <Ref Func="LoadPackage" BookName="ref"/> shows a list of matches
+if only a prefix of a package name is given.
+After loading the <Package>Browse</Package> package,
+<Ref Func="NCurses.Select"/> is used for that, and one can choose a match.
+<P/>
+If you want the original behavior call
+<C>SetUserPreference( "Browse", "SelectPackageName", false );</C>
+in your &GAP; session or <F>gap.ini</F> file,
+see&nbsp;<Ref Subsect="Configuring User preferences" BookName="ref"/>.
+
+</Subsection>
+
+</Section>
+
+
+
+<Section Label="sec:demo">
+<Heading>A Demo Function</Heading>
+<#Include Label="Demo_man">
+</Section>
+
+</Chapter>
+

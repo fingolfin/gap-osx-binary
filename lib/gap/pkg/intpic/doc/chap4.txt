@@ -1,0 +1,294 @@
+  
+  [1X4 [33X[0;0YVisualization of the pictures created[133X[101X
+  
+  [33X[0;0YThis  chapter  describes  two  easy  ways to visualize the images created by
+  using  the  [5XIntPic[105X package. Both require LaTeX and some LaTeX packages, such
+  as  [5XTikz[105X  and  [5Xpgf[105X,  to  be  installed  and working. One of the ways we will
+  describe  is  almost completely automatic, but requires the [5XViz[105X package. The
+  other  is  not  so  automatic  but  has the advantage of not requiring other
+  packages, besides the LaTeX ones.[133X
+  
+  
+  [1X4.1 [33X[0;0YViewing using [5XViz[105X[101X[1X[133X[101X
+  
+  [33X[0;0YIf you have a working copy of the [5XViz[105X package, you may produce and display a
+  picture from a [10Xtikz[110X string [3Xtkz[103X just by typing the following:[133X
+  
+  [4X[32X  Splash  [32X[104X
+    [4XSplash(tkz);[104X
+  [4X[32X[104X
+  
+  [33X[0;0YA  picture is popped up after this use of the function [2XSplash[102X ([14XViz: Splash[114X).
+  To  see  the  name  of  the  temporary  directory  created  to  perform  the
+  computations,  and  thus  being able to copy the files involved to any other
+  place,  one  should  set  the info level [10XInfoViz[110X to [22X1[122X or more. The following
+  example  illustrates  this  and  the use of some options of the [2XSplash[102X ([14XViz:
+  Splash[114X)  function  of  the  [5XViz[105X  package.  Setting  the  option [10Xpapersize[110X to
+  "a0paper"  may  be convenient for the visualization of large images. The [10Xpdf[110X
+  viewer can also be changed.[133X
+  
+  [4X[32X  infoviz: temporary directory  [32X[104X
+    [4Xgap> SetInfoLevel(InfoViz,1);[104X
+    [4Xgap> Splash(tkz,rec(latexpoints:="10pt",papersize:="a0paper",viewer:="okular")); [104X
+    [4X#I  The temporary directory used is: /tmp/tmJcpphI/[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  temporary  directory  /tmp/tmJcpphI/ contains the files vizpicture1.tex
+  and  vizpicture.tex. The file vizpicture1.tex contains the tikz code and the
+  file  vizpicture.tex  is  the  LaTeX  document to be processed. Other files,
+  namely the [10Xvizpicture.pdf[110X are created by the [10Xpdflatex[110X command that is called
+  by the [2XSplash[102X ([14XViz: Splash[114X) function.[133X
+  
+  
+  [1X4.2 [33X[0;0YViewing without using [5XViz[105X[101X[1X[133X[101X
+  
+  [33X[0;0YThis  section  describes a way to visualize images without sing [5XViz[105X. Besides
+  being  useful  in the case of not having a working copy of [5XViz[105X, it is rather
+  convenient  when the decision of where to save the pictures is made. In this
+  case,  you  may  start  your  gap  session in the desired place, the working
+  directory.  Furthermore,  if your intention is, for instance, to include the
+  images  in  a document, you may just decide the name for the file containing
+  the  [10Xtikz[110X  code  and  let  your  document  input  it.  The  glogal variables
+  [10XIP_Preamble[110X  and  [10XClosing[110X  can  be used to pruduce a complete LaTeX document
+  rather  than  only  the  [10Xtizk[110X code for the picture. The document may then be
+  processed by using [10Xpdflatex[110X and the picture viewed by using some [10Xpdf[110X viewer.
+  The  [10Xpdf[110X  produced  can  be included in a LaTeX document instead of the [10Xtizk[110X
+  code.  In  the  later  case, the code is processed each time the document is
+  processed, which should perhaps be avoided in the case of large images.[133X
+  
+  [33X[0;0YNote  the  use of the [10Xpreview[110X package, which is used to produce the complete
+  picture  without  having  to pay attention to the paper size nor to crop the
+  image.  It  is  useful for viewing purposes and also to include the [10Xpdf[110X file
+  produced in a LaTeX document to be processed with [10Xpdflatex[110X.[133X
+  
+  [4X[32X  Preamble  [32X[104X
+    [4Xgap> Print(IP_Preamble);[104X
+    [4X\documentclass{minimal}[104X
+    [4X\usepackage{amsmath}[104X
+    [4X\usepackage[active,tightpage]{preview}[104X
+    [4X\setlength\PreviewBorder{1pt}[104X
+    [4X\usepackage{pgf}[104X
+    [4X\usepackage{tikz}[104X
+    [4X\usepgfmodule{plot}[104X
+    [4X\usepgflibrary{plothandlers}[104X
+    [4X\usetikzlibrary{shapes.geometric}[104X
+    [4X\usetikzlibrary{shadings}[104X
+    [4X\begin{document}[104X
+    [4X\begin{preview}[104X
+  [4X[32X[104X
+  
+  [4X[32X  Closing  [32X[104X
+    [4Xgap> Print(IP_Closing);[104X
+    [4X\end{preview}[104X
+    [4X\end{document}[104X
+  [4X[32X[104X
+  
+  
+  [1X4.2-1 [33X[0;0YA complete example[133X[101X
+  
+  [33X[0;0YAdmit   you   want   to  produce  a  document  which  contains  the  picture
+  corresponding to the [10Xtikz[110X code obtained through the instructions[133X
+  
+  [4X[32X  instructions to obtain some tikz code  [32X[104X
+    [4Xarr := [[1,2,3,4,5,6],[1,2,3,4,5],[1,2,3,4],[1,2,3],[1,2],[1]];;[104X
+    [4Xtkz := IP_TikzArrayOfIntegers([1..10],5,rec(highlights:=arr));;[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  picture is: The elements of the set [22X[1,2,3,4,5,6][122X are highlighted using
+  the  first  color  (red); those of the set [22X[1,2,3,4,5][122X are highlighted using
+  the  second  color (green); those of the set [22X[1,2,3,4][122X are highlighted using
+  the  third  color (blue); those of the set [22X[1,2,3][122X are highlighted using the
+  fourth  color (cyan); those of the set [22X[1,2][122X are highlighted using the fifth
+  color  (magenta);  those of the set [22X[1][122X is highlighted using the sixth color
+  (yellow).[133X
+  
+  [33X[0;0YLet  us  explain  how  the  six  colors  used  for the cell containing [22X1[122X are
+  distributed:  upper  left  corner -- red; upper right corner -- green; lower
+  left  corner -- blue; lower right corner -- cyan; the number -- magenta; the
+  border -- yellow.[133X
+  
+  [33X[0;0YThe colors of the cell containing [22X2[122X and [22X3[122X are distributed in a similar way.[133X
+  
+  [33X[0;0YThe  colors  of the cell containing [22X4[122X: left -- red; middle -- blue; right --
+  green.[133X
+  
+  [33X[0;0YAfter the session listed below, the files [10Xtikz_pic_for_complete_document.tex[110X
+  and [10Xpic_for_complete_document.tex[110X have been created in the current directory
+  (that is, the one where the [5XGAP[105X session has started). For other directories,
+  complete paths may have to be given.[133X
+  
+  [4X[32X  the GAP session  [32X[104X
+    [4Xgap> tikzfile := "tikz_pic_for_complete_document.tex";;[104X
+    [4Xgap> file := "pic_for_complete_document.tex";;[104X
+    [4Xgap> [104X
+    [4Xgap> arr := [[1,2,3,4,5,6],[1,2,3,4,5],[1,2,3,4],[1,2,3],[1,2],[1]];;[104X
+    [4Xgap> tkz := IP_TikzArrayOfIntegers([1..10],5,rec(highlights:=arr));;[104X
+    [4Xgap> [104X
+    [4Xgap> FileString(tikzfile,tkz);[104X
+    [4X642[104X
+    [4Xgap> FileString(file,Concatenation(IP_Preamble,tkz,IP_Closing));[104X
+    [4X961[104X
+  [4X[32X[104X
+  
+  [33X[0;0YExecuting something like[133X
+  
+  [4X[32X  the pdf and the jpg of the picture  [32X[104X
+    [4Xpdflatex pic_for_complete_document.tex[104X
+    [4Xconvert pic_for_complete_document.pdf pic_for_complete_document.jpg[104X
+  [4X[32X[104X
+  
+  [33X[0;0Ythe  [10Xpdf[110X  and the [10Xjpg[110X formats of the image have been created. The [10Xjpg[110X format
+  is usefull to be included into an html document, for instance.[133X
+  
+  [33X[0;0YNote    that    the    tikz    code   has   been   saved   into   the   file
+  [10Xtikz_pic_for_complete_document.tex[110X.  A  complete example of a LaTeX document
+  follows.[133X
+  
+  [4X[32X  a LaTeX document  [32X[104X
+    [4X\documentclass{article}[104X
+    [4X\usepackage{amsmath}[104X
+    [4X%\usepackage[active,tightpage]{preview}[104X
+    [4X%\setlength\PreviewBorder{1pt}[104X
+    [4X\usepackage{pgf}[104X
+    [4X\usepackage{tikz}[104X
+    [4X\usepgfmodule{plot}[104X
+    [4X\usepgflibrary{plothandlers}[104X
+    [4X\usetikzlibrary{shapes.geometric}[104X
+    [4X\usetikzlibrary{shadings}[104X
+    [4X\usepackage{graphicx}[104X
+    [4X\author{Author}[104X
+    [4X\title{How to include images in a \LaTeX\ document}[104X
+    [4X\date{June, 2013}[104X
+    [4X\begin{document}[104X
+    [4X%\begin{preview}[104X
+    [4X\maketitle[104X
+    [4XUsing the pdf file:[104X
+    [4X[104X
+    [4X\begin{center}[104X
+    [4X  \includegraphics[width=0.80\textwidth]{../images/pic_for_complete_document.pdf}[104X
+    [4X\end{center}[104X
+    [4X[104X
+    [4XUsing the PGF/TikZ code:[104X
+    [4X[104X
+    [4X\begin{center}[104X
+    [4X\input{../images/tikz_pic_for_complete_document.tex}[104X
+    [4X\end{center}[104X
+    [4XIf you want to scale this immage, please chang the ``scale'' in the file[104X
+    [4X\textt{tikz_pic_for_complete_document.tex} [104X
+    [4X%\end{preview}[104X
+    [4X\end{document}[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe output, after processing with [10Xpdflatex[110X is as follows:[133X
+  
+  
+  [1X4.3 [33X[0;0YOther examples of use of the [5XIntPic[105X[101X[1X package[133X[101X
+  
+  
+  [1X4.3-1 [33X[0;0YVaria[133X[101X
+  
+  [33X[0;0YThe  following  example  shows  how  to  produce  [10Xtikz[110X  code  for  a picture
+  containing  the odd integers from [22X801[122X to [22X999[122X. Each line (except the highest)
+  contains [22X15[122X cells.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xrg := Filtered([801..889],u->(u mod 2)<>0);;[127X[104X
+    [4X[25Xgap>[125X [27Xflen := 15;;[127X[104X
+    [4X[25Xgap>[125X [27Xtwins := Filtered(Primes, p -> p + 2 in Primes);;[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;[127X[104X
+    [4X[25Xgap>[125X [27Xtkz := IP_TikzArrayOfIntegers(rg,flen,rec(highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  picture  obtained  highlights  the  primes,  the  twin  primes  and the
+  multiples  of  [22X3[122X.  As  the  twins  are  also  primes,  a gradient is used to
+  highlight them. In this example the default list of colors is used. The same
+  computations, but defining other color lists.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xcls := IP_ColorsCompRedTones;;[127X[104X
+    [4X[25Xgap>[125X [27Xrg := Filtered([801..889],u->(u mod 2)<>0);;[127X[104X
+    [4X[25Xgap>[125X [27Xflen := 15;;[127X[104X
+    [4X[25Xgap>[125X [27Xtwins := Filtered(Primes, p -> p + 2 in Primes);;[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;[127X[104X
+    [4X[25Xgap>[125X [27Xtkz := IP_TikzArrayOfIntegers(rg,flen,rec(colors := cls,highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xcls := IP_ColorsDGrayTones;;[127X[104X
+    [4X[25Xgap>[125X [27Xrg := Filtered([801..889],u->(u mod 2)<>0);;[127X[104X
+    [4X[25Xgap>[125X [27Xflen := 15;;[127X[104X
+    [4X[25Xgap>[125X [27Xtwins := Filtered(Primes, p -> p + 2 in Primes);;[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;[127X[104X
+    [4X[25Xgap>[125X [27Xtkz := IP_TikzArrayOfIntegers(rg,flen,rec(colors := cls,highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xcls := ["blue","-blue","black"];;[127X[104X
+    [4X[25Xgap>[125X [27Xrg := Filtered([801..889],u->(u mod 2)<>0);;[127X[104X
+    [4X[25Xgap>[125X [27Xflen := 15;;[127X[104X
+    [4X[25Xgap>[125X [27Xtwins := Filtered(Primes, p -> p + 2 in Primes);;[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [Primes,Union(twins,twins+2),Filtered(rg,u->(u mod 3)=0)];;[127X[104X
+    [4X[25Xgap>[125X [27Xtkz := IP_TikzArrayOfIntegers(rg,flen,rec( colors := cls,highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe following example uses the [5XNumericalSgps[105X package.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27X#LoadPackage("numericalsgps");[127X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27Xns := NumericalSemigroup(11,19,30,42,59);;[127X[104X
+    [4X[25Xgap>[125X [27Xcls := ShuffleIP_Colors([IP_ColorsGreenTones,IP_ColorsCompBlueTones]);;[127X[104X
+    [4X[25Xgap>[125X [27Xflen := 20;;[127X[104X
+    [4X[25Xgap>[125X [27X#some notable elements[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [SmallElementsOfNumericalSemigroup(ns),[127X[104X
+    [4X[25X>[125X [27X        GapsOfNumericalSemigroup(ns),[127X[104X
+    [4X[25X>[125X [27X        MinimalGeneratingSystemOfNumericalSemigroup(ns),[127X[104X
+    [4X[25X>[125X [27X        FundamentalGapsOfNumericalSemigroup(ns),[127X[104X
+    [4X[25X>[125X [27X        [ConductorOfNumericalSemigroup(ns)],[127X[104X
+    [4X[25X>[125X [27X        PseudoFrobeniusOfNumericalSemigroup(ns)];;[127X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27Xtkz := IP_TikzArrayOfIntegers(flen,rec(colors := cls,highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YUsing the default colors[133X
+  
+  
+  [1X4.3-2 [33X[0;0YThe banner[133X[101X
+  
+  [33X[0;0YThe  code  in  the  following  example has been used to produce one possible
+  banner  for  the  homepage  of the [5XIntPic[105X package. It is a nice picture that
+  gives  an  idea  about  the  primes less than [22X10000[122X. Of course, other ranges
+  could  have  been  chosen.  I  warn the user that pictures involving a large
+  amount of data may face the problem of exceeding TeX capacity...[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xrow_length := 200;; # the legth of each row[127X[104X
+    [4X[25Xgap>[125X [27Xcolumns := 50;; # the number of colums[127X[104X
+    [4X[25Xgap>[125X [27Xn := row_length*columns;[127X[104X
+    [4X[28X10000[128X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27X##compute the primes less than n[127X[104X
+    [4X[25Xgap>[125X [27X# Primes is a GAP variable representing the list of primes less than 1000[127X[104X
+    [4X[25Xgap>[125X [27Xmp := Maximum(Primes);[127X[104X
+    [4X[28X997[128X[104X
+    [4X[25Xgap>[125X [27Xnewprimes := [];;[127X[104X
+    [4X[25Xgap>[125X [27Xwhile mp < n do[127X[104X
+    [4X[25X>[125X [27X  mp := NextPrimeInt(mp);[127X[104X
+    [4X[25X>[125X [27X  Add(newprimes, mp);[127X[104X
+    [4X[25X>[125X [27Xod;[127X[104X
+    [4X[25Xgap>[125X [27Xsmall_primes := Union(Primes, newprimes);;[127X[104X
+    [4X[25Xgap>[125X [27X##compute the first element of each pair of twin primes less than n[127X[104X
+    [4X[25Xgap>[125X [27Xtwins := Filtered(small_primes, p -> IsPrime(p+2));;[127X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27Xrg := [1..n];;[127X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [Intersection(small_primes,rg),[],[], [127X[104X
+    [4X[25X>[125X [27X        Intersection(Union(twins,twins+2),rg),[],[],[],[],[],[],[],[127X[104X
+    [4X[25X>[125X [27X        [],[],[],[],[],[],Difference(rg,small_primes)];;[127X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27Xtkz:=IP_TikzArrayOfIntegers([1..n],row_length,rec(highlights:=arr,[127X[104X
+    [4X[25X>[125X [27X             cell_width := "6",colsep:="0",rowsep:="0",inner_sep:="2",[127X[104X
+    [4X[25X>[125X [27X             shape_only:=" ",line_width:="0",line_color:="black!20" ));;[127X[104X
+  [4X[32X[104X
+  

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Chapter Label="intro">
+  <Heading>
+    The <Package>IntPic</Package> package
+  </Heading>
+<!--  <Index>&IntPic; - Overview</Index>-->	
+  <Section>
+    <Heading>Overview and Introduction</Heading>
+    The &IntPic; package has as its main goal producing <C>Tikz</C> code for arrays of integers to be included in a &LaTeX; file, which can then be processed. Some of the integers are emphasized, by using different colors for the cells.
+<!--      When used in conjunction with the package &Viz; <Cite Key="DelgadoEgri-NagyMitchellPfeiffer2012-Viz"></Cite>, &IntPic; provides an immediate visualization.-->
+    <P />
+    &IntPic; grew up from my will to have a pictorial view of some sets of integers. I wanted, in particular, get a pictorial view of the results produced by the <Alt Not='Text'><URL
+   Text='NumericalSgps'>http://www.fc.up.pt/cmup/mdelgado/numericalsgps</URL></Alt><Alt Only='Text'><Package>NumericalSgps</Package></Alt> package <Cite Key="DelgadoGarcia-SanchezMorais:numericalsgps"></Cite>. Effort has then been made to serve a slightly more general purpose.
+    For instance, if the user wants to have a pictorial idea of how many primes there are between 800 and 1000, or show it to his students and, perhaps, which among these primes are twin primes, he will probably be happy by producing a picture like the following
+    <P />
+    
+    <Alt Only="LaTeX">
+      \begin{center}
+      \includegraphics[width=0.95\textwidth]{../images/primesandtwins}
+      \end{center}
+    </Alt>
+    <Alt Only="HTML">
+      &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/primesandtwins.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+    </Alt>
+    
+    It has clearly too much information, given through the different colors. The twin primes in the given range are in red-blue, while the remaining primes in the same range are in red. 
+    <P />
+    This package contains relatively few lines of code. The heavier part is the documentation, where many examples are presented.
+    <P />
+    The design of this greatly benefits from my long experience on producing visualization tools for &GAP; objects. The package <Package>sgpviz</Package> <Cite Key="DelgadoMorais:sgpviz"></Cite> is the visible part. More recently, I got involved in a more general project, the &Viz; package <Cite Key="DelgadoEgri-NagyMitchellPfeiffer2012-Viz"></Cite>.
+    The experience gained there, especially through long and fruitful discussions with J. Mitchell, influenced me a lot. This package will probably be part of that more general project. For the moment it is independent, but its use in conjunction with the &Viz; package is recommended since in this case an immediate visualization is provided.
+    <P />
+    The package produces <C>tikz</C> code that the user may then use at his wish. In particular, he can use it in publications. But prior to obtaining results that lead to a publication, the user may benefit of viewing thousands of images. There is a (almost platform independent) function in &Viz; that is intended to make this task easy. It benefits from the &GAP; stuff on creating a temporary directory where the computations occur. The cleaning task is also left to &GAP;, which leaves the user free of the need of collecting the garbage.
+    
+    In order to produce the drawings, &LaTeX;, as well as some &LaTeX; packages, in particular <C>tikz</C> and <C>pgf</C>, must be installed and working. I will assume that this is the case.
+    
+    All the images in <Cite Key="fengraoab"></Cite> have been produced by using the &IntPic; package.
+    <P />
+    This package consists basically of a function with many options associated. The purpose of the manual is to illustrate the use of the options. Many examples are presented. A file, named <F>examples.g</F> contains the &GAP; code, including the one to save the <C>tikz</C> code, to produce the examples in the manual. 
+   
+  </Section>
+  
+  <!-- ######################################## -->
+  <Section Label="install">
+    <Heading>
+      Installing <Package>IntPic</Package>
+    </Heading>
+    In this section we give a brief description of how to start using &IntPic;. If you have any problems getting &IntPic; working, then you could try emailing me at <Email>mdelgado@fc.up.pt</Email>. 
+    <P/>
+    It is assumed that you have a working copy of &GAP; with version number 4.5 or higher. The most up-to-date version of &GAP; and instructions on how to install it can be obtained from the main &GAP; web page
+    <Alt Only="LaTeX">\noindent\vspace{\baselineskip}</Alt>
+    <URL>http://www.gap-system.org</URL>.
+    <P/>
+    
+    <Alt Only="LaTeX">\noindent</Alt> 
+    If the &IntPic; package was obtained as a part of the &GAP; distribution from the <Q>Download</Q> section of the &GAP; website, you may proceed to Section <Ref Sect="loading"/>. Alternatively, the &IntPic; package may be installed using a separate archive, for example, for an update or an installation in a non-default location  (see <Ref Sect="GAP Root Directories" BookName="ref"/>).
+    <P/>
+    
+    Below we describe the installation procedure for the <File>.tar.gz</File> archive format, which can be obtained from <URL>http://cmup.fc.up.pt/cmup/mdelgado/intpic/</URL>. Installation using other archive formats or non UNIX-like systems is performed in a similar way.
+    <P/>
+    
+    To install the &IntPic; package, unpack the archive file, which  should have a name of the form 
+    <C>
+      intpic-<A>XXX</A>.tar.gz
+    </C>
+    for some version number 
+    <A>XXX</A>, by typing 
+    <P/>
+    &nbsp;&nbsp;
+    <C>
+      gzip -dc intpic-<A>XXX</A>.tar.gz | tar xpv
+    </C>
+    <P/>
+    
+    It may be unpacked in one of the following locations:
+    <List>
+      <Item>
+        in the <File>pkg</File> directory of your &GAP; installation;
+      </Item>
+      <Item>
+        or in a directory named <File>.gap/pkg</File> in your home directory (to be added to the &GAP; root directory unless &GAP; is started with <C>-r</C> option);
+      </Item>
+       
+      <Item>
+        or in a directory named <File>pkg</File> in another directory of your choice (e.g.&nbsp;in the directory <File>mygap</File> in your home directory).
+      </Item>
+    </List>
+    
+    In the latter case one must start &GAP; with the <C>-l</C> option, e.g.&nbsp;if your private <F>pkg</F> directory is a subdirectory of <F>mygap</F> in your home directory you might type:
+    <P/>
+    &nbsp;&nbsp;
+    <C>
+      gap -l "<A>;myhomedir</A>/mygap"
+    </C>
+    <P/>
+    <Alt Only="LaTeX">\noindent</Alt> 
+    where <A>myhomedir</A> is the  path  to  your  home  directory,  which may be replaced  by  a  tilde (the  empty  path  before  the semicolon is  filled  in  by  the  default  path  of  the  &GAP; home directory).
+  </Section>
+  
+  <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+  
+  
+  <Section Label="loading">
+    <Heading>
+      Loading <Package>IntPic</Package>
+    </Heading>
+    
+    To use the &IntPic; Package you have to request it explicitly. This  is done by calling <Ref Func="LoadPackage" BookName="ref"/>:
+    <P/>
+    <Example><![CDATA[
+gap> LoadPackage("intpic");
+]]></Example>
+    <P/>
+    The package banner, followed by <C>true</C>, will be shown, if the load has been successful.
+    <P/>
+    If you want to load the &IntPic; package by default, you  can  put  the  <C>LoadPackage</C> command  into  your  <F>gaprc</F>  file  
+    (see  Section&nbsp;<Ref Sect="The gap.ini and gaprc files" BookName="ref"/>).
+    
+  </Section>
+</Chapter>

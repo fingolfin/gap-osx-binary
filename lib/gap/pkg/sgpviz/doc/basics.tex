@@ -1,0 +1,163 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  basics.tex           GAP documentation               Manuel Delgado
+%%
+%H  $Id: basics.tex,v 0.1 mdelgado Exp $
+%%
+%Y  Copyright (C)CMUP, University of Porto
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Some basic functions}
+
+%\Section{Basics}
+\> IsFpSgpAndMonoid(S) 
+
+Tests whether a finitely presented semigroup <S> has an
+identity and thus is a monoid. 
+Note that while {\sf IsFpSemigroup} is part of \GAP, there is no built-in
+function to test whether some object is a finitely presented monoid. 
+The following examples involve the *Brandt
+semigroup* $B_2$ and the *Brandt monoid*
+$B_2^1$.\index{Brandt!semigroup}\index{Brandt!monoid}\index{b21} 
+
+\beginexample
+gap> f := FreeMonoid("a","b");
+<free monoid on the generators [ a, b ]>
+gap> a := GeneratorsOfMonoid( f )[ 1 ];;
+gap> b := GeneratorsOfMonoid( f )[ 2 ];;
+gap> r:=[[a^3,a^2],
+>       [a^2*b,a^2],
+>       [b*a^2,a^2],
+>       [b^2,a^2],
+>       [a*b*a,a],
+>       [b*a*b,b] ];
+[ [ a^3, a^2 ], [ a^2*b, a^2 ], [ b*a^2, a^2 ], [ b^2, a^2 ], [ a*b*a, a ], 
+  [ b*a*b, b ] ]
+gap> b21:= f/r;
+<fp semigroup on the generators [ <identity ...>, a, b ]>
+gap> IsFpSgpAndMonoid(b21);
+true
+\endexample
+\beginexample
+gap> f := FreeSemigroup("a","b");
+<free semigroup on the generators [ a, b ]>
+gap> a := GeneratorsOfSemigroup( f )[ 1 ];;
+gap> b := GeneratorsOfSemigroup( f )[ 2 ];;
+gap> r:=[[a^3,a^2],
+>       [a^2*b,a^2],
+>       [b*a^2,a^2],
+>       [b^2,a^2],
+>       [a*b*a,a],
+>       [b*a*b,b] ];
+[ [ a^3, a^2 ], [ a^2*b, a^2 ], [ b*a^2, a^2 ], [ b^2, a^2 ], [ a*b*a, a ], 
+  [ b*a*b, b ] ]
+gap> b2:= f/r; 
+<fp semigroup on the generators [ a, b ]>
+gap> IsFpSgpAndMonoid(b2); 
+false
+\endexample
+
+%\> IsIdempotent(m)  Tests if an element of a magma is idempotent.
+
+%\> Idempotents(M)  Produces the list of idempotents of a finite magma.
+
+\> HasCommutingIdempotents(M)  
+
+Tests whether the idempotents of the semigroup <M> commute.
+
+\> IsInverseSemigroup(S)  
+
+Tests whether a finite semigroup <S> is inverse. It is well-known that it
+suffices to test whether the idempotents of <S> commute and <S> is
+regular. The function {\sf IsRegularSemigroup} is part of \GAP.
+
+\> DClassDistribution( M, K )  
+
+Computes the number of elements of the subset K of the semigroup M in each
+D-class.  
+\beginexample
+gap> K := Idempotents(b21);
+[ <identity ...>, a^2, a*b, b*a ]
+gap> DClassDistribution(b21,K);
+The D-class of <identity ...> has 1 element which is in K
+The D-class of a has 4 elements 2 of which are in K
+The D-class of a^2 has 1 element which is in K
+gap> 
+\endexample
+
+\> SOne(TS)  
+
+Adds an identity to a transfomation semigroup, if the given semigroup is
+ not a monoid. (Note that it only works for transfomation semigroups.)
+
+
+%\Section{CayleyGraphs}
+
+\> RightCayleyGraph(M)   
+
+Computes the right Cayley graph of the monoid <M>. (It is returned as an
+automaton without initial and final states.) 
+
+\beginexample
+gap> rcg := RightCayleyGraph(b21);
+      |  1  2  3  4  5  6 
+   -  -  -  -  -  -  -  - 
+   a  |  2  4  6  4  2  4 
+   b  |  3  5  4  4  4  3 
+Initial state: [  ]
+Accepting states: [  ]
+\endexample
+
+\>  AutCayley(rcg,x)  
+
+<rcg> is the Cayley graph of a finite monoid and
+ <x> is an element of the monoid (more precisely, the position of
+ that element in the list of the elements of the monoid). It produces
+ an automaton whose initial state is the identity the final state is <x>.
+\beginexample
+gap> AutCayley(rcg,3);
+      |  1  2  3  4  5  6 
+   -  -  -  -  -  -  -  - 
+   a  |  2  4  6  4  2  4 
+   b  |  3  5  4  4  4  3 
+Initial state: [ 1 ]
+Accepting state: [ 3 ]
+\endexample
+
+We give here examples of monoids of injective partial transformations that
+will be used later. \index{poi4}\index{popi4} 
+\beginexample
+gap> g0:=Transformation([5,1,2,3,5]);
+Transformation( [ 5, 1, 2, 3, 5 ] )
+gap> g1:=Transformation([1,2,4,5,5]);
+Transformation( [ 1, 2, 4, 5, 5 ] )
+gap> g2:=Transformation([1,3,5,4,5]);
+Transformation( [ 1, 3, 5, 4, 5 ] )
+gap> g3:=Transformation([2,5,3,4,5]);
+Transformation( [ 2, 5, 3, 4, 5 ] )
+gap> g:=Transformation([2,3,4,1,5]);
+Transformation( [ 2, 3, 4, 1, 5 ] )
+gap> poi4:= Monoid(g0,g1,g2,g3);;
+gap> popi4:= Monoid(g,g0,g1,g2,g3);
+gap> Size(poi4);Size(popi4);
+70
+141
+\endexample
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

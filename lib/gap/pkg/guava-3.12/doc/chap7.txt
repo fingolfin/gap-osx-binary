@@ -1,0 +1,1917 @@
+  
+  [1X7 Bounds on codes, special matrices and miscellaneous functions[0X
+  
+  In  this chapter we describe functions that determine bounds on the size and
+  minimum  distance of codes (Section [14X7.1[0m), functions that determine bounds on
+  the  size  and  covering  radius of codes (Section [14X7.2[0m), functions that work
+  with  special  matrices [5XGUAVA[0m needs for several codes (see Section [14X7.3[0m), and
+  constructing codes or performing calculations with codes (see Section [14X7.5[0m).
+  
+  
+  [1X7.1 Distance bounds on codes[0X
+  
+  This  section  describes  the  functions  that calculate estimates for upper
+  bounds  on  the  size  and minimum distance of codes. Several algorithms are
+  known to compute a largest number of words a code can have with given length
+  and  minimum  distance.  It  is important however to understand that in some
+  cases  the  true upper bound is unknown. A code which has a size equalto the
+  calculated  upper  bound may not have been found. However, codes that have a
+  larger size do not exist.
+  
+  A  second  way  to obtain bounds is a table. In [5XGUAVA[0m, an extensive table is
+  implemented for linear codes over GF(2), GF(3) and GF(4). It contains bounds
+  on  the  minimum  distance  for given word length and dimension. It contains
+  entries  for  word  lengths less than or equal to 257, 243 and 256 for codes
+  over  GF(2),  GF(3) and GF(4) respectively. These entries were obtained from
+  Brouwer's  tables  as of 11 May 2006. For the latest information, please see
+  A. E. Brouwer's tables [Bro06] on the internet.
+  
+  Firstly,  we  describe  functions  that compute specific upper bounds on the
+  code  size  (see  [2XUpperBoundSingleton[0m  ([14X7.1-1[0m),  [2XUpperBoundHamming[0m  ([14X7.1-2[0m),
+  [2XUpperBoundJohnson[0m   ([14X7.1-3[0m),   [2XUpperBoundPlotkin[0m   ([14X7.1-4[0m),  [2XUpperBoundElias[0m
+  ([14X7.1-5[0m) and [2XUpperBoundGriesmer[0m ([14X7.1-6[0m)).
+  
+  Next  we  describe  a function that computes [5XGUAVA[0m's best upper bound on the
+  code size (see [2XUpperBound[0m ([14X7.1-8[0m)).
+  
+  Then  we  describe two functions that compute a lower and upper bound on the
+  minimum  distance  of  a  code  (see  [2XLowerBoundMinimumDistance[0m  ([14X7.1-9[0m) and
+  [2XUpperBoundMinimumDistance[0m ([14X7.1-12[0m)).
+  
+  Finally,  we describe a function that returns a lower and upper bound on the
+  minimum  distance  with given parameters and a description of how the bounds
+  were obtained (see [2XBoundsMinimumDistance[0m ([14X7.1-13[0m)).
+  
+  [1X7.1-1 UpperBoundSingleton[0m
+  
+  [2X> UpperBoundSingleton( [0X[3Xn, d, q[0X[2X ) ___________________________________[0Xfunction
+  
+  [10XUpperBoundSingleton[0m  returns  the  Singleton  bound  for a code of length [3Xn[0m,
+  minimum  distance  [3Xd[0m  over  a  field  of  size [3Xq[0m. This bound is based on the
+  shortening  of  codes.  By  shortening  an  (n,  M,  d)  code  d-1 times, an
+  (n-d+1,M,1)  code  results,  with  M <= q^n-d+1 (see [2XShortenedCode[0m ([14X6.1-9[0m)).
+  Thus
+  
+  
+       M \leq q^{n-d+1}.
+  
+  
+  Codes  that  meet  this  bound  are  called  [13Xmaximum distance separable[0m (see
+  [2XIsMDSCode[0m ([14X4.3-7[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> UpperBoundSingleton(4, 3, 5);[0X
+    [4X25[0X
+    [4Xgap> C := ReedSolomonCode(4,3);; Size(C);[0X
+    [4X25[0X
+    [4Xgap> IsMDSCode(C);[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-2 UpperBoundHamming[0m
+  
+  [2X> UpperBoundHamming( [0X[3Xn, d, q[0X[2X ) _____________________________________[0Xfunction
+  
+  The  Hamming bound (also known as the [13Xsphere packing bound[0m) returns an upper
+  bound on the size of a code of length [3Xn[0m, minimum distance [3Xd[0m, over a field of
+  size [3Xq[0m. The Hamming bound is obtained by dividing the contents of the entire
+  space  GF(q)^n  by the contents of a ball with radius lfloor(d-1) / 2rfloor.
+  As  all these balls are disjoint, they can never contain more than the whole
+  vector space.
+  
+  
+       M \leq {q^n \over V(n,e)},
+  
+  
+  where  M  is  the  maxmimum  number  of codewords and V(n,e) is equal to the
+  contents  of  a  ball of radius e (see [2XSphereContent[0m ([14X7.5-5[0m)). This bound is
+  useful  for  small  values  of  [3Xd[0m. Codes for which equality holds are called
+  [13Xperfect[0m (see [2XIsPerfectCode[0m ([14X4.3-6[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> UpperBoundHamming( 15, 3, 2 );[0X
+    [4X2048[0X
+    [4Xgap> C := HammingCode( 4, GF(2) );[0X
+    [4Xa linear [15,11,3]1 Hamming (4,2) code over GF(2)[0X
+    [4Xgap> Size( C );[0X
+    [4X2048 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-3 UpperBoundJohnson[0m
+  
+  [2X> UpperBoundJohnson( [0X[3Xn, d[0X[2X ) ________________________________________[0Xfunction
+  
+  The  Johnson  bound  is  an  improved  version  of  the  Hamming  bound (see
+  [2XUpperBoundHamming[0m  ([14X7.1-2[0m)). In addition to the Hamming bound, it takes into
+  account  the  elements of the space outside the balls of radius e around the
+  elements of the code. The Johnson bound only works for binary codes.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> UpperBoundJohnson( 13, 5 );[0X
+    [4X77[0X
+    [4Xgap> UpperBoundHamming( 13, 5, 2);[0X
+    [4X89   # in this case the Johnson bound is better [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-4 UpperBoundPlotkin[0m
+  
+  [2X> UpperBoundPlotkin( [0X[3Xn, d, q[0X[2X ) _____________________________________[0Xfunction
+  
+  The  function  [10XUpperBoundPlotkin[0m  calculates the sum of the distances of all
+  ordered  pairs  of  different  codewords.  It  is based on the fact that the
+  minimum  distance  is  at  most  equal to the average distance. It is a good
+  bound if the weights of the codewords do not differ much. It results in:
+  
+  
+       M \leq {d \over {d-(1-1/q)n}},
+  
+  
+  where  M  is the maximum number of codewords. In this case, [3Xd[0m must be larger
+  than (1-1/q)n, but by shortening the code, the case d < (1-1/q)n is covered.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> UpperBoundPlotkin( 15, 7, 2 );[0X
+    [4X32[0X
+    [4Xgap> C := BCHCode( 15, 7, GF(2) );[0X
+    [4Xa cyclic [15,5,7]5 BCH code, delta=7, b=1 over GF(2)[0X
+    [4Xgap> Size(C);[0X
+    [4X32[0X
+    [4Xgap> WeightDistribution(C);[0X
+    [4X[ 1, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0, 0, 0, 0, 0, 1 ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-5 UpperBoundElias[0m
+  
+  [2X> UpperBoundElias( [0X[3Xn, d, q[0X[2X ) _______________________________________[0Xfunction
+  
+  The   Elias   bound   is   an   improvement   of   the  Plotkin  bound  (see
+  [2XUpperBoundPlotkin[0m  ([14X7.1-4[0m))  for  large codes. Subcodes are used to decrease
+  the  size  of  the  code, in this case the subcode of all codewords within a
+  certain  ball.  This  bound  is useful for large codes with relatively small
+  minimum distances.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> UpperBoundPlotkin( 16, 3, 2 );[0X
+    [4X12288[0X
+    [4Xgap> UpperBoundElias( 16, 3, 2 );[0X
+    [4X10280 [0X
+    [4Xgap> UpperBoundElias( 20, 10, 3 );[0X
+    [4X16255[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-6 UpperBoundGriesmer[0m
+  
+  [2X> UpperBoundGriesmer( [0X[3Xn, d, q[0X[2X ) ____________________________________[0Xfunction
+  
+  The  Griesmer  bound  is  valid  only  for  linear  codes. It is obtained by
+  counting  the number of equal symbols in each row of the generator matrix of
+  the  code.  By  omitting  the  coordinates  in which all rows have a zero, a
+  smaller  code  results.  The  Griesmer  bound  is obtained by repeating this
+  proces until a trivial code is left in the end.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> UpperBoundGriesmer( 13, 5, 2 );[0X
+    [4X64[0X
+    [4Xgap> UpperBoundGriesmer( 18, 9, 2 );[0X
+    [4X8        # the maximum number of words for a linear code is 8[0X
+    [4Xgap> Size( PuncturedCode( HadamardCode( 20, 1 ) ) );[0X
+    [4X20       # this non-linear code has 20 elements [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-7 IsGriesmerCode[0m
+  
+  [2X> IsGriesmerCode( [0X[3XC[0X[2X ) ______________________________________________[0Xfunction
+  
+  [10XIsGriesmerCode[0m  returns  `true'  if  a linear code [3XC[0m is a Griesmer code, and
+  `false' otherwise. A code is called [13XGriesmer[0m if its length satisfies
+  
+  
+       n = g[k,d] = \sum_{i=0}^{k-1} \lceil \frac{d}{q^i} \rceil.
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsGriesmerCode( HammingCode( 3, GF(2) ) );[0X
+    [4Xtrue[0X
+    [4Xgap> IsGriesmerCode( BCHCode( 17, 2, GF(2) ) );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-8 UpperBound[0m
+  
+  [2X> UpperBound( [0X[3Xn, d, q[0X[2X ) ____________________________________________[0Xfunction
+  
+  [10XUpperBound[0m  returns the best known upper bound A(n,d) for the size of a code
+  of  length  [3Xn[0m,  minimum  distance  [3Xd[0m  over  a  field of size [3Xq[0m. The function
+  [10XUpperBound[0m  first  checks  for  trivial  cases (like d=1 or n=d), and if the
+  value  is in the built-in table. Then it calculates the minimum value of the
+  upper   bound  using  the  methods  of  Singleton  (see  [2XUpperBoundSingleton[0m
+  ([14X7.1-1[0m)),    Hamming   (see   [2XUpperBoundHamming[0m   ([14X7.1-2[0m)),   Johnson   (see
+  [2XUpperBoundJohnson[0m  ([14X7.1-3[0m)),  Plotkin  (see  [2XUpperBoundPlotkin[0m  ([14X7.1-4[0m)) and
+  Elias (see [2XUpperBoundElias[0m ([14X7.1-5[0m)). If the code is binary, A(n, 2* ell-1) =
+  A(n+1,2*  ell),  so  the [10XUpperBound[0m takes the minimum of the values obtained
+  from all methods for the parameters (n, 2*ell-1) and (n+1, 2* ell).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> UpperBound( 10, 3, 2 );[0X
+    [4X85[0X
+    [4Xgap> UpperBound( 25, 9, 8 );[0X
+    [4X1211778792827540 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-9 LowerBoundMinimumDistance[0m
+  
+  [2X> LowerBoundMinimumDistance( [0X[3XC[0X[2X ) ___________________________________[0Xfunction
+  
+  In  this  form,  [10XLowerBoundMinimumDistance[0m  returns  a  lower  bound for the
+  minimum distance of code [3XC[0m.
+  
+  This  command can also be called using the syntax [10XLowerBoundMinimumDistance(
+  n, k, F )[0m. In this form, [10XLowerBoundMinimumDistance[0m returns a lower bound for
+  the  minimum distance of the best known linear code of length [3Xn[0m, dimension [3Xk[0m
+  over field [3XF[0m. It uses the mechanism explained in section [14X7.1-13[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := BCHCode( 45, 7 );[0X
+    [4Xa cyclic [45,23,7..9]6..16 BCH code, delta=7, b=1 over GF(2)[0X
+    [4Xgap> LowerBoundMinimumDistance( C );[0X
+    [4X7     # designed distance is lower bound for minimum distance [0X
+    [4Xgap> LowerBoundMinimumDistance( 45, 23, GF(2) );[0X
+    [4X10 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-10 LowerBoundGilbertVarshamov[0m
+  
+  [2X> LowerBoundGilbertVarshamov( [0X[3Xn, d, q[0X[2X ) ____________________________[0Xfunction
+  
+  This  is the lower bound on the size of a linear code due (independently) to
+  Gilbert  and Varshamov. It says that for each [3Xn[0m and [3Xd[0m, there exists a linear
+  code having length n and minimum distance d at least of size q^k, where k is
+  the largest integer such that q^k < q^n/[10XSphereContent[0m(n-1,d-2,GF(q)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> LowerBoundGilbertVarshamov(24,8,2);[0X
+    [4X64[0X
+    [4Xgap> LowerBoundGilbertVarshamov(7,3,2);[0X
+    [4X16[0X
+    [4Xgap> LowerBoundMinimumDistance(7,4,2);[0X
+    [4X3[0X
+    [4Xgap> LowerBoundGilbertVarshamov(3,3,2);[0X
+    [4X1[0X
+    [4Xgap> LowerBoundMinimumDistance(3,3,2);[0X
+    [4X1[0X
+    [4Xgap> LowerBoundGilbertVarshamov(25,10,2);[0X
+    [4X16[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-11 LowerBoundSpherePacking[0m
+  
+  [2X> LowerBoundSpherePacking( [0X[3Xn, d, q[0X[2X ) _______________________________[0Xfunction
+  
+  This  is  the  (weaker) Gilbert-Varshamov bound valid for unrestricted codes
+  over  an  alphabet  of  size [3Xq[0m (where [3Xq[0m is an integer > 1). It says that for
+  each  [3Xn[0m  and  [3Xr[0m,  there  exists  an  unrestricted  code  at  least  of  size
+  q^n/[10XSphereContent[0m(n,d,GF(q)) minimum distance d.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> LowerBoundSpherePacking(3,2,2);[0X
+    [4X2[0X
+    [4Xgap> LowerBoundSpherePacking(3,3,2);[0X
+    [4X1[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-12 UpperBoundMinimumDistance[0m
+  
+  [2X> UpperBoundMinimumDistance( [0X[3XC[0X[2X ) ___________________________________[0Xfunction
+  
+  In  this  form,  [10XUpperBoundMinimumDistance[0m  returns  an  upper bound for the
+  minimum distance of code [3XC[0m. For unrestricted codes, it just returns the word
+  length.  For  linear codes, it takes the minimum of the possibly known value
+  from the method of construction, the weight of the generators, and the value
+  from the table (see [14X7.1-13[0m).
+  
+  This  command can also be called using the syntax [10XUpperBoundMinimumDistance(
+  n,  k,  F  )[0m. In this form, [10XUpperBoundMinimumDistance[0m returns an upper bound
+  for  the  minimum  distance  of  the  best  known  linear  code of length [3Xn[0m,
+  dimension [3Xk[0m over field [3XF[0m. It uses the mechanism explained in section [14X7.1-13[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := BCHCode( 45, 7 );;[0X
+    [4Xgap> UpperBoundMinimumDistance( C );[0X
+    [4X9 [0X
+    [4Xgap> UpperBoundMinimumDistance( 45, 23, GF(2) );[0X
+    [4X11 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.1-13 BoundsMinimumDistance[0m
+  
+  [2X> BoundsMinimumDistance( [0X[3Xn, k, F[0X[2X ) _________________________________[0Xfunction
+  
+  The  function  [10XBoundsMinimumDistance[0m  calculates a lower and upper bound for
+  the minimum distance of an optimal linear code with word length [3Xn[0m, dimension
+  [3Xk[0m  over  field  [3XF[0m.  The function returns a record with the two bounds and an
+  explanation  for  each  bound.  The function [10XDisplay[0m can be used to show the
+  explanations.
+  
+  The  values  for  the lower and upper bound are obtained from a table. [5XGUAVA[0m
+  has  tables  containing  lower  and upper bounds for q=2 (n <= 257), 3 (n <=
+  243),  4  (n <= 256). (Current as of 11 May 2006.) These tables were derived
+  from       the       table       of       Brouwer.       (See       [Bro06],
+  [7Xhttp://www.win.tue.nl/~aeb/voorlincod.html[0m  for  the  most recent data.) For
+  codes  over  other  fields  and  for larger word lengths, trivial bounds are
+  used.
+  
+  The  resulting  record  can be used in the function [10XBestKnownLinearCode[0m (see
+  [2XBestKnownLinearCode[0m  ([14X5.2-14[0m))  to  construct  a  code with minimum distance
+  equal to the lower bound.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> bounds := BoundsMinimumDistance( 7, 3 );; DisplayBoundsInfo( bounds );[0X
+    [4Xan optimal linear [7,3,d] code over GF(2) has d=4[0X
+    [4X------------------------------------------------------------------------------[0X
+    [4XLb(7,3)=4, by shortening of:[0X
+    [4XLb(8,4)=4, u u+v construction of C1 and C2:[0X
+    [4XLb(4,3)=2, dual of the repetition code[0X
+    [4XLb(4,1)=4, repetition code[0X
+    [4X------------------------------------------------------------------------------[0X
+    [4XUb(7,3)=4, Griesmer bound[0X
+    [4X# The lower bound is equal to the upper bound, so a code with[0X
+    [4X# these parameters is optimal.[0X
+    [4Xgap> C := BestKnownLinearCode( bounds );; Display( C );[0X
+    [4Xa linear [7,3,4]2..3 shortened code of[0X
+    [4Xa linear [8,4,4]2 U U+V construction code of[0X
+    [4XU: a cyclic [4,3,2]1 dual code of[0X
+    [4X   a cyclic [4,1,4]2 repetition code over GF(2)[0X
+    [4XV: a cyclic [4,1,4]2 repetition code over GF(2)[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X7.2 Covering radius bounds on codes[0X
+  
+  [1X7.2-1 BoundsCoveringRadius[0m
+  
+  [2X> BoundsCoveringRadius( [0X[3XC[0X[2X ) ________________________________________[0Xfunction
+  
+  [10XBoundsCoveringRadius[0m  returns  a  list  of integers. The first entry of this
+  list  is  the maximum of some lower bounds for the covering radius of [3XC[0m, the
+  last entry the minimum of some upper bounds of [3XC[0m.
+  
+  If  the  covering  radius  of  [3XC[0m  is  known, a list of length 1 is returned.
+  [10XBoundsCoveringRadius[0m       makes       use       of       the      functions
+  [10XGeneralLowerBoundCoveringRadius[0m and [10XGeneralUpperBoundCoveringRadius[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> BoundsCoveringRadius( BCHCode( 17, 3, GF(2) ) );[0X
+    [4X[ 3 .. 4 ][0X
+    [4Xgap> BoundsCoveringRadius( HammingCode( 5, GF(2) ) );[0X
+    [4X[ 1 ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-2 IncreaseCoveringRadiusLowerBound[0m
+  
+  [2X> IncreaseCoveringRadiusLowerBound( [0X[3XC[, stopdist][, startword][0X[2X ) ___[0Xfunction
+  
+  [10XIncreaseCoveringRadiusLowerBound[0m  tries  to  increase the lower bound of the
+  covering  radius  of  [3XC[0m. It does this by means of a probabilistic algorithm.
+  This  algorithm  takes  a  random  word  in  GF(q)^n  (or [3Xstartword[0m if it is
+  specified),  and, by changing random coordinates, tries to get as far from [3XC[0m
+  as  possible.  If  changing  a  coordinate  finds  a  word that has a larger
+  distance  to  the  code than the previous one, the change is made permanent,
+  and  the  algorithm starts all over again. If changing a coordinate does not
+  find  a  coset leader that is further away from the code, then the change is
+  made  permanent with a chance of 1 in 100, if it gets the word closer to the
+  code,  or  with a chance of 1 in 10, if the word stays at the same distance.
+  Otherwise, the algorithm starts again with the same word as before.
+  
+  If  the  algorithm  did  not allow changes that decrease the distance to the
+  code,  it  might  get  stuck  in  a  sub-optimal situation (the coset leader
+  corresponding  to such a situation - i.e. no coordinate of this coset leader
+  can  be changed in such a way that we get at a larger distance from the code
+  - is called an [13Xorphan[0m).
+  
+  If  the  algorithm  finds  a word that has distance [3Xstopdist[0m to the code, it
+  ends and returns that word, which can be used for further investigations.
+  
+  The  variable  [3XInfoCoveringRadius[0m  can  be set to [3XPrint[0m to print the maximum
+  distance  reached  so  far every 1000 runs. The algorithm can be interrupted
+  with  [12Xctrl-C[0m,  allowing the user to look at the word that is currently being
+  examined  (called  `current'), or to change the chances that the new word is
+  made  permanent  (these are called `staychance' and `downchance'). If one of
+  these variables is i, then it corresponds with a i in 100 chance.
+  
+  At  the moment, the algorithm is only useful for codes with small dimension,
+  where  small means that the elements of the code fit in the memory. It works
+  with  larger  codes,  however,  but  when  you  use  it for codes with large
+  dimension,  you  should  be [13Xvery[0m patient. If running the algorithm quits GAP
+  (due  to memory problems), you can change the global variable [3XCRMemSize[0m to a
+  lower  value.  This  might  cause  the  algorithm to run slower, but without
+  quitting  GAP.  The  only  way to find out the best value of [3XCRMemSize[0m is by
+  experimenting.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> IncreaseCoveringRadiusLowerBound(C,10);[0X
+    [4XNumber of runs: 1000  best distance so far: 3[0X
+    [4XNumber of runs: 2000  best distance so far: 3[0X
+    [4XNumber of changes: 100[0X
+    [4XNumber of runs: 3000  best distance so far: 3[0X
+    [4XNumber of runs: 4000  best distance so far: 3[0X
+    [4XNumber of runs: 5000  best distance so far: 3[0X
+    [4XNumber of runs: 6000  best distance so far: 3[0X
+    [4XNumber of runs: 7000  best distance so far: 3[0X
+    [4XNumber of changes: 200[0X
+    [4XNumber of runs: 8000  best distance so far: 3[0X
+    [4XNumber of runs: 9000  best distance so far: 3[0X
+    [4XNumber of runs: 10000  best distance so far: 3[0X
+    [4XNumber of changes: 300[0X
+    [4XNumber of runs: 11000  best distance so far: 3[0X
+    [4XNumber of runs: 12000  best distance so far: 3[0X
+    [4XNumber of runs: 13000  best distance so far: 3[0X
+    [4XNumber of changes: 400[0X
+    [4XNumber of runs: 14000  best distance so far: 3[0X
+    [4Xuser interrupt at... [0X
+    [4X#[0X
+    [4X# used ctrl-c to break out of execution[0X
+    [4X#[0X
+    [4X... called from [0X
+    [4XIncreaseCoveringRadiusLowerBound( code, -1, current ) called from[0X
+    [4X function( arguments ) called from read-eval-loop[0X
+    [4XEntering break read-eval-print loop ...[0X
+    [4Xyou can 'quit;' to quit to outer loop, or[0X
+    [4Xyou can 'return;' to continue[0X
+    [4Xbrk> current;[0X
+    [4X[ Z(2)^0, Z(2)^0, Z(2)^0, Z(2)^0, 0*Z(2), Z(2)^0, 0*Z(2), Z(2)^0, 0*Z(2), Z(2)^0 ][0X
+    [4Xbrk>[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-3 ExhaustiveSearchCoveringRadius[0m
+  
+  [2X> ExhaustiveSearchCoveringRadius( [0X[3XC[0X[2X ) ______________________________[0Xfunction
+  
+  [10XExhaustiveSearchCoveringRadius[0m   does  an  exhaustive  search  to  find  the
+  covering  radius of [3XC[0m. Every time a coset leader of a coset with weight w is
+  found, the function tries to find a coset leader of a coset with weight w+1.
+  It  does this by enumerating all words of weight w+1, and checking whether a
+  word is a coset leader. The start weight is the current known lower bound on
+  the covering radius.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> ExhaustiveSearchCoveringRadius(C);[0X
+    [4XTrying 3 ...[0X
+    [4X[ 3 .. 5 ][0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-4 GeneralLowerBoundCoveringRadius[0m
+  
+  [2X> GeneralLowerBoundCoveringRadius( [0X[3XC[0X[2X ) _____________________________[0Xfunction
+  
+  [10XGeneralLowerBoundCoveringRadius[0m returns a lower bound on the covering radius
+  of    [3XC[0m.    It   uses   as   many   functions   which   names   start   with
+  [10XLowerBoundCoveringRadius[0m  as possible to find the best known lower bound (at
+  least  that  [5XGUAVA[0m knows of) together with tables for the covering radius of
+  binary linear codes with length not greater than 64.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> GeneralLowerBoundCoveringRadius(C);[0X
+    [4X2[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-5 GeneralUpperBoundCoveringRadius[0m
+  
+  [2X> GeneralUpperBoundCoveringRadius( [0X[3XC[0X[2X ) _____________________________[0Xfunction
+  
+  [10XGeneralUpperBoundCoveringRadius[0m  returns  an  upper  bound  on  the covering
+  radius   of   [3XC[0m.   It   uses  as  many  functions  which  names  start  with
+  [10XUpperBoundCoveringRadius[0m  as possible to find the best known upper bound (at
+  least that [5XGUAVA[0m knows of).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> GeneralUpperBoundCoveringRadius(C);[0X
+    [4X4[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-6 LowerBoundCoveringRadiusSphereCovering[0m
+  
+  [2X> LowerBoundCoveringRadiusSphereCovering( [0X[3Xn, M[, F], false[0X[2X ) _______[0Xfunction
+  
+  This     command     can     also     be    called    using    the    syntax
+  [10XLowerBoundCoveringRadiusSphereCovering(  n,  r,  [F,]  true  )[0m.  If the last
+  argument of [10XLowerBoundCoveringRadiusSphereCovering[0m is [3Xfalse[0m, then it returns
+  a  lower  bound  for  the  covering radius of a code of size [3XM[0m and length [3Xn[0m.
+  Otherwise,  it  returns a lower bound for the size of a code of length [3Xn[0m and
+  covering radius [3Xr[0m.
+  
+  [3XF[0m  is  the  field  over  which  the  code is defined. If [3XF[0m is omitted, it is
+  assumed  that the code is over GF(2). The bound is computed according to the
+  sphere covering bound:
+  
+  
+       M \cdot V_q(n,r) \geq q^n
+  
+  
+  where V_q(n,r) is the size of a sphere of radius r in GF(q)^n.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> Size(C);[0X
+    [4X32[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4Xgap> LowerBoundCoveringRadiusSphereCovering(10,32,GF(2),false);[0X
+    [4X2[0X
+    [4Xgap> LowerBoundCoveringRadiusSphereCovering(10,3,GF(2),true);[0X
+    [4X6[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-7 LowerBoundCoveringRadiusVanWee1[0m
+  
+  [2X> LowerBoundCoveringRadiusVanWee1( [0X[3Xn, M[, F], false[0X[2X ) ______________[0Xfunction
+  
+  This     command     can     also     be    called    using    the    syntax
+  [10XLowerBoundCoveringRadiusVanWee1(  n, r, [F,] true )[0m. If the last argument of
+  [10XLowerBoundCoveringRadiusVanWee1[0m  is [3Xfalse[0m, then it returns a lower bound for
+  the  covering radius of a code of size [3XM[0m and length [3Xn[0m. Otherwise, it returns
+  a lower bound for the size of a code of length [3Xn[0m and covering radius [3Xr[0m.
+  
+  [3XF[0m  is  the  field  over  which  the  code is defined. If [3XF[0m is omitted, it is
+  assumed that the code is over GF(2).
+  
+  The Van Wee bound is an improvement of the sphere covering bound:
+  
+  
+       M \cdot \left\{ V_q(n,r) - \frac{{n \choose
+       r}}{\lceil\frac{n-r}{r+1}\rceil}
+       \left(\left\lceil\frac{n+1}{r+1}\right\rceil -
+       \frac{n+1}{r+1}\right) \right\} \geq q^n
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> Size(C);[0X
+    [4X32[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4Xgap> LowerBoundCoveringRadiusVanWee1(10,32,GF(2),false);[0X
+    [4X2[0X
+    [4Xgap> LowerBoundCoveringRadiusVanWee1(10,3,GF(2),true);[0X
+    [4X6[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-8 LowerBoundCoveringRadiusVanWee2[0m
+  
+  [2X> LowerBoundCoveringRadiusVanWee2( [0X[3Xn, M, false[0X[2X ) ___________________[0Xfunction
+  
+  This     command     can     also     be    called    using    the    syntax
+  [10XLowerBoundCoveringRadiusVanWee2(  n,  r  [,true]  )[0m. If the last argument of
+  [10XLowerBoundCoveringRadiusVanWee2[0m  is [3Xfalse[0m, then it returns a lower bound for
+  the  covering radius of a code of size [3XM[0m and length [3Xn[0m. Otherwise, it returns
+  a lower bound for the size of a code of length [3Xn[0m and covering radius [3Xr[0m.
+  
+  This  bound  only  works  for  binary  codes.  It  is based on the following
+  inequality:
+  
+  
+       M \cdot \frac{\left( \left( V_2(n,2) - \frac{1}{2}(r+2)(r-1)
+       \right) V_2(n,r) + \varepsilon V_2(n,r-2) \right)} {(V_2(n,2) -
+       \frac{1}{2}(r+2)(r-1) + \varepsilon)} \geq 2^n,
+  
+  
+  where
+  
+  
+       \varepsilon = {r+2 \choose 2} \left\lceil {n-r+1 \choose 2} / {r+2
+       \choose 2} \right\rceil - {n-r+1 \choose 2}.
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> Size(C);[0X
+    [4X32[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4Xgap> LowerBoundCoveringRadiusVanWee2(10,32,false);[0X
+    [4X2[0X
+    [4Xgap> LowerBoundCoveringRadiusVanWee2(10,3,true);[0X
+    [4X7[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-9 LowerBoundCoveringRadiusCountingExcess[0m
+  
+  [2X> LowerBoundCoveringRadiusCountingExcess( [0X[3Xn, M, false[0X[2X ) ____________[0Xfunction
+  
+  This command can also be called with [10XLowerBoundCoveringRadiusCountingExcess(
+  n,      r      [,true]      )[0m.      If      the     last     argument     of
+  [10XLowerBoundCoveringRadiusCountingExcess[0m  is  [3Xfalse[0m,  then  it returns a lower
+  bound  for  the covering radius of a code of size [3XM[0m and length [3Xn[0m. Otherwise,
+  it  returns  a  lower  bound for the size of a code of length [3Xn[0m and covering
+  radius [3Xr[0m.
+  
+  This  bound  only  works  for  binary  codes.  It  is based on the following
+  inequality:
+  
+  
+       M \cdot \left( \rho V_2(n,r) + \varepsilon V_2(n,r-1) \right) \geq
+       (\rho + \varepsilon) 2^n,
+  
+  
+  where
+  
+  
+       \varepsilon = (r+1) \left\lceil\frac{n+1}{r+1}\right\rceil - (n+1)
+  
+  
+  and
+  
+  
+       \rho = \left\{ \begin{array}{l} n-3+\frac{2}{n}, \ \ \ \ \ \ {\rm
+       if}\ r = 2\\ n-r-1 , \ \ \ \ \ \ {\rm if}\ r \geq 3 . \end{array}
+       \right.
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> Size(C);[0X
+    [4X32[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4Xgap> LowerBoundCoveringRadiusCountingExcess(10,32,false);[0X
+    [4X0[0X
+    [4Xgap> LowerBoundCoveringRadiusCountingExcess(10,3,true);[0X
+    [4X7[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-10 LowerBoundCoveringRadiusEmbedded1[0m
+  
+  [2X> LowerBoundCoveringRadiusEmbedded1( [0X[3Xn, M, false[0X[2X ) _________________[0Xfunction
+  
+  This command can also be called with [10XLowerBoundCoveringRadiusEmbedded1( n, r
+  [,true]  )[0m.  If  the  last  argument of [10XLowerBoundCoveringRadiusEmbedded1[0m is
+  'false',  then it returns a lower bound for the covering radius of a code of
+  size  [3XM[0m  and length [3Xn[0m. Otherwise, it returns a lower bound for the size of a
+  code of length [3Xn[0m and covering radius [3Xr[0m.
+  
+  This  bound  only  works  for  binary  codes.  It  is based on the following
+  inequality:
+  
+  
+       M \cdot \left( V_2(n,r) - {2r \choose r} \right) \geq 2^n - A( n,
+       2r+1 ) {2r \choose r},
+  
+  
+  where  A(n,d) denotes the maximal cardinality of a (binary) code of length n
+  and  minimum  distance  d.  The  function [10XUpperBound[0m is used to compute this
+  value.
+  
+  Sometimes      [10XLowerBoundCoveringRadiusEmbedded1[0m      is     better     than
+  [10XLowerBoundCoveringRadiusEmbedded2[0m, sometimes it is the other way around.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> Size(C);[0X
+    [4X32[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4Xgap> LowerBoundCoveringRadiusEmbedded1(10,32,false);[0X
+    [4X2[0X
+    [4Xgap> LowerBoundCoveringRadiusEmbedded1(10,3,true);[0X
+    [4X7[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-11 LowerBoundCoveringRadiusEmbedded2[0m
+  
+  [2X> LowerBoundCoveringRadiusEmbedded2( [0X[3Xn, M, false[0X[2X ) _________________[0Xfunction
+  
+  This command can also be called with [10XLowerBoundCoveringRadiusEmbedded2( n, r
+  [,true]  )[0m.  If  the  last  argument of [10XLowerBoundCoveringRadiusEmbedded2[0m is
+  'false',  then it returns a lower bound for the covering radius of a code of
+  size  [3XM[0m  and length [3Xn[0m. Otherwise, it returns a lower bound for the size of a
+  code of length [3Xn[0m and covering radius [3Xr[0m.
+  
+  This  bound  only  works  for  binary  codes.  It  is based on the following
+  inequality:
+  
+  
+       M \cdot \left( V_2(n,r) - \frac{3}{2} {2r \choose r} \right) \geq
+       2^n - 2A( n, 2r+1 ) {2r \choose r},
+  
+  
+  where  A(n,d) denotes the maximal cardinality of a (binary) code of length n
+  and  minimum  distance  d.  The  function [10XUpperBound[0m is used to compute this
+  value.
+  
+  Sometimes      [10XLowerBoundCoveringRadiusEmbedded1[0m      is     better     than
+  [10XLowerBoundCoveringRadiusEmbedded2[0m, sometimes it is the other way around.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(15,5,GF(2));[0X
+    [4Xa  [15,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> Size(C);[0X
+    [4X32[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X6[0X
+    [4Xgap> LowerBoundCoveringRadiusEmbedded2(10,32,false);[0X
+    [4X2[0X
+    [4Xgap> LowerBoundCoveringRadiusEmbedded2(10,3,true);[0X
+    [4X7[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-12 LowerBoundCoveringRadiusInduction[0m
+  
+  [2X> LowerBoundCoveringRadiusInduction( [0X[3Xn, r[0X[2X ) ________________________[0Xfunction
+  
+  [10XLowerBoundCoveringRadiusInduction[0m  returns  a  lower bound for the size of a
+  code with length [3Xn[0m and covering radius [3Xr[0m.
+  
+  If n = 2r+2 and r >= 1, the returned value is 4.
+  
+  If n = 2r+3 and r >= 1, the returned value is 7.
+  
+  If n = 2r+4 and r >= 4, the returned value is 8.
+  
+  Otherwise, 0 is returned.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(15,5,GF(2));[0X
+    [4Xa  [15,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X5[0X
+    [4Xgap> LowerBoundCoveringRadiusInduction(15,6);[0X
+    [4X7[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-13 UpperBoundCoveringRadiusRedundancy[0m
+  
+  [2X> UpperBoundCoveringRadiusRedundancy( [0X[3XC[0X[2X ) __________________________[0Xfunction
+  
+  [10XUpperBoundCoveringRadiusRedundancy[0m  returns  the redundancy of [3XC[0m as an upper
+  bound for the covering radius of [3XC[0m. [3XC[0m must be a linear code.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(15,5,GF(2));[0X
+    [4Xa  [15,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X5[0X
+    [4Xgap> UpperBoundCoveringRadiusRedundancy(C);[0X
+    [4X10[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-14 UpperBoundCoveringRadiusDelsarte[0m
+  
+  [2X> UpperBoundCoveringRadiusDelsarte( [0X[3XC[0X[2X ) ____________________________[0Xfunction
+  
+  [10XUpperBoundCoveringRadiusDelsarte[0m  returns  an  upper  bound for the covering
+  radius  of  [3XC[0m. This upper bound is equal to the external distance of [3XC[0m, this
+  is the minimum distance of the dual code, if [3XC[0m is a linear code.
+  
+  This is described in Theorem 11.3.3 of [HP03].
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(15,5,GF(2));[0X
+    [4Xa  [15,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X5[0X
+    [4Xgap> UpperBoundCoveringRadiusDelsarte(C);[0X
+    [4X13[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-15 UpperBoundCoveringRadiusStrength[0m
+  
+  [2X> UpperBoundCoveringRadiusStrength( [0X[3XC[0X[2X ) ____________________________[0Xfunction
+  
+  [10XUpperBoundCoveringRadiusStrength[0m  returns  an  upper  bound for the covering
+  radius of [3XC[0m.
+  
+  First  the  code  is punctured at the zero coordinates (i.e. the coordinates
+  where all codewords have a zero). If the remaining code has [13Xstrength[0m 1 (i.e.
+  each  coordinate  contains  each  element  of  the  field an equal number of
+  times),  then it returns fracq-1qm + (n-m) (where q is the size of the field
+  and  m  is the length of punctured code), otherwise it returns n. This bound
+  works for all codes.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(15,5,GF(2));[0X
+    [4Xa  [15,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X5[0X
+    [4Xgap> UpperBoundCoveringRadiusStrength(C);[0X
+    [4X7[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-16 UpperBoundCoveringRadiusGriesmerLike[0m
+  
+  [2X> UpperBoundCoveringRadiusGriesmerLike( [0X[3XC[0X[2X ) ________________________[0Xfunction
+  
+  This  function  returns  an  upper bound for the covering radius of [3XC[0m, which
+  must be linear, in a Griesmer-like fashion. It returns
+  
+  
+       n - \sum_{i=1}^k \left\lceil \frac{d}{q^i} \right\rceil
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(15,5,GF(2));[0X
+    [4Xa  [15,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X5[0X
+    [4Xgap> UpperBoundCoveringRadiusGriesmerLike(C);[0X
+    [4X9[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.2-17 UpperBoundCoveringRadiusCyclicCode[0m
+  
+  [2X> UpperBoundCoveringRadiusCyclicCode( [0X[3XC[0X[2X ) __________________________[0Xfunction
+  
+  This  function  returns  an  upper bound for the covering radius of [3XC[0m, which
+  must be a cyclic code. It returns
+  
+  
+       n - k + 1 - \left\lceil \frac{w(g(x))}{2} \right\rceil,
+  
+  
+  where g(x) is the generator polynomial of [3XC[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=CyclicCodes(15,GF(2))[3];[0X
+    [4Xa cyclic [15,12,1..2]1..3 enumerated code over GF(2)[0X
+    [4Xgap> CoveringRadius(C);[0X
+    [4X3[0X
+    [4Xgap> UpperBoundCoveringRadiusCyclicCode(C);[0X
+    [4X3[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X7.3 Special matrices in [5XGUAVA[1X[0X
+  
+  This  section explains functions that work with special matrices [5XGUAVA[0m needs
+  for several codes.
+  
+  Firstly,  we  describe  some  matrix generating functions (see [2XKrawtchoukMat[0m
+  ([14X7.3-1[0m), [2XGrayMat[0m ([14X7.3-2[0m), [2XSylvesterMat[0m ([14X7.3-3[0m), [2XHadamardMat[0m ([14X7.3-4[0m) and [2XMOLS[0m
+  ([14X7.3-11[0m)).
+  
+  Next  we  describe  two functions regarding a standard form of matrices (see
+  [2XPutStandardForm[0m ([14X7.3-6[0m) and [2XIsInStandardForm[0m ([14X7.3-7[0m)).
+  
+  Then  we  describe  functions that return a matrix after a manipulation (see
+  [2XPermutedCols[0m     ([14X7.3-8[0m),     [2XVerticalConversionFieldMat[0m     ([14X7.3-9[0m)     and
+  [2XHorizontalConversionFieldMat[0m ([14X7.3-10[0m)).
+  
+  Finally,  we  describe  functions  that  do  some  tests  on  matrices  (see
+  [2XIsLatinSquare[0m ([14X7.3-12[0m) and [2XAreMOLS[0m ([14X7.3-13[0m)).
+  
+  [1X7.3-1 KrawtchoukMat[0m
+  
+  [2X> KrawtchoukMat( [0X[3Xn, q[0X[2X ) ____________________________________________[0Xfunction
+  
+  [10XKrawtchoukMat[0m  returns the n+1 by n+1 matrix K=(k_ij) defined by k_ij=K_i(j)
+  for i,j=0,...,n. K_i(j) is the Krawtchouk number (see [2XKrawtchouk[0m ([14X7.5-6[0m)). [3Xn[0m
+  must  be  a  positive  integer and [3Xq[0m a prime power. The Krawtchouk matrix is
+  used in the [13XMacWilliams identities[0m, defining the relation between the weight
+  distribution  of  a  code  of  length [3Xn[0m over a field of size [3Xq[0m, and its dual
+  code.  Each  call  to  [10XKrawtchoukMat[0m  returns a new matrix, so it is safe to
+  modify the result.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> PrintArray( KrawtchoukMat( 3, 2 ) );[0X
+    [4X[ [   1,   1,   1,   1 ],[0X
+    [4X  [   3,   1,  -1,  -3 ],[0X
+    [4X  [   3,  -1,  -1,   3 ],[0X
+    [4X  [   1,  -1,   1,  -1 ] ][0X
+    [4Xgap> C := HammingCode( 3 );; a := WeightDistribution( C );[0X
+    [4X[ 1, 0, 0, 7, 7, 0, 0, 1 ][0X
+    [4Xgap> n := WordLength( C );; q := Size( LeftActingDomain( C ) );;[0X
+    [4Xgap> k := Dimension( C );;[0X
+    [4Xgap> q^( -k ) * KrawtchoukMat( n, q ) * a;[0X
+    [4X[ 1, 0, 0, 0, 7, 0, 0, 0 ][0X
+    [4Xgap> WeightDistribution( DualCode( C ) );[0X
+    [4X[ 1, 0, 0, 0, 7, 0, 0, 0 ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-2 GrayMat[0m
+  
+  [2X> GrayMat( [0X[3Xn, F[0X[2X ) __________________________________________________[0Xfunction
+  
+  [10XGrayMat[0m  returns a list of all different vectors (see GAP's [10XVectors[0m command)
+  of  length  [3Xn[0m  over  the  field [3XF[0m, using Gray ordering. [3Xn[0m must be a positive
+  integer.  This  order  has  the  property  that subsequent vectors differ in
+  exactly  one  coordinate.  The  first vector is always the null vector. Each
+  call to [10XGrayMat[0m returns a new matrix, so it is safe to modify the result.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> GrayMat(3);[0X
+    [4X[ [ 0*Z(2), 0*Z(2), 0*Z(2) ], [ 0*Z(2), 0*Z(2), Z(2)^0 ],[0X
+    [4X  [ 0*Z(2), Z(2)^0, Z(2)^0 ], [ 0*Z(2), Z(2)^0, 0*Z(2) ],[0X
+    [4X  [ Z(2)^0, Z(2)^0, 0*Z(2) ], [ Z(2)^0, Z(2)^0, Z(2)^0 ],[0X
+    [4X  [ Z(2)^0, 0*Z(2), Z(2)^0 ], [ Z(2)^0, 0*Z(2), 0*Z(2) ] ][0X
+    [4Xgap> G := GrayMat( 4, GF(4) );; Length(G);[0X
+    [4X256          # the length of a GrayMat is always q^n[0X
+    [4Xgap> G[101] - G[100];[0X
+    [4X[ 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-3 SylvesterMat[0m
+  
+  [2X> SylvesterMat( [0X[3Xn[0X[2X ) ________________________________________________[0Xfunction
+  
+  [10XSylvesterMat[0m returns the nx n Sylvester matrix of order [3Xn[0m. This is a special
+  case   of   the  Hadamard  matrices  (see  [2XHadamardMat[0m  ([14X7.3-4[0m)).  For  this
+  construction,  [3Xn[0m  must  be a power of 2. Each call to [10XSylvesterMat[0m returns a
+  new matrix, so it is safe to modify the result.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> PrintArray(SylvesterMat(2));[0X
+    [4X[ [   1,   1 ],[0X
+    [4X  [   1,  -1 ] ][0X
+    [4Xgap> PrintArray( SylvesterMat(4) );[0X
+    [4X[ [   1,   1,   1,   1 ],[0X
+    [4X  [   1,  -1,   1,  -1 ],[0X
+    [4X  [   1,   1,  -1,  -1 ],[0X
+    [4X  [   1,  -1,  -1,   1 ] ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-4 HadamardMat[0m
+  
+  [2X> HadamardMat( [0X[3Xn[0X[2X ) _________________________________________________[0Xfunction
+  
+  [10XHadamardMat[0m  returns  a  Hadamard  matrix of order [3Xn[0m. This is an nx n matrix
+  with  the  property  that  the  matrix multiplied by its transpose returns [3Xn[0m
+  times  the  identity  matrix. This is only possible for n=1, n=2 or in cases
+  where [3Xn[0m is a multiple of 4. If the matrix does not exist or is not known (as
+  of  1998),  [10XHadamardMat[0m  returns  an  error.  A large number of construction
+  methods  is known to create these matrices for different orders. [10XHadamardMat[0m
+  makes   use   of   two  construction  methods  (the  Paley  Type  I  and  II
+  constructions,  and the Sylvester construction -- see [2XSylvesterMat[0m ([14X7.3-3[0m)).
+  These  methods  cover  most of the possible Hadamard matrices, although some
+  special  algorithms have not been implemented yet. The following orders less
+  than  100  do not yet have an implementation for a Hadamard matrix in [5XGUAVA[0m:
+  52, 92.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := HadamardMat(8);; PrintArray(C);[0X
+    [4X[ [   1,   1,   1,   1,   1,   1,   1,   1 ],[0X
+    [4X  [   1,  -1,   1,  -1,   1,  -1,   1,  -1 ],[0X
+    [4X  [   1,   1,  -1,  -1,   1,   1,  -1,  -1 ],[0X
+    [4X  [   1,  -1,  -1,   1,   1,  -1,  -1,   1 ],[0X
+    [4X  [   1,   1,   1,   1,  -1,  -1,  -1,  -1 ],[0X
+    [4X  [   1,  -1,   1,  -1,  -1,   1,  -1,   1 ],[0X
+    [4X  [   1,   1,  -1,  -1,  -1,  -1,   1,   1 ],[0X
+    [4X  [   1,  -1,  -1,   1,  -1,   1,   1,  -1 ] ][0X
+    [4Xgap> C * TransposedMat(C) = 8 * IdentityMat( 8, 8 );[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-5 VandermondeMat[0m
+  
+  [2X> VandermondeMat( [0X[3XX, a[0X[2X ) ___________________________________________[0Xfunction
+  
+  The  function  [10XVandermondeMat[0m  returns  the  (a+1)x n matrix of powers x_i^j
+  where  [3XX[0m  is  a  list  of  elements of a field, X={ x_1,...,x_n}, and [3Xa[0m is a
+  non-negative integer.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M:=VandermondeMat([Z(5),Z(5)^2,Z(5)^0,Z(5)^3],2);[0X
+    [4X[ [ Z(5)^0, Z(5), Z(5)^2 ], [ Z(5)^0, Z(5)^2, Z(5)^0 ],[0X
+    [4X  [ Z(5)^0, Z(5)^0, Z(5)^0 ], [ Z(5)^0, Z(5)^3, Z(5)^2 ] ][0X
+    [4Xgap> Display(M);[0X
+    [4X 1 2 4[0X
+    [4X 1 4 1[0X
+    [4X 1 1 1[0X
+    [4X 1 3 4[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-6 PutStandardForm[0m
+  
+  [2X> PutStandardForm( [0X[3XM[, idleft][0X[2X ) ___________________________________[0Xfunction
+  
+  We  say  that  a kx n matrix is in [13Xstandard form[0m if it is equal to the block
+  matrix  (I | A), for some kx (n-k) matrix A and where I is the kx k identity
+  matrix.  It  follows  from  a  basis  result in linear algebra that, after a
+  possible  permutation of the columns, using elementary row operations, every
+  matrix  can  be reduced to standard form. [10XPutStandardForm[0m puts a matrix [3XM[0m in
+  standard  form,  and  returns  the  permutation needed to do so. [3Xidleft[0m is a
+  boolean that sets the position of the identity matrix in [3XM[0m. (The default for
+  [3Xidleft[0m is `true'.) If [3Xidleft[0m is set to `true', the identity matrix is put on
+  the  left side of [3XM[0m. Otherwise, it is put at the right side. (This option is
+  useful  when  putting  a  check  matrix  of  a code into standard form.) The
+  function  [10XBaseMat[0m  also  returns a similar standard form, but does not apply
+  column permutations. The rows of the matrix still span the same vector space
+  after  [10XBaseMat[0m,  but  after calling [10XPutStandardForm[0m, this is not necessarily
+  true.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := Z(2)*[[1,0,0,1],[0,0,1,1]];; PrintArray(M);[0X
+    [4X[ [    Z(2),  0*Z(2),  0*Z(2),    Z(2) ],[0X
+    [4X  [  0*Z(2),  0*Z(2),    Z(2),    Z(2) ] ][0X
+    [4Xgap> PutStandardForm(M);                   # identity at the left side[0X
+    [4X(2,3)[0X
+    [4Xgap> PrintArray(M);[0X
+    [4X[ [    Z(2),  0*Z(2),  0*Z(2),    Z(2) ],[0X
+    [4X  [  0*Z(2),    Z(2),  0*Z(2),    Z(2) ] ][0X
+    [4Xgap> PutStandardForm(M, false);            # identity at the right side[0X
+    [4X(1,4,3)[0X
+    [4Xgap> PrintArray(M);[0X
+    [4X[ [  0*Z(2),    Z(2),    Z(2),  0*Z(2) ],[0X
+    [4X  [  0*Z(2),    Z(2),  0*Z(2),    Z(2) ] ][0X
+    [4Xgap> C := BestKnownLinearCode( 23, 12, GF(2) );[0X
+    [4Xa linear [23,12,7]3 punctured code[0X
+    [4Xgap> G:=MutableCopyMat(GeneratorMat(C));;[0X
+    [4Xgap> PutStandardForm(G);[0X
+    [4X()[0X
+    [4Xgap> Display(G);[0X
+    [4X 1 . . . . . . . . . . . 1 . 1 . 1 1 1 . . . 1[0X
+    [4X . 1 . . . . . . . . . . 1 1 1 1 1 . . 1 . . .[0X
+    [4X . . 1 . . . . . . . . . 1 1 . 1 . . 1 . 1 . 1[0X
+    [4X . . . 1 . . . . . . . . 1 1 . . . 1 1 1 . 1 .[0X
+    [4X . . . . 1 . . . . . . . 1 1 . . 1 1 . 1 1 . 1[0X
+    [4X . . . . . 1 . . . . . . . 1 1 . . 1 1 . 1 1 1[0X
+    [4X . . . . . . 1 . . . . . . . 1 1 . . 1 1 . 1 1[0X
+    [4X . . . . . . . 1 . . . . 1 . 1 1 . 1 1 1 1 . .[0X
+    [4X . . . . . . . . 1 . . . . 1 . 1 1 . 1 1 1 1 .[0X
+    [4X . . . . . . . . . 1 . . . . 1 . 1 1 . 1 1 1 .[0X
+    [4X . . . . . . . . . . 1 . 1 . 1 1 1 . . . 1 1 1[0X
+    [4X . . . . . . . . . . . 1 . 1 . 1 1 1 . . . 1 1[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-7 IsInStandardForm[0m
+  
+  [2X> IsInStandardForm( [0X[3XM[, idleft][0X[2X ) __________________________________[0Xfunction
+  
+  [10XIsInStandardForm[0m  determines  if  [3XM[0m is in standard form. [3Xidleft[0m is a boolean
+  that   indicates   the   position  of  the  identity  matrix  in  [3XM[0m,  as  in
+  [10XPutStandardForm[0m  (see  [2XPutStandardForm[0m  ([14X7.3-6[0m)). [10XIsInStandardForm[0m checks if
+  the  identity  matrix  is  at  the left side of [3XM[0m, otherwise if it is at the
+  right side. The elements of [3XM[0m may be elements of any field.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsInStandardForm(IdentityMat(7, GF(2)));[0X
+    [4Xtrue[0X
+    [4Xgap> IsInStandardForm([[1, 1, 0], [1, 0, 1]], false);[0X
+    [4Xtrue[0X
+    [4Xgap> IsInStandardForm([[1, 3, 2, 7]]);[0X
+    [4Xtrue[0X
+    [4Xgap> IsInStandardForm(HadamardMat(4));[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-8 PermutedCols[0m
+  
+  [2X> PermutedCols( [0X[3XM, P[0X[2X ) _____________________________________________[0Xfunction
+  
+  [10XPermutedCols[0m returns a matrix [3XM[0m with a permutation [3XP[0m applied to its columns.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := [[1,2,3,4],[1,2,3,4]];; PrintArray(M);[0X
+    [4X[ [  1,  2,  3,  4 ],[0X
+    [4X  [  1,  2,  3,  4 ] ][0X
+    [4Xgap> PrintArray(PermutedCols(M, (1,2,3)));[0X
+    [4X[ [  3,  1,  2,  4 ],[0X
+    [4X  [  3,  1,  2,  4 ] ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-9 VerticalConversionFieldMat[0m
+  
+  [2X> VerticalConversionFieldMat( [0X[3XM, F[0X[2X ) _______________________________[0Xfunction
+  
+  [10XVerticalConversionFieldMat[0m  returns the matrix [3XM[0m with its elements converted
+  from  a field F=GF(q^m), q prime, to a field GF(q). Each element is replaced
+  by  its  representation  over  the  latter  field,  placed vertically in the
+  matrix, using the GF(p)-vector space isomorphism
+  
+  
+       [...] : GF(q)\rightarrow GF(p)^m,
+  
+  
+  with q=p^m.
+  
+  If [3XM[0m is a k by n matrix, the result is a k* m x n matrix, since each element
+  of GF(q^m) can be represented in GF(q) using m elements.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := Z(9)*[[1,2],[2,1]];; PrintArray(M);[0X
+    [4X[ [    Z(3^2),  Z(3^2)^5 ],[0X
+    [4X  [  Z(3^2)^5,    Z(3^2) ] ][0X
+    [4Xgap> DefaultField( Flat(M) );[0X
+    [4XGF(3^2)[0X
+    [4Xgap> VCFM := VerticalConversionFieldMat( M, GF(9) );; PrintArray(VCFM);[0X
+    [4X[ [  0*Z(3),  0*Z(3) ],[0X
+    [4X  [  Z(3)^0,    Z(3) ],[0X
+    [4X  [  0*Z(3),  0*Z(3) ],[0X
+    [4X  [    Z(3),  Z(3)^0 ] ][0X
+    [4Xgap> DefaultField( Flat(VCFM) );[0X
+    [4XGF(3) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  A      similar     function     is     [10XHorizontalConversionFieldMat[0m     (see
+  [2XHorizontalConversionFieldMat[0m ([14X7.3-10[0m)).
+  
+  [1X7.3-10 HorizontalConversionFieldMat[0m
+  
+  [2X> HorizontalConversionFieldMat( [0X[3XM, F[0X[2X ) _____________________________[0Xfunction
+  
+  [10XHorizontalConversionFieldMat[0m   returns   the  matrix  [3XM[0m  with  its  elements
+  converted from a field F=GF(q^m), q prime, to a field GF(q). Each element is
+  replaced by its representation over the latter field, placed horizontally in
+  the matrix.
+  
+  If  [3XM[0m  is  a  k  x n matrix, the result is a kx mx n* m matrix. The new word
+  length  of  the  resulting  code  is  equal to n* m, because each element of
+  GF(q^m)  can  be represented in GF(q) using m elements. The new dimension is
+  equal  to  kx m because the new matrix should be a basis for the same number
+  of vectors as the old one.
+  
+  [10XConversionFieldCode[0m  uses  horizontal  conversion  to  convert  a  code (see
+  [2XConversionFieldCode[0m ([14X6.1-15[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := Z(9)*[[1,2],[2,1]];; PrintArray(M);[0X
+    [4X[ [    Z(3^2),  Z(3^2)^5 ],[0X
+    [4X  [  Z(3^2)^5,    Z(3^2) ] ][0X
+    [4Xgap> DefaultField( Flat(M) );[0X
+    [4XGF(3^2)[0X
+    [4Xgap> HCFM := HorizontalConversionFieldMat(M, GF(9));; PrintArray(HCFM);[0X
+    [4X[ [  0*Z(3),  Z(3)^0,  0*Z(3),    Z(3) ],[0X
+    [4X  [  Z(3)^0,  Z(3)^0,    Z(3),    Z(3) ],[0X
+    [4X  [  0*Z(3),    Z(3),  0*Z(3),  Z(3)^0 ],[0X
+    [4X  [    Z(3),    Z(3),  Z(3)^0,  Z(3)^0 ] ][0X
+    [4Xgap> DefaultField( Flat(HCFM) );[0X
+    [4XGF(3) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  A      similar      function      is     [10XVerticalConversionFieldMat[0m     (see
+  [2XVerticalConversionFieldMat[0m ([14X7.3-9[0m)).
+  
+  [1X7.3-11 MOLS[0m
+  
+  [2X> MOLS( [0X[3Xq[, n][0X[2X ) ___________________________________________________[0Xfunction
+  
+  [10XMOLS[0m  returns  a list of [3Xn[0m [13XMutually Orthogonal Latin Squares[0m (MOLS). A [13XLatin
+  square[0m  of  order  [3Xq[0m  is a qx q matrix whose entries are from a set F_q of [3Xq[0m
+  distinct  symbols  ([5XGUAVA[0m  uses the integers from 0 to [3Xq[0m) such that each row
+  and each column of the matrix contains each symbol exactly once.
+  
+  A  set  of  Latin  squares  is a set of MOLS if and only if for each pair of
+  Latin  squares  in  this set, every ordered pair of elements that are in the
+  same position in these matrices occurs exactly once.
+  
+  [3Xn[0m must be less than [3Xq[0m. If [3Xn[0m is omitted, two MOLS are returned. If [3Xq[0m is not a
+  prime  power,  at most 2 MOLS can be created. For all values of [3Xq[0m with q > 2
+  and  q  <> 6, a list of MOLS can be constructed. However, [5XGUAVA[0m does not yet
+  construct  MOLS  for  q= 2 mod 4. If it is not possible to construct [3Xn[0m MOLS,
+  the function returns `false'.
+  
+  MOLS are used to create [3Xq[0m-ary codes (see [2XMOLSCode[0m ([14X5.1-4[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := MOLS( 4, 3 );;PrintArray( M[1] );[0X
+    [4X[ [  0,  1,  2,  3 ],[0X
+    [4X  [  1,  0,  3,  2 ],[0X
+    [4X  [  2,  3,  0,  1 ],[0X
+    [4X  [  3,  2,  1,  0 ] ][0X
+    [4Xgap> PrintArray( M[2] );[0X
+    [4X[ [  0,  2,  3,  1 ],[0X
+    [4X  [  1,  3,  2,  0 ],[0X
+    [4X  [  2,  0,  1,  3 ],[0X
+    [4X  [  3,  1,  0,  2 ] ][0X
+    [4Xgap> PrintArray( M[3] );[0X
+    [4X[ [  0,  3,  1,  2 ],[0X
+    [4X  [  1,  2,  0,  3 ],[0X
+    [4X  [  2,  1,  3,  0 ],[0X
+    [4X  [  3,  0,  2,  1 ] ][0X
+    [4Xgap> MOLS( 12, 3 );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-12 IsLatinSquare[0m
+  
+  [2X> IsLatinSquare( [0X[3XM[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XIsLatinSquare[0m determines if a matrix [3XM[0m is a Latin square. For a Latin square
+  of  size  nx  n, each row and each column contains all the integers 1,dots,n
+  exactly once.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsLatinSquare([[1,2],[2,1]]);[0X
+    [4Xtrue[0X
+    [4Xgap> IsLatinSquare([[1,2,3],[2,3,1],[1,3,2]]);[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.3-13 AreMOLS[0m
+  
+  [2X> AreMOLS( [0X[3XL[0X[2X ) _____________________________________________________[0Xfunction
+  
+  [10XAreMOLS[0m  determines  if  [3XL[0m  is  a  list of mutually orthogonal Latin squares
+  (MOLS).  For each pair of Latin squares in this list, the function checks if
+  each  ordered  pair  of  elements  that  are  in  the same position in these
+  matrices  occurs  exactly  once.  The  function  [10XMOLS[0m creates MOLS (see [2XMOLS[0m
+  ([14X7.3-11[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := MOLS(4,2);[0X
+    [4X[ [ [ 0, 1, 2, 3 ], [ 1, 0, 3, 2 ], [ 2, 3, 0, 1 ], [ 3, 2, 1, 0 ] ],[0X
+    [4X  [ [ 0, 2, 3, 1 ], [ 1, 3, 2, 0 ], [ 2, 0, 1, 3 ], [ 3, 1, 0, 2 ] ] ][0X
+    [4Xgap> AreMOLS(M);[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X7.4 Some functions related to the norm of a code[0X
+  
+  In  this  section,  some functions that can be used to compute the norm of a
+  code  and  to  decide upon its normality are discussed. Typically, these are
+  applied  to  binary  linear  codes.  The  definitions  of  this section were
+  introduced in Graham and Sloane [GS85].
+  
+  [1X7.4-1 CoordinateNorm[0m
+  
+  [2X> CoordinateNorm( [0X[3XC, coord[0X[2X ) _______________________________________[0Xfunction
+  
+  [10XCoordinateNorm[0m  returns  the  norm of [3XC[0m with respect to coordinate [3Xcoord[0m. If
+  C_a  = { c in C | c_coord = a }, then the norm of [3XC[0m with respect to [3Xcoord[0m is
+  defined as
+  
+  
+       \max_{v \in GF(q)^n} \sum_{a=1}^q d(x,C_a),
+  
+  
+  with the convention that d(x,C_a) = n if C_a is empty.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CoordinateNorm( HammingCode( 3, GF(2) ), 3 );[0X
+    [4X3 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.4-2 CodeNorm[0m
+  
+  [2X> CodeNorm( [0X[3XC[0X[2X ) ____________________________________________________[0Xfunction
+  
+  [10XCodeNorm[0m returns the norm of [3XC[0m. The [13Xnorm[0m of a code is defined as the minimum
+  of the norms for the respective coordinates of the code. In effect, for each
+  coordinate  [10XCoordinateNorm[0m  is  called,  and  the  minimum of the calculated
+  numbers is returned.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CodeNorm( HammingCode( 3, GF(2) ) );[0X
+    [4X3 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.4-3 IsCoordinateAcceptable[0m
+  
+  [2X> IsCoordinateAcceptable( [0X[3XC, coord[0X[2X ) _______________________________[0Xfunction
+  
+  [10XIsCoordinateAcceptable[0m   returns   `true'   if  coordinate  [3Xcoord[0m  of  [3XC[0m  is
+  acceptable.  A  coordinate is called [13Xacceptable[0m if the norm of the code with
+  respect to that coordinate is not more than two times the covering radius of
+  the code plus one.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsCoordinateAcceptable( HammingCode( 3, GF(2) ), 3 );[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.4-4 GeneralizedCodeNorm[0m
+  
+  [2X> GeneralizedCodeNorm( [0X[3XC, subcode1, subscode2, ..., subcodek[0X[2X ) _____[0Xfunction
+  
+  [10XGeneralizedCodeNorm[0m returns the [3Xk[0m-norm of [3XC[0m with respect to [3Xk[0m subcodes.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> c := RepetitionCode( 7, GF(2) );;[0X
+    [4Xgap> ham := HammingCode( 3, GF(2) );;[0X
+    [4Xgap> d := EvenWeightSubcode( ham );;[0X
+    [4Xgap> e := ConstantWeightSubcode( ham, 3 );;[0X
+    [4Xgap> GeneralizedCodeNorm( ham, c, d, e );[0X
+    [4X4 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.4-5 IsNormalCode[0m
+  
+  [2X> IsNormalCode( [0X[3XC[0X[2X ) ________________________________________________[0Xfunction
+  
+  [10XIsNormalCode[0m  returns  `true' if [3XC[0m is normal. A code is called [13Xnormal[0m if the
+  norm  of the code is not more than two times the covering radius of the code
+  plus  one.  Almost  all codes are normal, however some (non-linear) abnormal
+  codes have been found.
+  
+  Often,  it  is  difficult  to  find out whether a code is normal, because it
+  involves  computing  the  covering  radius.  However, [10XIsNormalCode[0m uses much
+  information  from the literature (in particular, [GS85]) about normality for
+  certain code parameters.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsNormalCode( HammingCode( 3, GF(2) ) );[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X7.5 Miscellaneous functions[0X
+  
+  In  this  section  we describe several vector space functions [5XGUAVA[0m uses for
+  constructing codes or performing calculations with codes.
+  
+  In  this  section, some new miscellaneous functions are described, including
+  weight  enumerators,  the  MacWilliams-transform  and  affinity  and  almost
+  affinity of codes.
+  
+  [1X7.5-1 CodeWeightEnumerator[0m
+  
+  [2X> CodeWeightEnumerator( [0X[3XC[0X[2X ) ________________________________________[0Xfunction
+  
+  [10XCodeWeightEnumerator[0m returns a polynomial of the following form:
+  
+  
+       f(x) = \sum_{i=0}^{n} A_i x^i,
+  
+  
+  where A_i is the number of codewords in [3XC[0m with weight i.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CodeWeightEnumerator( ElementsCode( [ [ 0,0,0 ], [ 0,0,1 ],[0X
+    [4X> [ 0,1,1 ], [ 1,1,1 ] ], GF(2) ) );[0X
+    [4Xx^3 + x^2 + x + 1[0X
+    [4Xgap> CodeWeightEnumerator( HammingCode( 3, GF(2) ) );[0X
+    [4Xx^7 + 7*x^4 + 7*x^3 + 1 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-2 CodeDistanceEnumerator[0m
+  
+  [2X> CodeDistanceEnumerator( [0X[3XC, w[0X[2X ) ___________________________________[0Xfunction
+  
+  [10XCodeDistanceEnumerator[0m returns a polynomial of the following form:
+  
+  
+       f(x) = \sum_{i=0}^{n} B_i x^i,
+  
+  
+  where B_i is the number of codewords with distance i to [3Xw[0m.
+  
+  If  [3Xw[0m is a codeword, then [10XCodeDistanceEnumerator[0m returns the same polynomial
+  as [10XCodeWeightEnumerator[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CodeDistanceEnumerator( HammingCode( 3, GF(2) ),[0,0,0,0,0,0,1] );[0X
+    [4Xx^6 + 3*x^5 + 4*x^4 + 4*x^3 + 3*x^2 + x[0X
+    [4Xgap> CodeDistanceEnumerator( HammingCode( 3, GF(2) ),[1,1,1,1,1,1,1] );[0X
+    [4Xx^7 + 7*x^4 + 7*x^3 + 1 # `[1,1,1,1,1,1,1]' $\in$ `HammingCode( 3, GF(2 ) )'[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-3 CodeMacWilliamsTransform[0m
+  
+  [2X> CodeMacWilliamsTransform( [0X[3XC[0X[2X ) ____________________________________[0Xfunction
+  
+  [10XCodeMacWilliamsTransform[0m returns a polynomial of the following form:
+  
+  
+       f(x) = \sum_{i=0}^{n} C_i x^i,
+  
+  
+  where C_i is the number of codewords with weight i in the [13Xdual[0m code of [3XC[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CodeMacWilliamsTransform( HammingCode( 3, GF(2) ) );[0X
+    [4X7*x^4 + 1 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-4 CodeDensity[0m
+  
+  [2X> CodeDensity( [0X[3XC[0X[2X ) _________________________________________________[0Xfunction
+  
+  [10XCodeDensity[0m returns the [13Xdensity[0m of [3XC[0m. The density of a code is defined as
+  
+  
+       \frac{M \cdot V_q(n,t)}{q^n},
+  
+  
+  where  M is the size of the code, V_q(n,t) is the size of a sphere of radius
+  t  in GF(q^n) (which may be computed using [10XSphereContent[0m), t is the covering
+  radius of the code and n is the length of the code.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CodeDensity( HammingCode( 3, GF(2) ) );[0X
+    [4X1[0X
+    [4Xgap> CodeDensity( ReedMullerCode( 1, 4 ) );[0X
+    [4X14893/2048 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-5 SphereContent[0m
+  
+  [2X> SphereContent( [0X[3Xn, t, F[0X[2X ) _________________________________________[0Xfunction
+  
+  [10XSphereContent[0m  returns the content of a ball of radius [3Xt[0m around an arbitrary
+  element  of  the  vectorspace F^n. This is the cardinality of the set of all
+  elements of F^n that are at distance (see [2XDistanceCodeword[0m ([14X3.6-2[0m) less than
+  or equal to [3Xt[0m from an element of F^n.
+  
+  In  the  context  of  codes,  the function is used to determine if a code is
+  perfect.  A  code  is  [13Xperfect[0m  if  spheres of radius t around all codewords
+  partition  the  whole  ambient vector space, where [13Xt[0m is the number of errors
+  the code can correct.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> SphereContent( 15, 0, GF(2) );[0X
+    [4X1    # Only one word with distance 0, which is the word itself[0X
+    [4Xgap> SphereContent( 11, 3, GF(4) );[0X
+    [4X4984[0X
+    [4Xgap> C := HammingCode(5);[0X
+    [4Xa linear [31,26,3]1 Hamming (5,2) code over GF(2)[0X
+    [4X#the minimum distance is 3, so the code can correct one error[0X
+    [4Xgap> ( SphereContent( 31, 1, GF(2) ) * Size(C) ) = 2 ^ 31;[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-6 Krawtchouk[0m
+  
+  [2X> Krawtchouk( [0X[3Xk, i, n, q[0X[2X ) _________________________________________[0Xfunction
+  
+  [10XKrawtchouk[0m  returns the Krawtchouk number K_k(i). [3Xq[0m must be a prime power, [3Xn[0m
+  must  be  a  positive integer, [3Xk[0m must be a non-negative integer less then or
+  equal  to  [3Xn[0m  and  [3Xi[0m  can  be any integer. (See [2XKrawtchoukMat[0m ([14X7.3-1[0m)). This
+  number is the value at x=i of the polynomial
+  
+  
+       K_k^{n,q}(x) =\sum_{j=0}^n (-1)^j(q-1)^{k-j}b(x,j)b(n-x,k-j),
+  
+  
+  where  $b(v,u)=u!/(v!(v-u)!)$  is  the  binomial  coefficient  if  $u,v$ are
+  integers. For more properties of these polynomials, see [MS83].
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> Krawtchouk( 2, 0, 3, 2);[0X
+    [4X3 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-7 PrimitiveUnityRoot[0m
+  
+  [2X> PrimitiveUnityRoot( [0X[3XF, n[0X[2X ) _______________________________________[0Xfunction
+  
+  [10XPrimitiveUnityRoot[0m  returns  a  primitive [3Xn[0m-th root of unity in an extension
+  field  of  [3XF[0m. This is a finite field element a with the property a^n=1 in [3XF[0m,
+  and [3Xn[0m is the smallest integer such that this equality holds.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> PrimitiveUnityRoot( GF(2), 15 );[0X
+    [4XZ(2^4)[0X
+    [4Xgap> last^15;[0X
+    [4XZ(2)^0[0X
+    [4Xgap> PrimitiveUnityRoot( GF(8), 21 );[0X
+    [4XZ(2^6)^3 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-8 PrimitivePolynomialsNr[0m
+  
+  [2X> PrimitivePolynomialsNr( [0X[3Xn, F[0X[2X ) ___________________________________[0Xfunction
+  
+  [10XPrimitivePolynomialsNr[0m  returns  the  number of irreducible polynomials over
+  F=GF(q)  of degree [3Xn[0m with (maximum) period q^n-1. (According to a theorem of
+  S. Golomb, this is phi(p^n-1)/n.)
+  
+  See      also      the      GAP      function     [10XRandomPrimitivePolynomial[0m,
+  [2XRandomPrimitivePolynomial[0m ([14X8.2-2[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> PrimitivePolynomialsNr(3,4);[0X
+    [4X12[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-9 IrreduciblePolynomialsNr[0m
+  
+  [2X> IrreduciblePolynomialsNr( [0X[3Xn, F[0X[2X ) _________________________________[0Xfunction
+  
+  [10XPrimitivePolynomialsNr[0m  returns  the  number of irreducible polynomials over
+  F=GF(q) of degree [3Xn[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IrreduciblePolynomialsNr(3,4);[0X
+    [4X20[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-10 MatrixRepresentationOfElement[0m
+  
+  [2X> MatrixRepresentationOfElement( [0X[3Xa, F[0X[2X ) ____________________________[0Xfunction
+  
+  Here  [3XF[0m  is  either a finite extension of the ``base field'' GF(p) or of the
+  rationals Q}, and ain F. The command [10XMatrixRepresentationOfElement[0m returns a
+  matrix representation of [3Xa[0m over the base field.
+  
+  If  the  element  [3Xa[0m  is  defined  over  the  base  field then it returns the
+  corresponding 1x 1 matrix.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> a:=Random(GF(4));[0X
+    [4X0*Z(2)[0X
+    [4Xgap> M:=MatrixRepresentationOfElement(a,GF(4));; Display(M);[0X
+    [4X .[0X
+    [4Xgap> a:=Random(GF(4));[0X
+    [4XZ(2^2)[0X
+    [4Xgap> M:=MatrixRepresentationOfElement(a,GF(4));; Display(M);[0X
+    [4X . 1[0X
+    [4X 1 1[0X
+    [4Xgap>[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-11 ReciprocalPolynomial[0m
+  
+  [2X> ReciprocalPolynomial( [0X[3XP[0X[2X ) ________________________________________[0Xfunction
+  
+  [10XReciprocalPolynomial[0m  returns  the  [13Xreciprocal[0m  of  polynomial  [3XP[0m. This is a
+  polynomial  with coefficients of [3XP[0m in the reverse order. So if P=a_0 + a_1 X
+  +  ...  + a_n X^n, the reciprocal polynomial is P'=a_n + a_n-1 X + ... + a_0
+  X^n.
+  
+  This command can also be called using the syntax [10XReciprocalPolynomial( P , n
+  )[0m.  In this form, the number of coefficients of [3XP[0m is assumed to be less than
+  or  equal  to  n+1  (with zero coefficients added in the highest degrees, if
+  necessary). Therefore, the reciprocal polynomial also has degree n+1.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> P := UnivariatePolynomial( GF(3), Z(3)^0 * [1,0,1,2] );[0X
+    [4XZ(3)^0+x_1^2-x_1^3[0X
+    [4Xgap> RecP := ReciprocalPolynomial( P );[0X
+    [4X-Z(3)^0+x_1+x_1^3[0X
+    [4Xgap> ReciprocalPolynomial( RecP ) = P;[0X
+    [4Xtrue [0X
+    [4Xgap> P := UnivariatePolynomial( GF(3), Z(3)^0 * [1,0,1,2] );[0X
+    [4XZ(3)^0+x_1^2-x_1^3[0X
+    [4Xgap> ReciprocalPolynomial( P, 6 );[0X
+    [4X-x_1^3+x_1^4+x_1^6[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-12 CyclotomicCosets[0m
+  
+  [2X> CyclotomicCosets( [0X[3Xq, n[0X[2X ) _________________________________________[0Xfunction
+  
+  [10XCyclotomicCosets[0m  returns  the cyclotomic cosets of q mod n. [3Xq[0m and [3Xn[0m must be
+  relatively  prime.  Each  of  the elements of the returned list is a list of
+  integers  that belong to one cyclotomic coset. A q-cyclotomic coset of s mod
+  n  is  a  set  of  the  form {s,sq,sq^2,...,sq^r-1}, where r is the smallest
+  positive  integer  such  that  sq^r-s is 0 mod n. In other words, each coset
+  contains  all  multiplications  of  the coset representative by q mod n. The
+  coset  representative  is  the  smallest  integer that isn't in the previous
+  cosets.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CyclotomicCosets( 2, 15 );[0X
+    [4X[ [ 0 ], [ 1, 2, 4, 8 ], [ 3, 6, 12, 9 ], [ 5, 10 ],[0X
+    [4X  [ 7, 14, 13, 11 ] ][0X
+    [4Xgap> CyclotomicCosets( 7, 6 );[0X
+    [4X[ [ 0 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ] ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-13 WeightHistogram[0m
+  
+  [2X> WeightHistogram( [0X[3XC[, h][0X[2X ) ________________________________________[0Xfunction
+  
+  The  function  [10XWeightHistogram[0m  plots  a histogram of weights in code [3XC[0m. The
+  maximum  length  of a column is [3Xh[0m. Default value for [3Xh[0m is 1/3 of the size of
+  the  screen.  The  number  that  appears  at the top of the histogram is the
+  maximum value of the list of weights.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> H := HammingCode(2, GF(5));[0X
+    [4Xa linear [6,4,3]1 Hamming (2,5) code over GF(5)[0X
+    [4Xgap> WeightDistribution(H);[0X
+    [4X[ 1, 0, 0, 80, 120, 264, 160 ][0X
+    [4Xgap> WeightHistogram(H);[0X
+    [4X264----------------[0X
+    [4X               *[0X
+    [4X               *[0X
+    [4X               *[0X
+    [4X               *[0X
+    [4X               *  *[0X
+    [4X            *  *  *[0X
+    [4X         *  *  *  *[0X
+    [4X         *  *  *  *[0X
+    [4X+--------+--+--+--+--[0X
+    [4X0  1  2  3  4  5  6 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-14 MultiplicityInList[0m
+  
+  [2X> MultiplicityInList( [0X[3XL, a[0X[2X ) _______________________________________[0Xfunction
+  
+  This  is a very simple list command which returns how many times a occurs in
+  L.  It returns 0 if a is not in L. (The GAP command [10XCollected[0m does not quite
+  handle this "extreme" case.)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> L:=[1,2,3,4,3,2,1,5,4,3,2,1];;[0X
+    [4Xgap> MultiplicityInList(L,1);[0X
+    [4X3[0X
+    [4Xgap> MultiplicityInList(L,6);[0X
+    [4X0[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-15 MostCommonInList[0m
+  
+  [2X> MostCommonInList( [0X[3XL[0X[2X ) ____________________________________________[0Xfunction
+  
+  Input: a list L
+  
+  Output: an a in L which occurs at least as much as any other in L
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> L:=[1,2,3,4,3,2,1,5,4,3,2,1];;[0X
+    [4Xgap> MostCommonInList(L);[0X
+    [4X1[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-16 RotateList[0m
+  
+  [2X> RotateList( [0X[3XL[0X[2X ) __________________________________________________[0Xfunction
+  
+  Input: a list L
+  
+  Output: a list L' which is the cyclic rotation of L (to the right)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> L:=[1,2,3,4];;[0X
+    [4Xgap> RotateList(L);[0X
+    [4X[2,3,4,1][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.5-17 CirculantMatrix[0m
+  
+  [2X> CirculantMatrix( [0X[3Xk, L[0X[2X ) __________________________________________[0Xfunction
+  
+  Input: integer k, a list L of length n
+  
+  Output: kxn matrix whose rows are cyclic rotations of the list L
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> k:=3; L:=[1,2,3,4];;[0X
+    [4Xgap> M:=CirculantMatrix(k,L);;[0X
+    [4Xgap> Display(M);[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X7.6 Miscellaneous polynomial functions[0X
+  
+  In  this  section  we describe several multivariate polynomial GAP functions
+  [5XGUAVA[0m uses for constructing codes or performing calculations with codes.
+  
+  [1X7.6-1 MatrixTransformationOnMultivariatePolynomial [0m
+  
+  [2X> MatrixTransformationOnMultivariatePolynomial ( [0X[3XA, f, R[0X[2X ) _________[0Xfunction
+  
+  [3XA[0m  is  an nx n matrix with entries in a field F, [3XR[0m is a polynomial ring of n
+  variables,  say  F[x_1,...,x_n],  and  [3Xf[0m  is  a polynomial in [3XR[0m. Returns the
+  composition fcirc A.
+  
+  [1X7.6-2 DegreeMultivariatePolynomial[0m
+  
+  [2X> DegreeMultivariatePolynomial( [0X[3Xf, R[0X[2X ) _____________________________[0Xfunction
+  
+  This  command  takes  two  arguments,  [3Xf[0m, a multivariate polynomial, and [3XR[0m a
+  polynomial  ring  over a field F containing [3Xf[0m, say R=F[x_1,x_2,...,x_n]. The
+  output is simply the maximum degrees of all the monomials occurring in [3Xf[0m.
+  
+  This command can be used to compute the degree of an affine plane curve.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(11);;[0X
+    [4Xgap> R2:=PolynomialRing(F,2);[0X
+    [4XPolynomialRing(..., [ x_1, x_2 ])[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R2);;[0X
+    [4Xgap> x:=vars[1];; y:=vars[2];;[0X
+    [4Xgap> poly:=y^2-x*(x^2-1);;[0X
+    [4Xgap> DegreeMultivariatePolynomial(poly,R2);[0X
+    [4X3[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-3 DegreesMultivariatePolynomial[0m
+  
+  [2X> DegreesMultivariatePolynomial( [0X[3Xf, R[0X[2X ) ____________________________[0Xfunction
+  
+  Returns  a list of information about the multivariate polynomial [3Xf[0m. Nice for
+  other programs but mostly unreadable by GAP users.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(11);;[0X
+    [4Xgap> R2:=PolynomialRing(F,2);[0X
+    [4XPolynomialRing(..., [ x_1, x_2 ])[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R2);;[0X
+    [4Xgap> x:=vars[1];; y:=vars[2];;[0X
+    [4Xgap> poly:=y^2-x*(x^2-1);;[0X
+    [4Xgap> DegreesMultivariatePolynomial(poly,R2);[0X
+    [4X[ [ [ x_1, x_1, 1 ], [ x_1, x_2, 0 ] ], [ [ x_2^2, x_1, 0 ], [ x_2^2, x_2, 2 ] ],[0X
+    [4X  [ [ x_1^3, x_1, 3 ], [ x_1^3, x_2, 0 ] ] ][0X
+    [4Xgap>[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-4 CoefficientMultivariatePolynomial[0m
+  
+  [2X> CoefficientMultivariatePolynomial( [0X[3Xf, var, power, R[0X[2X ) ____________[0Xfunction
+  
+  The   command  [10XCoefficientMultivariatePolynomial[0m  takes  four  arguments:  a
+  multivariant  polynomial  [3Xf[0m,  a  variable  name [3Xvar[0m, an integer [3Xpower[0m, and a
+  polynomial  ring  [3XR[0m  containing  [3Xf[0m.  For  example,  if  [3Xf[0m  is a multivariate
+  polynomial  in  R  = F[x_1,x_2,...,x_n] then [3Xvar[0m must be one of the x_i. The
+  output is the coefficient of x_i^power in [3Xf[0m.
+  
+  (Not sure if F needs to be a field in fact ...)
+  
+  Related to the GAP command [10XPolynomialCoefficientsPolynomial[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(11);;[0X
+    [4Xgap> R2:=PolynomialRing(F,2);[0X
+    [4XPolynomialRing(..., [ x_1, x_2 ])[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R2);;[0X
+    [4Xgap> x:=vars[1];; y:=vars[2];;[0X
+    [4Xgap> poly:=y^2-x*(x^2-1);;[0X
+    [4Xgap> PolynomialCoefficientsOfPolynomial(poly,x);[0X
+    [4X[ x_2^2, Z(11)^0, 0*Z(11), -Z(11)^0 ][0X
+    [4Xgap> PolynomialCoefficientsOfPolynomial(poly,y);[0X
+    [4X[ -x_1^3+x_1, 0*Z(11), Z(11)^0 ][0X
+    [4Xgap> CoefficientMultivariatePolynomial(poly,y,0,R2);[0X
+    [4X-x_1^3+x_1[0X
+    [4Xgap> CoefficientMultivariatePolynomial(poly,y,1,R2);[0X
+    [4X0*Z(11)[0X
+    [4Xgap> CoefficientMultivariatePolynomial(poly,y,2,R2);[0X
+    [4XZ(11)^0[0X
+    [4Xgap> CoefficientMultivariatePolynomial(poly,x,0,R2);[0X
+    [4Xx_2^2[0X
+    [4Xgap> CoefficientMultivariatePolynomial(poly,x,1,R2);[0X
+    [4XZ(11)^0[0X
+    [4Xgap> CoefficientMultivariatePolynomial(poly,x,2,R2);[0X
+    [4X0*Z(11)[0X
+    [4Xgap> CoefficientMultivariatePolynomial(poly,x,3,R2);[0X
+    [4X-Z(11)^0[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-5 SolveLinearSystem[0m
+  
+  [2X> SolveLinearSystem( [0X[3XL, vars[0X[2X ) _____________________________________[0Xfunction
+  
+  Input: [3XL[0m is a list of linear forms in the variables [3Xvars[0m.
+  
+  Output: the solution of the system, if its unique.
+  
+  The  procedure  is  straightforward:  Find the associated matrix A, find the
+  "constant vector" b, and solve A*v=b. No error checking is performed.
+  
+  Related to the GAP command [10XSolutionMat( A, b )[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(11);;[0X
+    [4Xgap> R2:=PolynomialRing(F,2);[0X
+    [4XPolynomialRing(..., [ x_1, x_2 ])[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R2);;[0X
+    [4Xgap> x:=vars[1];; y:=vars[2];;[0X
+    [4Xgap> f:=3*y-3*x+1;; g:=-5*y+2*x-7;;[0X
+    [4Xgap> soln:=SolveLinearSystem([f,g],[x,y]);[0X
+    [4X[ Z(11)^3, Z(11)^2 ][0X
+    [4Xgap> Value(f,[x,y],soln); # checking okay[0X
+    [4X0*Z(11)[0X
+    [4Xgap> Value(g,[x,y],col); # checking okay[0X
+    [4X0*Z(11)[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-6 GuavaVersion[0m
+  
+  [2X> GuavaVersion( [0X[3X[0X[2X ) _________________________________________________[0Xfunction
+  
+  Returns the current version of Guava. Same as [10Xguava\_version()[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> GuavaVersion();[0X
+    [4X"3.11"[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-7 ZechLog[0m
+  
+  [2X> ZechLog( [0X[3Xx, b, F[0X[2X ) _______________________________________________[0Xfunction
+  
+  Returns  the  Zech  log  of  x  to  base b, ie the i such that $x+1=b^i$, so
+  $y+z=y(1+z/y)=b^k$,   where   k=Log(y,b)+ZechLog(z/y,b)  and  b  must  be  a
+  primitive element of F.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(11);; l := One(F);;[0X
+    [4Xgap> ZechLog(2*l,8*l,F);[0X
+    [4X-24[0X
+    [4Xgap> 8*l+l;(2*l)^(-24);[0X
+    [4XZ(11)^6[0X
+    [4XZ(11)^6[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-8 CoefficientToPolynomial[0m
+  
+  [2X> CoefficientToPolynomial( [0X[3Xcoeffs, R[0X[2X ) _____________________________[0Xfunction
+  
+  The  function  [10XCoefficientToPolynomial[0m  returns  the  degree  d-1 polynomial
+  c_0+c_1x+...+c_d-1x^d-1,  where  [3Xcoeffs[0m  is  a  list of elements of a field,
+  coeffs={ c_0,...,c_d-1}, and [3XR[0m is a univariate polynomial ring.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(11);[0X
+    [4XGF(11)[0X
+    [4Xgap> R1:=PolynomialRing(F,["a"]);;[0X
+    [4Xgap> var1:=IndeterminatesOfPolynomialRing(R1);; a:=var1[1];;[0X
+    [4Xgap> coeffs:=Z(11)^0*[1,2,3,4];[0X
+    [4X[ Z(11)^0, Z(11), Z(11)^8, Z(11)^2 ][0X
+    [4Xgap> CoefficientToPolynomial(coeffs,R1);[0X
+    [4XZ(11)^2*a^3+Z(11)^8*a^2+Z(11)*a+Z(11)^0[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-9 DegreesMonomialTerm[0m
+  
+  [2X> DegreesMonomialTerm( [0X[3Xm, R[0X[2X ) ______________________________________[0Xfunction
+  
+  The  function  [10XDegreesMonomialTerm[0m returns the list of degrees to which each
+  variable  in  the  multivariate  polynomial ring [3XR[0m occurs in the monomial [3Xm[0m,
+  where [3Xcoeffs[0m is a list of elements of a field.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(11);[0X
+    [4XGF(11)[0X
+    [4Xgap> R1:=PolynomialRing(F,["a"]);;[0X
+    [4Xgap> var1:=IndeterminatesOfPolynomialRing(R1);; a:=var1[1];;[0X
+    [4Xgap> b:=X(F,"b",var1);[0X
+    [4Xb[0X
+    [4Xgap> var2:=Concatenation(var1,[b]);[0X
+    [4X[ a, b ][0X
+    [4Xgap> R2:=PolynomialRing(F,var2);[0X
+    [4XPolynomialRing(..., [ a, b ])[0X
+    [4Xgap> c:=X(F,"c",var2);[0X
+    [4Xc[0X
+    [4Xgap> var3:=Concatenation(var2,[c]);[0X
+    [4X[ a, b, c ][0X
+    [4Xgap> R3:=PolynomialRing(F,var3);[0X
+    [4XPolynomialRing(..., [ a, b, c ])[0X
+    [4Xgap> m:=b^3*c^7;[0X
+    [4Xb^3*c^7[0X
+    [4Xgap> DegreesMonomialTerm(m,R3);[0X
+    [4X[ 0, 3, 7 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X7.6-10 DivisorsMultivariatePolynomial[0m
+  
+  [2X> DivisorsMultivariatePolynomial( [0X[3Xf, R[0X[2X ) ___________________________[0Xfunction
+  
+  The  function  [10XDivisorsMultivariatePolynomial[0m returns the list of polynomial
+  divisors  of  [3Xf[0m in the multivariate polynomial ring [3XR[0m with coefficients in a
+  field.  This  program  uses a simple but slow algorithm (see Joachim von zur
+  Gathen,  Jürgen  Gerhard,  [GG03],  exercise 16.10) which first converts the
+  multivariate  polynomial  [3Xf[0m to an associated univariate polynomial f^*, then
+  [10XFactors[0m  f^*,  and  finally  converts these univariate factors back into the
+  multivariate  polynomial  factors  of [3Xf[0m. Since [10XFactors[0m is non-deterministic,
+  [10XDivisorsMultivariatePolynomial[0m is non-deterministic as well.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R2:=PolynomialRing(GF(3),["x1","x2"]);[0X
+    [4XPolynomialRing(..., [ x1, x2 ])[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R2);[0X
+    [4X[ x1, x2 ][0X
+    [4Xgap> x2:=vars[2];[0X
+    [4Xx2[0X
+    [4Xgap> x1:=vars[1];[0X
+    [4Xx1[0X
+    [4Xgap> f:=x1^3+x2^3;;[0X
+    [4Xgap> DivisorsMultivariatePolynomial(f,R2);[0X
+    [4X[ x1+x2, x1+x2, x1+x2 ][0X
+  [4X------------------------------------------------------------------[0X
+  

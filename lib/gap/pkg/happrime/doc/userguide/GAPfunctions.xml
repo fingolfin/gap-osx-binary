@@ -1,0 +1,88 @@
+<!-- 
+  HAPPRIME - functions.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  Paul Smith
+  National University of Ireland Galway
+
+  $Id: functions.xml.in 200 2008-02-05 14:29:47Z pas $
+-->
+
+<!-- ********************************************************** -->
+<Chapter>
+  <Heading>General Functions</Heading>
+
+  Some of the functions provided by &HAPprime; are not specifically aimed
+  at homological algebra or extending the &HAP; package. The functions
+  in this chapter, which are used internally by &HAPprime; extend some of the 
+  standard &GAP; functions and datatypes.
+
+  <Section>
+    <Heading>Matrices</Heading>
+
+    See <Ref Chap="Matrices" BookName="ref"/> in the
+    &GAP; reference manual for the standard &GAP; matrix functions. 
+
+    <#Include Label="SumIntersectionMatDestructive_manBaseMat">
+    <#Include Label="SolutionMat_manBaseMat">
+    <#Include Label="IsSameSubspace_manBaseMat">
+    <#Include Label="PrintDimensionsMat_manBaseMat">
+
+  </Section>
+
+  <Section>
+    <Heading>Polynomials</Heading>
+
+    See <Ref Chap="Polynomials and Rational Functions" BookName="ref"/> in 
+    the &GAP; reference manual for the functions provided by &GAP; for 
+    representing an manipulating polynomials.
+
+    <#Include Label="TermsOfPolynomial_manPolynomial">
+    <#Include Label="UnivariateMonomialsOfMonomial_manPolynomial">
+    <#Include Label="IndeterminateAndCoefficientOfUnivariateMonomial_manPolynomial">
+    <#Include Label="ReduceIdeal_manPolynomial">
+    <#Include Label="ReducePolynomialRingPresentation_manPolynomial">
+
+    <Subsection>
+      <Heading>Examples</Heading>
+    
+<Example><![CDATA[
+gap> ring := PolynomialRing(Integers, 2);;
+gap> i := IndeterminatesOfPolynomialRing(ring);;
+gap> poly := i[1] + i[1]*i[2]^2 + 3*i[2]^3;
+x_1*x_2^2+3*x_2^3+x_1
+gap> terms := TermsOfPolynomial(poly);
+[ [ x_1, 1 ], [ x_2^3, 3 ], [ x_1*x_2^2, 1 ] ]
+gap> UnivariateMonomialsOfMonomial(terms[3][1]);
+[ x_1, x_2^2 ]
+gap> IndeterminateAndCoefficientOfUnivariateMonomial(last[2]);
+[ x_2, 2 ]
+]]></Example>
+
+<Example><![CDATA[
+gap> ring := PolynomialRing(GF(2), 2);;
+gap> i := IndeterminatesOfPolynomialRing(ring);;
+gap> I := [i[1]^2 + i[2], i[1]^3 + i[2]^3];
+[ x_1^2+x_2, x_1^3+x_2^3 ]
+gap> ReduceIdeal(I, MonomialLexOrdering());
+[ x_1^2+x_2, x_2^3+x_1*x_2 ]
+]]></Example>
+
+<Example><![CDATA[
+gap> ring := PolynomialRing(GF(2), 3);;
+gap> i := IndeterminatesOfPolynomialRing(ring);;
+gap> ideal := [ i[3]^2 + i[1] + i[2] ];
+[ x_3^2+x_1+x_2 ]
+gap> ReducePolynomialRingPresentation(ring, ideal);
+[ GF(2)[x_1,x_3], [  ] ]
+]]></Example>
+    </Subsection>
+  </Section>
+
+
+</Chapter>
+
+
+

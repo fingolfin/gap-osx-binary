@@ -1,0 +1,93 @@
+  
+  [1X4 [33X[0;0YAn example of [5XUnitLib[105X[101X[1X usage[133X[101X
+  
+  [33X[0;0YWe will finish with several examples of [5XUnitLib[105X usage to give an idea how to
+  work with the package.[133X
+  
+  [33X[0;0YIn  the first example we retrieve from the library the normalized unit group
+  of  the  group  algebra of the dihedral group of order 128 over the field of
+  two  elements, compute its center and express one of its generators in terms
+  of group algebra elements:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XIdGroup(DihedralGroup(128));[127X[104X
+    [4X[28X[ 128, 161 ][128X[104X
+    [4X[25Xgap>[125X [27XV := PcNormalizedUnitGroupSmallGroup( 128, 161 );[127X[104X
+    [4X[28X<pc group of size 170141183460469231731687303715884105728 with 127 generators>[128X[104X
+    [4X[25Xgap>[125X [27XC := Center( V );           [127X[104X
+    [4X[28X<pc group with 34 generators>  [128X[104X
+    [4X[25Xgap>[125X [27Xgens := MinimalGeneratingSet( C );;[127X[104X
+    [4X[25Xgap>[125X [27XKG := UnderlyingGroupRing( V );[127X[104X
+    [4X[28X<algebra-with-one over GF(2), with 7 generators>[128X[104X
+    [4X[25Xgap>[125X [27Xf := NaturalBijectionToNormalizedUnitGroup( KG );;[127X[104X
+    [4X[25Xgap>[125X [27Xgens[8]^f;[127X[104X
+    [4X[28X(Z(2)^0)*f3+(Z(2)^0)*f4+(Z(2)^0)*f7+(Z(2)^0)*f3*f4+(Z(2)^0)*f3*f5+(Z(2)^[128X[104X
+    [4X[28X0)*f3*f6+(Z(2)^0)*f3*f7+(Z(2)^0)*f4*f5+(Z(2)^0)*f4*f6+(Z(2)^0)*f4*f7+(Z(2)^[128X[104X
+    [4X[28X0)*f3*f4*f5+(Z(2)^0)*f3*f4*f6+(Z(2)^0)*f3*f4*f7+(Z(2)^0)*f3*f5*f6+(Z(2)^[128X[104X
+    [4X[28X0)*f3*f5*f7+(Z(2)^0)*f3*f6*f7+(Z(2)^0)*f4*f5*f6+(Z(2)^0)*f4*f5*f7+(Z(2)^[128X[104X
+    [4X[28X0)*f4*f6*f7+(Z(2)^0)*f3*f4*f5*f6+(Z(2)^0)*f3*f4*f5*f7+(Z(2)^0)*f3*f4*f6*f7+([128X[104X
+    [4X[28XZ(2)^0)*f3*f5*f6*f7+(Z(2)^0)*f4*f5*f6*f7+(Z(2)^0)*f3*f4*f5*f6*f7[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIn  the second example we will check the conjecture about the coincidence of
+  the lower and upper Lie nilpotency indices of the modular group algebras for
+  all non-abelian groups of order 64.[133X
+  
+  [33X[0;0YIt is known that these indices coincide for [22Xp[122X-groups with [22Xp>3[122X [BP92], but in
+  the general case the problem remains open.[133X
+  
+  [33X[0;0YThe  indices  [22Xt_L(G)[122X  and  [22Xt^L(G)[122X  can be computed using the [5XLAGUNA[105X package.
+  While  the  upper Lie nilpotency index can be expressed only in terms of the
+  underlying  group  [22XG[122X,  the  lower  Lie nilpotency index is determined by the
+  formula  [22Xt_L(G)  =[122X  cl  [22XV(KG)  +  1[122X  [Du92], and can be computed immediately
+  whenever [22XV(KG)[122X is known.[133X
+  
+  [33X[0;0YIn  the  program  below  we  enumerate  all  groups of size 64 and check the
+  conjecture  (we do not exclude from consideration some particular cases when
+  the  conjecture is known to be true for [22Xp=2[122X, because this is beyond the task
+  of this manual).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xfor n in [ 1 .. NrSmallGroups( 64 ) ] do[127X[104X
+    [4X[25X>[125X [27Xif not IsAbelian( SmallGroup( 64, n ) ) then[127X[104X
+    [4X[25X>[125X [27X  V := PcNormalizedUnitGroupSmallGroup( 64, n );[127X[104X
+    [4X[25X>[125X [27X  KG := UnderlyingGroupRing( V );[127X[104X
+    [4X[25X>[125X [27X  if LieLowerNilpotencyIndex( KG ) <>[127X[104X
+    [4X[25X>[125X [27X     LieUpperNilpotencyIndex( KG ) then[127X[104X
+    [4X[25X>[125X [27X    Print( n," - counterexample !!! \n" );[127X[104X
+    [4X[25X>[125X [27X    break;[127X[104X
+    [4X[25X>[125X [27X  fi;[127X[104X
+    [4X[25X>[125X [27Xfi;[127X[104X
+    [4X[25X>[125X [27Xod;[127X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThus, the test was finished without finding a counterexample.[133X
+  
+  [33X[0;0YIn  the  next  example we will answer the question about possible nilpotency
+  classes  of  normalized  unit groups of modular group algebras of nonabelian
+  groups of order 64:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xcl := [];;[127X[104X
+    [4X[25Xgap>[125X [27Xfor n in [ 1 .. NrSmallGroups( 64 ) ] do[127X[104X
+    [4X[25X>[125X [27Xif not IsAbelian( SmallGroup( 64, n ) ) then[127X[104X
+    [4X[25X>[125X [27X  V := PcNormalizedUnitGroupSmallGroup( 64, n );  [127X[104X
+    [4X[25X>[125X [27X  AddSet( cl, NilpotencyClassOfGroup( V ) );[127X[104X
+    [4X[25X>[125X [27Xfi;[127X[104X
+    [4X[25X>[125X [27Xod;[127X[104X
+    [4X[25Xgap>[125X [27Xcl;[127X[104X
+    [4X[28X[ 2, 3, 4, 5, 6, 7, 8, 16 ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YWith  [5XUnitLib[105X  you  can  perform  the  computation  from the last example in
+  several  hours on a modern computer. Without [5XUnitLib[105X you will spend the same
+  time  to  compute  only  several  normalized unit groups [22XV(KG)[122X for groups of
+  order 128 with the help of the [5XLAGUNA[105X package. Note that without [5XLAGUNA[105X such
+  computation would not be feasible at all.[133X
+  

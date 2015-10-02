@@ -1,0 +1,504 @@
+  
+  [1X3 Codewords[0X
+  
+  Let GF(q) denote a finite field with q (a prime power) elements. A [13Xcode[0m is a
+  subset C of some finite-dimensional vector space V over GF(q). The [13Xlength[0m of
+  C  is the dimension of V. Usually, V=GF(q)^n and the length is the number of
+  coordinate  entries.  When  C is itself a vector space over GF(q) then it is
+  called  a  [13Xlinear  code[0m  and the [13Xdimension[0m of C is its dimension as a vector
+  space over GF(q).
+  
+  In  [5XGUAVA[0m, a `codeword' is a GAP record, with one of its components being an
+  element in V. Likewise, a `code' is a GAP record, with one of its components
+  being a subset (or subspace with given basis, if C is linear) of V.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4X  gap> C:=RandomLinearCode(20,10,GF(4));[0X
+    [4X  a  [20,10,?] randomly generated code over GF(4)[0X
+    [4X  gap> c:=Random(C);[0X
+    [4X  [ 1 a 0 0 0 1 1 a^2 0 0 a 1 1 1 a 1 1 a a 0 ][0X
+    [4X  gap> NamesOfComponents(C);[0X
+    [4X  [ "LeftActingDomain", "GeneratorsOfLeftOperatorAdditiveGroup", "WordLength",[0X
+    [4X    "GeneratorMat", "name", "Basis", "NiceFreeLeftModule", "Dimension", [0X
+    [4X     "Representative", "ZeroImmutable" ][0X
+    [4X  gap> NamesOfComponents(c);[0X
+    [4X  [ "VectorCodeword", "WordLength", "treatAsPoly" ][0X
+    [4X  gap> c!.VectorCodeword;[0X
+    [4X  [ immutable compressed vector length 20 over GF(4) ] [0X
+    [4X  gap> Display(last);[0X
+    [4X  [ Z(2^2), Z(2^2), Z(2^2), Z(2)^0, Z(2^2), Z(2^2)^2, 0*Z(2), Z(2^2), Z(2^2),[0X
+    [4X    Z(2)^0, Z(2^2)^2, 0*Z(2), 0*Z(2), Z(2^2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2^2)^2,[0X
+    [4X    Z(2)^0, 0*Z(2) ][0X
+    [4X  gap> C!.Dimension;[0X
+    [4X  10[0X
+  [4X------------------------------------------------------------------[0X
+  
+  Mathematically,  a  `codeword'  is  an element of a code C, but in [5XGUAVA[0m the
+  [10XCodeword[0m and [10XVectorCodeword[0m commands have implementations which do not check
+  if  the  codeword  belongs  to C (i.e., are independent of the code itself).
+  They  exist  primarily  to  make  it  easier  for  the user to construct the
+  associated  GAP  record. Using these commands, one can enter into GAP both a
+  codeword c (belonging to C) and a received word r (not belonging to C) using
+  the  same  command.  The  user  can input codewords in different formats (as
+  strings, vectors, and polynomials), and output information is formatted in a
+  readable way.
+  
+  A codeword c in a linear code C arises in practice by an initial encoding of
+  a  'block'  message  m,  adding  enough  redundancy  to recover m after c is
+  transmitted  via a 'noisy' communication medium. In [5XGUAVA[0m, for linear codes,
+  the  map mlongmapsto c is computed using the command [10Xc:=m*C[0m and recovering m
+  from  c  is obtained by the command [10XInformationWord(C,c)[0m. These commands are
+  explained more below.
+  
+  Many  operations  are  available on codewords themselves, although codewords
+  also work together with codes (see chapter [14X4.[0m on Codes).
+  
+  The  first  section  describes  how  codewords are constructed (see [2XCodeword[0m
+  ([14X3.1-1[0m)   and  [2XIsCodeword[0m  ([14X3.1-3[0m)).  Sections  [14X3.2[0m  and  [14X3.3[0m  describe  the
+  arithmetic   operations   applicable  to  codewords.  Section  [14X3.4[0m  describe
+  functions  that  convert  codewords  back  to  vectors  or  polynomials (see
+  [2XVectorCodeword[0m  ([14X3.4-1[0m)  and  [2XPolyCodeword[0m  ([14X3.4-2[0m)).  Section  [14X3.5[0m describe
+  functions  that  change  the  way a codeword is displayed (see [2XTreatAsVector[0m
+  ([14X3.5-1[0m)  and [2XTreatAsPoly[0m ([14X3.5-2[0m)). Finally, Section [14X3.6[0m describes a function
+  to  generate  a  null  word  (see  [2XNullWord[0m  ([14X3.6-1[0m)) and some functions for
+  extracting  properties  of  codewords (see [2XDistanceCodeword[0m ([14X3.6-2[0m), [2XSupport[0m
+  ([14X3.6-3[0m) and [2XWeightCodeword[0m ([14X3.6-4[0m)).
+  
+  
+  [1X3.1 Construction of Codewords[0X
+  
+  [1X3.1-1 Codeword[0m
+  
+  [2X> Codeword( [0X[3Xobj[, n][, F][0X[2X ) ________________________________________[0Xfunction
+  
+  [10XCodeword[0m returns a codeword or a list of codewords constructed from [3Xobj[0m. The
+  object  [3Xobj[0m  can  be  a vector, a string, a polynomial or a codeword. It may
+  also be a list of those (even a mixed list).
+  
+  If a number [3Xn[0m is specified, all constructed codewords have length [3Xn[0m. This is
+  the  only  way  to  make  sure  that  all  elements  of [3Xobj[0m are converted to
+  codewords  of  the  same  length. Elements of [3Xobj[0m that are longer than [3Xn[0m are
+  reduced in length by cutting of the last positions. Elements of [3Xobj[0m that are
+  shorter  than  [3Xn[0m  are  lengthened  by  adding  zeros  at the end. If no [3Xn[0m is
+  specified, each constructed codeword is handled individually.
+  
+  If  a  Galois  field [3XF[0m is specified, all codewords are constructed over this
+  field.  This  is  the  only  way  to  make sure that all elements of [3Xobj[0m are
+  converted  to  the  same  field [3XF[0m (otherwise they are converted one by one).
+  Note  that all elements of [3Xobj[0m must have elements over [3XF[0m or over `Integers'.
+  Converting  from  one  Galois  field  to  another is not allowed. If no [3XF[0m is
+  specified, vectors or strings with integer elements will be converted to the
+  smallest Galois field possible.
+  
+  Note  that  a significant speed increase is achieved if [3XF[0m is specified, even
+  when all elements of [3Xobj[0m already have elements over [3XF[0m.
+  
+  Every  vector  in  [3Xobj[0m  can be a finite field vector over [3XF[0m or a vector over
+  `Integers'.  In  the  last case, it is converted to [3XF[0m or, if omitted, to the
+  smallest Galois field possible.
+  
+  Every  string  in [3Xobj[0m must be a string of numbers, without spaces, commas or
+  any  other  characters.  These  numbers  must  be from 0 to 9. The string is
+  converted to a codeword over [3XF[0m or, if [3XF[0m is omitted, over the smallest Galois
+  field possible. Note that since all numbers in the string are interpreted as
+  one-digit  numbers,  Galois  fields  of size larger than 10 are not properly
+  represented when using strings. In fact, no finite field of size larger than
+  11 arises in this fashion at all.
+  
+  Every  polynomial  in  [3Xobj[0m  is  converted  to  a codeword of length [3Xn[0m or, if
+  omitted,  of  a  length  dictated  by  the degree of the polynomial. If [3XF[0m is
+  specified, a polynomial in [3Xobj[0m must be over [3XF[0m.
+  
+  Every  element of [3Xobj[0m that is already a codeword is changed to a codeword of
+  length  [3Xn[0m.  If  no  [3Xn[0m  was  specified,  the codeword doesn't change. If [3XF[0m is
+  specified, the codeword must have base field [3XF[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> c := Codeword([0,1,1,1,0]);[0X
+    [4X[ 0 1 1 1 0 ][0X
+    [4Xgap> VectorCodeword( c ); [0X
+    [4X[ 0*Z(2), Z(2)^0, Z(2)^0, Z(2)^0, 0*Z(2) ][0X
+    [4Xgap> c2 := Codeword([0,1,1,1,0], GF(3));[0X
+    [4X[ 0 1 1 1 0 ][0X
+    [4Xgap> VectorCodeword( c2 );[0X
+    [4X[ 0*Z(3), Z(3)^0, Z(3)^0, Z(3)^0, 0*Z(3) ][0X
+    [4Xgap> Codeword([c, c2, "0110"]);[0X
+    [4X[ [ 0 1 1 1 0 ], [ 0 1 1 1 0 ], [ 0 1 1 0 ] ][0X
+    [4Xgap> p := UnivariatePolynomial(GF(2), [Z(2)^0, 0*Z(2), Z(2)^0]);[0X
+    [4XZ(2)^0+x_1^2[0X
+    [4Xgap> Codeword(p);[0X
+    [4Xx^2 + 1 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  This  command  can  also be called using the syntax [10XCodeword(obj,C)[0m. In this
+  format,  the  elements  of [3Xobj[0m are converted to elements of the same ambient
+  vector  space  as the elements of a code [3XC[0m. The command [10XCodeword(c,C)[0m is the
+  same  as  calling [10XCodeword(c,n,F)[0m, where [3Xn[0m is the word length of [3XC[0m and the [3XF[0m
+  is the ground field of [3XC[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := WholeSpaceCode(7,GF(5));[0X
+    [4Xa cyclic [7,7,1]0 whole space code over GF(5)[0X
+    [4Xgap> Codeword(["0220110", [1,1,1]], C);[0X
+    [4X[ [ 0 2 2 0 1 1 0 ], [ 1 1 1 0 0 0 0 ] ][0X
+    [4Xgap> Codeword(["0220110", [1,1,1]], 7, GF(5));[0X
+    [4X[ [ 0 2 2 0 1 1 0 ], [ 1 1 1 0 0 0 0 ] ] [0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(3));[0X
+    [4Xa linear [10,5,1..3]3..5 random linear code over GF(3)[0X
+    [4Xgap> Codeword("1000000000",C);[0X
+    [4X[ 1 0 0 0 0 0 0 0 0 0 ][0X
+    [4Xgap> Codeword("1000000000",10,GF(3));[0X
+    [4X[ 1 0 0 0 0 0 0 0 0 0 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.1-2 CodewordNr[0m
+  
+  [2X> CodewordNr( [0X[3XC, list[0X[2X ) ____________________________________________[0Xfunction
+  
+  [10XCodewordNr[0m  returns a list of codewords of [3XC[0m. [3Xlist[0m may be a list of integers
+  or a single integer. For each integer of [3Xlist[0m, the corresponding codeword of
+  [3XC[0m  is  returned.  The  correspondence  of  a  number  i  with  a codeword is
+  determined  as  follows:  if  a list of elements of [3XC[0m is available, the i^th
+  element  is taken. Otherwise, it is calculated by multiplication of the i^th
+  information  vector  by  the generator matrix or generator polynomial, where
+  the  information  vectors  are ordered lexicographically. In particular, the
+  returned  codeword(s) could be a vector or a polynomial. So [10XCodewordNr(C, i)[0m
+  is  equal  to [10XAsSSortedList(C)[i][0m, described in the next chapter. The latter
+  function  first calculates the set of all the elements of C and then returns
+  the  i^th  element  of that set, whereas the former only calculates the i^th
+  codeword.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> B := BinaryGolayCode();[0X
+    [4Xa cyclic [23,12,7]3 binary Golay code over GF(2)[0X
+    [4Xgap> c := CodewordNr(B, 4);[0X
+    [4Xx^22 + x^20 + x^17 + x^14 + x^13 + x^12 + x^11 + x^10[0X
+    [4Xgap> R := ReedSolomonCode(2,2);[0X
+    [4Xa cyclic [2,1,2]1 Reed-Solomon code over GF(3)[0X
+    [4Xgap> AsSSortedList(R);[0X
+    [4X[ [ 0 0 ], [ 1 1 ], [ 2 2 ] ][0X
+    [4Xgap> CodewordNr(R, [1,3]);[0X
+    [4X[ [ 0 0 ], [ 2 2 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.1-3 IsCodeword[0m
+  
+  [2X> IsCodeword( [0X[3Xobj[0X[2X ) ________________________________________________[0Xfunction
+  
+  [10XIsCodeword[0m  returns `true' if [3Xobj[0m, which can be an object of arbitrary type,
+  is  of  the codeword type and `false' otherwise. The function will signal an
+  error if [3Xobj[0m is an unbound variable.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsCodeword(1);[0X
+    [4Xfalse[0X
+    [4Xgap> IsCodeword(ReedMullerCode(2,3));[0X
+    [4Xfalse[0X
+    [4Xgap> IsCodeword("11111");[0X
+    [4Xfalse[0X
+    [4Xgap> IsCodeword(Codeword("11111"));[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.2 Comparisons of Codewords[0X
+  
+  [1X3.2-1 =[0m
+  
+  [2X> =( [0X[3Xc1, c2[0X[2X ) ______________________________________________________[0Xfunction
+  
+  The equality operator [10Xc1 = c2[0m evaluates to `true' if the codewords [3Xc1[0m and [3Xc2[0m
+  are  equal,  and  to `false' otherwise. Note that codewords are equal if and
+  only  if  their  base  vectors  are equal. Whether they are represented as a
+  vector or polynomial has nothing to do with the comparison.
+  
+  Comparing codewords with objects of other types is not recommended, although
+  it  is  possible.  If  [3Xc2[0m  is  the  codeword,  the  other object [3Xc1[0m is first
+  converted  to  a  codeword,  after which comparison is possible. This way, a
+  codeword  can be compared with a vector, polynomial, or string. If [3Xc1[0m is the
+  codeword,  then  problems may arise if [3Xc2[0m is a polynomial. In that case, the
+  comparison  always  yields  a  `false', because the polynomial comparison is
+  called.
+  
+  The  equality operator is also denoted [10XEQ[0m, and [10XEQ(c1,c2)[0m is the same as [10Xc1 =
+  c2[0m. There is also an inequality operator, < >, or [10Xnot EQ[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> P := UnivariatePolynomial(GF(2), Z(2)*[1,0,0,1]);[0X
+    [4XZ(2)^0+x_1^3[0X
+    [4Xgap> c := Codeword(P, GF(2));[0X
+    [4Xx^3 + 1[0X
+    [4Xgap> P = c;        # codeword operation[0X
+    [4Xtrue[0X
+    [4Xgap> c2 := Codeword("1001", GF(2));[0X
+    [4X[ 1 0 0 1 ][0X
+    [4Xgap> c = c2;[0X
+    [4Xtrue [0X
+    [4Xgap> C:=HammingCode(3);[0X
+    [4Xa linear [7,4,3]1 Hamming (3,2) code over GF(2)[0X
+    [4Xgap> c1:=Random(C);[0X
+    [4X[ 1 0 0 1 1 0 0 ][0X
+    [4Xgap> c2:=Random(C);[0X
+    [4X[ 0 1 0 0 1 0 1 ][0X
+    [4Xgap> EQ(c1,c2);[0X
+    [4Xfalse[0X
+    [4Xgap> not EQ(c1,c2);[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.3 Arithmetic Operations for Codewords[0X
+  
+  [1X3.3-1 +[0m
+  
+  [2X> +( [0X[3Xc1, c2[0X[2X ) ______________________________________________________[0Xfunction
+  
+  The  following  operations  are always available for codewords. The operands
+  must  have  a  common base field, and must have the same length. No implicit
+  conversions are performed.
+  
+  The operator [10X+[0m evaluates to the sum of the codewords [3Xc1[0m and [3Xc2[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5,GF(3));[0X
+    [4Xa linear [10,5,1..3]3..5 random linear code over GF(3)[0X
+    [4Xgap> c:=Random(C);[0X
+    [4X[ 1 0 2 2 2 2 1 0 2 0 ][0X
+    [4Xgap> Codeword(c+"2000000000");[0X
+    [4X[ 0 0 2 2 2 2 1 0 2 0 ][0X
+    [4Xgap> Codeword(c+"1000000000");[0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  last  command  returns  a  GAP  ERROR  since the `codeword' which [5XGUAVA[0m
+  associates to "1000000000" belongs to GF(2) and not GF(3).
+  
+  [1X3.3-2 -[0m
+  
+  [2X> -( [0X[3Xc1, c2[0X[2X ) ______________________________________________________[0Xfunction
+  
+  Similar  to  addition:  the  operator  [10X-[0m  evaluates to the difference of the
+  codewords [3Xc1[0m and [3Xc2[0m.
+  
+  [1X3.3-3 +[0m
+  
+  [2X> +( [0X[3Xv, C[0X[2X ) ________________________________________________________[0Xfunction
+  
+  The  operator  [10Xv+C[0m  evaluates  to  the  coset  code of code [3XC[0m after adding a
+  `codeword'  [3Xv[0m to all codewords in [3XC[0m. Note that if c in C then mathematically
+  c+C=C but [5XGUAVA[0m only sees them equal as [13Xsets[0m. See [2XCosetCode[0m ([14X6.1-17[0m).
+  
+  Note that the command [10XC+v[0m returns the same output as the command [10Xv+C[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(10,5);[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> c:=Random(C);[0X
+    [4X[ 0 0 0 0 0 0 0 0 0 0 ][0X
+    [4Xgap> c+C;[0X
+    [4X[ add. coset of a  [10,5,?] randomly generated code over GF(2) ][0X
+    [4Xgap> c+C=C;[0X
+    [4Xtrue[0X
+    [4Xgap> IsLinearCode(c+C);[0X
+    [4Xfalse[0X
+    [4Xgap> v:=Codeword("100000000");[0X
+    [4X[ 1 0 0 0 0 0 0 0 0 ][0X
+    [4Xgap> v+C;[0X
+    [4X[ add. coset of a  [10,5,?] randomly generated code over GF(2) ][0X
+    [4Xgap> C=v+C;[0X
+    [4Xfalse[0X
+    [4Xgap> C := GeneratorMatCode( [ [1, 0,0,0], [0, 1,0,0] ], GF(2) );[0X
+    [4Xa linear [4,2,1]1 code defined by generator matrix over GF(2)[0X
+    [4Xgap> Elements(C);[0X
+    [4X[ [ 0 0 0 0 ], [ 0 1 0 0 ], [ 1 0 0 0 ], [ 1 1 0 0 ] ][0X
+    [4Xgap> v:=Codeword("0011");[0X
+    [4X[ 0 0 1 1 ][0X
+    [4Xgap> C+v;[0X
+    [4X[ add. coset of a linear [4,2,4]1 code defined by generator matrix over GF(2) ][0X
+    [4Xgap> Elements(C+v);[0X
+    [4X[ [ 0 0 1 1 ], [ 0 1 1 1 ], [ 1 0 1 1 ], [ 1 1 1 1 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  In general, the operations just described can also be performed on codewords
+  expressed   as  vectors,  strings  or  polynomials,  although  this  is  not
+  recommended.  The  vector,  string  or  polynomial  is  first converted to a
+  codeword,  after  which  the  normal  operation is performed. For this to go
+  right,  make  sure  that at least one of the operands is a codeword. Further
+  more, it will not work when the right operand is a polynomial. In that case,
+  the  polynomial operations ([10XFiniteFieldPolynomialOps[0m) are called, instead of
+  the codeword operations ([10XCodewordOps[0m).
+  
+  Some other code-oriented operations with codewords are described in [14X4.2[0m.
+  
+  
+  [1X3.4 Functions that Convert Codewords to Vectors or Polynomials[0X
+  
+  [1X3.4-1 VectorCodeword[0m
+  
+  [2X> VectorCodeword( [0X[3Xobj[0X[2X ) ____________________________________________[0Xfunction
+  
+  Here  [3Xobj[0m  can be a code word or a list of code words. This function returns
+  the corresponding vectors over a finite field.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> a := Codeword("011011");; [0X
+    [4Xgap> VectorCodeword(a);[0X
+    [4X[ 0*Z(2), Z(2)^0, Z(2)^0, 0*Z(2), Z(2)^0, Z(2)^0 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.4-2 PolyCodeword[0m
+  
+  [2X> PolyCodeword( [0X[3Xobj[0X[2X ) ______________________________________________[0Xfunction
+  
+  [10XPolyCodeword[0m  returns  a  polynomial  or a list of polynomials over a Galois
+  field,  converted  from  [3Xobj[0m. The object [3Xobj[0m can be a codeword, or a list of
+  codewords.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> a := Codeword("011011");; [0X
+    [4Xgap> PolyCodeword(a);[0X
+    [4Xx_1+x_1^2+x_1^4+x_1^5[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.5 Functions that Change the Display Form of a Codeword[0X
+  
+  [1X3.5-1 TreatAsVector[0m
+  
+  [2X> TreatAsVector( [0X[3Xobj[0X[2X ) _____________________________________________[0Xfunction
+  
+  [10XTreatAsVector[0m  adapts  the codewords in [3Xobj[0m to make sure they are printed as
+  vectors.  [3Xobj[0m may be a codeword or a list of codewords. Elements of [3Xobj[0m that
+  are  not codewords are ignored. After this function is called, the codewords
+  will  be  treated as vectors. The vector representation is obtained by using
+  the coefficient list of the polynomial.
+  
+  Note  that  this  [13Xonly[0m  changes the way a codeword is [13Xprinted[0m. [10XTreatAsVector[0m
+  returns  nothing,  it  is  called  only  for  its  side effect. The function
+  [10XVectorCodeword[0m converts codewords to vectors (see [2XVectorCodeword[0m ([14X3.4-1[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> B := BinaryGolayCode();[0X
+    [4Xa cyclic [23,12,7]3 binary Golay code over GF(2)[0X
+    [4Xgap> c := CodewordNr(B, 4);[0X
+    [4Xx^22 + x^20 + x^17 + x^14 + x^13 + x^12 + x^11 + x^10[0X
+    [4Xgap> TreatAsVector(c);[0X
+    [4Xgap> c;[0X
+    [4X[ 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 1 0 0 1 0 1 ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.5-2 TreatAsPoly[0m
+  
+  [2X> TreatAsPoly( [0X[3Xobj[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XTreatAsPoly[0m  adapts  the  codewords  in [3Xobj[0m to make sure they are printed as
+  polynomials.  [3Xobj[0m  may be a codeword or a list of codewords. Elements of [3Xobj[0m
+  that  are  not  codewords  are  ignored.  After this function is called, the
+  codewords  will  be  treated  as  polynomials.  The finite field vector that
+  defines  the  codeword  is  used  as  a  coefficient  list of the polynomial
+  representation,  where the first element of the vector is the coefficient of
+  degree zero, the second element is the coefficient of degree one, etc, until
+  the last element, which is the coefficient of highest degree.
+  
+  Note  that  this  [13Xonly[0m  changes  the  way a codeword is [13Xprinted[0m. [10XTreatAsPoly[0m
+  returns  nothing,  it  is  called  only  for  its  side effect. The function
+  [10XPolyCodeword[0m converts codewords to polynomials (see [2XPolyCodeword[0m ([14X3.4-2[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> a := Codeword("00001",GF(2));[0X
+    [4X[ 0 0 0 0 1 ][0X
+    [4Xgap> TreatAsPoly(a); a;[0X
+    [4Xx^4[0X
+    [4Xgap> b := NullWord(6,GF(4));[0X
+    [4X[ 0 0 0 0 0 0 ][0X
+    [4Xgap> TreatAsPoly(b); b;[0X
+    [4X0 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X3.6 Other Codeword Functions[0X
+  
+  [1X3.6-1 NullWord[0m
+  
+  [2X> NullWord( [0X[3Xn, F[0X[2X ) _________________________________________________[0Xfunction
+  
+  Other  uses:  [10XNullWord(  n  )[0m  (default F=GF(2)) and [10XNullWord( C )[0m. [10XNullWord[0m
+  returns a codeword of length [3Xn[0m over the field [3XF[0m of only zeros. The integer [3Xn[0m
+  must  be  greater  then  zero.  If only a code [3XC[0m is specified, [10XNullWord[0m will
+  return a null word with both the word length and the Galois field of [3XC[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> NullWord(8);[0X
+    [4X[ 0 0 0 0 0 0 0 0 ][0X
+    [4Xgap> Codeword("0000") = NullWord(4);[0X
+    [4Xtrue[0X
+    [4Xgap> NullWord(5,GF(16));[0X
+    [4X[ 0 0 0 0 0 ][0X
+    [4Xgap> NullWord(ExtendedTernaryGolayCode());[0X
+    [4X[ 0 0 0 0 0 0 0 0 0 0 0 0 ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.6-2 DistanceCodeword[0m
+  
+  [2X> DistanceCodeword( [0X[3Xc1, c2[0X[2X ) _______________________________________[0Xfunction
+  
+  [10XDistanceCodeword[0m  returns the Hamming distance from [3Xc1[0m to [3Xc2[0m. Both variables
+  must  be  codewords  with  equal word length over the same Galois field. The
+  Hamming  distance  between  two  words is the number of places in which they
+  differ. As a result, [10XDistanceCodeword[0m always returns an integer between zero
+  and the word length of the codewords.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> a := Codeword([0, 1, 2, 0, 1, 2]);; b := NullWord(6, GF(3));;[0X
+    [4Xgap> DistanceCodeword(a, b);[0X
+    [4X4[0X
+    [4Xgap> DistanceCodeword(b, a);[0X
+    [4X4[0X
+    [4Xgap> DistanceCodeword(a, a);[0X
+    [4X0 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.6-3 Support[0m
+  
+  [2X> Support( [0X[3Xc[0X[2X ) _____________________________________________________[0Xfunction
+  
+  [10XSupport[0m  returns  a set of integers indicating the positions of the non-zero
+  entries in a codeword [3Xc[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> a := Codeword("012320023002");; Support(a);[0X
+    [4X[ 2, 3, 4, 5, 8, 9, 12 ][0X
+    [4Xgap> Support(NullWord(7));[0X
+    [4X[  ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  support  of a list with codewords can be calculated by taking the union
+  of  the  individual supports. The weight of the support is the length of the
+  set.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> L := Codeword(["000000", "101010", "222000"], GF(3));;[0X
+    [4Xgap> S := Union(List(L, i -> Support(i)));[0X
+    [4X[ 1, 2, 3, 5 ][0X
+    [4Xgap> Length(S);[0X
+    [4X4 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X3.6-4 WeightCodeword[0m
+  
+  [2X> WeightCodeword( [0X[3Xc[0X[2X ) ______________________________________________[0Xfunction
+  
+  [10XWeightCodeword[0m  returns  the  weight of a codeword c, the number of non-zero
+  entries  in [3Xc[0m. As a result, [10XWeightCodeword[0m always returns an integer between
+  zero and the word length of the codeword.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> WeightCodeword(Codeword("22222"));[0X
+    [4X5[0X
+    [4Xgap> WeightCodeword(NullWord(3));[0X
+    [4X0[0X
+    [4Xgap> C := HammingCode(3);[0X
+    [4Xa linear [7,4,3]1 Hamming (3,2) code over GF(2)[0X
+    [4Xgap> Minimum(List(AsSSortedList(C){[2..Size(C)]}, WeightCodeword ) );[0X
+    [4X3 [0X
+  [4X------------------------------------------------------------------[0X
+  

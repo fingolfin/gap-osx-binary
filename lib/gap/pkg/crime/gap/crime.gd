@@ -1,0 +1,37 @@
+DeclareCategory("IsCObject",IsObject);
+
+DeclareOperation("CohomologyGenerators", 
+  [IsCObject,IsPosInt]);
+DeclareOperation("CohomologyObject",
+  [IsGroup,IsObject]);
+DeclareOperation("CohomologyRelators", 
+  [IsCObject,IsPosInt]);
+DeclareOperation("CohomologyRing", 
+  [IsCObject,IsPosInt]);
+DeclareOperation("SubgroupInclusion",
+  [IsGroup,IsGroup]);
+DeclareOperation("IsHomogeneous",[IsSCAlgebraObj]);
+DeclareOperation("ProjectiveResolution", 
+  [IsCObject,IsPosInt]);
+DeclareOperation("BoundaryMap",
+  [IsCObject,IsInt]);
+
+DeclareGlobalFunction("ActDiagonally");
+DeclareGlobalFunction("GMinusOneBasis");
+DeclareGlobalFunction("ExtractColumn");
+DeclareGlobalFunction("FirstLift");
+DeclareGlobalFunction("FirstStep");
+DeclareGlobalFunction("GeneratorsOfRadical");
+DeclareGlobalFunction("InducedHomomorphismOnCohomology");
+DeclareGlobalFunction("Intersperse");
+DeclareGlobalFunction("MakeMultiplicationTable");
+DeclareGlobalFunction("_MasseyProduct");
+DeclareGlobalFunction("MasseyProduct");
+DeclareGlobalFunction("LiftChainMap");
+DeclareGlobalFunction("LiftChainMapAlternating");
+DeclareGlobalFunction("LiftHom");
+DeclareGlobalFunction("LocateGeneratorsInCohomologyRing");
+DeclareGlobalFunction("PCGens");
+DeclareGlobalFunction("ProductOfChainMaps");
+DeclareGlobalFunction("ReverseLexBasis");
+DeclareGlobalFunction("ActionOfPCGenerators");

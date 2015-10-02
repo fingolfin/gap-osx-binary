@@ -1,0 +1,274 @@
+  
+  [1X2 Resolutions[0X
+  
+  A free FG-resolution of an FG-module M is a sequence of module homomorphisms
+  
+  
+       ... ---> M_(n+1) ---> M_n ---> M_(n-1) ---> ... ---> M_1 ---> M_0
+       --->> M
+  
+  
+  Where  each  M_n  is  a  free FG-module and the image of d_n+1: M_n+1 -> M_n
+  equals the kernel of d_n: M_n -> M_n-1 for all n > 0.
+  
+  
+  [1X2.1 The [9XHAPResolution[1X datatype in [5XHAPprime[1X[0X
+  
+  Both  [5XHAP[0m  and [5XHAPprime[0m use the [9XHAPResolution[0m datatype to store resolutions,
+  and  you  should  refer  to  the  [5XHAP[0m documentation for full details of this
+  datatype.  With  resolutions computed by [5XHAP[0m, the boundary maps which define
+  the  module  homomorphisms  are  stored as lists of ZG-module words, each of
+  which  is  an  integer  pair  [10X[i,g][0m.  By  contrast,  when  [5XHAPprime[0m computes
+  resolutions it stores the boundary maps as lists of G-generating vectors (as
+  used  in  [9XFpGModuleHomomorphismGF[0m,  see Chapter [14X4[0m). Over small finite fields
+  (and in particular in GF(2)), these compressed vectors take far less memory,
+  saving  at  least  a  factor of two for long resolutions. The different data
+  storage  method  is  entirely  an  internal  change  - as far as the used is
+  concerned, both versions behave exactly the same.
+  
+  
+  [1X2.2 Implementation: Constructing resolutions[0X
+  
+  Given  the definition of a free FG-resolution given above, a resolution of a
+  module M can be calculated by construction. If there are k generators for M,
+  we  can  set  M_0  equal  to  the  free  FG-module  (FG)^k,  and  the module
+  homomorphism  d_0  :  M_0  ->  M  to  be the one that sends the ith standard
+  generator  of  (FG)^k  to  the  ith  element  of  M.  We can now recursively
+  construct  the  other  modules and module homomorphisms in a similar manner.
+  Given  a boundary homomorphism d_n = M_n -> M_n-1, the kernel of this can be
+  calculated.  Then  given  a  set  of  generators  (ideally  a small set) for
+  ker(d_n),   we   can  set  M_n+1  =  (FG)^|ker(d_n)|,  and  the  new  module
+  homomorphism  d_n+1  to  be the one mapping the standard generators of M_n+1
+  onto the generators of ker(d_n).
+  
+  [5XHAPprime[0m  implements  the construction of resolutions using this method. The
+  construction  is  divided  into  two  stages.  The  creation  of  the  first
+  homomorphism   in  the  resolution  for  M  is  performed  by  the  function
+  [2XLengthZeroResolutionPrimePowerGroup[0m  ([14X2.3-2[0m),  or  for  a  resolution of the
+  trivial  FG-module  F,  the  first  two  homomorphisms can be stated without
+  calculation  using  [2XLengthOneResolutionPrimePowerGroup[0m  ([14X2.3-1[0m).  Once  this
+  initial  sequence is created, a longer resolution can be created by repeated
+  application   of   one   of   [2XExtendResolutionPrimePowerGroupGF[0m   ([14XHAPprime:
+  ExtendResolutionPrimePowerGroupGF[0m),   [2XExtendResolutionPrimePowerGroupRadical[0m
+  ([14XHAPprime:             ExtendResolutionPrimePowerGroupRadical[0m)            or
+  [2XExtendResolutionPrimePowerGroupGF2[0m                                ([14XHAPprime:
+  ExtendResolutionPrimePowerGroupGF2[0m), each of which extends the resolution by
+  one  stage  by  constructing  a new module and homomorphism mapping onto the
+  minimal  generators  of  the  kernel  of  the last homomorphism of the input
+  resolution.  These  extension  functions  differ  in speed and the amount of
+  memory      that      they      use.      The     lowest-memory     version,
+  [2XExtendResolutionPrimePowerGroupGF[0m                                 ([14XHAPprime:
+  ExtendResolutionPrimePowerGroupGF[0m),  uses  the  block  structure  of  module
+  generating  vectors  (see  Section  [14X3.2-1[0m)  and  calculates  kernels  of the
+  boundary  homomorphisms  using  [2XKernelOfModuleHomomorphismSplit[0m  ([14X4.6-3[0m) and
+  finds    a    minimal    set   of   generators   for   this   kernel   using
+  [2XMinimalGeneratorsModuleGF[0m   ([14X3.5-9[0m).   The  much  faster  but  memory-hungry
+  [2XExtendResolutionPrimePowerGroupRadical[0m                            ([14XHAPprime:
+  ExtendResolutionPrimePowerGroupRadical[0m)    uses   [2XKernelOfModuleHomomorphism[0m
+  ([14X4.6-3[0m)    and    [2XMinimalGeneratorsModuleRadical[0m    ([14X3.5-9[0m)    respectively.
+  [2XExtendResolutionPrimePowerGroupGF2[0m                                ([14XHAPprime:
+  ExtendResolutionPrimePowerGroupGF2[0m)     uses    [2XKernelOfModuleHomomorphismGF[0m
+  ([14X4.6-3[0m) whic partitions the boundary homomorphism matrix using FG-reduction.
+  This  gives  a  small memory saving over the [10XRadical[0m method, but can take as
+  long as the [10XGF[0m scheme.
+  
+  The  construction  of resolutions of length n is wrapped up in the functions
+  [9XResolutionPrimePowerGroupGF[0m,       [9XResolutionPrimePowerGroupRadical[0m      and
+  [9XResolutionPrimePowerGroupAutoMem[0m, which (as well as the extension functions)
+  are fully documented in Section [14X'HAPprime: ResolutionPrimePowerGroup'[0m of the
+  [5XHAPprime[0m user manual.
+  
+  
+  [1X2.3 Resolution construction functions[0X
+  
+  [1X2.3-1 LengthOneResolutionPrimePowerGroup[0m
+  
+  [2X> LengthOneResolutionPrimePowerGroup( [0X[3XG[0X[2X ) __________________________[0Xfunction
+  [6XReturns:[0X  [9XHAPResolution[0m
+  
+  Returns  a  free  FG-resolution  of length 1 for group [3XG[0m (which must be of a
+  prime power), i.e. the resolution
+  
+  
+       FG^k ---> FG --->> F
+  
+  
+  This  function  requires  very  little  calculation:  the first stage of the
+  resolution  can  simply  be stated given a set of minimal generators for the
+  group.
+  
+  [1X2.3-2 LengthZeroResolutionPrimePowerGroup[0m
+  
+  [2X> LengthZeroResolutionPrimePowerGroup( [0X[3XM[0X[2X ) _________________________[0Xfunction
+  [6XReturns:[0X  [9XHAPResolution[0m
+  
+  Returns  a minimal free FG-resolution of length 0 for the [9XFpGModuleGF[0m module
+  [3XM[0m, i.e. the resolution
+  
+  
+       FG^k --->> M
+  
+  
+  This  function  requires little calculation since the the first stage of the
+  resolution  can  simply be stated if the module has minimal generators: each
+  standard  generator of the zeroth-degree module M_0 maps onto a generator of
+  [3XM[0m.  If  [3XM[0m  does  not  have  minimal  generators,  they  are calculated using
+  [2XMinimalGeneratorsModuleRadical[0m ([14X3.5-9[0m).
+  
+  
+  [1X2.4 Resolution data access functions[0X
+  
+  [1X2.4-1 ResolutionLength[0m
+  
+  [2X> ResolutionLength( [0X[3XR[0X[2X ) ______________________________________________[0Xmethod
+  [6XReturns:[0X  Integer
+  
+  Returns the length (i.e. the maximum index k) in the resolution [3XR[0m.
+  
+  [1X2.4-2 ResolutionGroup[0m
+  
+  [2X> ResolutionGroup( [0X[3XR[0X[2X ) _______________________________________________[0Xmethod
+  [6XReturns:[0X  Group
+  
+  Returns the group of the resolution [3XR[0m.
+  
+  [1X2.4-3 ResolutionFpGModuleGF[0m
+  
+  [2X> ResolutionFpGModuleGF( [0X[3XR, k[0X[2X ) ______________________________________[0Xmethod
+  [6XReturns:[0X  [9XFpGModuleGF[0m
+  
+  Returns  the  module  M_k in the resolution [3XR[0m, as a [9XFpGModuleGF[0m (see Chapter
+  [14X3[0m), assuming the canonical action.
+  
+  [1X2.4-4 ResolutionModuleRank[0m
+  
+  [2X> ResolutionModuleRank( [0X[3XR, k[0X[2X ) _______________________________________[0Xmethod
+  [6XReturns:[0X  Integer
+  
+  Returns the FG rank of the [3Xk[0mth module M_k in the resolution.
+  
+  [1X2.4-5 ResolutionModuleRanks[0m
+  
+  [2X> ResolutionModuleRanks( [0X[3XR[0X[2X ) _________________________________________[0Xmethod
+  [6XReturns:[0X  List of integers
+  
+  Returns  a  list  containg the FG rank of the each of the modules M_k in the
+  resolution [3XR[0m.
+  
+  [1X2.4-6 BoundaryFpGModuleHomomorphismGF[0m
+  
+  [2X> BoundaryFpGModuleHomomorphismGF( [0X[3XR, k[0X[2X ) ____________________________[0Xmethod
+  [6XReturns:[0X  [9XFpGModuleHomomorphismGF[0m
+  
+  Returns    the    [3Xk[0mth   boundary   map   in   the   resolution   [3XR[0m,   as   a
+  [9XFpGModuleHomomorphismGF[0m. This represents the linear homomorphism d_k: M_k ->
+  M_k-1.
+  
+  [1X2.4-7 ResolutionsAreEqual[0m
+  
+  [2X> ResolutionsAreEqual( [0X[3XR, S[0X[2X ) _____________________________________[0Xoperation
+  [6XReturns:[0X  Boolean
+  
+  Returns  [9Xtrue[0m  if  the resolutions appear to be equal, [9Xfalse[0m otherwise. This
+  compares the torsion coefficients of the homology from the two resolutions.
+  
+  
+  [1X2.5 Example: Computing and working with resolutions[0X
+  
+  In this example we construct a minimal free FG-resolution of length four for
+  the group G = D_8 x Q_8 of order 64, which will be the sequence
+  
+  
+       (FG)^22 ---> (FG)^15 ---> (FG)^9 ---> FG --->> F
+  
+  
+  We     first     build     each     stage    explicitly,    starting    with
+  [2XLengthOneResolutionPrimePowerGroup[0m ([14X2.3-1[0m) followed by repeated applications
+  of             [2XExtendResolutionPrimePowerGroupRadical[0m             ([14XHAPprime:
+  ExtendResolutionPrimePowerGroupRadical[0m).  We  extract  various properties of
+  this  resolution.  Finally,  we construct equivalent resolutions for G using
+  [2XResolutionPrimePowerGroupGF[0m   ([14XHAPprime:   ResolutionPrimePowerGroupGF  (for
+  group)[0m)          and         [2XResolutionPrimePowerGroupGF2[0m         ([14XHAPprime:
+  ResolutionPrimePowerGroupGF2  (for  group)[0m)  and  check  that  the three are
+  equivalent.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := DirectProduct(DihedralGroup(8), SmallGroup(8, 4));[0X
+    [4X<pc group of size 64 with 6 generators>[0X
+    [4Xgap> R := LengthOneResolutionPrimePowerGroup(G);[0X
+    [4XResolution of length 1 in characteristic 2 for <pc group of size 64 with[0X
+    [4X6 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupRadical(R);;[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupRadical(R);;[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupRadical(R);[0X
+    [4XResolution of length 4 in characteristic 2 for <pc group of size 64 with[0X
+    [4X6 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> #[0X
+    [4Xgap> ResolutionLength(R);[0X
+    [4X4[0X
+    [4Xgap> ResolutionGroup(R);[0X
+    [4X<pc group of size 64 with 6 generators>[0X
+    [4Xgap> ResolutionModuleRanks(R);[0X
+    [4X[ 4, 9, 15, 22 ][0X
+    [4Xgap> ResolutionModuleRank(R, 3);[0X
+    [4X15[0X
+    [4Xgap> M2 := ResolutionFpGModuleGF(R, 2);[0X
+    [4XFull canonical module FG^9 over the group ring of <pc group of size 64 with[0X
+    [4X6 generators> in characteristic 2[0X
+    [4X[0X
+    [4Xgap> d3 := BoundaryFpGModuleHomomorphismGF(R, 3);[0X
+    [4X<Module homomorphism>[0X
+    [4X[0X
+    [4Xgap> ImageOfModuleHomomorphism(d3);[0X
+    [4XModule over the group ring of <pc group of size 64 with[0X
+    [4X6 generators> in characteristic 2 with 15 generators in FG^9.[0X
+    [4X[0X
+    [4Xgap> #[0X
+    [4Xgap> S := ResolutionPrimePowerGroupGF(G, 4);[0X
+    [4XResolution of length 4 in characteristic 2 for <pc group of size 64 with[0X
+    [4X6 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> ResolutionsAreEqual(R, S);[0X
+    [4Xtrue[0X
+    [4Xgap> T := ResolutionPrimePowerGroupGF2(G, 4);[0X
+    [4XResolution of length 4 in characteristic 2 for <pc group of size 64 with[0X
+    [4X6 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> ResolutionsAreEqual(R, T);[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  Further  example  of  constructing resolutions and extracting data from them
+  are  given  in  Sections  [14X3.4-11[0m,  [14X3.5-11[0m,  [14X3.6-3[0m,  [14X4.5-7[0m  and [14X4.6-4[0m in this
+  reference  manual,  and  also  the  chapter  of  [14X'HAPprime: Examples'[0m in the
+  [5XHAPprime[0m user guide.
+  
+  
+  [1X2.6 Miscellaneous resolution functions[0X
+  
+  [1X2.6-1 BestCentralSubgroupForResolutionFiniteExtension[0m
+  
+  [2X> BestCentralSubgroupForResolutionFiniteExtension( [0X[3XG[, n][0X[2X ) _______[0Xoperation
+  [6XReturns:[0X  Group
+  
+  Returns the central subgroup of [3XG[0m that is likely to give the smallest module
+  ranks   when   using   the   [5XHAP[0m  function  [2XResolutionFiniteExtension[0m  ([14XHAP:
+  ResolutionFiniteExtension[0m).  That function computes a non-minimal resolution
+  for [3XG[0m from the twisted tensor product of resolutions for a normal subgroup N
+  and the quotient group G/N. The ranks of the modules in the resolution for G
+  are  the  products  of the module ranks of the resolutions for these smaller
+  groups.  This  function tests [3Xn[0m terms of the minimal resolutions for all the
+  central  subgroups  of  G  and  the  corresponding  quotients  to  find  the
+  subgroup/quotient pair with the smallest module ranks. If [3Xn[0m is not provided,
+  then n=5 is used.
+  

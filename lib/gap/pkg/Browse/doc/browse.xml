@@ -1,0 +1,640 @@
+
+<Chapter Label="chap:browse-user">
+<Heading>Browsing Tables in &GAP; using <C>ncurses</C>
+&ndash;The User Interface</Heading>
+
+As stated in Section&nbsp;<Ref Sect="sec:intro"/>,
+one aim of the &Browse; package is to provide tools for the quite usual task
+to show a two-dimensional array or certain rows and columns of it
+on a character screen in a formatted way,
+to navigate in this array via key strokes (and mouse events), and
+to search for strings, to sort the array by row or column values etc.
+<P/>
+The idea is that one starts with an array of data,
+the <E>main table</E><Index>main table of a browse table</Index>.
+Optionally, labels for each row of the main table are given,
+which are also arranged in an array (with perhaps several columns),
+the <E>row labels table</E><Index>row labels of a browse table</Index>;
+analogously,
+a <E>column labels table</E><Index>column labels of a browse table</Index>
+of labels for the columns of the main table may be given.
+The row labels are shown to the left of the main table, the column labels are
+shown above the main table.
+The space above the row labels and to the left of the column labels
+can be used for a fourth table,
+the <E>corner table</E><Index>corner table of a browse table</Index>,
+with information about the labels or about the main table.
+Optionally, a <E>header</E><Index>header of a browse table</Index>
+and a <E>footer</E><Index>footer of a browse table</Index>
+may be shown above and below these four tables, respectively.
+Header and footer are not separated into columns.
+So the shown window has the following structure.
+<P/>
+<Alt Only="Text">
+<Verb>
+      ┌────────────────────────────────┐
+      │             header             │
+      ├────────┬───────────────────────┤
+      │        │                       │
+      │ corner │     column labels     │
+      │        │                       │
+      ├────────┼───────────────────────┤
+      │        │                       │
+      │        │                       │
+      │  row   │         main          │
+      │ labels │         table         │
+      │        │                       │
+      │        │                       │
+      │        │                       │
+      ├────────┴───────────────────────┤
+      │             footer             │
+      └────────────────────────────────┘
+</Verb>
+</Alt>
+<Alt Only="LaTeX">
+<![CDATA[
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{2}{|c|}{header} \\
+\hline
+corner & column labels \\
+\hline
+ & \\
+row & main \\
+labels &  table \\
+ & \\
+\hline
+\multicolumn{2}{|c|}{footer} \\
+\hline
+\end{tabular}
+\end{center}
+]]>
+</Alt>
+<Alt Only="HTML">
+<![CDATA[
+</p>
+<table rules="all" border="3">
+<thead>
+<tr>
+<td colspan="2" align="center">header</td>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td colspan="2" align="center">footer</td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td align="center">corner</td>
+<td align="center">column labels</td>
+</tr>
+<tr>
+<td align="center">row labels</td>
+<td align="center">main table</td>
+</tr>
+</tbody>
+</table><p>
+]]>
+</Alt>
+<P/>
+If not the whole tables fit into the window then only subranges of rows
+and columns of the main table are shown,
+together with the corresponding row and column labels.
+Also in this case, the row heights and column widths are computed w.r.t.
+the whole table not w.r.t. the shown rows and columns.
+This means that the shown row labels are unchanged if the range of shown
+columns is changed,
+the shown column labels are unchanged if the range of shown rows is changed,
+and the whole corner table is always shown.
+<P/>
+The current chapter describes the user interface for
+<E>standard applications</E> of this kind, i.&nbsp;e.,
+those applications for which one just has to collect the data to be shown
+in a record
+&ndash;which we call a <E>browse table</E>&ndash;
+without need for additional &GAP; programming.
+<P/>
+Section&nbsp;<Ref Sect="sec:features"/> gives an overview of the features
+available in standard browse table applications,
+and Section&nbsp;<Ref Sect="sec:browsebasicdata"/> describes
+the data structures used in browse tables.
+Finally, Section&nbsp;<Ref Sect="sec:browsegeneric"/> introduces
+the function <Ref Func="NCurses.BrowseGeneric"/>,
+which is the generic function for showing browse table in visual mode.
+<P/>
+For technical details needed to extend these applications
+and to build other applications,
+see Chapter&nbsp;<Ref Chap="chap:browse-prg"/>.
+<P/>
+Examples of browse table applications are shown
+in Chapter&nbsp;<Ref Chap="ch:appl"/>.
+
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sec:features">
+<Heading>Features Supported by the Function <C>NCurses.BrowseGeneric</C>
+</Heading>
+
+Standard applications of the function <Ref Func="NCurses.BrowseGeneric"/>
+have the following functionality.
+Other applications may provide only a subset, or add further functionality,
+see Chapters&nbsp;<Ref Chap="chap:browse-prg"/>
+and&nbsp;<Ref Chap="ch:appl"/>.
+<P/>
+<List>
+<Mark>Scrolling:<Index>scrolling in a browse table</Index></Mark>
+<Item>
+  The subranges of shown rows and columns of the main table can be modified,
+  such that the focus area is moved to the left, to the right, up, or down;
+  depending on the context, the focus is moved by one character, by one table
+  cell or a part of it, by the window height/width (minus one character or
+  minus one table cell).
+  If mouse events <Index>mouse events</Index>
+  are enabled then cells can be selected also via mouse clicks.
+</Item>
+<Mark>Selecting:<Index>selecting entries of a browse table</Index></Mark>
+<Item>
+  A cell, row, or column of the main table can be selected;
+  then it is shown highlighted on the screen (by default using the attribute
+  <C>NCurses.attrs.STANDOUT</C>,
+  see Section&nbsp;<Ref Subsect="ssec:ncursesAttrs"/>).
+  The selection can be moved inside the main table to a neighboring cell,
+  row, or column; this causes also scrolling of the main table
+  when the window borders are reached.
+</Item>
+<Mark>Searching:<Index>searching in a browse table</Index></Mark>
+<Item>
+  A search string is entered by the user, and the first matching cell
+  becomes selected; one can search further for the next matching cell.
+  Global search parameters define what matching means (case sensitive or
+  not, search for substrings or complete words) and what the first and
+  the next matching cells are (search in the whole table or just in the
+  selected row or column, search for whole words or prefixes or suffixes,
+  search forwards or backwards).
+</Item>
+<Mark>Sorting:<Index>sorting a browse table</Index></Mark>
+<Item>
+  If a row or column is selected then the main table can be sorted w.r.t.
+  the entries in this row or column.
+  Global sort parameters describe for example whether one wants to sort
+  ascending or descending, or case sensitive or not.
+  <P/>
+  If a categorized table is sorted by a column then the category rows
+  are removed and the current sorting and filtering by rows is reset
+  before the table is sorted by the given column.
+  If a table is sorted by a column/row that is already sorted by a column/row
+  then this ordering is reset first.
+  <P/>
+  Sorting can be undone globally, i.&nbsp;e., one can return to the
+  unsorted table.
+</Item>
+<Mark>Sorting and Categorizing:<Index>categorizing a browse table</Index></Mark>
+<Item>
+  If a column is selected then the main table can be sorted w.r.t.
+  the entries in this column,
+  and additionally these entries are turned into <E>category rows</E>,
+  i.&nbsp;e.,
+  additional rows are added to the main table, appearing immediately above
+  the table rows with a fixed value in the selected column, and showing
+  this column value.
+  (There should be no danger to mix up this notion of categories with the one
+  introduced in&nbsp;<Ref Sect="Categories" BookName="ref"/>.)
+  The category rows can be <E>collapsed</E>
+  <Index>collapsed category row</Index>
+  (that is, the table rows that belong to this category row are not shown)
+  or <E>expanded</E><Index>expanded category row</Index>
+  (that is, the corresponding table rows are shown).
+  Some of the global search parameters affect the category rows,
+  for example, whether the category rows shall involve a counter showing the
+  number of corresponding data rows,
+  or whether a row of the browse table appears under different category rows.
+  <P/>
+  <!--
+  When a table gets sorted and categorized that is already categorized,
+  the new category rows are created on the outermost category level,
+  so successively categorizing by several columns yields a category hierarchy.
+  <P/>
+  -->
+  Sorting and categorizing can be undone globally, i.&nbsp;e.,
+  one can return to the unsorted table without category rows.
+</Item>
+<Mark>Filtering:<Index>filtering a browse table</Index></Mark>
+<Item>
+  The browse table can be restricted to those rows or columns in which
+  a given search string occurs.
+  (Also entries in collapsed rows can match; they remain collapsed then.)
+  As a consequence, the category rows are restricted to those
+  under which a matching row occurs.
+  (It is irrelevant whether the search string occurs in category rows.)
+  <P/>
+  If the search string does not occur at all then a message is printed,
+  and the table remains as it was before.
+  If a browse table is restricted then this fact is indicated by the message
+  <Q>restricted table</Q> in the lower right corner of the window.
+  <P/>
+  When a column or row is selected then the search is restricted to the
+  entries in this column or row, respectively.
+  Besides using a search,
+  one can also explicitly hide the selected row or column.
+  Filtering in an already restricted table restricts the shown rows or
+  columns further.
+  <P/>
+  Filtering can be undone globally, i.&nbsp;e., one can return to the
+  unrestricted table.
+</Item>
+<Mark>Help:<Index>help window for a browse table</Index></Mark>
+<Item>
+  Depending on the application and on the situation,
+  different sets of user inputs may be available
+  and different meanings of these inputs are possible.
+  An overview of the currently available inputs and their meanings
+  can be opened in each situation, by hitting the <B>?</B> key.
+</Item>
+<Mark>Re-entering:</Mark>
+<Item>
+  When one has called <Ref Func="NCurses.BrowseGeneric"/> with a browse table,
+  and returns from visual mode to the &GAP; prompt after some navigation steps,
+  calling <C>NCurses.BrowseGeneric</C> again with this table
+  will enter visual mode in the same situation where it was left.
+  For example, the cell in the top-left position will be the same as before,
+  and if a cell was selected before then this cell will be selected now.
+  (One can avoid this behavior using the optional second argument of
+  <C>NCurses.BrowseGeneric</C>.)
+</Item>
+<Mark>Logging:<Index>log of a browse table session</Index></Mark>
+<Item>
+  The integers corresponding to the user inputs in visual mode
+  are collected in a list that is stored in the component
+  <C>dynamic.log</C> of the browse table.
+  It can be used for repeating the inputs with the replay feature.
+  (For browse table applications that give the user no access to the
+  browse table itself, one can force the log to be assigned to the component
+  <C>log</C> of the global variable <C>BrowseData</C>,
+  <Index>BrowseData.log</Index>
+  see Section&nbsp;<Ref Subsect="BrowseData"/>.)
+</Item>
+<Mark>Replay:<Index>replay of a browse table session</Index></Mark>
+<Item>
+  Instead of interactively hitting keys in visual mode, one can prescribe
+  the user inputs to a browse table via a <Q>replay record</Q>;
+  the inputs are then processed with given time intervals.
+  The easiest way to create a meaningful replay record is via the function
+  <Ref Func="BrowseData.SetReplay"/>, with argument the <C>dynamic.log</C>
+  component of the browse table in question that was stored in an
+  interactive session.
+</Item>
+</List>
+<P/>
+The following features are not available in standard applications.
+They require additional programming.
+<P/>
+<List>
+<Mark>Clicking:<Index>click on an entry of a browse table</Index></Mark>
+<Item>
+  One possible action is to <Q>click</Q> a selected cell, row, or column,
+  by hitting the <B>Enter</B> key.
+  It depends on the application what the effect is.
+  A typical situation is that a corresponding &GAP; object is added to the
+  list of return values of <Ref Func="NCurses.BrowseGeneric"/>.
+  Again it depends on the application what this &GAP; object is.
+  In order to use this feature, one has to provide a record whose components
+  are &GAP; functions, see Section&nbsp;<Ref Subsect="BrowseData"/>
+  for details.
+  If mouse events <Index>mouse events</Index> are enabled
+  (see <Ref Func="NCurses.UseMouse"/>)
+  then also mouse clicks can be used as an alternative
+  to hitting the <B>Enter</B> key.
+</Item>
+<Mark>Return Value:<Index>return value of a browse table session</Index></Mark>
+<Item>
+  The function <Ref Func="NCurses.BrowseGeneric"/> may have
+  an application dependent return value.
+  A typical situation is that a list of objects corresponding to those
+  cells is returned that were <Q>clicked</Q> in visual mode.
+  In order to use this feature, one has to assign the desired value to
+  the component <C>dynamic.Return</C> of the browse table.
+</Item>
+</List>
+
+</Section>
+
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sec:browsebasicdata">
+<Heading>Data Structures used by <C>NCurses.BrowseGeneric</C></Heading>
+
+<#Include Label="IsBrowseTableCellData_man">
+
+<#Include Label="BlockEntry_man">
+
+<#Include Label="IsBrowseTable_man">
+
+</Section>
+
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sec:browsegeneric">
+<Heading>The Function <C>NCurses.BrowseGeneric</C></Heading>
+
+<#Include Label="NCurses.BrowseGeneric_man">
+
+</Section>
+
+</Chapter>
+
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Chapter Label="chap:browse-prg">
+<Heading>Browsing Tables in &GAP; using <C>ncurses</C>
+&ndash;The Programming Interface</Heading>
+
+This chapter describes some aspects of the internals of the browse table
+handling.
+The relevant objects are
+<E>action functions</E> that implement the individual navigation steps
+(see Section&nbsp;<Ref Sect="sec:actions"/>),
+<E>modes</E> that describe the sets of available navigation steps in given
+situations (see Section&nbsp;<Ref Sect="sec:modes"/>),
+and <E>browse applications</E> that are given by the combination of several
+modes (see Section&nbsp;<Ref Sect="sec:applications"/>).
+Most of the related data is stored in the global variable
+<Ref Var="BrowseData"/>.
+
+For more details, one should look directly at the code in the file
+<F>lib/browse.gi</F> of the &Browse; package.
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sec:actions">
+<Heading>Navigation Steps in Browse Tables</Heading>
+
+Navigating in a browse table means that after entering visual mode
+by calling <Ref Func="NCurses.BrowseGeneric"/>,
+the user hits one or several keys, or uses a mouse button,
+and if this input is in a given set of admissible inputs
+then a corresponding function is executed with argument the browse table
+(plus additional information in the case of mouse events).
+The function call then may change components in this table
+(recommended: components in its <C>dynamic</C> component),
+such that the appearance in the window may be different afterwards,
+and also the admissible inputs and their effects may have changed.
+
+<P/>
+
+The relation between the admissible inputs and the corresponding functions
+is application dependent.
+However, it is recommended to associate the same input to the same function
+in different situations;
+for example,
+the <B>?</B> key and the <B>F1</B> key should belong to a function
+that shows a help window
+(see Section <Ref Subsect="BrowseData.actions.ShowHelp"/>),
+the <B>q</B> key and the <B>Esc</B> key should belong to a function
+that exits the current mode
+(Note that the <B>Esc</B> key may be recognized as input
+only after a delay of about a second.),
+the <B>Q</B> key should belong to a function that exits the browse
+application (see Section <Ref Subsect="BrowseData.actions.QuitMode"/>),
+the <B>F2</B> key should belong to a function that saves the current
+window contents in a global variable
+(see Section <Ref Subsect="BrowseData.actions.SaveWindow"/>),
+and
+the <B>E</B> key should belong to a function that enters a break loop
+(see Section&nbsp;<Ref Subsect="BrowseData.actions.Error"/>).
+The <B>Enter</B> and <B>Return</B> keys should belong to a <Q>click</Q>
+on a selected table entry, and if a category row is selected then they
+should expand/collapse this category.
+The <B>M</B> key should toggle enabling and disabling mouse events.
+Mouse events on a cell or on a category row of a browse table
+should move the selected entry to this position;
+it is recommended that no functionality is lost if no mouse events are used,
+although the number of steps might be reduced when the mouse is used.
+
+<P/>
+
+Each such function is wrapped into a record with the components <C>action</C>
+(the function itself) and <C>helplines</C> (a list of attribute lines that
+describes what the function does).
+<Index>action record of a browse table</Index>
+The help lines are used by the help feature of <C>NCurses.BrowseGeneric</C>,
+see Section <Ref Subsect="BrowseData.actions.ShowHelp"/>.
+
+<P/>
+
+The action functions need not return anything.
+Whenever the shown screen shall be recomputed after the function call,
+the component <C>dynamic.changed</C> of the browse table must be set to
+<K>true</K> by the action functions.
+
+<P/>
+
+After entering the first characters of an admissible input
+that consists of more characters, 
+the last line of the window with the browse table shows these characters
+behind the prefix <Q>partial input:</Q>.
+<Index>partial input in a browse table</Index>
+One can delete the last entered character of a partial input via the
+<B>Delete</B> and <B>Backspace</B> keys.
+It is not possible to make these keys part of an admissible input.
+When a partial input is given, only those user inputs have an effect
+that extend the partial input to (a prefix of) an admissible input.
+For example, asking for help by hitting the <B>?</B> key will in general
+not work if a partial input had been entered before.
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sec:modes">
+<Heading>Modes in Browse Tables</Heading>
+<Index>mode of a browse table</Index>
+
+In different situations, different inputs may be admissible for the same
+browse table, and different functions may belong to the same input.
+For example, the meaning of <Q>moving down</Q> can be different depending on
+whether a cell is selected or not.
+
+<P/>
+
+The set of admissible user inputs and corresponding functions for a
+particular situation is collected in a <E>mode</E> of the browse table.
+(There should be no danger to mix up this notion of mode with the
+<Q>visual mode</Q> introduced in Section&nbsp;<Ref Sect="sec:intro"/>.)
+A mode is represented by a record with the components
+<C>name</C>
+(a string used to associate the mode with the components of <C>header</C>,
+<C>headerLength</C>, <C>footer</C>, <C>footerLength</C>, <C>Click</C>,
+and for the help screen),
+<C>flag</C>
+(a string that describes properties of the mode but that can be equal for
+different modes),
+<C>actions</C>
+(a list of records describing the navigation steps that are admissible
+in the mode, see Section&nbsp;<Ref Sect="sec:actions"/>),
+and <C>ShowTables</C>
+(the function used to eventually print the current window contents,
+the default is <C>BrowseData.ShowTables</C>).
+<Index>BrowseData.ShowTables</Index>
+Due to the requirement that each admissible user input uniquely determines
+a corresponding function, no admissible user input can be a prefix of
+another admissible input, for the same mode.
+
+<P/>
+
+Navigation steps (see Section <Ref Sect="sec:actions"/>) can change
+the current mode or keep the mode.
+It is recommended that each mode has an action to leave this mode;
+also an action to leave the browse table application is advisable.
+
+<P/>
+
+In a browse table, all available modes are stored in the component
+<C>work.availableModes</C>, whose value is a list of mode records.
+The value of the component <C>dynamic.activeModes</C> is a list of
+mode records that is used as a stack:
+The <E>current mode</E> is the last entry in this list,
+changing the current mode is achieved
+by unbinding the last entry (so one returns to the mode
+from which the current mode had been entered by adding it to the list),
+by adding a new mode record (so one can later return to the current mode),
+or by replacing the last entry by another mode record.
+As soon as the <C>dynamic.activeModes</C> list becomes empty,
+the browse table application is left.
+(In this situation,
+if the browse table had been entered from the &GAP; prompt then
+visual mode is left, and one returns to the &GAP; prompt.)
+
+<P/>
+
+The following modes are predefined by the &Browse; package.
+Each of these modes admits the user inputs
+<B>?</B>, <B>F1</B>, <B>q</B>, <B>Esc</B>,
+<B>Q</B>, <B>F2</B>, <B>E</B>, and <B>M</B>
+that have been mentioned in Section <Ref Sect="sec:actions"/>.
+
+<List>
+<Mark>browse</Mark>
+<Item>
+  This mode admits scrolling of the browse table by a cell or by a screen,
+  searching for a string, selecting a row, a column, or an entry,
+  and expanding or collapsing all category rows.
+</Item>
+<Mark>help</Mark>
+<Item>
+  This mode is entered by calling <C>BrowseData.ShowHelpTable</C>;
+  it shows a help window concerning the actions available in the mode
+  from which the <C>help</C> mode was entered.
+  The <C>help</C> mode admits scrolling in the help table
+  by a cell or by a screen.
+  See Section <Ref Subsect="BrowseData.actions.ShowHelp"/>
+  for details.
+</Item>
+<Mark>select_entry</Mark>
+<Item>
+  In this mode, one table cell is regarded as selected;
+  this cell is highlighted using the attribute in the component
+  <C>work.startSelect</C> as a prefix of each attribute line,
+  see the remark in Section <Ref Subsect="NCurses.IsAttributeLine"/>.
+  The mode admits moving the selection by one cell in the four directions,
+  searching for a string and for further occurrences of this string,
+  expanding or collapsing the current category row or all category rows,
+  and executing the <Q>click</Q> function of this mode,
+  provided that the component <C>work.Click.( "select_entry" )</C>
+  of the browse table is bound.
+</Item>
+<Mark>select_row</Mark>
+<Item>
+  This is like the <C>select_entry</C> mode,
+  except that a whole row of the browse table is highlighted.
+  Searching is restricted to the selected row, and <Q>click</Q> refers to the
+  function <C>work.Click.( "select_row" )</C>.
+</Item>
+<Mark>select_row_and_entry</Mark>
+<Item>
+  This is a combination of the <C>select_entry</C> mode and the
+  <C>select_row</C> mode.
+</Item>
+<Mark>select_column</Mark>
+<Item>
+  This is like the <C>select_row</C> mode,
+  just a column is selected not a row.
+</Item>
+<Mark>select_column_and_entry</Mark>
+<Item>
+  This is like the <C>select_row_and_entry</C> mode,
+  just a column is selected not a row.
+</Item>
+</List>
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sec:applications">
+<Heading>Browse Applications</Heading>
+
+The data in a browse table together with the set of its available modes and
+the stack of active modes forms a browse application.
+So the part of or all functionality of the &Browse; package can be available
+(<Q>standard application</Q>),
+or additional functionality can be provided by extending available modes or
+adding new modes.
+
+<P/>
+
+When <Ref Func="NCurses.BrowseGeneric"/> has been called
+with the browse table <A>t</A>, say, the following loop is executed.
+
+<Enum>
+<Item>
+  If the list <A>t</A><C>.dynamic.activeModes</C> is empty then exit
+  the browse table, and if the component <A>t</A><C>.dynamic.Return</C>
+  is bound then return its value.
+  Otherwise proceed with step 2.
+</Item>
+<Item>
+  If <A>t</A><C>.dynamic.changed</C> is <K>true</K> then
+  call the <C>ShowTables</C> function of the current mode;
+  this causes a redraw of the window that shows the browse table.
+  Then go to step 3.
+</Item>
+<Item>
+  Get one character of user input.
+  If then the current user input string is the name of an action of the
+  current mode then call the corresponding action function and go to step 1;
+  if the current user input string is just a prefix of the name of some
+  actions of the current mode then go to step 3;
+  if the current user input string is not a prefix of any name of an action
+  of the current mode then discard the last read character and go to step 3.
+</Item>
+</Enum>
+
+When one designs a new application, it may be not obvious whether some
+functionality shall be implemented via one mode or via several modes.
+As a rule of thumb, introducing a new mode is recommended when one needs
+a new set of admissible actions in a given situation,
+and also if one wants to allow the user to perform some actions
+and then to return to the previous status.
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sec:browse-avail">
+<Heading>Predefined Browse Functionalities</Heading>
+
+<#Include Label="BrowseData_man">
+
+<#Include Label="SetReplay_man">
+
+<#Include Label="AlertWithReplay_man">
+
+<#Include Label="ShowHelp_man">
+
+<#Include Label="SaveWindow_man">
+
+<#Include Label="QuitMode_man">
+
+<#Include Label="Error_man">
+
+</Section>
+</Chapter>
+

@@ -1,0 +1,278 @@
+<html><head><title>[CARAT] 3 Interface to CARAT</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<h1>3 Interface to CARAT</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP003.htm#SECT001">Action from the left and from the right</a>
+<li> <A HREF="CHAP003.htm#SECT002">CARAT input and output files</a>
+<li> <A HREF="CHAP003.htm#SECT003">Executing CARAT commands</a>
+<li> <A HREF="CHAP003.htm#SECT004">Methods provided by CARAT</a>
+<li> <A HREF="CHAP003.htm#SECT005">CARAT Bravais Catalog</a>
+<li> <A HREF="CHAP003.htm#SECT006">CARAT Q-Class Catalog</a>
+</ol><p>
+<p>
+The GAP interface to <font face="Gill Sans,Helvetica,Arial">CARAT</font> consists of two parts, low level 
+interface routines to <font face="Gill Sans,Helvetica,Arial">CARAT</font> functions on the one hand, and 
+comfortable high level <font face="Gill Sans,Helvetica,Arial">GAP</font> functions on the other hand. 
+The high level functions, implemented in terms of the low level 
+functions, provide actually methods for functions and operations 
+declared in the GAP library.
+<p>
+Note that while (almost) all <font face="Gill Sans,Helvetica,Arial">CARAT</font> functions should be accessible
+from within <font face="Gill Sans,Helvetica,Arial">GAP</font> by the low level interface routines, high level
+interface routines are provided only for a small subset of the
+<font face="Gill Sans,Helvetica,Arial">CARAT</font> functions. Priority has been given to routines providing
+functionality that has previously not been available in <font face="Gill Sans,Helvetica,Arial">GAP</font>.
+Further high level interface routines may be added in the future.
+<p>
+<p>
+<h2><a name="SECT001">3.1 Action from the left and from the right</a></h2>
+<p><p>
+In crystallography, the convention usually is that matrix groups
+act from the left on column vectors. This convention is adopted
+also in <font face="Gill Sans,Helvetica,Arial">CARAT</font>. The low level interface routines described below
+must respect this convention and provide <font face="Gill Sans,Helvetica,Arial">CARAT</font> with data in the 
+expected format.
+<p>
+On the other hand, in <font face="Gill Sans,Helvetica,Arial">GAP</font> the convention is that all groups 
+act from the right, in the case of matrix groups on row vectors. 
+However, in order to make <font face="Gill Sans,Helvetica,Arial">GAP</font> accessible to crystallographers,
+functions that are important in crystallography and for which it
+matters which action is assumed, are provided in two variants, 
+one for each convention. The high level routines currently provided
+by this package do not depend on which convention is assumed.
+This may change, however, when further high level routines are 
+added in the future.
+<p>
+<p>
+<h2><a name="SECT002">3.2 CARAT input and output files</a></h2>
+<p><p>
+<font face="Gill Sans,Helvetica,Arial">CARAT</font> routines read their input from one or several input files,
+and write the result to standard output. In order to use <font face="Gill Sans,Helvetica,Arial">CARAT</font>
+routines from within <font face="Gill Sans,Helvetica,Arial">GAP</font>, the input must be prepared in suitably
+formatted input files. A <font face="Gill Sans,Helvetica,Arial">CARAT</font> command is then executed with these
+input files, with standard output redirected to an output file, 
+which is read back into <font face="Gill Sans,Helvetica,Arial">GAP</font> afterwards. This section describes
+routines interfacing with <font face="Gill Sans,Helvetica,Arial">CARAT</font> input and output files.
+<p>
+Working with <font face="Gill Sans,Helvetica,Arial">CARAT</font> requires many temporary files. When the <font face="Gill Sans,Helvetica,Arial">CARAT</font>
+package is loaded, a temporary directory is created, where one can
+put such files. The routine
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>CaratTmpFile( </code><var>filename</var><code> ) F</code>
+<p>
+returns a file name <var>filename</var> in the <font face="Gill Sans,Helvetica,Arial">CARAT</font> temporary directory, which
+can be used to store temporary data. Of course, it is also possible
+to use any other file name, for instance files in the current directory.
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>CaratShowFile( </code><var>filename</var><code> ) F</code>
+<p>
+displays the contents of any text file on the terminal. This can be
+used to inspect the contents of <font face="Gill Sans,Helvetica,Arial">CARAT</font> input and output files.
+<p>
+Most <font face="Gill Sans,Helvetica,Arial">CARAT</font> data files are in either of two formats. The first <font face="Gill Sans,Helvetica,Arial">CARAT</font>
+file type is the Matrix File, containing one or several matrices.
+The following routines serve as interface to <font face="Gill Sans,Helvetica,Arial">CARAT</font> Matrix Files.
+<p>
+<a name = "SSEC002.3"></a>
+<li><code>CaratWriteMatrixFile( </code><var>filename</var><code>, </code><var>data</var><code> ) F</code>
+<p>
+takes a file name and a matrix or a list of matrices, and writes the
+matrix or matrices to the file.
+<p>
+<a name = "SSEC002.4"></a>
+<li><code>CaratReadMatrixFile( </code><var>filename</var><code> ) F</code>
+<p>
+reads a <font face="Gill Sans,Helvetica,Arial">CARAT</font> matrix file, and returns a matrix or a list of matrices
+read from the file.
+<p>
+The second <font face="Gill Sans,Helvetica,Arial">CARAT</font> file type is the Bravais File, containing information
+on a finite unimodular group. In  <font face="Gill Sans,Helvetica,Arial">GAP</font>, the contents of a Bravais File 
+is represented by a Bravais record, having the following components:
+<p>
+<dl compact>
+<dt><code>generators</code>   <dd> generators of the finite unimodular group
+<p>
+<dt><code>formspace</code>    <dd> basis of the space of invariant forms (optional)
+<p>
+<dt><code>centerings</code>   <dd> list of centering matrices (optional)
+<p>
+<dt><code>normalizer</code>   <dd> additional generators of the normalizer in GL(n,Z) (optional)
+<p>
+<dt><code>centralizer</code>  <dd> additional generators of the centralizer in GL(n,Z) (optional)
+<p>
+<dt><code>size</code>         <dd> size of the unimodular group (optional)
+</dl>
+<p>
+The following routines serve as interface to <font face="Gill Sans,Helvetica,Arial">CARAT</font> Bravais Files.
+<p>
+<a name = "SSEC002.5"></a>
+<li><code>CaratWriteBravaisFile( </code><var>filename</var><code>, </code><var>data</var><code> ) F</code>
+<p>
+takes a file name and a Bravais record, and writes the data in the
+Bravais record to the file.
+<p>
+<a name = "SSEC002.6"></a>
+<li><code>CaratReadBravaisFile( </code><var>filename</var><code> ) F</code>
+<p>
+reads a Bravais File, and returns the resulting Bravais record.
+<p>
+Certain <font face="Gill Sans,Helvetica,Arial">CARAT</font> programs produce output files containing several Bravais 
+records, possibly preceeded by a varying number of header lines.
+<p>
+<a name = "SSEC002.7"></a>
+<li><code>CaratReadMultiBravaisFile( </code><var>filename</var><code> ) F</code>
+<p>
+reads such a multi-Bravais file, and returns a record with the components
+<code>info</code> and <code>groups</code>. <code>info</code> is the list of header lines before the first
+Bravais record starts, and <code>groups</code> is the list of Bravais records read from
+the file.
+<p>
+<p>
+<h2><a name="SECT003">3.3 Executing CARAT commands</a></h2>
+<p><p>
+To execute a <font face="Gill Sans,Helvetica,Arial">CARAT</font> program from within <font face="Gill Sans,Helvetica,Arial">GAP</font>, some low level,
+general purpose routines are provided in this package. 
+Higher level routines for certain <font face="Gill Sans,Helvetica,Arial">CARAT</font> functions may be available 
+in the <font face="Gill Sans,Helvetica,Arial">GAP</font> library or in other packages. These higher
+level functions are expected to use the following low level routines,
+so that changes in the low level interface will be transparent. 
+<p>
+An arbitrary <font face="Gill Sans,Helvetica,Arial">CARAT</font> program can be executed with the routine
+<p>
+<a name = "SSEC003.1"></a>
+<li><code>CaratCommand( </code><var>command</var><code>, </code><var>args</var><code>, </code><var>outfile</var><code> ) F</code>
+<p>
+where <var>command</var> is the name of a <font face="Gill Sans,Helvetica,Arial">CARAT</font> program, <var>args</var> is a string
+containing the command line arguments of the <font face="Gill Sans,Helvetica,Arial">CARAT</font> program,
+and <var>outfile</var> is the name of the file to which the output is to be 
+written. Example:
+<p>
+<pre>
+gap&gt; CaratCommand( "Z_equiv", "file1 file2", "file.out" );
+</pre>
+<p>
+A short description of the arguments and options of any <font face="Gill Sans,Helvetica,Arial">CARAT</font> 
+program can be obtained from the <font face="Gill Sans,Helvetica,Arial">CARAT</font> online help facility with
+<p>
+<a name = "SSEC003.2"></a>
+<li><code>CaratHelp( </code><var>command</var><code> ) F</code>
+<p>
+where <var>command</var> is the name of the <font face="Gill Sans,Helvetica,Arial">CARAT</font> program. CaratHelp executes
+the program with the <code>-h</code> option, and writes the output to the 
+terminal. Example:
+<p>
+<pre>
+gap&gt; CaratHelp( "Z_equiv" );
+</pre>
+<p>
+A list of all <font face="Gill Sans,Helvetica,Arial">CARAT</font> programs, along with a description of their
+usage and functionality, can be found in the <font face="Gill Sans,Helvetica,Arial">CARAT</font> documentation 
+(in HTML), in the file
+<p>
+<pre>
+documentation/introduction.html
+</pre>
+<p>
+in the <font face="Gill Sans,Helvetica,Arial">CARAT</font> home directory.
+<p>
+<p>
+<h2><a name="SECT004">3.4 Methods provided by CARAT</a></h2>
+<p><p>
+<font face="Gill Sans,Helvetica,Arial">CARAT</font> implements methods for the following functions and operations
+declared in the <font face="Gill Sans,Helvetica,Arial">GAP</font> library. For a detailed description of these
+functions, please consult the <font face="Gill Sans,Helvetica,Arial">GAP</font> manual (section 
+<a href="../../../doc/ref/chap44.html#X7FB0138F79E8C5E7">Matrix Groups in Characteristic 0</a>).
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>BravaisGroup( </code><var>G</var><code> ) A</code>
+<p>
+<a name = "SSEC004.2"></a>
+<li><code>IsBravaisGroup( </code><var>G</var><code> ) P</code>
+<p>
+<a name = "SSEC004.3"></a>
+<li><code>BravaisSubgroups( </code><var>G</var><code> ) A</code>
+<p>
+<a name = "SSEC004.4"></a>
+<li><code>BravaisSupergroups( </code><var>G</var><code> ) A</code>
+<p>
+<a name = "SSEC004.5"></a>
+<li><code>NormalizerInGLnZBravaisGroup( </code><var>G</var><code> ) A</code>
+<p>
+<a name = "SSEC004.6"></a>
+<li><code>Normalizer( GL(</code><var>n</var><code>, Integers), </code><var>G</var><code> ) O</code>
+<p>
+<a name = "SSEC004.7"></a>
+<li><code>Centralizer( GL(</code><var>n</var><code>, Integers), </code><var>G</var><code> ) O</code>
+<p>
+<a name = "SSEC004.8"></a>
+<li><code>ZClassRepsQClass( </code><var>G</var><code> ) A</code>
+<p>
+<a name = "SSEC004.9"></a>
+<li><code>RepresentativeAction( GL(</code><var>n</var><code>,Integers), </code><var>G1</var><code>, </code><var>G2</var><code> ) O</code>
+<p>
+<p>
+<h2><a name="SECT005">3.5 CARAT Bravais Catalog</a></h2>
+<p><p>
+<font face="Gill Sans,Helvetica,Arial">CARAT</font> contains a catalog with <b>Z</b>-class representatives of all
+Bravais groups of dimension up to 6. These Bravais groups are
+accessed via a crystal family symbol.
+<p>
+<a name = "SSEC005.1"></a>
+<li><code>CaratCrystalFamilies [d] V</code>
+<p>
+returns a list of inequivalent crystal family symbols in dimension <var>d</var>.
+<p>
+<a name = "SSEC005.2"></a>
+<li><code>BravaisGroupsCrystalFamily( </code><var>symb</var><code> ) F</code>
+<p>
+returns a list of <b>Z</b>-class representatives of the Bravais groups
+in the crystal family with symbol <var>symb</var>.
+<p>
+<p>
+<h2><a name="SECT006">3.6 CARAT Q-Class Catalog</a></h2>
+<p><p>
+<font face="Gill Sans,Helvetica,Arial">CARAT</font> contains a catalog with representatives of all <i>Q</i>-classes of
+finite unimodular groups up to dimension&nbsp;6. This catalog can be accessd
+with the function
+<p>
+<a name = "SSEC006.1"></a>
+<li><code>CaratQClassCatalog( </code><var>grp</var><code>, </code><var>mode</var><code> ) F</code>
+<p>
+where <var>grp</var> is a finite unimodular group of dimension up to 6, and
+<var>mode</var> is an integer. This function returns a record with one or
+several of the following components, depending on the decomposition of
+<i>mode</i> = <i>n</i><sub>0</sub> + <i>n</i><sub>1</sub> * 2 + <i>n</i><sub>2</sub> * 4 into powers of 2:
+<p>
+<dl compact>
+<dt><code>qclass</code>     <dd> Q-class symbol; this component is always present
+<p>
+<dt><code>familysymb</code> <dd> crystal family symbol (present if <i>n</i><sub>0</sub>  &lt;  &gt;  0)
+<p>
+<dt><code>trans</code>      <dd> transformation to standard representative of Q-class: 
+               <var>grp</var>^<var>trans</var> = <var>std</var>
+               (present if <i>n</i><sub>1</sub>  &lt;  &gt;  0)
+<p>
+<dt><code>group</code>      <dd> standard representative of Q-class of <var>grp</var> 
+               (present if <i>n</i><sub>2</sub>  &lt;  &gt;  0 )
+</dl>
+<p>
+If <var>G1</var> and <var>G2</var> are two unimodular groups,
+<p>
+<a name = "SSEC006.2"></a>
+<li><code>ConjugatorQClass( </code><var>G1</var><code>, </code><var>G2</var><code> ) F</code>
+<p>
+returns a rational matrix <var>m</var> such that <var>G1</var>^<var>m</var> = <var>G2</var>, or fail, if 
+the groups are not in the same Q-class. Since this function uses the 
+<font face="Gill Sans,Helvetica,Arial">CARAT</font> Q-class catalog, only groups up to dimension 6 are supported. 
+If this dimension is exceeded, an error is reported.
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>CARAT manual<br>May 2012
+</address></body></html>

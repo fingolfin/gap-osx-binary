@@ -1,0 +1,503 @@
+  
+  [1X4 [33X[0;0YBrowsing Tables in [5XGAP[105X[101X[1X using [10Xncurses[110X[101X[1X –The User Interface[133X[101X
+  
+  [33X[0;0YAs  stated in Section [14X1.1[114X, one aim of the [5XBrowse[105X package is to provide tools
+  for the quite usual task to show a two-dimensional array or certain rows and
+  columns  of it on a character screen in a formatted way, to navigate in this
+  array via key strokes (and mouse events), and to search for strings, to sort
+  the array by row or column values etc.[133X
+  
+  [33X[0;0YThe  idea  is  that  one  starts  with  an  array  of  data, the [13Xmain table[113X.
+  Optionally,  labels for each row of the main table are given, which are also
+  arranged  in  an array (with perhaps several columns), the [13Xrow labels table[113X;
+  analogously,  a  [13Xcolumn  labels  table[113X of labels for the columns of the main
+  table  may be given. The row labels are shown to the left of the main table,
+  the  column  labels  are shown above the main table. The space above the row
+  labels  and to the left of the column labels can be used for a fourth table,
+  the [13Xcorner table[113X, with information about the labels or about the main table.
+  Optionally,  a  [13Xheader[113X  and a [13Xfooter[113X may be shown above and below these four
+  tables,  respectively.  Header and footer are not separated into columns. So
+  the shown window has the following structure.[133X
+  
+        ┌────────────────────────────────┐
+        │             header             │
+        ├────────┬───────────────────────┤
+        │        │                       │
+        │ corner │     column labels     │
+        │        │                       │
+        ├────────┼───────────────────────┤
+        │        │                       │
+        │        │                       │
+        │  row   │         main          │
+        │ labels │         table         │
+        │        │                       │
+        │        │                       │
+        │        │                       │
+        ├────────┴───────────────────────┤
+        │             footer             │
+        └────────────────────────────────┘
+  
+  [33X[0;0YIf  not the whole tables fit into the window then only subranges of rows and
+  columns of the main table are shown, together with the corresponding row and
+  column  labels.  Also  in  this  case, the row heights and column widths are
+  computed  w.r.t. the whole table not w.r.t. the shown rows and columns. This
+  means  that the shown row labels are unchanged if the range of shown columns
+  is changed, the shown column labels are unchanged if the range of shown rows
+  is changed, and the whole corner table is always shown.[133X
+  
+  [33X[0;0YThe  current  chapter describes the user interface for [13Xstandard applications[113X
+  of  this  kind,  i. e., those applications for which one just has to collect
+  the data to be shown in a record –which we call a [13Xbrowse table[113X– without need
+  for additional [5XGAP[105X programming.[133X
+  
+  [33X[0;0YSection [14X4.1[114X  gives  an overview of the features available in standard browse
+  table  applications,  and  Section [14X4.2[114X describes the data structures used in
+  browse    tables.    Finally,    Section [14X4.3[114X    introduces    the   function
+  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X),  which  is  the generic function for showing
+  browse table in visual mode.[133X
+  
+  [33X[0;0YFor technical details needed to extend these applications and to build other
+  applications, see Chapter [14X5[114X.[133X
+  
+  [33X[0;0YExamples of browse table applications are shown in Chapter [14X6[114X.[133X
+  
+  
+  [1X4.1 [33X[0;0YFeatures Supported by the Function [10XNCurses.BrowseGeneric[110X[101X[1X[133X[101X
+  
+  [33X[0;0YStandard applications of the function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) have the
+  following  functionality.  Other  applications may provide only a subset, or
+  add further functionality, see Chapters [14X5[114X and [14X6[114X.[133X
+  
+  [8XScrolling:[108X
+        [33X[0;6YThe  subranges  of  shown  rows  and  columns of the main table can be
+        modified, such that the focus area is moved to the left, to the right,
+        up,  or  down;  depending  on  the  context, the focus is moved by one
+        character,  by  one  table  cell  or  a  part  of  it,  by  the window
+        height/width  (minus  one character or minus one table cell). If mouse
+        events are enabled then cells can be selected also via mouse clicks.[133X
+  
+  [8XSelecting:[108X
+        [33X[0;6YA  cell,  row, or column of the main table can be selected; then it is
+        shown  highlighted  on  the  screen  (by  default  using the attribute
+        [10XNCurses.attrs.STANDOUT[110X, see Section [14X2.1-7[114X). The selection can be moved
+        inside  the  main  table  to  a neighboring cell, row, or column; this
+        causes  also  scrolling  of the main table when the window borders are
+        reached.[133X
+  
+  [8XSearching:[108X
+        [33X[0;6YA  search  string  is entered by the user, and the first matching cell
+        becomes  selected;  one can search further for the next matching cell.
+        Global search parameters define what matching means (case sensitive or
+        not,  search  for substrings or complete words) and what the first and
+        the  next matching cells are (search in the whole table or just in the
+        selected  row  or  column,  search  for  whole  words  or  prefixes or
+        suffixes, search forwards or backwards).[133X
+  
+  [8XSorting:[108X
+        [33X[0;6YIf  a  row  or  column  is  selected then the main table can be sorted
+        w.r.t.  the  entries  in  this  row  or column. Global sort parameters
+        describe   for   example  whether  one  wants  to  sort  ascending  or
+        descending, or case sensitive or not.[133X
+  
+        [33X[0;6YIf  a  categorized  table is sorted by a column then the category rows
+        are  removed  and  the  current sorting and filtering by rows is reset
+        before  the  table is sorted by the given column. If a table is sorted
+        by  a  column/row  that  is  already  sorted by a column/row then this
+        ordering is reset first.[133X
+  
+        [33X[0;6YSorting  can be undone globally, i. e., one can return to the unsorted
+        table.[133X
+  
+  [8XSorting and Categorizing:[108X
+        [33X[0;6YIf  a  column is selected then the main table can be sorted w.r.t. the
+        entries in this column, and additionally these entries are turned into
+        [13Xcategory  rows[113X,  i. e.,  additional  rows are added to the main table,
+        appearing  immediately  above the table rows with a fixed value in the
+        selected  column,  and  showing this column value. (There should be no
+        danger  to  mix  up  this notion of categories with the one introduced
+        in [14X'Reference:  Categories'[114X.) The category rows can be [13Xcollapsed[113X (that
+        is,  the table rows that belong to this category row are not shown) or
+        [13Xexpanded[113X  (that  is,  the corresponding table rows are shown). Some of
+        the  global  search  parameters affect the category rows, for example,
+        whether  the  category rows shall involve a counter showing the number
+        of  corresponding  data  rows,  or  whether  a row of the browse table
+        appears under different category rows.[133X
+  
+        [33X[0;6YSorting and categorizing can be undone globally, i. e., one can return
+        to the unsorted table without category rows.[133X
+  
+  [8XFiltering:[108X
+        [33X[0;6YThe browse table can be restricted to those rows or columns in which a
+        given search string occurs. (Also entries in collapsed rows can match;
+        they  remain  collapsed then.) As a consequence, the category rows are
+        restricted  to  those  under  which  a  matching  row  occurs.  (It is
+        irrelevant whether the search string occurs in category rows.)[133X
+  
+        [33X[0;6YIf  the search string does not occur at all then a message is printed,
+        and  the  table  remains  as  it  was  before.  If  a  browse table is
+        restricted then this fact is indicated by the message [21Xrestricted table[121X
+        in the lower right corner of the window.[133X
+  
+        [33X[0;6YWhen  a column or row is selected then the search is restricted to the
+        entries  in  this column or row, respectively. Besides using a search,
+        one  can also explicitly hide the selected row or column. Filtering in
+        an  already  restricted  table  restricts  the  shown  rows or columns
+        further.[133X
+  
+        [33X[0;6YFiltering  can  be  undone  globally,  i. e.,  one  can  return to the
+        unrestricted table.[133X
+  
+  [8XHelp:[108X
+        [33X[0;6YDepending  on  the application and on the situation, different sets of
+        user  inputs  may  be available and different meanings of these inputs
+        are  possible. An overview of the currently available inputs and their
+        meanings can be opened in each situation, by hitting the [12X?[112X key.[133X
+  
+  [8XRe-entering:[108X
+        [33X[0;6YWhen one has called [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) with a browse table,
+        and  returns  from visual mode to the [5XGAP[105X prompt after some navigation
+        steps,  calling [10XNCurses.BrowseGeneric[110X again with this table will enter
+        visual  mode in the same situation where it was left. For example, the
+        cell  in  the  top-left  position will be the same as before, and if a
+        cell was selected before then this cell will be selected now. (One can
+        avoid   this   behavior   using   the   optional  second  argument  of
+        [10XNCurses.BrowseGeneric[110X.)[133X
+  
+  [8XLogging:[108X
+        [33X[0;6YThe  integers  corresponding  to  the  user  inputs in visual mode are
+        collected in a list that is stored in the component [10Xdynamic.log[110X of the
+        browse  table. It can be used for repeating the inputs with the replay
+        feature.  (For  browse table applications that give the user no access
+        to  the  browse  table itself, one can force the log to be assigned to
+        the   component   [10Xlog[110X   of   the   global   variable  [10XBrowseData[110X,  see
+        Section [14X5.4-1[114X.)[133X
+  
+  [8XReplay:[108X
+        [33X[0;6YInstead  of  interactively  hitting  keys  in  visual  mode,  one  can
+        prescribe  the  user inputs to a browse table via a [21Xreplay record[121X; the
+        inputs  are  then processed with given time intervals. The easiest way
+        to   create   a   meaningful   replay   record  is  via  the  function
+        [2XBrowseData.SetReplay[102X  ([14X5.4-2[114X), with argument the [10Xdynamic.log[110X component
+        of  the  browse  table  in  question that was stored in an interactive
+        session.[133X
+  
+  [33X[0;0YThe  following  features  are  not  available in standard applications. They
+  require additional programming.[133X
+  
+  [8XClicking:[108X
+        [33X[0;6YOne  possible  action  is to [21Xclick[121X a selected cell, row, or column, by
+        hitting  the  [12XEnter[112X key. It depends on the application what the effect
+        is. A typical situation is that a corresponding [5XGAP[105X object is added to
+        the  list  of return values of [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X). Again it
+        depends  on  the  application what this [5XGAP[105X object is. In order to use
+        this  feature,  one  has  to provide a record whose components are [5XGAP[105X
+        functions,  see Section [14X5.4-1[114X for details. If mouse events are enabled
+        (see  [2XNCurses.UseMouse[102X ([14X2.2-10[114X)) then also mouse clicks can be used as
+        an alternative to hitting the [12XEnter[112X key.[133X
+  
+  [8XReturn Value:[108X
+        [33X[0;6YThe  function  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X)  may have an application
+        dependent  return value. A typical situation is that a list of objects
+        corresponding  to  those cells is returned that were [21Xclicked[121X in visual
+        mode.  In  order  to  use  this feature, one has to assign the desired
+        value to the component [10Xdynamic.Return[110X of the browse table.[133X
+  
+  
+  [1X4.2 [33X[0;0YData Structures used by [10XNCurses.BrowseGeneric[110X[101X[1X[133X[101X
+  
+  [1X4.2-1 BrowseData.IsBrowseTableCellData[101X
+  
+  [29X[2XBrowseData.IsBrowseTableCellData[102X( [3Xobj[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if the argument is a list or a record in a supported format.[133X
+  
+  [33X[0;0YA [13Xtable cell data object[113X describes the input data for the contents of a cell
+  in   a  browse  table.  It  is  represented  by  either  an  attribute  line
+  (see [2XNCurses.IsAttributeLine[102X ([14X2.2-3[114X)), for cells of height one, or a list of
+  attribute  lines  or  a record with the components [10Xrows[110X, a list of attribute
+  lines,  and  optionally  [10Xalign[110X,  a  substring of [10X"bclt"[110X, which describes the
+  alignment  of  the attribute lines in the table cell -- bottom, horizontally
+  centered,  left,  and  top  alignment;  the  default is right and vertically
+  centered  alignment. (Note that the height of a table row and the width of a
+  table column can be larger than the height and width of an individual cell.)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTableCellData( "abc" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTableCellData( [ "abc", "def" ] );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTableCellData( rec( rows:= [ "ab", "cd" ],[127X[104X
+    [4X[25X>[125X [27X                                          align:= "tl" ) );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTableCellData( "" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTableCellData( [] );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  [13Xempty  string[113X  is a table cell data object of height one and width zero
+  whereas   the   [13Xempty   list[113X   (which  is  not  in  [2XIsStringRep[102X  ([14XReference:
+  IsStringRep[114X)) is a table cell data object of height zero and width zero.[133X
+  
+  [1X4.2-2 BrowseData.BlockEntry[101X
+  
+  [29X[2XBrowseData.BlockEntry[102X( [3Xtablecelldata[103X, [3Xheight[103X, [3Xwidth[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya list of attribute lines.[133X
+  
+  [33X[0;0YFor       a       table       cell       data      object      [3Xtablecelldata[103X
+  (see [2XBrowseData.IsBrowseTableCellData[102X  ([14X4.2-1[114X))  and  two  positive integers
+  [3Xheight[103X  and  [3Xwidth[103X, [10XBrowseData.BlockEntry[110X returns a list of [3Xheight[103X attribute
+  lines   of   displayed  length  [3Xwidth[103X  each  (see [2XNCurses.WidthAttributeLine[102X
+  ([14X2.2-7[114X)), that represents the formatted version of [3Xtablecelldata[103X.[133X
+  
+  [33X[0;0YIf  the rows of [3Xtablecelldata[103X have different numbers of displayed characters
+  then  they  are  filled  up  to  the  desired  numbers  of rows and columns,
+  according   to  the  alignment  prescribed  by  [3Xtablecelldata[103X;  the  default
+  alignment is right and vertically centered.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XBrowseData.BlockEntry( "abc", 3, 5 );[127X[104X
+    [4X[28X[ "     ", "  abc", "     " ][128X[104X
+    [4X[25Xgap>[125X [27XBrowseData.BlockEntry( rec( rows:= [ "ab", "cd" ],[127X[104X
+    [4X[25X>[125X [27X                               align:= "tl" ), 3, 5 );[127X[104X
+    [4X[28X[ "ab   ", "cd   ", "     " ][128X[104X
+  [4X[32X[104X
+  
+  [1X4.2-3 BrowseData.IsBrowseTable[101X
+  
+  [29X[2XBrowseData.IsBrowseTable[102X( [3Xobj[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X  if  the  argument  record has the required components and is
+            consistent.[133X
+  
+  [33X[0;0YA [13Xbrowse table[113X is a [5XGAP[105X record that can be used as the first argument of the
+  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X).[133X
+  
+  [33X[0;0YThe  supported  components  of  a  browse  table are [10Xwork[110X and [10Xdynamic[110X, their
+  values  must  be  records:  The components in [10Xwork[110X describe that part of the
+  data  that  are not likely to depend on user interactions, such as the table
+  entries  and  their  heights  and widths. The components in [10Xdynamic[110X describe
+  that  part  of  the  data that is intended to change with user interactions,
+  such  as  the  currently  shown  top-left entry of the table, or the current
+  status  w.r.t.  sorting. For example, suppose you call [2XNCurses.BrowseGeneric[102X
+  ([14X4.3-1[114X)  twice  with the same browse table; the second call enters the table
+  in  the  same status where it was left [13Xafter[113X the first call if the component
+  [10Xdynamic[110X  is  kept,  whereas  one has to reset (which usually simply means to
+  unbind)  the  component  [10Xdynamic[110X if one wants to start in the same status as
+  [13Xbefore[113X the first call.[133X
+  
+  [33X[0;0YThe  following  components  are  the most important ones for standard browse
+  applications.  All  these  components  belong  to the [10Xwork[110X record. For other
+  supported  components (of [10Xwork[110X as well as of [10Xdynamic[110X) and for the meaning of
+  the term [21Xmode[121X, see Section [14X5.2[114X.[133X
+  
+  [8X[10Xmain[110X[108X
+        [33X[0;6Yis  the  list of lists of table cell data objects that form the matrix
+        to  be  shown. There is no default for this component. (It is possible
+        to  compute  the  entries  of  the  main  table  on  demand,  see  the
+        description of the component [10XMain[110X in Section [14X5.4-1[114X. In this situation,
+        the value of the component [10Xmain[110X can be an empty list.)[133X
+  
+  [8X[10Xheader[110X[108X
+        [33X[0;6Ydescribes  a  header  that shall be shown above the column labels. The
+        value  is  either  a  list  of  attribute  lines  ([21Xstatic header[121X) or a
+        function  or  a  record  whose  component names are names of available
+        modes  of the browse table ([21Xdynamic header[121X). In the function case, the
+        function must take the browse table as its only argument, and return a
+        list  of  attribute  lines.  In  the  record  case,  the values of the
+        components  must  be  such functions. It is assumed that the number of
+        these lines depends at most on the mode. The default is an empty list,
+        i. e., there is no header.[133X
+  
+  [8X[10Xfooter[110X[108X
+        [33X[0;6Ydescribes  a  footer that shall be shown below the table. The value is
+        analogous  to  that  of  [10Xfooter[110X.  The default is an empty list, i. e.,
+        there is no footer.[133X
+  
+  [8X[10XlabelsRow[110X[108X
+        [33X[0;6Yis  a  list  of  row  label rows, each being a list of table cell data
+        objects.  These  rows  are  shown  to  the left of the main table. The
+        default is an empty list, i. e., there are no row labels.[133X
+  
+  [8X[10XlabelsCol[110X[108X
+        [33X[0;6Yis  a list of column information rows, each being a list of table cell
+        data  objects.  These  rows  are shown between the header and the main
+        table.  The  default  is  an  empty  list,  i. e., there are no column
+        labels.[133X
+  
+  [8X[10Xcorner[110X[108X
+        [33X[0;6Yis  a list of lists of table cell data objects that are printed in the
+        upper  left  corner,  i. e.,  to the left of the column label rows and
+        above the row label columns. The default is an empty list.[133X
+  
+  [8X[10XsepRow[110X[108X
+        [33X[0;6Ydescribes the separators above and below rows of the main table and of
+        the  row labels table. The value is either an attribute line or a (not
+        necessarily  dense)  list  of  attribute  lines.  In  the former case,
+        repetitions  of  the  attribute line are used as separators below each
+        row  and  above  the  first  row  of  the  table;  in the latter case,
+        repetitions  of  the  entry  at the first position (if bound) are used
+        above  the  first  row, and repetitions of the last bound entry before
+        the  [22X(i+2)[122X-th  position  (if  there  is such an entry at all) are used
+        below  the [22Xi[122X-th table row. The default is an empty string, which means
+        that there are no row separators.[133X
+  
+  [8X[10XsepCol[110X[108X
+        [33X[0;6Ydescribes  the  separators  in front of and behind columns of the main
+        table  and  of  the  column  labels  table. The format of the value is
+        analogous to that of the component [10XsepRow[110X; the default is the string [10X"
+        "[110X (whitespace of width one).[133X
+  
+  [8X[10XsepLabelsCol[110X[108X
+        [33X[0;6Ydescribes  the  separators  above  and below rows of the column labels
+        table  and  of the corner table, analogously to [10XsepRow[110X. The default is
+        an   empty  string,  which  means  that  there  are  no  column  label
+        separators.[133X
+  
+  [8X[10XsepLabelsRow[110X[108X
+        [33X[0;6Ydescribes  the  separators  in  front of and behind columns of the row
+        labels  table  and  of  the  corner  table, analogously to [10XsepCol[110X. The
+        default is an empty string.[133X
+  
+  [33X[0;0YWe give a few examples of standard applications.[133X
+  
+  [33X[0;0YThe  first  example  defines  a  small  browse table by prescribing only the
+  component  [10Xwork.main[110X,  so  the  defaults  for row and column labels (no such
+  labels),  and  for  separators  are used. The table cells are given by plain
+  strings, so they have height one. Usually this table will fit on the screen.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xm:= 10;;  n:= 5;;[127X[104X
+    [4X[25Xgap>[125X [27Xxpl1:= rec( work:= rec([127X[104X
+    [4X[25X>[125X [27X     main:= List( [ 1 .. m ], i -> List( [ 1 .. n ],[127X[104X
+    [4X[25X>[125X [27X       j -> String( [ i, j ] ) ) ) ) );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTable( xpl1 );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIn  the  second  example,  also  row and column labels appear, and different
+  separators are used. The table cells have height three. Also this table will
+  usually fit on the screen.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xm:= 6;;  n:= 5;;[127X[104X
+    [4X[25Xgap>[125X [27Xxpl2:= rec( work:= rec([127X[104X
+    [4X[25X>[125X [27X     main:= List( [ 1 .. m ], i -> List( [ 1 .. n ],[127X[104X
+    [4X[25X>[125X [27X       j -> rec( rows:= List( [ -i*j, i*j*1000+j, i-j ], String ),[127X[104X
+    [4X[25X>[125X [27X                 align:= "c" ) ) ),[127X[104X
+    [4X[25X>[125X [27X     labelsRow:= List( [ 1 .. m ], i -> [ String( i ) ] ),[127X[104X
+    [4X[25X>[125X [27X     labelsCol:= [ List( [ 1 .. n ], String ) ],[127X[104X
+    [4X[25X>[125X [27X     sepRow:= "-",[127X[104X
+    [4X[25X>[125X [27X     sepCol:= "|",[127X[104X
+    [4X[25X>[125X [27X ) );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTable( xpl2 );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe third example additionally has a static header and a dynamic footer, and
+  the  table  cells involve attributes. This table will usually not fit on the
+  screen. Note that [10XNCurses.attrs.ColorPairs[110X is available only if the terminal
+  supports   colors,  which  can  be  checked  using  [2XNCurses.attrs.has_colors[102X
+  ([14X2.2-1[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xm:= 30;;  n:= 25;;[127X[104X
+    [4X[25Xgap>[125X [27Xxpl3:= rec( work:= rec([127X[104X
+    [4X[25X>[125X [27X     header:= [ "                    Example 3" ],[127X[104X
+    [4X[25X>[125X [27X     labelsRow:= List( [ 1 .. 30 ], i -> [ String( i ) ] ),[127X[104X
+    [4X[25X>[125X [27X     sepLabelsRow:= " % ",[127X[104X
+    [4X[25X>[125X [27X     sepLabelsCol:= "=",[127X[104X
+    [4X[25X>[125X [27X     sepRow:= "*",[127X[104X
+    [4X[25X>[125X [27X     sepCol:= " |",[127X[104X
+    [4X[25X>[125X [27X     footer:= t -> [ Concatenation( "top-left entry is: ",[127X[104X
+    [4X[25X>[125X [27X                         String( t.dynamic.topleft{ [ 1, 2] } ) ) ],[127X[104X
+    [4X[25X>[125X [27X ) );;[127X[104X
+    [4X[25Xgap>[125X [27Xif NCurses.attrs.has_colors then[127X[104X
+    [4X[25X>[125X [27X  xpl3.work.main:= List( [ 1 .. m ], i -> List( [ 1 .. n ],[127X[104X
+    [4X[25X>[125X [27X    j -> rec( rows:= [ String( -i*j ),[127X[104X
+    [4X[25X>[125X [27X                       [ NCurses.attrs.BOLD, true,[127X[104X
+    [4X[25X>[125X [27X                         NCurses.attrs.ColorPairs[56+1], true,[127X[104X
+    [4X[25X>[125X [27X                         String( i*j*1000+j ),[127X[104X
+    [4X[25X>[125X [27X                         NCurses.attrs.NORMAL, true ],[127X[104X
+    [4X[25X>[125X [27X                         String( i-j ) ],[127X[104X
+    [4X[25X>[125X [27X              align:= "c" ) ) );[127X[104X
+    [4X[25X>[125X [27X  xpl3.work.labelsCol:= [ List( [ 1 .. 30 ], i -> [[127X[104X
+    [4X[25X>[125X [27X    NCurses.attrs.ColorPairs[ 56+4 ], true,[127X[104X
+    [4X[25X>[125X [27X    String( i ),[127X[104X
+    [4X[25X>[125X [27X    NCurses.attrs.NORMAL, true ] ) ];[127X[104X
+    [4X[25X>[125X [27Xelse[127X[104X
+    [4X[25X>[125X [27X  xpl3.work.main:= List( [ 1 .. m ], i -> List( [ 1 .. n ],[127X[104X
+    [4X[25X>[125X [27X    j -> rec( rows:= [ String( -i*j ),[127X[104X
+    [4X[25X>[125X [27X                       [ NCurses.attrs.BOLD, true,[127X[104X
+    [4X[25X>[125X [27X                         String( i*j*1000+j ),[127X[104X
+    [4X[25X>[125X [27X                         NCurses.attrs.NORMAL, true ],[127X[104X
+    [4X[25X>[125X [27X                         String( i-j ) ],[127X[104X
+    [4X[25X>[125X [27X              align:= "c" ) ) );[127X[104X
+    [4X[25X>[125X [27X  xpl3.work.labelsCol:= [ List( [ 1 .. 30 ], i -> [[127X[104X
+    [4X[25X>[125X [27X    NCurses.attrs.BOLD, true,[127X[104X
+    [4X[25X>[125X [27X    String( i ),[127X[104X
+    [4X[25X>[125X [27X    NCurses.attrs.NORMAL, true ] ) ];[127X[104X
+    [4X[25X>[125X [27Xfi;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTable( xpl3 );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  fourth  example illustrates that highlighting may not work properly for
+  browse  tables containing entries whose attributes are not set with explicit
+  Boolean     values,     see     [2XNCurses.IsAttributeLine[102X     ([14X2.2-3[114X).    Call
+  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X)  with  the  browse  table [10Xxpl4[110X, and select an
+  entry (or a column or a row): Only the middle row of each selected cell will
+  be highlighted, because only in this row, the color attribute is switched on
+  with an explicit [9Xtrue[109X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xxpl4:= rec([127X[104X
+    [4X[25X>[125X [27X    defc:= NCurses.defaultColors,[127X[104X
+    [4X[25X>[125X [27X    wd:= Maximum( List( ~.defc, Length ) ),[127X[104X
+    [4X[25X>[125X [27X    ca:= NCurses.ColorAttr,[127X[104X
+    [4X[25X>[125X [27X    work:= rec([127X[104X
+    [4X[25X>[125X [27X      header:= [ "Examples of NCurses.ColorAttr" ],[127X[104X
+    [4X[25X>[125X [27X      main:= List( ~.defc, i -> List( ~.defc,[127X[104X
+    [4X[25X>[125X [27X        j -> [ [ ~.ca( i, j ), String( i, ~.wd ) ],        # no true![127X[104X
+    [4X[25X>[125X [27X               [ ~.ca( i, j ), true, String( "on", ~.wd ) ],[127X[104X
+    [4X[25X>[125X [27X               [ ~.ca( i, j ), String( j, ~.wd ) ] ] ) ),  # no true![127X[104X
+    [4X[25X>[125X [27X      labelsRow:= List( ~.defc, i -> [ String( i ) ] ),[127X[104X
+    [4X[25X>[125X [27X      labelsCol:= [ List( ~.defc, String ) ],[127X[104X
+    [4X[25X>[125X [27X      sepRow:= "-",[127X[104X
+    [4X[25X>[125X [27X      sepCol:= [ " |", "|" ],[127X[104X
+    [4X[25X>[125X [27X ) );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.IsBrowseTable( xpl4 );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X4.3 [33X[0;0YThe Function [10XNCurses.BrowseGeneric[110X[101X[1X[133X[101X
+  
+  [1X4.3-1 NCurses.BrowseGeneric[101X
+  
+  [29X[2XNCurses.BrowseGeneric[102X( [3Xt[103X[, [3Xarec[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan application dependent value, or nothing.[133X
+  
+  [33X[0;0Y[2XNCurses.BrowseGeneric[102X    is    used    to    show   the   browse   table   [3Xt[103X
+  (see [2XBrowseData.IsBrowseTable[102X  ([14X4.2-3[114X)) in a formatted way on a text screen,
+  and allows the user to navigate in this table.[133X
+  
+  [33X[0;0YThe optional argument [3Xarec[103X, if given, must be a record whose components [10Xwork[110X
+  and  [10Xdynamic[110X,  if  bound, are used to provide defaults for missing values in
+  the  corresponding  components  of  [3Xt[103X.  The  default  for  [3Xarec[103X  and for the
+  components  not  provided  in  [3Xarec[103X  is  [10XBrowseData.defaults[110X, see [2XBrowseData[102X
+  ([14X5.4-1[114X), the function [10XBrowseData.SetDefaults[110X sets these default values.[133X
+  
+  [33X[0;0YAt  least  the  component [10Xwork.main[110X must be bound in [3Xt[103X, with value a list of
+  list   of  table  cell  data  objects,  see [2XBrowseData.IsBrowseTableCellData[102X
+  ([14X4.2-1[114X).[133X
+  
+  [33X[0;0YWhen  the  window or the screen is too small for the browse table, according
+  to its component [10Xwork.minyx[110X, the table will not be shown in visual mode, and
+  [9Xfail[109X  is returned. (This holds also if there would be no return value of the
+  call  in  a  large enough screen.) Thus one should check for [9Xfail[109X results of
+  programmatic calls of [2XNCurses.BrowseGeneric[102X, and one should better not admit
+  [9Xfail[109X as a regular return value.[133X
+  
+  [33X[0;0YMost  likely,  [2XNCurses.BrowseGeneric[102X will not be called on the command line,
+  but  the  browse  table [3Xt[103X will be composed by a suitable function which then
+  calls [2XNCurses.BrowseGeneric[102X, see the examples in Chapter [14X6[114X.[133X
+  

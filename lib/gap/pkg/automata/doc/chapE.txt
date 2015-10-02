@@ -1,0 +1,110 @@
+  
+  [1m[4m[31mE. Commutative image of a rational language[0m
+  
+  The  commutative  image  of  a rational language is a semilinear set, i.e. a
+  finite  union  of  semilinear  sets. One may adapt the function to compute a
+  rational  expression for the language recognized by an automaton in order to
+  compute  directly  the  commutative  image of the language recognized by the
+  automaton.  Further  improvement  leads  to  the  direct  computation of the
+  closure  in  Bbb Z^n, for the profinite topology, of that commutative image.
+  (See [D01] for the correction of the algorithms.) Recall that (see [D98]) if
+  a  linear  set  given  by the linear expression a+b_1Bbb N+ cdots +b_pBbb N,
+  then  a+b_1Bbb  Z+  cdots +b_pBbb Z is a Bbb Z-semilinear expression for the
+  closure under the profinite topology of the semilinear set given. We use the
+  terminology [22m[32mcommutative language[0m and [22m[32mAbelian language[0m for subsets of Bbb N^n
+  and  Bbb  Z^n  respectively.  The  [22m[32mcommutative  language  recognized  by  an
+  automaton[0m  is  the  commutative  image  of  the  language  recognized by the
+  automaton.  The  [22m[32mAbelian  language recognized by an automaton[0m is the closure
+  under  the  profinite  topology  of  the  commutative  image of the language
+  recognized by the automaton.
+  
+  
+  [1m[4m[31mE.1 Commutative image[0m
+  
+  A  semilinear  expression  for  the commutative image of a rational language
+  given  through  a  rational  expression  can be computed using the following
+  function. The algorithm used is described in [D01].
+  
+  [1m[4m[31mE.1-1 CommutativeImageOfRatExp[0m
+  
+  [1m[34m> CommutativeImageOfRatExp( [0m[22m[34mrat[0m[1m[34m ) __________________________________[0mfunction
+  
+  [22m[32mrat[0m  is  a  rational expression. A semilinear expression for its commutative
+  image is returned.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35mgap> r5;[0m
+    [22m[35m(a(aUb))*[0m
+    [22m[35mgap> CommutativeImageOfRatExp(r5); [0m
+    [22m[35m[ [ 0, 0 ], [ 1, 1 ] + [ 1, 1 ] N , [ 2, 0 ] + [ 2, 0 ] N , [0m
+    [22m[35m  [ 3, 1 ] + [ 1, 1 ] N  + [ 2, 0 ] N  ][0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  [1m[4m[31mE.1-2 LanguageCom[0m
+  
+  [1m[34m> LanguageCom( [0m[22m[34maut[0m[1m[34m ) _______________________________________________[0mfunction
+  [1m[34m> FAtosml( [0m[22m[34maut[0m[1m[34m ) ___________________________________________________[0mfunction
+  
+  Computes  the  commutative  language  recognized  by  the  automaton  [22m[34mA[0m. The
+  functions are synonyms.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m gap> aut := Automaton("det",5,2,[[1,2,4,2,1],[1,1,1,5,1]],[3],[2,3,4,5]);[0m
+    [22m[35m      |  1  2  3  4  5 [0m
+    [22m[35m   -  -  -  -  -  -  - [0m
+    [22m[35m   a  |  1  2  4  2  1 [0m
+    [22m[35m   b  |  1  1  1  5  1 [0m
+    [22m[35mInitial state: [ 3 ][0m
+    [22m[35mAccepting states: [ 2, 3, 4, 5 ][0m
+    [22m[35m[0m
+    [22m[35mgap> AutomatonToRatExp(aut);[0m
+    [22m[35m1UabUa(1Uaa*)[0m
+    [22m[35mgap> LanguageCom(aut);[0m
+    [22m[35m[ [ 1, 1 ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 3, 0 ] + [ 1, 0 ] N  ][0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  The  expression  is  simplified,  but  it  is  obvious that not all possible
+  simplifications have been carried out.
+  
+  
+  [1m[4m[31mE.2 Abelian image[0m
+  
+  A  Bbb  Z-semilinear expression for the profinite closure of the commutative
+  image  of  a  rational  language  given through a rational expression can be
+  computed  using  the  following function. The algorithm used is described in
+  [D01].
+  
+  [1m[4m[31mE.2-1 AbelianImageOfRatExp[0m
+  
+  [1m[34m> AbelianImageOfRatExp( [0m[22m[34mrat[0m[1m[34m ) ______________________________________[0mfunction
+  
+  [22m[32mrat[0m  is  a  rational  expression.  A  Bbb  Z-semilinear  expression  for the
+  profinite closure of the commutative image of [22m[32mrat[0m is returned.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35mgap> AbelianImageOfRatExp(r5);[0m
+    [22m[35m[ [ 0, 0 ] + [ 1, 1 ] Z  + [ 0, 2 ] Z  ][0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  The  case  of  Bbb  Z-semilinear  languages is similar to that of semilinear
+  languages,  but  some  more simplifications are done. Computations of normal
+  forms  of  matrices  aiming  to determine basis for subgroups of Bbb Z^n are
+  made.  These  computations  of  normal forms are carried out using functions
+  that are part of \GAP.
+  
+  [1m[4m[31mE.2-2 LanguageAb[0m
+  
+  [1m[34m> LanguageAb( [0m[22m[34mA[0m[1m[34m ) __________________________________________________[0mfunction
+  [1m[34m> FAtoclsml( [0m[22m[34mA[0m[1m[34m ) ___________________________________________________[0mfunction
+  
+  [22m[32mFAtoclsml[0m  computes an expression for the abelian language recognized by the
+  automaton [22m[34mA[0m.
+  
+  [22m[32mLanguageAb[0m  does  the  same  thing  that [22m[32mFAtoclsml[0m but returns [22m[32mtrue[0m when the
+  expression returned corresponds to Bbb Z^n.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35mgap> LanguageAb(aut); [0m
+    [22m[35m[ [ 1, 1 ], [ 0, 0 ] + [ 1, 0 ] Z  ][0m
+  [22m[35m------------------------------------------------------------------[0m
+  

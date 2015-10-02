@@ -1,0 +1,2442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta name="GENERATOR" content="TtH 3.59">
+ <style type="text/css"> div.p { margin-top: 7pt;}</style>
+ <style type="text/css"><!--
+ td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}
+ td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}
+ td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}
+ td div.norm {line-height:normal;}
+ span.roman {font-family: serif; font-style: normal; font-weight: normal;} 
+ span.overacc2 {position: relative;  left: .8em; top: -1.2ex;}
+ span.overacc1 {position: relative;  left: .6em; top: -1.2ex;} --></style>
+ 
+
+             _known_monster_maxes <title>Solvable Subgroups of Maximal Order in Sporadic Simple Groups</title>
+<h1 align="center">Solvable Subgroups of Maximal Order in Sporadic Simple Groups</h1>
+  <body bgcolor="FFFFFF"> 
+
+<div class="p"><!----></div>
+
+<h3 align="center"> T<font size="-2">HOMAS</font> B<font size="-2">REUER</font> <br />
+<i>Lehrstuhl D f&#252;r Mathematik</i> <br />
+<i>RWTH, 52056 Aachen, Germany</i> </h3>
+
+<div class="p"><!----></div>
+
+<h3 align="center">May 14th, 2012 </h3>
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+
+We determine the orders of solvable subgroups of maximal orders in sporadic
+simple groups and their automorphism groups,
+using the information in the  A<font size="-2">TLAS</font> of Finite Groups&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>] and
+the <font face="helvetica">GAP</font> system&nbsp;[<a href="#GAP4" name="CITEGAP4">GAP04</a>],
+in particular its Character Table Library&nbsp;[<a href="#CTblLib1.2" name="CITECTblLib1.2">Bre12</a>]
+and its library of Tables of Marks&nbsp;[<a href="#TomLib" name="CITETomLib">NMP11</a>].
+
+<div class="p"><!----></div>
+We also determine the conjugacy classes of these solvable subgroups
+in the big group, and the maximal overgroups.
+
+<div class="p"><!----></div>
+A first version of this document, which was based on <font face="helvetica">GAP</font>&nbsp;4.4.10,
+had been accessible in the web since August&nbsp;2006.
+The differences to the current version are as follows.
+
+<ul>
+<li>  The format of the <font face="helvetica">GAP</font> output was adjusted to the changed behaviour
+  of <font face="helvetica">GAP</font>&nbsp;4.5.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  The (too wide) table of results was split into two tables,
+  the first one lists the orders and indices of the subgroups,
+  the second one lists the structure of subgroups and the maximal overgroups.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  The distribution of the solvable subgroups of maximal orders in the
+  Baby Monster group and the Monster group to conjugacy classes is now
+  proved.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  The sporadic simple Monster group has exactly one class of maximal
+  subgroups of the type <span class="roman">PSL</span>(2, 41) (see&nbsp;[<a href="#NW12" name="CITENW12">NW</a>]),
+  and has no maximal subgroups which have the socle <span class="roman">PSL</span>(2, 27)
+  (see&nbsp;[<a href="#Wil10" name="CITEWil10">Wil10</a>]).
+  This does not affect the arguments in Section&nbsp;<a href="#M">4.14</a>,
+  but some statements in this section had to be corrected.
+<div class="p"><!----></div>
+</li>
+</ul>
+
+<div class="p"><!----></div>
+
+
+
+<div class="p"><!----></div>
+
+<h1>Contents </h1><a href="#tth_sEc1"
+>1&nbsp; The Result</a><br />
+<a href="#tth_sEc2"
+>2&nbsp; The Approach</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.1"
+>2.1&nbsp; Use the Table of Marks</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.2"
+>2.2&nbsp; Use Information from the Character Table Library</a><br />
+<a href="#tth_sEc3"
+>3&nbsp; Cases where the Table of Marks is available in <font face="helvetica">GAP</font></a><br />
+<a href="#tth_sEc4"
+>4&nbsp; Cases where the Table of Marks is not available in <font face="helvetica">GAP</font></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.1"
+>4.1&nbsp; G = Ru</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.2"
+>4.2&nbsp; G = Suz</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.3"
+>4.3&nbsp; G = ON</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.4"
+>4.4&nbsp; G = Co<sub>2</sub></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.5"
+>4.5&nbsp; G = Fi<sub>22</sub></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.6"
+>4.6&nbsp; G = HN</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.7"
+>4.7&nbsp; G = Ly</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.8"
+>4.8&nbsp; G = Th</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.9"
+>4.9&nbsp; G = Fi<sub>23</sub></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.10"
+>4.10&nbsp; G = Co<sub>1</sub></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.11"
+>4.11&nbsp; G = J<sub>4</sub></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.12"
+>4.12&nbsp; G = Fi<sub>24</sub><sup>&#8242;</sup></a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.13"
+>4.13&nbsp; G = B</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc4.14"
+>4.14&nbsp; G = M</a><br />
+<a href="#tth_sEc5"
+>5&nbsp; Proof of the Corollary</a><br />
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc1">
+1</a>&nbsp;&nbsp;The Result</h2><a name="result">
+</a>
+
+<div class="p"><!----></div>
+The tables&nbsp;<a href="#numberstable">1</a> and&nbsp;<a href="#thetable">2</a> list information about
+solvable subgroups of maximal order in sporadic simple groups and their
+automorphism groups.
+The first column in each table gives the names of the almost simple groups
+G, in alphabetical order.
+The remaining columns of Table&nbsp;<a href="#numberstable">1</a> contain the order
+and the index of a solvable subgroup S of maximal order in G, the value
+log<sub>&#124;G&#124;</sub>(&#124;S&#124;), and the page number in the  A<font size="-2">TLAS</font>&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>] where
+the information about maximal subgroups of G is listed.
+The second and third columns of Table&nbsp;<a href="#thetable">2</a> a structure description
+of S and the structures of the maximal subgroups that contain S;
+the value "S" in the third column means that S is itself maximal in G.
+The fourth and fifth columns list the pages in the  A<font size="-2">TLAS</font>
+with the information about the maximal subgroups of G
+and the section in this note with the proof of the table row,
+respectively.
+In the fourth column, page numbers in brackets refer to the  A<font size="-2">TLAS</font> pages
+with information about the maximal subgroups of nonsolvable quotients
+of the maximal subgroups of G listed in the third column.
+
+<div class="p"><!----></div>
+Note that in the case of nonmaximal subgroups S,
+we do not claim to describe the <em>module</em> structure of S
+in the third column of the table;
+we have kept the  A<font size="-2">TLAS</font> description of the normal subgroups of the maximal
+overgroups of S.
+For example, the subgroup S listed for Co<sub>2</sub> is contained in maximal
+subgroups of the types 2<sup>1+8</sup><sub>+</sub>:S<sub>6</sub>(2) and 2<sup>4+10</sup>(S<sub>4</sub> &times;S<sub>3</sub>),
+so S has normal subgroups
+of the orders 2, 2<sup>4</sup>, 2<sup>9</sup>, 2<sup>14</sup>, and 2<sup>16</sup>;
+more  A<font size="-2">TLAS</font> conformal notations would be
+2<sup>[14]</sup>(S<sub>4</sub> &times;S<sub>3</sub>) or 2<sup>[16]</sup>(S<sub>3</sub> &times;S<sub>3</sub>).
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a name="tth_tAb1">
+</a> <center>Table 1: Solvable subgroups of maximal order - orders and indices</center><a name="numberstable">
+</a>
+
+<center>
+
+<table border="1">
+<tr><td>G        </td><td align="right">&#124;S&#124; </td><td align="right">&#124;G/S&#124; </td><td align="right">log<sub>&#124;G&#124;</sub>(&#124;S&#124;) </td><td align="right">p. </td></tr>
+<tr><td>M<sub>11</sub> </td><td align="right">144
+ </td><td align="right">55
+ </td><td align="right">0.5536 </td><td align="right">18 </td></tr>
+<tr><td>M<sub>12</sub> </td><td align="right">432
+ </td><td align="right">220
+ </td><td align="right">0.5294 </td><td align="right">33 </td></tr>
+<tr><td>M<sub>12</sub>.2 </td><td align="right">432
+ </td><td align="right">440
+ </td><td align="right">0.4992 </td><td align="right">33 </td></tr>
+<tr><td>J<sub>1</sub> </td><td align="right">168
+ </td><td align="right">1&nbsp;045
+ </td><td align="right">0.4243 </td><td align="right">36 </td></tr>
+<tr><td>M<sub>22</sub> </td><td align="right">576
+ </td><td align="right">770
+ </td><td align="right">0.4888 </td><td align="right">39 </td></tr>
+<tr><td>M<sub>22</sub>.2 </td><td align="right">1&nbsp;152
+ </td><td align="right">770
+ </td><td align="right">0.5147 </td><td align="right">39 </td></tr>
+<tr><td>J<sub>2</sub> </td><td align="right">1&nbsp;152
+ </td><td align="right">525
+ </td><td align="right">0.5295 </td><td align="right">42 </td></tr>
+<tr><td>J<sub>2</sub>.2 </td><td align="right">2&nbsp;304
+ </td><td align="right">525
+ </td><td align="right">0.5527 </td><td align="right">42 </td></tr>
+<tr><td>M<sub>23</sub> </td><td align="right">1&nbsp;152
+ </td><td align="right">8&nbsp;855
+ </td><td align="right">0.4368 </td><td align="right">71 </td></tr>
+<tr><td>HS </td><td align="right">2&nbsp;000
+ </td><td align="right">22&nbsp;176
+ </td><td align="right">0.4316 </td><td align="right">80 </td></tr>
+<tr><td>HS.2 </td><td align="right">4&nbsp;000
+ </td><td align="right">22&nbsp;176
+ </td><td align="right">0.4532 </td><td align="right">80 </td></tr>
+<tr><td>J<sub>3</sub> </td><td align="right">1&nbsp;944
+ </td><td align="right">25&nbsp;840
+ </td><td align="right">0.4270 </td><td align="right">82 </td></tr>
+<tr><td>J<sub>3</sub>.2 </td><td align="right">3&nbsp;888
+ </td><td align="right">25&nbsp;840
+ </td><td align="right">0.4486 </td><td align="right">82 </td></tr>
+<tr><td>M<sub>24</sub> </td><td align="right">13&nbsp;824
+ </td><td align="right">17&nbsp;710
+ </td><td align="right">0.4935 </td><td align="right">96 </td></tr>
+<tr><td>McL </td><td align="right">11&nbsp;664
+ </td><td align="right">77&nbsp;000
+ </td><td align="right">0.4542 </td><td align="right">100 </td></tr>
+<tr><td>McL.2 </td><td align="right">23&nbsp;328
+ </td><td align="right">77&nbsp;000
+ </td><td align="right">0.4719 </td><td align="right">100 </td></tr>
+<tr><td>He </td><td align="right">13&nbsp;824
+ </td><td align="right">291&nbsp;550
+ </td><td align="right">0.4310 </td><td align="right">104 </td></tr>
+<tr><td>He.2 </td><td align="right">18&nbsp;432
+ </td><td align="right">437&nbsp;325
+ </td><td align="right">0.4305 </td><td align="right">104 </td></tr>
+<tr><td>Ru </td><td align="right">49&nbsp;152
+ </td><td align="right">2&nbsp;968&nbsp;875
+ </td><td align="right">0.4202 </td><td align="right">126 </td></tr>
+<tr><td>Suz </td><td align="right">139&nbsp;968
+ </td><td align="right">3&nbsp;203&nbsp;200
+ </td><td align="right">0.4416 </td><td align="right">131 </td></tr>
+<tr><td>Suz.2 </td><td align="right">279&nbsp;936
+ </td><td align="right">3&nbsp;203&nbsp;200
+ </td><td align="right">0.4557 </td><td align="right">131 </td></tr>
+<tr><td>O&#8242;N </td><td align="right">25&nbsp;920
+ </td><td align="right">17&nbsp;778&nbsp;376
+ </td><td align="right">0.3784 </td><td align="right">132 </td></tr>
+<tr><td>O&#8242;N.2 </td><td align="right">51&nbsp;840
+ </td><td align="right">17&nbsp;778&nbsp;376
+ </td><td align="right">0.3940 </td><td align="right">132 </td></tr>
+<tr><td>Co<sub>3</sub> </td><td align="right">69&nbsp;984
+ </td><td align="right">7&nbsp;084&nbsp;000
+ </td><td align="right">0.4142 </td><td align="right">134 </td></tr>
+<tr><td>Co<sub>2</sub> </td><td align="right">2&nbsp;359&nbsp;296
+ </td><td align="right">17&nbsp;931&nbsp;375
+ </td><td align="right">0.4676 </td><td align="right">154 </td></tr>
+<tr><td>Fi<sub>22</sub> </td><td align="right">5&nbsp;038&nbsp;848
+ </td><td align="right">12&nbsp;812&nbsp;800
+ </td><td align="right">0.4853 </td><td align="right">163 </td></tr>
+<tr><td>Fi<sub>22</sub>.2 </td><td align="right">10&nbsp;077&nbsp;696
+ </td><td align="right">12&nbsp;812&nbsp;800
+ </td><td align="right">0.4963 </td><td align="right">163 </td></tr>
+<tr><td>HN </td><td align="right">2&nbsp;000&nbsp;000
+ </td><td align="right">136&nbsp;515&nbsp;456
+ </td><td align="right">0.4364 </td><td align="right">166 </td></tr>
+<tr><td>HN.2 </td><td align="right">4&nbsp;000&nbsp;000
+ </td><td align="right">136&nbsp;515&nbsp;456
+ </td><td align="right">0.4479 </td><td align="right">166 </td></tr>
+<tr><td>Ly </td><td align="right">900&nbsp;000
+ </td><td align="right">57&nbsp;516&nbsp;865&nbsp;560
+ </td><td align="right">0.3562 </td><td align="right">174 </td></tr>
+<tr><td>Th </td><td align="right">944&nbsp;784
+ </td><td align="right">96&nbsp;049&nbsp;408&nbsp;000
+ </td><td align="right">0.3523 </td><td align="right">177 </td></tr>
+<tr><td>Fi<sub>23</sub> </td><td align="right">3&nbsp;265&nbsp;173&nbsp;504
+ </td><td align="right">1&nbsp;252&nbsp;451&nbsp;200
+ </td><td align="right">0.5111 </td><td align="right">177 </td></tr>
+<tr><td>Co<sub>1</sub> </td><td align="right">84&nbsp;934&nbsp;656
+ </td><td align="right">48&nbsp;952&nbsp;653&nbsp;750
+ </td><td align="right">0.4258 </td><td align="right">183 </td></tr>
+<tr><td>J<sub>4</sub> </td><td align="right">28&nbsp;311&nbsp;552
+ </td><td align="right">3&nbsp;065&nbsp;023&nbsp;459&nbsp;190
+ </td><td align="right">0.3737 </td><td align="right">190 </td></tr>
+<tr><td>Fi<sub>24</sub>&#8242; </td><td align="right">29&nbsp;386&nbsp;561&nbsp;536
+ </td><td align="right">42&nbsp;713&nbsp;595&nbsp;724&nbsp;800
+ </td><td align="right">0.4343 </td><td align="right">207 </td></tr>
+<tr><td>Fi<sub>24</sub>&#8242;.2 </td><td align="right">58&nbsp;773&nbsp;123&nbsp;072
+ </td><td align="right">42&nbsp;713&nbsp;595&nbsp;724&nbsp;800
+ </td><td align="right">0.4413 </td><td align="right">207 </td></tr>
+<tr><td>B </td><td align="right">29&nbsp;686&nbsp;813&nbsp;949&nbsp;952
+ </td><td align="right">139&nbsp;953&nbsp;768&nbsp;303&nbsp;693&nbsp;093&nbsp;750
+ </td><td align="right">0.4007 </td><td align="right">217 </td></tr>
+<tr><td>M </td><td align="right">2&nbsp;849&nbsp;934&nbsp;139&nbsp;195&nbsp;392
+ </td><td align="right">283&nbsp;521&nbsp;437&nbsp;805&nbsp;098&nbsp;363&nbsp;752 </td><td align="right"></td><td align="right"></td></tr>
+<tr><td></td><td align="right"></td><td align="right">344&nbsp;287&nbsp;234&nbsp;566&nbsp;406&nbsp;250
+ </td><td align="right">0.2866 </td><td align="right">234 </td></tr></table>
+
+</center>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a name="tth_tAb2">
+</a> <center>Table 2: Solvable subgroups of maximal order - structures and overgroups</center><a name="thetable">
+</a>
+
+<center>
+
+<table border="1">
+<tr><td>G        </td><td>S </td><td><font face="helvetica"><i>M</i></font>(S) </td><td colspan="2" align="center">[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>] </td><td>see </td></tr>
+<tr><td>M<sub>11</sub>   </td><td>3<sup>2</sup>:Q<sub>8</sub>.2 </td><td>S </td><td align="right">18 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>M<sub>12</sub>   </td><td>3<sup>2</sup>:2S<sub>4</sub> </td><td>S </td><td align="right">33 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td></td><td>3<sup>2</sup>:2S<sub>4</sub> </td><td>S </td><td align="right">33 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>M<sub>12</sub>.2 </td><td>3<sup>2</sup>:2S<sub>4</sub> </td><td>M<sub>12</sub> </td><td align="right">33 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>J<sub>1</sub>      </td><td>2<sup>3</sup>:7:3 </td><td>S </td><td align="right">36 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>M<sub>22</sub>   </td><td>2<sup>4</sup>:3<sup>2</sup>:4 </td><td>2<sup>4</sup>:A<sub>6</sub> </td><td align="right">39 </td><td>(4) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>M<sub>22</sub>.2 </td><td>2<sup>4</sup>:3<sup>2</sup>:D<sub>8</sub> </td><td>2<sup>4</sup>:S<sub>6</sub> </td><td align="right">39 </td><td>(4) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>J<sub>2</sub>      </td><td>2<sup>2+4</sup>:(3 &times;S<sub>3</sub>) </td><td>S </td><td align="right">42 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>J<sub>2</sub>.2    </td><td>2<sup>2+4</sup>:(S<sub>3</sub> &times;S<sub>3</sub>) </td><td>S </td><td align="right">42 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>M<sub>23</sub>   </td><td>2<sup>4</sup>:(3 &times;A<sub>4</sub>):2 </td><td>2<sup>4</sup>:(3 &times;A<sub>5</sub>):2, </td><td align="right">71 </td><td>(2) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td></td><td></td><td>2<sup>4</sup>:A<sub>7</sub> </td><td align="right"></td><td>(10) </td><td></td></tr>
+<tr><td>HS       </td><td>5<sup>1+2</sup><sub>+</sub>:8:2 </td><td>U<sub>3</sub>(5).2 </td><td align="right">80 </td><td>(34) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td></td><td></td><td>U<sub>3</sub>(5).2 </td><td align="right"></td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>HS.2     </td><td>5<sup>1+2</sup><sub>+</sub>:[2<sup>5</sup>] </td><td>S </td><td align="right">80 </td><td>(34) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>J<sub>3</sub>      </td><td>3<sup>2</sup>.3<sup>1+2</sup><sub>+</sub>:8 </td><td>S </td><td align="right">82 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>J<sub>3</sub>.2    </td><td>3<sup>2</sup>.3<sup>1+2</sup><sub>+</sub>:QD<sub>16</sub> </td><td>S </td><td align="right">82 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>M<sub>24</sub>   </td><td>2<sup>6</sup>:3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub> </td><td>2<sup>6</sup>:3.S<sub>6</sub> </td><td align="right">96 </td><td>(4) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>McL      </td><td>3<sup>1+4</sup><sub>+</sub>:2S<sub>4</sub> </td><td>3<sup>1+4</sup><sub>+</sub>:2S<sub>5</sub>, </td><td align="right">100 </td><td>(2) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td></td><td></td><td>U<sub>4</sub>(3)          </td><td align="right">52 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>McL.2    </td><td>3<sup>1+4</sup><sub>+</sub>:4S<sub>4</sub> </td><td>3<sup>1+4</sup><sub>+</sub>:4S<sub>5</sub>, </td><td align="right">100 </td><td>(2) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td></td><td></td><td>U<sub>4</sub>(3).2<sub>3</sub> </td><td align="right">52 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>He       </td><td>2<sup>6</sup>:3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub> </td><td>2<sup>6</sup>:3.S<sub>6</sub> </td><td align="right">104 </td><td>(4) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td></td><td>2<sup>6</sup>:3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub> </td><td>2<sup>6</sup>:3.S<sub>6</sub> </td><td align="right">104 </td><td>(4) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>He.2     </td><td>2<sup>4+4</sup>.(S<sub>3</sub> &times;S<sub>3</sub>).2 </td><td>S </td><td align="right">104 </td><td></td><td><a href="#EASY">3</a> </td></tr>
+<tr><td>Ru       </td><td>2.2<sup>4+6</sup>:S<sub>4</sub> </td><td>2<sup>3+8</sup>:L<sub>3</sub>(2), </td><td align="right">126 </td><td>(3) </td><td><a href="#Ru">4.1</a> </td></tr>
+<tr><td></td><td></td><td>2.2<sup>4+6</sup>:S<sub>5</sub> </td><td align="right"></td><td>(2) </td><td></td></tr>
+<tr><td></td><td>2<sup>3+8</sup>:S<sub>4</sub>   </td><td>2<sup>3+8</sup>:L<sub>3</sub>(2), </td><td align="right"></td><td>(3) </td><td><a href="#Ru">4.1</a> </td></tr>
+<tr><td>Suz      </td><td>3<sup>2+4</sup>:2(A<sub>4</sub> &times;2<sup>2</sup>).2 </td><td>S </td><td align="right">131 </td><td></td><td><a href="#Suz">4.2</a> </td></tr>
+<tr><td>Suz.2    </td><td>3<sup>2+4</sup>:2(S<sub>4</sub> &times;D<sub>8</sub>) </td><td>S </td><td align="right">131 </td><td></td><td><a href="#Suz">4.2</a> </td></tr>
+<tr><td>O&#8242;N      </td><td>3<sup>4</sup>:2<sup>1+4</sup><sub>&#8722;</sub>D<sub>10</sub> </td><td>S </td><td align="right">132 </td><td></td><td><a href="#ON">4.3</a> </td></tr>
+<tr><td>O&#8242;N.2    </td><td>3<sup>4</sup>:2<sup>1+4</sup><sub>&#8722;</sub>.(5:4) </td><td>S </td><td align="right">132 </td><td></td><td><a href="#ON">4.3</a> </td></tr>
+<tr><td>Co<sub>3</sub>     </td><td>3<sup>1+4</sup><sub>+</sub>:4.3<sup>2</sup>:D<sub>8</sub> </td><td>3<sup>1+4</sup><sub>+</sub>:4S<sub>6</sub> </td><td align="right">134 </td><td>(4) </td><td><a href="#EASY">3</a> </td></tr>
+<tr><td></td><td></td><td>3<sup>5</sup>:(2 &times;M<sub>11</sub>) </td><td align="right"></td><td>(18) </td><td></td></tr>
+<tr><td>Co<sub>2</sub>     </td><td>2<sup>4+10</sup>(S<sub>4</sub> &times;S<sub>3</sub>) </td><td>2<sup>1+8</sup><sub>+</sub>:S<sub>6</sub>(2), </td><td align="right">154 </td><td>(46) </td><td><a href="#Co2">4.4</a> </td></tr>
+<tr><td></td><td></td><td>2<sup>4+10</sup>(S<sub>5</sub> &times;S<sub>3</sub>) </td><td align="right"></td><td>(2) </td><td></td></tr>
+<tr><td>Fi<sub>22</sub>  </td><td>3<sup>1+6</sup><sub>+</sub>:2<sup>3+4</sup>:3<sup>2</sup>:2 </td><td>S </td><td align="right">163 </td><td></td><td><a href="#Fi22">4.5</a> </td></tr>
+<tr><td>Fi<sub>22</sub>.2</td><td>3<sup>1+6</sup><sub>+</sub>:2<sup>3+4</sup>:(S<sub>3</sub> &times;S<sub>3</sub>) </td><td>S </td><td align="right">163 </td><td></td><td><a href="#Fi22">4.5</a> </td></tr>
+<tr><td>HN       </td><td>5<sup>1+4</sup><sub>+</sub>:2<sup>1+4</sup><sub>&#8722;</sub>.5.4 </td><td>S </td><td align="right">166 </td><td></td><td><a href="#HN">4.6</a> </td></tr>
+<tr><td>HN.2     </td><td>5<sup>1+4</sup><sub>+</sub>:(4 Y2<sup>1+4</sup><sub>&#8722;</sub>.5.4) </td><td>S </td><td align="right">166 </td><td></td><td><a href="#HN">4.6</a> </td></tr>
+<tr><td>Ly       </td><td>5<sup>1+4</sup><sub>+</sub>:4.3<sup>2</sup>:D<sub>8</sub> </td><td>5<sup>1+4</sup><sub>+</sub>:4S<sub>6</sub> </td><td align="right">174 </td><td>(4) </td><td><a href="#Ly">4.7</a> </td></tr>
+<tr><td>Th       </td><td>[3<sup>9</sup>].2S<sub>4</sub> </td><td>S </td><td align="right">177 </td><td></td><td><a href="#Th">4.8</a> </td></tr>
+<tr><td></td><td>3<sup>2</sup>.[3<sup>7</sup>].2S<sub>4</sub> </td><td>S </td><td align="right"></td><td></td><td></td></tr>
+<tr><td>Fi<sub>23</sub>  </td><td>3<sup>1+8</sup><sub>+</sub>.2<sup>1+6</sup><sub>&#8722;</sub>.3<sup>1+2</sup><sub>+</sub>.2S<sub>4</sub> </td><td>S </td><td align="right">177 </td><td></td><td><a href="#Fi23">4.9</a> </td></tr>
+<tr><td>Co<sub>1</sub>     </td><td>2<sup>4+12</sup>.(S<sub>3</sub> &times;3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub>) </td><td>2<sup>4+12</sup>.(S<sub>3</sub> &times;3S<sub>6</sub>) </td><td align="right">183 </td><td></td><td><a href="#Co1">4.10</a> </td></tr>
+<tr><td>J<sub>4</sub>      </td><td>2<sup>11</sup>:2<sup>6</sup>:3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub> </td><td>2<sup>11</sup>:M<sub>24</sub>, </td><td align="right">190 </td><td>(96) </td><td><a href="#J4">4.11</a> </td></tr>
+<tr><td></td><td></td><td>2<sup>1+12</sup><sub>+</sub>.3M<sub>22</sub>:2 </td><td align="right"></td><td>(39) </td><td></td></tr>
+<tr><td>Fi<sub>24</sub>&#8242; </td><td>3<sup>1+10</sup><sub>+</sub>:2<sup>1+6</sup><sub>&#8722;</sub>:3<sup>1+2</sup><sub>+</sub>:2S<sub>4</sub> </td><td>3<sup>1+10</sup><sub>+</sub>:U<sub>5</sub>(2):2 </td><td align="right">207 </td><td>(73) </td><td><a href="#F3+">4.12</a> </td></tr>
+<tr><td>Fi<sub>24</sub>&#8242;.2 </td><td>3<sup>1+10</sup><sub>+</sub>:(2 &times;2<sup>1+6</sup><sub>&#8722;</sub>:3<sup>1+2</sup><sub>+</sub>:2S<sub>4</sub>) </td><td>3<sup>1+10</sup><sub>+</sub>:(2 &times;U<sub>5</sub>(2):2) </td><td align="right">207 </td><td>(73) </td><td><a href="#F3+">4.12</a> </td></tr>
+<tr><td>B        </td><td>2<sup>2+10+20</sup>(2<sup>4</sup>:3<sup>2</sup>:D<sub>8</sub> &times;S<sub>3</sub>) </td><td>2<sup>2+10+20</sup>(M<sub>22</sub>:2 &times;S<sub>3</sub>), </td><td align="right">217 </td><td>(39) </td><td><a href="#B">4.13</a> </td></tr>
+<tr><td></td><td></td><td>2<sup>9+16</sup>S<sub>8</sub>(2) </td><td align="right"></td><td>(123) </td><td></td></tr>
+<tr><td>M        </td><td>2<sup>1+2+6+12+18</sup>.(S<sub>4</sub> &times;3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub>) </td><td>2<sup>[39]</sup>.(L<sub>3</sub>(2) &times;3S<sub>6</sub>), </td><td align="right">234 </td><td>(3, 4) </td><td><a href="#M">4.14</a> </td></tr>
+<tr><td></td><td></td><td>2<sup>1+24</sup><sub>+</sub>.Co<sub>1</sub> </td><td align="right"></td><td>(183) </td><td></td></tr>
+<tr><td></td><td>2<sup>2+1+6+12+18</sup>.(S<sub>4</sub> &times;3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub>) </td><td>2<sup>[39]</sup>.(L<sub>3</sub>(2) &times;3S<sub>6</sub>), </td><td align="right"></td><td>(3, 4) </td><td><a href="#M">4.14</a> </td></tr>
+<tr><td></td><td></td><td>2<sup>2+11+22</sup>.(M<sub>24</sub> &times;S<sub>3</sub>) </td><td align="right"></td><td>(96) </td><td></td></tr></table>
+
+</center>
+
+<div class="p"><!----></div>
+As a corollary (see Section&nbsp;<a href="#Corollary">5</a>), we read off the following.
+
+<div class="p"><!----></div>
+
+   <b>Corollary 1</b> <em><a name="largerthansquareroot">
+</a>
+Exactly the following almost simple groups G with sporadic simple socle
+contain a solvable subgroup S with the property &#124;S&#124;<sup>2</sup>  &#8805; &#124;G&#124;.
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ Fi<sub>23</sub>, J<sub>2</sub>, J<sub>2</sub>.2, M<sub>11</sub>, M<sub>12</sub>, M<sub>22</sub>.2.</td></tr></table>
+</td></tr></table>
+
+
+
+<div class="p"><!----></div>
+</em>The existence of the subgroups S of G with the structure and the order
+stated in Table&nbsp;<a href="#numberstable">1</a> and&nbsp;<a href="#thetable">2</a> follows from the
+ A<font size="-2">TLAS</font>:
+It is obvious in the cases where S is maximal in G,
+and in the other cases, the  A<font size="-2">TLAS</font> information about a nonsolvable
+factor group of a maximal subgroup of G suffices.
+
+<div class="p"><!----></div>
+In order to show that the table rows for the group G are correct,
+we have to show the following.
+
+<ul>
+<li>  G does not contain solvable subgroups of order larger than &#124;S&#124;.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  G contain exactly the conjugacy classes of solvable subgroups of order
+  &#124;S&#124; that are listed in the second column of Table&nbsp;<a href="#thetable">2</a>.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  S is contained exactly in the maximal subgroups listed in the third
+  column of Table&nbsp;<a href="#thetable">2</a>.
+<div class="p"><!----></div>
+</li>
+</ul>
+
+<div class="p"><!----></div>
+
+   <b>Remark 2</b> <em>
+<span class="roman">
+
+<ul>
+<li>  The groups M<sub>12</sub> and He contain two classes of isomorphic
+  solvable subgroups of maximal order.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  The groups Ru, Th, and M contain two classes of nonisomorphic
+  solvable subgroups of maximal order.
+<div class="p"><!----></div>
+</li>
+
+<li>
+  The solvable subgroups of maximal order in McL.2 have the structure
+  3<sup>1+4</sup><sub>+</sub>:4S<sub>4</sub>, the subgroups are maximal in the maximal subgroups of the
+  structures 3<sup>1+4</sup><sub>+</sub>:4S<sub>5</sub> and U<sub>4</sub>(3).2<sub>3</sub> in McL.2.
+  Note that the  A<font size="-2">TLAS</font> claims another structure for these
+  maximal subgroups of U<sub>4</sub>(3).2<sub>3</sub>.
+<div class="p"><!----></div>
+</li>
+</ul></span>
+
+<div class="p"><!----></div>
+</em>
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc2">
+2</a>&nbsp;&nbsp;The Approach</h2><a name="approach">
+</a>
+
+<div class="p"><!----></div>
+We combine the information in the  A<font size="-2">TLAS</font>&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>] with explicit
+computations using the <font face="helvetica">GAP</font> system&nbsp;[<a href="#GAP4" name="CITEGAP4">GAP04</a>],
+in particular its Character Table Library&nbsp;[<a href="#CTblLib1.2" name="CITECTblLib1.2">Bre12</a>]
+and its library of Tables of Marks&nbsp;[<a href="#TomLib" name="CITETomLib">NMP11</a>].
+First we load these two packages.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; LoadPackage( "CTblLib", "1.2" );
+    true
+    gap&#62; LoadPackage( "TomLib" );
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+The orders of solvable subgroups of maximal order are collected in a
+global record <tt>MaxSolv</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv:= rec();;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc2.1">
+2.1</a>&nbsp;&nbsp;Use the Table of Marks</h3>
+
+<div class="p"><!----></div>
+If the <font face="helvetica">GAP</font> library of Tables of Marks&nbsp;[<a href="#TomLib" name="CITETomLib">NMP11</a>] contains
+the table of marks of a group G
+then we can easily inspect all conjugacy classes of subgroups of G.
+The following small <font face="helvetica">GAP</font> function can be used for that.
+It returns <tt>false</tt> if the table of marks of the group with the name <tt>name</tt>
+is not available,
+and the list <tt>[ name, n, super ]</tt> otherwise,
+where <tt>n</tt> is the maximal order of solvable subgroups of G,
+and <tt>super</tt> is a list of lists;
+for each conjugacy class of solvable subgroups S of order <tt>n</tt>,
+<tt>super</tt> contains the list of orders of representatives M of the classes of
+maximal subgroups of G such that M contains a conjugate of S.
+
+<div class="p"><!----></div>
+Note that a subgroup in the i-th class of a table of marks contains
+a subgroup in the j-th class if and only if the entry in the position
+(i,j) of the table of marks is nonzero.
+For tables of marks objects in <font face="helvetica">GAP</font>,
+this is the case if and only if j is contained in the i-th row of
+the list that is stored as the value of the attribute <tt>SubsTom</tt> of the
+table of marks object;
+for this test, one need not unpack the matrix of marks.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaximalSolvableSubgroupInfoFromTom:= function( name )
+    &#62;     local tom,          # table of marks for `name'
+    &#62;           n,            # maximal order of a solvable subgroup
+    &#62;           maxsubs,      # numbers of the classes of subgroups of order `n'
+    &#62;           orders,       # list of orders of the classes of subgroups
+    &#62;           i,            # loop over the classes of subgroups
+    &#62;           maxes,        # list of positions of the classes of max. subgroups
+    &#62;           subs,         # `SubsTom' value
+    &#62;           cont;         # list of list of positions of max. subgroups
+    &#62; 
+    &#62;     tom:= TableOfMarks( name );
+    &#62;     if tom = fail then
+    &#62;       return false;
+    &#62;     fi;
+    &#62;     n:= 1;
+    &#62;     maxsubs:= [];
+    &#62;     orders:= OrdersTom( tom );
+    &#62;     for i in [ 1 .. Length( orders ) ] do
+    &#62;       if IsSolvableTom( tom, i ) then
+    &#62;         if orders[i] = n then
+    &#62;           Add( maxsubs, i );
+    &#62;         elif orders[i] &#62; n then
+    &#62;           n:= orders[i];
+    &#62;           maxsubs:= [ i ];
+    &#62;         fi;
+    &#62;       fi;
+    &#62;     od;
+    &#62;     maxes:= MaximalSubgroupsTom( tom )[1];
+    &#62;     subs:= SubsTom( tom );
+    &#62;     cont:= List( maxsubs, j -&#62; Filtered( maxes, i -&#62; j in subs[i] ) );
+    &#62; 
+    &#62;     return [ name, n, List( cont, l -&#62; orders{ l } ) ];
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc2.2">
+2.2</a>&nbsp;&nbsp;Use Information from the Character Table Library</h3>
+
+<div class="p"><!----></div>
+The <font face="helvetica">GAP</font> Character Table Library contains the character tables of all
+maximal subgroups of sporadic simple groups,
+except for the Monster group.
+This information can be used as follows.
+
+<div class="p"><!----></div>
+We start, for a sporadic simple group G,
+with a known solvable subgroup of order n, say, in G.
+In order to show that G contains no solvable subgroup of larger order,
+it suffices to show that no maximal subgroup of G contains
+a larger solvable subgroup.
+
+<div class="p"><!----></div>
+The point is that usually the orders of the maximal subgroups of G
+are not much larger than n,
+and that a maximal subgroup M contains a solvable subgroup of order n
+only if the factor group of M by its largest solvable normal subgroup N
+contains a solvable subgroup of order n/&#124;N&#124;.
+This reduces the question to relatively small groups.
+
+<div class="p"><!----></div>
+What we can check <em>automatically</em> from the character table of M/N
+is whether M/N can contain subgroups (solvable or not) of indices between
+five and &#124;M&#124;/n, by computing possible permutation characters of these
+degrees.
+(Note that a solvable subgroup of a nonsolvable group has index
+at least five.
+This lower bound could be improved for example by considering the
+smallest degree of a nontrivial character, but this is not an issue here.)
+
+<div class="p"><!----></div>
+Then we are left with a -hopefully short- list of maximal subgroups of G,
+together with upper bounds on the indices of possible solvable subgroups;
+excluding these possibilities then yields that the initially chosen
+solvable subgroup of G is indeed the largest one.
+
+<div class="p"><!----></div>
+The following <font face="helvetica">GAP</font> function can be used to compute this information
+for the character table <tt>tblM</tt> of M and a given order <tt>minorder</tt>.
+It returns <tt>false</tt> if M cannot contain a solvable subgroup of order
+at least <tt>minorder</tt>,
+otherwise a list <tt>[ tblM, m, k ]</tt> where
+<tt>m</tt> is the maximal index of a subgroup that has order at least <tt>minorder</tt>,
+and <tt>k</tt> is the minimal index of a possible subgroup of M (a proper subgroup
+if M is nonsolvable), according to the <font face="helvetica">GAP</font> function <tt>PermChars</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; SolvableSubgroupInfoFromCharacterTable:= function( tblM, minorder )
+    &#62;     local maxindex,  # index of subgroups of order `minorder'
+    &#62;           N,         # class positions describing a solvable normal subgroup
+    &#62;           fact,      # character table of the factor by `N'
+    &#62;           classes,   # class sizes in `fact'
+    &#62;           nsg,       # list of class positions of normal subgroups
+    &#62;           i;         # loop over the possible indices
+    &#62; 
+    &#62;     maxindex:= Int( Size( tblM ) / minorder );
+    &#62;     if   maxindex = 0 then
+    &#62;       return false;
+    &#62;     elif IsSolvableCharacterTable( tblM ) then
+    &#62;       return [ tblM, maxindex, 1 ];
+    &#62;     elif maxindex &lt; 5 then
+    &#62;       return false;
+    &#62;     fi;
+    &#62; 
+    &#62;     N:= [ 1 ];
+    &#62;     fact:= tblM;
+    &#62;     repeat
+    &#62;       fact:= fact / N;
+    &#62;       classes:= SizesConjugacyClasses( fact );
+    &#62;       nsg:= Difference( ClassPositionsOfNormalSubgroups( fact ), [ [ 1 ] ] );
+    &#62;       N:= First( nsg, x -&#62; IsPrimePowerInt( Sum( classes{ x } ) ) );
+    &#62;     until N = fail;
+    &#62; 
+    &#62;     for i in [ 5 .. maxindex ] do
+    &#62;       if Length( PermChars( fact, rec( torso:= [ i ] ) ) ) &#62; 0 then
+    &#62;         return [ tblM, maxindex, i ];
+    &#62;       fi;
+    &#62;     od;
+    &#62; 
+    &#62;     return false;
+    &#62; end;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc3">
+3</a>&nbsp;&nbsp;Cases where the Table of Marks is available in <font face="helvetica">GAP</font></h2><a name="EASY">
+</a>
+
+<div class="p"><!----></div>
+For twelve sporadic simple groups,
+the <font face="helvetica">GAP</font> library of Tables of Marks knows the tables of marks,
+so we can use <tt>MaximalSolvableSubgroupInfoFromTom</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; solvinfo:= Filtered( List(
+    &#62;         AllCharacterTableNames( IsSporadicSimple, true,
+    &#62;                                 IsDuplicateTable, false ),
+    &#62;         MaximalSolvableSubgroupInfoFromTom ), x -&#62; x &lt;&#62; false );;
+    gap&#62; for entry in solvinfo do
+    &#62;      MaxSolv.( entry[1] ):= entry[2];
+    &#62;    od;
+    gap&#62; for entry in solvinfo do                                 
+    &#62;      Print( String( entry[1], 5 ), String( entry[2], 7 ),
+    &#62;             String( entry[3], 28 ), "\n" );
+    &#62;    od;
+      Co3  69984     [ [ 3849120, 699840 ] ]
+       HS   2000      [ [ 252000, 252000 ] ]
+       He  13824  [ [ 138240 ], [ 138240 ] ]
+       J1    168                 [ [ 168 ] ]
+       J2   1152                [ [ 1152 ] ]
+       J3   1944                [ [ 1944 ] ]
+      M11    144                 [ [ 144 ] ]
+      M12    432        [ [ 432 ], [ 432 ] ]
+      M22    576                [ [ 5760 ] ]
+      M23   1152         [ [ 40320, 5760 ] ]
+      M24  13824              [ [ 138240 ] ]
+      McL  11664      [ [ 3265920, 58320 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+We see that for J<sub>1</sub>, J<sub>2</sub>, J<sub>3</sub>, M<sub>11</sub>, and M<sub>12</sub>,
+the subgroup S is maximal.
+For M<sub>12</sub> and He, there are two classes of subgroups S.
+For the other groups, the class of subgroups S is unique,
+and there are one or two classes of maximal subgroups
+of G that contain S.
+From the shown orders of these maximal subgroups, their structures can
+be read off from the  A<font size="-2">TLAS</font>, on the pages listed in Table&nbsp;<a href="#thetable">2</a>.
+
+<div class="p"><!----></div>
+Similarly, the  A<font size="-2">TLAS</font> tells us about the extensions of the subgroups S
+in <span class="roman">Aut</span>(G).
+In particular,
+
+<ul>
+<br />-
+  the order 2&nbsp;000 subgroups of HS are contained in maximal
+  subgroups of the type U<sub>3</sub>(5).2 (two classes) which do not extend to
+  HS.2, but there are novelties of the type 5<sup>1+2</sup><sub>+</sub>:[2<sup>5</sup>]
+  and of the order 4&nbsp;000,
+  so the solvable subgroups of maximal order in HS
+  do in fact extend to HS.2.
+<br />-
+  the order 13&nbsp;824 subgroups of He are contained in maximal
+  subgroups of the type 2<sup>6</sup>:3S<sub>6</sub> (two classes) which do not extend to
+  He.2, but there are novelties of the type 2<sup>4+4</sup>.(S<sub>3</sub> &times;S<sub>3</sub>).2
+  and of the order 18&nbsp;432.
+  (So the solvable subgroups S of maximal order in He
+  do not extend to He.2 but there are larger solvable subgroups in He.2.)
+
+<div class="p"><!----></div>
+  We inspect the maximal subgroups of He.2 in order to show that these are
+  in fact the solvable subgroups of maximal order (see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;104]):
+  Any other solvable subgroup of order at least n in He.2 must be
+  contained in a subgroup of one of the types
+  S<sub>4</sub>(4).4 (of index at most 212),
+  2<sup>2</sup>.L<sub>3</sub>(4).D<sub>12</sub> (of index at most 52),
+  or
+  2<sup>1+6</sup><sub>+</sub>.L<sub>3</sub>(2).2 (of index at most 2).
+  By&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,pp.&nbsp;44, 23, 3], this is not the case.
+<br />-
+  the maximal subgroups of order 1&nbsp;152 in J<sub>2</sub> extend to subgroups
+  of order 2&nbsp;304 in J<sub>2</sub>.2.
+<br />-
+  the maximal subgroups of order 1&nbsp;944 in J<sub>3</sub> extend to subgroups
+  of the type 3<sup>2</sup>.3<sup>1+2</sup><sub>+</sub>:8.2 and of order 3888 in J<sub>3</sub>.2.
+  (The structure stated in&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;82] is not correct,
+  see&nbsp;[<a href="#BN95" name="CITEBN95">BN95</a>].)
+<br />-
+  the maximal subgroups of order 432 in M<sub>12</sub> (two classes)
+  do <em>not</em> extend in M<sub>12</sub>.2,
+  and we see from the table of marks of M<sub>12</sub>.2 that there are no
+  larger solvable subgroups in this group, i.&nbsp;e.,
+  the solvable subgroups of maximal order in M<sub>12</sub>.2 lie in M<sub>12</sub>.
+<br />-
+  the order 576 subgroups of M<sub>22</sub> are contained in maximal
+  subgroups of the type 2<sup>4</sup>:A<sub>6</sub> which extend to subgroups of the type
+  2<sup>4</sup>:S<sub>6</sub> in M<sub>22</sub>.2,
+  so the solvable subgroups of maximal order in M<sub>22</sub>.2
+  have the type 2<sup>4</sup>:3<sup>2</sup>:D<sub>8</sub> and the order 1&nbsp;152.
+  In fact the structure is S<sub>4</sub> \wr S<sub>2</sub>.
+<br />-
+  the order 11&nbsp;664 subgroups of McL are contained in maximal
+  subgroups of the type 3<sup>1+4</sup><sub>+</sub>:2S<sub>5</sub> which extend to subgroups of the type
+  3<sup>1+4</sup>:4S<sub>5</sub> in McL.2,
+  so the solvable subgroups of maximal order in McL.2
+  have the type 3<sup>1+4</sup>:4S<sub>4</sub> and the order 23&nbsp;328.</ul>
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "HS.2" ):= 2 * MaxSolv.( "HS" );;
+    gap&#62; n:= 2^(4+4) * ( 6 * 6 ) * 2;  MaxSolv.( "He.2" ):= n;;
+    18432
+    gap&#62; List( [ Size( CharacterTable( "S4(4).4" ) ),
+    &#62;            Factorial( 5 )^2 * 2,
+    &#62;            Size( CharacterTable( "2^2.L3(4).D12" ) ),
+    &#62;            2^7 * Size( CharacterTable( "L3(2)" ) ) * 2,
+    &#62;            7^2 * 2 * Size( CharacterTable( "L2(7)" ) ) * 2,
+    &#62;            3 * Factorial( 7 ) * 2 ], i -&#62; Int( i / n ) );
+    [ 212, 1, 52, 2, 1, 1 ]
+    gap&#62; MaxSolv.( "J2.2" ):= 2 * MaxSolv.( "J2" );;
+    gap&#62; MaxSolv.( "J3.2" ):= 2 * MaxSolv.( "J3" );;
+    gap&#62; info:= MaximalSolvableSubgroupInfoFromTom( "M12.2" );
+    [ "M12.2", 432, [ [ 95040 ] ] ]
+    gap&#62; MaxSolv.( "M12.2" ):= info[2];;
+    gap&#62; MaxSolv.( "M22.2" ):= 2 * MaxSolv.( "M22" );;
+    gap&#62; MaxSolv.( "McL.2" ):= 2 * MaxSolv.( "McL" );;
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc4">
+4</a>&nbsp;&nbsp;Cases where the Table of Marks is not available in <font face="helvetica">GAP</font></h2>
+
+<div class="p"><!----></div>
+We use the <font face="helvetica">GAP</font> function <tt>SolvableSubgroupInfoFromCharacterTable</tt>,
+and individual arguments.
+In several cases, information about smaller sporadic simple groups is needed,
+so we deal with the groups in increasing order.
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.1">
+4.1</a>&nbsp;&nbsp;G = Ru</h3><a name="Ru">
+</a>
+
+<div class="p"><!----></div>
+The group Ru contains exactly two conjugacy classes of nonisomorphic
+solvable subgroups of order n = 49&nbsp;152, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Ru" );;
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 49152;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "2^3+8:L3(2)" ), 7, 7 ], 
+      [ CharacterTable( "2.2^4+6:S5" ), 5, 5 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 2.2<sup>4+6</sup>:S<sub>5</sub> in Ru
+contain one class of solvable subgroups of order n
+and with the structure 2.2<sup>4+6</sup>:S<sub>4</sub>, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;126, p.&nbsp;2].
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 2<sup>3+8</sup>:L<sub>3</sub>(2) in Ru
+contain two classes of solvable subgroups of order n
+and with the structure 2<sup>3+8</sup>:S<sub>4</sub>, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;126, p.&nbsp;3].
+These groups are the stabilizers of vectors and two-dimensional subspaces,
+respectively, in the three-dimensional submodule;
+note that each 2<sup>3+8</sup>:L<sub>3</sub>(2) type subgroup H of Ru is the normalizer of
+an elementary abelian group of order eight all of whose involutions are in the
+Ru-class <tt>2A</tt> and are conjugate in H.
+Since the 2.2<sup>4+6</sup>:S<sub>5</sub> type subgroups of Ru are the normalizers of
+<tt>2A</tt>-elements in Ru, the groups in one of the two classes in question
+coincide with the largest solvable subgroups in the 2.2<sup>4+6</sup>:S<sub>5</sub> type
+subgroups.
+The groups in the other class do not centralize a <tt>2A</tt>-element in Ru
+and are therefore not isomorphic with the 2.2<sup>4+6</sup>:S<sub>4</sub> type groups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Ru" ):= n;;
+    gap&#62; s:= info[1][1];;
+    gap&#62; cls:= SizesConjugacyClasses( s );;
+    gap&#62; nsg:= Filtered( ClassPositionsOfNormalSubgroups( s ),
+    &#62;                    x -&#62; Sum( cls{ x } ) = 2^3 );
+    [ [ 1, 2 ] ]
+    gap&#62; cls{ nsg[1] };
+    [ 1, 7 ]
+    gap&#62; GetFusionMap( s, t ){ nsg[1] };
+    [ 1, 2 ]
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.2">
+4.2</a>&nbsp;&nbsp;G = Suz</h3><a name="Suz">
+</a>
+
+<div class="p"><!----></div>
+The group Suz contains a unique conjugacy class of solvable subgroups
+of order n = 139&nbsp;968, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Suz" );;
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 139968;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "G2(4)" ), 1797, 416 ], 
+      [ CharacterTable( "3_2.U4(3).2_3'" ), 140, 72 ], 
+      [ CharacterTable( "3^5:M11" ), 13, 11 ], 
+      [ CharacterTable( "2^4+6:3a6" ), 7, 6 ], 
+      [ CharacterTable( "3^2+4:2(2^2xa4)2" ), 1, 1 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups S of the structure 3<sup>2+4</sup>:2(A<sub>4</sub> &times;2<sup>2</sup>).2
+in Suz are solvable and have order n, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;131].
+
+<div class="p"><!----></div>
+In order to show that Suz contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in G<sub>2</sub>(4) of index at most 1&nbsp;797 (see p.&nbsp;97),
+in U<sub>4</sub>(3).2<sub>3</sub><sup>&#8242;</sup> of index at most 140 (see p.&nbsp;52),
+in M<sub>11</sub> of index at most 13 (see p.&nbsp;18), and
+in A<sub>6</sub> of index at most 7 (see p.&nbsp;4).
+
+<div class="p"><!----></div>
+The group S extends to a group of the structure
+3<sup>2+4</sup>:2(S<sub>4</sub> &times;D<sub>8</sub>)
+in the automorphism group Suz.2.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Suz" ):= n;;
+    gap&#62; MaxSolv.( "Suz.2" ):= 2 * n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.3">
+4.3</a>&nbsp;&nbsp;G = ON</h3><a name="ON">
+</a>
+
+<div class="p"><!----></div>
+The group ON contains a unique conjugacy class of solvable subgroups
+of order 25&nbsp;920, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "ON" );;                                            
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 25920;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "L3(7).2" ), 144, 114 ], 
+      [ CharacterTable( "ONM2" ), 144, 114 ], 
+      [ CharacterTable( "3^4:2^(1+4)D10" ), 1, 1 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups S of the structure 3<sup>4</sup>:2<sup>1+4</sup><sub>&#8722;</sub>D<sub>10</sub>
+in ON are solvable and have order n, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;132].
+
+<div class="p"><!----></div>
+In order to show that ON contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in L<sub>3</sub>(7).2 of index at most 144 (see p.&nbsp;50);
+note that the groups in the second class of maximal subgroups of ON
+are isomorphic with L<sub>3</sub>(7).2.
+
+<div class="p"><!----></div>
+The group S extends to a group of order &#124;S.2&#124;
+in the automorphism group ON.2.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "ON" ):= n;;
+    gap&#62; MaxSolv.( "ON.2" ):= 2 * n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.4">
+4.4</a>&nbsp;&nbsp;G = Co<sub>2</sub></h3><a name="Co2">
+</a>
+
+<div class="p"><!----></div>
+The group Co<sub>2</sub> contains a unique conjugacy class of solvable subgroups
+of order 2&nbsp;359&nbsp;296, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Co2" );;                                           
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 2359296;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "U6(2).2" ), 7796, 672 ], 
+      [ CharacterTable( "2^10:m22:2" ), 385, 22 ], 
+      [ CharacterTable( "McL" ), 380, 275 ], 
+      [ CharacterTable( "2^1+8:s6f2" ), 315, 28 ], 
+      [ CharacterTable( "2^1+4+6.a8" ), 17, 8 ], 
+      [ CharacterTable( "U4(3).D8" ), 11, 8 ], 
+      [ CharacterTable( "2^(4+10)(S5xS3)" ), 5, 5 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 2<sup>4+10</sup>(S<sub>5</sub> &times;S<sub>3</sub>) in Co<sub>2</sub>
+contain solvable subgroups S of order n and with the structure
+2<sup>4+10</sup>(S<sub>4</sub> &times;S<sub>3</sub>), see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;154].
+
+<div class="p"><!----></div>
+The subgroups S are contained also in the maximal subgroups of the type
+2<sup>1+8</sup><sub>+</sub>:S<sub>6</sub>(2);
+note that the 2<sup>1+8</sup><sub>+</sub>:S<sub>6</sub>(2) type subgroups are described
+as normalizers of elements in the Co<sub>2</sub>-class <tt>2A</tt>,
+and S normalizes an elementary abelian group of order 16
+containing an S-class of length five that is contained in the
+Co<sub>2</sub>-class <tt>2A</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; s:= info[7][1];
+    CharacterTable( "2^(4+10)(S5xS3)" )
+    gap&#62; cls:= SizesConjugacyClasses( s );;
+    gap&#62; nsg:= Filtered( ClassPositionsOfNormalSubgroups( s ),
+    &#62;                    x -&#62; Sum( cls{ x } ) = 2^4 );
+    [ [ 1, 2, 3 ] ]
+    gap&#62; cls{ nsg[1] };
+    [ 1, 5, 10 ]
+    gap&#62; GetFusionMap( s, t ){ nsg[1] };
+    [ 1, 2, 3 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The stabilizers of these involutions in 2<sup>4+10</sup>(S<sub>5</sub> &times;S<sub>3</sub>)
+have index five,
+they are solvable, and they are contained in 2<sup>1+8</sup><sub>+</sub>:S<sub>6</sub>(2) type
+subgroups,
+so they are Co<sub>2</sub>-conjugates of S.
+(The corresponding subgroups of S<sub>6</sub>(2) are maximal and have the type
+2.[2<sup>6</sup>]:(S<sub>3</sub> &times;S<sub>3</sub>).)
+
+<div class="p"><!----></div>
+In order to show that G contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in U<sub>6</sub>(2) of index at most 7&nbsp;796 (see p.&nbsp;115),
+in M<sub>22</sub>.2 of index at most 385 (see p.&nbsp;39 or Section&nbsp;<a href="#EASY">3</a>),
+in McL of index at most 380 (see p.&nbsp;100 or Section&nbsp;<a href="#EASY">3</a>),
+in A<sub>8</sub> of index at most 17 (see p.&nbsp;20),
+and
+in U<sub>4</sub>(3).D<sub>8</sub> of index at most 11 (see p.&nbsp;52).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Co2" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.5">
+4.5</a>&nbsp;&nbsp;G = Fi<sub>22</sub></h3><a name="Fi22">
+</a>
+
+<div class="p"><!----></div>
+The group Fi<sub>22</sub> contains a unique conjugacy class of solvable subgroups
+of order 5&nbsp;038&nbsp;848, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Fi22" );;
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 5038848;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "2.U6(2)" ), 3650, 672 ], 
+      [ CharacterTable( "O7(3)" ), 910, 351 ], 
+      [ CharacterTable( "Fi22M3" ), 910, 351 ], 
+      [ CharacterTable( "O8+(2).3.2" ), 207, 6 ], 
+      [ CharacterTable( "2^10:m22" ), 90, 22 ], 
+      [ CharacterTable( "3^(1+6):2^(3+4):3^2:2" ), 1, 1 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups S of the structure 3<sup>1+6</sup>:2<sup>3+4</sup>:3<sup>2</sup>:2
+in Fi<sub>22</sub> are solvable and have order n, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;163].
+
+<div class="p"><!----></div>
+In order to show that Fi<sub>22</sub> contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in U<sub>6</sub>(2) of index at most 3&nbsp;650 (see p.&nbsp;115),
+in O<sub>7</sub>(3) of index at most 910 (see p.&nbsp;109),
+in O<sub>8</sub><sup>+</sup>(2).S<sub>3</sub> of index at most 207 (see p.&nbsp;85),
+and
+in M<sub>22</sub>.2 of index at most 90 (see p.&nbsp;39 or Section&nbsp;<a href="#EASY">3</a>);
+note that the groups in the third class of maximal subgroups of Fi<sub>22</sub>
+are isomorphic with O<sub>7</sub>(3).
+
+<div class="p"><!----></div>
+The group S extends to a group of order &#124;S.2&#124;
+in the automorphism group Fi<sub>22</sub>.2.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Fi22" ):= n;;
+    gap&#62; MaxSolv.( "Fi22.2" ):= 2 * n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.6">
+4.6</a>&nbsp;&nbsp;G = HN</h3><a name="HN">
+</a>
+
+<div class="p"><!----></div>
+The group HN contains a unique conjugacy class of solvable subgroups
+of order 2&nbsp;000&nbsp;000, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "HN" );; 
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;                               
+    gap&#62; n:= 2000000;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "A12" ), 119, 12 ], 
+      [ CharacterTable( "5^(1+4):2^(1+4).5.4" ), 1, 1 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups S of the structure 5<sup>1+4</sup>:2<sup>1+4</sup>.5.4
+in HN are solvable and have order n, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;166].
+
+<div class="p"><!----></div>
+In order to show that HN contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in A<sub>12</sub> of index at most 119 (see p.&nbsp;91).
+
+<div class="p"><!----></div>
+The group S extends to a group of order &#124;S.2&#124;
+in the automorphism group HN.2.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "HN" ):= n;;
+    gap&#62; MaxSolv.( "HN.2" ):= 2 * n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.7">
+4.7</a>&nbsp;&nbsp;G = Ly</h3><a name="Ly">
+</a>
+
+<div class="p"><!----></div>
+The group Ly contains a unique conjugacy class of solvable subgroups
+of order 900&nbsp;000, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Ly" );;                                            
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 900000;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "G2(5)" ), 6510, 3906 ], 
+      [ CharacterTable( "3.McL.2" ), 5987, 275 ], 
+      [ CharacterTable( "5^3.psl(3,5)" ), 51, 31 ], 
+      [ CharacterTable( "2.A11" ), 44, 11 ], 
+      [ CharacterTable( "5^(1+4):4S6" ), 10, 6 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 5<sup>(</sup>1+4):4S6 in Ly
+contain solvable subgroups S of order n and with the structure
+5<sup>1+4</sup>:4.3<sup>2</sup>.D<sub>8</sub>, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;174].
+
+<div class="p"><!----></div>
+In order to show that Ly contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in G<sub>2</sub>(5) of index at most 6&nbsp;510 (see p.&nbsp;114),
+in McL.2 of index at most 5&nbsp;987 (see p.&nbsp;100 or Section&nbsp;<a href="#EASY">3</a>),
+in L<sub>3</sub>(5) of index at most 51 (see p.&nbsp;38),
+and
+in A<sub>11</sub> of index at most 44 (see p.&nbsp;75).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Ly" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.8">
+4.8</a>&nbsp;&nbsp;G = Th</h3><a name="Th">
+</a>
+
+<div class="p"><!----></div>
+The group Th contains exactly two conjugacy classes of nonisomorphic
+solvable subgroups of order n = 944&nbsp;784, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Th" );;
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 944784;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "2^5.psl(5,2)" ), 338, 31 ], 
+      [ CharacterTable( "2^1+8.a9" ), 98, 9 ], 
+      [ CharacterTable( "U3(8).6" ), 35, 6 ], [ CharacterTable( "ThN3B" ), 1, 1 ],
+      [ CharacterTable( "ThM7" ), 1, 1 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups S of the structures [3<sup>9</sup>].2S<sub>4</sub> and 3<sup>2</sup>.[3<sup>7</sup>].2S<sub>4</sub>
+in Th are solvable and have order n, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;177].
+
+<div class="p"><!----></div>
+In order to show that Th contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in L<sub>5</sub>(2) of index at most 338 (see p.&nbsp;70),
+in A<sub>9</sub> of index at most 98 (see p.&nbsp;37),
+and
+in U<sub>3</sub>(8).6 of index at most 35 (see p.&nbsp;66).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Th" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.9">
+4.9</a>&nbsp;&nbsp;G = Fi<sub>23</sub></h3><a name="Fi23">
+</a>
+
+<div class="p"><!----></div>
+The group Fi<sub>23</sub> contains a unique conjugacy class of solvable subgroups
+of order n = 3&nbsp;265&nbsp;173&nbsp;504, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Fi23" );;
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 3265173504;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "2.Fi22" ), 39545, 3510 ], 
+      [ CharacterTable( "O8+(3).3.2" ), 9100, 6 ], 
+      [ CharacterTable( "3^(1+8).2^(1+6).3^(1+2).2S4" ), 1, 1 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups S of the structure 3<sup>1+8</sup><sub>+</sub>.2<sup>1+6</sup><sub>&#8722;</sub>.3<sup>1+2</sup><sub>+</sub>.2S<sub>4</sub>
+in Fi<sub>23</sub> are solvable and have order n, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;177].
+
+<div class="p"><!----></div>
+In order to show that Fi<sub>23</sub> contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in Fi<sub>22</sub> of index at most 39&nbsp;545 (see Section&nbsp;<a href="#Fi22">4.5</a>)
+and
+in O<sub>8</sub><sup>+</sup>(3).S<sub>3</sub> of index at most 9&nbsp;100 (see p.&nbsp;140).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Fi23" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.10">
+4.10</a>&nbsp;&nbsp;G = Co<sub>1</sub></h3><a name="Co1">
+</a>
+
+<div class="p"><!----></div>
+The group Co<sub>1</sub> contains a unique conjugacy class of solvable subgroups
+of order n = 84&nbsp;934&nbsp;656, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Co1" );;                                           
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 84934656;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "Co2" ), 498093, 2300 ], 
+      [ CharacterTable( "3.Suz.2" ), 31672, 1782 ], 
+      [ CharacterTable( "2^11:M24" ), 5903, 24 ], 
+      [ CharacterTable( "Co3" ), 5837, 276 ], 
+      [ CharacterTable( "2^(1+8)+.O8+(2)" ), 1050, 120 ], 
+      [ CharacterTable( "U6(2).3.2" ), 649, 6 ], 
+      [ CharacterTable( "2^(2+12):(A8xS3)" ), 23, 8 ], 
+      [ CharacterTable( "2^(4+12).(S3x3S6)" ), 10, 6 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 2<sup>4+12</sup>.(S<sub>3</sub> &times;3S<sub>6</sub>) in Co<sub>1</sub>
+contain solvable subgroups S of order n and with the structure
+2<sup>4+12</sup>.(S<sub>3</sub> &times;3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub>), see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;183].
+
+<div class="p"><!----></div>
+In order to show that Co<sub>1</sub> contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in Co<sub>2</sub> of index at most 498&nbsp;093 (see Section&nbsp;<a href="#Co2">4.4</a>),
+in Suz.2 of index at most 31&nbsp;672 (see Section&nbsp;<a href="#Suz">4.2</a>),
+in M<sub>24</sub> of index at most 5&nbsp;903 (see Section&nbsp;<a href="#EASY">3</a>),
+in Co<sub>3</sub> of index at most 5&nbsp;837 (see p.&nbsp;134 or Section&nbsp;<a href="#EASY">3</a>),
+in O<sub>8</sub><sup>+</sup>(2) of index at most 1&nbsp;050 (see p.&nbsp;185),
+in U<sub>6</sub>(2).S<sub>3</sub> of index at most 649 (see p.&nbsp;115),
+and
+in A<sub>8</sub> of index at most 23 (see p.&nbsp;22).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Co1" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.11">
+4.11</a>&nbsp;&nbsp;G = J<sub>4</sub></h3><a name="J4">
+</a>
+
+<div class="p"><!----></div>
+The group J<sub>4</sub> contains a unique conjugacy class of solvable subgroups
+of order 28&nbsp;311&nbsp;552, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "J4" );; 
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 28311552;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );
+    [ [ CharacterTable( "mx1j4" ), 17710, 24 ], 
+      [ CharacterTable( "c2aj4" ), 770, 22 ], 
+      [ CharacterTable( "2^10:L5(2)" ), 361, 31 ], 
+      [ CharacterTable( "J4M4" ), 23, 5 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 2<sup>11</sup>:M<sub>24</sub> in J<sub>4</sub> 
+contain solvable subgroups S of order n and with the structure
+2<sup>11</sup>:2<sup>6</sup>:3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub>, see Section&nbsp;<a href="#EASY">3</a> and&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;190].
+
+<div class="p"><!----></div>
+(The subgroups in the first four classes of maximal subgroups of J<sub>4</sub>
+have the structures 2<sup>11</sup>:M<sub>24</sub>, 2<sup>1+12</sup><sub>+</sub>.3M<sub>22</sub>:2,
+2<sup>10</sup>:L<sub>5</sub>(2), and 2<sup>3+12</sup>.(S<sub>5</sub> &times;L<sub>3</sub>(2)),
+in this order.)
+
+<div class="p"><!----></div>
+The subgroups S are contained also in the maximal subgroups of the type
+2<sup>1+12</sup><sub>+</sub>.3M<sub>22</sub>:2;
+note that these subgroups are described
+as normalizers of elements in the J<sub>4</sub>-class <tt>2A</tt>,
+and S normalizes an elementary abelian group of order 2<sup>11</sup>
+containing an S-class of length 1&nbsp;771 that is contained in the
+J<sub>4</sub>-class <tt>2A</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; s:= info[1][1];
+    CharacterTable( "mx1j4" )
+    gap&#62; cls:= SizesConjugacyClasses( s );;
+    gap&#62; nsg:= Filtered( ClassPositionsOfNormalSubgroups( s ),
+    &#62;                    x -&#62; Sum( cls{ x } ) = 2^11 );
+    [ [ 1, 2, 3 ] ]
+    gap&#62; cls{ nsg[1] };
+    [ 1, 276, 1771 ]
+    gap&#62; GetFusionMap( s, t ){ nsg[1] };
+    [ 1, 3, 2 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The stabilizers of these involutions in 2<sup>11</sup>:M<sub>24</sub> have index 1&nbsp;771,
+they have the structure 2<sup>11</sup>:2<sup>6</sup>:3.S<sub>6</sub>,
+and they are contained in 2<sup>1+12</sup><sub>+</sub>.3M<sub>22</sub>:2 type subgroups;
+so also S, which has index 10 in 2<sup>11</sup>:2<sup>6</sup>:3.S<sub>6</sub>,
+is contained in 2<sup>1+12</sup><sub>+</sub>.3M<sub>22</sub>:2.
+(The corresponding subgroups of M<sub>22</sub>:2 are of course the solvable groups
+of maximal order described in Section&nbsp;<a href="#EASY">3</a>.)
+
+<div class="p"><!----></div>
+In order to show that G contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in L<sub>5</sub>(2) of index at most 361 (see p.&nbsp;70)
+and
+in S<sub>5</sub> &times;L<sub>3</sub>(2) of index at most 23 (see pp.&nbsp;2, 3).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "J4" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.12">
+4.12</a>&nbsp;&nbsp;G = Fi<sub>24</sub><sup>&#8242;</sup></h3><a name="F3+">
+</a>
+
+<div class="p"><!----></div>
+The group Fi<sub>24</sub><sup>&#8242;</sup> contains a unique conjugacy class of solvable
+subgroups
+of order 29&nbsp;386&nbsp;561&nbsp;536, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; t:= CharacterTable( "Fi24'" );;
+    gap&#62; mx:= List( Maxes( t ), CharacterTable );;
+    gap&#62; n:= 29386561536;;
+    gap&#62; info:= List( mx, x -&#62; SolvableSubgroupInfoFromCharacterTable( x, n ) );;
+    gap&#62; info:= Filtered( info, IsList );                                        
+    [ [ CharacterTable( "Fi23" ), 139161244, 31671 ], 
+      [ CharacterTable( "2.Fi22.2" ), 8787, 3510 ], 
+      [ CharacterTable( "(3xO8+(3):3):2" ), 3033, 6 ], 
+      [ CharacterTable( "O10-(2)" ), 851, 495 ], 
+      [ CharacterTable( "3^(1+10):U5(2):2" ), 165, 165 ], 
+      [ CharacterTable( "2^2.U6(2).3.2" ), 7, 6 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 3<sup>1+10</sup><sub>+</sub>:U5(2):2 in
+Fi<sub>24</sub><sup>&#8242;</sup> 
+contain solvable subgroups S of order n and with the structure
+3<sup>1+10</sup><sub>+</sub>:2<sup>1+6</sup><sub>&#8722;</sub>:3<sup>1+2</sup><sub>+</sub>:2S<sub>4</sub>, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;73, p.&nbsp;207].
+
+<div class="p"><!----></div>
+In order to show that G contains no other solvable subgroups of order
+larger than or equal to &#124;S&#124;,
+we check that there are no solvable subgroups
+in Fi<sub>23</sub> of order at least n (see Section&nbsp;<a href="#Fi23">4.9</a>),
+in Fi<sub>22</sub>.2 of order at least n (see Section&nbsp;<a href="#Fi22">4.5</a>),
+in O<sub>8</sub><sup>+</sup>(3).S<sub>3</sub> of index at most 3&nbsp;033 (see p.&nbsp;140),
+in O<sub>10</sub><sup>&#8722;</sup>(2) of index at most 851 (see p.&nbsp;147),
+and
+in U<sub>6</sub>(2).S<sub>3</sub> of index at most 7 (see p.&nbsp;115).
+
+<div class="p"><!----></div>
+The group S extends to a group of order &#124;S.2&#124;
+in the automorphism group Fi<sub>24</sub>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "Fi24'" ):= n;;
+    gap&#62; MaxSolv.( "Fi24'.2" ):= 2 * n;;
+
+</pre>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.13">
+4.13</a>&nbsp;&nbsp;G = B</h3><a name="B">
+</a>
+
+<div class="p"><!----></div>
+The group B contains a unique conjugacy class of solvable subgroups
+of order n = 29&nbsp;686&nbsp;813&nbsp;949&nbsp;952, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 2<sup>2+10+20</sup>(M<sub>22</sub>:2 &times;S<sub>3</sub>)
+in B 
+contain solvable subgroups S of order n and with the structure
+2<sup>2+10+20</sup>(2<sup>4</sup>:3<sup>2</sup>:D<sub>8</sub> &times;S<sub>3</sub>),
+see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;217] and Section&nbsp;<a href="#EASY">3</a>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; n:= 29686813949952;;
+    gap&#62; n = 2^(2+10+20) * 2^4 * 3^2 * 8 * 6;
+    true
+    gap&#62; n = 2^(2+10+20) * MaxSolv.( "M22.2" ) * 6;
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+By&nbsp;[<a href="#Wil99" name="CITEWil99">Wil99</a>,Table&nbsp;1],
+the only maximal subgroups of B of order bigger than &#124;S&#124; have
+the following structures.
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2.<sup>2</sup>E<sub>6</sub>(2).2 </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>1+22</sup>.Co<sub>2</sub> </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+Fi<sub>23</sub> </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>9+16</sup>S<sub>8</sub>(2) </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+Th </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+(2<sup>2</sup> &times;F<sub>4</sub>(2)):2 </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>2+10+20</sup>(M<sub>22</sub>:2 &times;S<sub>3</sub>) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>5+5+10+10</sup>L<sub>5</sub>(2) </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+S<sub>3</sub> &times;Fi<sub>22</sub>:2 </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>[35]</sup>(S<sub>5</sub> &times;L<sub>3</sub>(2)) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+HN:2 </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+O<sub>8</sub><sup>+</sup>(3):S<sub>4</sub> </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+</td></tr></table>
+</td></tr></table>
+
+
+
+<div class="p"><!----></div>
+(The character tables of the maximal subgroups of B are meanwhile
+available in <font face="helvetica">GAP</font>.
+Note that we cannot apply the function 
+<tt>SolvableSubgroupInfoFromCharacterTable</tt> to these character tables
+because some indices are too large for forming ranges.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; b:= CharacterTable( "B" );;
+    gap&#62; mx:= List( Maxes( b ), CharacterTable );;
+    gap&#62; Filtered( mx, x -&#62; Size( x ) &#62;= n );
+    [ CharacterTable( "2.2E6(2).2" ), CharacterTable( "2^(1+22).Co2" ), 
+      CharacterTable( "Fi23" ), CharacterTable( "2^(9+16).S8(2)" ), 
+      CharacterTable( "Th" ), CharacterTable( "(2^2xF4(2)):2" ), 
+      CharacterTable( "2^(2+10+20).(M22.2xS3)" ), CharacterTable( "[2^30].L5(2)" )
+        , CharacterTable( "S3xFi22.2" ), CharacterTable( "[2^35].(S5xL3(2))" ), 
+      CharacterTable( "HN.2" ), CharacterTable( "O8+(3).S4" ) ]
+
+</pre>
+
+<div class="p"><!----></div>
+For the subgroups 2<sup>1+22</sup>.Co<sub>2</sub>, Fi<sub>23</sub>, Th, S<sub>3</sub> &times;Fi<sub>22</sub>:2,
+and HN:2,
+the solvable subgroups of maximal order are known from the previous sections
+or can be derived from known values, and are smaller than n.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; List( [ 2^(1+22) * MaxSolv.( "Co2" ),
+    &#62;            MaxSolv.( "Fi23" ),
+    &#62;            MaxSolv.( "Th" ),
+    &#62;            6 * MaxSolv.( "Fi22.2" ),
+    &#62;            MaxSolv.( "HN.2" ) ], i -&#62; Int( i / n ) );
+    [ 0, 0, 0, 0, 0 ]
+
+</pre>
+
+<div class="p"><!----></div>
+If one of the remaining maximal groups U from the above list
+has a solvable subgroup of order at least n
+then the index of this subgroup in U is bounded as follows.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; List( [ Size( CharacterTable( "2.2E6(2).2" ) ),
+    &#62;            2^(9+16) * Size( CharacterTable( "S8(2)" ) ),
+    &#62;            2^3 * Size( CharacterTable( "F4(2)" ) ),
+    &#62;            2^(2+10+20) * Size( CharacterTable( "M22.2" ) ) * 6,
+    &#62;            2^30 * Size( CharacterTable( "L5(2)" ) ),
+    &#62;            2^35 * Factorial(5) * Size( CharacterTable( "L3(2)" ) ),
+    &#62;            Size( CharacterTable( "O8+(3)" ) ) * 24 ],
+    &#62;          i -&#62; Int( i / n ) );
+    [ 10311982931, 53550, 892, 770, 361, 23, 4 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The group O<sub>8</sub><sup>+</sup>(3):S<sub>4</sub> is nonsolvable, and its order is less than 5 n,
+thus its solvable subgroups have orders less than n.
+
+<div class="p"><!----></div>
+The largest solvable subgroup of S<sub>5</sub> &times;L<sub>3</sub>(2) has index 35,
+thus the solvable subgroups of 2<sup>[35]</sup>(S<sub>5</sub> &times;L<sub>3</sub>(2)) have orders
+less than n.
+
+<div class="p"><!----></div>
+The groups of type 2<sup>5+5+10+10</sup>L<sub>5</sub>(2) cannot contain solvable subgroups
+of order at least n because L<sub>5</sub>(2) has no solvable subgroup of index
+up to 361 -such a subgroup would be contained in 2<sup>4</sup>:L<sub>4</sub>(2),
+of index at most &#63728;361/31 &#63739; =  11 (see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;70]),
+and L<sub>4</sub>(2)  &#8773; A<sub>8</sub> does not have such subgroups (see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;22]).
+
+<div class="p"><!----></div>
+The largest proper subgroup of F<sub>4</sub>(2) has index 69&nbsp;615
+(see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;170]), which excludes solvable subgroups of order
+at least n in (2<sup>2</sup> &times;F<sub>4</sub>(2)):2.
+
+<div class="p"><!----></div>
+Ruling out the group 2.<sup>2</sup>E<sub>6</sub>(2).2 is more involved.
+We consider the list of maximal subgroups of <sup>2</sup>E<sub>6</sub>(2)
+in&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;191] (which is complete, see&nbsp;[<a href="#BN95" name="CITEBN95">BN95</a>]),
+and compute the maximal index of a group of order n/4;
+the possible subgroups of <sup>2</sup>E<sub>6</sub>(2) to consider are the following
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>1+20</sup>:U<sub>6</sub>(2) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>8+16</sup>:O<sub>8</sub><sup>&#8722;</sup>(2) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+F<sub>4</sub>(2) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>2</sup>.2<sup>9</sup>.2<sup>18</sup>:(L<sub>3</sub>(4) &times;S<sub>3</sub>) </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+Fi<sub>22</sub> </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+O<sub>10</sub><sup>&#8722;</sup>(2) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>3</sup>.2<sup>12</sup>.2<sup>15</sup>:(S<sub>5</sub> &times;L<sub>3</sub>(2)) </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+</td></tr></table>
+</td></tr></table>
+
+
+(The order of S<sub>3</sub> &times;U<sub>6</sub>(2) is already smaller than n/4.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; List( [ 2^(1+20) * Size( CharacterTable( "U6(2)" ) ),
+    &#62;            2^(8+16) * Size( CharacterTable( "O8-(2)" ) ),
+    &#62;            Size( CharacterTable( "F4(2)" ) ),
+    &#62;            2^(2+9+18) * Size( CharacterTable( "L3(4)" ) ) * 6,
+    &#62;            Size( CharacterTable( "Fi22" ) ),
+    &#62;            Size( CharacterTable( "O10-(2)" ) ),
+    &#62;            2^(3+12+15) * 120 * Size( CharacterTable( "L3(2)" ) ),
+    &#62;            6 * Size( CharacterTable( "U6(2)" ) ) ],
+    &#62;          i -&#62; Int( i / ( n / 4 ) ) );
+    [ 2598, 446, 446, 8, 8, 3, 2, 0 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The indices of the solvable groups of maximal orders in the groups
+U<sub>6</sub>(2), O<sub>8</sub><sup>&#8722;</sup>(2), F<sub>4</sub>(2), L<sub>3</sub>(4), and Fi<sub>22</sub>
+are larger than the bounds we get for n,
+see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,pp.&nbsp;115, 89, 170, 23, 163].
+
+<div class="p"><!----></div>
+It remains to consider the subgroups of the type 2<sup>9+16</sup>S<sub>8</sub>(2).
+The group S<sub>8</sub>(2) contains maximal subgroups of the type
+2<sup>3+8</sup>:(S<sub>3</sub> &times;S<sub>6</sub>) and of index 5&nbsp;355 (see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;123]),
+which contain solvable subgroups S&#8242; of index 10.
+This yields solvable subgroups of order 2<sup>9+16+3+8</sup> &#183;6 &#183;72 = n.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; 2^(9+16+3+8) * 6 * 72 = n;
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+There are no other solvable subgroups of larger or equal order in S<sub>8</sub>(2):
+We would need solvable subgroups of index at most 446 in O<sub>8</sub><sup>&#8722;</sup>(2):2,
+393 in O<sub>8</sub><sup>+</sup>(2):2, 210 in S<sub>6</sub>(2), or 23 in A<sub>8</sub>,
+which is not the case by&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,pp.&nbsp;89, 85, 46, 22].
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; index:= Int( 2^(9+16) * Size( CharacterTable( "S8(2)" ) ) / n );
+    53550
+    gap&#62; List( [ 120, 136, 255, 2295 ], i -&#62; Int( index / i ) );
+    [ 446, 393, 210, 23 ]
+    gap&#62; MaxSolv.( "B" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+So the 2<sup>9+16</sup>S<sub>8</sub>(2) type subgroups of B yield solvable subgroups S&#8242;
+of the type 2<sup>9+16</sup>.2<sup>3+8</sup>:(S<sub>3</sub> &times;3<sup>2</sup>:D<sub>8</sub>), and of order n.
+
+<div class="p"><!----></div>
+We want to show that S&#8242; is a B-conjugate of S.
+For that, we first show the following:
+
+<div class="p"><!----></div>
+
+  <b>Lemma 1</b> <em>
+The group B contains exactly two conjugacy classes of Klein four groups
+whose involutions lie in the class <tt>2B</tt>.
+(We will call these Klein four groups <tt>2B</tt>-pure.)
+Their normalizers in B have the orders 22&nbsp;858&nbsp;846&nbsp;741&nbsp;463&nbsp;040 and
+292&nbsp;229&nbsp;574&nbsp;819&nbsp;840, respectively.
+
+<div class="p"><!----></div>
+</em>  P<font size="-2">ROOF</font>.
+Let V be a <tt>2B</tt>-pure Klein four group in B, and set N = N<sub>B</sub>(V).
+Let x  &#8712; V be an involution and set H = C<sub>B</sub>(x),
+then H is maximal in B and has the structure 2<sup>1+22</sup>.Co<sub>2</sub>.
+The index of C = C<sub>B</sub>(V) = C<sub>H</sub>(V) in N divides 6,
+and C stabilizes the central involution in H
+and another <tt>2B</tt> involution.
+The group H contains exactly four conjugacy classes of <tt>2B</tt> elements.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; h:= mx[2];
+    CharacterTable( "2^(1+22).Co2" )
+    gap&#62; pos:= Positions( GetFusionMap( h, b ), 3 );
+    [ 2, 4, 11, 20 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The B-classes of <tt>2B</tt>-pure Klein four groups arise from those of these
+classes y<sup>H</sup>  &#8834; H such that x  &#8800; y holds
+and x y is a <tt>2B</tt> element.
+We compute this subset.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; pos:= Filtered( Difference( pos, [ 2 ] ), i -&#62; ForAny( pos,
+    &#62;             j -&#62; NrPolyhedralSubgroups( h, 2, i, j ).number &lt;&#62; 0 ) );
+    [ 4, 11 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The two classes have lengths 93&nbsp;150 and 7&nbsp;286&nbsp;400,
+thus the index of C in H is one of these numbers.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; SizesConjugacyClasses( h ){ pos };
+    [ 93150, 7286400 ]
+
+</pre>
+
+<div class="p"><!----></div>
+Next we compute the number n<sub>0</sub> of <tt>2B</tt>-pure Klein four groups in B.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; nr:= NrPolyhedralSubgroups( b, 3, 3, 3 );
+    rec( number := 14399283809600746875, type := "V4" )
+    gap&#62; n0:= nr.number;;
+
+</pre>
+
+<div class="p"><!----></div>
+The B-conjugacy class of V has length
+[B:N] = [B:H] &#183;[H:C] / [N:C], where [N:C] divides 6.
+We see that [N:C] = 6 in both cases.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; cand:= List( pos, i -&#62; Size( b ) / SizesCentralizers( h )[i] / 6 );
+    [ 181758140654146875, 14217525668946600000 ]
+    gap&#62; Sum( cand ) = n0;
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+The orders of the normalizers of the two classes of
+<tt>2B</tt>-pure Klein four groups are as claimed.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; List( cand, x -&#62; Size( b ) / x );
+    [ 22858846741463040, 292229574819840 ]
+
+</pre>
+
+ <font size="+1"><font size="-2"><sup>[<u>&#175;</u>]</sup></font></font>
+
+<div class="p"><!----></div>
+The subgroup S of order n is contained in a maximal subgroup M of the
+type 2<sup>2+10+20</sup>(M<sub>22</sub>:2 &times;S<sub>3</sub>) in B.
+The group M is the normalizer of a <tt>2B</tt>-pure Klein four group in B,
+and the other class of normalizers of <tt>2B</tt>-pure Klein four groups does not
+contain subgroups of order n.
+Thus the conjugates of S are uniquely determined by &#124;S&#124; and the
+property that they normalize <tt>2B</tt>-pure Klein four groups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; m:= mx[7];
+    CharacterTable( "2^(2+10+20).(M22.2xS3)" )
+    gap&#62; Size( m );
+    22858846741463040
+    gap&#62; nsg:= ClassPositionsOfMinimalNormalSubgroups( m );
+    [ [ 1, 2 ] ]
+    gap&#62; SizesConjugacyClasses( m ){ nsg[1] };
+    [ 1, 3 ]
+    gap&#62; GetFusionMap( m, b ){ nsg[1] };
+    [ 1, 3 ]
+    gap&#62; List( cand, x -&#62; Size( b ) / ( n * x ) );
+    [ 770, 315/32 ]
+
+</pre>
+
+<div class="p"><!----></div>
+Now consider the subgroup S&#8242; of order n, which is contained in
+a maximal subgroup of the type 2<sup>9+16</sup>S<sub>8</sub>(2) in B.
+In order to prove that S&#8242; is B-conjugate to S,
+it is enough to show that S&#8242; normalizes a <tt>2B</tt>-pure Klein four group.
+
+<div class="p"><!----></div>
+The unique minimal normal subgroup V of 2<sup>9+16</sup>S<sub>8</sub>(2) has order 2<sup>8</sup>.
+Its involutions lie in the class <tt>2B</tt> of B.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; m:= mx[4];
+    CharacterTable( "2^(9+16).S8(2)" )
+    gap&#62; nsg:= ClassPositionsOfMinimalNormalSubgroups( m );
+    [ [ 1, 2 ] ]
+    gap&#62; SizesConjugacyClasses( m ){ nsg[1] };
+    [ 1, 255 ]
+    gap&#62; GetFusionMap( m, b ){ nsg[1] };
+    [ 1, 3 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The group V is central in the normal subgroup W = 2<sup>9+16</sup>, since all
+nonidentity elements of V lie in one conjugacy class of odd length.
+As a module for S<sub>8</sub>(2), V is the unique irreducible eight-dimensional
+module in characteristic two.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; CharacterDegrees( CharacterTable( "S8(2)" ) mod 2 );
+    [ [ 1, 1 ], [ 8, 1 ], [ 16, 1 ], [ 26, 1 ], [ 48, 1 ], [ 128, 1 ], 
+      [ 160, 1 ], [ 246, 1 ], [ 416, 1 ], [ 768, 1 ], [ 784, 1 ], [ 2560, 1 ], 
+      [ 3936, 1 ], [ 4096, 1 ], [ 12544, 1 ], [ 65536, 1 ] ]
+
+</pre>
+
+<div class="p"><!----></div>
+Hence we are done if the restriction of the S<sub>8</sub>(2)-action on V to
+S&#8242;/W leaves a two-dimensional subspace of V invariant.
+In fact we show that already the restriction of the S<sub>8</sub>(2)-action on V
+to the maximal subgroups of the structure 2<sup>3+8</sup>:(S<sub>3</sub> &times;S<sub>6</sub>)
+has a two-dimensional submodule.
+
+<div class="p"><!----></div>
+These maximal subgroups have index 5&nbsp;355 in S<sub>8</sub>(2).
+The primitive permutation representation of degree 5&nbsp;355 of S<sub>8</sub>(2)
+and the irreducible eight-dimensional matrix representation of S<sub>8</sub>(2)
+over the field with two elements are available via the <font face="helvetica">GAP</font> package
+<font face="helvetica">AtlasRep</font>, see&nbsp;[<a href="#AtlasRep" name="CITEAtlasRep">WPN<sup>+</sup>11</a>].
+We compute generators for an index 5&nbsp;355 subgroup in the matrix
+group via an isomorphism to the permutation group.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; permg:= AtlasGroup( "S8(2)", NrMovedPoints, 5355 );
+    &lt;permutation group of size 47377612800 with 2 generators&#62;
+    gap&#62; matg:= AtlasGroup( "S8(2)", Dimension, 8 );
+    &lt;matrix group of size 47377612800 with 2 generators&#62;
+    gap&#62; hom:= GroupHomomorphismByImagesNC( matg, permg,
+    &#62;              GeneratorsOfGroup( matg ), GeneratorsOfGroup( permg ) );;
+    gap&#62; max:= PreImages( hom, Stabilizer( permg, 1 ) );;
+
+</pre>
+
+<div class="p"><!----></div>
+These generators define the action of the index 5&nbsp;355 subgroup of S<sub>8</sub>(2)
+on the eight-dimensional module.
+We compute the dimensions of the factors of an ascending composition series
+of this module.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; m:= GModuleByMats( GeneratorsOfGroup( max ), GF(2) );;
+    gap&#62; comp:= MTX.CompositionFactors( m );;
+    gap&#62; List( comp, r -&#62; r.dimension );
+    [ 2, 4, 2 ]
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc4.14">
+4.14</a>&nbsp;&nbsp;G = M</h3><a name="M">
+</a>
+
+<div class="p"><!----></div>
+The group M contains exactly two conjugacy classes of solvable
+subgroups
+of order n = 2&nbsp;849&nbsp;934&nbsp;139&nbsp;195&nbsp;392, and no larger solvable subgroups.
+
+<div class="p"><!----></div>
+The maximal subgroups of the structure 2<sup>1+24</sup><sub>+</sub>.Co<sub>1</sub>
+in the group M 
+contain solvable subgroups S of order n and with the structure
+2<sup>1+24</sup><sub>+</sub>.2<sup>4+12</sup>.(S<sub>3</sub> &times;3<sup>1+2</sup><sub>+</sub>:D<sub>8</sub>),
+see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;234] and Section&nbsp;<a href="#Co1">4.10</a>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; n:= 2^25 * MaxSolv.( "Co1" );
+    2849934139195392
+
+</pre>
+
+<div class="p"><!----></div>
+The solvable subgroups of maximal order in groups of the types
+2<sup>2+11+22</sup>.(M<sub>24</sub> &times;S<sub>3</sub>) and 2<sup>[39]</sup>.(L<sub>3</sub>(2) &times;3S<sub>6</sub>)
+have order n.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; 2^(2+11+22) * MaxSolv.( "M24" ) * 6 = n;    
+    true
+    gap&#62; 2^39 * 24 * 3 * 72 = n;                 
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+For inspecting the other maximal subgroups of M,
+we use the description from&nbsp;[<a href="#NW12" name="CITENW12">NW</a>].
+Currently 44_known_monster_maxes classes of maximal subgroups
+are listed there,
+and any possible other maximal subgroup of G has socle isomorphic to
+one of L<sub>2</sub>(13), Sz(8), U<sub>3</sub>(4), U<sub>3</sub>(8);
+so these maximal subgroups are isomorphic to subgroups of the automorphism
+groups of these groups
+- the maximum of these group orders is smaller than n,
+hence we may ignore these possible subgroups.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; cand:= [ "L2(13)", "Sz(8)", "U3(4)", "U3(8)" ];;
+    gap&#62; List( cand, nam -&#62; ExtensionInfoCharacterTable( 
+    &#62; CharacterTable( nam ) ) );
+    [ [ "2", "2" ], [ "2^2", "3" ], [ "", "4" ], [ "3", "(3xS3)" ] ]
+    gap&#62; ll:= List( cand, x -&#62; Size( CharacterTable( x ) ) );
+    [ 1092, 29120, 62400, 5515776 ]
+    gap&#62; 18* ll[4];
+    99283968
+    gap&#62; 2^39 * 24 * 3 * 72;
+    2849934139195392
+
+</pre>
+
+<div class="p"><!----></div>
+Thus only the following maximal subgroups of M have order bigger than &#124;S&#124;.
+
+<div class="p"><!----></div>
+
+<br clear="all" /><table border="0" width="100%"><tr><td>
+<table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center">
+ </td><td nowrap="nowrap" align="center">
+<table>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2.B </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>1+24</sup><sub>+</sub>.Co<sub>1</sub> </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+3.Fi<sub>24</sub> </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>2</sup>.<sup>2</sup>E<sub>6</sub>(2):S<sub>3</sub> </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>10+16</sup>.O<sub>10</sub><sup>+</sup>(2) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>2+11+22</sup>.(M<sub>24</sub> &times;S<sub>3</sub>) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+3<sup>1+12</sup><sub>+</sub>.2Suz.2 </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>5+10+20</sup>.(S<sub>3</sub> &times;L<sub>5</sub>(2)) </td></tr></table></td></tr>
+<tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+S<sub>3</sub> &times;Th </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+2<sup>[39]</sup>.(L<sub>3</sub>(2) &times;3S<sub>6</sub>) </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+3<sup>8</sup>.O<sub>8</sub><sup>&#8722;</sup>(3).2<sub>3</sub> </td></tr></table></td><td><table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center">
+(D<sub>10</sub> &times;HN).2 </td></tr></table></td></tr></table>
+</td><td nowrap="nowrap" align="center">
+</td></tr></table>
+</td></tr></table>
+
+
+
+<div class="p"><!----></div>
+For the subgroups 2.B, 3.Fi<sub>24</sub>, 3<sup>1+12</sup><sub>+</sub>.2Suz.2, S<sub>3</sub> &times;Th,
+and (D<sub>10</sub> &times;HN).2,
+the solvable subgroups of maximal order are smaller than n.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; List( [ 2 * MaxSolv.( "B" ),
+    &#62;            6 * MaxSolv.( "Fi24'" ),
+    &#62;            3^13 * 2 * MaxSolv.( "Suz" ) * 2,
+    &#62;            6 * MaxSolv.( "Th" ),
+    &#62;            10 * MaxSolv.( "HN" ) * 2 ], i -&#62; Int( i / n ) );
+    [ 0, 0, 0, 0, 0 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The subgroup 2<sup>2</sup>.<sup>2</sup>E<sub>6</sub>(2):S<sub>3</sub> can be excluded by the fact that
+this group is only six times larger than the subgroup 2.<sup>2</sup>E<sub>6</sub>(2):2
+of B,
+but n is 96 times larger than the maximal solvable subgroup in B.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; n / MaxSolv.( "B" );
+    96
+
+</pre>
+
+<div class="p"><!----></div>
+The group 3<sup>8</sup>.O<sub>8</sub><sup>&#8722;</sup>(3).2<sub>3</sub> can be excluded by the fact that
+a solvable subgroup of order at least n would imply the existence of
+a solvable subgroup of index at most 46 in O<sub>8</sub><sup>&#8722;</sup>(3).2<sub>3</sub>,
+which is not the case (see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;141]).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; Int( 3^8 * Size( CharacterTable( "O8-(3)" ) ) * 2 / n );
+    46
+
+</pre>
+
+<div class="p"><!----></div>
+Similarly, the existence of a solvable subgroup of order at least n
+in 2<sup>5+10+20</sup>.(S<sub>3</sub> &times;L<sub>5</sub>(2)) would imply the existence of a
+solvable subgroup of index at most 723 in L<sub>5</sub>(2)
+and in turn of a solvable subgroup of index at most 23 in L<sub>4</sub>(2),
+which is not the case (see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;70]).
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; Int( 2^(10+16) * Size( CharacterTable( "O10+(2)" ) ) / n );    
+    553350
+    gap&#62; Int( 2^(5+10+20) * 6 * Size( CharacterTable( "L5(2)" ) ) / n );  
+    723
+    gap&#62; Int( 723 / 31 );
+    23
+
+</pre>
+
+<div class="p"><!----></div>
+It remains to exclude the subgroup 2<sup>10+16</sup>.O<sub>10</sub><sup>+</sup>(2),
+which means to show that O<sub>10</sub><sup>+</sup>(2) does not contain a solvable subgroup
+of index at most 553&nbsp;350.
+If such a subgroup would exist then it would be contained in
+one of the following maximal subgroups of O<sub>10</sub><sup>+</sup>(2)
+(see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;146]):
+in S<sub>8</sub>(2) (of index at most 1&nbsp;115),
+in 2<sup>8</sup>:O<sub>8</sub><sup>+</sup>(2) (of index at most 1&nbsp;050),
+in 2<sup>10</sup>:L<sub>5</sub>(2) (of index at most 241),
+in (3 &times;O<sub>8</sub><sup>&#8722;</sup>(2)):2 (of index at most 27),
+in (2<sup>1+12</sup><sub>+</sub>:(S<sub>3</sub> &times;A<sub>8</sub>) (of index at most 23),
+or
+in 2<sup>3+12</sup>:(S<sub>3</sub> &times;S<sub>3</sub> &times;L<sub>3</sub>(2)) (of index at most 4).
+By&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,pp.&nbsp;123, 85, 70, 89, 22], this is not the case.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; index:= Int( 2^(10+16) * Size( CharacterTable( "O10+(2)" ) ) / n );    
+    553350
+    gap&#62; List( [ 496, 527, 2295, 19840, 23715, 118575 ], i -&#62; Int( index / i ) );
+    [ 1115, 1050, 241, 27, 23, 4 ]
+
+</pre>
+
+<div class="p"><!----></div>
+As a consequence, we have shown that the largest solvable subgroups
+of M have order n.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; MaxSolv.( "M" ):= n;;
+
+</pre>
+
+<div class="p"><!----></div>
+In order to prove the statement about the conjugacy of subgroups of order n
+in M, we first show the following.
+
+<div class="p"><!----></div>
+
+  <b>Lemma 2</b> <em>
+The group M contains exactly three conjugacy classes of
+<tt>2B</tt>-pure Klein four groups.
+Their normalizers in M have the orders
+50&nbsp;472&nbsp;333&nbsp;605&nbsp;150&nbsp;392&nbsp;320,
+259&nbsp;759&nbsp;622&nbsp;062&nbsp;080, and
+9&nbsp;567&nbsp;039&nbsp;651&nbsp;840, respectively.
+
+<div class="p"><!----></div>
+</em>  P<font size="-2">ROOF</font>.
+The idea is the same as for the Baby Monster group, see Section&nbsp;<a href="#B">4.13</a>.
+Let V be a <tt>2B</tt>-pure Klein four group in M, and set N = N<sub>M</sub>(V).
+Let x  &#8712; V be an involution and set H = C<sub>M</sub>(x),
+then H is maximal in M and has the structure 2<sup>1+24</sup><sub>+</sub>.Co<sub>1</sub>.
+The index of C = C<sub>M</sub>(V) = C<sub>H</sub>(V) in N divides 6,
+and C stabilizes the central involution in H
+and another <tt>2B</tt> involution.
+
+<div class="p"><!----></div>
+The group H contains exactly five conjugacy classes of <tt>2B</tt> elements,
+three of them consist of elements that generate a <tt>2B</tt>-pure Klein four group
+together with x.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; m:= CharacterTable( "M" );;
+    gap&#62; h:= CharacterTable( "2^1+24.Co1" );
+    CharacterTable( "2^1+24.Co1" )
+    gap&#62; pos:= Positions( GetFusionMap( h, m ), 3 );
+    [ 2, 4, 7, 9, 16 ]
+    gap&#62; pos:= Filtered( Difference( pos, [ 2 ] ), i -&#62; ForAny( pos,
+    &#62;             j -&#62; NrPolyhedralSubgroups( h, 2, i, j ).number &lt;&#62; 0 ) );
+    [ 4, 9, 16 ]
+
+</pre>
+
+<div class="p"><!----></div>
+The two classes have lengths 93&nbsp;150 and 7&nbsp;286&nbsp;400,
+thus the index of C in H is one of these numbers.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; SizesConjugacyClasses( h ){ pos };
+    [ 16584750, 3222483264000, 87495303168000 ]
+
+</pre>
+
+<div class="p"><!----></div>
+Next we compute the number n<sub>0</sub> of <tt>2B</tt>-pure Klein four groups in M.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; nr:= NrPolyhedralSubgroups( m, 3, 3, 3 );
+    rec( number := 87569110066985387357550925521828244921875, type := "V4" )
+    gap&#62; n0:= nr.number;;
+
+</pre>
+
+<div class="p"><!----></div>
+The M-conjugacy class of V has length
+[M:N] = [M:H] &#183;[H:C] / [N:C], where [N:C] divides 6.
+We see that [N:C] = 6 in both cases.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; cand:= List( pos, i -&#62; Size( m ) / SizesCentralizers( h )[i] / 6 );
+    [ 16009115629875684006343550944921875, 
+      3110635203347364905168577322802100000000, 
+      84458458854522392576698341855475200000000 ]
+    gap&#62; Sum( cand ) = n0;
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+The orders of the normalizers of the three classes of
+<tt>2B</tt>-pure Klein four groups are as claimed.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; List( cand, x -&#62; Size( m ) / x );
+    [ 50472333605150392320, 259759622062080, 9567039651840 ]
+
+</pre>
+
+ <font size="+1"><font size="-2"><sup>[<u>&#175;</u>]</sup></font></font>
+
+<div class="p"><!----></div>
+As we have seen above, the group M contains exactly the following
+(solvable) subgroups of order n.
+
+<div class="p"><!----></div>
+
+<ol type="1">
+<li>  One class in 2<sup>1+24</sup><sub>+</sub>.Co<sub>1</sub> type subgroups,
+<div class="p"><!----></div>
+</li>
+
+<li>
+  one class in 2<sup>2+11+22</sup>.(M<sub>24</sub> &times;S<sub>3</sub>) type subgroups, and
+<div class="p"><!----></div>
+</li>
+
+<li>
+  two classes in 2<sup>[39]</sup>.(L<sub>3</sub>(2) &times;3S<sub>6</sub>) type subgroups.
+<div class="p"><!----></div>
+</li>
+</ol>
+
+<div class="p"><!----></div>
+Note that 2<sup>[39]</sup>.(L<sub>3</sub>(2) &times;3S<sub>6</sub>) contains an elementary
+abelian normal subgroup of order eight whose involutions lie in the class
+<tt>2B</tt>, see&nbsp;[<a href="#CCN85" name="CITECCN85">CCN<sup>+</sup>85</a>,p.&nbsp;234].
+As a module for the group L<sub>3</sub>(2), this normal subgroup is irreducible,
+and the restriction of the action to the two classes of S<sub>4</sub> type subgroups
+fixes a one- and a two-dimensional subspace, respectively.
+Hence we have one class of subgroups of order n that centralize a <tt>2B</tt>
+element and one class of subgroups of order n that normalize a
+<tt>2B</tt>-pure Klein four group.
+Clearly the subgroups in the first class coincide with the subgroups
+of order n in 2<sup>1+24</sup><sub>+</sub>.Co<sub>1</sub> type subgroups.
+By the above classification of <tt>2B</tt>-pure Klein four groups in M,
+the subgroups in the second class coincide with the subgroups of order n
+in 2<sup>2+11+22</sup>.(M<sub>24</sub> &times;S<sub>3</sub>) type subgroups.
+
+<div class="p"><!----></div>
+It remains to show that the subgroups of order n do <b>not</b> stabilize
+both a <tt>2B</tt> element <b>and</b> a <tt>2B</tt>-pure Klein four group.
+We do this by direct computations with a 2<sup>2+11+22</sup>.(M<sub>24</sub> &times;S<sub>3</sub>)
+type group, which is available via the <font face="helvetica">AtlasRep</font> package,
+see&nbsp;[<a href="#AtlasRep" name="CITEAtlasRep">WPN<sup>+</sup>11</a>].
+
+<div class="p"><!----></div>
+First we fetch the group, and factor out the largest solvable normal
+subgroup, by suitable actions on blocks.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; g:= AtlasGroup( "2^(2+11+22).(M24xS3)" );
+    &lt;permutation group of size 50472333605150392320 with 2 generators&#62;
+    gap&#62; NrMovedPoints( g );
+    294912
+    gap&#62; bl:= Blocks( g, MovedPoints( g ) );;
+    gap&#62; Length( bl );
+    147456
+    gap&#62; hom1:= ActionHomomorphism( g, bl, OnSets );;
+    gap&#62; act1:= Image( hom1 );;
+    gap&#62; Size( g ) / Size( act1 );
+    8192
+    gap&#62; bl2:= Blocks( act1, MovedPoints( act1 ) );;
+    gap&#62; Length( bl2 );
+    72
+    gap&#62; hom2:= ActionHomomorphism( act1, bl2, OnSets );;
+    gap&#62; act2:= Image( hom2 );;
+    gap&#62; Size( act2 );
+    1468938240
+    gap&#62; Size( MathieuGroup( 24 ) ) * 6;
+    1468938240
+    gap&#62; bl3:= AllBlocks( act2 );;
+    gap&#62; List( bl3, Length );                                             
+    [ 24, 3 ]
+    gap&#62; bl3:= Orbit( act2, bl3[2], OnSets );;
+    gap&#62; hom3:= ActionHomomorphism( act2, bl3, OnSets );;
+    gap&#62; act3:= Image( hom3 );;
+
+</pre>
+
+<div class="p"><!----></div>
+Now we compute an isomorphism from the factor group of type M<sub>24</sub>
+to the group that belongs to <font face="helvetica">GAP</font>'s table of marks.
+Then we use the information from the table of marks to compute a
+solvable subgroup of maximal order in M<sub>24</sub> (which is 13&nbsp;824),
+and take the preimage under the isomorphism.
+Finally, we take the preimage of this group in te original group.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; tom:= TableOfMarks( "M24" );;
+    gap&#62; tomgroup:= UnderlyingGroup( tom );;
+    gap&#62; iso:= IsomorphismGroups( act3, tomgroup );;
+    gap&#62; pos:= Positions( OrdersTom( tom ), 13824 );
+    [ 1508 ]
+    gap&#62; sub:= RepresentativeTom( tom, pos[1] );;
+    gap&#62; pre:= PreImages( iso, sub );;
+    gap&#62; pre:= PreImages( hom3, pre );;
+    gap&#62; pre:= PreImages( hom2, pre );;
+    gap&#62; pre:= PreImages( hom1, pre );;
+    gap&#62; Size( pre ) = n;
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+The subgroups stabilizes a Klein four group.
+It does not stabilize a <tt>2B</tt> element because its centre is trivial.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; pciso:= IsomorphismPcGroup( pre );;
+    gap&#62; Size( Centre( Image( pciso ) ) );
+    1
+
+</pre>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc5">
+5</a>&nbsp;&nbsp;Proof of the Corollary</h2><a name="Corollary">
+</a>
+
+<div class="p"><!----></div>
+With the computations in the previous sections,
+we have collected the information that is needed to show the corollary
+stated in Section&nbsp;<a href="#result">1</a>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; Filtered( Set( RecNames( MaxSolv ) ), 
+    &#62;              x -&#62; MaxSolv.( x )^2 &#62;= Size( CharacterTable( x ) ) );
+    [ "Fi23", "J2", "J2.2", "M11", "M12", "M22.2" ]
+
+</pre>
+
+<div class="p"><!----></div>
+
+
+<h2>References</h2>
+
+<dl compact="compact">
+ <dt><a href="#CITEBN95" name="BN95">[BN95]</a></dt><dd>
+T.&nbsp;Breuer and S.&nbsp;P. Norton, <em>Improvements to the Atlas</em>,
+  p.&nbsp;297-327, vol.&nbsp;11 of London Mathematical Society Monographs.
+  New Series [<a href="#JLPW95" name="CITEJLPW95">JLPW95</a>], 1995, Appendix 2 by T. Breuer and S. Norton, Oxford
+  Science Publications. MR 1367961 (96k:20016)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITECTblLib1.2" name="CTblLib1.2">[Bre12]</a></dt><dd>
+T.&nbsp;Breuer, <em>The <font face="helvetica">GAP</font> Character Table Library, Version
+  1.2</em>, <a href="http://www.math.rwth-aachen.de/~Thomas.Breuer/ctbllib"><tt>http://www.math.rwth-aachen.de/</tt>
+<tt><tt>~</tt>Thomas.Breuer/</tt>
+<tt>ctbllib</tt></a>, May 2012, <font face="helvetica">GAP</font> package.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITECCN85" name="CCN85">[CCN<sup>+</sup>85]</a></dt><dd>
+J.&nbsp;H. Conway, R.&nbsp;T. Curtis, S.&nbsp;P. Norton, R.&nbsp;A. Parker, and R.&nbsp;A. Wilson,
+  <em>Atlas of finite groups</em>, Oxford University Press, Eynsham, 1985,
+  Maximal subgroups and ordinary characters for simple groups, With
+  computational assistance from J. G. Thackray. MR 827219 (88g:20025)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEGAP4" name="GAP4">[GAP04]</a></dt><dd>
+The GAP&nbsp;Group, <em>GAP-Groups, Algorithms, and
+  Programming, Version 4.4</em>, 2004, <a href="http://www.gap-system.org"><tt>http://www.gap-system.org</tt></a>.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEJLPW95" name="JLPW95">[JLPW95]</a></dt><dd>
+C.&nbsp;Jansen, K.&nbsp;Lux, R.&nbsp;Parker, and R.&nbsp;Wilson, <em>An atlas of Brauer
+  characters</em>, London Mathematical Society Monographs. New Series, vol.&nbsp;11, The
+  Clarendon Press Oxford University Press, New York, 1995, Appendix 2 by T.
+  Breuer and S. Norton, Oxford Science Publications. MR 1367961 (96k:20016)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEMoonshine2010" name="Moonshine2010">[LMT10]</a></dt><dd>
+J.&nbsp;Lepowsky, J.&nbsp;McKay, and M.&nbsp;P. Tuite (eds.), <em>Moonshine: the first
+  quarter century and beyond</em>, London Mathematical Society Lecture Note Series,
+  vol. 372, Cambridge, Cambridge University Press, 2010. MR 2724692
+  (2011e:17001)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITETomLib" name="TomLib">[NMP11]</a></dt><dd>
+L.&nbsp;Naughton, T.&nbsp;Merkwitz, and G.&nbsp;Pfeiffer, <em>TomLib, the <font face="helvetica">GAP</font>
+  library of tables of marks, Version 1.2.1</em>, <a href="http://schmidt.nuigalway.ie/tomlib/tomlib"><tt>http://schmidt.nuigalway.ie/</tt>
+<tt>tomlib/</tt><tt>tomlib</tt></a>, Jan 2011, GAP
+  package.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITENW12" name="NW12">[NW]</a></dt><dd>
+S.&nbsp;P. Norton and R.&nbsp;A. Wilson, <em>A correction to the 41-structure of the
+  Monster, a construction of a new maximal subgroup L<sub>2</sub>(41), and a new
+  Moonshine phenomenon</em>, <a href="http://www.maths.qmul.ac.uk/~raw/pubs_files/ML241sub.pdf"><tt>http://www.maths.qmul.ac.uk/</tt>
+<tt><tt>~</tt>raw/</tt>
+<tt>pubs files/</tt>
+<tt>ML241sub.pdf</tt></a>.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEWil99" name="Wil99">[Wil99]</a></dt><dd>
+R.&nbsp;A. Wilson, <em>The maximal subgroups of the Baby Monster. I</em>, J.
+  Algebra <b>211</b> (1999), no.&nbsp;1, 1-14. MR 1656568
+  (2000b:20016)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEWil10" name="Wil10">[Wil10]</a></dt><dd>
+<br /><table align="left" border="0"><tr><td width="50">
+<hr />
+</td></tr></table><!--hbox-->
+ , <em>New computations in the Monster</em>, in Lepowsky et&nbsp;al.
+  [<a href="#Moonshine2010" name="CITEMoonshine2010">LMT10</a>], p.&nbsp;393-403. MR 2681789 (2011i:20020)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEAtlasRep" name="AtlasRep">[WPN<sup>+</sup>11]</a></dt><dd>
+R.&nbsp;A. Wilson, R.&nbsp;A. Parker, S.&nbsp;Nickerson, J.&nbsp;N. Bray, and T.&nbsp;Breuer,
+  <em>AtlasRep, a <font face="helvetica">GAP</font> Interface to the Atlas of Group
+  Representations, Version 1.5</em>, <a href="http://www.math.rwth-aachen.de/~Thomas.Breuer/atlasrep"><tt>http://www.math.rwth-aachen.de/</tt>
+<tt><tt>~</tt>Thomas.Breuer/</tt>
+<tt>atlasrep</tt></a>, Jul 2011, Refereed <font face="helvetica">GAP</font> package.</dd>
+</dl>
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<br /><br /><hr /><small>File translated from
+T<sub><font size="-1">E</font></sub>X
+by <a href="http://hutchinson.belmont.ma.us/tth/">
+T<sub><font size="-1">T</font></sub>H</a>,
+version 3.59.<br />On 30 May 2012, 15:59.</small>
+</html>

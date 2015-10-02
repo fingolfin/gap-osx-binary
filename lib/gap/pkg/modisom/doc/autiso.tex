@@ -1,0 +1,89 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Automorphism groups and Canonical Forms}
+
+We refer to \cite{Eic07} for background on the algorithms used in this 
+Chapter. Throughout the chapter, we assume that $F$ is a finite field.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Automorphism groups}
+
+Let $T$ be a nilpotent table over $F$. The following function can be used 
+to determine the automorphism group of the algebra described by $T$. The
+automorphism group is determined as subgroup of $GL(T.dim, T.fld)$ given 
+by generators and its order. There is a variation available to determine
+the automorphism group of a modular group algebra $FG$, where $F$ is a finite
+field and $G$ is a $p$-group.
+
+\> AutGroupOfTable( T ) F 
+\> AutGroupOfRad( FG ) F 
+
+In both cases, the automorphism group is described by a record. The
+matrices in the lists $glAutos$ and $agAutos$ generate together the 
+automorphism group. The matrices in $agAutos$ generate a $p$-group.
+The entry $size$ contains the order of the automorphism group.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Canonical forms}
+
+Let $T$ be a nilpotent table. The following function can be used to determine
+the automorphism group of $T$ if the underlying field of $T$ is finite. The
+canonical form is a nilpotent table which is unique for the isomorphism type
+of the algebra defined by $T$. Again there a variation available for modular
+group algebras. 
+
+\> CanonicalFormOfTable( T ) F 
+\> CanonicalFormOfRad( FG ) F 
+
+The automorphism group of $T$ is determined as a side-product of computing
+the canonical form. The following functions can be used to return both.
+
+\> CanoFormWithAutGroupOfTable( T ) F
+\> CanoFormWithAutGroupOfRad( FG ) F
+
+In both cases, these functions return a record with entries $cano$ and
+$auto$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Example of canonical form computation}
+
+We compute the automorphism group and a canonical form for the 
+modular group algebra of the dihedral group of order 8.
+
+\beginexample
+gap> A := GroupRing(GF(2), SmallGroup(8,3));;
+gap> T := TableByWeightedBasisOfRad(A);;
+gap> C := CanoFormWithAutGroupOfTable(T);;
+
+# check that the canonical form is not equal to T
+gap> CompareTables(C.cano, T);
+false
+
+# the order of the automorphism group
+gap> C.auto.size;
+512
+
+# the entries of the canonical table as far as they are bounded
+gap> C.cano.tab;
+[ [ <a GF2 vector of length 7>, <a GF2 vector of length 7>, 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] ], 
+  [ <a GF2 vector of length 7>, <a GF2 vector of length 7>, 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] ], 
+  [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+      [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ] ]
+\endexample

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (toric) - Chapter 1: Introduction</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+</head>
+<body>
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap0.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap2.html">Next Chapter</a>&nbsp;  </div>
+
+<p><a id="X7DFB63A97E67C0A1" name="X7DFB63A97E67C0A1"></a></p>
+<div class="ChapSects"><a href="chap1.html#X7DFB63A97E67C0A1">1 <span class="Heading">Introduction</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap1.html#X7A77DB9F7E392A98">1.1 <span class="Heading">Introduction to the <strong class="pkg">toric</strong> package</span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap1.html#X7C4637B9828E445B">1.2 <span class="Heading">Introduction to constructing toric varieties</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7AF8D94A7E56C049">1.2-1 <span class="Heading">Generalities</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7A87B1F97D958BA9">1.2-2 <span class="Heading">Basic combinatorial geometry constructions</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X857707BA7D2336A0">1.2-3 <span class="Heading">Basic affine toric variety constructions</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X86627F4181E72808">1.2-4 <span class="Heading">Riemann-Roch spaces and related constructions</span></a>
+</span>
+</div></div>
+</div>
+
+<h3>1 <span class="Heading">Introduction</span></h3>
+
+<p><a id="X7A77DB9F7E392A98" name="X7A77DB9F7E392A98"></a></p>
+
+<h4>1.1 <span class="Heading">Introduction to the <strong class="pkg">toric</strong> package</span></h4>
+
+<p>This manual describes the <strong class="pkg">toric</strong> package for working with toric varieties in <strong class="pkg">GAP</strong>. Toric varieties can be dealt with more easily than general varieties since often times questions about a toric variety can be reformulated in terms of combinatorial geometry. Some coding theory commands related to toric varieties are contained in the error-correcting codes <strong class="pkg">GUAVA</strong> package (for example, the command <code class="code">ToricCode</code>). We refer to the <strong class="pkg">GUAVA</strong> manual <a href="chapBib.html#biBGua05">[CM09]</a> and the expository paper <a href="chapBib.html#biBJV02">[JV02]</a> for more details.</p>
+
+<p>The <strong class="pkg">toric</strong> package also contains several commands unrelated to toric varieties (mostly for list manipulations). These will not be described in this documention but they are briefly documented in the <code class="code">lib/util.gd</code> file.</p>
+
+<p><strong class="pkg">toric</strong> is implemented in the <strong class="pkg">GAP</strong> language, and runs on any system supporting <strong class="pkg">GAP</strong>4.3 and above. The <strong class="pkg">toric</strong> package is loaded with the command</p>
+
+
+<pre class="normal">
+ gap&gt; LoadPackage( "toric" ); 
+</pre>
+
+<p>Please send bug reports, suggestions and other comments about <strong class="pkg">toric</strong> to <span class="URL"><a href="mailto:support@gap-system.org">support@gap-system.org</a></span>.</p>
+
+<p><a id="X7C4637B9828E445B" name="X7C4637B9828E445B"></a></p>
+
+<h4>1.2 <span class="Heading">Introduction to constructing toric varieties</span></h4>
+
+<p>Rather than sketch the theory of toric varieties, we refer to <a href="chapBib.html#biBJV02">[JV02]</a> and <a href="chapBib.html#biBF93">[Ful93]</a> for details. However, we briefly describe some terminology and notation.</p>
+
+<p><a id="X7AF8D94A7E56C049" name="X7AF8D94A7E56C049"></a></p>
+
+<h5>1.2-1 <span class="Heading">Generalities</span></h5>
+
+<p>Let F denote a field and R=F [x_1,...,x_n] be a ring in n variables. A <strong class="button">binomial equation</strong> in R is one of the form</p>
+
+<p class="pcenter">
+x_1^{k_1}...x_n^{k_n}=x_1^{\ell_1}...x_n^{\ell_n},
+</p>
+
+<p>where k_i &gt;= 0, ell_j &gt;= 0 are integers. A binomial variety is a subvariety of affine n-space A_F^n defined by a finite set of binomial equations (such a variety need not be normal). A typical ``toric variety'' is binomial, though they will be introduced via an <em>a priori</em> independent construction. The basic idea of the construction is to replace each such binomial equation as above by a relation in a semigroup contained in a lattice and replace R by the ``group algebra'' of this semigroup. By the way, a toric variety is always normal (see for example, <a href="chapBib.html#biBF93">[Ful93]</a>, page 29).</p>
+
+<p><a id="X7A87B1F97D958BA9" name="X7A87B1F97D958BA9"></a></p>
+
+<h5>1.2-2 <span class="Heading">Basic combinatorial geometry constructions</span></h5>
+
+<p>Let Q denote the field of rational numbers and Z denote the set of integers. Let n&gt;1 denote an integer.</p>
+
+<p>Let $V=Q^n$ having basis f_1=(1,0,...,0), ..., f_n=(0,...,0,1). Let L_0=Z^nsubset V be the standard lattice in V. We identify V and L_0otimes_Z Q. We use &lt; , &gt; to denote the (standard) inner product on V. Let</p>
+
+<p class="pcenter">
+L_0^*={\rm Hom}(L_0,Z)=\{ v\in V\ |\ \langle v,w \rangle \in Z,
+\ \forall w\in L_0\}
+</p>
+
+<p>denote the <strong class="button">dual lattice</strong>, so (fixing the standard basis e_1^*,...,e_n^* dual to the f_1,...,f_n) L_0^* may be identified with Z^n.</p>
+
+<p>A <strong class="button">cone</strong> in V is a set sigma of the form</p>
+
+<p class="pcenter">
+\sigma=\{a_1v_1+...+a_mv_m\ |\ a_i\geq 0\}\subset V,
+</p>
+
+<p>where v_1,...,v_m in V is a given collection of vectors, called (semigroup) <strong class="button">generators</strong> of sigma. A <strong class="button">rational cone</strong> is one where v_1,...,v_m in L_0. A <strong class="button">strongly convex</strong> cone is one which contains no lines through the origin.</p>
+
+<p><em> By abuse of terminology, from now on a <strong class="button">cone</strong> of L_0 is a strongly convex rational cone. </em></p>
+
+<p>A <strong class="button">face</strong> of a cone sigma is either sigma itself or a subset of the form Hcap sigma, where H is a codimension one subspace of V which intersects the cone non-trivially and such that the cone is contained in exactly one of the two half-spaces determined by H. A <strong class="button">ray</strong> (or edge) of a cone is a one-dimensional face. Typically, cones are represented in <strong class="pkg">toric</strong> by the list of vectors defining their rays. The <strong class="button">dimension</strong> of a cone is the dimension of the vector space it spans. The <strong class="pkg">toric</strong> package can test if a given vector is in a given cone (see <code class="code">InsideCone</code>).</p>
+
+<p>If sigma is a cone then the <strong class="button">dual cone</strong> is defined by</p>
+
+<p class="pcenter">
+\sigma^* =\{w \in L_0^*\otimes Q
+\ |\ \langle v,w \rangle \geq 0,\ \forall v\in \sigma\}.
+</p>
+
+<p>The <strong class="pkg">toric</strong> package can test if a vector is in the dual of a given cone (see <code class="code">InDualCone</code>).</p>
+
+<p>Associate to the dual cone sigma^* is the semigroup</p>
+
+<p class="pcenter">
+S_\sigma =\sigma^*\cap L_0^*
+=\{w\in L_0^*
+\ |\ \langle v,w\rangle \geq 0,\ 
+\forall v\in \sigma\}.
+</p>
+
+<p>Though L_0^* has $n$ generators <em>as a lattice</em>, typically S_sigma will have more than n generators <em>as a semigroup</em>. The <strong class="pkg">toric</strong> package can compute a minimal list of semigroup generators of S_sigma (see <code class="code">DualSemigroupGenerators</code>).</p>
+
+<p>A fan is a collection of cones which ``fit together'' well. A <strong class="button">fan</strong> in L_0 is a set Delta={sigma } of rational strongly convex cones in V= L_0 otimes Q such that</p>
+
+
+<ul>
+<li><p>if sigma in Delta and tau subset sigma is a face of sigma then tau in Delta,</p>
+
+</li>
+<li><p>if sigma_1, sigma_2 in Delta then the intersection sigma_1 cap sigma_2 is a face of both sigma_1 and sigma_2 (and hence belongs to Delta).</p>
+
+</li>
+</ul>
+<p>In particular, the face of a cone in a fan is a cone is the fan.</p>
+
+<p>If V is the (set-theoretic) union of the cones in Delta then we call the fan <strong class="button">complete</strong>. We shall assume that all fans are finite. A fan is determined by its list of maximal cones.</p>
+
+<p><em>Notation</em>: A fan Delta is represented in <strong class="pkg">toric</strong> as a set of maximal cones. For example, if Delta is the fan with maximal cones sigma_1=Q_+* f_1+Q_+* (-f_1+f_2), sigma_2=Q_+* (-f_1+f_2)+Q_+* (-f_1-f_2), sigma_3=Q_+* (-f_1-f_2)+Q_+* f_1, then Delta is represented by [[[1,0],[-1,1]],[[-1,1],[-1,-1]],[[-1,-1],[1,0]]].</p>
+
+<p>The <strong class="pkg">toric</strong> package can compute all cones in a fan of a given dimension (see <code class="code">ConesOfFan</code>). Moreover, <strong class="pkg">toric</strong> can compute the set of all normal vectors to the faces (i.e., hyperplanes) of a cone (see <code class="code">Faces</code>).</p>
+
+<p>The <strong class="button">star</strong> of a cone sigma in a fan Delta is the set Delta_sigma of cones in Delta containing sigma as a face. The <strong class="pkg">toric</strong> package can compute stars (see <code class="code">ToricStar</code>).</p>
+
+<p><a id="X857707BA7D2336A0" name="X857707BA7D2336A0"></a></p>
+
+<h5>1.2-3 <span class="Heading">Basic affine toric variety constructions</span></h5>
+
+<p>Let</p>
+
+<p class="pcenter">
+R_\sigma = F [S_\sigma]
+</p>
+
+<p>denote the ``group algebra'' of this semigroup. It is a finitely generated commutative F-algebra. It is in fact integrally closed (<a href="chapBib.html#biBF93">[Ful93]</a>, page 29). We may interprete R_sigma as a subring of R=F [x_1,...,x_n] as follows: First, identify each e_i^* with the variable x_i. If S_sigma is generated as a semigroup by vectors of the form ell_1 e_1^*+...+ell_n e_n^*, where ell_i is an integer, then its image in R is generated by monomials of the form x_1^ell_1dots x_n^ell_n. The <strong class="pkg">toric</strong> package can compute these generating monomials (see <code class="code">EmbeddingAffineToricVariety</code>). See Lemma 2.14 in <a href="chapBib.html#biBJV02">[JV02]</a> for more details. This embedding can also be used to resolve singularities - see section 5 of <a href="chapBib.html#biBJV02">[JV02]</a> for more details.</p>
+
+<p>Let</p>
+
+<p class="pcenter">
+U_\sigma={\rm Spec}\ R_\sigma.
+</p>
+
+<p>This defines an <strong class="button">affine toric variety</strong> (associated to sigma). It is known that the coordinate ring R_sigma of the affine toric variety U_sigma has the form R_sigma = F[x_1,...,x_n]/J, where J is an ideal. The <strong class="pkg">toric</strong> package can compute generators of this ideal (see <code class="code">IdealAffineToricVariety</code>).</p>
+
+<p>Roughly speaking, the toric variety X(Delta) associated to the fan Delta is given by a collection of affine pieces $U_{\sigma_1},U_{\sigma_2},\dots,U_{\sigma_d}$ which ``glue'' together (where Delta = {sigma_i}). The affine pieces are given by the zero sets of polynomial equations in some affine spaces and the gluings are given by maps phi_i,j : U_sigma_i -&gt; U_sigma_j which are defined by ratios of polynomials on open subsets of the $U_{\sigma_i}$. The <strong class="pkg">toric</strong> package does <em>not</em> compute these gluings or work directly with these (non-affine) varieties X(Delta).</p>
+
+<p>A cone sigma subset V is said to be <strong class="button">nonsingular</strong> if it is generated by part of a basis for the lattice L_0. A fan Delta of cones is said to be <strong class="button">nonsingular</strong> if all its cones are nonsingular. It is known that U_sigma is nonsingular if and only if sigma is nonsingular (Proposition 2.1 in <a href="chapBib.html#biBF93">[Ful93]</a>).</p>
+
+<p><strong class="button">Example:</strong> In three dimensions, consider the cones sigma_epsilon_1,epsilon_2,epsilon_3,i,j generated by (epsilon_1* 1,epsilon_2* 1,epsilon_3* 1) and the standard basis vectors f_i,f_j, where epsilon_i=pm 1 and 1&lt;= inot= j&lt;= 3. There are 8 cones per octant, for a total of 64 cones. Let Delta denote the fan in V=Q^3 determined by these maximal cones. The toric variety X(Delta) is nonsingular.</p>
+
+<p><a id="X86627F4181E72808" name="X86627F4181E72808"></a></p>
+
+<h5>1.2-4 <span class="Heading">Riemann-Roch spaces and related constructions</span></h5>
+
+<p>Although the <strong class="pkg">toric</strong> package does not work directly with the toric varieties X(Delta), it can compute objects associated with it. For example, it can compute the Euler characteristic (see <code class="code">EulerCharacteristic</code>), Betti numbers (see <code class="code">BettiNumberToric</code>), and the number of GF(q)-rational points (see <code class="code">CardinalityOfToricVariety</code>) of X(Delta), <em> provided Delta is nonsingular.</em></p>
+
+<p>For an algebraic variety X the group of <strong class="button">Weil divisors</strong> on X is the abelian group Div(X) generated (additively) by the irreducible subvarieties of X of codimension 1. For a toric variety X(Delta) with dense open torus T, a Weil divisor D is <strong class="button">T-invariant</strong> if D=T* D. The group of T-invariant Weil divisors is denoted TDiv(X). This is finitely generated by an explicitly given finite set of divisors {D_1,...,D_r} which correspond naturally to certain cones in Delta (see <a href="chapBib.html#biBF93">[Ful93]</a> for details). In particular, we may represent such a divisor D in TDiv(X) by an k-tuple (d_1,...,d_k) of integers.</p>
+
+<p>Let Delta denote a fan in V=Q^n with rays (or edges) tau_i, 1&lt;= i&lt;= k, and let v_i denote the first lattice point on tau_i. Associated to the T-invariant Weil divisor D=d_1D_1+...+d_kD_k, is the <strong class="button">polytope</strong></p>
+
+<p class="pcenter">
+P_D = \{ x=(x_1,...,x_n)\ |\ \langle x,v_i \rangle \geq -d_i, 
+\ \forall 1 \leq i \leq k\}.
+</p>
+
+<p>The <strong class="pkg">toric</strong> package can compute P_D (see <code class="code">DivisorPolytope</code>), as well as the set of all lattice points contained in this polytope (see <code class="code">DivisorPolytopeLatticePoints</code>). Also associated to the T-invariant Weil divisor D=d_1D_1+...+d_kD_k, is the Riemann-Roch space, L(D). This is a space of functions on X(Delta) whose zeros and poles are ``controlled'' by D (for a more precise definition, see <a href="chapBib.html#biBF93">[Ful93]</a>). The <strong class="pkg">toric</strong> package can compute a basis for L(D) (see <code class="code">RiemannRochBasis</code>), <em> provided Delta is complete and nonsingular.</em></p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap0.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap2.html">Next Chapter</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

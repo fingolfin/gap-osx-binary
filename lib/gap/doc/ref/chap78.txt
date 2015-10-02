@@ -1,0 +1,348 @@
+  
+  [1X78 [33X[0;0YMethod Selection[133X[101X
+  
+  [33X[0;0YThis chapter explains how [5XGAP[105X decides which function to call for which types
+  of  objects.  It  assumes  that  you  have  read  the chapters about objects
+  (Chapter [14X12[114X) and types (Chapter [14X13[114X).[133X
+  
+  [33X[0;0YAn  [13Xoperation[113X is a special [5XGAP[105X function that bundles a set of functions, its
+  [13Xmethods[113X.[133X
+  
+  [33X[0;0YAll  methods  of  an  operation  compute the same result. But each method is
+  installed for specific types of arguments.[133X
+  
+  [33X[0;0YIf  an  operation is called with a tuple of arguments, one of the applicable
+  methods is selected and called.[133X
+  
+  [33X[0;0YSpecial cases of methods are partial methods, immediate methods, and logical
+  implications.[133X
+  
+  
+  [1X78.1 [33X[0;0YOperations and Methods[133X[101X
+  
+  [33X[0;0YOperations are functions in the category [2XIsOperation[102X ([14X5.4-2[114X).[133X
+  
+  [33X[0;0YSo  on  the  one  hand,  [13Xoperations[113X  are [5XGAP[105X functions, that is, they can be
+  applied to arguments and return a result or cause a side-effect.[133X
+  
+  [33X[0;0YOn  the other hand, operations are more. Namely, an operation corresponds to
+  a set of [5XGAP[105X functions, called the [13Xmethods[113X of the operation.[133X
+  
+  [33X[0;0YEach  call  of an operation causes a suitable method to be selected and then
+  called.  The choice of which method to select is made according to the types
+  of  the  arguments,  the  underlying mechanism is described in the following
+  sections.[133X
+  
+  [33X[0;0YExamples  of  operations  are  the  binary  infix  operators  [10X=[110X, [10X+[110X etc., and
+  [2XPrintObj[102X  ([14X6.3-5[114X) is the operation that is called for each argument of [2XPrint[102X
+  ([14X6.3-4[114X).[133X
+  
+  [33X[0;0YAlso  all  attributes  and  properties  are operations. Each attribute has a
+  special  method  which  is  called if the attribute value is already stored;
+  this method of course simply returns this value.[133X
+  
+  [33X[0;0YThe setter of an attribute is called automatically if an attribute value has
+  been  computed.  Attribute  setters are operations, too. They have a default
+  method that ignores the request to store the value. Depending on the type of
+  the  object,  there  may  be another method to store the value in a suitable
+  way, and then set the attribute tester for the object to [9Xtrue[109X.[133X
+  
+  
+  [1X78.2 [33X[0;0YMethod Installation[133X[101X
+  
+  [33X[0;0YIn  order  to  describe what it means to select a method of an operation, we
+  must describe how the methods are connected to their operations.[133X
+  
+  [33X[0;0YFor attributes and properties there is [2XInstallImmediateMethod[102X ([14X78.6-1[114X).[133X
+  
+  [33X[0;0YFor   declaring  that  a  filter  is  implied  by  other  filters  there  is
+  [2XInstallTrueMethod[102X ([14X78.7-1[114X).[133X
+  
+  [1X78.2-1 InstallMethod[101X
+  
+  [29X[2XInstallMethod[102X( [3Xopr[103X[, [3Xinfo[103X][, [3Xfamp[103X], [3Xargs-filts[103X[, [3Xval[103X], [3Xmethod[103X ) [32X function
+  
+  [33X[0;0Yinstalls  a  function method [3Xmethod[103X for the operation [3Xopr[103X; [3Xargs-filts[103X should
+  be  a  list of requirements for the arguments, each entry being a filter; if
+  supplied  [3Xinfo[103X  should  be a short but informative string that describes for
+  what  situation  the  method  is  installed, [3Xfamp[103X should be a function to be
+  applied  to the families of the arguments, and [3Xval[103X should be an integer that
+  measures the priority of the method.[133X
+  
+  [33X[0;0YThe  default  values  for  [3Xinfo[103X,  [3Xfamp[103X,  and  [3Xval[103X  are the empty string, the
+  function [2XReturnTrue[102X ([14X5.3-1[114X), and the integer zero, respectively.[133X
+  
+  [33X[0;0YThe exact meaning of the arguments [3Xfamp[103X, [3Xargs-filts[103X, and [3Xval[103X is explained in
+  Section [14X78.3[114X.[133X
+  
+  [33X[0;0Y[3Xopr[103X  expects its methods to require certain filters for their arguments. For
+  example,  the  argument of a method for the operation [2XZero[102X ([14X31.10-3[114X) must be
+  in  the  category [2XIsAdditiveElementWithZero[102X ([14X31.14-5[114X). It is not possible to
+  use [2XInstallMethod[102X to install a method for which the entries of [3Xargs-filts[103X do
+  not  imply the respective requirements of the operation [3Xopr[103X. If one wants to
+  override  this  restriction,  one  has  to  use  [2XInstallOtherMethod[102X ([14X78.2-2[114X)
+  instead.[133X
+  
+  [1X78.2-2 InstallOtherMethod[101X
+  
+  [29X[2XInstallOtherMethod[102X( [3Xopr[103X[, [3Xinfo[103X][, [3Xfamp[103X], [3Xargs-filts[103X[, [3Xval[103X], [3Xmethod[103X ) [32X function
+  
+  [33X[0;0Yinstalls  a function method [3Xmethod[103X for the operation [3Xopr[103X, in the same way as
+  for  [2XInstallMethod[102X  ([14X78.2-1[114X), but without the restriction that the number of
+  arguments  must  match a declaration of [3Xopr[103X and without the restriction that
+  [3Xargs-filts[103X imply the respective requirements of the operation [3Xopr[103X.[133X
+  
+  
+  [1X78.3 [33X[0;0YApplicable Methods and Method Selection[133X[101X
+  
+  [33X[0;0YA  method  installed  as  above  is [13Xapplicable[113X for an arguments tuple if the
+  following conditions are satisfied.[133X
+  
+  [33X[0;0YThe  number  of arguments equals the length of the list [3Xargs-filts[103X, the [22Xi[122X-th
+  argument  lies  in  the  filter  [3Xargs-filts[103X[22X[i][122X,  and  [3Xfamp[103X returns [9Xtrue[109X when
+  applied  to  the  families of the arguments. The maximal number of arguments
+  supported  for  methods  is  six,  one gets an error message if one tries to
+  install a method with at least seven arguments.[133X
+  
+  [33X[0;0YSo  [3Xargs-filt[103X  describes  conditions for each argument, and [3Xfamp[103X describes a
+  relation between the arguments.[133X
+  
+  [33X[0;0YFor  unary  operations  such  as attributes and properties, there is no such
+  relation  to  postulate,  [3Xfamp[103X is [2XReturnTrue[102X ([14X5.3-1[114X) for these operations, a
+  function that always returns [9Xtrue[109X. For binary operations, the usual value of
+  [3Xfamp[103X is [2XIsIdenticalObj[102X ([14X12.5-1[114X), which means that both arguments must lie in
+  the same family.[133X
+  
+  [33X[0;0YNote  that  any  properties which occur among the filters in the filter list
+  will  [13Xnot[113X be tested by the method selection if they are not yet known. (More
+  exact:  if  [3Xprop[103X  is a property then the filter implicitly uses not [3Xprop[103X but
+  [10XHas[3Xprop[103X[10X  and  [3Xprop[103X[10X[110X.)  If  this is desired you must explicitly enforce a test
+  (see section [14X78.5[114X) below.[133X
+  
+  [33X[0;0YIf no method is applicable, the error message [21Xno method found[121X is signaled.[133X
+  
+  [33X[0;0YOtherwise,  the  applicable  method  with  highest [13Xrank[113X is selected and then
+  called.  This  rank  is  given by the sum of the ranks of the filters in the
+  list  [3Xargs-filt[103X, [13Xincluding involved filters[113X, plus the number [3Xval[103X used in the
+  call of [2XInstallMethod[102X ([14X78.2-1[114X). So the argument [3Xval[103X can be used to raise the
+  priority of a method relative to other methods for [3Xopr[103X.[133X
+  
+  [33X[0;0YNote  that  from the applicable methods, an efficient one shall be selected.
+  This  is  a  method  that  needs  only  little  time  and  storage  for  the
+  computations.[133X
+  
+  [33X[0;0YIt  seems to be impossible for [5XGAP[105X to select an optimal method in all cases.
+  The  present  ranking  of  methods  is based on the assumption that a method
+  installed  for  a special situation shall be preferred to a method installed
+  for a more general situation.[133X
+  
+  [33X[0;0YFor example, a method for computing a Sylow subgroup of a nilpotent group is
+  expected  to  be  more  efficient than a method for arbitrary groups. So the
+  more  specific  method will be selected if [5XGAP[105X knows that the group given as
+  argument is nilpotent.[133X
+  
+  [33X[0;0YOf  course  there  is  no  obvious  way  to decide between the efficiency of
+  incommensurable  methods. For example, take an operation with one method for
+  permutation  groups,  another method for nilpotent groups, but no method for
+  nilpotent  permutation  groups,  and  call this operation with a permutation
+  group known to be nilpotent.[133X
+  
+  
+  [1X78.4 [33X[0;0YPartial Methods[133X[101X
+  
+  [1X78.4-1 TryNextMethod[101X
+  
+  [29X[2XTryNextMethod[102X(  ) [32X function
+  
+  [33X[0;0YAfter  a  method has been selected and called, the method may recognize that
+  it   cannot   compute   the   desired   result,   and  give  up  by  calling
+  [10XTryNextMethod()[110X.[133X
+  
+  [33X[0;0YIn  effect,  the  execution  of  the  method  is  terminated, and the method
+  selection  calls  the  next  method  that  is applicable w.r.t. the original
+  arguments.  In  other  words,  the  applicable  method  is  called  that  is
+  subsequent  to  the  one  that called [2XTryNextMethod[102X, according to decreasing
+  rank of the methods.[133X
+  
+  [33X[0;0YFor  example,  since  every  finite  group of odd order is solvable, one may
+  install  a  method  for  the  property [2XIsSolvableGroup[102X ([14X39.15-6[114X) that checks
+  whether  the size of the argument is an odd integer, returns [9Xtrue[109X if so, and
+  gives up otherwise.[133X
+  
+  [33X[0;0YCare  is  needed  if  a  partial  method might modify the type of one of its
+  arguments,  for  example  by  computing  an  attribute  or property. If this
+  happens,  and  the  type has really changed, then the method should not exit
+  using  [10XTryNextMethod()[110X  but  should  call  the  operation  again, as the new
+  information   in   the   type  may  cause  some  methods  previously  judged
+  inapplicable  to  be  applicable.  For  example,  if  the  above  method for
+  [2XIsSolvableGroup[102X  ([14X39.15-6[114X)  actually  computes  the  size, (rather than just
+  examining  a  stored size), then it must take care to check whether the type
+  of the group has changed.[133X
+  
+  
+  [1X78.5 [33X[0;0YRedispatching[133X[101X
+  
+  [33X[0;0YAs mentioned above the method selection will not test unknown properties. In
+  situations,  in  which  algorithms  are  only  known  (or implemented) under
+  certain conditions, however such a test might be actually desired.[133X
+  
+  [33X[0;0YOne  way  to  achieve  this  would  be  to  install  the method under weaker
+  conditions   and   explicitly   test   the  properties  first,  exiting  via
+  [2XTryNextMethod[102X  ([14X78.4-1[114X) if some of them are not fulfilled. A problem of this
+  approach  however  is  that such methods then automatically are ranked lower
+  and that the code does not look nice.[133X
+  
+  [33X[0;0YA  much  better  way is to use redispatching: Before deciding that no method
+  has  been  found  one tests these properties and if they turn out to be true
+  the method selection is started anew (and will then find a method).[133X
+  
+  [33X[0;0YThis can be achieved via the following function:[133X
+  
+  [1X78.5-1 RedispatchOnCondition[101X
+  
+  [29X[2XRedispatchOnCondition[102X( [3Xoper[103X, [3Xfampred[103X, [3Xreqs[103X, [3Xcond[103X, [3Xval[103X ) [32X function
+  
+  [33X[0;0YThis  function installs a method for the operation [3Xoper[103X under the conditions
+  [3Xfampred[103X  and  [3Xreqs[103X  which  has absolute value [3Xval[103X; that is, the value of the
+  filters  [3Xreqs[103X  is  disregarded.  [3Xcond[103X  is  a list of filters. If not all the
+  values  of properties involved in these filters are already known for actual
+  arguments  of  the  method,  they  are  explicitly  tested  and  if they are
+  fulfilled  [13Xand[113X  stored  after  this test, the operation is dispatched again.
+  Otherwise  the method exits with [2XTryNextMethod[102X ([14X78.4-1[114X). This can be used to
+  enforce tests like [2XIsFinite[102X ([14X30.4-2[114X) in situations when all existing methods
+  require  this property. The list [3Xcond[103X may have unbound entries in which case
+  the corresponding argument is ignored for further tests.[133X
+  
+  
+  [1X78.6 [33X[0;0YImmediate Methods[133X[101X
+  
+  [33X[0;0YUsually a method is called only if its operation has been called and if this
+  method has been selected, see [2XInstallMethod[102X ([14X78.2-1[114X).[133X
+  
+  [33X[0;0YFor attributes and properties, one can install also [13Ximmediate methods[113X.[133X
+  
+  [1X78.6-1 InstallImmediateMethod[101X
+  
+  [29X[2XInstallImmediateMethod[102X( [3Xopr[103X[, [3Xinfo[103X], [3Xfilter[103X, [3Xrank[103X, [3Xmethod[103X ) [32X function
+  
+  [33X[0;0Y[2XInstallImmediateMethod[102X installs [3Xmethod[103X as an immediate method for [3Xopr[103X, which
+  must  be  an attribute or a property, with requirement [3Xfilter[103X and rank [3Xrank[103X.
+  The rank must be an integer value that measures the priority of [3Xmethod[103X among
+  the  immediate  methods  for  [3Xopr[103X.  If  supplied, [3Xinfo[103X should be a short but
+  informative  string  that  describes  the  situation  in which the method is
+  called.[133X
+  
+  [33X[0;0YAn  immediate  method  is called automatically as soon as the object lies in
+  [3Xfilter[103X,  provided  that the value is not yet known. Afterwards the attribute
+  setter  is  called  in order to store the value, unless the method exits via
+  [2XTryNextMethod[102X ([14X78.4-1[114X).[133X
+  
+  [33X[0;0YNote  the  difference  to  [2XInstallMethod[102X  ([14X78.2-1[114X)  that no family predicate
+  occurs  because [3Xopr[103X expects only one argument, and that [3Xfilter[103X is not a list
+  of requirements but the argument requirement itself.[133X
+  
+  [33X[0;0YImmediate methods are thought of as a possibility for objects to gain useful
+  knowledge.  They  must  not  be  used  to  force  the  storing  of  [21Xdefining
+  information[121X  in  an  object.  In  other  words,  [5XGAP[105X should work even if all
+  immediate   methods   are   completely  disabled.  Therefore,  the  call  to
+  [2XInstallImmediateMethod[102X  installs  [3Xmethod[103X  also as an ordinary method for [3Xopr[103X
+  with requirement [3Xfilter[103X.[133X
+  
+  [33X[0;0YNote  that  in  such  a case [5XGAP[105X executes a computation for which it was not
+  explicitly  asked  by  the user. So one should install only those methods as
+  immediate  methods  that  are  [13Xextremely cheap[113X. To emphasize this, immediate
+  methods  are  also  called  [13Xzero  cost methods[113X. The time for their execution
+  should really be approximately zero.[133X
+  
+  [33X[0;0YFor example, the size of a permutation group can be computed very cheaply if
+  a  stabilizer chain of the group is known. So it is reasonable to install an
+  immediate method for [2XSize[102X ([14X30.4-6[114X) with requirement [10XIsGroup and Tester( [3Xstab[103X[10X
+  )[110X, where [3Xstab[103X is the attribute corresponding to the stabilizer chain.[133X
+  
+  [33X[0;0YAnother  example  would  be  the implementation of the conclusion that every
+  finite  group  of  prime  power  order  is  nilpotent. This could be done by
+  installing  an immediate method for the attribute [2XIsNilpotentGroup[102X ([14X39.15-3[114X)
+  with  requirement  [10XIsGroup  and Tester( Size )[110X. This method would then check
+  whether  the  size  is  a  finite  prime power, return [9Xtrue[109X in this case and
+  otherwise  call  [2XTryNextMethod[102X  ([14X78.4-1[114X).  But this requires factoring of an
+  integer,  which  cannot  be  guaranteed  to be very cheap, so one should not
+  install this method as an immediate method.[133X
+  
+  
+  [1X78.7 [33X[0;0YLogical Implications[133X[101X
+  
+  [1X78.7-1 InstallTrueMethod[101X
+  
+  [29X[2XInstallTrueMethod[102X( [3Xnewfil[103X, [3Xfilt[103X ) [32X function
+  
+  [33X[0;0YIt  may happen that a filter [3Xnewfil[103X shall be implied by another filter [3Xfilt[103X,
+  which  is usually a meet of other properties, or the meet of some properties
+  and  some  categories.  Such  a  logical  implication can be installed as an
+  [21Ximmediate method[121X for [3Xnewfil[103X that requires [3Xfilt[103X and that always returns [9Xtrue[109X.
+  (This   should   not   be   mixed   up   with   the  methods  installed  via
+  [2XInstallImmediateMethod[102X  ([14X78.6-1[114X), which have to be called at runtime for the
+  actual objects.)[133X
+  
+  [33X[0;0Y[2XInstallTrueMethod[102X  has  the  effect that [3Xnewfil[103X becomes an implied filter of
+  [3Xfilt[103X, see [14X13.2[114X.[133X
+  
+  [33X[0;0YFor  example,  each  cyclic  group  is  abelian, each finite vector space is
+  finite  dimensional,  and each division ring is integral. The first of these
+  implications is installed as follows.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28XInstallTrueMethod( IsCommutative, IsGroup and IsCyclic );[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YContrary  to  the  immediate  methods  installed with [2XInstallImmediateMethod[102X
+  ([14X78.6-1[114X), logical implications cannot be switched off. This means that after
+  the  above  implication  has  been  installed, one can rely on the fact that
+  every  object  in the filter [10XIsGroup and IsCyclic[110X will also be in the filter
+  [2XIsCommutative[102X ([14X35.4-9[114X).[133X
+  
+  
+  [1X78.8 [33X[0;0YOperations and Mathematical Terms[133X[101X
+  
+  [33X[0;0YUsually  an operation stands for a mathematical concept, and the name of the
+  operation  describes  this  uniquely.  Examples  are  the  property [2XIsFinite[102X
+  ([14X30.4-2[114X) and the attribute [2XSize[102X ([14X30.4-6[114X). But there are cases where the same
+  mathematical  term  is used to denote different concepts, for example [10XDegree[110X
+  is  defined  for polynomials, group characters, and permutation actions, and
+  [10XRank[110X  is  defined  for  matrices,  free  modules,  [22Xp[122X-groups,  and transitive
+  permutation actions.[133X
+  
+  [33X[0;0YIt  is  in principle possible to install methods for the operation [10XRank[110X that
+  are  applicable  to  the  different types of arguments, corresponding to the
+  different  contexts.  But this is not the approach taken in the [5XGAP[105X library.
+  Instead  there  are  operations  such  as  [2XRankMat[102X ([14X24.7-1[114X) for matrices and
+  [2XDegreeOfCharacter[102X   ([14X72.8-4[114X)  (in  fact  these  are  attributes)  which  are
+  installed as methods of the [21Xambiguous[121X operations [10XRank[110X and [10XDegree[110X.[133X
+  
+  [33X[0;0YThe idea is to distinguish between on the one hand different ways to compute
+  the  same  thing  (e.g. different  methods  for [2X\=[102X ([14X31.11-1[114X), [2XSize[102X ([14X30.4-6[114X),
+  etc.),  and on the other hand genuinely different things (such as the degree
+  of a polynomial and a permutation action).[133X
+  
+  [33X[0;0YThe  former is the basic purpose of operations and attributes. The latter is
+  provided  as a user convenience where mathematical usage forces it on us [13Xand[113X
+  where  no conflicts arise. In programming the library, we use the underlying
+  mathematically  precise  operations  or attributes, such as [2XRankMat[102X ([14X24.7-1[114X)
+  and  [10XRankOperation[110X.  These should be attributes if appropriate, and the only
+  role of the operation [10XRank[110X is to decide which attribute the user meant. That
+  way,  stored  information  is stored with [21Xfull mathematical precision[121X and is
+  less likely to be retrieved for a wrong purpose later.[133X
+  
+  [33X[0;0YOne  word  about  possible  conflicts. A typical example is the mathematical
+  term  [21Xcentre[121X,  which  is  defined as [22X{ x ∈ M | a * x = x * a ∀ a ∈ M }[122X for a
+  magma  [22XM[122X,  and as [22X{ x ∈ L | l * x = 0 ∀ l ∈ L }[122X for a Lie algebra [22XL[122X. Here it
+  is  [13Xnot[113X possible to introduce an operation [2XCentre[102X ([14X35.4-5[114X) that delegates to
+  attributes  [10XCentreOfMagma[110X  and  [10XCentreOfLieAlgebra[110X, depending on the type of
+  the  argument.  This  is  because any Lie algebra in [5XGAP[105X is also a magma, so
+  both  [10XCentreOfMagma[110X  and  [10XCentreOfLieAlgebra[110X  would  be  defined  for  a Lie
+  algebra,  with  different meaning if the characteristic is two. So we cannot
+  achieve  that  one  operation  in  [5XGAP[105X  corresponds to the mathematical term
+  [21Xcentre[121X.[133X
+  
+  [33X[0;0Y[21XAmbiguous[121X  operations  such  as  [10XRank[110X  are  declared  in  the  library  file
+  [11Xlib/overload.g[111X.[133X
+  

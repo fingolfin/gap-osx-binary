@@ -1,0 +1,194 @@
+  
+  [1X2 Examples[0X
+  
+  Here  we give some simple examples that display some of the functionality of
+  [5XForms[0m.
+  
+  
+  [1X2.1 A conic of PG(2,8)[0X
+  
+  Consider  the  three-dimensional vector space V := V(3,GF(8)) = GF(8)^3, and
+  consider the following quadratic polynomial in 3 variables:
+  
+  
+       x_1^2+x_2x_3.
+  
+  
+  Then  this  polynomial  defines  a  quadratic form on V and the zeros form a
+  [13Xconic[0m  of  the  associated projective plane. So in particular, our quadratic
+  form defines a degenerate parabolic quadric of Witt Index 1. We will see now
+  how we can use [5XForms[0m to view this example.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> gf := GF(8);[0X
+    [4XGF(2^3)[0X
+    [4Xgap> vec := gf^3;[0X
+    [4X( GF(2^3)^3 )[0X
+    [4Xgap> r := PolynomialRing( gf, 3);[0X
+    [4XPolynomialRing(..., [ x_1, x_2, x_3 ])[0X
+    [4Xgap> poly := r.1^2 + r.2 * r.3;[0X
+    [4Xx_1^2+x_2*x_3[0X
+    [4Xgap> form := QuadraticFormByPolynomial( poly, r );[0X
+    [4X< quadratic form >[0X
+    [4Xgap> Display( form );[0X
+    [4XQuadratic form[0X
+    [4XGram Matrix:[0X
+    [4X 1 . .[0X
+    [4X . . 1[0X
+    [4X . . .[0X
+    [4XPolynomial: x_1^2+x_2*x_3[0X
+    [4Xgap> IsDegenerateForm( form );[0X
+    [4X#I  Testing degeneracy of the *associated bilinear form*[0X
+    [4Xtrue[0X
+    [4Xgap> IsSingularForm( form );[0X
+    [4Xfalse[0X
+    [4Xgap> WittIndex( form );[0X
+    [4X1[0X
+    [4Xgap> IsParabolicForm( form );[0X
+    [4Xtrue[0X
+    [4Xgap> RadicalOfForm( form );[0X
+    [4X<vector space over GF(2^3), with 0 generators>[0X
+  [4X------------------------------------------------------------------[0X
+  
+  Now  our  conic  is  stabilised  by  a  group isomorphic to GO(3,8), but not
+  identical  to  the  group  returned by the GAP command [10XGO(3,8)[0m. However, our
+  conic is the canonical conic given in [5XForms[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> canonical := IsometricCanonicalForm( form );[0X
+    [4X< parabolic quadratic form >[0X
+    [4Xgap> form = canonical;[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  So we ``change forms''...
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> go := GO(3,8);[0X
+    [4XGO(0,3,8)[0X
+    [4Xgap> mat := InvariantQuadraticForm( go )!.matrix;[0X
+    [4X[ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), 0*Z(2), 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), Z(2)^0, 0*Z(2) ] ][0X
+    [4Xgap> gapform := QuadraticFormByMatrix( mat, GF(8) );[0X
+    [4X< quadratic form >[0X
+    [4Xgap> b := BaseChangeToCanonical( gapform );[0X
+    [4X[ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), Z(2)^0, 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), Z(2)^0 ] ][0X
+    [4Xgap> hom := BaseChangeHomomorphism( b, GF(8) );[0X
+    [4X^[ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), Z(2)^0, 0*Z(2) ], [0X
+    [4X  [ 0*Z(2), 0*Z(2), Z(2)^0 ] ][0X
+    [4Xgap> newgo := Image(hom, go);[0X
+    [4XGroup([0X
+    [4X[ [ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ 0*Z(2), Z(2^3), 0*Z(2) ], [ 0*Z(2), 0*Z(2),[0X
+    [4X           Z(2^3)^6 ] ], [0X
+    [4X  [ [ Z(2)^0, 0*Z(2), 0*Z(2) ], [ Z(2)^0, Z(2)^0, Z(2)^0 ], [0X
+    [4X      [ 0*Z(2), Z(2)^0, 0*Z(2) ] ] ])[0X
+  [4X------------------------------------------------------------------[0X
+  
+  Now we look at the action of our new GO(3,8) on the conic.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> conic := Filtered(vec, x -> IsZero( x^form ));;[0X
+    [4Xgap> Size(conic);[0X
+    [4X64[0X
+    [4Xgap> orbs := Orbits(newgo, conic, OnRight);;[0X
+    [4Xgap> List(orbs,Size);[0X
+    [4X[ 1, 63 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  So  we see that there is a fixed point, which is actually the [13Xnucleus[0m of the
+  conic, or in other words, the radical of the form.
+  
+  
+  [1X2.2 A form for W(5,3)[0X
+  
+  The  symplectic  polar  space  W(5,q) is defined by an alternating reflexive
+  bilinear  form on the six-dimensional vector space GF(q)^6. Any invertible 6
+  x 6 matrix A which satisfies A+A^T=0 is a candidate for the Gram matrix of a
+  symplectic polarity. The canonical form we adopt in [5XForms[0m for an alternating
+  form is
+  
+  
+       f(x,y)=x_1y_2-x_2y_1+x_3y_4-x_4y_3\cdots+x_{2n-1}y_{2n}-x_{2n}y_{2n-1}.
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> f := GF(3);[0X
+    [4XGF(3)[0X
+    [4Xgap> gram := [[0X
+    [4X> [0,0,0,1,0,0], [0X
+    [4X> [0,0,0,0,1,0],[0X
+    [4X> [0,0,0,0,0,1],[0X
+    [4X> [-1,0,0,0,0,0],[0X
+    [4X> [0,-1,0,0,0,0],[0X
+    [4X> [0,0,-1,0,0,0]] * One(f);;[0X
+    [4Xgap> form := BilinearFormByMatrix( gram, f );[0X
+    [4X< bilinear form >[0X
+    [4Xgap> IsSymplecticForm( form );[0X
+    [4Xtrue[0X
+    [4Xgap> Display( form );[0X
+    [4XSymplectic form[0X
+    [4XGram Matrix:[0X
+    [4X . . . 1 . .[0X
+    [4X . . . . 1 .[0X
+    [4X . . . . . 1[0X
+    [4X 2 . . . . .[0X
+    [4X . 2 . . . .[0X
+    [4X . . 2 . . .[0X
+    [4Xgap> b := BaseChangeToCanonical( form );[0X
+    [4X[ [ Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3) ], [0X
+    [4X  [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0 ] ][0X
+    [4Xgap> Display( b );[0X
+    [4X 1 . . . . .[0X
+    [4X . . . 1 . .[0X
+    [4X . 1 . . . .[0X
+    [4X . . . . 1 .[0X
+    [4X . . 1 . . .[0X
+    [4X . . . . . 1[0X
+    [4Xgap> Display( b * gram * TransposedMat(b) );[0X
+    [4X . 1 . . . .[0X
+    [4X 2 . . . . .[0X
+    [4X . . . 1 . .[0X
+    [4X . . 2 . . .[0X
+    [4X . . . . . 1[0X
+    [4X . . . . 2 .[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X2.3 What is the form preserved by this group?[0X
+  
+  Here we start with a matrix group which is available in GAP, namely GO(5,5).
+  We  then conjugate this group by an element of GL(5,5), and then we find the
+  forms  left  invariant  by  this  copy  of  GO(5,5) (which we expect to be a
+  symmetric bilinear form).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> go := GO(5, 5);[0X
+    [4XGO(0,5,5)[0X
+    [4Xgap> x := [0X
+    [4X> [ [ Z(5)^0, Z(5)^3, 0*Z(5), Z(5)^3, Z(5)^3 ], [0X
+    [4X>   [ Z(5)^2, Z(5)^3, 0*Z(5), Z(5)^2, Z(5) ], [0X
+    [4X>   [ Z(5)^2, Z(5)^2, Z(5)^0, Z(5), Z(5)^3 ],[0X
+    [4X>   [ Z(5)^0, Z(5)^3, Z(5), Z(5)^0, Z(5)^3 ], [0X
+    [4X>   [ Z(5)^3, 0*Z(5), Z(5)^0, 0*Z(5), Z(5) ] [0X
+    [4X>  ];;[0X
+    [4Xgap> go2 := go^x;[0X
+    [4X<matrix group of size 18720000 with 2 generators>[0X
+    [4Xgap> forms := PreservedSesquilinearForms( go2 );[0X
+    [4X[ < bilinear form > ][0X
+    [4Xgap> Display( forms[1] );[0X
+    [4XBilinear form[0X
+    [4XGram Matrix:[0X
+    [4X 4 2 4 3 3[0X
+    [4X 2 2 2 3 3[0X
+    [4X 4 2 3 1 4[0X
+    [4X 3 3 1 2 4[0X
+    [4X 3 3 4 4 3[0X
+    [4X [0X
+  [4X------------------------------------------------------------------[0X
+  

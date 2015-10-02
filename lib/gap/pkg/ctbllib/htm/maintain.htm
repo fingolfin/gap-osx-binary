@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta name="GENERATOR" content="TtH 3.59">
+ <style type="text/css"> div.p { margin-top: 7pt;}</style>
+ <style type="text/css"><!--
+ td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}
+ td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}
+ td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}
+ td div.norm {line-height:normal;}
+ span.roman {font-family: serif; font-style: normal; font-weight: normal;} 
+ span.overacc2 {position: relative;  left: .8em; top: -1.2ex;}
+ span.overacc1 {position: relative;  left: .6em; top: -1.2ex;} --></style>
+ 
+
+            <title>Maintenance Issues for the GAP Character Table Library</title>
+<h1 align="center">Maintenance Issues for the GAP Character Table Library</h1>
+  <body bgcolor="FFFFFF"> 
+
+<div class="p"><!----></div>
+
+<h3 align="center"> T<font size="-2">HOMAS</font> B<font size="-2">REUER</font> <br />
+<i>Lehrstuhl D f&#252;r Mathematik</i> <br />
+<i>RWTH, 52056 Aachen, Germany</i> </h3>
+
+<div class="p"><!----></div>
+
+<h3 align="center">November 24th, 2006 </h3>
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+This note collects examples of computations that arose
+in the context of maintaining the <font face="helvetica">GAP</font> Character Table Library.
+
+<div class="p"><!----></div>
+
+
+
+<div class="p"><!----></div>
+
+<h1>Contents </h1><a href="#tth_sEc1"
+>1&nbsp; Disproving Possible Character Tables</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc1.1"
+>1.1&nbsp; A Perfect Pseudo Character Table (November 2006)</a><br />
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+ <h2><a name="tth_sEc1">
+1</a>&nbsp;&nbsp;Disproving Possible Character Tables</h2><a name="disprove">
+</a>
+
+<div class="p"><!----></div>
+I do not know a necessary and sufficient criterion for checking
+whether a given matrix together with a list of power maps
+describes the character table of a finite group.
+Examples of <em>pseudo character tables</em>
+(tables which satisfy certain necessary conditions
+but for which actually no group exists) have been given in&nbsp;[<a href="#Gag86" name="CITEGag86">Gag86</a>].
+
+<div class="p"><!----></div>
+Another such example is described in
+
+<A href="ctblcons.htm#pseudo_tables_MGA">another collection of examples</A>.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+The tables in the <font face="helvetica">GAP</font> Character Table Library satisfy the usual tests.
+However,
+there are table candidates for which these tests are not good enough.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+     <h3><a name="tth_sEc1.1">
+1.1</a>&nbsp;&nbsp;A Perfect Pseudo Character Table (November 2006)</h3>
+
+<div class="p"><!----></div>
+(This example arose from a discussion with Jack Schmidt.)
+
+<div class="p"><!----></div>
+Up to version&nbsp;1.1.3 of the <font face="helvetica">GAP</font> Character Table Library,
+the table with identifier <tt>"P41/G1/L1/V4/ext2"</tt> was not correct.
+The problem occurs already in the microfiches
+that are attached to&nbsp;[<a href="#HP89" name="CITEHP89">HP89</a>].
+
+<div class="p"><!----></div>
+In the following, we show that this table is not the character table
+of a finite group,
+using the <font face="helvetica">GAP</font> library of perfect groups.
+Currently we do not know how to prove this inconsistency
+alone from the table.
+
+<div class="p"><!----></div>
+We start with the construction of the inconsistent table;
+apart from a little editing,
+the following input equals the data formerly stored
+in the file <tt>data/ctoholpl.tbl</tt> of the <font face="helvetica">GAP</font> Character Table Library.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; tbl:= rec(
+    &#62;   Identifier:= "P41/G1/L1/V4/ext2",
+    &#62;   InfoText:= Concatenation( [
+    &#62;     "origin: Hanrath library,\n",
+    &#62;     "structure is 2^7.L2(8),\n",
+    &#62;     "characters sorted with permutation (12,14,15,13)(19,20)" ] ),
+    &#62;   UnderlyingCharacteristic:= 0,
+    &#62;   SizesCentralizers:= [64512,1024,1024,64512,64,64,64,64,128,128,64,64,128,
+    &#62;     128,18,18,14,14,14,14,14,14,18,18,18,18,18,18],
+    &#62;   ComputedPowerMaps:= [,[1,1,1,1,2,3,3,2,3,2,2,1,3,2,16,16,20,20,22,22,18,
+    &#62;     18,26,26,27,27,23,23],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,4,1,21,22,17,
+    &#62;     18,19,20,16,15,15,16,16,15],,,,[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
+    &#62;     4,1,4,1,4,1,26,25,28,27,23,24]],
+    &#62;   Irr:= 0,
+    &#62;   AutomorphismsOfTable:= Group( [(23,26,27)(24,25,28),(9,13)(10,14),
+    &#62;     (17,19,21)(18,20,22)] ),
+    &#62;   ConstructionInfoCharacterTable:= ["ConstructClifford",[[[1,2,3,4,5,6,7,8,
+    &#62;     9],[1,7,8,3,9,2],[1,4,5,6,2],[1,2,2,2,2,2,2,2]],[["L2(8)"],["Dihedral",
+    &#62;     18],["Dihedral",14],["2^3"]],[[[1,2,3,4],[1,1,1,1],["elab",4,25]],[[1,
+    &#62;     2,3,4,4,4,4,4,4,4],[2,6,5,2,3,4,5,6,7,8],["elab",10,17]],[[1,2],[3,4],[
+    &#62;     [1,1],[-1,1]]],[[1,3],[4,2],[[1,1],[-1,1]]],[[1,3],[5,3],[[1,1],[-1,1]]
+    &#62;     ],[[1,3],[6,4],[[1,1],[-1,1]]],[[1,2],[7,2],[[1,1],[1,-1]]],[[1,2],[8,
+    &#62;     3],[[1,1],[-1,1]]],[[1,2],[9,5],[[1,1],[1,-1]]]]]],
+    &#62;   );;
+    gap&#62; ConstructClifford( tbl, tbl.ConstructionInfoCharacterTable[2] );
+    gap&#62; ConvertToLibraryCharacterTableNC( tbl );;
+
+</pre>
+
+<div class="p"><!----></div>
+Suppose that there is a group G, say, with this table.
+Then G is perfect since the table has only one linear character.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; Length( LinearCharacters( tbl ) );
+    1
+    gap&#62; IsPerfectCharacterTable( tbl );
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+The table satisfies the orthogonality relations,
+the structure constants are nonnegative integers,
+and symmetrizations of the irreducibles decompose
+into the irreducibles, with nonnegative integral coefficients.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; IsInternallyConsistent( tbl );
+    true
+    gap&#62; irr:= Irr( tbl );;
+    gap&#62; test:= Concatenation( List( [ 2 .. 7 ],
+    &#62;               n -&#62; Symmetrizations( tbl, irr, n ) ) );;
+    gap&#62; Append( test, Set( Tensored( irr, irr ) ) );
+    gap&#62; fail in Decomposition( irr, test, "nonnegative" );
+    false
+    gap&#62; if ForAny( Tuples( [ 1 .. NrConjugacyClasses( tbl ) ], 3 ),
+    &#62;      t -&#62; not ClassMultiplicationCoefficient( tbl, t[1], t[2], t[3] )
+    &#62;               in NonnegativeIntegers ) then
+    &#62;      Error( "contradiction" );
+    &#62; fi;
+
+</pre>
+
+<div class="p"><!----></div>
+The <font face="helvetica">GAP</font> Library of Perfect Groups contains representatives of the
+four isomorphism types of perfect groups of order &#124;G&#124; = 64&nbsp;512.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; n:= Size( tbl );
+    64512
+    gap&#62; NumberPerfectGroups( n );
+    4
+    gap&#62; grps:= List( [ 1 .. 4 ], i -&#62; PerfectGroup( IsPermGroup, n, i ) );
+    [ L2(8) 2^6 E 2^1, L2(8) N 2^6 E 2^1 I, L2(8) N 2^6 E 2^1 II, 
+      L2(8) N 2^6 E 2^1 III ]
+
+</pre>
+
+<div class="p"><!----></div>
+If we believe that the classification of perfect groups of order &#124;G&#124;
+is correct then all we have to do is to show that none of the
+character tables of these four groups is equivalent to the given table.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; tbls:= List( grps, CharacterTable );;
+    gap&#62; List( tbls, x -&#62; TransformingPermutationsCharacterTables( x, tbl ) );
+    [ fail, fail, fail, fail ]
+
+</pre>
+
+<div class="p"><!----></div>
+In fact, already the matrices of irreducible characters of the four groups
+do not fit to the given table.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; List( tbls, t -&#62; TransformingPermutations( Irr( t ), Irr( tbl ) ) );
+    [ fail, fail, fail, fail ]
+
+</pre>
+
+<div class="p"><!----></div>
+Let us look closer at the tables in question.
+Each character table of a perfect group of order 64&nbsp;512
+has exactly one irreducible character of degree 63 that takes exactly
+the values &#8722;1, 0, 7, and 63;
+moreover, the value 7 occurs in exactly two classes.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; testchars:= List( tbls,
+    &#62;   t -&#62; Filtered( Irr( t ),
+    &#62;          x -&#62; x[1] = 63 and Set( x ) = [ -1, 0, 7, 63 ] ) );;
+    gap&#62; List( testchars, Length );
+    [ 1, 1, 1, 1 ]
+    gap&#62; List( testchars, l -&#62; Number( l[1], x -&#62; x = 7 ) );
+    [ 2, 2, 2, 2 ]
+
+</pre>
+
+<div class="p"><!----></div>
+(Another way to state this is that in each of the four tables t in
+question,
+there are ten preimage classes of the involution class in the simple
+factor group L<sub>2</sub>(8),
+there are eight preimage classes of this class in the factor group
+2<sup>6</sup>.L<sub>2</sub>(8),
+and that the unique class in which an irreducible degree 63 character
+of this factor group takes the value 7 splits in t.)
+
+<div class="p"><!----></div>
+In the erroneous table, however,
+there is only one class with the value 7 in this character.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; testchars:= List( [ tbl ],
+    &#62;   t -&#62; Filtered( Irr( t ),
+    &#62;          x -&#62; x[1] = 63 and Set( x ) = [ -1, 0, 7, 63 ] ) );;
+    gap&#62; List( testchars, Length );
+    [ 1 ]
+    gap&#62; List( testchars, l -&#62; Number( l[1], x -&#62; x = 7 ) );
+    [ 1 ]
+
+</pre>
+
+<div class="p"><!----></div>
+This property can be checked easily for the displayed table stored
+in fiche 2, row 4, column 7 of&nbsp;[<a href="#HP89" name="CITEHP89">HP89</a>],
+with the name <tt>6L1&lt;&#62;Z^7&lt;&#62;L2(8); V4; MOD 2</tt>,
+and it turns out that this table is not correct.
+
+<div class="p"><!----></div>
+Note that these microfiches contain <em>two</em> tables of order 64&nbsp;512,
+and there were <em>three</em> tables in the <font face="helvetica">GAP</font> Character Table Library
+that contain <tt>origin: Hanrath library</tt> in their <tt>InfoText</tt>
+value.
+Besides the incorrect table, these library tables are
+the character tables of the groups
+<tt>PerfectGroup( 64512, 1 )</tt> and <tt>PerfectGroup( 64512, 3 )</tt>,
+respectively.
+(The matrices of irreducible characters of these tables are equivalent.)
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; Filtered( [ 1 .. 4 ], i -&#62;
+    &#62;        TransformingPermutationsCharacterTables( tbls[i],
+    &#62;            CharacterTable( "P41/G1/L1/V1/ext2" ) ) &lt;&#62; fail );
+    [ 1 ]
+    gap&#62; Filtered( [ 1 .. 4 ], i -&#62;
+    &#62;        TransformingPermutationsCharacterTables( tbls[i],
+    &#62;            CharacterTable( "P41/G1/L1/V2/ext2" ) ) &lt;&#62; fail );
+    [ 3 ]
+    gap&#62; TransformingPermutations( Irr( tbls[1] ), Irr( tbls[3] ) ) &lt;&#62; fail;
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+Since version&nbsp;1.2 of the <font face="helvetica">GAP</font> Character Table Library,
+the character table with the <tt>Identifier</tt> value
+<tt>"P41/G1/L1/V4/ext2"</tt> corresponds to the group
+<tt>PerfectGroup( 64512, 4 )</tt>.
+The choice of this group was somewhat arbitrary since the vector system
+<tt>V4</tt> seems to be not defined in&nbsp;[<a href="#HP89" name="CITEHP89">HP89</a>];
+anyhow, this group and the remaining perfect group,
+<tt>PerfectGroup( 64512, 2 )</tt>,
+have equivalent matrices of irreducibles.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; Filtered( [ 1 .. 4 ], i -&#62;
+    &#62;        TransformingPermutationsCharacterTables( tbls[i],
+    &#62;            CharacterTable( "P41/G1/L1/V4/ext2" ) ) &lt;&#62; fail );
+    [ 4 ]
+    gap&#62; TransformingPermutations( Irr( tbls[2] ), Irr( tbls[4] ) ) &lt;&#62; fail;
+    true 
+
+</pre>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+
+<h2>References</h2>
+
+<dl compact="compact">
+ <dt><a href="#CITEAuto" name="Auto">[Bre]</a></dt><dd>
+T.&nbsp;Breuer, <em>Using table automorphisms for constructing character tables in
+  <font face="helvetica">GAP</font></em>, <a href="http://www.math.rwth-aachen.de/~Thomas.Breuer/ctbllib/doc/ctblcons.pdf"><tt>http://www.math.rwth-aachen.de/</tt>
+<tt><tt>~</tt>Thomas.Breuer/</tt>
+<tt>ctbllib/</tt><tt>doc/</tt>
+<tt>ctblcons.pdf</tt></a>.
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEGag86" name="Gag86">[Gag86]</a></dt><dd>
+S.&nbsp;M. Gagola, Jr., <em>Formal character tables</em>, Michigan Math. J.
+  <b>33</b> (1986), no.&nbsp;1, 3-10. MR 817904 (86k:20010)
+
+<div class="p"><!----></div>
+</dd>
+ <dt><a href="#CITEHP89" name="HP89">[HP89]</a></dt><dd>
+D.&nbsp;F. Holt and W.&nbsp;Plesken, <em>Perfect groups</em>, Oxford Mathematical
+  Monographs, The Clarendon Press Oxford University Press, New York, 1989, With
+  an appendix by W. Hanrath, Oxford Science Publications. MR 1025760
+  (91c:20029)</dd>
+</dl>
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<br /><br /><hr /><small>File translated from
+T<sub><font size="-1">E</font></sub>X
+by <a href="http://hutchinson.belmont.ma.us/tth/">
+T<sub><font size="-1">T</font></sub>H</a>,
+version 3.59.<br />On 30 May 2012, 15:44.</small>
+</html>

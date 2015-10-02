@@ -1,0 +1,100 @@
+  
+  [1X3 [33X[0;0YImplementation Details[133X[101X
+  
+  [33X[0;0YIn  this  chapter we describe the approach used to store the normalized unit
+  group  of  the  group  algebra  in the library, and to reconstruct the group
+  [22XV(KG)[122X from the stored information.[133X
+  
+  
+  [1X3.1 [33X[0;0YSaving the data[133X[101X
+  
+  [33X[0;0YTo  compute  the pc-presentation of the normalized unit group of the modular
+  group algebra of a finite [22Xp[122X-group we used the function [10XPcNormalizedUnitGroup[110X
+  from  the [5XLAGUNA[105X package. It uses the algorithm descibed in [Bov98]. See the
+  [5XLAGUNA[105X manual [BKRS] for more details.[133X
+  
+  [33X[0;0YWhen  this  group  is  computed,  the  main  idea  is  to  use  [5XGAP[105X function
+  [10XCodePcGroup[110X  that returns the code for the polycyclic generating sequence of
+  the  group,  and  then  to  create  the  group  from this code using the [5XGAP[105X
+  function [10XPcGroupCode[110X.[133X
+  
+  [33X[0;0YThe  resulting  code  could be very long, and to compress it we used the [5XGAP[105X
+  function  [10XHexStringInt[110X  than  returns a string that represents the code with
+  hexa-decimal  digits  (using  A-F  as digits 10-15). The inverse translation
+  then  can  be  performed with the [5XGAP[105X function [10XIntHexString[110X. This allowed to
+  save  almost 20 MB of space on groups of order 128 and reduce the total size
+  of their database to 90 MB.[133X
+  
+  [33X[0;0YFor  groups  of  order  128 we decided to compress the library with the [11Xgzip[111X
+  program,  and  then uncompress each file "on fly" when it is requested. This
+  allowed us to reduce the size of their part in the library from 90 to 12 MB,
+  which  is already quite reasonable. Of course, there is some little overhead
+  arising  from the uncompression and subsequent translation from hexa-decimal
+  notation,  but  it  is  neglectible comparatively with the total time of the
+  computation of [22XV(KG)[122X from scratch.[133X
+  
+  [33X[0;0YThere  is  one more thing that needs to be stored together with this code to
+  make  it  sure that we will correctly identify the underlying group [22XG[122X of the
+  group  algebra  [22XKG[122X  with  its image in the pc-presentation of the normalized
+  unit group [22XV(KG)[122X.[133X
+  
+  [33X[0;0YThe  group [22XG[122X is extracted from the [5XGAP[105X Small Groups Library, so it is always
+  the same, unless its description in the library will be changed (and it will
+  be  an  important  task  of  [5XUnitLib[105X maintaner to update the package in this
+  case!), and here we are safe from inconsistencies.[133X
+  
+  [33X[0;0YBut  the  next stage is the computation of generators of the normalized unit
+  group  [22XV(KG)[122X, and the first step is the dimension basis of the group [22XG[122X, that
+  can  be  computed  using  the  [5XLAGUNA[105X  function [10XDimensionBasis[110X. To avoid the
+  influence  of  possible  changes in [5XGAP[105X or usage of random methods, we store
+  (in  compacted  form)  the information about the dimension basis of [22XG[122X in the
+  [5XUnitLib[105X.[133X
+  
+  [33X[0;0YAll  further procedures are implemented inside the [5XLAGUNA[105X package, and their
+  result is uniquely determined and predictable.[133X
+  
+  [33X[0;0YFor most groups all information is stored in a single file. However, this is
+  not  the case for groups of order 243, where we have about 30 MB of data for
+  67  groups.  For  these  groups  we  provide  a  solution  on  the  base  of
+  Web-services.  The  information about the dimension basis is stored locally,
+  while  the  codes for polycyclic generating sequences are available from the
+  [5XUnitLib[105X  homepage,  and  the  package  will  access  them using the function
+  [2XSingleHTTPRequest[102X ([14XIO: SingleHTTPRequest[114X) from the [5XIO[105X package.[133X
+  
+  [33X[0;0YFor  the  reader  interested  in more details, the package contains the file
+  [11Xunitlib/lib/genlib.g[111X  with the function [10XCreatePcNormalizedUnitGroupsLibrary[110X,
+  that  creates library files for groups of a given prime power order, and the
+  file          [11Xunitlib/lib/genpar.g[111X         with         the         function
+  [10XParCreatePcNormalizedUnitGroupsLibrary[110X, which is the parallel version of the
+  previous function and must be used with the [5XParGAP[105X package [Coo].[133X
+  
+  
+  [1X3.2 [33X[0;0YReading the data[133X[101X
+  
+  [33X[0;0YTo  reconstruct  the  normalized  unit group [22XV(KG)[122X from the library, we need
+  only to know the catalogue number of the underlying group [22XG[122X in the [5XGAP[105X Small
+  Groups Library.[133X
+  
+  [33X[0;0YWe  use  the  same  numbering  as in the [5XGAP[105X Small Group Library, so [5XUnitLib[105X
+  finds  the  appropriate  library  file(s) and reads from it the code for the
+  polycyclic  generating  sequence  of  [22XV(KG)[122X  and  the  information about the
+  dimension basis of [22XG[122X used for the computation of this code.[133X
+  
+  [33X[0;0YThen  [22XV(KG)[122X  is  created  from  the  code using the [5XGAP[105X function [2XPcGroupCode[102X
+  ([14XReference:  PcGroupCode[114X).  We  also  create  [22XG[122X  using  the [5XGAP[105X Small Groups
+  Library.[133X
+  
+  [33X[0;0YNow  to [21Xglue[121X the group [22XV(KG)[122X with the underlying group [22XG[122X properly, the value
+  of  the  attribute  [2XDimensionBasis[102X  ([14XLAGUNA:  DimensionBasis[114X) of [22XG[122X is set in
+  accordance with the data retrieved from the library. This will guarantee the
+  correct  construction  of  [2XNaturalBijectionToPcNormalizedUnitGroup[102X  ([14XLAGUNA:
+  NaturalBijectionToPcNormalizedUnitGroup[114X)                                 and
+  [2XNaturalBijectionToNormalizedUnitGroup[102X                               ([14XLAGUNA:
+  NaturalBijectionToNormalizedUnitGroup[114X) by the [5XLAGUNA[105X package.[133X
+  
+  [33X[0;0YIt  remains  now  to make only several technical steps, such as constructing
+  the  group  algebra  [22XKG[122X  over the appropriate field [22XK[122X, and storing [22XKG[122X in the
+  attribute  [2XUnderlyingGroupRing[102X  ([14XLAGUNA:  UnderlyingGroupRing[114X)  of [22XV(KG)[122X and
+  [22XV(KG)[122X in the attribute [2XPcNormalizedUnitGroup[102X ([14XLAGUNA: PcNormalizedUnitGroup[114X)
+  of [22XKG[122X.[133X
+  

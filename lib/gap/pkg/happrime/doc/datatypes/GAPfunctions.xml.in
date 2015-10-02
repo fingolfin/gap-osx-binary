@@ -1,0 +1,88 @@
+<!-- 
+  HAPPRIME - functions.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  National University of Ireland Galway
+  Copyright (C)  2011
+  University of St Andrews
+-->
+
+<!-- ********************************************************** -->
+<Chapter Label="GeneralFunctions">
+  <Heading>General Functions</Heading>
+
+  Some of the functions provided by &HAPprime; are not specifically aimed
+  at homological algebra or extending the &HAP; package. The functions
+  in this chapter, which are used internally by &HAPprime; extend some of the 
+  standard &GAP; functions and datatypes.
+
+  <Section>
+    <Heading>Matrices</Heading>
+
+    For details of the standard &GAP; vector and matrix functions, see 
+    <Ref Chap="Matrices" BookName="tut"/> and <Ref Chap="Matrices" BookName="ref"/> 
+    in the &GAP; tutorial and reference manuals. &HAPprime; provides improved
+    versions of a couple of standard matrix operations, and two small helper
+    functions.
+
+    <!-- GAPDocSourceSuffix="_manBaseMat" -->
+
+    <Subsection>
+      <Heading>Example: matrices and vector spaces</Heading>
+    
+      &GAP; uses rows of a matrix to represent basis vectors for a vector space. 
+      In this example we have two matrics <M>U</M> and <M>V</M> that we suspect
+      represent the same subspace. Using 
+      <Ref Func="SolutionMat" Label="for multiple vectors"/> we can see that
+      <M>V</M> lies in <M>U</M>, but <Ref Func="IsSameSubspace"/> shows that 
+      they are the same subspace, as is confirmed by having identical 
+      sums and intersections.
+<!--
+gap> U := [[1,2,3],[4,5,6]];;
+gap> V := [[3,3,3],[5,7,9]];;
+gap> SolutionMat(U, V);
+gap> IsSameSubspace(U, V);
+gap> SumIntersectionMatDestructive(U, V);
+gap> IsSameSubspace(last[1], last[2]);
+gap> PrintDimensionsMat(V);
+-->      
+<Example><![CDATA[
+gap> U := [[1,2,3],[4,5,6]];;
+gap> V := [[3,3,3],[5,7,9]];;
+gap> SolutionMat(U, V);
+[ [ -1, 1 ], [ 1, 1 ] ]
+gap> IsSameSubspace(U, V);
+true
+gap> SumIntersectionMatDestructive(U, V);
+[ [ [ 1, 2, 3 ], [ 0, 1, 2 ] ], [ [ 0, 1, 2 ], [ 1, 0, -1 ] ] ]
+gap> IsSameSubspace(last[1], last[2]);
+true
+gap> PrintDimensionsMat(V);
+"2x3"
+]]></Example>
+   </Subsection>
+  </Section>
+
+  <Section>
+    <Heading>Groups</Heading>
+
+    Small groups in &GAP; can be indexed by their small groups library number
+    <Ref Sect="Small groups" BookName="ref"/>. An alternative indexing scheme,
+    the Hall-Senior number, is used by Jon Carlson to publish his 
+    cohomology ring calculations at 
+    <URL>http://www.math.uga.edu/~lvalero/cohointro.html</URL>. To allow 
+    comparison with these results, we
+    provide a function that converts from the &GAP; small groups library numbers
+    to Hall-Senior number for
+    the groups of order 8, 16, 32 and 64.
+
+    <!-- GAPDocSourceSuffix="_manGroups" -->
+
+  </Section>
+
+</Chapter>
+
+
+

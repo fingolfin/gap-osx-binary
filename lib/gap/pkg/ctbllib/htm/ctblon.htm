@@ -1,0 +1,312 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta name="GENERATOR" content="TtH 3.59">
+ <style type="text/css"> div.p { margin-top: 7pt;}</style>
+ <style type="text/css"><!--
+ td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}
+ td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}
+ td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}
+ td div.norm {line-height:normal;}
+ span.roman {font-family: serif; font-style: normal; font-weight: normal;} 
+ span.overacc2 {position: relative;  left: .8em; top: -1.2ex;}
+ span.overacc1 {position: relative;  left: .6em; top: -1.2ex;} --></style>
+ 
+
+         <title>Constructing the Irreducible Characters of O'N with GAP</title>
+<h1 align="center">Constructing the Irreducible Characters of O'N with GAP</h1>
+  <body bgcolor="FFFFFF"> 
+
+<div class="p"><!----></div>
+
+<h3 align="center"> T<font size="-2">HOMAS</font> B<font size="-2">REUER</font> <br />
+<i>Lehrstuhl D f&#252;r Mathematik</i> <br />
+<i>RWTH, 52056 Aachen, Germany</i> </h3>
+
+<div class="p"><!----></div>
+
+<h3 align="center">September 14th, 2004 </h3>
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+We assume that the "table head" of the ordinary character table of the
+sporadic simple O'Nan group O&#8242;N is known.
+That is, the conjugacy classes and their centralizer orders are known
+as well as all p-th power maps,
+for primes p up to the maximal element order in O&#8242;N, which is 31.
+For the sake of simplicity, we take the table head of the character table
+contained in the <font face="helvetica">GAP</font> Character Table Library&nbsp;[<a href="#CTblLib1.2" name="CITECTblLib1.2">Bre12</a>].
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; LoadPackage( "ctbllib" );
+    true
+    gap&#62; tbl:= CharacterTable( "ON" );
+    CharacterTable( "ON" )
+    gap&#62; NrConjugacyClasses( tbl );
+    30
+
+</pre>
+
+<div class="p"><!----></div>
+Besides the table head with the trivial character,
+we assume that we know a nontrivial irreducible character of smallest
+degree -which is 10&nbsp;944-
+and the nontrivial permutation character of smallest degree;
+the latter character corresponds to the action on the cosets of a maximal
+subgroup of type L<sub>3</sub>(7).2 in O&#8242;N.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; irreducibles:= Irr( tbl ){ [ 1, 2 ] };
+    [ Character( CharacterTable( "ON" ), [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ] ), 
+      Character( CharacterTable( "ON" ), [ 10944, 64, 9, 64, 0, -1, 1, 17, 3, 0, 
+          0, -1, -1, 1, 1, -1, -1, 0, 0, 0, 0, 0, 0, 0, -1, -1, 1, 1, 1, 1 ] ) ]
+    gap&#62; max:= CharacterTable( Maxes( tbl )[1] );
+    CharacterTable( "L3(7).2" )
+    gap&#62; pi:= TrivialCharacter( max ) ^ tbl;
+    Character( CharacterTable( "ON" ), [ 122760, 360, 45, 120, 8, 0, 9, 15, 1, 4, 
+      0, 0, 0, 3, 3, 0, 0, 2, 2, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0 ] )
+
+</pre>
+
+<div class="p"><!----></div>
+Now our strategy is to create characters that are in general reducible,
+and to compute characters and virtual characters of smaller norm from
+them until eventually the list of irreducibles is complete.
+
+<div class="p"><!----></div>
+We start with the characters obtained by induction from cyclic subgroups
+of O&#8242;N, and symmetrizations of the known irreducibles.
+Note that these two computations are possible only because we know the
+power maps of O&#8242;N.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; indcyc:= InducedCyclic( tbl, "all" );;
+    gap&#62; sym2:= Symmetrizations( tbl, irreducibles, 2 );;
+    gap&#62; sym3:= Symmetrizations( tbl, irreducibles, 3 );;
+
+</pre>
+
+<div class="p"><!----></div>
+Before we start to work with characters,
+we raise the info level for computations of this kind.
+This will for example cause that a message is printed whenever a new
+irreducible character has been found.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; SetInfoLevel( InfoCharacterTable, 2 );
+
+</pre>
+
+<div class="p"><!----></div>
+First we reduce the characters with the known irreducibles,
+that is, we project them into the orthogonal space of the vector space
+that is spanned by the known irreducibles.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; chars:= Concatenation( indcyc, [ pi ], sym2, sym3 );;
+    gap&#62; Length( chars );
+    91
+    gap&#62; chars:= ReducedCharacters( tbl, irreducibles, chars );;
+    gap&#62; Length( chars.irreducibles );
+    0
+    gap&#62; Length( chars.remainders );
+    86
+
+</pre>
+
+<div class="p"><!----></div>
+In order to find out the dimension of the <font size="+0">Z</font>-lattice spanned by
+the remaining reducible characters, we compute a lattice basis using
+the LLL algorithm.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; lll:= LLL( tbl, chars.remainders );;
+    #I  LLL: 13 irreducibles found
+
+</pre>
+
+<div class="p"><!----></div>
+We were lucky, 13 new irreducibles were obtained as elements of the
+lattice basis;
+in order to work in their orthogonal space from now on,
+we reduce <tt>chars.remainders</tt> with them.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; newirr:= lll.irreducibles;;
+    gap&#62; chars:= ReducedCharacters( tbl, lll.irreducibles, chars.remainders );;
+
+</pre>
+
+<div class="p"><!----></div>
+This yields no new irreducibles.
+Now let us look at the reducible vectors in the lattice basis computed by
+<tt>LLL</tt>.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; Length( lll.remainders );
+    15
+    gap&#62; lll.norms;
+    [ 2, 2, 2, 2, 2, 2, 3, 2, 3, 3, 2, 2, 2, 2, 3 ]
+
+</pre>
+
+<div class="p"><!----></div>
+Together with the 15 known irreducibles, the basis of length 15 spans
+the whole 30 dimensional space of irreducibles of O&#8242;N.
+The norms of the virtual characters in <tt>lll.remainders</tt> are listed in
+<tt>lll.norms</tt>, in our case they are very small.
+Since <tt>LLL</tt> does not reduce the virtual characters in the <tt>remainders</tt> list
+with the characters in the <tt>irreducibles</tt> list,
+we do this reduction now.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; lll:= ReducedClassFunctions( tbl, lll.irreducibles, lll.remainders );;
+    gap&#62; Append( irreducibles, newirr );
+    gap&#62; Length( irreducibles );
+    15
+
+</pre>
+
+<div class="p"><!----></div>
+Now 15 irreducible characters are missing, and we know a 15-dimensional
+lattice L of virtual characters inside the standard lattice spanned by
+these irreducibles.
+Let us compute the possible embeddings of L into the standard lattice,
+and try to deduce irreducible characters if possible.
+We use the new irreducibles to repeat the process of generating and
+reducing characters.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; gram:= MatScalarProducts( tbl, lll.remainders, lll.remainders );;
+    gap&#62; emb:= OrthogonalEmbeddingsSpecialDimension( tbl, lll.remainders,
+    &#62;              gram, Length( gram ) );;
+    #I  Decreased : computation of 2nd character failed
+    gap&#62; Length( emb.irreducibles );
+    11
+    gap&#62; Append( irreducibles, emb.irreducibles );
+    gap&#62; Length( irreducibles );
+    26
+
+</pre>
+
+<div class="p"><!----></div>
+This first attempt yields 11 new irreducibles that are uniquely
+determined by the possible embeddings.
+Let us see which embeddings are possible for the remaining
+4-dimensional lattice.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; chars:= emb.remainders;;
+    gap&#62; gram:= MatScalarProducts( tbl, chars, chars );
+    [ [ 2, 0, -1, -1 ], [ 0, 2, -1, -1 ], [ -1, -1, 2, 1 ], [ -1, -1, 1, 2 ] ]
+    gap&#62; emb:= OrthogonalEmbeddings( gram, 4 );
+    rec( vectors := [ [ -1, -1, 1, 1 ], [ -1, 1, 0, 0 ], [ -1, 0, 1, 1 ], 
+          [ -1, 0, 1, 0 ], [ -1, 0, 0, 1 ], [ 1, 0, 0, 0 ], [ 0, -1, 1, 1 ], 
+          [ 0, -1, 1, 0 ], [ 0, -1, 0, 1 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], 
+          [ 0, 0, 0, 1 ] ], norms := [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], 
+      solutions := [ [ 1, 2, 11, 12 ], [ 3, 6, 8, 9 ], [ 4, 5, 7, 10 ] ] )
+    gap&#62; dec1:= Decreased( tbl, chars, emb.vectors{ emb.solutions[1] } );
+    #I  Decreased : computation of 1st character failed
+    fail
+    gap&#62; dec2:= Decreased( tbl, chars, emb.vectors{ emb.solutions[2] } );;
+    gap&#62; dec3:= Decreased( tbl, chars, emb.vectors{ emb.solutions[3] } );;
+
+</pre>
+
+<div class="p"><!----></div>
+We got three embeddings, one of which did not fit to the requirements
+that the standard basis vectors are characters.
+The two remaining solutions lead to valid character tables for O&#8242;N,
+which differ only by a permutation of columns of rows.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; TransformingPermutations(
+    &#62;        Concatenation( irreducibles, dec2.irreducibles ), 
+    &#62;        Concatenation( irreducibles, dec3.irreducibles ) );
+    rec( columns := (20,21), rows := (27,30)(28,29), 
+      group := &lt;permutation group with 7 generators&#62; )
+
+</pre>
+
+<div class="p"><!----></div>
+In fact, the first of the two solutions corresponds to the character
+table of O&#8242;N that is stored in the <font face="helvetica">GAP</font> Character Table Library.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; IsSubset( Irr( tbl ), irreducibles );
+    true
+    gap&#62; IsSubset( Irr( tbl ), dec2.irreducibles ); 
+    true
+
+</pre>
+
+<div class="p"><!----></div>
+For further computations, we reset the changed <tt>Info</tt> level to zero.
+
+<div class="p"><!----></div>
+
+<pre>
+    gap&#62; SetInfoLevel( InfoCharacterTable, 0 );
+
+</pre>
+
+<div class="p"><!----></div>
+(The whole computation took less than a second.)
+
+<div class="p"><!----></div>
+
+
+<h2>References</h2>
+
+<dl compact="compact">
+ <dt><a href="#CITECTblLib1.2" name="CTblLib1.2">[Bre12]</a></dt><dd>
+T.&nbsp;Breuer, <em>The <font face="helvetica">GAP</font> Character Table Library, Version
+  1.2</em>, <a href="http://www.math.rwth-aachen.de/~Thomas.Breuer/ctbllib"><tt>http://www.math.rwth-aachen.de/</tt>
+<tt><tt>~</tt>Thomas.Breuer/</tt>
+<tt>ctbllib</tt></a>, Mar 2012, <font face="helvetica">GAP</font> package.</dd>
+</dl>
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<br /><br /><hr /><small>File translated from
+T<sub><font size="-1">E</font></sub>X
+by <a href="http://hutchinson.belmont.ma.us/tth/">
+T<sub><font size="-1">T</font></sub>H</a>,
+version 3.59.<br />On  5 May 2012, 09:01.</small>
+</html>

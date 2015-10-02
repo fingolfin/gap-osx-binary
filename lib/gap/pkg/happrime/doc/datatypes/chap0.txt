@@ -1,0 +1,208 @@
+  
+  
+                                   [1X [5XHAPprime[0m[1X [0m
+  
+  
+                          [1X Datatypes reference manual [0m
+  
+  
+                                 Version 0.5.1
+  
+  
+                                  10 May 2011
+  
+  
+                                   Paul Smith
+  
+  
+  
+  Paul Smith
+      Email:    [7Xmailto:paul.smith@st-andrews.ac.uk[0m
+      Homepage: [7Xhttp://www.cs.st-andrews.ac.uk/~pas[0m
+      Address:  School of Computer Science,
+                University of St Andrews
+                St Andrews,
+                UK.
+  
+  
+  
+  -------------------------------------------------------
+  [1XCopyright[0m
+  © 2006-2011 Paul Smith
+  
+  [5XHAPprime[0m  is  released under the GNU General Public License (GPL). This file
+  is  part  of  [5XHAPprime[0m, though as documentation it is released under the GNU
+  Free                Documentation                License                (see
+  [7Xhttp://www.gnu.org/licenses/licenses.html#FDL[0m).
+  
+  [5XHAPprime[0m  is  free  software; you can redistribute it and/or modify it under
+  the  terms  of  the  GNU  General  Public  License  as published by the Free
+  Software  Foundation;  either  version 2 of the License, or (at your option)
+  any later version.
+  
+  [5XHAPprime[0m  is distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY;  without  even  the implied warranty of MERCHANTABILITY or FITNESS
+  FOR  A  PARTICULAR  PURPOSE.  See  the  GNU  General Public License for more
+  details.
+  
+  You should have received a copy of the GNU General Public License along with
+  [5XHAPprime[0m;  if  not,  write  to the Free Software Foundation, Inc., 59 Temple
+  Place, Suite 330, Boston, MA 02111-1307 USA
+  
+  For more details, see [7Xhttp://www.fsf.org/licenses/gpl.html[0m.
+  
+  
+  -------------------------------------------------------
+  [1XAcknowledgements[0m
+  [5XHAPprime[0m  was  developed  with  the  support  of  a  Marie Curie Transfer of
+  Knowledge   grant  based  at  the  Department  of  Mathematics,  NUI  Galway
+  (MTKD-CT-2006-042685)  and  is  maintained  with  the support of the HPC-GAP
+  grant at the School of Computer Science, University of St Andrews.
+  
+  
+  -------------------------------------------------------
+  
+  
+  [1XContents (HAPprime Datatypes)[0X
+  
+  1 Introduction
+    1.1 Internal function reference
+  2 Resolutions
+    2.1 The [9XHAPResolution[0m datatype in [5XHAPprime[0m
+    2.2 Implementation: Constructing resolutions
+    2.3 Resolution construction functions
+      2.3-1 LengthOneResolutionPrimePowerGroup
+      2.3-2 LengthZeroResolutionPrimePowerGroup
+    2.4 Resolution data access functions
+      2.4-1 ResolutionLength
+      2.4-2 ResolutionGroup
+      2.4-3 ResolutionFpGModuleGF
+      2.4-4 ResolutionModuleRank
+      2.4-5 ResolutionModuleRanks
+      2.4-6 BoundaryFpGModuleHomomorphismGF
+      2.4-7 ResolutionsAreEqual
+    2.5 Example: Computing and working with resolutions
+    2.6 Miscellaneous resolution functions
+      2.6-1 BestCentralSubgroupForResolutionFiniteExtension
+  3 FG-modules
+    3.1 The [9XFpGModuleGF[0m datatype
+    3.2 Implementation details: Block echelon form
+      3.2-1 Generating vectors and their block structure
+      3.2-2 Matrix echelon reduction and head elements
+      3.2-3 Echelon block structure and minimal generators
+      3.2-4 Intersection of two modules
+    3.3 Construction functions
+      3.3-1 FpGModuleGF construction functions
+      3.3-2 FpGModuleFromFpGModuleGF
+      3.3-3 MutableCopyModule
+      3.3-4 CanonicalAction
+      3.3-5 Example: Constructing a [9XFpGModuleGF[0m
+    3.4 Data access functions
+      3.4-1 ModuleGroup
+      3.4-2 ModuleGroupOrder
+      3.4-3 ModuleAction
+      3.4-4 ModuleActionBlockSize
+      3.4-5 ModuleGroupAndAction
+      3.4-6 ModuleCharacteristic
+      3.4-7 ModuleField
+      3.4-8 ModuleAmbientDimension
+      3.4-9 AmbientModuleDimension
+      3.4-10 DisplayBlocks
+      3.4-11 Example: Accessing data about a [9XFpGModuleGF[0m
+    3.5 Generator and vector space functions
+      3.5-1 ModuleGenerators
+      3.5-2 ModuleGeneratorsAreMinimal
+      3.5-3 ModuleGeneratorsAreEchelonForm
+      3.5-4 ModuleIsFullCanonical
+      3.5-5 ModuleGeneratorsForm
+      3.5-6 ModuleRank
+      3.5-7 ModuleVectorSpaceBasis
+      3.5-8 ModuleVectorSpaceDimension
+      3.5-9 MinimalGeneratorsModule
+      3.5-10 RadicalOfModule
+      3.5-11 Example: Generators and basis vectors of a [9XFpGModuleGF[0m
+    3.6 Block echelon functions
+      3.6-1 EchelonModuleGenerators
+      3.6-2 ReverseEchelonModuleGenerators
+      3.6-3 Example: Converting a [9XFpGModuleGF[0m to block echelon form
+    3.7 Sum and intersection functions
+      3.7-1 DirectSumOfModules
+      3.7-2 DirectDecompositionOfModule
+      3.7-3 IntersectionModules
+      3.7-4 SumModules
+      3.7-5 Example: Sum and intersection of [9XFpGModuleGF[0ms
+    3.8 Miscellaneous functions
+      3.8-1 =
+      3.8-2 IsModuleElement
+      3.8-3 IsSubModule
+      3.8-4 RandomElement
+      3.8-5 Random Submodule
+  4 FG-module homomorphisms
+    4.1 The [9XFpGModuleHomomorphismGF[0m datatype
+    4.2 Calculating the kernel of a FG-module homorphism by splitting into two
+    homomorphisms
+    4.3 Calculating the kernel of a FG-module homorphism by column reduction
+    and partitioning
+    4.4 Construction functions
+      4.4-1 FpGModuleHomomorphismGF construction functions
+      4.4-2 Example: Constructing a [9XFpGModuleHomomorphismGF[0m
+    4.5 Data access functions
+      4.5-1 SourceModule
+      4.5-2 TargetModule
+      4.5-3 ModuleHomomorphismGeneratorMatrix
+      4.5-4 DisplayBlocks
+      4.5-5 DisplayModuleHomomorphismGeneratorMatrix
+      4.5-6 DisplayModuleHomomorphismGeneratorMatrixBlocks
+      4.5-7 Example: Accessing data about a [9XFpGModuleHomomorphismGF[0m
+    4.6 Image and kernel functions
+      4.6-1 ImageOfModuleHomomorphism
+      4.6-2 PreImageRepresentativeOfModuleHomomorphism
+      4.6-3 KernelOfModuleHomomorphism
+      4.6-4 Example: Kernel and Image of a [9XFpGModuleHomomorphismGF[0m
+  5 General Functions
+    5.1 Matrices
+      5.1-1 SumIntersectionMatDestructive
+      5.1-2 SolutionMat
+      5.1-3 IsSameSubspace
+      5.1-4 PrintDimensionsMat
+      5.1-5 Example: matrices and vector spaces
+    5.2 Groups
+      5.2-1 HallSeniorNumber
+  6 Internal functions
+    6.1 Matrices as G-generators of a FG-module vector space
+      6.1-1 HAPPRIME_ValueOptionMaxFGExpansionSize
+      6.1-2 HAPPRIME_KernelOfGeneratingRowsDestructive
+      6.1-3 HAPPRIME_GActMatrixColumns
+      6.1-4 HAPPRIME_ExpandGeneratingRow
+      6.1-5 HAPPRIME_AddGeneratingRowToSemiEchelonBasisDestructive
+      6.1-6 HAPPRIME_ReduceVectorDestructive
+      6.1-7 HAPPRIME_ReduceGeneratorsOfModuleByXX
+      6.1-8 HAPPRIME_DisplayGeneratingRows
+      6.1-9 HAPPRIME_GeneratingRowsBlockStructure
+      6.1-10 HAPPRIME_DisplayGeneratingRowsBlocks
+      6.1-11 HAPPRIME_IndependentGeneratingRows
+      6.1-12 HAPPRIME_GactFGvector
+      6.1-13 HAPPRIME_CoefficientsOfGeneratingRowsXX
+      6.1-14 HAPPRIME_GenerateFromGeneratingRowsCoefficientsXX
+      6.1-15 HAPPRIME_RemoveZeroBlocks
+      6.1-16 HAPPRIME_AddZeroBlocks
+    6.2 FG-modules
+      6.2-1 HAPPRIME_DirectSumForm
+      6.2-2 HAPPRIME_PrintModuleDescription
+      6.2-3 HAPPRIME_ModuleGeneratorCoefficients
+      6.2-4 HAPPRIME_ModuleElementFromGeneratorCoefficients
+      6.2-5 HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsDestructive
+      6.2-6 HAPPRIME_IsGroupAndAction
+    6.3 Resolutions
+      6.3-1 HAPPRIME_WordToVector
+      6.3-2 HAPPRIME_VectorToWord
+      6.3-3 HAPPRIME_BoundaryMatrices
+      6.3-4 HAPPRIME_AddNextResolutionBoundaryMapMatNC
+      6.3-5 HAPPRIME_CreateResolutionWithBoundaryMapMatsNC
+    6.4 Test functions
+      6.4-1 HAPPRIME_SingularIsAvailable
+      6.4-2 HAPPRIME_Random2Group
+      6.4-3 HAPPRIME_TestResolutionPrimePowerGroup
+  
+  
+  -------------------------------------------------------

@@ -1,0 +1,50 @@
+# makefile prototype for the Browse package                    Frank Lübeck
+
+CONFIGNAME=@CONFIGNAME@
+
+GAP = $(GAPPATH)/bin/@GAPARCH@/gap -b -r -l $(GAPPATH)
+
+GAPINCL=-I$(GAPPATH)/src -I$(GAPPATH)/bin/@GAPARCH@
+
+PKGROOT=$(shell pwd)
+
+LOPTS=-lpanel -lncurses
+
+.PHONY: clean doc test
+
+default:  bin/@GAPARCH@/ncurses.so
+
+# this target creates a bin-directory
+bin/@GAPARCH@:
+	if test ! -d bin;  then mkdir bin;  fi
+	if test ! -d bin/@GAPARCH@;  then mkdir -p bin/@GAPARCH@;  fi
+
+bin/@GAPARCH@/ncurses.so: bin/@GAPARCH@ src/ncurses.c Makefile-$(CONFIGNAME)
+	$(GAPPATH)/bin/@GAPARCH@/gac -p "$(CFLAGS)" -d -o bin/@GAPARCH@/ncurses.so \
+        src/ncurses.c -L "${LOPTS}"
+
+# just make it again when called with 'manual'
+##  manual: doc/manual.six
+##  doc/manual.six: doc/main.xml doc/browsebib.xml doc/appl.xml doc/browse.xml \
+##                  doc/curses.xml doc/intro.xml doc/util.xml
+manual:
+	($(GAP) -l "../../;" < makedocrel.g)
+	echo "LaTeX warnings:"
+	grep "\(^LaTeX Warning\|^Overfull \\hbox\)" doc/main.log; exit 0
+
+clean:
+	rm -rf bin/@GAPARCH@ Makefile Makefile-${CONFIGNAME} *~
+distclean:
+	rm -rf bin/* Makefile Makefile-*
+
+doc:
+	($(GAP)  < makedocrel.g)
+
+docclean:
+	(cd  doc; ./clean)
+
+# experimental so far
+WIDECHARS:
+	$(GAPPATH)/bin/@GAPARCH@/gac -d -o bin/@GAPARCH@/ncurses.so \
+        src/ncurses.c -p -DWIDECHARS -L "-lpanelw  -lncursesw"
+

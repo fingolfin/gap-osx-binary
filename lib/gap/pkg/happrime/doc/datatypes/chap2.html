@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (HAPprime Datatypes) - Chapter 2: Resolutions</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+</head>
+<body>
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap1.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap3.html">Next Chapter</a>&nbsp;  </div>
+
+<p><a id="X7C0B125E7D5415B4" name="X7C0B125E7D5415B4"></a></p>
+<div class="ChapSects"><a href="chap2.html#X7C0B125E7D5415B4">2 <span class="Heading">Resolutions</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X86DA1C1B7EDE0DD8">2.1 <span class="Heading">The <code class="keyw">HAPResolution</code> datatype in <strong class="pkg">HAPprime</strong></span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X7D3C5D987DEB2360">2.2 <span class="Heading">Implementation: Constructing resolutions</span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X7D61ADD17A4CF194">2.3 <span class="Heading">Resolution construction functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X784BCF7C801B6E8E">2.3-1 LengthOneResolutionPrimePowerGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8311B9697B5F7685">2.3-2 LengthZeroResolutionPrimePowerGroup</a></span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X84AD05E17FA85CB1">2.4 <span class="Heading">Resolution data access functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X83F7747D8585608C">2.4-1 ResolutionLength</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X806048907CE5B7B6">2.4-2 ResolutionGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7FF354AC7EEE2197">2.4-3 ResolutionFpGModuleGF</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7AFBE74B85AC3D85">2.4-4 ResolutionModuleRank</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7EBA188478844D96">2.4-5 ResolutionModuleRanks</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X803528CD872A1F4C">2.4-6 BoundaryFpGModuleHomomorphismGF</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7FB150F67DAF9059">2.4-7 ResolutionsAreEqual</a></span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X81D7C767813647B3">2.5 <span class="Heading">Example: Computing and working with resolutions</span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X79487D6C80383A6A">2.6 <span class="Heading">Miscellaneous resolution functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7AB2536286A7324D">2.6-1 BestCentralSubgroupForResolutionFiniteExtension</a></span>
+</div></div>
+</div>
+
+<h3>2 <span class="Heading">Resolutions</span></h3>
+
+<p>A free FG-resolution of an FG-module M is a sequence of module homomorphisms</p>
+
+<p class="pcenter">
+      ... ---&gt; M_(n+1) ---&gt; M_n ---&gt; M_(n-1) ---&gt; ... ---&gt; M_1 ---&gt; M_0 ---&gt;&gt; M
+    </p>
+
+<p>Where each M_n is a free FG-module and the image of d_n+1: M_n+1 -&gt; M_n equals the kernel of d_n: M_n -&gt; M_n-1 for all n &gt; 0.</p>
+
+<p><a id="X86DA1C1B7EDE0DD8" name="X86DA1C1B7EDE0DD8"></a></p>
+
+<h4>2.1 <span class="Heading">The <code class="keyw">HAPResolution</code> datatype in <strong class="pkg">HAPprime</strong></span></h4>
+
+<p>Both <strong class="pkg">HAP</strong> and <strong class="pkg">HAPprime</strong> use the <code class="keyw">HAPResolution</code> datatype to store resolutions, and you should refer to the <strong class="pkg">HAP</strong> documentation for full details of this datatype. With resolutions computed by <strong class="pkg">HAP</strong>, the boundary maps which define the module homomorphisms are stored as lists of ZG-module words, each of which is an integer pair <code class="code">[i,g]</code>. By contrast, when <strong class="pkg">HAPprime</strong> computes resolutions it stores the boundary maps as lists of G-generating vectors (as used in <code class="keyw">FpGModuleHomomorphismGF</code>, see Chapter <a href="chap4.html#X82F28552819A6542"><b>4</b></a>). Over small finite fields (and in particular in GF(2)), these compressed vectors take far less memory, saving at least a factor of two for long resolutions. The different data storage method is entirely an internal change - as far as the used is concerned, both versions behave exactly the same.</p>
+
+<p><a id="X7D3C5D987DEB2360" name="X7D3C5D987DEB2360"></a></p>
+
+<h4>2.2 <span class="Heading">Implementation: Constructing resolutions</span></h4>
+
+<p>Given the definition of a free FG-resolution given above, a resolution of a module M can be calculated by construction. If there are k generators for M, we can set M_0 equal to the free FG-module (FG)^k, and the module homomorphism d_0 : M_0 -&gt; M to be the one that sends the ith standard generator of (FG)^k to the ith element of M. We can now recursively construct the other modules and module homomorphisms in a similar manner. Given a boundary homomorphism d_n = M_n -&gt; M_n-1, the kernel of this can be calculated. Then given a set of generators (ideally a small set) for ker(d_n), we can set M_n+1 = (FG)^|ker(d_n)|, and the new module homomorphism d_n+1 to be the one mapping the standard generators of M_n+1 onto the generators of ker(d_n).</p>
+
+<p><strong class="pkg">HAPprime</strong> implements the construction of resolutions using this method. The construction is divided into two stages. The creation of the first homomorphism in the resolution for M is performed by the function <code class="func">LengthZeroResolutionPrimePowerGroup</code> (<a href="chap2.html#X8311B9697B5F7685"><b>2.3-2</b></a>), or for a resolution of the trivial FG-module F, the first two homomorphisms can be stated without calculation using <code class="func">LengthOneResolutionPrimePowerGroup</code> (<a href="chap2.html#X784BCF7C801B6E8E"><b>2.3-1</b></a>). Once this initial sequence is created, a longer resolution can be created by repeated application of one of <code class="func">ExtendResolutionPrimePowerGroupGF</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupGF</b></a>), <code class="func">ExtendResolutionPrimePowerGroupRadical</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupRadical</b></a>) or <code class="func">ExtendResolutionPrimePowerGroupGF2</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupGF2</b></a>), each of which extends the resolution by one stage by constructing a new module and homomorphism mapping onto the minimal generators of the kernel of the last homomorphism of the input resolution. These extension functions differ in speed and the amount of memory that they use. The lowest-memory version, <code class="func">ExtendResolutionPrimePowerGroupGF</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupGF</b></a>), uses the block structure of module generating vectors (see Section <a href="chap3.html#X79DDD8C37A0B8425"><b>3.2-1</b></a>) and calculates kernels of the boundary homomorphisms using <code class="func">KernelOfModuleHomomorphismSplit</code> (<a href="chap4.html#X86C7D57A825235EE"><b>4.6-3</b></a>) and finds a minimal set of generators for this kernel using <code class="func">MinimalGeneratorsModuleGF</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>). The much faster but memory-hungry <code class="func">ExtendResolutionPrimePowerGroupRadical</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupRadical</b></a>) uses <code class="func">KernelOfModuleHomomorphism</code> (<a href="chap4.html#X86C7D57A825235EE"><b>4.6-3</b></a>) and <code class="func">MinimalGeneratorsModuleRadical</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) respectively. <code class="func">ExtendResolutionPrimePowerGroupGF2</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupGF2</b></a>) uses <code class="func">KernelOfModuleHomomorphismGF</code> (<a href="chap4.html#X86C7D57A825235EE"><b>4.6-3</b></a>) whic partitions the boundary homomorphism matrix using FG-reduction. This gives a small memory saving over the <code class="code">Radical</code> method, but can take as long as the <code class="code">GF</code> scheme.</p>
+
+<p>The construction of resolutions of length n is wrapped up in the functions <code class="keyw">ResolutionPrimePowerGroupGF</code>, <code class="keyw">ResolutionPrimePowerGroupRadical</code> and <code class="keyw">ResolutionPrimePowerGroupAutoMem</code>, which (as well as the extension functions) are fully documented in Section <a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X86934BE9858F7199"><b>HAPprime: ResolutionPrimePowerGroup</b></a> of the <strong class="pkg">HAPprime</strong> user manual.</p>
+
+<p><a id="X7D61ADD17A4CF194" name="X7D61ADD17A4CF194"></a></p>
+
+<h4>2.3 <span class="Heading">Resolution construction functions</span></h4>
+
+<p><a id="X784BCF7C801B6E8E" name="X784BCF7C801B6E8E"></a></p>
+
+<h5>2.3-1 LengthOneResolutionPrimePowerGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; LengthOneResolutionPrimePowerGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p><b>Returns: </b><code class="keyw">HAPResolution</code></p>
+
+<p>Returns a free FG-resolution of length 1 for group <var class="Arg">G</var> (which must be of a prime power), i.e. the resolution</p>
+
+<p class="pcenter">
+FG^k ---&gt; FG ---&gt;&gt; F
+</p>
+
+<p>This function requires very little calculation: the first stage of the resolution can simply be stated given a set of minimal generators for the group.</p>
+
+<p><a id="X8311B9697B5F7685" name="X8311B9697B5F7685"></a></p>
+
+<h5>2.3-2 LengthZeroResolutionPrimePowerGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; LengthZeroResolutionPrimePowerGroup</code>( <var class="Arg">M</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p><b>Returns: </b><code class="keyw">HAPResolution</code></p>
+
+<p>Returns a minimal free FG-resolution of length 0 for the <code class="keyw">FpGModuleGF</code> module <var class="Arg">M</var>, i.e. the resolution</p>
+
+<p class="pcenter">
+FG^k ---&gt;&gt; M
+</p>
+
+<p>This function requires little calculation since the the first stage of the resolution can simply be stated if the module has minimal generators: each standard generator of the zeroth-degree module M_0 maps onto a generator of <var class="Arg">M</var>. If <var class="Arg">M</var> does not have minimal generators, they are calculated using <code class="func">MinimalGeneratorsModuleRadical</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>).</p>
+
+<p><a id="X84AD05E17FA85CB1" name="X84AD05E17FA85CB1"></a></p>
+
+<h4>2.4 <span class="Heading">Resolution data access functions</span></h4>
+
+<p><a id="X83F7747D8585608C" name="X83F7747D8585608C"></a></p>
+
+<h5>2.4-1 ResolutionLength</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ResolutionLength</code>( <var class="Arg">R</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the length (i.e. the maximum index k) in the resolution <var class="Arg">R</var>.</p>
+
+<p><a id="X806048907CE5B7B6" name="X806048907CE5B7B6"></a></p>
+
+<h5>2.4-2 ResolutionGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ResolutionGroup</code>( <var class="Arg">R</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b>Group</p>
+
+<p>Returns the group of the resolution <var class="Arg">R</var>.</p>
+
+<p><a id="X7FF354AC7EEE2197" name="X7FF354AC7EEE2197"></a></p>
+
+<h5>2.4-3 ResolutionFpGModuleGF</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ResolutionFpGModuleGF</code>( <var class="Arg">R, k</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b><code class="keyw">FpGModuleGF</code></p>
+
+<p>Returns the module M_k in the resolution <var class="Arg">R</var>, as a <code class="keyw">FpGModuleGF</code> (see Chapter <a href="chap3.html#X820435E87D83DF34"><b>3</b></a>), assuming the canonical action.</p>
+
+<p><a id="X7AFBE74B85AC3D85" name="X7AFBE74B85AC3D85"></a></p>
+
+<h5>2.4-4 ResolutionModuleRank</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ResolutionModuleRank</code>( <var class="Arg">R, k</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the FG rank of the <var class="Arg">k</var>th module M_k in the resolution.</p>
+
+<p><a id="X7EBA188478844D96" name="X7EBA188478844D96"></a></p>
+
+<h5>2.4-5 ResolutionModuleRanks</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ResolutionModuleRanks</code>( <var class="Arg">R</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b>List of integers</p>
+
+<p>Returns a list containg the FG rank of the each of the modules M_k in the resolution <var class="Arg">R</var>.</p>
+
+<p><a id="X803528CD872A1F4C" name="X803528CD872A1F4C"></a></p>
+
+<h5>2.4-6 BoundaryFpGModuleHomomorphismGF</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; BoundaryFpGModuleHomomorphismGF</code>( <var class="Arg">R, k</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b><code class="keyw">FpGModuleHomomorphismGF</code></p>
+
+<p>Returns the <var class="Arg">k</var>th boundary map in the resolution <var class="Arg">R</var>, as a <code class="keyw">FpGModuleHomomorphismGF</code>. This represents the linear homomorphism d_k: M_k -&gt; M_k-1.</p>
+
+<p><a id="X7FB150F67DAF9059" name="X7FB150F67DAF9059"></a></p>
+
+<h5>2.4-7 ResolutionsAreEqual</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ResolutionsAreEqual</code>( <var class="Arg">R, S</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="keyw">true</code> if the resolutions appear to be equal, <code class="keyw">false</code> otherwise. This compares the torsion coefficients of the homology from the two resolutions.</p>
+
+<p><a id="X81D7C767813647B3" name="X81D7C767813647B3"></a></p>
+
+<h4>2.5 <span class="Heading">Example: Computing and working with resolutions</span></h4>
+
+<p>In this example we construct a minimal free FG-resolution of length four for the group G = D_8 x Q_8 of order 64, which will be the sequence</p>
+
+<p class="pcenter">
+        (FG)^22 ---&gt; (FG)^15 ---&gt; (FG)^9 ---&gt; FG ---&gt;&gt; F
+      </p>
+
+<p>We first build each stage explicitly, starting with <code class="func">LengthOneResolutionPrimePowerGroup</code> (<a href="chap2.html#X784BCF7C801B6E8E"><b>2.3-1</b></a>) followed by repeated applications of <code class="func">ExtendResolutionPrimePowerGroupRadical</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupRadical</b></a>). We extract various properties of this resolution. Finally, we construct equivalent resolutions for G using <code class="func">ResolutionPrimePowerGroupGF</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X86934BE9858F7199"><b>HAPprime: ResolutionPrimePowerGroupGF (for group)</b></a>) and <code class="func">ResolutionPrimePowerGroupGF2</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X86934BE9858F7199"><b>HAPprime: ResolutionPrimePowerGroupGF2 (for group)</b></a>) and check that the three are equivalent.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := DirectProduct(DihedralGroup(8), SmallGroup(8, 4));
+&lt;pc group of size 64 with 6 generators&gt;
+gap&gt; R := LengthOneResolutionPrimePowerGroup(G);
+Resolution of length 1 in characteristic 2 for &lt;pc group of size 64 with
+6 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap&gt; R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap&gt; R := ExtendResolutionPrimePowerGroupRadical(R);
+Resolution of length 4 in characteristic 2 for &lt;pc group of size 64 with
+6 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; #
+gap&gt; ResolutionLength(R);
+4
+gap&gt; ResolutionGroup(R);
+&lt;pc group of size 64 with 6 generators&gt;
+gap&gt; ResolutionModuleRanks(R);
+[ 4, 9, 15, 22 ]
+gap&gt; ResolutionModuleRank(R, 3);
+15
+gap&gt; M2 := ResolutionFpGModuleGF(R, 2);
+Full canonical module FG^9 over the group ring of &lt;pc group of size 64 with
+6 generators&gt; in characteristic 2
+
+gap&gt; d3 := BoundaryFpGModuleHomomorphismGF(R, 3);
+&lt;Module homomorphism&gt;
+
+gap&gt; ImageOfModuleHomomorphism(d3);
+Module over the group ring of &lt;pc group of size 64 with
+6 generators&gt; in characteristic 2 with 15 generators in FG^9.
+
+gap&gt; #
+gap&gt; S := ResolutionPrimePowerGroupGF(G, 4);
+Resolution of length 4 in characteristic 2 for &lt;pc group of size 64 with
+6 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; ResolutionsAreEqual(R, S);
+true
+gap&gt; T := ResolutionPrimePowerGroupGF2(G, 4);
+Resolution of length 4 in characteristic 2 for &lt;pc group of size 64 with
+6 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; ResolutionsAreEqual(R, T);
+true
+</pre></td></tr></table>
+
+<p>Further example of constructing resolutions and extracting data from them are given in Sections <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a>, <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a>, <a href="chap3.html#X83306CFA857F177C"><b>3.6-3</b></a>, <a href="chap4.html#X7C5F52FE80BB871A"><b>4.5-7</b></a> and <a href="chap4.html#X795D4069832F15F8"><b>4.6-4</b></a> in this reference manual, and also the chapter of <a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap2.html#X7A489A5D79DA9E5C"><b>HAPprime: Examples</b></a> in the <strong class="pkg">HAPprime</strong> user guide.</p>
+
+<p><a id="X79487D6C80383A6A" name="X79487D6C80383A6A"></a></p>
+
+<h4>2.6 <span class="Heading">Miscellaneous resolution functions</span></h4>
+
+<p><a id="X7AB2536286A7324D" name="X7AB2536286A7324D"></a></p>
+
+<h5>2.6-1 BestCentralSubgroupForResolutionFiniteExtension</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; BestCentralSubgroupForResolutionFiniteExtension</code>( <var class="Arg">G[, n]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Group</p>
+
+<p>Returns the central subgroup of <var class="Arg">G</var> that is likely to give the smallest module ranks when using the <strong class="pkg">HAP</strong> function <code class="func">ResolutionFiniteExtension</code> (<a href="/home/pas/GAP/gap/pkg/Hap1.9/doc/chap1.html#X8735FC5E7BB5CE3A"><b>HAP: ResolutionFiniteExtension</b></a>). That function computes a non-minimal resolution for <var class="Arg">G</var> from the twisted tensor product of resolutions for a normal subgroup N and the quotient group G/N. The ranks of the modules in the resolution for G are the products of the module ranks of the resolutions for these smaller groups. This function tests <var class="Arg">n</var> terms of the minimal resolutions for all the central subgroups of G and the corresponding quotients to find the subgroup/quotient pair with the smallest module ranks. If <var class="Arg">n</var> is not provided, then n=5 is used.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap1.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap3.html">Next Chapter</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

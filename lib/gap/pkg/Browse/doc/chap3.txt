@@ -1,0 +1,295 @@
+  
+  [1X3 [33X[0;0YUtilities using [10Xncurses[110X[101X[1X[133X[101X
+  
+  [33X[0;0YIn  this  chapter  we describe the usage of some example applications of the
+  [10Xncurses[110X interface provided by the [5XBrowse[105X package. They may be of interest by
+  themselves,  or  they  may  be  used  as  utility  functions  within  larger
+  applications.[133X
+  
+  
+  [1X3.1 [33X[0;0Y[10Xncurses[110X[101X[1X utilities[133X[101X
+  
+  [33X[0;0YIf  you  call  the  functions [2XNCurses.Alert[102X ([14X3.1-1[114X), [2XNCurses.Select[102X ([14X3.1-2[114X),
+  [2XNCurses.GetLineFromUser[102X  ([14X3.1-3[114X),  or  [2XNCurses.Pager[102X  ([14X3.1-4[114X)  from  another
+  [10Xncurses[110X  application in visual mode, you should refresh the windows that are
+  still   open,   by   calling   [10XNCurses.update_panels[110X   and  [10XNCurses.doupdate[110X
+  afterwards, see Section [14X2.1-3[114X and [14X2.1-2[114X. Also, if the cursor shall be hidden
+  after  that,  you  should  call [10Xcurs_set[110X with argument [10X0[110X, see Section [14X2.1-1[114X,
+  since the cursor is automatically made visible in [10XNCurses.endwin[110X.[133X
+  
+  [1X3.1-1 NCurses.Alert[101X
+  
+  [29X[2XNCurses.Alert[102X( [3Xmessages[103X, [3Xtimeout[103X[, [3Xattrs[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe integer corresponding to the character entered, or [9Xfail[109X.[133X
+  
+  [33X[0;0YIn  visual  mode,  [2XPrint[102X  ([14XReference: Print[114X) cannot be used for messages. An
+  alternative is given by [2XNCurses.Alert[102X.[133X
+  
+  [33X[0;0YLet  [3Xmessages[103X  be  either  an attribute line or a nonempty list of attribute
+  lines, and [3Xtimeout[103X be a nonnegative integer. [2XNCurses.Alert[102X shows [3Xmessages[103X in
+  a bordered box in the middle of the screen.[133X
+  
+  [33X[0;0YIf  [3Xtimeout[103X  is  zero  then  the box is closed after any user input, and the
+  integer  corresponding  to  the  entered  key  is  returned. If [3Xtimeout[103X is a
+  positive  number  [22Xn[122X,  say,  then the box is closed after [22Xn[122X milliseconds, and
+  [9Xfail[109X is returned.[133X
+  
+  [33X[0;0YIf  [10Xtimeout[110X  is  zero  and  mouse  events  are enabled (see [2XNCurses.UseMouse[102X
+  ([14X2.2-10[114X)) then the box can be moved inside the window via mouse events.[133X
+  
+  [33X[0;0YIf  the optional argument [3Xattrs[103X is given, it must be an integer representing
+  attributes  such  as  the components of [10XNCurses.attrs[110X (see Section [14X2.1-7[114X) or
+  the return value of [2XNCurses.ColorAttr[102X ([14X2.2-1[114X); these attributes are used for
+  the border of the box. The default is [10XNCurses.attrs.NORMAL[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XNCurses.Alert( "Hello world!", 1000 );[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XNCurses.Alert( [ "Hello world!",[127X[104X
+    [4X[25X>[125X [27X     [ "Hello ", NCurses.attrs.BOLD, "bold!" ] ], 1500,[127X[104X
+    [4X[25X>[125X [27X     NCurses.ColorAttr( "red", -1 ) + NCurses.attrs.BOLD );[127X[104X
+    [4X[28Xfail[128X[104X
+  [4X[32X[104X
+  
+  [1X3.1-2 NCurses.Select[101X
+  
+  [29X[2XNCurses.Select[102X( [3Xposs[103X[, [3Xsingle[103X[, [3Xnone[103X]] ) [32X function
+  [6XReturns:[106X  [33X[0;10YPosition or list of positions, or [9Xfalse[109X.[133X
+  
+  [33X[0;0YThis  function  allows  the user to select one or several items from a given
+  list.  In  the  simplest  case  [3Xposs[103X  is  a  list  of  attribute  lines (see
+  [2XNCurses.IsAttributeLine[102X ([14X2.2-3[114X)), each of which should fit on one line. Then
+  [2XNCurses.Select[102X  displays  these lines and lets the user browse through them.
+  After pressing the [12XReturn[112X key the index of the highlighted item is returned.
+  Note  that attributes in your lines should be switched on and off separately
+  by [9Xtrue[109X/[9Xfalse[109X entries such that the lines can be nicely highlighted.[133X
+  
+  [33X[0;0YThe  optional argument [3Xsingle[103X must be [9Xtrue[109X (default) or [9Xfalse[109X. In the second
+  case,  an  arbitrary  number of items can be marked and the function returns
+  the list of their indices.[133X
+  
+  [33X[0;0YIf  [3Xsingle[103X is [9Xtrue[109X a third argument [3Xnone[103X can be given. If it is [9Xtrue[109X then it
+  is  possible  to  leave the selection without choosing an item, in this case
+  [9Xfalse[109X is returned.[133X
+  
+  [33X[0;0YMore  details  can  be  given to the function by giving a record as argument
+  [3Xposs[103X. It can have the following components:[133X
+  
+  [8X[10Xitems[110X[108X
+        [33X[0;6YThe list of attribute lines as described above.[133X
+  
+  [8X[10Xsingle[110X[108X
+        [33X[0;6YBoolean with the same meaning as the optional argument [3Xsingle[103X.[133X
+  
+  [8X[10Xnone[110X[108X
+        [33X[0;6YBoolean with the same meaning as the optional argument [3Xnone[103X.[133X
+  
+  [8X[10Xsize[110X[108X
+        [33X[0;6YThe  size of the window like the first two arguments of [10XNCurses.newwin[110X
+        (default  is  [10X[0,  0][110X,  as big as possible), or the string [10X"fit"[110X which
+        means the smallest possible window.[133X
+  
+  [8X[10Xalign[110X[108X
+        [33X[0;6YA  substring of [10X"bclt"[110X, which describes the alignment of the window in
+        the  terminal.  The  meaning  and  the  default  are  the  same as for
+        [2XBrowseData.IsBrowseTableCellData[102X ([14X4.2-1[114X).[133X
+  
+  [8X[10Xbegin[110X[108X
+        [33X[0;6YTop-left  corner  of  the  window  like  the  last  two  arguments  of
+        [10XNCurses.newwin[110X (default is [10X[0, 0][110X, top-left of the screen). This value
+        has priority over the [10Xalign[110X component.[133X
+  
+  [8X[10Xattribute[110X[108X
+        [33X[0;6YAn   attribute  used  for  the  display  of  the  window  (default  is
+        [10XNCurses.attrs.NORMAL[110X).[133X
+  
+  [8X[10Xborder[110X[108X
+        [33X[0;6YIf  the  window  should  be  displayed  with a border then set to [9Xtrue[109X
+        (default  is  [9Xfalse[109X)  or to an integer representing attributes such as
+        the  components  of  [10XNCurses.attrs[110X  (see  Section [14X2.1-7[114X) or the return
+        value  of [2XNCurses.ColorAttr[102X ([14X2.2-1[114X); these attributes are used for the
+        border of the box. The default is [10XNCurses.attrs.NORMAL[110X.[133X
+  
+  [8X[10Xheader[110X[108X
+        [33X[0;6YAn  attribute  line  used  as  header line (the default depends on the
+        settings of [10Xsingle[110X and [10Xnone[110X).[133X
+  
+  [8X[10Xhint[110X[108X
+        [33X[0;6YAn  attribute  line  used  as hint in the last line of the window (the
+        default depends on the settings of [10Xsingle[110X and [10Xnone[110X).[133X
+  
+  [8X[10XonSubmitFunction[110X[108X
+        [33X[0;6YA  function  that  is  called when the user submits the selection; the
+        argument for this call is the current value of the record [3Xposs[103X. If the
+        function returns [9Xtrue[109X then the selected entries are returned as usual,
+        otherwise  the  selection window is kept open, waiting for new inputs;
+        if  the function returns a nonempty list of attribute lines then these
+        messages are shown using [2XNCurses.Alert[102X ([14X3.1-1[114X).[133X
+  
+  [33X[0;0YIf  mouse events are enabled (see [2XNCurses.UseMouse[102X ([14X2.2-10[114X)) then the window
+  can  be  moved  on the screen via mouse events, the focus can be moved to an
+  entry, and (if [10Xsingle[110X is [9Xfalse[109X) the selection of an entry can be toggled.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xindex := NCurses.Select(["Apples", "Pears", "Oranges"]);[127X[104X
+    [4X[25Xgap>[125X [27Xindex := NCurses.Select(rec([127X[104X
+    [4X[25X>[125X [27X                    items := ["Apples", "Pears", "Oranges"],[127X[104X
+    [4X[25X>[125X [27X                    single := false,[127X[104X
+    [4X[25X>[125X [27X                    border := true,[127X[104X
+    [4X[25X>[125X [27X                    begin := [5, 5],[127X[104X
+    [4X[25X>[125X [27X                    size := [8, 60],[127X[104X
+    [4X[25X>[125X [27X                    header := "Choose at least two fruits",[127X[104X
+    [4X[25X>[125X [27X                    attribute := NCurses.ColorAttr("yellow","red"),[127X[104X
+    [4X[25X>[125X [27X                    onSubmitFunction:= function( r )[127X[104X
+    [4X[25X>[125X [27X                      if Length( r.RESULT ) < 2 then[127X[104X
+    [4X[25X>[125X [27X                        return [ "Choose at least two fruits" ];[127X[104X
+    [4X[25X>[125X [27X                      else[127X[104X
+    [4X[25X>[125X [27X                        return true;[127X[104X
+    [4X[25X>[125X [27X                      fi;[127X[104X
+    [4X[25X>[125X [27X                    end ) );[127X[104X
+  [4X[32X[104X
+  
+  [1X3.1-3 NCurses.GetLineFromUser[101X
+  
+  [29X[2XNCurses.GetLineFromUser[102X( [3Xpre[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10YUser input as string.[133X
+  
+  [33X[0;0YThis  function  can be used to get an input string from the user. It opens a
+  one  line  window and writes the given string [3Xpre[103X into it. Then it waits for
+  user  input.  After  hitting  the [12XReturn[112X key the typed line is returned as a
+  string  to [5XGAP[105X. If the user exits via hitting the [12XEsc[112X key instead of hitting
+  the  [12XReturn[112X  key, the function returns [9Xfalse[109X. (The [12XEsc[112X key may be recognized
+  as input only after a delay of about a second.)[133X
+  
+  [33X[0;0YSome simple editing is possible during user input: The [12XLeft[112X, [12XRight[112X, [12XHome[112X and
+  [12XEnd[112X  keys,  the  [12XInsert[112X/[12XReplace[112X  keys,  and  the  [12XBackspace[112X/[12XDelete[112X  keys are
+  supported.[133X
+  
+  [33X[0;0YInstead  of  a  string,  [3Xpre[103X can also be a record with the component [10Xprefix[110X,
+  whose value is the string described above. The following optional components
+  of this record are supported.[133X
+  
+  [8X[10Xwindow[110X[108X
+        [33X[0;6YThe  window  with  the input field is created relative to this window,
+        the default is [22X0[122X.[133X
+  
+  [8X[10Xbegin[110X[108X
+        [33X[0;6YThis  is  a  list with the coordinates of the upper left corner of the
+        window  with  the input field, relative to the window described by the
+        [10Xwindow[110X  component; the default is [10X[ y-4, 2 ][110X, where [10Xy[110X is the height of
+        this window.[133X
+  
+  [8X[10Xdefault[110X[108X
+        [33X[0;6YThis  string  appears as result when the window is opened, the default
+        is an empty string.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xstr := NCurses.GetLineFromUser("Your Name: ");;[127X[104X
+    [4X[25Xgap>[125X [27XPrint("Hello ", str, "!\n");[127X[104X
+  [4X[32X[104X
+  
+  [1X3.1-4 NCurses.Pager[101X
+  
+  [29X[2XNCurses.Pager[102X( [3Xlines[103X[, [3Xborder[103X[, [3Xly[103X, [3Xlx[103X, [3Xy[103X, [3Xx[103X]] ) [32X function
+  
+  [33X[0;0YThis  is  a  simple  pager  utility  for  displaying and scrolling text. The
+  argument [3Xlines[103X can be a list of attribute lines (see [2XNCurses.IsAttributeLine[102X
+  ([14X2.2-3[114X))  or  a  string (the lines are separated by newline characters) or a
+  record. In case of a record the following components are recognized:[133X
+  
+  [8X[10Xlines[110X[108X
+        [33X[0;6YThe list of attribute lines or a string as described above.[133X
+  
+  [8X[10Xstart[110X[108X
+        [33X[0;6YLine number to start the display.[133X
+  
+  [8X[10Xsize[110X[108X
+        [33X[0;6YThe  size  [10X[ly,  lx][110X  of  the  window  like the first two arguments of
+        [10XNCurses.newwin[110X (default is [10X[0, 0][110X, as big as possible).[133X
+  
+  [8X[10Xbegin[110X[108X
+        [33X[0;6YTop-left  corner  [10X[y,  x][110X of the window like the last two arguments of
+        [10XNCurses.newwin[110X (default is [10X[0, 0][110X, top-left of the screen).[133X
+  
+  [8X[10Xattribute[110X[108X
+        [33X[0;6YAn   attribute  used  for  the  display  of  the  window  (default  is
+        [10XNCurses.attrs.NORMAL[110X).[133X
+  
+  [8X[10Xborder[110X[108X
+        [33X[0;6YEither  one  of  [9Xtrue[109X/[9Xfalse[109X to show the pager window with or without a
+        standard  border.  Or  it  can  be  string  with  eight,  two  or  one
+        characters,   giving   characters   to  be  used  for  a  border,  see
+        [2XNCurses.WBorder[102X ([14X2.2-9[114X).[133X
+  
+  [8X[10Xhint[110X[108X
+        [33X[0;6YA text for usage info in the last line of the window.[133X
+  
+  [33X[0;0YAs  an  abbreviation the information from [10Xborder[110X, [10Xsize[110X and [10Xbegin[110X can also be
+  specified in optional arguments.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xlines := List([1..100],i-> ["line ",NCurses.attrs.BOLD,String(i)]);;[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.Pager(lines);[127X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.1-5 [33X[0;0YSelection of help matches[133X[101X
+  
+  [33X[0;0YAfter  loading  the  [5XBrowse[105X  package  [5XGAP[105X's  help  system  behaves  slightly
+  different  when  a request yields several matches. The matches are shown via
+  [2XNCurses.Select[102X  ([14X3.1-2[114X),  the list can be searched and filtered, and one can
+  choose one match for immediate display. It is possible to not choose a match
+  and the [10X?<nr>[110X syntax still works.[133X
+  
+  [33X[0;0YIf   you  want  the  original  behavior  call  [10XSetUserPreference(  "Browse",
+  "SelectHelpMatches",   false  );[110X  in  your  [5XGAP[105X  session  or  [11Xgap.ini[111X  file,
+  see [14X'Reference: Configuring User preferences'[114X.[133X
+  
+  
+  [1X3.1-6 [33X[0;0YSelection of package names[133X[101X
+  
+  [33X[0;0YThe function [2XLoadPackage[102X ([14XReference: LoadPackage[114X) shows a list of matches if
+  only  a prefix of a package name is given. After loading the [5XBrowse[105X package,
+  [2XNCurses.Select[102X ([14X3.1-2[114X) is used for that, and one can choose a match.[133X
+  
+  [33X[0;0YIf   you  want  the  original  behavior  call  [10XSetUserPreference(  "Browse",
+  "SelectPackageName",   false  );[110X  in  your  [5XGAP[105X  session  or  [11Xgap.ini[111X  file,
+  see [14X'Reference: Configuring User preferences'[114X.[133X
+  
+  
+  [1X3.2 [33X[0;0YA Demo Function[133X[101X
+  
+  [1X3.2-1 NCurses.Demo[101X
+  
+  [29X[2XNCurses.Demo[102X( [[3Xinputs[103X] ) [32X function
+  
+  [33X[0;0YLet  [3Xinputs[103X be a list of records, each with the components [10Xtitle[110X (a string),
+  [10Xinputblocks[110X  (a  list  of strings, each describing some [5XGAP[105X statements), and
+  optionally   [10Xfooter[110X   (a  string)  and  [10Xcleanup[110X  (a  string  describing  [5XGAP[105X
+  statements). The default is [10XNCurses.DemoDefaults[110X.[133X
+  
+  [33X[0;0Y[10XNCurses.Demo[110X  lets  the user choose an entry from [3Xinputs[103X, via [2XNCurses.Select[102X
+  ([14X3.1-2[114X),  and  then  executes  the  [5XGAP[105X statements in the first entry of the
+  [10Xinputblocks[110X  list  of this entry; these strings, together with the values of
+  [10Xtitle[110X  and  [10Xfooter[110X,  are shown in a window, at the bottom of the screen. The
+  effects  of  calls  to  functions using [10Xncurses[110X are shown in the rest of the
+  screen.  After  the  execution  of  the  statements  (which may require user
+  input),  the user can continue with the next entry of [10Xinputblocks[110X, or return
+  to  the  [10Xinputs[110X  selection  (and  thus  cancel the current [10Xinputs[110X entry), or
+  return to the execution of the beginning of the current [10Xinputs[110X entry. At the
+  end  of  the  current  entry  of  [10Xinputs[110X,  the  user  returns  to the [10Xinputs[110X
+  selection.[133X
+  
+  [33X[0;0YThe  [5XGAP[105X  statements  in  the  [10Xcleanup[110X component, if available, are executed
+  whenever  the user does not continue; this is needed for deleting panels and
+  windows that are defined in the statements of the current entry.[133X
+  
+  [33X[0;0YNote that the [5XGAP[105X statements are executed in the [13Xglobal[113X scope, that is, they
+  have  the  same  effect  as  if  they  would  be  entered at the [5XGAP[105X prompt.
+  Initially,        [10XNCurses.Demo[110X        sets        the        value        of
+  [10XBrowseData.defaults.work.windowParameters[110X  to  the  parameters that describe
+  the  part  of  the  screen  above  the  window  that  shows  the  inputs; so
+  applications  of [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) use automatically the maximal
+  part  of  the screen as their window. It is recommended to use a screen with
+  at least [22X80[122X columns and at least [22X37[122X rows.[133X
+  

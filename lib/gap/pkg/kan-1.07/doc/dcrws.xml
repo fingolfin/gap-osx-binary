@@ -1,0 +1,491 @@
+<!-- ------------------------------------------------------------------- -->
+<!--                                                                     -->
+<!--  dcrws.xml             KAN documentation             Chris Wensley  -->
+<!--                                                    & Anne Heyworth  -->
+<!--  version 1.06, 07/01/2013                                           -->
+<!--                                                                     -->
+<!-- ------------------------------------------------------------------- -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Chapter Label="chap-dcrws">
+<Heading>Double Coset Rewriting Systems</Heading>
+
+The &kan; package provides functions for the computation of normal forms
+for double coset representatives of finitely presented groups.
+The first version of the package was released to support the
+paper <Cite Key="BrGhHeWe" />, which describes the algorithms 
+used in this package.
+
+<Section><Heading>Rewriting Systems</Heading>
+
+<ManSection>
+   <Oper Name="KnuthBendixRewritingSystem"
+         Arg="grp, gensorder, ordering, alph" />
+   <Oper Name="ReducedConfluentRewritingSystem"
+         Arg="grp, gensorder, ordering, limit" />
+   <Oper Name="DisplayRwsRules"
+         Arg="rws" />
+<Description>
+Methods for <C>KnuthBendixRewritingSystem</C> and 
+<C>ReducedConfluentRewritingSystem</C> 
+are supplied which apply to a finitely presented group. 
+These start by calling <C>IsomorphismFpMonoid</C> and then work with
+the resulting monoid.
+The parameter <C>gensorder</C> will normally be 
+<C>"shortlex"</C> or <C>"wreath"</C>, 
+while <C>ordering</C> is an integer list for reordering the generators, 
+and <C>alph</C> is an alphabet string used when printing words.
+A <E>partial</E> rewriting system may be obtained  by giving a <C>limit</C> 
+to the number of rules calculated. 
+As usual, <M>A,B</M> denote the inverses of <M>a,b</M>. 
+<P/>
+In the example the generators are by default ordered <M>[A,a,B,b]</M>, 
+so the list <C>L1</C> is used to specify the order <C>[a,A,b,B]</C> 
+to be used with the shortlex ordering.
+Specifying a limit <C>0</C> means that no limit is prescribed.
+</Description>
+</ManSection>
+<Example>
+<![CDATA[
+gap> G1 := FreeGroup( 2 );;
+gap> L1 := [2,1,4,3];;
+gap> order := "shortlex";;
+gap> alph1 := "AaBb";;
+gap> rws1 := ReducedConfluentRewritingSystem( G1, L1, order, 0, alph1 );
+Rewriting System for Monoid( [ f1, f1^-1, f2, f2^-1 ], ... ) with rules
+[ [ f1*f1^-1, <identity ...> ], [ f1^-1*f1, <identity ...> ],
+  [ f2*f2^-1, <identity ...> ], [ f2^-1*f2, <identity ...> ] ]
+gap> DisplayRwsRules( rws1 );;
+[ [ Aa, id ], [ aA, id ], [ Bb, id ], [ bB, id ] ]
+]]>
+</Example>
+</Section>
+
+
+<Section><Heading>Example 1 -- free product of two cyclic groups</Heading>
+
+<Index>example -- free product</Index>
+<ManSection>
+   <Func Name="DoubleCosetRewritingSystem"
+         Arg="grp, genH, genK, rws" />
+   <Prop Name="IsDoubleCosetRewritingSystem"
+         Arg="dcrws" />
+<Description>
+A <E>double coset rewriting system</E> for the double cosets 
+<M>H \backslash G / K</M> 
+requires as data a finitely presented group <M>G =</M><C>grp</C>, 
+generators <C>genH, genK</C> for subgroups <M>H, K</M>, 
+and a rewriting system <C>rws</C> for <M>G</M>.
+<P/>
+A simple example is given by taking <M>G</M> to be the free group on two
+generators <M>a,b</M>, a cyclic subgroup <M>H</M> with generator <M>a^6</M>,
+and a second cyclic subgroup <M>K</M> with generator <M>a^4</M>.
+(Similar examples using different powers of <M>a</M> are easily constructed.)
+Since <C>gcd(6,4)=2</C>, we have <M>Ha^2K=HK</M>, so the double cosets have
+representatives <M>[HK, HaK, Ha^iba^jK, Ha^ibwba^jK]</M>
+where <M>i \in [0..5]</M>, <M>j \in [0..3]</M>, 
+and <M>w</M> is any word in <M>a,b</M>.
+<P/>
+In the example the free group <M>G</M> is converted to a four generator
+monoid with relations defining the inverse of each generator,
+<C>[[Aa,id],[aA,id],[Bb,id],[bB,id]]</C>, 
+where <C>id</C> is the empty word.
+The initial rules for the double coset rewriting system 
+comprise those of <M>G</M> plus those given by 
+the generators of <M>H,K</M>, which are <M>[[Ha^6,H],[a^4K,K]]</M>.
+In the complete rewrite system new rules involving <M>H</M> or <M>K</M> 
+may arise, and there may also be rules involving both <M>H</M> and <M>K</M>. 
+<P/>
+For this example,
+<List>
+<Item>
+there are two <M>H</M>-rules, <M>[[Ha^4,HA^2],[HA^3,Ha^3]]</M>,
+</Item>
+<Item>
+there are two <M>K</M>-rules, <M>[[a^3K,AK],[A^2K,a^2K]]</M>,
+</Item>
+<Item>
+and there are two <M>H</M>-<M>K</M>-rules, <M>[[Ha^2K,HK],[HAK,HaK]]</M>.
+</Item>
+</List>
+Here is how the computation may be performed.
+</Description>
+</ManSection>
+<Example>
+<![CDATA[
+gap> genG1 := GeneratorsOfGroup( G1 );;
+gap> genH1 := [ genG1[1]^6 ];;
+gap> genK1 := [ genG1[1]^4 ];;
+gap> dcrws1 := DoubleCosetRewritingSystem( G1, genH1, genK1, rws1 );;
+gap> IsDoubleCosetRewritingSystem( dcrws1 );
+true
+gap> DisplayRwsRules( dcrws1 );;
+G-rules:
+[ [ Aa, id ], [ aA, id ], [ Bb, id ], [ bB, id ] ]
+H-rules:
+[ [ Haaaa, HAA ],
+  [ HAAA, Haaa ] ]
+K-rules:
+[ [ aaaK, AK ],
+  [ AAK, aaK ] ]
+H-K-rules:
+[ [ HaaK, HK ],
+  [ HAK, HaK ] ]
+]]>
+</Example>
+
+<ManSection>
+   <Attr Name="WordAcceptorOfReducedRws"
+         Arg="rws" />
+   <Attr Name="WordAcceptorOfDoubleCosetRws"
+         Arg="rws" />
+   <Prop Name="IsWordAcceptorOfDoubleCosetRws"
+         Arg="aut" />
+<Description>
+Using functions from the <Package>automata</Package> package, we may 
+<List>
+<Item>
+compute a <E>word acceptor</E> for the rewriting system of <M>G</M>;
+</Item>
+<Item>
+compute a <E>word acceptor</E> for the double coset rewriting system;
+</Item>
+<Item>
+test a list of words to see whether they are recognised by the automaton;
+</Item>
+<Item>
+obtain a rational expression for the language of the automaton. 
+</Item>
+</List>
+</Description>
+</ManSection>
+<P/>
+<Example>
+<![CDATA[
+gap> waG1 := WordAcceptorOfReducedRws( rws1 );
+Automaton("nondet",6,"aAbB",[ [ [ 1 ], [ 4 ], [ 1 ], [ 4 ], [ 4 ], [ 4 ] ], [ \
+[ 1 ], [ 3 ], [ 3 ], [ 1 ], [ 3 ], [ 3 ] ], [ [ 1 ], [ 6 ], [ 6 ], [ 6 ], [ 1 \
+], [ 6 ] ], [ [ 1 ], [ 5 ], [ 5 ], [ 5 ], [ 5 ], [ 1 ] ] ],[ 2 ],[ 1 ]);;
+gap> wadc1 := WordAcceptorOfDoubleCosetRws( dcrws1 );
+< deterministic automaton on 6 letters with 15 states >
+gap> Print( wadc1 );
+Automaton("det",15,"HKaAbB",[ [ 2, 2, 2, 6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ],\
+ [ 2, 2, 1, 2, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 2 ], [ 2, 2, 13, 2, 10, 5, 2, 13,\
+ 2, 7, 11, 11, 12, 2, 2 ], [ 2, 2, 9, 2, 2, 14, 2, 9, 15, 2, 2, 2, 2, 7, 15 ],\
+ [ 2, 2, 2, 2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ], [ 2, 2, 3, 2, 3, 3, 3, 2, 3,\
+ 3, 3, 3, 3, 3, 3 ] ],[ 4 ],[ 1 ]);;
+gap> words1 := [ "HK","HaK","HbK","HAK","HaaK","HbbK","HabK","HbaK","HbaabK"];;
+gap> valid1 := List( words1, w -> IsRecognizedByAutomaton( wadc1, w ) );
+[ true, true, true, false, false, true, true, true, true ]
+gap> lang1 := FAtoRatExp( wadc1 );
+((H(aaaUAA)BUH(a(aBUB)UABUB))(a(a(aa*BUB)UB)UA(AA*BUB)UB)*(a(a(aa*bUb)Ub)UA(AA\
+*bUb))UH(aaaUAA)bUH(a(abUb)UAbUb))((a(a(aa*BUB)UB)UA(AA*BUB))(a(a(aa*BUB)UB)UA\
+(AA*BUB)UB)*(a(a(aa*bUb)Ub)UA(AA*bUb))Ua(a(aa*bUb)Ub)UA(AA*bUb)Ub)*((a(a(aa*BU\
+B)UB)UA(AA*BUB))(a(a(aa*BUB)UB)UA(AA*BUB)UB)*(a(aKUK)UAKUK)Ua(aKUK)UAKUK)U(H(a\
+aaUAA)BUH(a(aBUB)UABUB))(a(a(aa*BUB)UB)UA(AA*BUB)UB)*(a(aKUK)UAKUK)UH(aKUK)
+]]>
+</Example>
+</Section>
+
+
+<Section><Heading>Example 2 -- the trefoil group</Heading>
+
+<Index>example -- trefoil group</Index>
+<Index>trefoil group</Index>
+<ManSection>
+   <Oper Name="PartialDoubleCosetRewritingSystem"
+         Arg="grp, Hgens, Kgens, rws, limit" />
+   <Attr Name="WordAcceptorOfPartialDoubleCosetRws"
+         Arg="grp, prws" />
+<Description>
+It may happen that, even when <M>G</M> has a finite rewriting system, 
+the double coset rewriting system is infinite.
+This is the case with the trefoil group <M>T</M> with generators 
+<M>[x,y]</M> and relator <M>[x^3 = y^2]</M> if the wreath product ordering 
+is used with <M>X > x > Y > y</M>. 
+The group itself has a rewriting system with just 6 rules. 
+</Description>
+</ManSection>
+<Example>
+<![CDATA[
+gap> FT := FreeGroup( 2 );;
+gap> relsT := [ FT.1^3*FT.2^-2 ];;
+gap> T := FT/relsT;;
+gap> genT := GeneratorsOfGroup( T );;
+gap> x := genT[1];  y := genT[2];
+gap> alphT := "XxYy";;
+gap> ordT := [4,3,2,1];;
+gap> orderT := "wreath";;
+gap> rwsT := ReducedConfluentRewritingSystem( T, ordT, orderT, 0, alphT );
+gap> DisplayRwsRules( rwsT );;
+[ [ Yy, id ], [ yY, id ], [ xxx, yy ], [ yyx, xyy ], [ X, xxYY ], [ Yx, yxYY ]\
+ ]
+gap> accT := WordAcceptorOfReducedRws( rwsT );
+< deterministic automaton on 4 letters with 7 states >
+gap> Print( accT );
+Automaton("nondet",7,"yYxX",[ [ [ 1 ], [ 4 ], [ 1 ], [ 4, 7 ], [ 4 ], [ 4 ], [\
+ 4, 7 ] ], [ [ 1 ], [ 3 ], [ 3 ], [ 1 ], [ 3 ], [ 3 ], [ 1 ] ], [ [ 1 ], [ 5 ]\
+, [ 1 ], [ 5 ], [ 5, 6 ], [ 1 ], [ 1 ] ], [ [ 1 ], [ 1 ], [ 1 ], [ 1 ], [ 1 ],\
+ [ 1 ], [ 1 ] ] ],[ 2 ],[ 1 ]);;
+gap> langT := FAtoRatExp( accT );
+(xx*(xyUy)Uy)(xx*(xyUy)Uyy*yUy)*(xx*((xYUY)Y*(yUxUX)Ux(xUX)UX)(yUYUxUX)*U(yy*(\
+YUxUX)UYUX)(yUYUxUX)*)Uxx*((xYUY)Y*(yUxUX)Ux(xUX)UX)(yUYUxUX)*U(YY*(yUxUX)UX)(\
+yUYUxUX)*(yxUx)((xyUy)x)*
+gap> r := RationalExpression( "((xyUy)y*UxY*UY*)Uyy*UY*" ); 
+(xyUy)y*UxY*UY*Uyy*UY*
+gap> AreEqualLang( langT, r );
+The given languages are not over the same alphabet
+false
+]]>
+</Example>
+In a previous version the expression <C>r</C>, 
+which does not involve the letter <C>X</C>, 
+was returned as the language <C>langT</C>. 
+This discrepancy should be investigated. 
+<P/>
+
+Taking subgroups <M>H</M>, <M>K</M> to be generated by 
+<M>x</M> and <M>y</M> respectively, 
+the double coset rewriting system has an infinite number of <M>H</M>-rules.
+It turns out that only a finite number of these are needed to produce
+the required automaton.
+The function <C>PartialDoubleCosetRewritingSystem</C> allows a limit to be 
+specified on the number of rules to be computed. 
+In the listing below a limit of 20 is used, but in fact 10 is sufficient.
+<Example>
+<![CDATA[
+gap> prwsT := PartialDoubleCosetRewritingSystem( T, [x], [y], rwsT, 20 );;
+#I WARNING: reached supplied limit 20 on number of rules
+gap> DisplayRwsRules( prwsT );
+G-rules:
+[ [ X, xxYY ], [ Yx, yxYY ], [ Yy, id ], [ yY, id ], [ xxx, yy ], [ yyx, xyy ]\
+ ]
+H-rules:
+[ [ Hx, H ],
+  [ HY, Hy ],
+  [ Hyy, H ],
+  [ Hyxyy, Hyx ],
+  [ HyxY, Hyxy ],
+  [ Hyxyxyy, Hyxyx ],
+  [ Hyxxyy, Hyxx ],
+  [ HyxxY, Hyxxy ],
+  [ HyxyxY, Hyxyxy ],
+  [ Hyxyxyxyy, Hyxyxyx ],
+  [ Hyxyxxyy, Hyxyxx ],
+  [ Hyxxyxyy, Hyxxyx ],
+  [ HyxxyxYY, Hyxxyx ] ]
+K-rules:
+[ [ YK, K ],
+  [ yK, K ] ]
+]]>
+</Example>
+
+This list of partial rules is then used by a modified 
+word acceptor function.
+<Example>
+<![CDATA[
+gap> paccT := WordAcceptorOfPartialDoubleCosetRws( T, prwsT );;
+< deterministic automaton on 6 letters with 6 states >
+gap> Print( paccT, "\n" );
+Automaton("det",6,"HKyYxX",[ [ 2, 2, 2, 6, 2, 2 ], [ 2, 2, 1, 2, 2, 1 ], [ 2, \
+2, 5, 2, 2, 5 ], [ 2, 2, 2, 2, 2, 2 ], [ 2, 2, 6, 2, 3, 2 ], [ 2, 2, 2, 2, 2, \
+2 ] ],[ 4 ],[ 1 ]);;
+gap> plangT := FAtoRatExp( paccT );
+H(yx(yx)*x)*(yx(yx)*KUK)
+gap> wordsT := ["HK", "HxK", "HyK", "HYK", "HyxK", "HyxxK", "HyyH", "HyxYK"];;
+gap> validT := List( wordsT, w -> IsRecognizedByAutomaton( paccT, w ) );
+[ true, false, false, false, true, true, false, false ]
+]]>
+</Example>
+</Section>
+
+
+
+<Section><Heading>Example 3 -- an infinite rewriting system</Heading>
+
+<Index>example -- infinite rws</Index>
+<ManSection>
+   <Attr Name="KBMagRewritingSystem"
+         Arg="fpgrp" />
+   <Attr Name="KBMagWordAcceptor"
+         Arg="fpgrp" />
+   <Oper Name="KBMagFSAtoAutomataDFA"
+         Arg="fsa, alph" />
+   <Oper Name="WordAcceptorByKBMag"
+         Arg="grp, alph" />
+   <Oper Name="WordAcceptorByKBMagOfDoubleCosetRws"
+         Arg="grp, dcrws" />
+<Description>
+When the group <M>G</M> has an infinite rewriting system, 
+the double coset rewriting system will also be infinite.
+In this case we try the function <C>KBMagWordAcceptor</C> 
+which calls the package <Package>KBMAG</Package> 
+to compute a word acceptor for <M>G</M>,
+and <C>KBMagFSAtoAutomataDFA</C> to convert this to a deterministic automaton 
+as used by the <Package>automata</Package> package.
+The resulting <C>dfa</C> forms part of the double coset automaton, 
+together with sufficient <M>H</M>-rules, <M>K</M>-rules 
+and <M>H</M>-<M>K</M>-rules found by the function 
+<C>PartialDoubleCosetRewritingSystem</C>.
+(Note that these five attributes and operations will not be available 
+if the <Package>kbmag</Package> package has not been loaded.)
+<P/>
+In the following example we take a two generator group <M>G3</M> 
+with relators <M>[a^3,b^3,(a*b)^3]</M>, 
+the normal forms of whose elements are some of the strings with 
+<M>a</M> or <M>a^{-1}</M> alternating with <M>b</M> or <M>b^{-1}</M>.
+The automatic structure computed by <Package>KBMAG</Package> 
+has a word acceptor with 17 states.
+</Description>
+</ManSection>
+<Example>
+<![CDATA[
+gap> F3 := FreeGroup("a","b");;
+gap> rels3 := [ F3.1^3, F3.2^3, (F3.1*F3.2)^3 ];;
+gap> G3 := F3/rels3;;
+gap> alph3 := "AaBb";;
+gap> waG3 := WordAcceptorByKBMag( G3, alph3 );;
+gap> Print( waG3, "\n");
+Automaton("det",18,"aAbB",[ [ 2, 18, 18, 8, 10, 12, 13, 18, 18, 18, 18, 18, 18\
+, 8, 17, 12, 18, 18 ], [ 3, 18, 18, 9, 11, 9, 12, 18, 18, 18, 18, 18, 18, 11, \
+18, 11, 18, 18 ], [ 4, 6, 6, 18, 18, 18, 18, 18, 6, 12, 16, 18, 12, 18, 18, 18\
+, 12, 18 ], [ 5, 5, 7, 18, 18, 18, 18, 14, 15, 5, 18, 18, 7, 18, 18, 18, 15, 1\
+8 ] ],[ 1 ],[ 1 .. 17 ]);;
+gap> langG3 := FAtoRatExp( waG3 );
+((abUAb)AUbA)(bA)*(b(aU@)UB(aB)*(a(bU@)U@)U@)U(abUAb)(aU@)U((aBUB)(aB)*AUba(Ba\
+)*BA)(bA)*(b(aU@)U@)U(aBUB)(aB)*(a(bU@)U@)Uba(Ba)*(BU@)UbUaUA(B(aB)*(a(bU@)UAU\
+@)U@)U@
+]]>
+</Example>
+
+<ManSection>
+   <Oper Name="DCrules"
+         Arg="dcrws" />
+   <Attr Name="Hrules"
+         Arg="dcrws" />
+   <Attr Name="Krules"
+         Arg="dcrws" />
+   <Attr Name="HKrules"
+         Arg="dcrws" />
+<Description>
+We now take <M>H</M> to be generated by <M>ab</M> and <M>K</M> 
+to be generated by <M>ba</M>.  
+If we specify a limits of 50, 75, 100, 200 
+for the number of rules in a partial double coset rewrite system, 
+we obtain lists of  <M>H</M>-rules, <M>K</M>-rules 
+and <M>H</M>-<M>K</M>-rules of increasing length.
+The numbers of states in the resulting automata also increase. 
+We may deduce by hand (but not computationally -- see <Cite Key="BrGhHeWe" />) 
+three infinite sets of rules and a limit for the automata.
+</Description>
+</ManSection>
+<Example>
+<![CDATA[
+gap> lim := 100;;
+gap> genG3 := GeneratorsOfGroup( G3 );;
+gap> a := genG3[1];;  b := genG3[2];; 
+gap> gH3 := [ a*b ];;  gK3 := [ b*a ];;
+gap> rwsG3 := KnuthBendixRewritingSystem( G3, "shortlex", [2,1,4,3], alph3 );;
+gap> dcrws3 := PartialDoubleCosetRewritingSystem( G3, gH3, gK3, rwsG3, lim );;
+#I using PartialDoubleCosetRewritingSystem with limit 100
+#I  51 rules, and 1039 pairs
+#I WARNING: reached supplied limit 100 on number of rules
+gap> Print( Length( Rules( dcrws3 ) ), " rules found.\n" );
+101 rules found.
+gap> dcaut3 := WordAcceptorByKBMagOfDoubleCosetRws( G3, dcrws3 );;
+gap> Print( "Double Coset Minimalized automaton:\n", dcaut3 );
+Double Coset Minimalized automaton:
+Automaton("det",44,"HKaAbB",[ [ 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2\
+, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2\
+, 2, 2 ], [ 2, 2, 1, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, \
+2, 2, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1 ], [ 2, 2, 2,\
+ 2, 3, 24, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 43, 2, 43, 2, 27, 2, 2, 2\
+, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ], [ 2, 2, 2, 2, 44, 3, 29, 2\
+, 8, 2, 10, 2, 12, 2, 14, 2, 16, 2, 18, 2, 20, 2, 22, 2, 2, 2, 2, 26, 2, 29, 2\
+, 31, 2, 33, 2, 35, 2, 37, 2, 39, 2, 41, 2, 2 ], [ 2, 2, 2, 2, 21, 2, 2, 28, 2\
+, 9, 2, 11, 2, 13, 2, 15, 2, 17, 2, 19, 2, 42, 2, 3, 2, 28, 3, 2, 7, 2, 30, 2,\
+ 32, 2, 34, 2, 36, 2, 38, 2, 40, 2, 2, 28 ], [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2\
+, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 6, 2, 25, 25, 2, 2, 2, 2, 2, 2, 2, 2, 2,\
+ 2, 2, 2, 2, 2, 2, 23, 6 ] ],[ 4 ],[ 1 ]);;
+gap> dclang3 := FAtoRatExp( dcaut3 );;
+gap> Print( "Double Coset language of acceptor:\n", dclang3, "\n" );
+Double Coset language of acceptor:
+(HbAbAbAbAbAbAbAbUHAb)(Ab)*(A(Ba(Ba)*bKUK)UK)UHbAbA(bA(bA(bA(bA(bAKUK)UK)UK)UK\
+)UK)UH(A(B(aB)*(abUA)KUK)UaKUb(a(Ba)*BA(bA(bA(bA(bA(bA(bA(bA(bA)*(bKUK)UK)UK)U\
+K)UK)UK)UK)UK)UAK)UK)
+gap> ok := DCrules(dcrws3);;
+gap> alph3e := dcrws3!.alphabet;;
+gap> Print("H-rules:\n");  DisplayAsString( Hrules(dcrws3), alph3e, true );
+H-rules:
+H-rules:
+[ HB, Ha ]
+[ HaB, Hb ]
+[ Hab, H ]
+[ HbAB, HAba ]
+[ HbAbAB, HAbAba ]
+[ HbAbAbAB, HAbAbAba ]
+[ HbAbAbAbAB, HAbAbAbAba ]
+[ HbAbAbAbAbAB, HAbAbAbAbAba ]
+[ HbAbAbAbAbAbAB, HAbAbAbAbAbAba ]
+[ HbAbAbAbAbAbAbAB, HAbAbAbAbAbAbAba ]
+gap>     Print(" K-rules:\n");  DisplayAsString( Krules(dcrws3), alph3e, true );;
+ K-rules:
+[ BK, aK ]
+[ BaK, bK ]
+[ baK, K ]
+[ BAbK, abAK ]
+[ BAbAbK, abAbAK ]
+[ BAbAbAbK, abAbAbAK ]
+[ BAbAbAbAbK, abAbAbAbAK ]
+[ BAbAbAbAbAbK, abAbAbAbAbAK ]
+[ BAbAbAbAbAbAbK, abAbAbAbAbAbAK ]
+[ BAbAbAbAbAbAbAbK, abAbAbAbAbAbAbAK ]
+gap> Print("HK-rules:\n");  DisplayAsString( HKrules(dcrws3), alph3e, true );;
+HK-rules:
+[ HbK, HAK ]
+[ HbAbK, HAbAK ]
+[ HbAbAbK, HAbAbAK ]
+[ HbAbAbAbK, HAbAbAbAK ]
+[ HbAbAbAbAbK, HAbAbAbAbAK ]
+[ HbAbAbAbAbAbK, HAbAbAbAbAbAK ]
+[ HbAbAbAbAbAbAbK, HAbAbAbAbAbAbAK ]
+]]>
+</Example>
+
+<ManSection>
+   <Oper Name="NextWord"
+         Arg="dcrws, word" />
+   <Oper Name="WordToString"
+         Arg="word, alph" />
+   <Oper Name="DisplayAsString"
+         Arg="word, alph" />
+   <Oper Name="IdentityDoubleCoset"
+         Arg="dcrws" />
+<Description>
+These functions may be used to find normal forms of increasing length 
+for double coset representatives.
+</Description>
+</ManSection>
+<Example>
+<![CDATA[
+gap> len := 30;;
+gap> L3 := 0*[1..len];;
+gap> L3[1] := IdentityDoubleCoset( dcrws3 );;
+gap> for i in [2..len] do
+gap>     L3[i] := NextWord( dcrws3, L3[i-1] );
+gap> od;
+gap> ## List of 30 normal forms for double cosets:
+gap> DisplayAsString( L3, alph3e, true );
+[ HK, HAK, HaK, HAbK, HbAK, HABAK, HAbAK, HABabK, HAbAbK, HbAbAK, HbaBAK, HABa\
+BAK, HAbAbAK, HABaBabK, HAbABabK, HAbAbAbK, HbAbAbAK, HbaBAbAK, HbaBaBAK, HABa\
+BaBAK, HAbAbAbAK, HABaBaBabK, HAbABaBabK, HAbAbABabK, HAbAbAbAbK, HbAbAbAbAK, \
+HbaBAbAbAK, HbaBaBAbAK, HbaBaBaBAK, HABaBaBaBAK ]
+gap> w := NextWord( dcrws3, L3[30] );
+m1*(m3*m6)^4*m3*m2
+gap> s := WordToString( w, alph3e );
+"HAbAbAbAbAK"
+]]>
+</Example>
+</Section>
+</Chapter>

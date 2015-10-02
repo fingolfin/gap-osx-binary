@@ -1,0 +1,227 @@
+  
+  [1X3 [33X[0;0Y2d-mappings[133X[101X
+  
+  
+  [1X3.1 [33X[0;0YMorphisms of 2d-groups[133X[101X
+  
+  [33X[0;0YThis    chapter   describes   morphisms   of   (pre-)crossed   modules   and
+  (pre-)cat1-groups.[133X
+  
+  [1X3.1-1 Source[101X
+  
+  [29X[2XSource[102X( [3Xmap[103X ) [32X attribute
+  [29X[2XRange[102X( [3Xmap[103X ) [32X attribute
+  [29X[2XSourceHom[102X( [3Xmap[103X ) [32X attribute
+  [29X[2XRangeHom[102X( [3Xmap[103X ) [32X attribute
+  
+  [33X[0;0YMorphisms  of [13X2d-groups[113X are implemented as [13X2d-mappings[113X. These have a pair of
+  2d-groups as source and range, together with two group homomorphisms mapping
+  between  corresponding  source and range groups. These functions return [10Xfail[110X
+  when invalid data is supplied.[133X
+  
+  
+  [1X3.2 [33X[0;0YMorphisms of pre-crossed modules[133X[101X
+  
+  [1X3.2-1 IsXModMorphism[101X
+  
+  [29X[2XIsXModMorphism[102X( [3Xmap[103X ) [32X property
+  [29X[2XIsPreXModMorphism[102X( [3Xmap[103X ) [32X property
+  
+  [33X[0;0YA  morphism  between two pre-crossed modules [22XmathcalX_1 = (∂_1 : S_1 -> R_1)[122X
+  and  [22XmathcalX_2  = (∂_2 : S_2 -> R_2)[122X is a pair [22X(σ, ρ)[122X, where [22Xσ : S_1 -> S_2[122X
+  and  [22Xρ : R_1 -> R_2[122X commute with the two boundary maps and are morphisms for
+  the two actions:[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Y\partial_2 \sigma = \rho \partial_1, \qquad \sigma(s^r) = (\sigma
+        s)^{\rho r}.[133X [124X[133X
+  
+  
+  [33X[0;0YThus  [22Xσ[122X is the [10XSourceHom[110X and [22Xρ[122X is the [10XRangeHom[110X. When [22XmathcalX_1 = mathcalX_2[122X
+  and [22Xσ, ρ[122X are automorphisms then [22X(σ, ρ)[122X is an automorphism of [22XmathcalX_1[122X. The
+  group of automorphisms is denoted by [22XAut(mathcalX_1 )[122X.[133X
+  
+  [1X3.2-2 IsInjective[101X
+  
+  [29X[2XIsInjective[102X( [3Xmap[103X ) [32X property
+  [29X[2XIsSurjective[102X( [3Xmap[103X ) [32X property
+  [29X[2XIsSingleValued[102X( [3Xmap[103X ) [32X property
+  [29X[2XIsTotal[102X( [3Xmap[103X ) [32X property
+  [29X[2XIsBijective[102X( [3Xmap[103X ) [32X property
+  [29X[2XIsEndo2dMapping[102X( [3Xmap[103X ) [32X property
+  
+  [33X[0;0YThe  usual  properties  of  mappings  are  easily  checked.  It  is  usually
+  sufficient  to  verify  that  both  the  [10XSourceHom[110X and the [10XRangeHom[110X have the
+  required property.[133X
+  
+  [1X3.2-3 XModMorphism[101X
+  
+  [29X[2XXModMorphism[102X( [3Xargs[103X ) [32X function
+  [29X[2XXModMorphismByHoms[102X( [3XX1[103X, [3XX2[103X, [3Xsigma[103X, [3Xrho[103X ) [32X operation
+  [29X[2XPreXModMorphism[102X( [3Xargs[103X ) [32X function
+  [29X[2XPreXModMorphismByHoms[102X( [3XP1[103X, [3XP2[103X, [3Xsigma[103X, [3Xrho[103X ) [32X operation
+  [29X[2XInclusionMorphism2dDomains[102X( [3XX1[103X, [3XS1[103X ) [32X operation
+  [29X[2XInnerAutomorphismXMod[102X( [3XX1[103X, [3Xr[103X ) [32X operation
+  [29X[2XIdentityMapping[102X( [3XX1[103X ) [32X attribute
+  [29X[2XIsomorphismPermObject[102X( [3Xobj[103X ) [32X function
+  
+  [33X[0;0YThese are the constructors for morphisms of pre-crossed and crossed modules.[133X
+  
+  [33X[0;0YIn  the  following example we construct a simple automorphism of the crossed
+  module [10XX1[110X constructed in the previous chapter.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xsigma1 := GroupHomomorphismByImages( c5, c5, [ (5,6,7,8,9) ][127X[104X
+    [4X[28X        [ (5,9,8,7,6) ] );;[128X[104X
+    [4X[25Xgap>[125X [27Xrho1 := IdentityMapping( Range( X1 ) );[127X[104X
+    [4X[28XIdentityMapping( PAut(c5) )[128X[104X
+    [4X[25Xgap>[125X [27Xmor1 := XModMorphism( X1, X1, sigma1, rho1 );[127X[104X
+    [4X[28X[[c5->PAut(c5))] => [c5->PAut(c5))]] [128X[104X
+    [4X[25Xgap>[125X [27XDisplay( mor1 );[127X[104X
+    [4X[28XMorphism of crossed modules :-[128X[104X
+    [4X[28X: Source = [c5->PAut(c5))] with generating sets:[128X[104X
+    [4X[28X  [ (5,6,7,8,9) ][128X[104X
+    [4X[28X  [ (1,2,3,4) ][128X[104X
+    [4X[28X: Range = Source[128X[104X
+    [4X[28X: Source Homomorphism maps source generators to:[128X[104X
+    [4X[28X  [ (5,9,8,7,6) ][128X[104X
+    [4X[28X: Range Homomorphism maps range generators to:[128X[104X
+    [4X[28X  [ (1,2,3,4) ][128X[104X
+    [4X[25Xgap>[125X [27XIsAutomorphism2dDomain( mor1 );[127X[104X
+    [4X[28Xtrue [128X[104X
+    [4X[25Xgap>[125X [27XOrder( mor1 );[127X[104X
+    [4X[28X2[128X[104X
+    [4X[25Xgap>[125X [27XRepresentationsOfObject( mor1 );[127X[104X
+    [4X[28X[ "IsComponentObjectRep", "IsAttributeStoringRep", "Is2dMappingRep" ][128X[104X
+    [4X[25Xgap>[125X [27XKnownPropertiesOfObject( mor1 );[127X[104X
+    [4X[28X[ "CanEasilyCompareElements", "CanEasilySortElements", "IsTotal", [128X[104X
+    [4X[28X  "IsSingleValued", "IsInjective", "IsSurjective", "RespectsMultiplication", [128X[104X
+    [4X[28X  "IsPreXModMorphism", "IsXModMorphism", "IsEndomorphism2dDomain", [128X[104X
+    [4X[28X  "IsAutomorphism2dDomain" ][128X[104X
+    [4X[25Xgap>[125X [27XKnownAttributesOfObject( mor1 );[127X[104X
+    [4X[28X[ "Name", "Order", "Range", "Source", "SourceHom", "RangeHom" ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.3 [33X[0;0YMorphisms of pre-cat1-groups[133X[101X
+  
+  [33X[0;0YA  morphism  of pre-cat1-groups from [22XmathcalC_1 = (e_1;t_1,h_1 : G_1 -> R_1)[122X
+  to [22XmathcalC_2 = (e_2;t_2,h_2 : G_2 -> R_2)[122X is a pair [22X(γ, ρ)[122X where [22Xγ : G_1 ->
+  G_2[122X and [22Xρ : R_1 -> R_2[122X are homomorphisms satisfying[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Yh_2 \gamma = \rho h_1, \qquad t_2 \gamma = \rho t_1, \qquad e_2 \rho =
+        \gamma e_1.[133X [124X[133X
+  
+  
+  [1X3.3-1 IsCat1Morphism[101X
+  
+  [29X[2XIsCat1Morphism[102X( [3Xmap[103X ) [32X property
+  [29X[2XIsPreCat1Morphism[102X( [3Xmap[103X ) [32X property
+  [29X[2XCat1Morphism[102X( [3Xargs[103X ) [32X function
+  [29X[2XCat1MorphismByHoms[102X( [3XC1[103X, [3XC2[103X, [3Xgamma[103X, [3Xrho[103X ) [32X operation
+  [29X[2XPreCat1Morphism[102X( [3Xargs[103X ) [32X function
+  [29X[2XPreCat1MorphismByHoms[102X( [3XP1[103X, [3XP2[103X, [3Xgamma[103X, [3Xrho[103X ) [32X operation
+  [29X[2XInclusionMorphism2dDomains[102X( [3XC1[103X, [3XS1[103X ) [32X operation
+  [29X[2XInnerAutomorphismCat1[102X( [3XC1[103X, [3Xr[103X ) [32X operation
+  [29X[2XIdentityMapping[102X( [3XC1[103X ) [32X attribute
+  [29X[2XIsomorphismPermObject[102X( [3Xobj[103X ) [32X function
+  [29X[2XSmallerDegreePerm2dDomain[102X( [3Xobj[103X ) [32X function
+  
+  [33X[0;0YThe  global  function  [10XIsomorphismPermObject[110X  calls  [10XIsomorphismPermPreCat1[110X,
+  which  constructs  a  morphism  whose  [10XSourceHom[110X and [10XRangeHom[110X are calculated
+  using    [10XIsomorphismPermGroup[110X   on   the   source   and   range.   Similarly
+  [10XSmallerDegreePermutationRepresentation[110X  is  used on the two groups to obtain
+  [10XSmallerDegreePerm2dDomain[110X. Names are assigned automatically.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xiso2 := IsomorphismPermObject( C2 );; [127X[104X
+    [4X[25Xgap>[125X [27XDisplay( iso2 ); [127X[104X
+    [4X[28XMorphism of cat1-groups :- [128X[104X
+    [4X[28X: Source = [s3c4=>s3] with generating sets:[128X[104X
+    [4X[28X  [ f1, f2, f3, f4 ][128X[104X
+    [4X[28X  [ f1, f2 ][128X[104X
+    [4X[28X:  Range = P[s3c4=>s3] with generating sets:[128X[104X
+    [4X[28X  [ (6,7), (5,6,7), (1,2,3,4), (1,3)(2,4) ][128X[104X
+    [4X[28X  [ (2,3), (1,2,3) ][128X[104X
+    [4X[28X: Source Homomorphism maps source generators to:[128X[104X
+    [4X[28X  [ (6,7), (5,6,7), (1,2,3,4), (1,3)(2,4) ][128X[104X
+    [4X[28X: Range Homomorphism maps range generators to:[128X[104X
+    [4X[28X  [ (2,3), (1,2,3) ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.4 [33X[0;0YOperations on morphisms[133X[101X
+  
+  [1X3.4-1 CompositionMorphism[101X
+  
+  [29X[2XCompositionMorphism[102X( [3Xmap2[103X, [3Xmap1[103X ) [32X operation
+  
+  [33X[0;0YComposition  of  morphisms, written [10X(<map1> * <map2>)[110X for maps acting of the
+  right,  calls  the [10XCompositionMorphism[110X function for maps acting on the left,
+  applied to the appropriate type of 2d-mapping.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XGeneratorsOfGroup( d16 );[127X[104X
+    [4X[28X[ (11,12,13,14,15,16,17,18), (12,18)(13,17)(14,16) ][128X[104X
+    [4X[25Xgap>[125X [27Xd8 := Subgroup( d16, [ c^2, d ] );;[127X[104X
+    [4X[25Xgap>[125X [27Xc4 := Subgroup( d8, [ c^2 ] );;[127X[104X
+    [4X[25Xgap>[125X [27XSetName( d8, "d8" );  SetName( c4, "c4" );[127X[104X
+    [4X[25Xgap>[125X [27XX16 := XModByNormalSubgroup( d16, d8 );[127X[104X
+    [4X[28X[d8->d16][128X[104X
+    [4X[25Xgap>[125X [27XX8 := SubXMod( X16, c4, d8 );[127X[104X
+    [4X[28X[c4->d8][128X[104X
+    [4X[25Xgap>[125X [27XIsSubXMod( X16, X8 );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xinc8 := InclusionMorphism2dDomains( X16, X8 );[127X[104X
+    [4X[28X[[c4->d8] => [d8->d16]][128X[104X
+    [4X[25Xgap>[125X [27Xrho := GroupHomomorphismByImages( d16, d16, [c,d], [c,d^(c^2)] );;[127X[104X
+    [4X[25Xgap>[125X [27Xsigma := GroupHomomorphismByImages( d8, d8, [c^2,d], [c^2,d^(c^2)] );;[127X[104X
+    [4X[25Xgap>[125X [27Xmor := XModMorphismByHoms( X16, X16, sigma, rho );[127X[104X
+    [4X[28X[[d8->d16] => [d8->d16]][128X[104X
+    [4X[25Xgap>[125X [27Xcomp := inc8 * mor;[127X[104X
+    [4X[28X[[c4->d8] => [d8->d16]][128X[104X
+    [4X[25Xgap>[125X [27Xcomp = CompositionMorphism(mor,inc8);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xc2 := Group( (19,20) );;[127X[104X
+    [4X[25Xgap>[125X [27Xi2 := Subgroup( c2, [()] );;[127X[104X
+    [4X[25Xgap>[125X [27XX9 := XModByNormalSubgroup( c2, i2 );;[127X[104X
+    [4X[25Xgap>[125X [27Xsigma9 := GroupHomomorphismByImages( c4, i2, [c^2], [()] );;[127X[104X
+    [4X[25Xgap>[125X [27Xrho9 := GroupHomomorphismByImages( d8, c2, [c^2,d], [(),(19,20)] );;[127X[104X
+    [4X[25Xgap>[125X [27Xmor9 := XModMorphism( X8, X9, sigma9, rho9 );[127X[104X
+    [4X[28X[[c4->d8] => [..]][128X[104X
+    [4X[25Xgap>[125X [27XK9 := Kernel( mor9 );[127X[104X
+    [4X[28X[Group( [ (11,13,15,17)(12,14,16,18) ] )->Group( [ (11,13,15,17)(12,14,16,18)[128X[104X
+    [4X[28X ] )][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X3.4-2 Kernel[101X
+  
+  [29X[2XKernel[102X( [3Xmap[103X ) [32X operation
+  [29X[2XKernel2dMapping[102X( [3Xmap[103X ) [32X attribute
+  
+  [33X[0;0YThe  kernel  of  a morphism of crossed modules is a normal subcrossed module
+  whose  groups  are  the  kernels of the source and target homomorphisms. The
+  inclusion of the kernel is a standard example of a crossed square, but these
+  have not yet been implemented.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xc2 := Group( (19,20) );;[127X[104X
+    [4X[25Xgap>[125X [27Xi2 := Subgroup( c2, [()] );;[127X[104X
+    [4X[25Xgap>[125X [27XX9 := XModByNormalSubgroup( c2, i2 );;[127X[104X
+    [4X[25Xgap>[125X [27Xsigma9 := GroupHomomorphismByImages( c4, i2, [c^2], [()] );;[127X[104X
+    [4X[25Xgap>[125X [27Xrho9 := GroupHomomorphismByImages( d8, c2, [c^2,d], [(),(19,20)] );;[127X[104X
+    [4X[25Xgap>[125X [27Xmor9 := XModMorphism( X8, X9, sigma9, rho9 );[127X[104X
+    [4X[28X[[c4->d8] => [..]][128X[104X
+    [4X[25Xgap>[125X [27XK9 := Kernel( mor9 );[127X[104X
+    [4X[28X[Group( [ (11,13,15,17)(12,14,16,18) ] )->Group( [ (11,13,15,17)(12,14,16,18)[128X[104X
+    [4X[28X ] )][128X[104X
+  [4X[32X[104X
+  

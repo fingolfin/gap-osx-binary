@@ -1,0 +1,1090 @@
+  
+  [1XA [33X[0;0YSome Tools for Database Handling[133X[101X
+  
+  [33X[0;0YTwo aims of the tools described in this appendix are[133X
+  
+  [30X    [33X[0;6Yspeeding   up   selection  functions  such  as  [2XAllCharacterTableNames[102X
+        ([14XCTblLib:  AllCharacterTableNames[114X)  for  certain data libraries of [5XGAP[105X
+        (with  not  too  many entries), in the sense that users can extend the
+        list of attributes that are treated in a special way[133X
+  
+  [30X    [33X[0;6Yand  a  programmatic  extension for rendering overviews of information
+        about        the        contents       of       databases,       using
+        [2XBrowseTableFromDatabaseIdEnumerator[102X ([14XA.2-2[114X).[133X
+  
+  [33X[0;0YThe  [5XGAP[105X objects introduced for that are [13Xdatabase id enumerators[113X (see [14XA.1-1[114X)
+  and [13Xdatabase attributes[113X (see [14XA.1-2[114X).[133X
+  
+  [33X[0;0YContrary  to the individual interfaces to the [5XGAP[105X manuals (see Section [14X6.6[114X),
+  the  [5XGAP[105X  bibliography (see Section [14X6.7[114X), and the overviews of [5XGAP[105X packages,
+  [5XGAP[105X methods, and Conway polynomials available in [5XGAP[105X (see Section [14X6.11[114X), the
+  approach  that  will  be  described  here  assumes  a  special way to access
+  database  entries.  Thus  it  depends  on  the structure of a given database
+  whether  the  tools  described  here  are  useful,  or whether an individual
+  interface  fits  better.  Perhaps the examples shown in Sections [14XA.3[114X and [14XA.4[114X
+  give an impression what is possible.[133X
+  
+  
+  [1XA.1 [33X[0;0Y[5XGAP[105X[101X[1X Objects for Database Handling[133X[101X
+  
+  
+  [1XA.1-1 [33X[0;0YDatabase Id Enumerators[133X[101X
+  
+  [33X[0;0YA  [13Xdatabase  id  enumerator[113X  is  a  record  [3Xr[103X  with  at  least the following
+  components.[133X
+  
+  [8X[10Xidentifiers[110X[108X
+        [33X[0;6Ya  list  of  [21Xidentifiers[121X  of  the  database  entries, which provides a
+        bijection with these entries,[133X
+  
+  [8X[10Xentry[110X[108X
+        [33X[0;6Ya  function  that  takes  [3Xr[103X  and an entry in the [10Xidentifiers[110X list, and
+        returns the corresponding database entry,[133X
+  
+  [8X[10Xattributes[110X[108X
+        [33X[0;6Ythe  record  whose  components are the database attribute records (see
+        Section  [14XA.1-2[114X)  for  [3Xr[103X;  this components is automatically initialized
+        when   [3Xr[103X   is  created  with  [2XDatabaseIdEnumerator[102X  ([14XA.1-4[114X);  database
+        attributes can be entered with [2XDatabaseAttributeAdd[102X ([14XA.1-5[114X).[133X
+  
+  [33X[0;0YIf  the  [10Xidentifiers[110X  list may change over the time (because the database is
+  extended or corrected) then the following components are supported. They are
+  used by [2XDatabaseIdEnumeratorUpdate[102X ([14XA.1-7[114X).[133X
+  
+  [8X[10Xversion[110X[108X
+        [33X[0;6Ya  [5XGAP[105X object that describes the version of the [10Xidentifiers[110X component,
+        this  can  be  for  example  a  string describing the time of the last
+        change (this time need not coincide with the time of the last update);
+        the  default  value  (useful  only  for  the case that the [10Xidentifiers[110X
+        component is never changed) is an empty string,[133X
+  
+  [8X[10Xupdate[110X[108X
+        [33X[0;6Ya  function that takes [3Xr[103X as its argument, replaces its [10Xidentifiers[110X and
+        [10Xversion[110X  values  by  up-to-date  versions if necessary (for example by
+        downloading the data), and returns [9Xtrue[109X or [9Xfalse[109X, depending on whether
+        the  update  process  was  successful  or  not;  the  default value is
+        [2XReturnTrue[102X ([14XReference: ReturnTrue[114X),[133X
+  
+  [33X[0;0YThe following component is optional.[133X
+  
+  [8X[10XisSorted[110X[108X
+        [33X[0;6Y[9Xtrue[109X  means  that the [10Xidentifiers[110X list is sorted w.r.t. [5XGAP[105X's ordering
+        [10X\<[110X; the default is [9Xfalse[109X.[133X
+  
+  [33X[0;0YThe  idea  behind  database  id  enumerator  objects  is that such an object
+  defines  the set of data covered by database attributes (see Section [14XA.1-2[114X),
+  it  provides  the  mapping between identifiers and the actual entries of the
+  database,  and  it  defines when precomputed data of database attributes are
+  outdated.[133X
+  
+  
+  [1XA.1-2 [33X[0;0YDatabase Attributes[133X[101X
+  
+  [33X[0;0YA [13Xdatabase attribute[113X is a record [3Xa[103X whose components belong to the aspects of
+  [13Xdefining[113X  the  attribute,  [13Xaccessing[113X  the  attribute's  data, [13Xcomputing[113X (and
+  recomputing)  data,  [13Xstoring[113X  data  on files, and [13Xchecking[113X data. (Additional
+  parameters  used  for creating browse table columns from database attributes
+  are described in Section [14XA.2-1[114X.)[133X
+  
+  [33X[0;0YThe   following   components  are  [13Xdefining[113X,  except  [10Xdescription[110X  they  are
+  mandatory.[133X
+  
+  [8X[10Xidenumerator[110X[108X
+        [33X[0;6Ythe database id enumerator to which the attribute [3Xa[103X is related,[133X
+  
+  [8X[10Xidentifier[110X[108X
+        [33X[0;6Ya  string  that  identifies  [3Xa[103X  among  all database attributes for the
+        underlying    database    id    enumerator    (this    is    used   by
+        [2XBrowseTableFromDatabaseIdEnumerator[102X ([14XA.2-2[114X) and when the data of [3Xa[103X are
+        entered   with  [2XDatabaseAttributeSetData[102X  ([14XA.1-9[114X),  for  example  when
+        precomputed values are read from a file),[133X
+  
+  [8X[10Xdescription[110X[108X
+        [33X[0;6Ya   string  that  describes  the  attribute  in  human  readable  form
+        (currently just for convenience, the default is an empty string).[133X
+  
+  [33X[0;0YThe  following components are used for [13Xaccessing[113X data. Except [10Xtype[110X, they are
+  optional,  but  enough  information  must  be  provided in order to make the
+  database  attribute  meaningful. If an individual [10XattributeValue[110X function is
+  available  then  this  function  decides  what  is  needed;  for the default
+  function   [2XDatabaseAttributeValueDefault[102X   ([14XA.1-6[114X),  at  least  one  of  the
+  components     [10Xname[110X,     [10Xdata[110X,     [10Xdatafile[110X     must     be    bound    (see
+  [2XDatabaseAttributeValueDefault[102X ([14XA.1-6[114X) for the behaviour in this case).[133X
+  
+  [8X[10Xtype[110X[108X
+        [33X[0;6Yone  of  the  strings [10X"values"[110X or [10X"pairs"[110X; the format of the component
+        [10Xdata[110X is different for these cases,[133X
+  
+  [8X[10Xname[110X[108X
+        [33X[0;6Yif  bound,  a  string that is the name of a [5XGAP[105X function such that the
+        database  attribute  encodes  the  values  of  this  function  for the
+        database  entries;  besides  the  computation  of  attribute values on
+        demand (see [2XDatabaseAttributeValueDefault[102X ([14XA.1-6[114X)), this component can
+        be used by selection functions such as [2XOneCharacterTableName[102X ([14XCTblLib:
+        OneCharacterTableName[114X)     or     [2XAllCharacterTableNames[102X     ([14XCTblLib:
+        AllCharacterTableNames[114X),  which  take  [5XGAP[105X  functions  and  prescribed
+        return  values as their arguments –of course these functions must then
+        be prepared to deal with database attributes.[133X
+  
+  [8X[10Xdata[110X[108X
+        [33X[0;6Yif  bound,  the data for this attribute; if the component [10Xtype[110X has the
+        value  [10X"values"[110X  then the value is a list, where the entry at position
+        [3Xi[103X,  if  bound,  belongs  to  the [3Xi[103X-th entry of the [10Xidentifiers[110X list of
+        [10Xidenumerator[110X;  if  [10Xtype[110X is [10X"pairs"[110X then the value is a record with the
+        components  [10Xautomatic[110X  and  [10Xnonautomatic[110X,  and  the  values  of  these
+        components  are  lists  such  that  each entry is a list of length two
+        whose first entry occurs in the [10Xidentifiers[110X list of [3Xa[103X[10X.idenumerator[110X and
+        whose second entry encodes the corresponding attribute value,[133X
+  
+  [8X[10Xdatafile[110X[108X
+        [33X[0;6Yif  bound, the absolute name of a file that contains the data for this
+        attribute,[133X
+  
+  [8X[10XattributeValue[110X[108X
+        [33X[0;6Ya  function  that takes [3Xa[103X and an [10Xidentifiers[110X entry of its [10Xidenumerator[110X
+        value,  and returns the attribute value for this identifier; typically
+        this  is  [13Xnot[113X  a  table cell data object that can be shown in a browse
+        table,    cf.    the    [10XviewValue[110X    component;    the    default   is
+        [2XDatabaseAttributeValueDefault[102X  ([14XA.1-6[114X)  (Note  that  using  individual
+        [10XattributeValue[110X  functions,  one  can  deal  with  database  attributes
+        independent  of  actually stored data, for example without precomputed
+        values, such that the values are computed on demand and afterwards are
+        cached.),[133X
+  
+  [8X[10XdataDefault[110X[108X
+        [33X[0;6Ya  [5XGAP[105X  object  that  is  regarded  as  the  attribute value for those
+        database  entries  for  which  [10Xdata[110X, [10Xdatafile[110X, and [10Xname[110X do not provide
+        values; the default value is an empty string [10X""[110X,[133X
+  
+  [8X[10Xeval[110X[108X
+        [33X[0;6Yif this component is bound, the value is assumed to be a function that
+        takes  [3Xa[103X  and  a value from its [10Xdata[110X component, and returns the actual
+        attribute value; this can be useful if one does not want to create all
+        attribute  values  in  advance,  because  this  would be space or time
+        consuming;  another  possible  aspect of the [10Xeval[110X component is that it
+        may  be  used to strip off comments that are perhaps contained in [10Xdata[110X
+        entries,[133X
+  
+  [8X[10XisSorted[110X[108X
+        [33X[0;6Yif  this  component is bound to [9Xtrue[109X and if [10Xtype[110X is [10X"pairs"[110X then it is
+        assumed  that  the two lists in the [10Xdata[110X record of [3Xa[103X are sorted w.r.t.
+        [5XGAP[105X's ordering [10X\<[110X; the default is [9Xfalse[109X,[133X
+  
+  [33X[0;0YThe  following optional components are needed for [13Xcomputing[113X (or recomputing)
+  data  with  [2XDatabaseAttributeCompute[102X  ([14XA.1-8[114X).  This  is  useful  mainly for
+  databases which can change over the time.[133X
+  
+  [8X[10Xversion[110X[108X
+        [33X[0;6Ythe  [5XGAP[105X  object  that  is  the  [10Xversion[110X component of the [10Xidenumerator[110X
+        component at the time when the stored data were entered; this value is
+        used  by  [2XDatabaseIdEnumeratorUpdate[102X  ([14XA.1-7[114X) for deciding whether the
+        attribute  values  are  outdated;  if  [3Xa[103X[10X.datafile[110X  is bound then it is
+        assumed  that the [10Xversion[110X component is set when this file is read, for
+        example in the function [2XDatabaseAttributeSetData[102X ([14XA.1-9[114X),[133X
+  
+  [8X[10Xupdate[110X[108X
+        [33X[0;6Ya  function  that takes [3Xa[103X as its argument, adjusts its data components
+        to  the  current  values  of [3Xa[103X[10X.dbidenum[110X if necessary, sets the [10Xversion[110X
+        component  to that of [3Xa[103X[10X.dbidenum[110X, and returns [9Xtrue[109X or [9Xfalse[109X, depending
+        on whether the update process was successful or not; the default value
+        is [2XReturnTrue[102X ([14XReference: ReturnTrue[114X),[133X
+  
+  [8X[10XneededAttributes[110X[108X
+        [33X[0;6Ya  list  of attribute [10Xidentifier[110X strings such that the values of these
+        attributes  are  needed  in  the computations for the current one, and
+        therefore these should be updated/recomputed in advance; it is assumed
+        that  the  [10XneededAttributes[110X  components  of all database attributes of
+        [3Xa[103X[10X.idenumerator[110X  define  a  partial  ordering;  the default is an empty
+        list,[133X
+  
+  [8X[10XprepareAttributeComputation[110X[108X
+        [33X[0;6Ya function with argument [3Xa[103X that must be called before the computations
+        for the current attribute are started; the default value is [2XReturnTrue[102X
+        ([14XReference: ReturnTrue[114X),[133X
+  
+  [8X[10XcleanupAfterAttibuteComputation[110X[108X
+        [33X[0;6Ya  function with argument [3Xa[103X that must be called after the computations
+        for   the  current  attribute  are  finished;  the  default  value  is
+        [2XReturnTrue[102X ([14XReference: ReturnTrue[114X), and[133X
+  
+  [8X[10Xcreate[110X[108X
+        [33X[0;6Ya  function  that  takes  a  database  attribute  and  an entry in the
+        [10Xidentifiers[110X list of its database id enumerator, and returns either the
+        entry that shall be stored in the [10Xdata[110X component, as the value for the
+        given  identifier (if this value shall be stored in the [10Xdata[110X component
+        of  [3Xa[103X)  or  the [10XdataDefault[110X component of [3Xa[103X (if this value shall [13Xnot[113X be
+        stored); in order to get the actual attribute value, the [10Xeval[110X function
+        of  [3Xa[103X,  if  bound, must be called with the return value. This function
+        may  assume  that  the  [10XprepareAttributeComputation[110X  function has been
+        called   in  advance,  and  that  the  [10XcleanupAfterAttibuteComputation[110X
+        function  will be called later. The [10Xcreate[110X function is [13Xnot[113X intended to
+        compute  an individual attribute value on demand, use a [10Xname[110X component
+        for that. (A stored [10Xname[110X function is used to provide a default for the
+        [10Xcreate[110X  function;  without  [10Xname[110X  component,  there  is no default for
+        [10Xcreate[110X.)[133X
+  
+  [33X[0;0YThe following optional component is needed for [13Xstoring[113X data on files.[133X
+  
+  [8X[10Xstring[110X[108X
+        [33X[0;6Yif  bound,  a function that takes the pair consisting of an identifier
+        and  the  return value of the [10Xcreate[110X function for this identifier, and
+        returns  a  string  that  shall represent this value when the data are
+        printed to a file; the default function returns the [2XString[102X ([14XReference:
+        String[114X) value of the second argument.[133X
+  
+  [33X[0;0YThe following optional component is needed for [13Xchecking[113X stored data.[133X
+  
+  [8X[10Xcheck[110X[108X
+        [33X[0;6Ya  function that takes a string that occurs in the [10Xidentifiers[110X list of
+        the  [10Xidenumerator[110X  record,  and  returns  [9Xtrue[109X  if the attribute value
+        stored  for  this  string  is reasonable, and something different from
+        [9Xtrue[109X  if  an error was detected. (One could argue that these tests can
+        be performed also when the values are computed, but consistency checks
+        may  involve  several  entries;  besides that, checking may be cheaper
+        than recomputing.)[133X
+  
+  
+  [1XA.1-3 [33X[0;0YHow to Deal with Database Id Enumerators and Database Attributes[133X[101X
+  
+  [33X[0;0YThe  idea is to start with a database id enumerator (see [14XA.1-1[114X), constructed
+  with  [2XDatabaseIdEnumerator[102X ([14XA.1-4[114X), and to define database attributes for it
+  (see [14XA.1-2[114X), using [2XDatabaseAttributeAdd[102X ([14XA.1-5[114X). The attribute values can be
+  precomputed  and  stored  on  files, or they are computed when the attribute
+  gets defined, or they are computed on demand.[133X
+  
+  [33X[0;0YThe  function  [2XDatabaseAttributeCompute[102X  ([14XA.1-8[114X)  can be used to [21Xrefresh[121X the
+  attribute  values, that is, all values or selected values can be recomputed;
+  this can be necessary for example when the underlying database id enumerator
+  gets extended.[133X
+  
+  [33X[0;0YIn  data files, the function [2XDatabaseAttributeSetData[102X ([14XA.1-9[114X) can be used to
+  fill the [10Xdata[110X component of the attribute.[133X
+  
+  [1XA.1-4 DatabaseIdEnumerator[101X
+  
+  [29X[2XDatabaseIdEnumerator[102X( [3Xarec[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya shallow copy of the record [3Xarec[103X, extended by default values.[133X
+  
+  [33X[0;0YFor  a  record  [3Xarec[103X,  [2XDatabaseIdEnumerator[102X  checks  whether  the  mandatory
+  components  of  a  database  id  enumerator (see Section [14XA.1-1[114X) are present,
+  initializes the [10Xattributes[110X component, sets the defaults for unbound optional
+  components (see [14XA.2-1[114X), and returns the resulting record.[133X
+  
+  [33X[0;0YA  special  database  attribute  (see  Section  [14XA.1-2[114X) with [10Xidentifier[110X value
+  [10X"self"[110X   is   constructed   automatically   for   the   returned  record  by
+  [2XDatabaseIdEnumerator[102X;  its [10XattributeValue[110X function simply returns its second
+  argument  (the  identifier).  The  optional components of this attribute are
+  derived  from  components of the database id enumerator, so these components
+  (see [14XA.2-1[114X) are supported for [3Xarec[103X. A typical use of the [10X"self"[110X attribute is
+  to   provide   the   first   column   in   browse   tables   constructed  by
+  [2XBrowseTableFromDatabaseIdEnumerator[102X ([14XA.2-2[114X).[133X
+  
+  [1XA.1-5 DatabaseAttributeAdd[101X
+  
+  [29X[2XDatabaseAttributeAdd[102X( [3Xdbidenum[103X, [3Xarec[103X ) [32X function
+  
+  [33X[0;0YFor    a    database   id   enumerator   [3Xdbidenum[103X   and   a   record   [3Xarec[103X,
+  [2XDatabaseAttributeAdd[102X  checks  whether the mandatory components of a database
+  attribute,  except  [10Xidenumerator[110X,  are  present in [3Xarec[103X (see Section [14XA.1-2[114X),
+  sets  the [10Xidenumerator[110X component, and sets the defaults for unbound optional
+  components (see [14XA.2-1[114X).[133X
+  
+  [1XA.1-6 DatabaseAttributeValueDefault[101X
+  
+  [29X[2XDatabaseAttributeValueDefault[102X( [3Xattr[103X, [3Xid[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe value of the database attribute [3Xattr[103X at [3Xid[103X.[133X
+  
+  [33X[0;0YFor a database attribute [3Xattr[103X and an entry [3Xid[103X of the [10Xidentifiers[110X list of the
+  underlying  database  id enumerator, [2XDatabaseAttributeValueDefault[102X takes the
+  [10Xdata[110X  entry for [3Xid[103X, applies the [10Xeval[110X function of [3Xattr[103X to it if available and
+  returns the result.[133X
+  
+  [33X[0;0YSo the question is how to get the [10Xdata[110X entry.[133X
+  
+  [33X[0;0YFirst, if the [10Xdata[110X component of [3Xattr[103X is not bound then the file given by the
+  [10Xdatafile[110X   component   of   [3Xattr[103X,  if  available,  is  read,  and  otherwise
+  [2XDatabaseAttributeCompute[102X  ([14XA.1-8[114X)  is  called; afterwards it is assumed that
+  the [10Xdata[110X component is bound.[133X
+  
+  [33X[0;0YThe further steps depend on the [10Xtype[110X value of [3Xattr[103X.[133X
+  
+  [33X[0;0YIf  the  [10Xtype[110X  value of [3Xattr[103X is [10X"pairs"[110X then the [10Xdata[110X entry for [3Xid[103X is either
+  contained  in  the [10Xautomatic[110X or in the [10Xnonautomatic[110X list of [3Xattr[103X[10X.data[110X, or it
+  is  given  by  the  [10XdataDefault[110X  value of [3Xattr[103X. (So a perhaps available [10Xname[110X
+  function is [13Xnot[113X used to compute the value for a missing [10Xdata[110X entry.)[133X
+  
+  [33X[0;0YIf the [10Xtype[110X value of [3Xattr[103X is [10X"values"[110X then the [10Xdata[110X entry for [3Xid[103X is computed
+  as  follows. Let [22Xn[122X be the position of [3Xid[103X in the [10Xidentifiers[110X component of the
+  database  id  enumerator. If the [22Xn[122X-th entry of the [10Xdata[110X component of [3Xattr[103X is
+  bound  then  take it; otherwise if the [10Xname[110X component is bound then apply it
+  to [3Xid[103X and take the return value; otherwise take the [10XdataDefault[110X value.[133X
+  
+  [33X[0;0YIf  one  wants to introduce a database attribute where this functionality is
+  not  suitable  then  another –more specific– function must be entered as the
+  component [10XattributeValue[110X of such an attribute.[133X
+  
+  [1XA.1-7 DatabaseIdEnumeratorUpdate[101X
+  
+  [29X[2XDatabaseIdEnumeratorUpdate[102X( [3Xdbidenum[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
+  
+  [33X[0;0YFor    a    database   id   enumerator   [3Xdbidenum[103X   (see   Section   [14XA.1-1[114X),
+  [2XDatabaseIdEnumeratorUpdate[102X  first  calls  the  [10Xupdate[110X  function of [3Xdbidenum[103X.
+  Afterwards,  the  [10Xupdate[110X  components  of those of its [10Xattributes[110X records are
+  called for which the [10Xversion[110X component differs from that of [3Xdbidenum[103X.[133X
+  
+  [33X[0;0YThe  order in which the database attributes are updates is determined by the
+  [10XneededAttributes[110X component.[133X
+  
+  [33X[0;0YThe  return  value  is  [9Xtrue[109X  if  all these functions return [9Xtrue[109X, and [9Xfalse[109X
+  otherwise.[133X
+  
+  [33X[0;0YWhen  [2XDatabaseIdEnumeratorUpdate[102X  has  returned  [9Xtrue[109X, the data described by
+  [3Xdbidenum[103X and its database attributes are consistent and up to date.[133X
+  
+  [1XA.1-8 DatabaseAttributeCompute[101X
+  
+  [29X[2XDatabaseAttributeCompute[102X( [3Xdbidenum[103X, [3Xattridentifier[103X[, [3Xwhat[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
+  
+  [33X[0;0YThis  function returns [9Xfalse[109X if [3Xdbidenum[103X is not a database id enumerator, or
+  if   it   does   not   have  a  database  attribute  with  [10Xidentifier[110X  value
+  [3Xattridentifier[103X, or if this attribute does not have a [10Xcreate[110X function.[133X
+  
+  [33X[0;0YOtherwise  the  [10XprepareAttributeComputation[110X  function  is  called,  the [10Xdata[110X
+  entries    for    the    database    attribute    are    (re)computed,   the
+  [10XcleanupAfterAttibuteComputation[110X function is called, and [9Xtrue[109X is returned.[133X
+  
+  [33X[0;0YThe  optional argument [3Xwhat[103X determines which values are computed. Admissible
+  values are[133X
+  
+  [8X[10X"all"[110X[108X
+        [33X[0;6Yall [10Xidentifiers[110X entries of [3Xdbidenum[103X,[133X
+  
+  [8X[10X"automatic"[110X (the default)[108X
+        [33X[0;6Ythe  same  as  [10X"all"[110X  if  the  [10Xtype[110X value of the database attribute is
+        [10X"values"[110X,  otherwise only the values for the [10X"automatic"[110X component are
+        computed,[133X
+  
+  [8X[10X"new"[110X[108X
+        [33X[0;6Ystored values are not recomputed.[133X
+  
+  [1XA.1-9 DatabaseAttributeSetData[101X
+  
+  [29X[2XDatabaseAttributeSetData[102X( [3Xdbidenum[103X, [3Xattridentifier[103X, [3Xversion[103X, [3Xdata[103X ) [32X function
+  
+  [33X[0;0YLet [3Xdbidenum[103X be a database id enumerator (see Section [14XA.1-1[114X), [3Xattridentifier[103X
+  be  a  string  that  is  the  [10Xidentifier[110X  value  of  a database attribute of
+  [3Xdbidenum[103X,  [3Xdata[103X  be  the  [10Xdata[110X  list  or  record  for the database attribute
+  (depending  on  its  [10Xtype[110X  value),  and [3Xversion[103X be the corresponding [10Xversion[110X
+  value.[133X
+  
+  [33X[0;0Y[2XDatabaseAttributeSetData[102X  sets  the  [10Xdata[110X  and  [10Xversion[110X  components  of  the
+  attribute. This function can be used for example in data files.[133X
+  
+  
+  [1XA.2 [33X[0;0YUsing Database Attributes for Browse Tables[133X[101X
+  
+  
+  [1XA.2-1 [33X[0;0YBrowse Relevant Components of Database Attributes[133X[101X
+  
+  [33X[0;0YThe  following  optional  components of database id enumerators and database
+  attributes are used by [2XBrowseTableFromDatabaseIdEnumerator[102X ([14XA.2-2[114X).[133X
+  
+  [8X[10XviewLabel[110X[108X
+        [33X[0;6Yif      bound,      a      table     cell     data     object     (see
+        [2XBrowseData.IsBrowseTableCellData[102X   ([14X4.2-1[114X))   that   gives   a   [13Xshort[113X
+        description  of  the  attribute,  which is used as the column label in
+        browse   tables   created   with   [2XBrowseTableFromDatabaseIdEnumerator[102X
+        ([14XA.2-2[114X); the default for database attributes is the [10Xname[110X component, if
+        bound,  and  otherwise  the  [10Xidentifier[110X  component;  the  default  for
+        database id enumerators is the string [10X"name"[110X,[133X
+  
+  [8X[10XviewValue[110X[108X
+        [33X[0;6Yif  bound,  a  function  that  takes  the output of the [10XattributeValue[110X
+        function    and    returns    a    table   cell   data   object   (see
+        [2XBrowseData.IsBrowseTableCellData[102X ([14X4.2-1[114X)) that is used as the entry of
+        the    corresponding    column   in   browse   tables   created   with
+        [2XBrowseTableFromDatabaseIdEnumerator[102X  ([14XA.2-2[114X);  the  default  is [2XString[102X
+        ([14XReference: String[114X),[133X
+  
+  [8X[10XviewSort[110X[108X
+        [33X[0;6Yif  bound,  a  comparison  function  that takes two database attribute
+        values and returns [9Xtrue[109X if the first value is regarded as smaller than
+        the  second  when  the  column  corresponding  to the attribute in the
+        browse   table   constructed   by  [2XBrowseTableFromDatabaseIdEnumerator[102X
+        ([14XA.2-2[114X)  gets  sorted,  and  [9Xfalse[109X  otherwise; the default is [5XGAP[105X's [10X\<[110X
+        operation,[133X
+  
+  [8X[10XsortParameters[110X[108X
+        [33X[0;6Yif  bound,  a  list  in  the  same  format  as  the  last  argument of
+        [10XBrowseData.SetSortParameters[110X,   which   is   used   for   the   column
+        corresponding  to  the  attribute  in  the browse table constructed by
+        [2XBrowseTableFromDatabaseIdEnumerator[102X  ([14XA.2-2[114X);  the default is an empty
+        list,[133X
+  
+  [8X[10XwidthCol[110X[108X
+        [33X[0;6Yif  bound,  the width of the column in the browse table constructed by
+        [2XBrowseTableFromDatabaseIdEnumerator[102X  ([14XA.2-2[114X);  if  a  column  width is
+        prescribed  this  way  then  the function stored in the [10XattributeValue[110X
+        component  must  return either a list of attribute lines that fit into
+        the  column or a plain string (which then gets formatted as required);
+        there  is no default for this component, meaning that the column width
+        is  computed  as  the maximum of the widths of the column label and of
+        all entries in the column if no value is bound,[133X
+  
+  [8X[10Xalign[110X[108X
+        [33X[0;6Yif  bound,  the  alignment  of  the values in the column of the browse
+        table   constructed  by  [2XBrowseTableFromDatabaseIdEnumerator[102X  ([14XA.2-2[114X);
+        admissible     values     are     substrings     of     [10X"bclt"[110X,    see
+        [2XBrowseData.IsBrowseTableCellData[102X  ([14X4.2-1[114X);  the  default  is right and
+        vertically  centered, but note that if the [10XviewValues[110X function returns
+        a  record  (see  [2XBrowseData.IsBrowseTableCellData[102X  ([14X4.2-1[114X))  then  the
+        alignment prescribed by this record is preferred,[133X
+  
+  [8X[10XcategoryValue[110X[108X
+        [33X[0;6Yif  bound,  a  function that is similar to the [10XviewValue[110X component but
+        may  return a different value; for example if the column in the browse
+        table  belongs  to  a  property  and  the  [10XviewValue[110X  function returns
+        something  like  [10X"+"[110X  or  [10X"-"[110X, it may be useful that the category rows
+        show  a  textual description of the property values; the default value
+        is  the  [10XviewValue[110X  component;  if the value is a record then its [10Xrows[110X
+        component  is  taken  for  forming  category  rows, if the value is an
+        attribute  line  (see  [2XNCurses.IsAttributeLine[102X  ([14X2.2-3[114X)) then there is
+        exactly  this  category  row, and otherwise the value is regarded as a
+        list  of attribute lines, which is either concatenated to one category
+        row  or  turned  into  individual  category  rows,  depending  on  the
+        [10XsortParameters[110X value.[133X
+  
+  [1XA.2-2 BrowseTableFromDatabaseIdEnumerator[101X
+  
+  [29X[2XBrowseTableFromDatabaseIdEnumerator[102X( [3Xdbidenum[103X, [3Xlabelids[103X, [3Xcolumnids[103X[, [3Xheader[103X[, [3Xfooter[103X[, [3Xchoice[103X]]] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  record  that  can be used as the input of [2XNCurses.BrowseGeneric[102X
+            ([14X4.3-1[114X).[133X
+  
+  [33X[0;0YFor  a  database  id  enumerator  [3Xdbidenum[103X (see Section [14XA.1-1[114X) and two lists
+  [3Xlabelids[103X and [3Xcolumnids[103X of [10Xidentifier[110X values of database attributes stored in
+  [3Xdbidenum[103X,   [2XBrowseTableFromDatabaseIdEnumerator[102X   returns   a  browse  table
+  (see [2XBrowseData.IsBrowseTable[102X ([14X4.2-3[114X)) whose columns are given by the values
+  of  the  specified  database  attributes. The columns listed in [3Xlabelids[103X are
+  used to provide row label columns of the browse table, the columns listed in
+  [3Xcolumnids[103X yield main table columns. [3Xcolumnids[103X must be nonempty.[133X
+  
+  [33X[0;0YIf  the  optional  arguments  [3Xheader[103X  and [3Xfooter[103X are given then they must be
+  lists  or functions or records that are admissible for the [10Xheader[110X and [10Xfooter[110X
+  components    of    the    [10Xwork[110X    record   of   the   browse   table,   see
+  [2XBrowseData.IsBrowseTable[102X ([14X4.2-3[114X).[133X
+  
+  [33X[0;0YThe   optional   argument   [3Xchoice[103X,   if   given,   must   be  a  subset  of
+  [3Xdbidenum[103X[10X.identifiers[110X.  The  rows  of  the  returned  browse  table  are then
+  restricted to this subset.[133X
+  
+  [33X[0;0YThe returned browse table does not support [21XClick[121X events or return values.[133X
+  
+  
+  [1XA.3 [33X[0;0YExample: Database Id Enumerators and Database Attributes[133X[101X
+  
+  [33X[0;0YAs  an  example  for the functions introduced in this appendix, we introduce
+  the  [13Xdatabase  of  small integers[113X. For that, we fix a positive integer [22Xn[122X and
+  consider  the  integers  from  [22X1[122X  to [22Xn[122X as the entries of our database. Using
+  these  integers  as  their  own  identifiers,  we  construct the database id
+  enumerator.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= 100;;[127X[104X
+    [4X[25Xgap>[125X [27Xsmallintenum1:= DatabaseIdEnumerator( rec([127X[104X
+    [4X[25X>[125X [27X     identifiers:= [ 1 .. n ],[127X[104X
+    [4X[25X>[125X [27X     entry:= function( dbidenum, id ) return id; end,[127X[104X
+    [4X[25X>[125X [27X   ) );;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YExamples  of  attributes for this database are the properties whether or not
+  an  integer  is  a  prime  or  a prime power. There are global [5XGAP[105X functions
+  [2XIsPrimeInt[102X   ([14XReference:   IsPrimeInt[114X)   and   [2XIsPrimePowerInt[102X   ([14XReference:
+  IsPrimePowerInt[114X)  for  computing  these  properties,  so we can define these
+  database  attributes  via  a  [10Xname[110X component; we choose [10X"values"[110X as the [10Xtype[110X
+  value,  so  the  values ([9Xtrue[109X or [9Xfalse[109X) are stored in a list of length [22Xn[122X for
+  each of the two database attributes.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum1, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "primes",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     name:= "IsPrimeInt",[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum1, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "prime powers",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     name:= "IsPrimePowerInt",[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSimilarly, we consider the prime factors as a database attribute.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum1, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "factors",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     name:= "Factors",[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAnother  example of an attribute of integers is the residue modulo [22X11[122X. We do
+  not  want  to introduce a global [5XGAP[105X function for computing the value, so we
+  use the [10Xcreate[110X component in order to define the attribute; again, the values
+  (integers from [22X0[122X to [22X10[122X) are stored in a list of length [22Xn[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum1, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "residue mod 11",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     create:= function( attr, id ) return id mod 11; end,[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSome integers are values of [2XFactorial[102X ([14XReference: Factorial[114X), and we want to
+  record  this  information  and show it in a browse table. For most integers,
+  nothing  is stored and shown for this attribute, so we choose the [10Xtype[110X value
+  [10X"pairs"[110X  and precompute the information for the [10Xdata[110X component. (The default
+  for  the [10XdataDefault[110X component is an empty string, which is fine; so we need
+  not prescribe this component.)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xfactorialdata:= function( n )[127X[104X
+    [4X[25X>[125X [27X     local result, i, f;[127X[104X
+    [4X[25X>[125X [27X     result:= [];  i:= 1;  f:= 1;;[127X[104X
+    [4X[25X>[125X [27X     while f <= n do[127X[104X
+    [4X[25X>[125X [27X       Add( result, [ f, i ] );  i:= i + 1;  f:= f * i;[127X[104X
+    [4X[25X>[125X [27X     od;[127X[104X
+    [4X[25X>[125X [27X     return result;[127X[104X
+    [4X[25X>[125X [27X   end;;[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum1, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "inverse factorial",[127X[104X
+    [4X[25X>[125X [27X     type:= "pairs",[127X[104X
+    [4X[25X>[125X [27X     data:= rec( automatic:= factorialdata( n ), nonautomatic:= [] ),[127X[104X
+    [4X[25X>[125X [27X     isSorted:= true,[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YWe use this setup for creating a browse table. The integers are shown as the
+  first  column,  using  the [10X"self"[110X attribute. This attribute can be used as a
+  column  of row labels (useful if we want to keep the column visible when one
+  scrolls  the table to the right) or as a column in the main table (useful if
+  we want to search for the values); here we choose the former possibility.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xt1:= BrowseTableFromDatabaseIdEnumerator( smallintenum1,[127X[104X
+    [4X[25X>[125X [27X          [ "self" ],[127X[104X
+    [4X[25X>[125X [27X          [ "primes", "prime powers", "factors", "residue mod 11",[127X[104X
+    [4X[25X>[125X [27X            "inverse factorial" ] );;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe following session shows some of the features of the browse table.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xnop:= [ 14, 14, 14, 14, 14, 14 ];;  # ``do nothing''[127X[104X
+    [4X[25Xgap>[125X [27Xsample_session:= Concatenation([127X[104X
+    [4X[25X>[125X [27X        # categorize by the first column, expand categories, wait, reset[127X[104X
+    [4X[25X>[125X [27X        nop, "scsc", nop, "X", nop, "!",[127X[104X
+    [4X[25X>[125X [27X        # sort the residue column, wait, reset[127X[104X
+    [4X[25X>[125X [27X        "scrrrso", nop, "!",[127X[104X
+    [4X[25X>[125X [27X        # categorize by the inverse factorial column[127X[104X
+    [4X[25X>[125X [27X        "rscsrdx", nop, "!",[127X[104X
+    [4X[25X>[125X [27X        # and quit the application[127X[104X
+    [4X[25X>[125X [27X        "qQ" );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( sample_session );[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.BrowseGeneric( t1 );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+    [4X[25Xgap>[125X [27XUnbind( t1.dynamic.replay );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y(Note  that  the  last  statement above is necessary to run the session more
+  than  once.)  The  result is not too bad but we can improve the table, using
+  the optional components of database attributes, as follows.[133X
+  
+  [30X    [33X[0;6YThe  strings  [10X"true"[110X and [10X"false"[110X shown for the Boolean valued database
+        attributes  can be replaced by the perhaps more suggestive strings [10X"+"[110X
+        and [10X"-"[110X (or perhaps an empty string instead of [10X"-"[110X).[133X
+  
+  [30X    [33X[0;6YThe alignment of values inside their columns can be customized.[133X
+  
+  [30X    [33X[0;6YWhen  the  browse  table is categorized by a column then the values in
+        this  column  do  usually  not  provide suitable category rows; we can
+        prescribe individual category values.[133X
+  
+  [30X    [33X[0;6YThe column labels can be customized.[133X
+  
+  [30X    [33X[0;6YWhere  the  lexicographic  order  is not appropriate for sorting table
+        entries, we can prescribe an individual comparison function.[133X
+  
+  [30X    [33X[0;6YSort parameters can be customized.[133X
+  
+  [30X    [33X[0;6YWe  can  prescribe  the  width  of  a  column, and thus distribute the
+        attribute  values  for this column to several rows when the values are
+        too long.[133X
+  
+  [30X    [33X[0;6YFinally,  in  the call of [2XBrowseTableFromDatabaseIdEnumerator[102X ([14XA.2-2[114X),
+        we can add a header to the browse table.[133X
+  
+  [33X[0;0YWe  create  a new database id enumerator and the corresponding browse table,
+  in order to be able to compare the behaviour of the two objects. However, we
+  assume that the variables [10Xn[110X and [10Xfactorialdata[110X are already available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xsmallintenum2:= DatabaseIdEnumerator( rec([127X[104X
+    [4X[25X>[125X [27X     identifiers:= [ 1 .. n ],[127X[104X
+    [4X[25X>[125X [27X     entry:= function( dbidenum, id ) return id; end,[127X[104X
+    [4X[25X>[125X [27X     viewLabel:= "",[127X[104X
+    [4X[25X>[125X [27X   ) );;[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum2, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "primes",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     name:= "IsPrimeInt",[127X[104X
+    [4X[25X>[125X [27X     viewLabel:= "prime?",[127X[104X
+    [4X[25X>[125X [27X     viewValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X         [ true, false ], [ "+", "-" ] ),[127X[104X
+    [4X[25X>[125X [27X     sortParameters:= [ "add counter on categorizing", "yes" ],[127X[104X
+    [4X[25X>[125X [27X     align:= "c",[127X[104X
+    [4X[25X>[125X [27X     categoryValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X         [ true, false ], [ "prime", "nonprime" ] ),[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum2, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "prime powers",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     name:= "IsPrimePowerInt",[127X[104X
+    [4X[25X>[125X [27X     viewLabel:= "prime power?",[127X[104X
+    [4X[25X>[125X [27X     viewValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X         [ true, false ], [ "+", "-" ] ),[127X[104X
+    [4X[25X>[125X [27X     sortParameters:= [ "add counter on categorizing", "yes" ],[127X[104X
+    [4X[25X>[125X [27X     align:= "c",[127X[104X
+    [4X[25X>[125X [27X     categoryValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X         [ true, false ], [ "prime power", "not prime power" ] ),[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum2, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "factors",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     name:= "Factors",[127X[104X
+    [4X[25X>[125X [27X     viewLabel:= "factors",[127X[104X
+    [4X[25X>[125X [27X     viewValue:= value -> JoinStringsWithSeparator( List( value, String ),[127X[104X
+    [4X[25X>[125X [27X                                                    " * "),[127X[104X
+    [4X[25X>[125X [27X     widthCol:= 10,[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum2, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "residue mod 11",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     create:= function( attr, id ) return id mod 11; end,[127X[104X
+    [4X[25X>[125X [27X     viewSort:= BrowseData.SortAsIntegers,[127X[104X
+    [4X[25X>[125X [27X     categoryValue:= res -> Concatenation( String( res ), " mod 11" ),[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum2, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "inverse factorial",[127X[104X
+    [4X[25X>[125X [27X     type:= "pairs",[127X[104X
+    [4X[25X>[125X [27X     data:= rec( automatic:= factorialdata( n ), nonautomatic:= [] ),[127X[104X
+    [4X[25X>[125X [27X     isSorted:= true,[127X[104X
+    [4X[25X>[125X [27X     categoryValue:= function( k )[127X[104X
+    [4X[25X>[125X [27X       if k = "" then[127X[104X
+    [4X[25X>[125X [27X         return "(no factorial)";[127X[104X
+    [4X[25X>[125X [27X       else[127X[104X
+    [4X[25X>[125X [27X         return Concatenation( String( k ), "!" );[127X[104X
+    [4X[25X>[125X [27X       fi;[127X[104X
+    [4X[25X>[125X [27X     end,[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+    [4X[25Xgap>[125X [27Xt2:= BrowseTableFromDatabaseIdEnumerator( smallintenum2,[127X[104X
+    [4X[25X>[125X [27X          [ "self" ],[127X[104X
+    [4X[25X>[125X [27X          [ "primes", "prime powers", "factors", "residue mod 11",[127X[104X
+    [4X[25X>[125X [27X            "inverse factorial" ],[127X[104X
+    [4X[25X>[125X [27X          t -> BrowseData.HeaderWithRowCounter( t, "Small integers", n ) );;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YWe run the same session as with the browse table for [10Xsmallintenum1[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( sample_session );[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.BrowseGeneric( t2 );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+    [4X[25Xgap>[125X [27XUnbind( t2.dynamic.replay );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAnother  possibility  to  change  the  look  of  the table is to combine the
+  columns  for  the  two  Boolean valued database attributes in one column, by
+  showing  the string [10X"+"[110X for prime powers, as before, and showing this string
+  in boldface red if the number in question is a prime. We implement this idea
+  in  the  following  database attribute. However, note that this can be a bad
+  idea  because  text  attributes  may be not supported in the user's terminal
+  (see  Section  [14X2.1-7[114X),  or  the  user  may  have  difficulties  to see or to
+  distinguish colors; also, it must be documented which information is encoded
+  in  the  table,  and the column label might be not sufficient for explaining
+  what  the  text  attributes  mean.  Alternatively, we could show for example
+  combined  symbols  such  as  [10X++[110X,  [10X+-[110X,  [10X--[110X  for  primes,  prime  powers,  and
+  non-prime-powers,  respectively.  (We  see  that  besides  these issues, the
+  required  [5XGAP[105X  code  is  more  involved than what is needed for the examples
+  above.)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum2, rec([127X[104X
+    [4X[25X>[125X [27X     identifier:= "primes & prime powers",[127X[104X
+    [4X[25X>[125X [27X     type:= "values",[127X[104X
+    [4X[25X>[125X [27X     create:= function( attr, id )[127X[104X
+    [4X[25X>[125X [27X       if   IsPrimeInt( id ) then[127X[104X
+    [4X[25X>[125X [27X         return 2;[127X[104X
+    [4X[25X>[125X [27X       elif IsPrimePowerInt( id ) then[127X[104X
+    [4X[25X>[125X [27X         return 1;[127X[104X
+    [4X[25X>[125X [27X       else[127X[104X
+    [4X[25X>[125X [27X         return 0;[127X[104X
+    [4X[25X>[125X [27X       fi;[127X[104X
+    [4X[25X>[125X [27X     end,[127X[104X
+    [4X[25X>[125X [27X     viewLabel:= [ NCurses.attrs.BOLD + NCurses.ColorAttr( "red", -1 ),[127X[104X
+    [4X[25X>[125X [27X                   "prime", NCurses.attrs.NORMAL, " power?" ],[127X[104X
+    [4X[25X>[125X [27X     viewValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X         [ 0, 1, 2 ], [ "-", "+",[127X[104X
+    [4X[25X>[125X [27X                        [ NCurses.attrs.BOLD + NCurses.ColorAttr( "red", -1 ),[127X[104X
+    [4X[25X>[125X [27X                          true, "+",[127X[104X
+    [4X[25X>[125X [27X                          NCurses.ColorAttr( "red", -1 ), false ] ] ),[127X[104X
+    [4X[25X>[125X [27X     sortParameters:= [ "add counter on categorizing", "yes" ],[127X[104X
+    [4X[25X>[125X [27X     align:= "c",[127X[104X
+    [4X[25X>[125X [27X     categoryValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X         [ 0, 1, 2 ],[127X[104X
+    [4X[25X>[125X [27X         [ "not prime power", "prime power, not prime", "prime" ] ),[127X[104X
+    [4X[25X>[125X [27X   ) );[127X[104X
+    [4X[25Xgap>[125X [27Xt3:= BrowseTableFromDatabaseIdEnumerator( smallintenum2,[127X[104X
+    [4X[25X>[125X [27X          [ "self" ],[127X[104X
+    [4X[25X>[125X [27X          [ "primes & prime powers", "residue mod 11",[127X[104X
+    [4X[25X>[125X [27X            "inverse factorial" ],[127X[104X
+    [4X[25X>[125X [27X          t -> BrowseData.HeaderWithRowCounter( t, "Small integers", n ) );;[127X[104X
+    [4X[25Xgap>[125X [27Xsample_session2:= Concatenation([127X[104X
+    [4X[25X>[125X [27X        # categorize by the first column, expand categories, wait, reset[127X[104X
+    [4X[25X>[125X [27X        nop, "scsc", nop, "X", nop, "!", "Q" );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( sample_session2 );[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.BrowseGeneric( t3 );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+    [4X[25Xgap>[125X [27XUnbind( t3.dynamic.replay );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNow  we  want to consider the database as extendible, that is, we want to be
+  able  to increase [22Xn[122X after constructing the database attributes. For that, we
+  use  [22Xn[122X  as  the  [10Xversion[110X  value  of  the database id enumerator, and provide
+  [10Xversion[110X and [10Xupdate[110X components for all attributes.[133X
+  
+  [33X[0;0YAgain, we start the construction from scratch.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xsmallintenum3:= DatabaseIdEnumerator( rec([127X[104X
+    [4X[25X>[125X [27X    identifiers:= [ 1 .. n ],[127X[104X
+    [4X[25X>[125X [27X    entry:= function( dbidenum, id ) return id; end,[127X[104X
+    [4X[25X>[125X [27X    viewLabel:= "",[127X[104X
+    [4X[25X>[125X [27X    version:= n,[127X[104X
+    [4X[25X>[125X [27X    update:= function( dbidenum )[127X[104X
+    [4X[25X>[125X [27X        dbidenum.identifiers:= [ 1 .. n ];[127X[104X
+    [4X[25X>[125X [27X        dbidenum.version:= n;[127X[104X
+    [4X[25X>[125X [27X        return true;[127X[104X
+    [4X[25X>[125X [27X      end,[127X[104X
+    [4X[25X>[125X [27X    ) );;[127X[104X
+    [4X[25Xgap>[125X [27XupdateByUnbindData:= function( attr )[127X[104X
+    [4X[25X>[125X [27X     Unbind( attr.data );[127X[104X
+    [4X[25X>[125X [27X     return true;[127X[104X
+    [4X[25X>[125X [27X   end;;[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum3, rec([127X[104X
+    [4X[25X>[125X [27X    identifier:= "primes",[127X[104X
+    [4X[25X>[125X [27X    type:= "values",[127X[104X
+    [4X[25X>[125X [27X    name:= "IsPrimeInt",[127X[104X
+    [4X[25X>[125X [27X    viewLabel:= "prime?",[127X[104X
+    [4X[25X>[125X [27X    viewValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X        [ true, false ], [ "+", "-" ] ),[127X[104X
+    [4X[25X>[125X [27X    sortParameters:= [ "add counter on categorizing", "yes" ],[127X[104X
+    [4X[25X>[125X [27X    align:= "c",[127X[104X
+    [4X[25X>[125X [27X    categoryValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X        [ true, false ], [ "prime", "nonprime" ] ),[127X[104X
+    [4X[25X>[125X [27X    version:= n,[127X[104X
+    [4X[25X>[125X [27X    update:= updateByUnbindData,[127X[104X
+    [4X[25X>[125X [27X    ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum3, rec([127X[104X
+    [4X[25X>[125X [27X    identifier:= "prime powers",[127X[104X
+    [4X[25X>[125X [27X    type:= "values",[127X[104X
+    [4X[25X>[125X [27X    name:= "IsPrimePowerInt",[127X[104X
+    [4X[25X>[125X [27X    viewLabel:= "prime power?",[127X[104X
+    [4X[25X>[125X [27X    viewValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X        [ true, false ], [ "+", "-" ] ),[127X[104X
+    [4X[25X>[125X [27X    sortParameters:= [ "add counter on categorizing", "yes" ],[127X[104X
+    [4X[25X>[125X [27X    align:= "c",[127X[104X
+    [4X[25X>[125X [27X    categoryValue:= value -> BrowseData.ReplacedEntry( value,[127X[104X
+    [4X[25X>[125X [27X        [ true, false ], [ "prime power", "not prime power" ] ),[127X[104X
+    [4X[25X>[125X [27X    version:= n,[127X[104X
+    [4X[25X>[125X [27X    update:= updateByUnbindData,[127X[104X
+    [4X[25X>[125X [27X    ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum3, rec([127X[104X
+    [4X[25X>[125X [27X    identifier:= "factors",[127X[104X
+    [4X[25X>[125X [27X    type:= "values",[127X[104X
+    [4X[25X>[125X [27X    name:= "Factors",[127X[104X
+    [4X[25X>[125X [27X    viewLabel:= "factors",[127X[104X
+    [4X[25X>[125X [27X    viewValue:= value -> JoinStringsWithSeparator( List( value, String ),[127X[104X
+    [4X[25X>[125X [27X                                                   " * "),[127X[104X
+    [4X[25X>[125X [27X    widthCol:= 10,[127X[104X
+    [4X[25X>[125X [27X    version:= n,[127X[104X
+    [4X[25X>[125X [27X    update:= updateByUnbindData,[127X[104X
+    [4X[25X>[125X [27X    ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum3, rec([127X[104X
+    [4X[25X>[125X [27X    identifier:= "residue mod 11",[127X[104X
+    [4X[25X>[125X [27X    type:= "values",[127X[104X
+    [4X[25X>[125X [27X    create:= function( attr, id ) return id mod 11; end,[127X[104X
+    [4X[25X>[125X [27X    viewSort:= BrowseData.SortAsIntegers,[127X[104X
+    [4X[25X>[125X [27X    categoryValue:= res -> Concatenation( String( res ), " mod 11" ),[127X[104X
+    [4X[25X>[125X [27X    version:= n,[127X[104X
+    [4X[25X>[125X [27X    update:= updateByUnbindData,[127X[104X
+    [4X[25X>[125X [27X    ) );[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseAttributeAdd( smallintenum3, rec([127X[104X
+    [4X[25X>[125X [27X    identifier:= "inverse factorial",[127X[104X
+    [4X[25X>[125X [27X    type:= "pairs",[127X[104X
+    [4X[25X>[125X [27X    data:= rec( automatic:= factorialdata( n ), nonautomatic:= [] ),[127X[104X
+    [4X[25X>[125X [27X    isSorted:= true,[127X[104X
+    [4X[25X>[125X [27X    categoryValue:= function( k )[127X[104X
+    [4X[25X>[125X [27X      if k = "" then[127X[104X
+    [4X[25X>[125X [27X        return "(no factorial)";[127X[104X
+    [4X[25X>[125X [27X      else[127X[104X
+    [4X[25X>[125X [27X        return Concatenation( String( k ), "!" );[127X[104X
+    [4X[25X>[125X [27X      fi;[127X[104X
+    [4X[25X>[125X [27X    end,[127X[104X
+    [4X[25X>[125X [27X    version:= n,[127X[104X
+    [4X[25X>[125X [27X    update:= function( attr )[127X[104X
+    [4X[25X>[125X [27X        attr.data.automatic:= factorialdata( n );[127X[104X
+    [4X[25X>[125X [27X        return true;[127X[104X
+    [4X[25X>[125X [27X      end,[127X[104X
+    [4X[25X>[125X [27X    ) );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNow  we  can  change the set of database entries by assigning a new value to
+  the variable [10Xn[110X, and then calling [2XDatabaseIdEnumeratorUpdate[102X ([14XA.1-7[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= 200;;[127X[104X
+    [4X[25Xgap>[125X [27XDatabaseIdEnumeratorUpdate( smallintenum3 );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xt4:= BrowseTableFromDatabaseIdEnumerator( smallintenum3,[127X[104X
+    [4X[25X>[125X [27X  [ "self" ], [ "primes", "prime powers", "factors", "residue mod 11",[127X[104X
+    [4X[25X>[125X [27X    "inverse factorial" ],[127X[104X
+    [4X[25X>[125X [27X  t -> BrowseData.HeaderWithRowCounter( t, "Small integers", n ) );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( sample_session );[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.BrowseGeneric( t4 );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+    [4X[25Xgap>[125X [27XUnbind( t4.dynamic.replay );[127X[104X
+  [4X[32X[104X
+  
+  
+  [1XA.4 [33X[0;0YExample: An Overview of the [5XGAP[105X[101X[1X Library of Transitive Groups[133X[101X
+  
+  [33X[0;0YThe  example  shown  in  this section deals with [5XGAP[105X's Library of Transitive
+  Permutation  Groups, see [14X'Reference: Transitive Permutation Groups'[114X. Section
+  [14XA.4-1[114X  introduces  a  browse table application for viewing information about
+  the contents of this library, which is based on database attributes. Section
+  [14XA.4-2[114X  introduces functions based on database attributes that can be used to
+  select  groups  from the library. Finally, Section [14XA.4-3[114X describes how these
+  two functionalities are implemented.[133X
+  
+  [1XA.4-1 BrowseTransitiveGroupsInfo[101X
+  
+  [29X[2XBrowseTransitiveGroupsInfo[102X( [[3Xarec[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe list of [21Xclicked[121X groups.[133X
+  
+  [33X[0;0YThis   function  shows  the  contents  of  the  [5XGAP[105X  Library  of  Transitive
+  Permutation Groups in a browse table.[133X
+  
+  [33X[0;0YThe  table  rows  correspond to the groups. If no argument is given then the
+  columns of the table contain information about the degree of the permutation
+  representation, group order, names for the group, primitivity, transitivity,
+  and  sign.  Otherwise,  the  argument  [3Xarec[103X  must be a record; the component
+  [10Xchoice[110X of [3Xarec[103X can be used to prescribe columns, the value of this component
+  must  then  be  a  list  of  strings  that are [10Xidentifier[110X values of database
+  attributes    (see    [14XA.1-2[114X)    for    the    [10XIdEnumerator[110X    component   of
+  [2XTransitiveGroupsData[102X ([14XA.4-3[114X), see Section [14XA.4-4[114X for examples.[133X
+  
+  [33X[0;0YThe return value is the list of transitive groups whose table rows have been
+  [21Xclicked[121X in visual mode.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xc:= [ NCurses.keys.ENTER ];;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "scrrrr/5", c,     # search for transitivity 5,[127X[104X
+    [4X[25X>[125X [27X       "nn", c,           # go to the third occurrence, click on it,[127X[104X
+    [4X[25X>[125X [27X       "Q" ) );;          # and quit the browse table[127X[104X
+    [4X[25Xgap>[125X [27XBrowseTransitiveGroupsInfo();[127X[104X
+    [4X[28X[ M(12) ][128X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [1XA.4-2 TransitiveGroupsData.AllTransitiveGroups[101X
+  
+  [29X[2XTransitiveGroupsData.AllTransitiveGroups[102X( [3Xfun[103X, [3Xres[103X[, [3X...[103X] ) [32X function
+  [29X[2XTransitiveGroupsData.OneTransitiveGroup[102X( [3Xfun[103X, [3Xres[103X[, [3X...[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  list of groups from the [5XGAP[105X Library of Transitive Permutation
+            Groups with the given properties, or one such group, or [9Xfail[109X.[133X
+  
+  [33X[0;0YThese   functions   are   analogues   of   [2XAllTransitiveGroups[102X   ([14XReference:
+  AllTransitiveGroups[114X) and [2XOneTransitiveGroup[102X ([14XReference: OneTransitiveGroup[114X).
+  The  only  difference is that they are based on the database attributes that
+  are defined in [2XTransitiveGroupsData[102X ([14XA.4-3[114X).[133X
+  
+  [33X[0;0YBesides  those [5XGAP[105X attributes such as [2XSize[102X ([14XReference: Size[114X) and [2XIsPrimitive[102X
+  ([14XReference:   IsPrimitive[114X)   for   which  special  support  is  provided  in
+  [2XAllTransitiveGroups[102X  ([14XReference: AllTransitiveGroups[114X) and [2XOneTransitiveGroup[102X
+  ([14XReference:  OneTransitiveGroup[114X),  database  attributes are defined for some
+  other     [5XGAP[105X    properties,    see    [14XA.4-4[114X.    One    could    speed    up
+  [2XTransitiveGroupsData.AllTransitiveGroups[102X  for  given  conditions  by  adding
+  further precomputed database attributes.[133X
+  
+  [33X[0;0YAfter  defining  a  database attribute, it is automatically used in calls to
+  [2XTransitiveGroupsData.AllTransitiveGroups[102X. In order to make the values appear
+  in  the  table shown by [2XBrowseTransitiveGroupsInfo[102X ([14XA.4-1[114X), one has to enter
+  an  argument record that contains the name of the database attributes in its
+  [10Xchoice[110X list.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XTransitiveGroupsData.AllTransitiveGroups([127X[104X
+    [4X[25X>[125X [27X     NrMovedPoints, [ 5 .. 28 ],[127X[104X
+    [4X[25X>[125X [27X     IsSimpleGroup, true, IsAbelian, true );[127X[104X
+    [4X[28X[ C(5) = 5, C(7) = 7, C(11)=11, C(13)=13, C(17)=17, C(19)=19, C(23) ][128X[104X
+  [4X[32X[104X
+  
+  [1XA.4-3 TransitiveGroupsData[101X
+  
+  [29X[2XTransitiveGroupsData[102X[32X global variable
+  
+  [33X[0;0YThis is a record that contains the data needed by [2XBrowseTransitiveGroupsInfo[102X
+  ([14XA.4-1[114X),      [2XTransitiveGroupsData.AllTransitiveGroups[102X      ([14XA.4-2[114X),     and
+  [2XTransitiveGroupsData.OneTransitiveGroup[102X  ([14XA.4-2[114X). The component [10XIdEnumerator[110X
+  contains  a  database  id  enumerator  (see  [14XA.1-1[114X)  for  the [5XGAP[105X Library of
+  Transitive Permutation Groups.[133X
+  
+  [33X[0;0YNote   that   although  [2XNrTransitiveGroups[102X  ([14XReference:  NrTransitiveGroups[114X)
+  returns [10X1[110X when it is called with the argument [10X1[110X, [2XTransitiveGroup[102X ([14XReference:
+  TransitiveGroup[114X)  runs  into  an error when it is called with first argument
+  equal  to  [10X1[110X,  and  the  degree  [10X1[110X  is  explicitly  excluded from results of
+  [2XAllTransitiveGroups[102X  ([14XReference: AllTransitiveGroups[114X) and [2XOneTransitiveGroup[102X
+  ([14XReference:  OneTransitiveGroup[114X).  For  the  sake  of  consistency with this
+  inconsistency  in  the  [5XGAP[105X  Library  of  Transitive  Permutation Groups, we
+  exclude  the  degree [10X1[110X from [2XTransitiveGroupsData[102X. (Those who want to include
+  this  degree can change the value of [10XTransitiveGroupsData.MinimalDegree[110X from
+  its default value [10X2[110X to [10X1[110X in the file [11Xapp/transbrowse.g[111X of the package.)[133X
+  
+  
+  [1XA.4-4 [33X[0;0YAdditional Database Attributes for Transitive Groups[133X[101X
+  
+  [33X[0;0YDatabase  attributes  for  the  following  [5XGAP[105X  properties  are  defined  in
+  [2XTransitiveGroupsData[102X     ([14XA.4-3[114X):    [2XIsAbelian[102X    ([14XReference:    IsAbelian[114X),
+  [2XIsPerfectGroup[102X   ([14XReference:   IsPerfectGroup[114X),   [2XIsSimpleGroup[102X  ([14XReference:
+  IsSimpleGroup[114X), and [2XIsSolvableGroup[102X ([14XReference: IsSolvableGroup[114X). The values
+  of  these  database  attributes  are  precomputed  and  stored  in  the file
+  [11Xapp/transdbattr.g[111X of the package.[133X
+  
+  [33X[0;0YSo   the  above  [5XGAP[105X  properties  have  special  support  as  conditions  in
+  [2XTransitiveGroupsData.AllTransitiveGroups[102X             ([14XA.4-2[114X)             and
+  [2XTransitiveGroupsData.OneTransitiveGroup[102X       ([14XA.4-2[114X),      contrary      to
+  [2XAllTransitiveGroups[102X  ([14XReference: AllTransitiveGroups[114X) and [2XOneTransitiveGroup[102X
+  ([14XReference:  OneTransitiveGroup[114X).  In  practice,  the difference is that the
+  former  functions  need not construct and check those transitive groups that
+  do not have the properties in question.[133X
+  
+  [33X[0;0YThese  database  attributes  can also be used as columns in the Browse table
+  shown by [2XBrowseTransitiveGroupsInfo[102X ([14XA.4-1[114X), for example as follows.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= [ 14, 14, 14 ];;  # ``do nothing'' input (means timeout)[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "scrrrsc", n, n,        # categorize by solvability info[127X[104X
+    [4X[25X>[125X [27X       "!", n,                 # reset[127X[104X
+    [4X[25X>[125X [27X       "scrrrrsc", n, n,       # categorize by abelianity info[127X[104X
+    [4X[25X>[125X [27X       "Q" ) );;               # quit the browse table[127X[104X
+    [4X[25Xgap>[125X [27XBrowseTransitiveGroupsInfo( rec( choice:= [ "degree", "size",[127X[104X
+    [4X[25X>[125X [27X     "names", "IsSolvableGroup", "IsAbelian", "IsPerfectGroup",[127X[104X
+    [4X[25X>[125X [27X     "IsSimpleGroup" ] ) );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  data  in  the  file  [11Xapp/transdbattr.g[111X are lists of Booleans, which are
+  encoded  as  strings via [10XHexStringBlistEncode[110X, and these strings are decoded
+  with  [10XBlistStringDecode[110X. Note that for most of the groups in the library are
+  not  abelian,  not  perfect, not simple, but solvable; Therefore in fact the
+  inverse  values  of  the solvability info are actually stored –this yields a
+  shorter string.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XTransitiveGroupsData.MinimalDegree;[127X[104X
+    [4X[28X2[128X[104X
+    [4X[25Xgap>[125X [27Xattrs:= TransitiveGroupsData.IdEnumerator.attributes;;[127X[104X
+    [4X[25Xgap>[125X [27Xoldlen:= SizeScreen();;  SizeScreen( [ 60 ] );;[127X[104X
+    [4X[25Xgap>[125X [27XHexStringBlistEncode( attrs.IsAbelian.data );[127X[104X
+    [4X[28X"D88400040Es0503s0480s040406s252010s0720s0C3EsF30803s7A040\[128X[104X
+    [4X[28X5s8B20s1302s0740E0sFFsFFsFFsFFsFFsFFsFFsFFsFFsFFsFFsFFs40C\[128X[104X
+    [4X[28X0s1910s0B1AsFFs2B18sE74040sFFsFF"[128X[104X
+    [4X[25Xgap>[125X [27XSizeScreen( oldlen );;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YRemoving  the  [10Xdatafile[110X  component  from  the four database attributes would
+  yield the situation that attribute values are computed at runtime. Computing
+  the  values  for  all groups in the library –for example by categorizing the
+  Browse  table  by  one  of  the  columns  that  correspond to these database
+  attributes–  will  require  several seconds. Note that if we assume that the
+  information  about solvability is already known, the test for [2XIsPerfectGroup[102X
+  ([14XReference: IsPerfectGroup[114X) is needed only for the few nonsolvable groups in
+  the  library  but  each such test is expensive; on the other hand, each test
+  for  [2XIsAbelian[102X ([14XReference: IsAbelian[114X) is cheap but such tests are needed for
+  the  many solvable groups in the library, in particular these groups must be
+  constructed for the tests.[133X
+  
+  
+  [1XA.5 [33X[0;0YExample: An Overview of the [5XGAP[105X[101X[1X Library of Tables of Marks[133X[101X
+  
+  [33X[0;0YThe  example  shown  in  this  section deals with [5XGAP[105X's Library of Tables of
+  Marks (the [5XTomLib[105X package [NMP11]).[133X
+  
+  [1XA.5-1 BrowseTomLibInfo[101X
+  
+  [29X[2XBrowseTomLibInfo[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing.[133X
+  
+  [33X[0;0YThis  function shows the contents of the [5XGAP[105X Library of Tables of Marks (the
+  [5XTomLib[105X package, see [NMP11]) in a browse table.[133X
+  
+  [33X[0;0YThe  first  call  may  take substantial time (about [22X40[122X seconds), because the
+  data  files  of  the [5XTomLib[105X package are evaluated. This could be improved by
+  precomputing  and  caching  the values. Another possibility would be to call
+  [2XBrowseTomLibInfo[102X  once before creating a [5XGAP[105X workspace. The subsequent calls
+  are not expensive.[133X
+  
+  [33X[0;0YThe  table  rows correspond to the tables of marks, one column of row labels
+  shows  the  identifier  of  the  table.  The  columns  of  the table contain
+  information  about  the  group  order,  the  number  of conjugacy classes of
+  subgroups,  the  identifiers of tables of marks with fusions to and from the
+  given table, and the name of the file that contains the table of marks data.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xc:= [ NCurses.keys.ENTER ];;[127X[104X
+    [4X[25Xgap>[125X [27Xn:= [ 14, 14, 14 ];;  # ``do nothing''[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "scrrsc",   # categorize the list by source tables of fusions,[127X[104X
+    [4X[25X>[125X [27X       "srdd",     # choose a source table,[127X[104X
+    [4X[25X>[125X [27X       "x",        # expand the list of targets of fusions[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "!",        # revert the categorization[127X[104X
+    [4X[25X>[125X [27X       "q",        # leave the mode in which a row is selected[127X[104X
+    [4X[25X>[125X [27X       "scrrrrsc", # categorize the list by filenames[127X[104X
+    [4X[25X>[125X [27X       "X",        # expand all categories[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "!",        # revert the categorization[127X[104X
+    [4X[25X>[125X [27X       "scso",     # sort the list by group order[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "!q",       # revert the sorting and selection[127X[104X
+    [4X[25X>[125X [27X       "?",        # open the help window[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "Q",        # close the help window[127X[104X
+    [4X[25X>[125X [27X       "/A5", c,   # search for the first occurrence of "A5"[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "Q" ) );;   # and quit the browse table[127X[104X
+    [4X[25Xgap>[125X [27XBrowseTomLibInfo();[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  

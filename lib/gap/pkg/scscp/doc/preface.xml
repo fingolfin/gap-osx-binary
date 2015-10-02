@@ -1,0 +1,112 @@
+<Chapter Label="Preface">
+<Heading>Preface</Heading>    
+
+The &GAP; package &SCSCP; implements the Symbolic 
+Computation Software Composability protocol <Cite Key="SCSCP"/>. This
+protocol specifies an &OpenMath;-based remote procedure call framework, in which
+all messages (procedure calls and returns of results of successful computation
+or error messages) are encoded in &OpenMath; using content dictionaries 
+&scscp1; and &scscp2; (<Cite Key="scscp1cd"/>, <Cite Key="scscp2cd"/>).
+Using the &SCSCP; package, &GAP; can communicate locally or remotely with any 
+other &OpenMath;-enabled &SCSCP;-compliant application which may be not only 
+another computer algebra system but also another instance of the &GAP; system
+or even, for example, an external Java or C/C++ application via libraries
+<URL>http://java.symcomp.org/</URL> 
+or <URL>http://www.imcce.fr/Equipes/ASD/trip/scscp/</URL>
+providing an &SCSCP; API. Such communication will go into seamless manner 
+for the &GAP; user, since all conversions from &GAP; to &OpenMath; and
+vice versa will be performed in the background. See the SCIEnce project
+homepage <URL>http://www.symbolic-computing.org/</URL> for the details
+about computer algebra systems and other sotware supporting &SCSCP;
+<P/>
+
+The &SCSCP; package for &GAP; has two main components:
+<List>
+<Item>SCSCP server;</Item>
+<Item>SCSCP client.</Item>
+</List>
+
+There are several ways to start &GAP; &SCSCP; server:
+<List>
+    <Item>call <Ref Func="RunSCSCPserver" /> from the &GAP; session specifying the 
+        server name and the port number from the &GAP; session;
+    </Item>
+    <Item>start &GAP; as <C>gap myserver.g</C>, where <File>myserver.g</File>
+        is the server configuration file with the last command being the call 
+        of <Ref Func="RunSCSCPserver" /> (an example of such configuration file 
+        is given in <File>scscp/example/myserver.g</File> );
+    </Item>
+    <Item>start &GAP; as a daemon using the script <File>gapd.sh</File> which
+        is supplied in the root directory of the package (for the description
+        of all available options see comments in <File>gapd.sh</File>).
+    </Item>
+</List>
+
+During startup the server installs all procedures that it will provide and 
+loads their lookup mechanisms, and then begins to listen to the specified 
+port. The recommended port number is 26133 which has been assigned to SCSCP 
+by the Internet Assigned Numbers Authority (IANA) in November 2007, see 
+<URL>http://www.iana.org/assignments/port-numbers</URL>.
+<P/>
+
+When the server accepts a connection from client, it starts the 
+"accept-evaluate-return" loop:
+<List>
+<Item>accepts the <C>"procedure&uscore;call";</C> message;</Item>
+<Item>performs lookup of the appropriate GAP function;</Item>
+<Item>evaluates the result (or produces a side-effect);</Item>
+<Item>returns the result in the <C>"procedure&uscore;completed"</C> message
+    or returns an error in the <C>"procedure&uscore;terminated"</C> message.</Item>
+</List>
+
+The server works in a "multi-user" mode. When one client is connected, 
+the server is busy for other clients. As soon as the computation is finished 
+and the client is disconnected, the server is waiting for the next connection, 
+and normally it never stops until it will be terminated by the service provider. 
+The server maintain a queue of five incoming connections (this parameter
+can be easily modified), and on each iteration evaluates the next request from the queue.
+<P/>
+
+There is an &SCSCP; server accessible at <File>chrystal.mcs.st-andrews.ac.uk</File>, 
+port 26133. It is running under development versions of the &GAP; system and a selection
+of currently distributed packages. The reader is encouraged to try to use examples from
+the manual to access this service, replacing <File>"localhost"</File> by its address,
+where appropriate. Please report to Alexander Konovalov if you will discover any bugs
+or if the server seems not available.
+<P/>
+    
+The SCSCP client:
+<List>
+<Item>establishes connection with the specified server at the specified port;</Item>
+<Item>sends the <C>"procedure&uscore;call"</C> message to the server;</Item>
+<Item>waits for the result of the computation or returns to pick it up later;</Item>
+<Item>fetches the response, extracting the result from the 
+    <C>"procedure&uscore;completed"</C> message or entering the break loop in the 
+    case of the <C>"procedure&uscore;terminated"</C> message.
+</Item>
+</List>
+
+On the top of this functionality we built a set of instructions for simple 
+parallel computations framework using the &SCSCP; protocol, which allows
+to send several procedure calls in parallel and then collect all results or 
+pick up the first available result, and implements the master-worker skeleton. 
+These tools are presented in the Chapter <Ref Label="Parallel"/>.
+<P/>
+
+The package also implements a new kind of &GAP; input-output streams, namely
+input-output TCP streams (see Chapter <Ref Label="UsingStreams"/>), based on the 
+functionality for TCP/IP protocol usage provided by the &GAP; package &IO;.
+Such streams may constitute an independent interest for adapting streams-using &GAP; 
+code to use streams across the network.
+<P/>
+
+Finally, the manual describes how the communication by &SCSCP; goes between 
+several instances of the &GAP; system, but the same behaviour is expected 
+from any &SCSCP;-compliant application: the set of supported &OpenMath;
+symbols clearly will be different, but the rules of communication are
+precisely specified in the &SCSCP; specification <Cite Key="SCSCP"/>. See
+the homepage of the SCIEnce project <URL>http://www.symbolic-computing.org/</URL>
+for the information about &SCSCP;-compliant computer algebra systems
+and other tools developed in the project.
+
+</Chapter>

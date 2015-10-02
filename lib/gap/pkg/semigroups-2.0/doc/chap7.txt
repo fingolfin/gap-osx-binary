@@ -1,0 +1,316 @@
+  
+  [1X7 [33X[0;0YCongruences[133X[101X
+  
+  [33X[0;0YIn  this  chapter  we  describe the various ways to define a congruence on a
+  semigroup.[133X
+  
+  [33X[0;0YSupport  for congruences in [5XSemigroups[105X is currently rather limited but there
+  are plans to improve this in the future.[133X
+  
+  
+  [1X7.1 [33X[0;0YCongruence classes[133X[101X
+  
+  [1X7.1-1 CongruenceClassOfElement[101X
+  
+  [29X[2XCongruenceClassOfElement[102X( [3Xcong[103X, [3Xelm[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA congruence class.[133X
+  
+  [33X[0;0YThis function is a synonym of [10XEquivalenceClassOfElement[110X in the case that the
+  argument [3Xcong[103X is a congruence of a semigroup.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := CongruencesOfSemigroup(S)[3];;[127X[104X
+    [4X[25Xgap>[125X [27Xelm := ReesZeroMatrixSemigroupElement(S, 1, (1,3,2), 1);;[127X[104X
+    [4X[25Xgap>[125X [27XCongruenceClassOfElement(cong, elm);[127X[104X
+    [4X[28X{(1,(1,3,2),1)}[128X[104X
+  [4X[32X[104X
+  
+  [1X7.1-2 CongruenceClasses[101X
+  
+  [29X[2XCongruenceClasses[102X( [3Xcong[103X ) [32X attribute
+  [6XReturns:[106X  [33X[0;10YThe classes of congruence.[133X
+  
+  [33X[0;0YWhen  [3Xcong[103X  is  a congruence of semigroup, this attribute is synonymous with
+  [10XEquivalenceClasses[110X.[133X
+  
+  [33X[0;0YThis  function  returns a list containing all the equivalence classes of the
+  semigroup congruence [3Xcong[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := CongruencesOfSemigroup(S)[3];;[127X[104X
+    [4X[25Xgap>[125X [27Xclasses := CongruenceClasses(cong);;[127X[104X
+    [4X[25Xgap>[125X [27XSize(classes);[127X[104X
+    [4X[28X9[128X[104X
+  [4X[32X[104X
+  
+  [1X7.1-3 NrCongruenceClasses[101X
+  
+  [29X[2XNrCongruenceClasses[102X( [3Xcong[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA positive integer.[133X
+  
+  [33X[0;0YThis  function  returns  the  number  of congruence classes in the semigroup
+  congruence [3Xcong[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := CongruencesOfSemigroup(S)[3];;[127X[104X
+    [4X[25Xgap>[125X [27XNrCongruenceClasses(cong);[127X[104X
+    [4X[28X9[128X[104X
+  [4X[32X[104X
+  
+  [1X7.1-4 CongruencesOfSemigroup[101X
+  
+  [29X[2XCongruencesOfSemigroup[102X( [3XS[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YThe congruences of a Rees 0-matrix semigroup.[133X
+  
+  [33X[0;0YThis operation returns the congruences of the semigroup [3XS[103X.[133X
+  
+  [33X[0;0YAt present this only works for Rees 0-matrix semigroups.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xs := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27Xcongs := CongruencesOfSemigroup(s);[127X[104X
+    [4X[28X[ <universal semigroup congruence>, [128X[104X
+    [4X[28X  <RZMS congruence by linked triple (1,2,2)>, [128X[104X
+    [4X[28X  <RZMS congruence by linked triple (3,2,2)>, [128X[104X
+    [4X[28X  <RZMS congruence by linked triple (S3,2,2)> ][128X[104X
+  [4X[32X[104X
+  
+  
+  [1X7.2 [33X[0;0YCongruence on Rees matrix semigroups[133X[101X
+  
+  [33X[0;0YThis  section  describes  the  implementation  of  congruences  of  0-simple
+  semigroups  in  the  [5XSemigroups[105X  package,  and the functions associated with
+  them.  This code and this part of the manual were written by Michael Torpey.
+  Most of the theorems used in this chapter are from Section 3.5 of [How95].[133X
+  
+  [33X[0;0YBy  the  Rees  Theorem,  any  0-simple  semigroup  [22XS[122X is isomorphic to a [13XRees
+  0-matrix  semigroup[113X  (see [14X'Reference: Rees Matrix Semigroups'[114X) over a group,
+  with a regular sandwich matrix.[133X
+  
+  [33X[0;0YThat  is,  [10XS[110X  is  isomorphic to [10XM^0[G;I,L;P][110X where [10XG[110X is a group, [10XL[110X and [10XI[110X are
+  non-empty  sets and the matrix [10XP[110X is regular in the sense that it has no rows
+  or columns consisting soley of zeroes.[133X
+  
+  [33X[0;0YThe  congruences of a Rees 0-matrix semigroup are in 1-1 correspondence with
+  the [13Xlinked triple[113X, which is a triple of the form [10X[N,S,T][110X where:[133X
+  
+  [30X    [33X[0;6Y[10XN[110X is a normal subgroup of the underlying group [10XG[110X,[133X
+  
+  [30X    [33X[0;6Y[10XS[110X is an equivalence relation on the columns of [10XP[110X,[133X
+  
+  [30X    [33X[0;6Y[10XT[110X is an equivalence relation on the rows of [10XP[110X,[133X
+  
+  [33X[0;0Ysatisfying the following conditions:[133X
+  
+  [30X    [33X[0;6Ya  pair of [10XS[110X-related columns must contain zeroes in precisely the same
+        rows,[133X
+  
+  [30X    [33X[0;6Ya  pair  of  [10XT[110X-related  rows must contain zeroes in precisely the same
+        columns,[133X
+  
+  [30X    [33X[0;6Yif [10Xi[110X and [10Xj[110X are [10XS[110X-related, [10Xk[110X and [10Xl[110X are [10XT[110X-related and the matrix entries
+        [22Xp_k, i, p_k, j, p_l, i, p_l, j ≠ 0[122X, then [22Xq_k, l, i, j ∈ N[122X, where[133X
+  
+  
+              [33X[1;12Y[24X [33X[0;6Yq_{k, l, i, j} = p_{k, i} p_{l, i}^{-1} p_{l, j} p_{k, j}^{-1}.[133X
+              [124X[133X
+  
+  
+  [33X[0;0YBy  Theorem  3.5.9  in  [How95],  for  any  finite  0-simple  Rees  0-matrix
+  semigroup,  there  is  a bijection between its non-universal congruences and
+  its  linked triples. In this way, we can internally represent any congruence
+  of such a semigroup by storing its associated linked triple instead of a set
+  of  generating  pairs,  and  thus  perform  many  calculations  on  it  more
+  efficiently.[133X
+  
+  [33X[0;0YIf  a  congruence is defined by a linked triple [10X(N,S,T)[110X, then a single class
+  of  that  congruence  can be defined by a triple [10X(Nx,i/S,k/S)[110X, where [10XNx[110X is a
+  right  coset  of  [10XN[110X,  [10Xi/S[110X is the equivalence class of [10Xi[110X in [10XS[110X, and [10Xk/S[110X is the
+  equivalence  class  of [10Xk[110X in [10XT[110X. Thus we can internally represent any class of
+  such  a  congruence  as  a triple simply consisting of a right coset and two
+  positive integers.[133X
+  
+  [1X7.2-1 RZMSCongruenceByLinkedTriple[101X
+  
+  [29X[2XRZMSCongruenceByLinkedTriple[102X( [3XS[103X, [3XN[103X, [3XcolBlocks[103X, [3XrowBlocks[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA Rees 0-matrix semigroup congruence by linked triple.[133X
+  
+  [33X[0;0YThis  function  returns  a  semigroup  congruence  over  the  Rees  0-matrix
+  semigroup  [3XS[103X  corresponding  to the linked triple ([3XN[103X, [3XcolBlocks[103X, [3XrowBlocks[103X).
+  The argument [3XN[103X should be a normal subgroup of the underlying semigroup of [3XS[103X;
+  [3XcolBlocks[103X  should  be  a  partition  of  the columns of the matrix of [3XS[103X; and
+  [3XrowBlocks[103X should be a partition of the rows of the matrix of [3XS[103X. For example,
+  if the matrix has 5 rows, then a possibility for [3XrowBlocks[103X might be [10X[ [1,3],
+  [2,5], [4] ][110X.[133X
+  
+  [33X[0;0YIf  the arguments describe a valid linked triple on [3XS[103X, then an object in the
+  category [10XIsRZMSCongruenceByLinkedTriple[110X is returned. This object can be used
+  like any other semigroup congruence in [5XGAP[105X.[133X
+  
+  [33X[0;0YIf  the  arguments  describe  a  triple  which  is  not  [13Xlinked[113X in the sense
+  described above, then this function returns an error.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XG := Group( [ (1,4,5), (1,5,3,4) ] );;[127X[104X
+    [4X[25Xgap>[125X [27Xmat := [ [  0,  0, (1,4,5),     0,     0, (1,4,3,5) ],[127X[104X
+    [4X[25X>[125X [27X            [  0, (),       0,     0, (3,5),         0 ],[127X[104X
+    [4X[25X>[125X [27X            [ (),  0,       0, (3,5),     0,         0 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(G, mat);;[127X[104X
+    [4X[25Xgap>[125X [27XN := Group([ (1,4)(3,5), (1,5)(3,4) ]);;[127X[104X
+    [4X[25Xgap>[125X [27XcolBlocks := [ [ 1 ], [ 2, 5 ], [ 3, 6 ], [ 4 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XrowBlocks := [ [ 1 ], [ 2 ], [ 3 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := RZMSCongruenceByLinkedTriple(S, N, colBlocks, rowBlocks);[127X[104X
+    [4X[28X<RZMS congruence by linked triple (2^2,4,3)>[128X[104X
+  [4X[32X[104X
+  
+  [1X7.2-2 RZMSCongruenceClassByLinkedTriple[101X
+  
+  [29X[2XRZMSCongruenceClassByLinkedTriple[102X( [3Xcong[103X, [3XnCoset[103X, [3XcolClass[103X, [3XrowClass[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA Rees 0-matrix semigroup congruence class by linked triple.[133X
+  
+  [33X[0;0YThis  function  returns  one  congruence  class  of  the congruence [3Xcong[103X, as
+  defined by the other three parameters.[133X
+  
+  [33X[0;0YThe  argument  [3Xcong[103X  must  be a Rees 0-matrix semigroup congruence by linked
+  triple.  If  the linked triple consists of the three parameters [10XN[110X, [10XcolBlocks[110X
+  and  [10XrowBlocks[110X,  then  [3XnCoset[103X must be a right coset of [10XN[110X, [3XcolClass[103X must be a
+  positive  integer  corresponding  to  a  position in the list [10XcolBlocks[110X, and
+  [3XrowClass[103X  must be a positive integer corresponding to a position in the list
+  [10XrowBlocks[110X.[133X
+  
+  [33X[0;0YIf the arguments are valid, an [10XIsRZMSCongruenceClassByLinkedTriple[110X object is
+  returned,  which  can  be  used  like  any  other  equivalence class in [5XGAP[105X.
+  Otherwise, an error is returned.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xg := Group( [ (1,4,5), (1,5,3,4) ] );;[127X[104X
+    [4X[25Xgap>[125X [27Xmat := [ [  0,  0, (1,4,5),     0,     0, (1,4,3,5) ],[127X[104X
+    [4X[25X>[125X [27X            [  0, (),       0,     0, (3,5),         0 ],[127X[104X
+    [4X[25X>[125X [27X            [ (),  0,       0, (3,5),     0,         0 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27Xs := ReesZeroMatrixSemigroup(g, mat);;[127X[104X
+    [4X[25Xgap>[125X [27Xn := Group([ (1,4)(3,5), (1,5)(3,4) ]);;[127X[104X
+    [4X[25Xgap>[125X [27XcolBlocks := [ [ 1 ], [ 2, 5 ], [ 3, 6 ], [ 4 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XrowBlocks := [ [ 1 ], [ 2 ], [ 3 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := RZMSCongruenceByLinkedTriple(s, n, colBlocks, rowBlocks);;[127X[104X
+    [4X[25Xgap>[125X [27Xclass := RZMSCongruenceClassByLinkedTriple(cong, [127X[104X
+    [4X[25X>[125X [27XRightCoset(n,(1,5)),2,3);[127X[104X
+    [4X[28X{(2,(3,4),3)}[128X[104X
+  [4X[32X[104X
+  
+  [1X7.2-3 IsLinkedTriple[101X
+  
+  [29X[2XIsLinkedTriple[102X( [3XS[103X, [3XN[103X, [3XcolBlocks[103X, [3XrowBlocks[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
+  
+  [33X[0;0YThis  function  returns  true  if  and  only if the arguments ([3XN[103X, [3XcolBlocks[103X,
+  [3XrowBlocks[103X)  describe  a  linked  triple of the Rees 0-matrix semigroup [3XS[103X, as
+  described above.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XG := Group( [ (1,4,5), (1,5,3,4) ] );;[127X[104X
+    [4X[25Xgap>[125X [27Xmat := [ [  0,  0, (1,4,5),     0,     0, (1,4,3,5) ],[127X[104X
+    [4X[25X>[125X [27X            [  0, (),       0,     0, (3,5),         0 ],[127X[104X
+    [4X[25X>[125X [27X            [ (),  0,       0, (3,5),     0,         0 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(G, mat);;[127X[104X
+    [4X[25Xgap>[125X [27XN := Group([ (1,4)(3,5), (1,5)(3,4) ]);;[127X[104X
+    [4X[25Xgap>[125X [27XcolBlocks := [ [ 1 ], [ 2, 5 ], [ 3, 6 ], [ 4 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XrowBlocks := [ [ 1 ], [ 2 ], [ 3 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XIsLinkedTriple(S, N, colBlocks, rowBlocks);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X7.2-4 CanonicalRepresentative[101X
+  
+  [29X[2XCanonicalRepresentative[102X( [3Xclass[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA Rees 0-matrix semigroup element.[133X
+  
+  [33X[0;0YThis  function  returns  a  canonical  representative  for the Rees 0-matrix
+  semigroup  congruence  class by linked triple [3Xclass[103X. This representative can
+  be used to identify a class uniquely.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := CongruencesOfSemigroup(S)[3];;[127X[104X
+    [4X[25Xgap>[125X [27Xclass := CongruenceClasses(cong)[3];;[127X[104X
+    [4X[25Xgap>[125X [27XCanonicalRepresentative(class);[127X[104X
+    [4X[28X(1,(1,2,3),2)[128X[104X
+  [4X[32X[104X
+  
+  [1X7.2-5 AsSemigroupCongruenceByGeneratingPairs[101X
+  
+  [29X[2XAsSemigroupCongruenceByGeneratingPairs[102X( [3Xcong[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA semigroup congruence.[133X
+  
+  [33X[0;0YThis  function  takes  [3Xcong[103X,  a Rees 0-matrix semigroup congruence by linked
+  triple, or a universal semigroup congruence, and returns the same congruence
+  relation,  but  described  by  [5XGAP[105X's  default  method  of defining semigroup
+  congruences: by a set of generating pairs for the congruence.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := CongruencesOfSemigroup(S)[3];;[127X[104X
+    [4X[25Xgap>[125X [27XAsSemigroupCongruenceByGeneratingPairs(cong);[127X[104X
+    [4X[28X<semigroup congruence with 3 generating pairs>[128X[104X
+  [4X[32X[104X
+  
+  [1X7.2-6 AsRZMSCongruenceByLinkedTriple[101X
+  
+  [29X[2XAsRZMSCongruenceByLinkedTriple[102X( [3Xcong[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA Rees 0-matrix semigroup congruence by linked triple.[133X
+  
+  [33X[0;0YThis  function takes a semigroup congruence [3Xcong[103X over a finite 0-simple Rees
+  0-matrix  semigroup,  and returns that congruence relation in a new form: as
+  either a congruence by linked triple, or a universal congruence.[133X
+  
+  [33X[0;0YIf the congruence is not defined over an appropriate type of semigroup, then
+  this function returns an error.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27Xx := ReesZeroMatrixSemigroupElement(S, 1, (1,3,2), 1);;[127X[104X
+    [4X[25Xgap>[125X [27Xy := ReesZeroMatrixSemigroupElement(S, 1, (), 1);;[127X[104X
+    [4X[25Xgap>[125X [27Xcong := SemigroupCongruenceByGeneratingPairs(S, [ [x,y] ]);;[127X[104X
+    [4X[25Xgap>[125X [27XAsRZMSCongruenceByLinkedTriple(cong);[127X[104X
+    [4X[28X<RZMS congruence by linked triple (3,2,2)>[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X7.3 [33X[0;0YUniversal congruences[133X[101X
+  
+  [33X[0;0YThe linked triples of a completely 0-simple Rees 0-matrix semigroup describe
+  only its non-universal congruences. In any one of these, the zero element of
+  the  semigroup  is  related only to itself. However, for any semigroup [22XS[122X the
+  universal relation [22XSxS[122X is a congruence; called the [13Xuniversal congruence[113X. The
+  universal congruence on a semigroup has its own unique representation.[133X
+  
+  [33X[0;0YSince  many things we want to calculate about congruences are trivial in the
+  case   of  the  universal  congruence,  this  package  contains  a  category
+  specifically designed for it, [10XIsUniversalSemigroupCongruence[110X. We also define
+  [10XIsUniversalSemigroupCongruenceClass[110X,  which represents the single congruence
+  class of the universal congruence.[133X
+  
+  [1X7.3-1 UniversalSemigroupCongruence[101X
+  
+  [29X[2XUniversalSemigroupCongruence[102X( [3XS[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10YA universal semigroup congruence.[133X
+  
+  [33X[0;0YThis  function  returns the universal semigroup congruence for the semigroup
+  [3XS[103X. It can be used in the same way as any other semigroup congruence object.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ReesZeroMatrixSemigroup(SymmetricGroup(3), [127X[104X
+    [4X[25X>[125X [27X[[(),(1,3,2)],[(1,2),0]]);;[127X[104X
+    [4X[25Xgap>[125X [27XUniversalSemigroupCongruence(S);[127X[104X
+    [4X[28X<universal semigroup congruence>[128X[104X
+  [4X[32X[104X
+  

@@ -1,0 +1,548 @@
+<html><head><title>[loops] 6 Methods based on permutation groups</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP005.htm">Previous</a>] [<a href ="CHAP007.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>6 Methods based on permutation groups</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP006.htm#SECT001">Parent of a quasigroup</a>
+<li> <A HREF="CHAP006.htm#SECT002">Comparing quasigroups with common parent</a>
+<li> <A HREF="CHAP006.htm#SECT003">Subquasigroups and subloops</a>
+<li> <A HREF="CHAP006.htm#SECT004">Translations and sections</a>
+<li> <A HREF="CHAP006.htm#SECT005">Multiplication groups</a>
+<li> <A HREF="CHAP006.htm#SECT006">Inner mapping groups</a>
+<li> <A HREF="CHAP006.htm#SECT007">Nuclei, commutant, center, and associator subloop</a>
+<li> <A HREF="CHAP006.htm#SECT008">Normal subloops</a>
+<li> <A HREF="CHAP006.htm#SECT009">Factor loops</a>
+<li> <A HREF="CHAP006.htm#SECT010">Nilpotency and central series</a>
+<li> <A HREF="CHAP006.htm#SECT011">Solvability</a>
+<li> <A HREF="CHAP006.htm#SECT012">Isomorphisms and automorphisms</a>
+<li> <A HREF="CHAP006.htm#SECT013">How are isomorphisms computed</a>
+<li> <A HREF="CHAP006.htm#SECT014">Isotopisms</a>
+</ol><p>
+<p>
+Most calculations in the <font face="Gill Sans,Helvetica,Arial">LOOPS</font> package are delegated to groups, taking
+advantage of the various permutations and permutation groups associated with
+quasigroups. This chapter explains in detail how the permutations associated
+with a quasigroup are calculated, and it also describes some of the core
+methods of <font face="Gill Sans,Helvetica,Arial">LOOPS</font> based on permutations. Additional core methods can be found
+in Chapter <a href="CHAP007.htm">Testing properties of quasigroups and loops</a>.
+<p>
+<p>
+<h2><a name="SECT001">6.1 Parent of a quasigroup</a></h2>
+<p><p>
+Let <i>Q</i> be a quasigroup and <i>S</i> a subquasigroup of <i>Q</i>. Since the
+multiplication in <i>S</i> coincides with the multiplication in <i>Q</i>, it is
+reasonable not to store the multiplication table of <i>S</i>. However, the
+quasigroup <i>S</i> then must know that it is a subquasigroup of <i>Q</i>. In order to
+facilitate this relationship, we introduce the attribute
+<p>
+<a name = "SSEC001.1"></a>
+<li><code>Parent( </code><var>Q</var><code> ) A</code>
+<p>
+for a quasigroup <i>Q</i>.
+<p>
+When <i>Q</i> is <var>not</var> created as a subquasigroup of another quasigroup, the
+attribute <code>Parent( </code><var>Q</var><code> )</code> is set to <i>Q</i>. When <i>Q</i> is created as a subquasigroup
+of a quasigroup <i>H</i>, we let <code>Parent( </code><var>Q</var><code> ) := Parent( </code><var>H</var><code> )</code>. Thus, in effect,
+<code>Parent( </code><var>Q</var><code> )</code> is the largest quasigroup from which <i>Q</i> has been created.
+<p>
+Let <i>Q</i> be a quasigroup with parent <i>P</i>, where <i>P</i> is some <i>n</i>-element
+quasigroup. Let <i>x</i> be an element of <i>Q</i>. Then <code>x![1]</code> is the position of <i>x</i>
+among the elements of <i>P</i>, i.e., <code>x![1] = Position( Elements( P ), x )</code>. The
+position of <i>x</i> among the elements of <i>Q</i> is obtained via
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>Position( </code><var>Q</var><code>, x ) O</code>
+<p>
+While referring to elements of <i>Q</i> by their positions, we therefore must decide
+if the positions are meant among the elements of <i>Q</i>, or among the elements of
+<i>P</i>. Since it requires no calculation to obtain <code>x![1]</code>, <var>we always use the
+position of an element in its parent quasigroup</var>. In this way, many attributes
+of a quasigroup, including its Cayley table, are permanently tied to its
+parent. It is now clear why we have not insisted that Cayley tables of
+quasigroups must have entries covering the entire interval 1, ..., <i>m</i>,
+for some <i>m</i>.
+<p>
+When <i>S</i> is a list of quasigroup elements, not necessarily from the same
+quasigroup, the operation
+<p>
+<a name = "SSEC001.3"></a>
+<li><code>PosInParent( </code><var>S</var><code> )</code>
+<p>
+returns the list of positions of elements of <i>S</i> in the corresponding parent,
+i.e., <code>PosInParent( </code><var>S</var><code> )[ i ] = S[ i ]![ 1 ] = Position( Parent( S[ i ] ), S[
+i ] )</code>.
+<p>
+<p>
+<h2><a name="SECT002">6.2 Comparing quasigroups with common parent</a></h2>
+<p><p>
+noindentAssume that <i>A</i>, <i>B</i> are two quasigroups with common parent <i>Q</i>. Let
+<i>G</i><sub><i>A</i></sub>, <i>G</i><sub><i>B</i></sub> be the canonical generating sets of <i>A</i> and <i>B</i>, respectively,
+obtained by the method <code>GeneratorsSmallest</code>, described above. Then we
+define <i>A</i>  &lt;  <i>B</i> if and only if <i>G</i><sub><i>A</i></sub>  &lt;  <i>G</i><sub><i>B</i></sub> lexicographically.
+<p>
+Note that if <i>A</i> is a subquasigroup of <i>B</i>, we get <i>A</i> &lt; <i>B</i>, but not necessarily
+vice versa.
+<p>
+<p>
+<h2><a name="SECT003">6.3 Subquasigroups and subloops</a></h2>
+<p><p>
+When <i>S</i> is a subset of a quasigroup <i>Q</i> (loop <i>L</i>), the smallest subquasigroup
+of <i>Q</i> (subloop of <i>L</i>) generated by <i>S</i> is returned via:
+<p>
+<a name = "SSEC003.1"></a>
+<li><code>Subquasigroup( </code><var>Q</var><code>, </code><var>S</var><code> ) O</code>
+<a name = "SSEC003.1"></a>
+<li><code>Subloop( </code><var>L</var><code>, </code><var>S</var><code> ) O</code>
+<p>
+In fact, we allow <i>S</i> to be a list of integers, too, representing the positions
+of the respective elements in the parent quasigroup (loop).
+<p>
+If <i>S</i> is empty, <code>Subloop( </code><var>L</var><code>, </code><var>S</var><code> )</code> returns the one-element subloop of <i>L</i>, while <code>Subquasigroup( </code><var>Q</var><code>, </code><var>S</var><code> )</code> returns the empty set. The empty set is obviously not a subquasigroup of <i>Q</i>, but this convention is useful for handling certain situation, for instance when the user calls <code>Center( </code><var>Q</var><code> )</code> for a quasigroup <i>Q</i> with empty center.
+<p>
+The following two operations test if a quasigroup (loop) <i>S</i> is a subquasigroup
+(subloop) of a quasigroup <i>Q</i>. They return <code>true</code> if and only if <i>Q</i> and <i>S</i>
+have the same parent, and if <i>S</i> is a subset of <i>Q</i>.
+<p>
+<a name = "SSEC003.2"></a>
+<li><code>IsSubquasigroup( </code><var>Q</var><code>, </code><var>S</var><code> ) O</code>
+<a name = "SSEC003.2"></a>
+<li><code>IsSubloop( </code><var>Q</var><code>, </code><var>S</var><code> ) O</code>
+<p>
+The operation
+<p>
+<a name = "SSEC003.3"></a>
+<li><code>AllSubloops( </code><var>L</var><code> ) O</code>
+<p>
+returns a list of all subloops of the loop <i>L</i>.
+<p>
+Let <i>S</i> be a subloop of <i>L</i>. The list of all right cosets of <i>S</i>
+in <i>L</i> is obtained via
+<p>
+<a name = "SSEC003.4"></a>
+<li><code>RightCosets( </code><var>L</var><code>, </code><var>S</var><code> ) F</code>
+<p>
+The coset <i>S</i> is listed first, and the elements of each coset are ordered in
+the same way as elements of <i>S</i>, i.e., if <i>S</i> = [<i>s</i><sub>1</sub>,...,<i>s</i><sub><i>m</i></sub>] then
+<i>Sx</i>=[<i>s</i><sub>1</sub><i>x</i>, ..., <i>s</i><sub><i>m</i></sub><i>x</i>].
+<p>
+When <i>S</i> is a subloop of <i>L</i>, the right transversal of <i>S</i>
+with respect to <i>L</i> is a subset of <i>L</i> containing one element from each right
+coset of <i>S</i> in <i>L</i>. It is obtained by
+<p>
+<a name = "SSEC003.5"></a>
+<li><code>RightTransversal( </code><var>L</var><code>, </code><var>S</var><code> ) O</code>
+<p>
+and it returns the first element from each right coset obtained by
+<code>RightCosets( </code><var>L</var><code>, </code><var>S</var><code> )</code>.
+<p>
+<p>
+<h2><a name="SECT004">6.4 Translations and sections</a></h2>
+<p><p>
+When <i>x</i> is an element of a quasigroup <i>Q</i>, the left translation <i>L</i><sub><i>x</i></sub> is a
+permutation of <i>Q</i>. In <font face="Gill Sans,Helvetica,Arial">LOOPS</font>, all permutations associated with quasigroups
+and their elements are permutations in the sense of <font face="Gill Sans,Helvetica,Arial">GAP</font>, i.e., bijections of
+some interval 1, ..., <i>n</i>. Moreover, following our convention, the
+numerical entries of the permutation point to the positions among elements of
+<code>Parent( </code><var>Q</var><code> )</code>, not <i>Q</i>.
+<p>
+The left and right translations by <i>x</i> in <i>Q</i> are obtained by
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>LeftTranslation( </code><var>Q</var><code>, </code><var>x</var><code> ) O</code>
+<a name = "SSEC004.1"></a>
+<li><code>RightTranslation( </code><var>Q</var><code>, </code><var>x</var><code> ) O</code>
+<p>
+The following two attributes calculate the left and right section of a
+quasigroup <i>Q</i>:
+<p>
+<a name = "SSEC004.2"></a>
+<li><code>LeftSection( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC004.2"></a>
+<li><code>RightSection( </code><var>Q</var><code> ) A</code>
+<p>
+Here is an example illustrating the main features of the subquasigroup
+construction and the relationship between a quasigroup and its parent.
+<p>
+Note how the Cayley table of the subquasigroup is created only upon explicit
+demand. Also note that changing the names of elements of a subquasigroup
+(subloop) automatically changes the names of the elements of the parent
+subquasigroup (subloop). This is because the elements are shared.
+<p>
+<pre>
+gap&gt; M := MoufangLoop( 12, 1 );; S := Subloop( M, [ M.5 ] );
+&lt;loop of order 3&gt;
+gap&gt; [ Parent( S ) = M, Elements( S ), PosInParent( S ) ];
+[ true, [ l1, l3, l5], [ 1, 3, 5 ] ]
+gap&gt; HasCayleyTable( S );
+false
+gap&gt; SetLoopElmName( S, "s" );; Elements( S ); Elements( M );
+[ s1, s3, s5 ]
+[ s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 ]
+gap&gt; CayleyTable( S );
+[ [ 1, 3, 5 ], [ 3, 5, 1 ], [ 5, 1, 3 ] ]
+gap&gt; LeftSection( S );
+[ (), (1,3,5), (1,5,3) ]
+gap&gt; [ HasCayleyTable( S ), Parent( S ) = M ];
+[ true, true ]
+gap&gt; L := LoopByCayleyTable( CayleyTable( S ) );; Elements( L );
+[ l1, l2, l3 ]
+gap&gt; [ Parent( L ) = L, IsSubloop( M, S ), IsSubloop( M, L ) ];
+[ true, true, false ]
+gap&gt; LeftSection( L );
+[ (), (1,2,3), (1,3,2) ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT005">6.5 Multiplication groups</a></h2>
+<p><p>
+The left multiplication group, right multiplication group and the
+multiplication group of a quasigroup <i>Q</i> are calculated as follows:
+<p>
+<a name = "SSEC005.1"></a>
+<li><code>LeftMultiplicationGroup( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC005.1"></a>
+<li><code>RightMultiplicationGroup( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC005.1"></a>
+<li><code>MultiplicationGroup( </code><var>Q</var><code> ) A</code>
+<p>
+Let <i>S</i> be a subloop of a loop <i>L</i>. Then the <var>relative left multiplication
+group</var> of <i>L</i> with respect to <i>S</i> is
+the group &#9001;<i>L</i>(<i>x</i>)&#124;<i>x</i> &#8712; <i>S</i>&#9002;, where <i>L</i>(<i>x</i>) is the left translation by
+<i>x</i> in <i>Q</i> restricted to <i>S</i>. The <var>relative right multiplication
+group</var> and <var>relative multiplication
+group</var> are defined analogously.
+<p>
+<a name = "SSEC005.2"></a>
+<li><code>RelativeLeftMultiplicationGroup( </code><var>L</var><code>, </code><var>S</var><code> ) O</code>
+<a name = "SSEC005.2"></a>
+<li><code>RelativeRightMultiplicationGroup( </code><var>L</var><code>, </code><var>S</var><code> ) O</code>
+<a name = "SSEC005.2"></a>
+<li><code>RelativeMultiplicationGroup( </code><var>L</var><code>, </code><var>S</var><code> ) O</code>
+<p>
+See Section <a href="CHAP008.htm#SECT004">Realizing groups as multiplication groups of loops</a> for more on
+that topic.
+<p>
+<p>
+<h2><a name="SECT006">6.6 Inner mapping groups</a></h2>
+<p><p>
+The <var>inner mapping group</var> of a loop <i>L</i> is the
+stabilizer of the unit element in <span class="roman">Mlt</span>(<i>L</i>). The elements of this
+stabilizer are called <var>inner maps</var> of <i>L</i>.
+<p>
+The <var>left inner mapping group</var> of a loop <i>L</i> is
+the stabilizer of the unit element in <span class="roman">LMlt</span>(<i>L</i>). The <var>right inner
+mapping group</var> is defined dually.
+<p>
+Equivalently, the left inner mapping group is generated by all <var>left inner
+mappings</var> <i>L</i>(<i>x</i>,<i>y</i>) = <i>L</i><sub><i>yx</i></sub><sup>&#8722;1</sup><i>L</i><sub><i>y</i></sub><i>L</i><sub><i>x</i></sub>, and the right
+inner mapping group is generated by all <var>right inner mappings</var> <i>R</i>(<i>x</i>,<i>y</i>) = <i>R</i><sub><i>xy</i></sub><sup>&#8722;1</sup><i>R</i><sub><i>y</i></sub><i>R</i><sub><i>x</i></sub>.
+<p>
+In analogy with group theory, we define the <var>conjugation</var>, 
+or the <var>middle inner mapping</var> by <i>x</i> as <i>T</i>(<i>x</i>) = <i>L</i><sub><i>x</i></sub><sup>&#8722;1</sup><i>R</i><sub><i>x</i></sub>. The <var>middle inner mapping grroup</var> is then the subgroup of <span class="roman">Mlt</span>(<i>L</i>) generated by all
+conjugations.
+<p>
+The corresponding commands in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> are
+<p>
+<a name = "SSEC006.1"></a>
+<li><code>LeftInnerMapping( </code><var>L</var><code>, </code><var>x</var><code>, </code><var>y</var><code> ) O</code>
+<a name = "SSEC006.1"></a>
+<li><code>MiddleInnerMapping( </code><var>L</var><code>, </code><var>x</var><code> ) O</code>
+<a name = "SSEC006.1"></a>
+<li><code>RightInnerMapping( </code><var>L</var><code>, </code><var>x</var><code>, </code><var>y</var><code> ) O</code>
+<a name = "SSEC006.1"></a>
+<li><code>LeftInnerMappingGroup( </code><var>L</var><code> ) A</code>
+<a name = "SSEC006.1"></a>
+<li><code>MiddleInnerMappingGroup( </code><var>L</var><code> ) A</code>
+<a name = "SSEC006.1"></a>
+<li><code>RightInnerMappingGroup( </code><var>L</var><code> ) A</code>
+<a name = "SSEC006.1"></a>
+<li><code>InnerMappingGroup( </code><var>L</var><code> ) A</code>
+<p>
+Here is an example for multiplication groups and inner mapping groups:
+<p>
+<pre>
+gap&gt; M := MoufangLoop( 12, 1 );
+&lt;Moufang loop 12/1&gt;
+gap&gt; LeftSection( M )[ 2 ];
+(1,2)(3,4)(5,6)(7,8)(9,12)(10,11)
+gap&gt; Mlt := MultiplicationGroup( M ); Inn := InnerMappingGroup( M );
+&lt;permutation group of size 2592 with 23 generators&gt;
+Group([ (4,6)(7,11), (7,11)(8,10), (2,6,4)(7,9,11), (3,5)(9,11), (8,12,10) ])
+gap&gt; Size( Inn );
+216
+</pre>
+<p>
+<p>
+<h2><a name="SECT007">6.7 Nuclei, commutant, center, and associator subloop</a></h2>
+<p><p>
+Let <i>Q</i> be a quasigroup. The <var>left nucleus</var> <i>N</i><sub>&#955;</sub>(<i>Q</i>)
+of <i>Q</i> is the set {<i>x</i> &#8712; <i>Q</i>&#124; <i>x</i>(<i>yz</i>)=(<i>xy</i>)<i>z</i> for every <i>y</i>, <i>z</i> &#8712; <i>Q</i>}. One
+defines similarly the <var>middle nucleus</var> <i>N</i><sub>&#956;</sub>(<i>Q</i>) and the
+<var>right nucleus</var> <i>N</i><sub>&#961;</sub>(<i>Q</i>). Then the
+<var>nucleus</var> <i>N</i>(<i>Q</i>) of <i>Q</i> is the intersection of the three nuclei.
+<p>
+The nuclei are calculated in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> as follows:
+<p>
+<a name = "SSEC007.1"></a>
+<li><code>LeftNucleus( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC007.1"></a>
+<li><code>MiddleNucleus( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC007.1"></a>
+<li><code>RightNucleus( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC007.1"></a>
+<li><code>Nuc( </code><var>Q</var><code> ) A</code>
+<p>
+Unfortunately, the word <code>Nucleus</code> is reserved in the core of <font face="Gill Sans,Helvetica,Arial">GAP</font> for a
+global function with two variables. That is the reason why we have used the
+abbreviation <code>Nuc</code>, which is also common in the literature. However, we support
+these synonyms of <code>Nuc</code>:
+<p>
+<a name = "SSEC007.2"></a>
+<li><code>NucleusOfLoop( </code><var>Q</var><code> ) A</code>
+<a name = "SSEC007.2"></a>
+<li><code>NucleusOfQuasigroup( </code><var>Q</var><code> ) A</code>
+<p>
+Since all nuclei are subquasigroups of <i>Q</i>, they are returned as subquasigroups
+(resp. subloops). When <i>Q</i> is a loop then all nuclei are in fact groups, and
+they are returned as associative loops.
+<p>
+The <var>commutant</var> <i>C</i>(<i>Q</i>) of <i>Q</i> is the set {<i>x</i> &#8712; <i>Q</i>&nbsp;&#124;&nbsp;<i>xy</i>=<i>yx</i>
+for every <i>y</i> &#8712; <i>Q</i>}. It is obtained via
+<p>
+<a name = "SSEC007.3"></a>
+<li><code>Commutant( </code><var>Q</var><code> ) A</code>
+<p>
+The center <i>Z</i>(<i>Q</i>) is defined as the intersection of <i>C</i>(<i>Q</i>) and <i>N</i>(<i>Q</i>), and it
+is obtained via
+<p>
+<a name = "SSEC007.4"></a>
+<li><code>Center( </code><var>Q</var><code> ) A</code>
+<p>
+It is a subgroup of <i>Q</i>  and is therefore returned as an associative loop.
+<p>
+Finally, the <var>associator
+subloop</var> of a loop <i>L</i> is
+the smallest normal subloop <i>A</i>(<i>L</i>) of <i>L</i> containing all associators of <i>L</i>.
+Equivalently, <i>A</i>(<i>L</i>) is the smallest normal subloop <i>K</i> such that <i>L</i>/<i>K</i> is
+associative. We use another equivalent reformulation for the purposes of
+computation: <i>A</i>(<i>L</i>) is the smallest normal subloop of <i>L</i> containing
+{<i>x</i>\&#945;(<i>x</i>)&nbsp;&#124;&nbsp;<i>x</i> &#8712; <i>L</i>,&nbsp;&#945; is a left inner mapping}.
+<p>
+<a name = "SSEC007.5"></a>
+<li><code>AssociatorSubloop( </code><var>L</var><code> ) A</code>
+<p>
+<p>
+<h2><a name="SECT008">6.8 Normal subloops</a></h2>
+<p><p>
+A subloop <i>S</i> of a loop <i>L</i> is
+<var>normal</var> if it is invariant under
+all inner mappings of <i>L</i>. Normality is tested via:
+<p>
+<a name = "SSEC008.1"></a>
+<li><code>IsNormal( </code><var>L</var><code>, </code><var>S</var><code> ) O</code>
+<p>
+When <i>S</i> is a subset of a loop <i>L</i> or a subloop of <i>L</i>, the <var>normal
+closure</var> of <i>S</i> in <i>L</i> is the smallest normal subloop of
+<i>L</i> containing <i>S</i>. It is obtained by
+<p>
+<a name = "SSEC008.2"></a>
+<li><code>NormalClosure( </code><var>L</var><code>, </code><var>S</var><code> ) O</code>
+<p>
+A loop <i>L</i> is <var>simple</var> if all normal
+subloops of <i>L</i> are trivial. The corresponding test in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> is:
+<p>
+<a name = "SSEC008.3"></a>
+<li><code>IsSimple( </code><var>L</var><code> ) O</code>
+<p>
+<p>
+<h2><a name="SECT009">6.9 Factor loops</a></h2>
+<p><p>
+When <i>N</i> is a normal subloop of a loop <i>L</i>, the factor loop <i>L</i>/<i>N</i> can be
+obtained directly via the command <code>L/N</code>, or by
+<p>
+<a name = "SSEC009.1"></a>
+<li><code>FactorLoop( </code><var>L</var><code>, </code><var>N</var><code> ) O</code>
+<p>
+The natural projection from <i>L</i> to <i>L</i>/<i>N</i> is returned by
+<p>
+<a name = "SSEC009.2"></a>
+<li><code>NaturalHomomorphismByNormalSubloop( </code><var>L</var><code>, </code><var>N</var><code> ) O</code>
+<p>
+Here is an illustrating example:
+<p>
+<pre>
+gap&gt; M := MoufangLoop( 12, 1 );; S := Subloop( M, [ M.3 ] );
+&lt;loop of order 3&gt;
+gap&gt; IsNormal( M, S );
+true
+gap&gt; F := FactorLoop( M, S );
+&lt;loop of order 4&gt;
+gap&gt; NaturalHomomorphismByNormalSubloop( M, S );
+MappingByFunction( &lt;loop of order 12&gt;, &lt;loop of order 4&gt;,
+    function( x ) ... end )
+</pre>
+<p>
+<p>
+<h2><a name="SECT010">6.10 Nilpotency and central series</a></h2>
+<p><p>
+The definition of nilpotency and nilpotence class is the same as in group
+theory. The corresponding commands are:
+<p>
+<a name = "SSEC010.1"></a>
+<li><code>NilpotencyClassOfLoop( </code><var>L</var><code> ) A</code>
+<a name = "SSEC010.1"></a>
+<li><code>IsNilpotent( </code><var>L</var><code> ) P</code>
+<p>
+When <i>L</i> is not nilpotent, <code>NilpotencyClassOfLoop( </code><var>L</var><code> )</code> returns <code>fail</code>.
+<p>
+A loop <i>L</i> is said to be <var>strongly nilpotent</var> if its
+multiplication group is nilpotent. This property is obtained by
+<p>
+<a name = "SSEC010.2"></a>
+<li><code>IsStronglyNilpotent( </code><var>L</var><code> ) P</code>
+<p>
+Let <i>L</i> be a loop. Define <var>iterated centers</var> <i>Z</i><sub><i>i</i></sub>(<i>L</i>) as
+follows: <i>Z</i><sub>0</sub>(<i>L</i>)=<i>Z</i>(<i>L</i>), <i>Z</i><sub><i>i</i>+1</sub>(<i>L</i>) = &#960;<sub><i>i</i></sub><sup>&#8722;1</sup>( <i>Z</i><sub><i>i</i></sub>(<i>L</i>) ), where &#960;<sub><i>i</i></sub> is
+the canonical projection <i>L</i>&#8594; <i>L</i>/<i>Z</i><sub><i>i</i></sub>(<i>L</i>). The longest series <i>Z</i><sub><i>i</i></sub>(<i>L</i>),
+<i>Z</i><sub><i>i</i>&#8722;1</sub>(<i>L</i>), ..., <i>Z</i><sub>0</sub>(<i>L</i>) with <i>Z</i><sub><i>i</i></sub>(<i>L</i>) &gt; <i>Z</i><sub><i>i</i>&#8722;1</sub>(<i>L</i>) &gt; &#8230; &gt; <i>Z</i><sub>0</sub>(<i>L</i>) is
+called the <var>upper central series</var> of <i>L</i>, and is
+returned via
+<p>
+<a name = "SSEC010.3"></a>
+<li><code>UpperCentralSeries( </code><var>L</var><code> ) A</code>
+<p>
+The <var>lower central series</var>, defined in the usual
+way, is obtained by
+<p>
+<a name = "SSEC010.4"></a>
+<li><code>LowerCentralSeries( </code><var>L</var><code> ) A</code>
+<p>
+<p>
+<h2><a name="SECT011">6.11 Solvability</a></h2>
+<p><p>
+The definition of solvability, derived subloop, derived length, Frattini
+subloop and Frattini factor size is the same as for groups. Frattini subloop is
+calculated only for strongly nilpotent loops.
+<p>
+<a name = "SSEC011.1"></a>
+<li><code>IsSolvable( </code><var>L</var><code> ) P</code>
+<a name = "SSEC011.1"></a>
+<li><code>DerivedSubloop( </code><var>L</var><code> ) A</code>
+<a name = "SSEC011.1"></a>
+<li><code>DerivedLength( </code><var>L</var><code> ) A</code>
+<a name = "SSEC011.1"></a>
+<li><code>FrattiniSubloop( </code><var>L</var><code> ) A</code>
+<a name = "SSEC011.1"></a>
+<li><code>FrattinifactorSize( </code><var>L</var><code> ) A</code>
+<p>
+<p>
+<h2><a name="SECT012">6.12 Isomorphisms and automorphisms</a></h2>
+<p><p>
+All isomorphisms between two loops can be found with <font face="Gill Sans,Helvetica,Arial">LOOPS</font>. The operation
+<p>
+<a name = "SSEC012.1"></a>
+<li><code>IsomorphismLoops( </code><var>L</var><code>, </code><var>M</var><code> ) O</code>
+<p>
+returns a single isomorphism between loops <i>L</i>, <i>M</i> if the loops are
+isomorphic, and <code>fail</code> otherwise.
+<p>
+If an isomorphism exists, it is returned as a permutation <i>p</i> of 1, ...,
+&#124;<i>L</i>&#124;, where <i>i</i><sup><i>p</i></sup>=<i>j</i> means that the <i>i</i>th element of <i>L</i> is mapped onto the
+<i>j</i>th element of <i>M</i>. This is true even if <i>L</i> or <i>M</i> are not their own
+parents.
+<p>
+Since one frequently needs to filter a list of loops up to isomorphism, we
+support
+<p>
+<a name = "SSEC012.2"></a>
+<li><code>LoopsUpToIsomorphism( </code><var>ls</var><code> ) O</code>
+<p>
+Given a list <i>ls</i> of loops, the operation returns a sublist of <i>ls</i> containing
+one loop from each isomorphism class of loops present in <i>ls</i>.
+<p>
+The attribute
+<p>
+<a name = "SSEC012.3"></a>
+<li><code>AutomorphismGroup( </code><var>L</var><code> ) A</code>
+<p>
+returns the automorphism group of the loop <i>L</i>, with the same convention on
+permutations as in the case of <code>IsomorphismLoops</code>.
+<p>
+Since two isomorphisms "differ" by an automorphism, all isomorphisms can be
+obtained by the above two functions.
+<p>
+While dealing with Cayley tables, it is often useful to rename or reorder the
+elements without changing the isomorphism type. When <i>Q</i> is a quasigroup of
+size <i>n</i> and <i>p</i> is a permutation of {1,...,<i>n</i>},
+<p>
+<a name = "SSEC012.4"></a>
+<li><code>IsomorphicCopyByPerm( Q, p )</code>
+<p>
+returns quasigroup (<i>Q</i>,&#176;) such that <i>p</i>(<i>xy</i>) = <i>p</i>(<i>x</i>)&#176;<i>p</i>(<i>y</i>), i.e.,
+<i>x</i>&#176;<i>y</i> = <i>p</i>( <i>p</i><sup>&#8722;1</sup>(<i>x</i>)<i>p</i><sup>&#8722;1</sup>(<i>y</i>)). When <i>Q</i> is a declared loop, a loop is
+returned. Consequently, when <i>Q</i> is a declared loop and <i>p</i>(1) = <i>k</i> &#8800; 1, then
+<i>p</i> is first replaced by <i>p</i>&#176;(1,<i>k</i>), to make sure that the Cayley table is
+normalized.
+<p>
+When <i>S</i> is a normal subloop of <i>L</i>,
+<p>
+<a name = "SSEC012.5"></a>
+<li><code>IsomorphicCopyByNormalSubloop( L, S )</code>
+<p>
+returns an isomorphic copy of <i>L</i> in which the elements are ordered according
+to the right cosets of <i>S</i>. In particular, the Cayley table of <i>S</i> will appear
+in the top left corner of the Cayley table of the resulting loop.
+<p>
+<p>
+<h2><a name="SECT013">6.13 How are isomorphisms computed</a></h2>
+<p><p>
+In order to speed up the search for isomorphisms and automorphisms, we first
+calculate some loop invariants preserved under isomorphisms, and use these
+invariants to partition the loop into blocks of elements preserved under
+isomorphisms. These invariants for a loop <i>L</i> can be obtained via
+<p>
+<a name = "SSEC013.1"></a>
+<li><code>Discriminator( </code><var>L</var><code> ) O</code>
+<p>
+Since the details are technical, we will not present them here. See <a href="biblio.htm#Vo"><cite>Vo</cite></a>
+or the file <code>iso.gi</code> for more.
+<p>
+If two loops have different discriminators, they are not isomorphic. If they
+have identical discriminators, they may or may not be isomorphic. The operation
+<p>
+<a name = "SSEC013.2"></a>
+<li><code>AreEqualDiscriminators( </code><var>D1</var><code>, </code><var>D2</var><code> ) O</code>
+<p>
+returns <code>true</code> if the discriminators <i>D</i>1, <i>D</i>2 are equal.
+<p>
+<p>
+<h2><a name="SECT014">6.14 Isotopisms</a></h2>
+<p><p>
+The package contains a slow method for testing if two loops are isotopic:
+<p>
+<a name = "SSEC014.1"></a>
+<li><code>IsotopismLoops( </code><var>K</var><code>, </code><var>L</var><code> ) O</code>
+<p>
+It returns <code>fail</code> if <i>K</i>, <i>L</i> are not isotopic, else it returns an isotopism as
+a triple of bijections on {1,...,&#124;<i>K</i>&#124;}.
+<p>
+The method works as follows: It is well known that if a loop <i>K</i> is isotopic to
+a loop <i>L</i> then there exist a principal loop isotope <i>P</i> of <i>K</i> such that <i>P</i>
+is isomorphic to <i>L</i>. The algorithm first finds all principal isotopes of <i>K</i>,
+then filters them up to isomorphism, and then checks if any of them is
+isomorphic to <i>L</i>. This is rather slow already for small orders, say 30.
+<p>
+The function
+<p>
+<a name = "SSEC014.2"></a>
+<li><code>LoopsUpToIsotopism( </code><var>ls</var><code> ) O</code>
+<p>
+filters the list <i>ls</i> in a way similar to <code>LoopsUpToIsomorphism</code>, but using
+isotopism as the underlying equivalence relation.
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP005.htm">Previous</a>] [<a href ="CHAP007.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>loops manual<br>July 2012
+</address></body></html>

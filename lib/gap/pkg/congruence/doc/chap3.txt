@@ -1,0 +1,136 @@
+  
+  [1X3 [33X[0;0YFarey symbols and their properties[133X[101X
+  
+  [33X[0;0YA Farey symbol is a compact and useful way to represent a subgroup of finite
+  index  in  [22XSL_2(ℤ)[122X from which one can deduce independent generators for this
+  subgroup.  It  consists  of  two  components, namely a so-called generalised
+  Farey  sequence  ([3Xgfs[103X)  and  an  ordered  list  of labels, giving additional
+  structure to the [3Xgfs[103X.[133X
+  
+  [33X[0;0YA  generalised  Farey  sequence  (g.F.S.)  is  an  ordered  list of the form
+  [22X-infinity, x_0, x_1, ... , x_n, infinity[122X, where[133X
+  
+  [33X[0;0Y1.  the  [22Xx_i  =  a_i/b_i[122X  are  rational  numbers in reduced form arranged in
+  increasing order for [22Xi = 0, ... , n[122X;[133X
+  
+  [33X[0;0Y2. [22Xx_0, ... , x_n ∈ Z[122X, and some [22Xx_i = 0[122X;[133X
+  
+  [33X[0;0Y3. we define [22Xx_-1=-infinity=-1/0[122X and [22Xx_n+1=infinity=1/0[122X;[133X
+  
+  [33X[0;0Y4. [22Xa_i+1b_i-a_ib_i+1=1[122X for [22Xi=-1, ... ,n[122X.[133X
+  
+  [33X[0;0YThe  ordered  list of labels of a Farey symbol gives an additional structure
+  to  the [3Xgfs[103X. The labels correspond to each consecutive pair of [22Xx_i[122X's and are
+  of the following types:[133X
+  
+  [33X[0;0Y1. even,[133X
+  
+  [33X[0;0Y2. odd,[133X
+  
+  [33X[0;0Y3. a natural number, which occurs in the list of labels exactly twice or not
+  at all.[133X
+  
+  [33X[0;0YNote that the actual values of numerical labels are not important; it is the
+  pairing of two intervals that matters.[133X
+  
+  [33X[0;0YThe  package [5XCongruence[105X provides functions to construct Farey symbols by the
+  given  generalised  Farey  sequence  and  corresponding  list of labels. The
+  returned  Farey  symbol  will  belong to the category [10XIsFareySymbol[110X and will
+  have the representation [10XIsFareySymbolDefaultRep[110X.[133X
+  
+  
+  [1X3.1 [33X[0;0YConstruction of Farey symbols[133X[101X
+  
+  [1X3.1-1 FareySymbolByData[101X
+  
+  [29X[2XFareySymbolByData[102X( [3Xgfs[103X, [3Xlabels[103X ) [32X function
+  
+  [33X[0;0YThis  constructor  creates the Farey symbol with the given generalized Farey
+  sequence  and  list of labels. It also checks conditions from the definition
+  of  Farey  symbol  and  returns an error if they are not satisfied. The data
+  used   to   create   the   Farey   symbol   are  stored  as  its  attributes
+  [2XGeneralizedFareySequence[102X ([14X3.2-1[114X) and [2XLabelsOfFareySymbol[102X ([14X3.2-4[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xfs:=FareySymbolByData([infinity,0,1,2,infinity],[1,2,2,1]);                         [127X[104X
+    [4X[28X[ infinity, 0, 1, 2, infinity ][128X[104X
+    [4X[28X[ 1, 2, 2, 1 ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X3.1-2 IsValidFareySymbol[101X
+  
+  [29X[2XIsValidFareySymbol[102X( [3Xfs[103X ) [32X function
+  
+  [33X[0;0YThis function is used in [2XFareySymbolByData[102X ([14X3.1-1[114X) to validate its output.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XIsValidFareySymbol(fs);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.2 [33X[0;0YProperties of Farey symbols[133X[101X
+  
+  [1X3.2-1 GeneralizedFareySequence[101X
+  
+  [29X[2XGeneralizedFareySequence[102X( [3Xfs[103X ) [32X attribute
+  
+  [33X[0;0YReturns the generalized Farey sequence [3Xgfs[103X of the Farey symbol.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XGeneralizedFareySequence(fs);[127X[104X
+    [4X[28X[ infinity, 0, 1, 2, infinity ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X3.2-2 NumeratorOfGFSElement[101X
+  
+  [29X[2XNumeratorOfGFSElement[102X( [3Xgfs[103X, [3Xi[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yinteger[133X
+  
+  [33X[0;0YReturns  the  numerator  of  the i-th term of the generalised Farey sequence
+  [3Xgfs[103X:  for the 1st infinite entry returns -1, for the last one returns 1, for
+  all other entries returns the usual numerator.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XList([1..5], i -> NumeratorOfGFSElement(GeneralizedFareySequence(fs),i));[127X[104X
+    [4X[28X[ -1, 0, 1, 2, 1 ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X3.2-3 DenominatorOfGFSElement[101X
+  
+  [29X[2XDenominatorOfGFSElement[102X( [3Xgfs[103X, [3Xi[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yinteger[133X
+  
+  [33X[0;0YReturns  the  denominator of the i-th term of the generalised Farey sequence
+  [3Xgfs[103X:  for  both  infinite  entries returns 0, for the other ones returns the
+  usual denominator.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XList([1..5], i -> DenominatorOfGFSElement(GeneralizedFareySequence(fs),i));         [127X[104X
+    [4X[28X[ 0, 1, 1, 1, 0 ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X3.2-4 LabelsOfFareySymbol[101X
+  
+  [29X[2XLabelsOfFareySymbol[102X( [3Xfs[103X ) [32X attribute
+  
+  [33X[0;0YReturns  the list of labels of the Farey symbol. This list has "odd", "even"
+  and paired integers as entries.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XLabelsOfFareySymbol(fs);[127X[104X
+    [4X[28X[ 1, 2, 2, 1 ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  

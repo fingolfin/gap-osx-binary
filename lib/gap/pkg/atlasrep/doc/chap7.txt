@@ -1,0 +1,1376 @@
+  
+  [1X7 [33X[0;0YTechnicalities of the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YThis  chapter  describes  those  parts  of the [5XGAP[105X interface to the [5XATLAS[105X of
+  Group   Representations   that   do   not   belong  to  the  user  interface
+  (cf. Chapter [14X3[114X).[133X
+  
+  [33X[0;0YBesides   global   variables   used   for   administrational  purposes  (see
+  Section [14X7.1[114X)  and  several  sanity  checks  (see  Section [14X7.8[114X),  they can be
+  regarded  as  the interface between the data actually contained in the files
+  and  the corresponding [5XGAP[105X objects (see Section [14X7.2[114X, [14X7.3[114X, [14X7.4[114X, and [14X7.5[114X), and
+  the  interface between the remote and the local version of the database (see
+  Section [14X7.6[114X  and [14X7.7[114X).  The  former interface contains functions to read and
+  write  files  in [5XMeatAxe[105X format, which may be interesting for users familiar
+  with   [5XMeatAxe[105X  standalones  (see  for  example [Rin98]).  Other  low  level
+  functions  may  be  undocumented in the sense that they are not described in
+  this  manual. Users interested in them may look at the actual implementation
+  in  the  [11Xgap[111X  directory  of the package, but it may happen that this will be
+  changed in future versions of the package.[133X
+  
+  
+  [1X7.1 [33X[0;0YGlobal Variables Used by the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YFor debugging purposes, the functions from the [5XGAP[105X interface to the [5XATLAS[105X of
+  Group  Representations  print information depending on the info level of the
+  info  classes  [2XInfoAtlasRep[102X  ([14X7.1-1[114X),  [2XInfoCMeatAxe[102X  ([14X7.1-2[114X),  and  [2XInfoBBox[102X
+  ([14X7.1-3[114X) (cf. [14X'Reference: Info Functions'[114X).[133X
+  
+  [33X[0;0YThe  info  level  of  an  info  class  can  be  changed  using  [2XSetInfoLevel[102X
+  ([14XReference:  SetInfoLevel[114X).  For  example,  the  info  level of [2XInfoAtlasRep[102X
+  ([14X7.1-1[114X)  can  be  set  to  the  nonnegative  integer  [3Xn[103X  using [10XSetInfoLevel(
+  InfoAtlasRep, [3Xn[103X[10X )[110X.[133X
+  
+  [33X[0;0YInformation  about  files being read can be obtained by setting the value of
+  the global variable [10XInfoRead1[110X to [2XPrint[102X ([14XReference: Print[114X).[133X
+  
+  [1X7.1-1 InfoAtlasRep[101X
+  
+  [29X[2XInfoAtlasRep[102X[32X info class
+  
+  [33X[0;0YIf  the info level of [2XInfoAtlasRep[102X is at least [22X1[122X then information about [9Xfail[109X
+  results  of  functions in the [5XAtlasRep[105X package is printed. If the info level
+  is  at least [22X2[122X then information about calls to external programs is printed.
+  The default level is [22X0[122X, no information is printed on this level.[133X
+  
+  [1X7.1-2 InfoCMeatAxe[101X
+  
+  [29X[2XInfoCMeatAxe[102X[32X info class
+  
+  [33X[0;0YIf  the info level of [2XInfoCMeatAxe[102X is at least [22X1[122X then information about [9Xfail[109X
+  results  of  [10XC[110X-[5XMeatAxe[105X  functions  is printed. The default level is zero, no
+  information is printed on this level.[133X
+  
+  [1X7.1-3 InfoBBox[101X
+  
+  [29X[2XInfoBBox[102X[32X info class
+  
+  [33X[0;0YIf  the  info  level  of  [2XInfoBBox[102X is at least [22X1[122X then information about [9Xfail[109X
+  results  of  functions  dealing with black box programs (see Section [14X6.2[114X) is
+  printed. The default level is [22X0[122X, no information is printed on this level.[133X
+  
+  [1X7.1-4 CMeatAxe.FastRead[101X
+  
+  [29X[2XCMeatAxe.FastRead[102X[32X global variable
+  
+  [33X[0;0YIf  this  component  is  bound  and  has the value [9Xtrue[109X then [2XScanMeatAxeFile[102X
+  ([14X7.3-1[114X) reads text files via [2XStringFile[102X ([14XGAPDoc: StringFile[114X). Otherwise each
+  file  containing  a  matrix  over  a  finite  field is read line by line via
+  [2XReadLine[102X  ([14XReference:  ReadLine[114X),  and the [5XGAP[105X matrix is constructed line by
+  line,  in  a  compressed  representation  (see [14X'Reference:  Row Vectors over
+  Finite Fields'[114X and [14X'Reference: Matrices over Finite Fields'[114X), which makes it
+  possible  to  read  large  matrices  in  a  reasonable  amount of space. The
+  [2XStringFile[102X   ([14XGAPDoc:   StringFile[114X)   approach  is  faster  but  needs  more
+  intermediate  space  when  text files containing matrices over finite fields
+  are read.[133X
+  
+  [1X7.1-5 AGR[101X
+  
+  [29X[2XAGR[102X[32X global variable
+  
+  [33X[0;0Yis  a  record  whose  components are functions and data that are used by the
+  higher level interface functions.[133X
+  
+  [1X7.1-6 AtlasOfGroupRepresentationsInfo[101X
+  
+  [29X[2XAtlasOfGroupRepresentationsInfo[102X[32X global variable
+  
+  [33X[0;0YThis  is  a  record  that is defined in the file [11Xgap/types.g[111X of the package,
+  with the following components.[133X
+  
+  [33X[0;0YComponents corresponding to [13Xuser parameters[113X (see Section [14X4.3[114X) are[133X
+  
+  [8X[10Xremote[110X[108X
+        [33X[0;6Ya boolean that controls what files are available; if the value is [9Xtrue[109X
+        then  [5XGAP[105X is allowed to try remotely accessing any [5XATLAS[105X file from the
+        servers  (see  below) and thus all files listed in the global table of
+        contents are available, if the value is [9Xfalse[109X then [5XGAP[105X may access only
+        those  files  that are stored in the database directories of the local
+        [5XGAP[105X installation (see Section [14X4.3-1[114X),[133X
+  
+  [8X[10Xservers[110X[108X
+        [33X[0;6Ya  list  of  pairs [10X[ [110X[3Xserver[103X[10X, [110X[3Xpath[103X[10X ][110X, where [3Xserver[103X is a string denoting
+        the  [11Xhttp[111X  address of a server where files can be fetched that are not
+        stored in the local database, and [3Xpath[103X is a string describing the path
+        where the data directories on the server reside,[133X
+  
+  [8X[10Xwget[110X[108X
+        [33X[0;6Ycontrols  whether  the  [5XGAP[105X package [5XIO[105X [Neu11] or the external program
+        [11Xwget[111X is used to fetch data files, see [14X4.3-3[114X,[133X
+  
+  [8X[10Xcompress[110X[108X
+        [33X[0;6Ya  boolean  that controls whether [5XMeatAxe[105X format text files are stored
+        in  compressed  form;  if  the  value  is  [9Xtrue[109X  then  these files are
+        compressed  with  [11Xgzip[111X after they have been fetched from a server, see
+        Section [14X4.3-4[114X,[133X
+  
+  [8X[10XdisplayFunction[110X[108X
+        [33X[0;6Ythe function that is used by [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) for printing the
+        formatted data, see Section [14X4.3-5[114X,[133X
+  
+  [8X[10XaccessFunctions[110X[108X
+        [33X[0;6Ya  list  of records, each describing how to access the data files, see
+        Sections [14X4.3-6[114X and [14X7.2[114X, and[133X
+  
+  [8X[10Xmarkprivate[110X[108X
+        [33X[0;6Ya  string  used  in [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) to mark private data, see
+        Section  [14X5.2[114X.[133X
+  
+  [33X[0;0Y[13XSystem components[113X (which are computed automatically) are[133X
+  
+  [8X[10XGAPnames[110X[108X
+        [33X[0;6Ya  list of pairs, each containing the [5XGAP[105X name and the [5XATLAS[105X-file name
+        of a group, see Section [14X3.2[114X,[133X
+  
+  [8X[10Xgroupnames[110X[108X
+        [33X[0;6Ya  list  of triples, each containing at the first position the name of
+        the  directory  on each server that contains data about the group [22XG[122X in
+        question,  at  the  second  position  the name of the (usually simple)
+        group  for which a subdirectory exists that contains the data about [22XG[122X,
+        and  at  the  third  position  the  [5XATLAS[105X-file  name  used  for [22XG[122X, see
+        Section [14X7.6[114X,[133X
+  
+  [8X[10Xprivate[110X[108X
+        [33X[0;6Ya  list  of pairs of strings used for administrating private data (see
+        Chapter [14X5[114X);        the        value        is        changed        by
+        [2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X      ([14X5.1-1[114X)     and
+        [2XAtlasOfGroupRepresentationsForgetPrivateDirectory[102X ([14X5.1-2[114X),[133X
+  
+  [8X[10Xcharacterinfo[110X, [10Xpermrepinfo[110X, [10Xringinfo[110X[108X
+        [33X[0;6Yadditional   information   about   representations,   concerning   the
+        characters    afforded,   the   point   stabilizers   of   permutation
+        representations, and the ring of definition of matrix representations;
+        this information is used by [2XDisplayAtlasInfo[102X ([14X3.5-1[114X),[133X
+  
+  [8X[10XTableOfContents[110X[108X
+        [33X[0;6Ya  record  with  at  most the components [10Xlocal[110X, [10Xremote[110X, [10Xtypes[110X, and the
+        names  of private data directories. The values of the components [10Xlocal[110X
+        and [10Xremote[110X can be computed automatically by [2XReloadAtlasTableOfContents[102X
+        ([14X4.2-1[114X),    the   value   of   the   component   [10Xtypes[110X   is   set   in
+        [2XAGR.DeclareDataType[102X  ([14X7.5-1[114X),  and  the  values  of the components for
+        local        data        directories        are       created       by
+        [2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X ([14X5.1-1[114X).[133X
+  
+  
+  [1X7.2 [33X[0;0YHow to Customize the Access to Data files[133X[101X
+  
+  [33X[0;0YWe discuss the three steps listed in Section [14X4.3-6[114X.[133X
+  
+  [33X[0;0YFor  creating  an overview of the locally available data, the first of these
+  steps  must  be  available  independent  of  actually  accessing the file in
+  question.  For updating the local copy of the server data, the second of the
+  above  steps  must be available independent of the third one. Therefore, the
+  package  provides  the possibility to extend the default behaviour by adding
+  new      records      to      the      [10XaccessFunctions[110X      component     of
+  [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X). Its components are as follows.[133X
+  
+  [8X
+  [10Xlocation( [3Xfilename[103X[10X, [3Xgroupname[103X[10X, [3Xdirname[103X[10X,
+               [3Xtype[103X[10X )[110X
+  [108X
+        [33X[0;6YLet  [3Xfilename[103X  be  the default filename (without path) of the required
+        file,  or a list of such filenames. Let [3Xgroupname[103X be the [5XATLAS[105X name of
+        the  group  to  which  the  data in these files belong, [3Xdirname[103X be the
+        default  directory  name  (one of [10X"datagens"[110X, [10X"dataword"[110X, or the [3Xdirid[103X
+        value         of         a        private        directory,        see
+        [2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X  ([14X5.1-1[114X)),  and [3Xtype[103X
+        be the data type (see [2XAGR.DeclareDataType[102X ([14X7.5-1[114X)). This function must
+        return  either the absolute path(s) where the mechanism implemented by
+        the  current record expects the local version of the given file(s), or
+        [9Xfail[109X  if this function does not feel responsible for these file(s). In
+        the  latter  case, the [10Xlocation[110X function in another record will know a
+        path.[133X
+  
+        [33X[0;6YThe  file(s) is/are regarded as not locally available if all installed
+        [10Xlocation[110X  functions  return either [9Xfail[109X or paths of nonexisting files,
+        in the sense of [2XIsExistingFile[102X ([14XReference: IsExistingFile[114X).[133X
+  
+  [8X
+  [10Xfetch( [3Xfilepath[103X[10X, [3Xfilename[103X[10X, [3Xgroupname[103X[10X,
+            [3Xdirname[103X[10X, [3Xtype[103X[10X )[110X
+  [108X
+        [33X[0;6YThis  function  is  called when a file is not locally available and if
+        the  [10Xlocation[110X  function in the current record has returned a path or a
+        list  of paths. The arguments [3Xdirname[103X and [3Xtype[103X must be the same as for
+        the  [10Xlocation[110X function, and [3Xfilepath[103X and [3Xfilename[103X must be strings ([13Xnot[113X
+        lists of strings).[133X
+  
+        [33X[0;6YThe  return  value  must be [9Xtrue[109X if the function succeeded with making
+        the  file  locally available (including postprocessing if applicable),
+        and [9Xfalse[109X otherwise.[133X
+  
+  [8X[10Xcontents( [3Xfilepath[103X[10X, [3Xtype[103X[10X )[110X[108X
+        [33X[0;6YThis  function  is  called  when  the [10Xlocation[110X function in the current
+        record  has  returned  the  path(s)  [3Xfilepath[103X, and if either these are
+        paths  of  existing  files or the [10Xfetch[110X function in the current record
+        has  been  called  for these paths, and the return value was [9Xtrue[109X. The
+        argument  [3Xtype[103X  must  be  the  same  as for the [10Xlocation[110X and the [10Xfetch[110X
+        functions.[133X
+  
+        [33X[0;6YThe  return  value  must  be the contents of the file(s), in the sense
+        that  the  [5XGAP[105X  matrix, matrix list, permutation, permutation list, or
+        program  described by the file(s) is returned. This means that besides
+        reading  the  file(s)  via  the appropriate function, interpreting the
+        contents may be necessary.[133X
+  
+  [8X[10Xdescription[110X[108X
+        [33X[0;6YThis  must  be  a short string that describes for which kinds of files
+        the  functions  in the current record are intended, which file formats
+        are      supported      etc.      The     value     is     used     by
+        [2XAtlasOfGroupRepresentationsUserParameters[102X ([14X4.3-8[114X).[133X
+  
+  [8X[10Xactive[110X[108X
+        [33X[0;6YThe  current  [10XaccessFunctions[110X  record  is  ignored by [2XAGR.FileContents[102X
+        ([14X7.6-2[114X) if the value is not [9Xtrue[109X.[133X
+  
+  [33X[0;0YIn [2XAGR.FileContents[102X ([14X7.6-2[114X), the records in the [10XaccessFunctions[110X component of
+  [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X) are considered in reversed order.[133X
+  
+  [33X[0;0YBy default, the [10XaccessFunctions[110X list contains three records. Only for one of
+  them,  the [10Xactive[110X component has the value [9Xtrue[109X. One of the other two records
+  can  be  used  to  change  the  access to permutation representations and to
+  matrix representations over finite fields such that [5XMeatAxe[105X binary files are
+  transferred  and read instead of [5XMeatAxe[105X text files. The fourth record makes
+  sense  only  if a local server is accessible, i. e., if the server files can
+  be read directly, without being transferred into the data directories of the
+  package.[133X
+  
+  
+  [1X7.3 [33X[0;0YReading and Writing MeatAxe Format Files[133X[101X
+  
+  [1X7.3-1 ScanMeatAxeFile[101X
+  
+  [29X[2XScanMeatAxeFile[102X( [3Xfilename[103X[, [3Xq[103X][, [3X"string"[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  matrix  or list of permutations stored in the file or encoded
+            by the string.[133X
+  
+  [33X[0;0YLet  [3Xfilename[103X be the name of a [5XGAP[105X readable file (see [14X'Reference: Filename'[114X)
+  that contains a matrix or a permutation or a list of permutations in [5XMeatAxe[105X
+  text  format  (see  the  section  about  the  program  [11Xzcv[111X  in  the  [5XMeatAxe[105X
+  manual [Rin98]),  and  let  [3Xq[103X  be a prime power. [2XScanMeatAxeFile[102X returns the
+  corresponding [5XGAP[105X matrix or list of permutations, respectively.[133X
+  
+  [33X[0;0YIf the file contains a matrix then the way how it is read by [2XScanMeatAxeFile[102X
+  depends  on  the  value of the global variable [2XCMeatAxe.FastRead[102X ([14X7.1-4[114X). If
+  the  parameter  [3Xq[103X  is  given  then the result matrix is represented over the
+  field  with  [3Xq[103X  elements,  the default for [3Xq[103X is the field size stored in the
+  file.[133X
+  
+  [33X[0;0YIf  the file contains a list of permutations then it is read with [2XStringFile[102X
+  ([14XGAPDoc: StringFile[114X); the parameter [3Xq[103X, if given, is ignored in this case.[133X
+  
+  [33X[0;0YIf  the  string  [10X"string"[110X  is  entered  as the third argument then the first
+  argument  must  be  a  string  as obtained by reading a file in [5XMeatAxe[105X text
+  format as a text stream (see [2XInputTextFile[102X ([14XReference: InputTextFile[114X)). Also
+  in  this  case, [2XScanMeatAxeFile[102X returns the corresponding [5XGAP[105X matrix or list
+  of permutations, respectively.[133X
+  
+  [1X7.3-2 MeatAxeString[101X
+  
+  [29X[2XMeatAxeString[102X( [3Xmat[103X, [3Xq[103X ) [32X operation
+  [29X[2XMeatAxeString[102X( [3Xperms[103X, [3Xdegree[103X ) [32X operation
+  [29X[2XMeatAxeString[102X( [3Xperm[103X, [3Xq[103X, [3Xdims[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya  string  encoding  the  [5XGAP[105X  objects  given  as input in [5XMeatAxe[105X
+            format.[133X
+  
+  [33X[0;0YIn  the  first  form, for a matrix [3Xmat[103X whose entries lie in the finite field
+  with [3Xq[103X elements, [2XMeatAxeString[102X returns a string that encodes [3Xmat[103X as a matrix
+  over [10XGF([3Xq[103X[10X)[110X, in [5XMeatAxe[105X text format.[133X
+  
+  [33X[0;0YIn the second form, for a nonempty list [3Xperms[103X of permutations that move only
+  points  up  to  the  positive integer [3Xdegree[103X, [2XMeatAxeString[102X returns a string
+  that  encodes [3Xperms[103X as permutations of degree [3Xdegree[103X, in [5XMeatAxe[105X text format
+  (see [Rin98]).[133X
+  
+  [33X[0;0YIn the third form, for a permutation [3Xperm[103X with largest moved point [22Xn[122X, say, a
+  prime  power  [3Xq[103X,  and  a  list  [3Xdims[103X  of  length two containing two positive
+  integers  larger  than  or  equal  to [22Xn[122X, [2XMeatAxeString[102X returns a string that
+  encodes  [3Xperm[103X as a matrix over [10XGF([3Xq[103X[10X)[110X, of dimensions [3Xdims[103X, whose first [22Xn[122X rows
+  and  columns  describe the permutation matrix corresponding to [3Xperm[103X, and the
+  remaining rows and columns are zero.[133X
+  
+  [33X[0;0YWhen  strings  are  printed  to  files using [2XPrintTo[102X ([14XReference: PrintTo[114X) or
+  [2XAppendTo[102X  ([14XReference: AppendTo[114X) then line breaks are inserted whenever lines
+  exceed  the  number  of  characters  given  by  the second entry of the list
+  returned  by  [2XSizeScreen[102X ([14XReference: SizeScreen[114X), see [14X'Reference: Operations
+  for  Output  Streams'[114X.  This  behaviour  is  not desirable for creating data
+  files. So the recommended functions for printing the result of [2XMeatAxeString[102X
+  to  a  file  are  [2XFileString[102X  ([14XGAPDoc:  FileString[114X) and [2XWriteAll[102X ([14XReference:
+  WriteAll[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xmat:= [ [ 1, -1 ], [ 0, 1 ] ] * Z(3)^0;;[127X[104X
+    [4X[25Xgap>[125X [27Xstr:= MeatAxeString( mat, 3 );[127X[104X
+    [4X[28X"1 3 2 2\n12\n01\n"[128X[104X
+    [4X[25Xgap>[125X [27Xmat = ScanMeatAxeFile( str, "string" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xstr:= MeatAxeString( mat, 9 );[127X[104X
+    [4X[28X"1 9 2 2\n12\n01\n"[128X[104X
+    [4X[25Xgap>[125X [27Xmat = ScanMeatAxeFile( str, "string" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xperms:= [ (1,2,3)(5,6) ];;[127X[104X
+    [4X[25Xgap>[125X [27Xstr:= MeatAxeString( perms, 6 );[127X[104X
+    [4X[28X"12 1 6 1\n2\n3\n1\n4\n6\n5\n"[128X[104X
+    [4X[25Xgap>[125X [27Xperms = ScanMeatAxeFile( str, "string" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xstr:= MeatAxeString( perms, 8 );[127X[104X
+    [4X[28X"12 1 8 1\n2\n3\n1\n4\n6\n5\n7\n8\n"[128X[104X
+    [4X[25Xgap>[125X [27Xperms = ScanMeatAxeFile( str, "string" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xperm:= (1,2,4);;[127X[104X
+    [4X[25Xgap>[125X [27Xstr:= MeatAxeString( perm, 3, [ 5, 6 ] );[127X[104X
+    [4X[28X"2 3 5 6\n2\n4\n3\n1\n5\n"[128X[104X
+    [4X[25Xgap>[125X [27Xmat:= ScanMeatAxeFile( str, "string" );;  Print( mat, "\n" );[127X[104X
+    [4X[28X[ [ 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], [128X[104X
+    [4X[28X  [ 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3) ], [128X[104X
+    [4X[28X  [ 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3) ], [128X[104X
+    [4X[28X  [ Z(3)^0, 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3) ], [128X[104X
+    [4X[28X  [ 0*Z(3), 0*Z(3), 0*Z(3), 0*Z(3), Z(3)^0, 0*Z(3) ] ][128X[104X
+    [4X[25Xgap>[125X [27XMeatAxeString( mat, 3 ) = str;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X7.3-3 FFList[101X
+  
+  [29X[2XFFList[102X( [3XF[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya list of elements in the given finite field.[133X
+  
+  [29X[2XFFLists[102X[32X global variable
+  
+  [33X[0;0Y[2XFFList[102X  is a utility program for the conversion of vectors and matrices from
+  [5XMeatAxe[105X  format  to [5XGAP[105X format and vice versa. It is used by [2XScanMeatAxeFile[102X
+  ([14X7.3-1[114X) and [2XMeatAxeString[102X ([14X7.3-2[114X).[133X
+  
+  [33X[0;0YFor  a  finite  field  [3XF[103X,  [2XFFList[102X returns a list [3Xl[103X giving the correspondence
+  between the [5XMeatAxe[105X numbering and the [5XGAP[105X numbering of the elements in [3XF[103X.[133X
+  
+  [33X[0;0YThe  element  of  [3XF[103X  corresponding  to [5XMeatAxe[105X number [3Xn[103X is [22X[3Xl[103X[ [3Xn[103X+1 ][122X, and the
+  [5XMeatAxe[105X number of the field element [3Xz[103X is [10XPosition( [110X[3Xl[103X[10X, [110X[3Xz[103X[10X ) - 1[110X.[133X
+  
+  [33X[0;0YThe global variable [2XFFLists[102X is used to store the information about [3XF[103X once it
+  has been computed.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XFFList( GF(4) );[127X[104X
+    [4X[28X[ 0*Z(2), Z(2)^0, Z(2^2), Z(2^2)^2 ][128X[104X
+    [4X[25Xgap>[125X [27XIsBound( FFLists[4] );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X7.3-4 CMtxBinaryFFMatOrPerm[101X
+  
+  [29X[2XCMtxBinaryFFMatOrPerm[102X( [3Xelm[103X, [3Xdef[103X, [3Xoutfile[103X ) [32X function
+  
+  [33X[0;0YLet  the  pair  [22X([3Xelm[103X,  [3Xdef[103X)[122X be either of the form [22X(M, q)[122X where [22XM[122X is a matrix
+  over  a  finite  field  [22XF[122X, say, with [22Xq ≤ 256[122X elements, or of the form [22X(π, n)[122X
+  where  [22Xπ[122X is a permutation with largest moved point at most [22Xn[122X. Let [3Xoutfile[103X be
+  a  string.  [2XCMtxBinaryFFMatOrPerm[102X  writes  the [10XC[110X-[5XMeatAxe[105X binary format of [22XM[122X,
+  viewed as a matrix over [22XF[122X, or of [22Xπ[122X, viewed as a permutation on the points up
+  to [22Xn[122X, to the file with name [3Xoutfile[103X.[133X
+  
+  [33X[0;0Y(The binary format is described in the [10XC[110X-[5XMeatAxe[105X manual [Rin98].)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xtmpdir:= DirectoryTemporary();;[127X[104X
+    [4X[25Xgap>[125X [27Xmat:= Filename( tmpdir, "mat" );;[127X[104X
+    [4X[25Xgap>[125X [27Xq:= 4;;[127X[104X
+    [4X[25Xgap>[125X [27Xmats:= GeneratorsOfGroup( GL(10,q) );;[127X[104X
+    [4X[25Xgap>[125X [27XCMtxBinaryFFMatOrPerm( mats[1], q, Concatenation( mat, "1" ) );[127X[104X
+    [4X[25Xgap>[125X [27XCMtxBinaryFFMatOrPerm( mats[2], q, Concatenation( mat, "2" ) );[127X[104X
+    [4X[25Xgap>[125X [27Xprm:= Filename( tmpdir, "prm" );;[127X[104X
+    [4X[25Xgap>[125X [27Xn:= 200;;[127X[104X
+    [4X[25Xgap>[125X [27Xperms:= GeneratorsOfGroup( SymmetricGroup( n ) );;[127X[104X
+    [4X[25Xgap>[125X [27XCMtxBinaryFFMatOrPerm( perms[1], n, Concatenation( prm, "1" ) );[127X[104X
+    [4X[25Xgap>[125X [27XCMtxBinaryFFMatOrPerm( perms[2], n, Concatenation( prm, "2" ) );[127X[104X
+  [4X[32X[104X
+  
+  [1X7.3-5 FFMatOrPermCMtxBinary[101X
+  
+  [29X[2XFFMatOrPermCMtxBinary[102X( [3Xfname[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe matrix or permutation stored in the file.[133X
+  
+  [33X[0;0YLet [3Xfname[103X be the name of a file that contains the [10XC[110X-[5XMeatAxe[105X binary format of
+  a  matrix  over  a  finite  field  or  of  a  permutation,  as  is described
+  in [Rin98].  [2XFFMatOrPermCMtxBinary[102X  returns  the corresponding [5XGAP[105X matrix or
+  permutation.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XFFMatOrPermCMtxBinary( Concatenation( mat, "1" ) ) = mats[1];[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XFFMatOrPermCMtxBinary( Concatenation( mat, "2" ) ) = mats[2];[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XFFMatOrPermCMtxBinary( Concatenation( prm, "1" ) ) = perms[1];[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XFFMatOrPermCMtxBinary( Concatenation( prm, "2" ) ) = perms[2];[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X7.4 [33X[0;0YReading and Writing [5XATLAS[105X[101X[1X Straight Line Programs[133X[101X
+  
+  [1X7.4-1 ScanStraightLineProgram[101X
+  
+  [29X[2XScanStraightLineProgram[102X( [3Xfilename[103X[, [3X"string"[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record containing the straight line program.[133X
+  
+  [33X[0;0YLet  [3Xfilename[103X be the name of a file that contains a straight line program in
+  the sense that it consists only of lines in the following form.[133X
+  
+  [8X[10X#[3Xanything[103X[10X[110X[108X
+        [33X[0;6Ylines starting with a hash sign [10X#[110X are ignored,[133X
+  
+  [8X[10Xecho [3Xanything[103X[10X[110X[108X
+        [33X[0;6Ylines  starting with [10Xecho[110X are ignored for the [10Xprogram[110X component of the
+        result  record  (see  below),  they  are  used to set up the bijection
+        between  the  labels  used in the program and conjugacy class names in
+        the case that the program computes dedicated class representatives,[133X
+  
+  [8X[10Xinp [3Xn[103X[10X[110X[108X
+        [33X[0;6Ymeans  that  there are [3Xn[103X inputs, referred to via the labels [10X1[110X, [10X2[110X, [22X...[122X,
+        [3Xn[103X,[133X
+  
+  [8X[10Xinp [3Xk[103X[10X [3Xa1[103X[10X [3Xa2[103X[10X ... [3Xak[103X[10X[110X[108X
+        [33X[0;6Ymeans  that  the  next [3Xk[103X inputs are referred to via the labels [3Xa1[103X, [3Xa2[103X,
+        ..., [3Xak[103X,[133X
+  
+  [8X[10Xcjr [3Xa[103X[10X [3Xb[103X[10X[110X[108X
+        [33X[0;6Ymeans that [3Xa[103X is replaced by [10X[3Xb[103X[10X^(-1) * [3Xa[103X[10X * [3Xb[103X[10X[110X,[133X
+  
+  [8X[10Xcj [3Xa[103X[10X [3Xb[103X[10X [3Xc[103X[10X[110X[108X
+        [33X[0;6Ymeans that [3Xc[103X is defined as [10X[3Xb[103X[10X^(-1) * [3Xa[103X[10X * [3Xb[103X[10X[110X,[133X
+  
+  [8X[10Xcom [3Xa[103X[10X [3Xb[103X[10X [3Xc[103X[10X[110X[108X
+        [33X[0;6Ymeans that [3Xc[103X is defined as [10X[3Xa[103X[10X^(-1) * [3Xb[103X[10X^(-1) * [3Xa[103X[10X * [3Xb[103X[10X[110X,[133X
+  
+  [8X[10Xiv [3Xa[103X[10X [3Xb[103X[10X[110X[108X
+        [33X[0;6Ymeans that [3Xb[103X is defined as [10X[3Xa[103X[10X^(-1)[110X,[133X
+  
+  [8X[10Xmu [3Xa[103X[10X [3Xb[103X[10X [3Xc[103X[10X[110X[108X
+        [33X[0;6Ymeans that [3Xc[103X is defined as [10X[3Xa[103X[10X * [3Xb[103X[10X[110X,[133X
+  
+  [8X[10Xpwr [3Xa[103X[10X [3Xb[103X[10X [3Xc[103X[10X[110X[108X
+        [33X[0;6Ymeans that [3Xc[103X is defined as [10X[3Xb[103X[10X^[3Xa[103X[10X[110X,[133X
+  
+  [8X[10Xcp [3Xa[103X[10X [3Xb[103X[10X[110X[108X
+        [33X[0;6Ymeans that [3Xb[103X is defined as a copy of [3Xa[103X,[133X
+  
+  [8X[10Xoup [3Xl[103X[10X[110X[108X
+        [33X[0;6Ymeans that there are [3Xl[103X outputs, stored in the labels [10X1[110X, [10X2[110X, [22X...[122X, [3Xl[103X, and[133X
+  
+  [8X[10Xoup [3Xl[103X[10X [3Xb1[103X[10X [3Xb2[103X[10X ... [3Xbl[103X[10X[110X[108X
+        [33X[0;6Ymeans that the next [3Xl[103X outputs are stored in the labels [3Xb1[103X, [3Xb2[103X, ... [3Xbl[103X.[133X
+  
+  [33X[0;0YEach  of  the  labels  [3Xa[103X,  [3Xb[103X,  [3Xc[103X  can be any nonempty sequence of digits and
+  alphabet  characters,  except  that the first argument of [10Xpwr[110X must denote an
+  integer.[133X
+  
+  [33X[0;0YIf  the  [10Xinp[110X  or  [10Xoup[110X  statements  are  missing  then  the  input or output,
+  respectively,  is  assumed  to  be given by the labels [10X1[110X and [10X2[110X. There can be
+  multiple [10Xinp[110X lines at the beginning of the program and multiple [10Xoup[110X lines at
+  the end of the program. Only the first [10Xinp[110X or [10Xoup[110X line may omit the names of
+  the  elements. For example, an empty file [3Xfilename[103X or an empty string [3Xstring[103X
+  represent  a  straight  line  program  with  two inputs that are returned as
+  outputs.[133X
+  
+  [33X[0;0YNo  command except [10Xcjr[110X may overwrite its own input. For example, the line [10Xmu
+  a b a[110X is not legal. (This is not checked.)[133X
+  
+  [33X[0;0Y[2XScanStraightLineProgram[102X  returns  a  record  containing  as the value of its
+  component    [10Xprogram[110X   the   corresponding   [5XGAP[105X   straight   line   program
+  (see [2XIsStraightLineProgram[102X  ([14XReference: IsStraightLineProgram[114X)) if the input
+  string  satisfies the syntax rules stated above, and returns [9Xfail[109X otherwise.
+  In  the  latter  case,  information  about  the  first corrupted line of the
+  program is printed if the info level of [2XInfoCMeatAxe[102X ([14X7.1-2[114X) is at least [22X1[122X.[133X
+  
+  [33X[0;0YIf  the  string  [10X"string"[110X  is  entered as the second argument then the first
+  argument  must  be  a  string  as obtained by reading a file in [5XMeatAxe[105X text
+  format as a text stream (see [2XInputTextFile[102X ([14XReference: InputTextFile[114X)). Also
+  in  this  case,  [2XScanStraightLineProgram[102X  returns  either  a record with the
+  corresponding [5XGAP[105X straight line program or [9Xfail[109X.[133X
+  
+  [33X[0;0YIf  the  input describes a straight line program that computes certain class
+  representatives  of  the  group  in  question  then  the  result record also
+  contains the component [10Xoutputs[110X. Its value is a list of strings, the entry at
+  position  [22Xi[122X  denoting  the  name  of  the class in which the [22Xi[122X output of the
+  straight  line program lies; see Section [14X3.4[114X for the definition of the class
+  names that occur.[133X
+  
+  [33X[0;0YSuch   straight   line   programs   must  end  with  a  sequence  of  output
+  specifications of the following form.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28Xecho "Classes 1A 2A 3A 5A 5B"[128X[104X
+    [4X[28Xoup 5 3 1 2 4 5[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis example means that the list of outputs of the program contains elements
+  of  the  classes [10X1A[110X, [10X2A[110X, [10X3A[110X, [10X5A[110X, and [10X5B[110X (in this order), and that inside the
+  program, these elements are referred to by the five names [10X3[110X, [10X1[110X, [10X2[110X, [10X4[110X, and [10X5[110X.[133X
+  
+  [1X7.4-2 AtlasStringOfProgram[101X
+  
+  [29X[2XAtlasStringOfProgram[102X( [3Xprog[103X[, [3Xoutputnames[103X] ) [32X function
+  [29X[2XAtlasStringOfProgram[102X( [3Xprog[103X[, [3X"mtx"[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string encoding the straight line program/decision in the format
+            used in [5XATLAS[105X files.[133X
+  
+  [33X[0;0YFor   a   straight   line   program   or   straight   line   decision   [3Xprog[103X
+  (see [2XIsStraightLineProgram[102X     ([14XReference:     IsStraightLineProgram[114X)    and
+  [2XIsStraightLineDecision[102X  ([14X6.1-1[114X)),  this function returns a string describing
+  the  input  format  of  an equivalent straight line program or straight line
+  decision  as  used in the [5XATLAS[105X of Group Representations, that is, the lines
+  are of the form described in [2XScanStraightLineProgram[102X ([14X7.4-1[114X).[133X
+  
+  [33X[0;0YA  list of strings that is given as the optional second argument [3Xoutputnames[103X
+  is  interpreted  as  the  class  names  corresponding  to  the outputs; this
+  argument  has  the  effect  that  appropriate  [10Xecho[110X statements appear in the
+  result string.[133X
+  
+  [33X[0;0YIf  the string [10X"mtx"[110X is given as the second argument then the result has the
+  format  used in the [10XC[110X-[5XMeatAxe[105X (see [Rin98]) rather than the format described
+  in  Section [14X7.4[114X.  (Note that the [10XC[110X-[5XMeatAxe[105X format does not make sense if the
+  argument [3Xoutputnames[103X is given, and that this format does not support [10Xinp[110X and
+  [10Xoup[110X statements.)[133X
+  
+  [33X[0;0YThe  argument  [3Xprog[103X  must  not  be  a  black  box program (see [2XIsBBoxProgram[102X
+  ([14X6.2-1[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xstr:= "inp 2\nmu 1 2 3\nmu 3 1 2\niv 2 1\noup 2 1 2";;[127X[104X
+    [4X[25Xgap>[125X [27Xprg:= ScanStraightLineProgram( str, "string" );[127X[104X
+    [4X[28Xrec( program := <straight line program> )[128X[104X
+    [4X[25Xgap>[125X [27Xprg:= prg.program;;[127X[104X
+    [4X[25Xgap>[125X [27XDisplay( prg );[127X[104X
+    [4X[28X# input:[128X[104X
+    [4X[28Xr:= [ g1, g2 ];[128X[104X
+    [4X[28X# program:[128X[104X
+    [4X[28Xr[3]:= r[1]*r[2];[128X[104X
+    [4X[28Xr[2]:= r[3]*r[1];[128X[104X
+    [4X[28Xr[1]:= r[2]^-1;[128X[104X
+    [4X[28X# return values:[128X[104X
+    [4X[28X[ r[1], r[2] ][128X[104X
+    [4X[25Xgap>[125X [27XStringOfResultOfStraightLineProgram( prg, [ "a", "b" ] );[127X[104X
+    [4X[28X"[ (aba)^-1, aba ]"[128X[104X
+    [4X[25Xgap>[125X [27XAtlasStringOfProgram( prg );[127X[104X
+    [4X[28X"inp 2\nmu 1 2 3\nmu 3 1 2\niv 2 1\noup 2\n"[128X[104X
+    [4X[25Xgap>[125X [27Xprg:= StraightLineProgram( "(a^2b^3)^-1", [ "a", "b" ] );[127X[104X
+    [4X[28X<straight line program>[128X[104X
+    [4X[25Xgap>[125X [27XPrint( AtlasStringOfProgram( prg ) );[127X[104X
+    [4X[28Xinp 2[128X[104X
+    [4X[28Xpwr 2 1 4[128X[104X
+    [4X[28Xpwr 3 2 5[128X[104X
+    [4X[28Xmu 4 5 3[128X[104X
+    [4X[28Xiv 3 4[128X[104X
+    [4X[28Xoup 1 4[128X[104X
+    [4X[25Xgap>[125X [27Xprg:= StraightLineProgram( [ [2,3], [ [3,1,1,4], [1,2,3,1] ] ], 2 );[127X[104X
+    [4X[28X<straight line program>[128X[104X
+    [4X[25Xgap>[125X [27XPrint( AtlasStringOfProgram( prg ) );[127X[104X
+    [4X[28Xinp 2[128X[104X
+    [4X[28Xpwr 3 2 3[128X[104X
+    [4X[28Xpwr 4 1 5[128X[104X
+    [4X[28Xmu 3 5 4[128X[104X
+    [4X[28Xpwr 2 1 6[128X[104X
+    [4X[28Xmu 6 3 5[128X[104X
+    [4X[28Xoup 2 4 5[128X[104X
+    [4X[25Xgap>[125X [27XPrint( AtlasStringOfProgram( prg, "mtx" ) );[127X[104X
+    [4X[28X# inputs are expected in 1 2[128X[104X
+    [4X[28Xzsm pwr3 2 3[128X[104X
+    [4X[28Xzsm pwr4 1 5[128X[104X
+    [4X[28Xzmu 3 5 4[128X[104X
+    [4X[28Xzsm pwr2 1 6[128X[104X
+    [4X[28Xzmu 6 3 5[128X[104X
+    [4X[28Xecho "outputs are in 4 5"[128X[104X
+    [4X[25Xgap>[125X [27Xstr:= "inp 2\nchor 1 2\nchor 2 3\nmu 1 2 3\nchor 3 5";;[127X[104X
+    [4X[25Xgap>[125X [27Xprg:= ScanStraightLineDecision( str );;[127X[104X
+    [4X[25Xgap>[125X [27XAtlasStringOfProgram( prg.program );[127X[104X
+    [4X[28X"inp 2\nchor 1 2\nchor 2 3\nmu 1 2 3\nchor 3 5\n"[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X7.5 [33X[0;0YData Types Used in the [5XATLAS[105X[101X[1X of Group Representations[133X[101X
+  
+  [33X[0;0YEach representation or program that is administrated by the [5XAtlasRep[105X package
+  belongs  to  a  unique  [13Xdata  type[113X.  Informally,  examples of data types are
+  [21Xpermutation  representation[121X,  [21Xmatrix  representation  over  the integers[121X, or
+  [21Xstraight line program for computing class representatives[121X.[133X
+  
+  [33X[0;0YThe idea is that for each data type, there can be[133X
+  
+  [30X    [33X[0;6Ya column of its own in the output produced by [2XDisplayAtlasInfo[102X ([14X3.5-1[114X)
+        when  called  without  arguments or with only argument a list of group
+        names,[133X
+  
+  [30X    [33X[0;6Ya  line  format of its own for the output produced by [2XDisplayAtlasInfo[102X
+        ([14X3.5-1[114X) when called with first argument a group name,[133X
+  
+  [30X    [33X[0;6Yan input format of its own for [2XAtlasProgram[102X ([14X3.5-3[114X),[133X
+  
+  [30X    [33X[0;6Yan input format of its own for [2XOneAtlasGeneratingSetInfo[102X ([14X3.5-5[114X), and[133X
+  
+  [30X    [33X[0;6Yspecific  tests  for  the  data of this data type; these functions are
+        used by the global tests described in Section [14X7.8[114X.[133X
+  
+  [33X[0;0YFormally,  a  data  type is defined by a record whose components are used by
+  the interface functions. The details are described in the following.[133X
+  
+  [1X7.5-1 AGR.DeclareDataType[101X
+  
+  [29X[2XAGR.DeclareDataType[102X( [3Xkind[103X, [3Xname[103X, [3Xrecord[103X ) [32X function
+  
+  [33X[0;0YLet  [3Xkind[103X  be  one  of  the  strings [10X"rep"[110X or [10X"prg"[110X, and [3Xrecord[103X be a record.
+  [2XAGR.DeclareDataType[102X  declares a new data type of representations (if [3Xkind[103X is
+  [10X"rep"[110X)  or  of  programs  (if  [3Xkind[103X  is  [10X"prg"[110X).  For each group used in the
+  [5XAtlasRep[105X  package,  the  record that contains the information about the data
+  will  have  a component [3Xname[103X whose value is a list containing the data about
+  the new type. Examples of [3Xname[103X are [10X"perm"[110X, [10X"matff"[110X, and [10X"classes"[110X.[133X
+  
+  [33X[0;0Y[13XMandatory components[113X of [3Xrecord[103X are[133X
+  
+  [8X[10XFilenameFormat[110X[108X
+        [33X[0;6YThis  defines  the format of the filenames containing data of the type
+        in  question.  The value must be a list that can be used as the second
+        argument  of [2XAGR.ParseFilenameFormat[102X ([14X7.6-1[114X), such that only filenames
+        of  the  type  in  question  match.  (It  is  not checked whether this
+        [21Xdetection  function[121X  matches exactly one type, so declaring a new type
+        needs care.)[133X
+  
+  [8X[10XAddFileInfo[110X[108X
+        [33X[0;6YThis  defines  the information stored in the table of contents for the
+        data  of  the  type.  The  value  must  be a function that takes three
+        arguments  (the current list of data for the type and the given group,
+        a list returned by [2XAGR.ParseFilenameFormat[102X ([14X7.6-1[114X) for the given type,
+        and  a  filename).  This function adds the necessary parts of the data
+        entry  to  the list, and returns [9Xtrue[109X if the data belongs to the type,
+        otherwise  [9Xfalse[109X  is returned; note that the latter case occurs if the
+        filename  matches  the format description but additional conditions on
+        the parts of the name are not satisfied (for example integer parts may
+        be required to be positive or prime powers).[133X
+  
+  [8X[10XReadAndInterpretDefault[110X[108X
+        [33X[0;6YThis is the function that does the work for the default [10Xcontents[110X value
+        of  the  [10XaccessFunctions[110X  component of [2XAtlasOfGroupRepresentationsInfo[102X
+        ([14X7.1-6[114X),  see  Section [14X7.2[114X.  This function must take a path and return
+        the [5XGAP[105X object given by this file.[133X
+  
+  [8X[10XAddDescribingComponents[110X (for [10Xrep[110X only)[108X
+        [33X[0;6YThis  function takes two arguments, a record (that will be returned by
+        [2XAtlasGenerators[102X   ([14X3.5-2[114X),   [2XOneAtlasGeneratingSetInfo[102X   ([14X3.5-5[114X),   or
+        [2XAllAtlasGeneratingSetInfos[102X  ([14X3.5-6[114X))  and  the  type record [3Xrecord[103X. It
+        sets  the components [10Xp[110X, [10Xdim[110X, [10Xid[110X, and [10Xring[110X that are promised for return
+        values of the abovementioned three functions.[133X
+  
+  [8X[10XDisplayGroup[110X (for [10Xrep[110X only)[108X
+        [33X[0;6YThis  defines  the  format  of  the  lines printed by [2XDisplayAtlasInfo[102X
+        ([14X3.5-1[114X)  for  a given group. The value must be a function that takes a
+        list  as  returned by the function given in the component [10XAddFileInfo[110X,
+        and  returns  the  string  to  be  printed  for  the representation in
+        question.[133X
+  
+  [33X[0;0Y[13XOptional components[113X of [3Xrecord[103X are[133X
+  
+  [8X[10XDisplayOverviewInfo[110X[108X
+        [33X[0;6YThis   is   used   to   introduce  a  new  column  in  the  output  of
+        [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) when this is called without arguments or with
+        a  list  of group names as its only argument. The value must be a list
+        of length three, containing at its first position a string used as the
+        header of the column, at its second position one of the strings [10X"r"[110X or
+        [10X"l"[110X,  denoting  right or left aligned column entries, and at its third
+        position  a  function  that  takes  two arguments (a list of tables of
+        contents of the [5XAtlasRep[105X package and a group name), and returns a list
+        of length two, containing the string to be printed as the column value
+        and  [9Xtrue[109X  or  [9Xfalse[109X, depending on whether private data is involved or
+        not.  (The  default  is  [9Xfail[109X,  indicating that no new column shall be
+        printed.)[133X
+  
+  [8X[10XDisplayPRG[110X (for [10Xprg[110X only)[108X
+        [33X[0;6YThis is used in [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) for [5XATLAS[105X programs. The value
+        must  be  a  function  that  takes four arguments (a list of tables of
+        contents  to  examine, the name of the given group, a list of integers
+        or  [9Xtrue[109X for the required standardization, and a list of all available
+        standardizations),  and  returns  the  list  of  lines (strings) to be
+        printed as the information about the available programs of the current
+        type  and  for  the  given  group.  (The default is to return an empty
+        list.)[133X
+  
+  [8X[10XAccessGroupCondition[110X (for [10Xrep[110X only)[108X
+        [33X[0;6YThis is used in [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) and [2XOneAtlasGeneratingSetInfo[102X
+        ([14X3.5-5[114X). The value must be a function that takes two arguments (a list
+        as  returned  by  [2XOneAtlasGeneratingSetInfo[102X  ([14X3.5-5[114X),  and  a  list of
+        conditions), and returns [9Xtrue[109X or [9Xfalse[109X, depending on whether the first
+        argument  satisfies  the conditions. (The default value is [2XReturnFalse[102X
+        ([14XReference: ReturnFalse[114X).)[133X
+  
+        [33X[0;6YThe function must support conditions such as [10X[ IsPermGroup, true ][110X and
+        [10X[  NrMovedPoints,  [ 5, 6 ] ][110X, in general a list of functions followed
+        by  a  prescribed  value, a list of prescribed values, another (unary)
+        function,  or the string [10X"minimal"[110X. For an overview of the interesting
+        functions, see [2XDisplayAtlasInfo[102X ([14X3.5-1[114X).[133X
+  
+  [8X[10XAccessPRG[110X (for [10Xprg[110X only)[108X
+        [33X[0;6YThis  is  used  in  [2XAtlasProgram[102X ([14X3.5-3[114X). The value must be a function
+        that  takes three arguments (the record with the information about the
+        given  group in the current table of contents, an integer or a list of
+        integers  or  [9Xtrue[109X  for  the  required  standardization, and a list of
+        conditions  given  by the optional arguments of [2XAtlasProgram[102X ([14X3.5-3[114X)),
+        and  returns  either  [9Xfail[109X or a list that together with the group name
+        forms  the  identifier  of a program that matches the conditions. (The
+        default value is [2XReturnFail[102X ([14XReference: ReturnFail[114X).)[133X
+  
+  [8X[10XAtlasProgram[110X (for [10Xprg[110X only)[108X
+        [33X[0;6YThis  is  used in [2XAtlasProgram[102X ([14X3.5-3[114X) to create the result value from
+        the identifier. (The default value is [10XAtlasProgramDefault[110X, which works
+        whenever  the  second entry of the identifier is the filename; this is
+        not  the case for example if the program is the composition of several
+        programs.)[133X
+  
+  [8X[10XAtlasProgramInfo[110X (for [10Xprg[110X only)[108X
+        [33X[0;6YThis  is  used  in [2XAtlasProgramInfo[102X ([14X3.5-4[114X) to create the result value
+        from the identifier. (The default value is [10XAtlasProgramDefault[110X.)[133X
+  
+  [8X[10XTOCEntryString[110X[108X
+        [33X[0;6YThis is used in [2XStoreAtlasTableOfContents[102X ([14X4.2-2[114X). The value must be a
+        function  that  takes  two  arguments (the name [3Xname[103X of the type and a
+        list  as  returned  by  [2XAGR.ParseFilenameFormat[102X  ([14X7.6-1[114X) and returns a
+        string  that  describes  the  appropriate  function call. (The default
+        value is [10XTOCEntryStringDefault[110X.)[133X
+  
+  [8X[10XPostprocessFileInfo[110X[108X
+        [33X[0;6YThis  is  used  in  the  construction  of  a  table  of  contents  via
+        [2XReloadAtlasTableOfContents[102X  ([14X4.2-1[114X),  for  testing  or rearranging the
+        data  of  the  current table of contents. The value must be a function
+        that  takes two arguments, the table of contents record and the record
+        in  it  that  belongs  to  one fixed group. (The default function does
+        nothing.)[133X
+  
+  [8X[10XSortTOCEntries[110X[108X
+        [33X[0;6YThis  is  used  in  the  construction  of  a  table  of  contents (see
+        [2XReloadAtlasTableOfContents[102X  ([14X4.2-1[114X)),  for  sorting  the entries after
+        they   have   been   added  and  after  the  value  of  the  component
+        [10XPostprocessFileInfo[110X has been called. The value must be a function that
+        takes  a  list  as  returned  by  [2XAGR.ParseFilenameFormat[102X ([14X7.6-1[114X), and
+        returns  the sorting key. (There is no default value, which means that
+        no sorting is needed.)[133X
+  
+  [8X[10XTestFileHeaders[110X (for [10Xrep[110X only)[108X
+        [33X[0;6YThis is used in the function [10XAGR.Test.FileHeaders[110X. The value must be a
+        function  that  takes  the  same  four  arguments  as [2XAGR.FileContents[102X
+        ([14X7.6-2[114X),  except that the first argument [10X"datagens"[110X can be replaced by
+        [10X"local"[110X  and  that  the  third  argument  is  a  list  as  returned by
+        [2XAGR.ParseFilenameFormat[102X  ([14X7.6-1[114X).  (The  default  value  is [2XReturnTrue[102X
+        ([14XReference: ReturnTrue[114X).)[133X
+  
+  [8X[10XTestFiles[110X (for [10Xrep[110X only)[108X
+        [33X[0;6YThis  is  used in the function [10XAGR.Test.Files[110X. The format of the value
+        and  the  default  are  the  same  as  for  the value of the component
+        [10XTestFileHeaders[110X.[133X
+  
+  [8X[10XTestWords[110X (for [10Xprg[110X only)[108X
+        [33X[0;6YThis  is  used  in  the  function  [10XAGR.Test.Words[110X. The value must be a
+        function  that  takes five arguments where the first four are the same
+        arguments  as  for  [2XAGR.FileContents[102X  ([14X7.6-2[114X),  except  that the first
+        argument [10X"dataword"[110X can be replaced by [10X"local"[110X, and the fifth argument
+        is [9Xtrue[109X or [9Xfalse[109X, indicating verbose mode or not.[133X
+  
+  
+  [1X7.6 [33X[0;0YFilenames Used in the [5XATLAS[105X[101X[1X of Group Representations[133X[101X
+  
+  [33X[0;0YThe data of each local [5XGAP[105X version of the [5XATLAS[105X of Group Representations are
+  either private (see Chapter [14X5[114X) or are stored in the two directories [11Xdatagens[111X
+  and  [11Xdataword[111X.  In the following, we describe the format of filenames in the
+  latter two directories, as a reference of the [21Xofficial[121X part of the [5XATLAS[105X.[133X
+  
+  [33X[0;0YIn  the directory [11Xdatagens[111X, the generators for the [13Xrepresentations[113X available
+  are  stored,  the  directory  [11Xdataword[111X  contains  the  [13Xprograms[113X  to  compute
+  conjugacy  class representatives, generators of maximal subgroups, images of
+  generators  under  automorphisms of a given group [22XG[122X from standard generators
+  of [22XG[122X, and to check and compute standard generators (see Section [14X3.3[114X).[133X
+  
+  [33X[0;0YThe  name  of each data file in the [5XATLAS[105X of Group Representations describes
+  the  contents  of  the  file.  This  section  lists  the  definitions of the
+  filenames used.[133X
+  
+  [33X[0;0YEach  filename consists of two parts, separated by a minus sign [10X-[110X. The first
+  part is always of the form [3Xgroupname[103X[10XG[110X[3Xi[103X, where the integer [3Xi[103X denotes the [3Xi[103X-th
+  set  of  standard  generators  for  the  group  [22XG[122X, say, with [5XATLAS[105X-file name
+  [3Xgroupname[103X  (see [14X3.2[114X).  The translations of the name [3Xgroupname[103X to the name(s)
+  used    within    [5XGAP[105X    is    given    by   the   component   [10XGAPnames[110X   of
+  [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X).[133X
+  
+  [33X[0;0YThe  filenames in the directory [11Xdataword[111X have one of the following forms. In
+  each of these cases, the suffix [10XW[110X[3Xn[103X means that [3Xn[103X is the version number of the
+  program.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-cycW[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn this case, the file contains a straight line program that returns a
+        list of representatives of generators of maximally cyclic subgroups of
+        [22XG[122X. An example is [10XCo1G1-cycW1[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-cclsW[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn this case, the file contains a straight line program that returns a
+        list   of   conjugacy  class  representatives  of  [22XG[122X.  An  example  is
+        [10XRuG1-cclsW1[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10XcycW[3Xn[103X[10X-cclsW[3Xm[103X[10X[110X[108X
+        [33X[0;6YIn this case, the file contains a straight line program that takes the
+        return value of the program in the file [3Xgroupname[103X[10XG[110X[3Xi[103X[10X-cycW[110X[3Xn[103X (see above),
+        and returns a list of conjugacy class representatives of [22XG[122X. An example
+        is [10XM11G1cycW1-cclsW1[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-max[3Xk[103X[10XW[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn  this  case,  the  file contains a straight line program that takes
+        generators  of  [22XG[122X  w.r.t. the  [3Xi[103X-th  set  of  standard generators, and
+        returns  a list of generators (in general [13Xnot[113X standard generators) for
+        a  subgroup  [22XU[122X in the [3Xk[103X-th class of maximal subgroups of [22XG[122X. An example
+        is [10XJ1G1-max7W1[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10Xmax[3Xk[103X[10XW[3Xn[103X[10X-[3Xsubgroupname[103X[10XG[3Xj[103X[10XW[3Xm[103X[10X[110X[108X
+        [33X[0;6YIn this case, the file contains a straight line program that takes the
+        return  value  of  the  program  in  the  file [3Xgroupname[103X[10XG[110X[3Xi[103X[10X-max[110X[3Xk[103X[10XW[110X[3Xn[103X (see
+        above),  which  are  generators  for a group [22XU[122X, say; [3Xsubgroupname[103X is a
+        name  for [22XU[122X, and the return value is a list of standard generators for
+        [22XU[122X, w.r.t. the [3Xj[103X-th set of standard generators. (Of course this implies
+        that  the  groups  in  the  [3Xk[103X-th  class  of maximal subgroups of [22XG[122X are
+        isomorphic  to  the  group  with  name  [3Xsubgroupname[103X.)  An  example is
+        [10XJ1G1max1W1-L211G1W1[110X; the first class of maximal subgroups of the Janko
+        group  [22XJ_1[122X  consists of groups isomorphic to the linear group [22XL_2(11)[122X,
+        for which standard generators are defined.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-a[3Xoutname[103X[10XW[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn  this  case,  the  file contains a straight line program that takes
+        generators  of  [22XG[122X  w.r.t. the  [3Xi[103X-th  set  of  standard generators, and
+        returns  the  list of their images under the outer automorphism [22Xα[122X of [22XG[122X
+        given  by the name [3Xoutname[103X; if this name is empty then [22Xα[122X is the unique
+        nontrivial outer automorphism of [22XG[122X; if it is a positive integer [22Xk[122X then
+        [22Xα[122X  is  a  generator of the unique cyclic order [22Xk[122X subgroup of the outer
+        automorphism  group  of  [22XG[122X; if it is of the form [10X2_1[110X or [10X2a[110X, [10X4_2[110X or [10X4b[110X,
+        [10X3_3[110X  or  [10X3c[110X  [22X...[122X  then  [22Xα[122X  generates the cyclic group of automorphisms
+        induced on [22XG[122X by [22XG.2_1[122X, [22XG.4_2[122X, [22XG.3_3[122X [22X...[122X; finally, if it is of the form
+        [3Xk[103X[10Xp[110X[3Xd[103X, with [3Xk[103X one of the above forms and [3Xd[103X an integer then [3Xd[103X denotes the
+        number of dashes appended to the automorphism described by [3Xk[103X; if [22X[3Xd[103X = 1[122X
+        then   [3Xd[103X   can   be  omitted.  Examples  are  [10XA5G1-aW1[110X,  [10XL34G1-a2_1W1[110X,
+        [10XU43G1-a2_3pW1[110X,  and  [10XO8p3G1-a2_2p5W1[110X;  these  file  names describe the
+        outer  order  [22X2[122X automorphism of [22XA_5[122X (induced by the action of [22XS_5[122X) and
+        the  order  [22X2[122X automorphisms of [22XL_3(4)[122X, [22XU_4(3)[122X, and [22XO_8^+(3)[122X induced by
+        the  actions  of  [22XL_3(4).2_1[122X,  [22XU_4(3).2_2^'[122X, and [22XO_8^+(3).2_2^{'''''}[122X,
+        respectively.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-G[3Xj[103X[10XW[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn  this  case,  the  file contains a straight line program that takes
+        generators  of  [22XG[122X  w.r.t. the  [3Xi[103X-th  set  of  standard generators, and
+        returns  standard  generators  of  [22XG[122X  w.r.t. the  [3Xj[103X-th set of standard
+        generators. An example is [10XL35G1-G2W1[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-check[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn  this  case,  the file contains a straight line decision that takes
+        generators  of  [22XG[122X,  and  returns [9Xtrue[109X if these generators are standard
+        generators w.r.t. the [3Xi[103X-th standardization, and [9Xfalse[109X otherwise.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-P[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn  this  case,  the file contains a straight line decision that takes
+        some  group  elements, and returns [9Xtrue[109X if these elements are standard
+        generators   for   [3XG[103X,   w.r.t. the  [3Xi[103X-th  standardization,  and  [9Xfalse[109X
+        otherwise.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-find[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn  this  case,  the  file  contains  a black box program that takes a
+        group,  and returns (if it is successful) a set of standard generators
+        for [3XG[103X, w.r.t. the [3Xi[103X-th standardization.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-X[3Xdescr[103X[10XW[3Xn[103X[10X[110X[108X
+        [33X[0;6YIn  this  case,  the  file contains a straight line program that takes
+        generators  of [22XG[122X w.r.t. the [3Xi[103X-th set of standard generators, and whose
+        return value corresponds to [3Xdescr[103X. This format is used only in private
+        extensions  (see  Chapter [14X5[114X), such a script can be accessed with [3Xdescr[103X
+        as the third argument of [2XAtlasProgram[102X ([14X3.5-3[114X).[133X
+  
+  [33X[0;0YThe  filenames in the directory [11Xdatagens[111X have one of the following forms. In
+  each  of  these  cases,  [3Xid[103X  is a (possibly empty) string that starts with a
+  lowercase      alphabet     letter     (see [2XIsLowerAlphaChar[102X     ([14XReference:
+  IsLowerAlphaChar[114X)),  and  [3Xm[103X  is  a  nonnegative  integer,  meaning  that the
+  generators  are written w.r.t. the [3Xm[103X-th basis (the meaning is defined by the
+  [5XATLAS[105X developers).[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-f[3Xq[103X[10Xr[3Xdim[103X[10X[3Xid[103X[10XB[3Xm[103X[10X.m[3Xnr[103X[10X[110X[108X
+        [33X[0;6Ya file in [5XMeatAxe[105X text file format containing the [3Xnr[103X-th generator of a
+        matrix  representation  over  the  field with [3Xq[103X elements, of dimension
+        [3Xdim[103X. An example is [10XS5G1-f2r4aB0.m1[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-p[3Xn[103X[10X[3Xid[103X[10XB[3Xm[103X[10X.m[3Xnr[103X[10X[110X[108X
+        [33X[0;6Ya file in [5XMeatAxe[105X text file format containing the [3Xnr[103X-th generator of a
+        permutation representation on [3Xn[103X points. An example is [10XM11G1-p11B0.m1[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-Ar[3Xdim[103X[10X[3Xid[103X[10XB[3Xm[103X[10X.g[110X[108X
+        [33X[0;6Ya   [5XGAP[105X   readable   file   containing  all  generators  of  a  matrix
+        representation  of  dimension  [3Xdim[103X  over an algebraic number field not
+        specified further. An example is [10XA5G1-Ar3aB0.g[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-Zr[3Xdim[103X[10X[3Xid[103X[10XB[3Xm[103X[10X.g[110X[108X
+        [33X[0;6Ya   [5XGAP[105X   readable   file   containing  all  generators  of  a  matrix
+        representation  over  the  integers,  of  dimension [3Xdim[103X. An example is
+        [10XA5G1-Zr4B0.g[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-Hr[3Xdim[103X[10X[3Xid[103X[10XB[3Xm[103X[10X.g[110X[108X
+        [33X[0;6Ya   [5XGAP[105X   readable   file   containing  all  generators  of  a  matrix
+        representation  over  a  quaternion  algebra  over an algebraic number
+        field, of dimension [3Xdim[103X. An example is [10X2A6G1-Hr2aB0.g[110X.[133X
+  
+  [8X[10X[3Xgroupname[103X[10XG[3Xi[103X[10X-Z[3Xn[103X[10Xr[3Xdim[103X[10X[3Xid[103X[10XB[3Xm[103X[10X.g[110X[108X
+        [33X[0;6Ya   [5XGAP[105X   readable   file   containing  all  generators  of  a  matrix
+        representation  of  dimension  [3Xdim[103X over the ring of integers mod [3Xn[103X. An
+        example is [10X2A8G1-Z4r4aB0.g[110X.[133X
+  
+  [1X7.6-1 AGR.ParseFilenameFormat[101X
+  
+  [29X[2XAGR.ParseFilenameFormat[102X( [3Xstring[103X, [3Xformat[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  list of strings and integers if [3Xstring[103X matches [3Xformat[103X, and [9Xfail[109X
+            otherwise.[133X
+  
+  [33X[0;0YLet  [3Xstring[103X  be a filename, and [3Xformat[103X be a list [22X[ [ c_1, c_2, ..., c_n ], [
+  f_1,  f_2, ..., f_n ] ][122X such that each entry [22Xc_i[122X is a list of strings and of
+  functions  that take a character as their argument and return [11Xtrue[111X or [11Xfalse[111X,
+  and  such  that each entry [22Xf_i[122X is a function for parsing a filename, such as
+  the currently undocumented functions [10XParseForwards[110X and [10XParseBackwards[110X.[133X
+  
+  [33X[0;0Y[2XAGR.ParseFilenameFormat[102X returns a list of strings and integers such that the
+  concatenation  of  their  [2XString[102X ([14XReference: String[114X) values yields [3Xstring[103X if
+  [3Xstring[103X  matches  [3Xformat[103X, and [9Xfail[109X otherwise. Matching is defined as follows.
+  Splitting  [3Xstring[103X  at each minus character ([10X-[110X) yields [22Xm[122X parts [22Xs_1, s_2, ...,
+  s_m[122X.  The string [3Xstring[103X matches [3Xformat[103X if [22Xs_i[122X matches the conditions in [22Xc_i[122X,
+  for  [22X1  ≤  i  ≤  n[122X,  in  the sense that applying [22Xf_i[122X to [22Xs_i[122X and [22Xc_i[122X yields a
+  non-[9Xfail[109X result.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xformat:= [ [ [ IsChar, "G", IsDigitChar ],[127X[104X
+    [4X[25X>[125X [27X                [ "p", IsDigitChar, AGR.IsLowerAlphaOrDigitChar,[127X[104X
+    [4X[25X>[125X [27X                  "B", IsDigitChar, ".m", IsDigitChar ] ],[127X[104X
+    [4X[25X>[125X [27X              [ ParseBackwards, ParseForwards ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XAGR.ParseFilenameFormat( "A6G1-p10B0.m1", format );[127X[104X
+    [4X[28X[ "A6", "G", 1, "p", 10, "", "B", 0, ".m", 1 ][128X[104X
+    [4X[25Xgap>[125X [27XAGR.ParseFilenameFormat( "A6G1-p15aB0.m1", format );[127X[104X
+    [4X[28X[ "A6", "G", 1, "p", 15, "a", "B", 0, ".m", 1 ][128X[104X
+    [4X[25Xgap>[125X [27XAGR.ParseFilenameFormat( "A6G1-f2r16B0.m1", format );[127X[104X
+    [4X[28Xfail[128X[104X
+  [4X[32X[104X
+  
+  [1X7.6-2 AGR.FileContents[101X
+  
+  [29X[2XAGR.FileContents[102X( [3Xdirname[103X, [3Xgroupname[103X, [3Xfilename[103X, [3Xtype[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  [5XGAP[105X object obtained from reading and interpreting the file(s)
+            with name(s) [3Xfilename[103X.[133X
+  
+  [33X[0;0YLet  [3Xdirname[103X  and  [3Xgroupname[103X  be  strings, [3Xfilename[103X be a string or a list of
+  strings,  and [3Xtype[103X be a data type (see [2XAGR.DeclareDataType[102X ([14X7.5-1[114X)). [3Xdirname[103X
+  must  be  one  of  [10X"datagens"[110X,  [10X"dataword"[110X,  or the [3Xdirid[103X value of a private
+  directory, see [2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X ([14X5.1-1[114X). If
+  [3Xgroupname[103X  is  the  [5XATLAS[105X-file  name  of a group [22XG[122X (see Section [14X3.2[114X), and if
+  [3Xfilename[103X  is  either the name of an accessible file in the [3Xdirname[103X directory
+  of  the  [5XATLAS[105X,  or a list of such filenames, with data concerning [22XG[122X and for
+  the  data  type  [10Xtype[110X,  then  [2XAGR.FileContents[102X  returns  the contents of the
+  corresponding  file(s),  in  the sense that the file(s) (or equivalent ones,
+  see  Section [14X4.3-6[114X) is/are read, and the result is interpreted if necessary;
+  otherwise [9Xfail[109X is returned.[133X
+  
+  [33X[0;0YNote  that  if  [3Xfilename[103X  refers  to  file(s)  already stored in the [3Xdirname[103X
+  directory then [2XAGR.FileContents[102X does [13Xnot[113X check whether the table of contents
+  of the [5XATLAS[105X of Group Representations actually contains [3Xfilename[103X.[133X
+  
+  
+  [1X7.7 [33X[0;0YThe Tables of Contents of the [5XATLAS[105X[101X[1X of Group Representations[133X[101X
+  
+  [33X[0;0YThe  list  of  data  currently  available  is  stored  in  several [13Xtables of
+  contents[113X,  one  for  the local [5XGAP[105X data, one for the data on remote servers,
+  and  one  for  each  private  data  directory.  These tables of contents are
+  created by [2XReloadAtlasTableOfContents[102X ([14X4.2-1[114X).[133X
+  
+  [33X[0;0YIt  is  assumed  that the local data directories contain only files that are
+  also   available  on  servers.  Private  extensions  to  the  database  (cf.
+  Section [14X4.5[114X  and Chapter [14X5[114X) cannot be handled by putting the data files into
+  the local directories.[133X
+  
+  [33X[0;0YEach  table  of contents is represented by a record whose components are the
+  [5XATLAS[105X-file  names  of the groups (see Section [14X3.2[114X) and [10Xlastupdated[110X, a string
+  describing  the date of the last update of this table of contents. The value
+  for each group name is a record whose components are the names of those data
+  types (see Section [14X7.5[114X) for which data are available.[133X
+  
+  [33X[0;0YHere are the administrational functions that are used to build the tables of
+  contents.  Some  of  them  may  be useful also for private extensions of the
+  package (see Chapter [14X5[114X).[133X
+  
+  [33X[0;0YThe  following  functions define group names, available representations, and
+  straight line programs.[133X
+  
+  [8X[10XAGR.GNAN( [3Xgapname[103X[10X, [3Xatlasname[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  two  strings  [3Xgapname[103X  (the  [5XGAP[105X  name of the group) and
+        [3Xatlasname[103X   (the  [5XATLAS[105X  name  of  the  group),  [10XAGR.GNAN[110X  stores  the
+        information   in  the  list  [10XAtlasOfGroupRepresentationsInfo.GAPnames[110X,
+        which  defines  the name mapping between the [5XATLAS[105X names and [5XGAP[105X names
+        of the groups.[133X
+  
+        [33X[0;6YThis function may be used also for private extensions of the database.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.GNAN("A5.2","S5")[110X.[133X
+  
+  [8X[10XAGR.GRP( [3Xdirname[103X[10X, [3Xsimpname[103X[10X, [3Xgroupname[103X[10X)[110X[108X
+        [33X[0;6YCalled  with  three strings, [10XAGR.GRP[110X stores in the [10Xgroupname[110X component
+        of  [2XAtlasOfGroupRepresentationsInfo[102X  ([14X7.1-6[114X)  in  which  path  on  the
+        servers  the  data  about  the  group with [5XATLAS[105X name [3Xgroupname[103X can be
+        found.[133X
+  
+        [33X[0;6YThis function is [13Xnot[113X intended for private extensions of the database.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.GRP("alt","A5","S5")[110X.[133X
+  
+  [8X[10XAGR.TOC( [3Xtypename[103X[10X, [3Xfilename[103X[10X[, [3Xn[103X[10X] )[110X[108X
+        [33X[0;6YCalled  with  two  strings  [3Xtypename[103X and [3Xfilename[103X, [10XAGR.TOC[110X notifies an
+        entry      to      the     [10XTableOfContents.remote[110X     component     of
+        [2XAtlasOfGroupRepresentationsInfo[102X  ([14X7.1-6[114X),  where  [3Xtypename[103X must be the
+        name  of the data type to which the entry belongs and [3Xfilename[103X must be
+        the  prefix  of  the  data  file(s);  the  optional  third  argument [3Xn[103X
+        indicates that the generators are located in [3Xn[103X files.[133X
+  
+        [33X[0;6YThis function is [13Xnot[113X intended for private extensions of the database.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.TOC("perm","S5G1-p5B0.m",2)[110X.[133X
+  
+  [33X[0;0YThe  following  functions  add  data  about  the  groups  and their standard
+  generators.  The  function  calls  must  be executed after the corresponding
+  [10XAGR.GNAN[110X calls.[133X
+  
+  [8X[10XAGR.GRS( [3Xgapname[103X[10X, [3Xsize[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  the  string  [3Xgapname[103X (the [5XGAP[105X name of the group) and the
+        integer [3Xsize[103X (the order of the group), [10XAGR.GRS[110X stores this information
+        in [10XAtlasOfGroupRepresentationsInfo.GAPnames[110X.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.GRS("A5.2",120)[110X.[133X
+  
+  [8X[10XAGR.MXN( [3Xgapname[103X[10X, [3XnrMaxes[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  the  string  [3Xgapname[103X (the [5XGAP[105X name of the group) and the
+        integer  [3XnrMaxes[103X  (the  number  of classes of maximal subgroups of the
+        group),       [10XAGR.MXN[110X       stores       the       information      in
+        [10XAtlasOfGroupRepresentationsInfo.GAPnames[110X.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.MXN("A5.2",4)[110X.[133X
+  
+  [8X[10XAGR.MXO( [3Xgapname[103X[10X, [3XsizesMaxes[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  the  string  [3Xgapname[103X (the [5XGAP[105X name of the group) and the
+        list  [3XsizesMaxes[103X  (of  subgroup  orders  of  the  classes  of  maximal
+        subgroups  of  the  group,  not  necessarily  dense, in non-increasing
+        order),       [10XAGR.MXO[110X       stores       the       information      in
+        [10XAtlasOfGroupRepresentationsInfo.GAPnames[110X.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.MXO("A5.2",[60,24,20,12])[110X.[133X
+  
+  [8X[10XAGR.MXS( [3Xgapname[103X[10X, [3XstructureMaxes[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  the  string  [3Xgapname[103X (the [5XGAP[105X name of the group) and the
+        list  [3XstructureMaxes[103X  (of  strings  describing  the  structures of the
+        maximal subgroups of the group, not necessarily dense), [10XAGR.MXS[110X stores
+        the information in [10XAtlasOfGroupRepresentationsInfo.GAPnames[110X.[133X
+  
+        [33X[0;6YAn        example        of        a        valid        call       is
+        [10XAGR.MXS("A5.2",["A5","S4","5:4","S3x2"])[110X.[133X
+  
+  [8X[10XAGR.KERPRG( [3Xgapname[103X[10X, [3XkernelProgram[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  the  string  [3Xgapname[103X (the [5XGAP[105X name of the group) and the
+        list [3XkernelProgram[103X (with entries the standardization of the group, the
+        [5XGAP[105X  name  of a factor group, and the list of lines of a straight line
+        program that computes generators of the kernel of the epimorphism from
+        the  group  to the factor group), [10XAGR.KERPRG[110X stores the information in
+        [10XAtlasOfGroupRepresentationsInfo.GAPnames[110X.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.KERPRG("2.J2",[1,"J2",[[[1,2]]]])[110X.[133X
+  
+  [8X[10XAGR.STDCOMP[110X[108X
+        [33X[0;6YCalled  with  the  string  [3Xgapname[103X (the [5XGAP[105X name of the group) and the
+        list  [3XfactorCompatibility[103X  (with  entries  the  standardization of the
+        group,  the  [5XGAP[105X  name  of a factor group, the standardization of this
+        factor  group,  and  [9Xtrue[109X  or  [9Xfalse[109X,  indicating  whether mapping the
+        standard  generators  for  [3Xgapname[103X  to those of [3Xfactgapname[103X defines an
+        epimorphism),     [10XAGR.STDCOMP[110X     stores     the     information    in
+        [10XAtlasOfGroupRepresentationsInfo.GAPnames[110X.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.STDCOMP("2.A5.2",[1,"A5.2",1,true])[110X.[133X
+  
+  [33X[0;0YThe  following  functions  add  data  about representations or straight line
+  programs  that  are already known. The function calls must be executed after
+  the corresponding [10XAGR.TOC[110X calls.[133X
+  
+  [8X[10XAGR.RNG( [3Xrepname[103X[10X, [3Xdescr[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  two  strings  [3Xrepname[103X  (denoting  the  name  of  a  file
+        containing  the generators of a matrix representation over a ring that
+        is  not determined by the filename) and [3Xdescr[103X (describing this ring [22XR[122X,
+        say), [10XAGR.RNG[110X adds the triple [22X[ [3Xrepname[103X, [3Xdescr[103X, R ][122X to the list stored
+        in the [10Xringinfo[110X component of [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X).[133X
+  
+        [33X[0;6YAn        example        of        a        valid        call       is
+        [10XAGR.RNG("A5G1-Ar3aB0","Field([Sqrt(5)])")[110X.[133X
+  
+  [8X[10XAGR.TOCEXT( [3Xatlasname[103X[10X, [3Xstd[103X[10X, [3Xmaxnr[103X[10X, [3Xfiles[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  the  string [3Xatlasname[103X (the [5XATLAS[105X name of the group), the
+        positive  integers  [3Xstd[103X (the standardization) and [3Xmaxnr[103X (the number of
+        the  class  of maximal subgroups), and the list [3Xfiles[103X (of filenames of
+        straight  line  programs  for  computing  generators  of  the [3Xmaxnr[103X-th
+        maximal  subgroup,  using  a  straight line program for a factor group
+        plus   perhaps   some  straight  line  program  for  computing  kernel
+        generators), [10XAGR.TOCEXT[110X stores the information in the [10Xmaxext[110X component
+        of the [3Xatlasname[103X component of the [10X"remote"[110X table of contents.[133X
+  
+        [33X[0;6YAn example of a valid call is [10XAGR.TOCEXT("2A5",1,3,["A5G1-max3W1"])[110X.[133X
+  
+  [8X[10XAGR.API( [3Xrepname[103X[10X, [3Xinfo[103X[10X )[110X[108X
+        [33X[0;6YCalled  with  the  string  [3Xrepname[103X (denoting the name of a permutation
+        representation)  and the list [3Xinfo[103X (describing the point stabilizer of
+        this  representation),  [10XAGR.API[110X  binds  the  component  [3Xrepname[103X of the
+        record [10XAtlasOfGroupRepresentationsInfo.permrepinfo[110X to [3Xinfo[103X.[133X
+  
+        [33X[0;6Y[3Xinfo[103X has the following entries.[133X
+  
+  [30X          [33X[0;12YAt position [22X1[122X, the transitivity is stored.[133X
+  
+  [30X          [33X[0;12YIf the transitivity is zero then the second entry is the list of
+              orbit lengths.[133X
+  
+  [30X          [33X[0;12YIf  the  transitivity  is  positive then the second entry is the
+              rank of the action.[133X
+  
+  [30X          [33X[0;12YIf  the  transitivity is positive then the third entry is one of
+              the strings [10X"prim"[110X, [10X"imprim"[110X, denoting primitivity or not.[133X
+  
+  [30X          [33X[0;12YIf  the  transitivity  is  positive  then  the fourth entry is a
+              string  describing the structure of the point stabilizer. If the
+              third  entry  is  [10X"imprim"[110X  then  this description consists of a
+              subgroup part and a maximal subgroup part, separated by [10X" < "[110X.[133X
+  
+  [30X          [33X[0;12YIf  the  third  entry  is  [10X"prim"[110X then the fifth entry is either
+              [10X"???"[110X or it denotes the number of the class of maximal subgroups
+              that are the point stabilizers.[133X
+  
+        [33X[0;6YAn        example        of        a        valid        call       is
+        [10XAGR.API("A5G1-p5B0",[3,2,"prim","A4",1])[110X.[133X
+  
+  [8X[10XAGR.CHAR( [3Xgroupname[103X[10X, [3Xrepname[103X[10X, [3Xchar[103X[10X, [3Xpos[103X[10X[, [3Xcharname[103X[10X] )[110X[108X
+        [33X[0;6YCalled  with  the  strings  [3Xgroupname[103X  (the [5XGAP[105X name of the group) and
+        [3Xrepname[103X  (denoting  the  name of the representation), the integer [3Xchar[103X
+        (the  characteristic  of the representation), and [3Xpos[103X (the position or
+        list  of positions of the irreducible constituent(s)), [10XAGR.CHAR[110X stores
+        the  information  in  [10XAtlasOfGroupRepresentationsInfo.characterinfo[110X. A
+        string describing the character can be entered as [3Xcharname[103X.[133X
+  
+        [33X[0;6YAn        example        of        a        valid        call       is
+        [10XAGR.CHAR("M11","M11G1-p11B0",0,[1,2],"1a+10a")[110X.[133X
+  
+  [33X[0;0YThese  functions  are  used  to create the initial table of contents for the
+  server  data  of  the  [5XAtlasRep[105X  package when the file [11Xgap/atlasprm.g[111X of the
+  package is read.[133X
+  
+  
+  [1X7.8 [33X[0;0YSanity Checks for the [5XATLAS[105X[101X[1X of Group Representations[133X[101X
+  
+  [33X[0;0YThe  fact  that  the  [5XATLAS[105X  of Group Representations is designed as an open
+  database   (see   Section [14X4.3-1[114X)  makes  it  especially  desirable  to  have
+  consistency  checks  available  which  can be run automatically whenever new
+  data  are  added  by  the  developers  of  the [5XATLAS[105X. The tests described in
+  Section  [14X7.8-1[114X  can  be  used  also  for data from private extensions of the
+  package  (see  Chapter [14X5[114X),  Section [14X7.8-2[114X lists tests which do not have this
+  property.[133X
+  
+  [33X[0;0YAll  these tests apply only to the [13Xlocal[113X table of contents (see Section [14X7.7[114X)
+  or  to  private  extensions.  So  only those data files are checked that are
+  actually  available in the local [5XGAP[105X installation. No files are fetched from
+  servers  during  these  tests. The required space and time for running these
+  tests depend on the amount of locally available data.[133X
+  
+  [33X[0;0YThe   file  [11Xtst/testall.g[111X  of  the  package  contains  [2XReadTest[102X  ([14XReference:
+  ReadTest[114X)  statements  for executing a collection of such sanity checks; one
+  can  run  them  by calling [10XReadPackage( "AtlasRep", "tst/testall.g" )[110X. If no
+  problem  occurs  then  [5XGAP[105X  prints  only  lines  starting  with  one  of the
+  following.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X+ Input file:[128X[104X
+    [4X[28X+ GAP4stones:[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSome  of  the checks compute and verify additional data, such as information
+  about  point  stabilizers  of  permutation  representations. In these cases,
+  output   lines   starting   with   [10X#E[110X  are  error  messages  that  point  to
+  inconsistencies,  whereas  output  lines  starting with [10X#I[110X inform about data
+  that  have  been computed and were not yet stored, or about stored data that
+  were not verified.[133X
+  
+  [33X[0;0YThe  examples  in  the  package  manual  form  a part of the tests, they are
+  collected in the file [11Xtst/docxpl.tst[111X of the package.[133X
+  
+  
+  [1X7.8-1 [33X[0;0YSanity Checks for a Table of Contents[133X[101X
+  
+  [33X[0;0YThe  following  tests  can  be used to check the data that belong to a given
+  table  of contents. Each of these tests is given by a function with optional
+  argument  [3Xtocid[103X,  the identifying string that had been entered as the second
+  argument  of  [2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X ([14X5.1-1[114X). The
+  contents of the local [11Xdataword[111X directory can be checked by entering [10X"local"[110X,
+  which  is also the default for [3Xtocid[103X. The function returns [9Xfalse[109X if an error
+  occurs,  otherwise  [9Xtrue[109X.  Currently  the  following  tests of this kind are
+  available.[133X
+  
+  [8X[10XAGR.Test.Words( [[3Xtocid[103X[10X] )[110X[108X
+        [33X[0;6Yprocesses  all straight line programs that are stored in the directory
+        with  identifier  [3Xtocid[103X,  using  the  function stored in the [10XTestWords[110X
+        component of the data type in question.[133X
+  
+  [8X[10XAGR.Test.FileHeaders( [[3Xtocid[103X[10X] )[110X[108X
+        [33X[0;6Ychecks  whether  all  [5XMeatAxe[105X  text format data files in the directory
+        with  identifier  [3Xtocid[103X have a header line that is consistent with the
+        filename,  and  whether  the  contents of all [5XGAP[105X format data files in
+        this directory is consistent with the contents of the file.[133X
+  
+  [8X[10XAGR.Test.Files( [[3Xtocid[103X[10X] )[110X[108X
+        [33X[0;6Ychecks whether the [5XMeatAxe[105X text files that are stored in the directory
+        with  identifier  [3Xtocid[103X  can be read with [2XScanMeatAxeFile[102X ([14X7.3-1[114X) such
+        that  the  result is not [9Xfail[109X. The function does not check whether the
+        first  line  of  a  [5XMeatAxe[105X text file is consistent with the filename,
+        since this can be tested with [10XAGR.Test.FileHeaders[110X.[133X
+  
+  [8X[10XAGR.Test.BinaryFormat( [[3Xtocid[103X[10X] )[110X[108X
+        [33X[0;6Ychecks  whether  all  [5XMeatAxe[105X  text format data files in the directory
+        with     identifier     [3Xtocid[103X     satisfy    that    applying    first
+        [2XCMtxBinaryFFMatOrPerm[102X  ([14X7.3-4[114X)  and then [2XFFMatOrPermCMtxBinary[102X ([14X7.3-5[114X)
+        yields the same object.[133X
+  
+  [8X[10XAGR.Test.Primitivity( [[3Xtocid[103X[10X] )[110X[108X
+        [33X[0;6Ychecks   the   stored  primitivity  information  for  the  permutation
+        representations  that  are  stored  in  the  directory with identifier
+        [3Xtocid[103X.[133X
+  
+  [8X[10XAGR.Test.Characters( [[3Xtocid[103X[10X] )[110X[108X
+        [33X[0;6Ychecks the stored character information for the matrix and permutation
+        representations  that  are  stored  in  the  directory with identifier
+        [3Xtocid[103X.[133X
+  
+  
+  [1X7.8-2 [33X[0;0YOther Sanity Checks[133X[101X
+  
+  [33X[0;0YThe  tests described in this section are not intended for checking data from
+  private  extensions of the [5XAtlasRep[105X package. Each of the tests is given by a
+  function  without  arguments that returns [9Xfalse[109X if a contradiction was found
+  during  the  test,  and  [9Xtrue[109X  otherwise. Additionally, certain messages are
+  printed when contradictions between stored and computed data are found, when
+  stored  data  cannot  be  verified computationally, or when the computations
+  yield improvements of the stored data. Currently the following tests of this
+  kind are available.[133X
+  
+  [8X[10XAGR.Test.GroupOrders()[110X[108X
+        [33X[0;6Ychecks  whether  the  group orders stored in the [10XGAPnames[110X component of
+        [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X) coincide with the group orders
+        computed  from  an  [5XATLAS[105X  permutation  representation of degree up to
+        [10XAGR.Test.MaxTestDegree[110X, from the character table or the table of marks
+        with the given name, or from the structure of the name. Supported is a
+        splitting of the name at the first dot ([10X.[110X), where the two parts of the
+        name  are examined with the same criteria in order to derive the group
+        order.[133X
+  
+  [8X[10XAGR.Test.MaxesOrders()[110X[108X
+        [33X[0;6Ychecks whether the orders of maximal subgroups stored in the component
+        [10XGAPnames[110X  of [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X) coincide with the
+        orders   computed   from  the  restriction  of  an  [5XATLAS[105X  permutation
+        representation  of  degree  up  to  [10XAGR.Test.MaxTestDegree[110X,  from  the
+        character  table,  or  the table of marks with the given name, or from
+        the  information  about  maximal  subgroups of a factor group modulo a
+        normal subgroup that is contained in the Frattini subgroup.[133X
+  
+  [8X[10XAGR.Test.MaxesStructure()[110X[108X
+        [33X[0;6Ychecks  whether the names of maximal subgroups stored in the component
+        [10XGAPnames[110X  of [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X) coincide with the
+        names computed from the [5XGAP[105X character table with the given name.[133X
+  
+  [8X[10XAGR.Test.StdCompatibility()[110X[108X
+        [33X[0;6Ychecks  whether  the  information  about the compatibility of standard
+        generators  of  a  group  and  its factor groups that is stored in the
+        [10XGAPnames[110X    component   of   [2XAtlasOfGroupRepresentationsInfo[102X   ([14X7.1-6[114X)
+        coincides with computed values.[133X
+  
+        [33X[0;6YThe following criterion is used for computing the value for a group [22XG[122X.
+        Use  the [5XGAP[105X Character Table Library to determine factor groups [22XF[122X of [22XG[122X
+        for  which standard generators are defined and moreover a presentation
+        in  terms of these standard generators is known. Evaluate the relators
+        of  the presentation in the standard generators of [22XG[122X, and let [22XN[122X be the
+        normal  closure  of  these  elements  in  [22XG[122X. Then mapping the standard
+        generators  of [22XF[122X to the [22XN[122X-cosets of the standard generators of [22XG[122X is an
+        epimorphism.  If  [22X|G/N| = |F|[122X holds then [22XG/N[122X and [22XF[122X are isomorphic, and
+        the  standard  generators  of [22XG[122X and [22XF[122X are compatible in the sense that
+        mapping the standard generators of [22XG[122X to their [22XN[122X-cosets yields standard
+        generators of [22XF[122X.[133X
+  
+  [8X[10XAGR.Test.CompatibleMaxes()[110X[108X
+        [33X[0;6Ychecks  whether  the information about deriving straight line programs
+        for  restricting  to subgroups from straight line programs that belong
+        to a factor group coincide with computed values.[133X
+  
+        [33X[0;6YThe following criterion is used for computing the value for a group [22XG[122X.
+        If [22XF[122X is a factor group of [22XG[122X such that the standard generators of [22XG[122X and
+        [22XF[122X are compatible (see the test function [10XAGR.Test.StdCompatibility[110X) and
+        if  there are a presentation for [22XF[122X and a permutation representation of
+        [22XG[122X  then  it is checked whether the [10X"maxes"[110X type straight line programs
+        for  [22XF[122X  can be used to compute generators for the maximal subgroups of
+        [22XG[122X;  if  not  then  generators of the kernel of the natural epimorphism
+        from [22XG[122X to [22XF[122X, must be added.[133X
+  
+  [8X[10XAGR.Test.ClassScripts()[110X[108X
+        [33X[0;6Ychecks whether the straight line programs that compute representatives
+        of certain conjugacy classes are consistent with information stored on
+        the  [5XGAP[105X  character  table of the group in question, in the sense that
+        the given class names really occur in the character table and that the
+        element orders and centralizer orders for the classes are correct.[133X
+  
+  [8X[10XAGR.Test.CycToCcls()[110X[108X
+        [33X[0;6Ychecks    whether   some   straight   line   program   that   computes
+        representatives  of  conjugacy classes of a group can be computed from
+        the  ordinary  [5XGAP[105X  character  table of that group and a straight line
+        program  that  computes  representatives  of cyclic subgroups. In this
+        case  the  missing  scripts  are  printed if the level of [2XInfoAtlasRep[102X
+        ([14X7.1-1[114X) is at least [22X1[122X.[133X
+  
+  [8X[10XAGR.Test.Standardization()[110X[108X
+        [33X[0;6Ychecks  whether  all  generating sets corresponding to the same set of
+        standard  generators  have  the same element orders; for the case that
+        straight line programs for computing certain class representatives are
+        available,  also  the  orders  of  these  representatives  are checked
+        w. r. t. all generating sets.[133X
+  
+  [8X[10XAGR.Test.StdTomLib()[110X[108X
+        [33X[0;6Ychecks  whether the standard generators are compatible with those that
+        occur in the [5XTomLib[105X package.[133X
+  
+  [8X[10XAGR.Test.KernelGenerators()[110X[108X
+        [33X[0;6Ychecks  whether  the  information  stored in the [10XGAPnames[110X component of
+        [2XAtlasOfGroupRepresentationsInfo[102X  ([14X7.1-6[114X)  about straight line programs
+        for  computing  generators  of  the  kernels  of  natural epimorphisms
+        between [5XATLAS[105X groups coincides with computed values.[133X
+  
+        [33X[0;6YThe following criterion is used for computing the value for a group [22XG[122X.
+        Use  the [5XGAP[105X Character Table Library to determine factor groups [22XF[122X of [22XG[122X
+        for  which  standard generators are defined such that mapping standard
+        generators  of [22XG[122X to those of [22XF[122X defines a homomorphism, and such that a
+        presentation  of  [22XF[122X  in  terms  of  its  standard generators is known.
+        Evaluating the relators of the presentation in the standard generators
+        of [22XG[122X yields normal subgroup generators for the kernel.[133X
+  
+        [33X[0;6YA  message is printed for each group name for which some straight line
+        program  for  computing  kernel  generators was not stored but now was
+        computed, or for which the stored info cannot be verified,[133X
+  
+  [8X[10XAGR.Test.MinimalDegrees()[110X[108X
+        [33X[0;6Ychecks  that the (permutation and matrix) representations available in
+        the [5XATLAS[105X of Group Representations do not have smaller degree than the
+        claimed minimum.[133X
+  

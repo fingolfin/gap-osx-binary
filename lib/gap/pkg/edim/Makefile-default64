@@ -1,0 +1,38 @@
+GAPPATH=../..
+CONFIGNAME=default64
+# makefile prototype for the EDIM package                         Frank Lübeck
+
+CONFIGNAME=default64
+
+GAPINCL=-I$(GAPPATH)/src -I$(GAPPATH)/bin/x86_64-apple-darwin10.0.0-clang-default64
+
+PKGROOT=$(shell pwd)
+
+GAP=$(PKGROOT)/../../bin/gap-$(CONFIGNAME).sh
+
+.PHONY: clean doc test
+
+default: bin/x86_64-apple-darwin10.0.0-clang-default64/ediv.so 
+
+# this target creates a bin-directory
+bin/x86_64-apple-darwin10.0.0-clang-default64:
+	if test ! -d bin;  then mkdir bin;  fi
+	if test ! -d bin/x86_64-apple-darwin10.0.0-clang-default64;  then mkdir -p bin/x86_64-apple-darwin10.0.0-clang-default64;  fi
+
+bin/x86_64-apple-darwin10.0.0-clang-default64/ediv.so: src/ediv.c bin/x86_64-apple-darwin10.0.0-clang-default64
+	$(GAPPATH)/bin/x86_64-apple-darwin10.0.0-clang-default64/gac -d -o bin/x86_64-apple-darwin10.0.0-clang-default64/ediv.so src/ediv.c
+
+doc:
+	($(GAP)  makedocrel.g)
+
+clean: 
+	rm -rf bin/x86_64-apple-darwin10.0.0-clang-default64 Makefile Makefile-$(CONFIGNAME) *~
+
+distclean:
+	rm -rf bin Makefile Makefile-*
+
+docclean:
+	(cd  doc; ./clean)
+
+test:
+	$(GAP) -b -q -r < tst/test.g

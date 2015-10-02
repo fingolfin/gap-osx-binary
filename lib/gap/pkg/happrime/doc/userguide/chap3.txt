@@ -1,0 +1,72 @@
+  
+  [1X3 Functions for Homological Algebra[0X
+  
+  
+  [1X3.1 Resolutions[0X
+  
+  
+  [1X3.1-1 ResolutionPrimePowerGroup[0X
+  
+  [2X> ResolutionPrimePowerGroupRadical( [0X[3XG, n[0X[2X ) ________________________[0Xoperation
+  [2X> ResolutionPrimePowerGroupGF( [0X[3XG, n[0X[2X ) _____________________________[0Xoperation
+  [2X> ResolutionPrimePowerGroupAutoMem( [0X[3XG, n[0X[2X ) ________________________[0Xoperation
+  [2X> ResolutionPrimePowerGroupGF2( [0X[3XG, n[0X[2X ) ____________________________[0Xoperation
+  [2X> ResolutionPrimePowerGroupRadical( [0X[3XM, n[0X[2X ) ________________________[0Xoperation
+  [2X> ResolutionPrimePowerGroupGF( [0X[3XM, n[0X[2X ) _____________________________[0Xoperation
+  [2X> ResolutionPrimePowerGroupAutoMem( [0X[3XM, n[0X[2X ) ________________________[0Xoperation
+  [2X> ResolutionPrimePowerGroupGF2( [0X[3XM, n[0X[2X ) ____________________________[0Xoperation
+  [6XReturns:[0X  [9XHAPResolution[0m
+  
+  Returns  [3Xn[0m  terms of a minimal free FG-resolution for either the ground ring
+  of a prime power group [3XG[0m or of a module [3XM[0m. For the module version, [3XM[0m must be
+  passed  as  an  [9XFpGModuleGF[0m object - see [14X'HAPprime Datatypes: FG-modules'[0m in
+  the [5XHAPprime[0m datatypes reference manual.
+  
+  Three versions of this function are provided:
+  
+  [8X[9XResolutionPrimePowerGroupRadical[0m[8X[0m
+        uses   the   same  resolution-building  method  as  the  [5XHAP[0m  function
+        [2XResolutionPrimePowerGroup[0m ([14XHAP: ResolutionPrimePowerGroup[0m), but stores
+        the  resolution  in  a different format that takes only about half the
+        memory of the [5XHAP[0m version.
+  
+  [8X[9XResolutionPrimePowerGroupGF[0m[8X[0m
+        calculates   the  resolution  using  [5XHAPprime[0m's  G-generator  form  of
+        modules,  which  reduces  memory  use  by  around a factor of two over
+        [9XResolutionPrimePowerGroupRadical[0m,   but  is  slower  by  an  order  of
+        magnitude.
+  
+  [8X[9XResolutionPrimePowerGroupAutoMem[0m[8X[0m
+        automatically  switches between the two previous versions based on the
+        available  memory.  It uses the [10XRadical[0m version until it gets close to
+        the  limit  of  the  available  memory,  and  then  switches to the [10XGF[0m
+        version.
+  
+  [8X[9XResolutionPrimePowerGroupGF2[0m[8X[0m
+        calculates  the  resolution  by  FG-matrix partitioning. The amount of
+        partitioning  is  governed  by  the  [14X'Reference: Options Stack'[0m option
+        [10XMaxFGExpansionSize[0m.  The  default  value means that until the boundary
+        map    takes    about    128Mb,    the   method   is   equivalent   to
+        [9XResolutionPrimePowerGroupRadical[0m,    and   then   it   tends   towards
+        [9XResolutionPrimePowerGroupGF[0m in terms of time, but saves less memory.
+  
+  See  the  [5XHAPprime[0m  datatypes  reference manual for details of the different
+  algorithms, in particular the chapters on the G-generator form of FG-modules
+  [14X'HAPprime  Datatypes:  FG-modules'[0m  and  FG-module  homomorphisms  [14X'HAPprime
+  Datatypes:  FG-module homomorphisms'[0m and on resolutions [14X'HAPprime Datatypes:
+  Resolutions'[0m.
+  
+  
+  [1X3.1-2 ExtendResolutionPrimePowerGroup[0X
+  
+  [2X> ExtendResolutionPrimePowerGroupRadical( [0X[3XR[0X[2X ) _____________________[0Xoperation
+  [2X> ExtendResolutionPrimePowerGroupGF( [0X[3XR[0X[2X ) __________________________[0Xoperation
+  [2X> ExtendResolutionPrimePowerGroupAutoMem( [0X[3XR[0X[2X ) _____________________[0Xoperation
+  [2X> ExtendResolutionPrimePowerGroupGF2( [0X[3XR[0X[2X ) _________________________[0Xoperation
+  [6XReturns:[0X  [9XHAPResolution[0m
+  
+  Returns  the  resolution  [3XR[0m extended by one term. The three variants offer a
+  choice between memory and speed, and correspond to the different versions of
+  [9XResolutionPrimePowerGroup[0m  in  [5XHAPprime[0m.  See  the documentation ([14X3.1-1[0m) for
+  those functions for a description of the different variants.
+  

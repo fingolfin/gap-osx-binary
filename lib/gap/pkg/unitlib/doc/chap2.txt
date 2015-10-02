@@ -1,0 +1,181 @@
+  
+  [1X2 [33X[0;0Y[5XUnitLib[105X[101X[1X functions[133X[101X
+  
+  [33X[0;0YSince  the main purpose of [5XUnitLib[105X is the date storage, it has only two main
+  user  functions  to  read  the  description of [22XV(KG)[122X for the given catalogue
+  number  of  [22XG[122X in the Small Groups Library of the [5XGAP[105X system, and to save the
+  description  of  [22XV(KG)[122X  if  the  user would like to store it for the further
+  usage for the group which is not contained in the library.[133X
+  
+  [33X[0;0YTo use the [5XUnitLib[105X package first you need to load it as follows:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XLoadPackage("unitlib");[127X[104X
+    [4X[28X----------------------------------------------------------------------------[128X[104X
+    [4X[28XLoading  UnitLib 3.1.0 (The library of normalized unit groups of modular group algebras)[128X[104X
+    [4X[28Xby Alexander Konovalov (http://www.cs.st-andrews.ac.uk/~alexk/) and[128X[104X
+    [4X[28X   Elena Yakimenko.[128X[104X
+    [4X[28XHomepage: http://www.cs.st-andrews.ac.uk/~alexk/unitlib/[128X[104X
+    [4X[28X----------------------------------------------------------------------------[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YUnder  Windows,  a  warning  will be displayed about non-availability of the
+  library of normalized unit groups for groups of orders 128.[133X
+  
+  [33X[0;0YExamples  below  contain  some functions from the [5XLAGUNA[105X package [BKRS], see
+  their description in the [5XLAGUNA[105X manual ([14XLAGUNA: LAGUNA package[114X).[133X
+  
+  
+  [1X2.1 [33X[0;0YMainFunctions[133X[101X
+  
+  [1X2.1-1 PcNormalizedUnitGroupSmallGroup[101X
+  
+  [29X[2XPcNormalizedUnitGroupSmallGroup[102X( [3Xs[103X, [3Xn[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10YPcGroup[133X
+  
+  [33X[0;0YLet [3Xs[103X be a power of prime [22Xp[122X and [3Xn[103X is an integer from [10X[ 1 .. NrSmallGroups(s)
+  ][110X.  Then  [10XPcNormalizedUnitGroupSmallGroup([3Xs[103X[10X,[3Xn[103X[10X)[110X  returns  the normalized unit
+  group [22XV(KG)[122X of the modular group algebra [22XKG[122X, where [22XG[122X is [10XSmallGroup([3Xs[103X[10X,[3Xn[103X[10X)[110X (see
+  [2XSmallGroup[102X  ([14XReference:  SmallGroup (for group order and index)[114X)) and [22XK[122X is a
+  field of [22Xp[122X elements.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XPcNormalizedUnitGroupSmallGroup(128,161);[127X[104X
+    [4X[28X<pc group of size 170141183460469231731687303715884105728 with 127 generators>[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  result returned by [10XPcNormalizedUnitGroupSmallGroup[110X is equivalent to the
+  following:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X                                                                         [128X[104X
+    [4X[25Xgap>[125X [27XG := SmallGroup( s, n );[127X[104X
+    [4X[25Xgap>[125X [27Xp := PrimePGroup( G );[127X[104X
+    [4X[25Xgap>[125X [27XK := GF( p );[127X[104X
+    [4X[25Xgap>[125X [27XKG := GroupRing( K, G );[127X[104X
+    [4X[25Xgap>[125X [27XPcNormalizedUnitGroup( KG );[127X[104X
+    [4X[28X                                                                               [128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNevertheless,  [10XPcNormalizedUnitGroupSmallGroup[110X  is  not  just a shortcut for
+  such computation. It reads the description of the normalized unit group from
+  the  [5XUnitLib[105X  library and then reconstructs all its necessary attributes and
+  properties.  Thus,  if  you would like to obtain the group algebra [22XKG[122X or the
+  field [22XK[122X and the group [22XG[122X, you should extract them from [22XV(KG)[122X, which should be
+  constructed first.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XV:=PcNormalizedUnitGroup(GroupRing(GF(2),SmallGroup(8,3)));[127X[104X
+    [4X[28X<pc group of size 128 with 7 generators>[128X[104X
+    [4X[25Xgap>[125X [27XV1:=PcNormalizedUnitGroupSmallGroup(8,3);                   [127X[104X
+    [4X[28X<pc group of size 128 with 7 generators>[128X[104X
+    [4X[25Xgap>[125X [27XV1=V;     # two isomorphic groups but not identical objects[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIdGroup(V)=IdGroup(V1);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsomorphismGroups(V,V1);[127X[104X
+    [4X[28X[ f1, f2, f3, f4, f5, f6, f7 ] -> [ f1, f2, f3, f4, f5, f6, f7 ][128X[104X
+    [4X[25Xgap>[125X [27XKG:=UnderlyingGroupRing(V1);  # now the correct way[127X[104X
+    [4X[28X<algebra-with-one over GF(2), with 3 generators>[128X[104X
+    [4X[25Xgap>[125X [27XV1=PcNormalizedUnitGroup(KG); # V1 is an attribute of KG[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XK:=UnderlyingField(KG);[127X[104X
+    [4X[28XGF(2)[128X[104X
+    [4X[25Xgap>[125X [27XG:=UnderlyingGroup(KG);     [127X[104X
+    [4X[28X<pc group of size 8 with 3 generators>[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YMoreover,  the  original  group  [22XG[122X  can  be  embedded into the output of the
+  [10XPcNormalizedUnitGroupSmallGroup[110X, as it is shown in the next example:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xf:=Embedding(G,V1); [127X[104X
+    [4X[28X[ f1, f2, f3 ] -> [ f2, f1, f3 ][128X[104X
+    [4X[25Xgap>[125X [27Xg:=List(GeneratorsOfGroup(G), x -> x^f ); [127X[104X
+    [4X[28X[ f2, f1, f3 ][128X[104X
+    [4X[25Xgap>[125X [27XG1:=Subgroup(V1,g);[127X[104X
+    [4X[28XGroup([ f2, f1, f3 ])[128X[104X
+    [4X[25Xgap>[125X [27XIdGroup(G1);[127X[104X
+    [4X[28X[ 8, 3 ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIf  the  first argument [3Xs[103X (the order of a group) is not a power of prime, an
+  error  message  will appear. If [3Xs[103X is bigger than 243, you will get a warning
+  telling that the library does not contain [22XV(KG)[122X for [22XG[122X of such order, and you
+  can use only data that you already stored in your [11Xunitlib/userdata[111X directory
+  with the help of the function [2XSavePcNormalizedUnitGroup[102X ([14X2.1-2[114X).[133X
+  
+  [33X[0;0YIt  is  worth to mention that for some groups of order 243, the construction
+  of  the  normalized  unit  group  using  [10XPcNormalizedUnitGroupSmallGroup[110X may
+  already  require  some noticeable amount of time. For example, it took about
+  166  seconds  of CPU time to compute [10XPcNormalizedUnitGroupSmallGroup(243,30)[110X
+  on Intel Xeon 3.4 GHz with 2048 KB cache.[133X
+  
+  [1X2.1-2 SavePcNormalizedUnitGroup[101X
+  
+  [29X[2XSavePcNormalizedUnitGroup[102X( [3XG[103X ) [32X function
+  [29X[2XParSavePcNormalizedUnitGroup[102X( [3XG[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ytrue[133X
+  
+  [33X[0;0YLet  [3XG[103X  be  a finite [22Xp[122X-group of order [22Xs[122X from the Small Groups Library of the
+  [5XGAP[105X  system,  constructed  with  the help of [10XSmallGroup(s,n)[110X (see [2XSmallGroup[102X
+  ([14XReference:    SmallGroup    (for    group    order   and   index)[114X)).   Then
+  [10XSavePcNormalizedUnitGroup([3XG[103X[10X)[110X  creates  the  file  with  the name of the form
+  [11Xus_n.g[111X  in the directory [11Xunitlib/userdata[111X, and returns [9Xtrue[109X if this file was
+  successfully generated. This file contains the description of the normalized
+  unit  group  [22XV(KG)[122X  of  the group algebra of the group [3XG[103X over the field of [22Xp[122X
+  elements.[133X
+  
+  [33X[0;0YIf  the  order  of  [3XG[103X  is greater than 243, after this you can construct the
+  group  [22XV(KG)[122X  using [2XPcNormalizedUnitGroupSmallGroup[102X ([14X2.1-1[114X) similarly to the
+  previous  section.  The  preliminary warning will be displayed, telling that
+  for  such orders you can use only those groups that were already computed by
+  the  user  and  saved to the [11Xunitlib/userdata[111X directory. If there will be no
+  such  file  there,  you will get an error message, otherwise the computation
+  will begin.[133X
+  
+  [33X[0;0YIf  the order of [3XG[103X is less or equal to 243, then the file will be created in
+  the  [11Xunitlib/userdata[111X  directory,  but [5XUnitLib[105X will continue to use the file
+  with  the  same name from the appropriate directory in [11Xunitlib/data[111X. You can
+  compare these two files to make it sure that they are the same.[133X
+  
+  [33X[0;0Y[12XNOTE THAT:[112X[133X
+  
+  [33X[0;0Y1. The argument should be the underlying group [22XG[122X and not the normalized unit
+  group [22XV(KG)[122X.[133X
+  
+  [33X[0;0Y2.  The  argument  should  be  a  group  from  the  [5XGAP[105X Small Groups Library
+  constructed with the help of [10XSmallGroup(s,n)[110X, otherwise the date consistency
+  may be lost.[133X
+  
+  [33X[0;0Y[2XParSavePcNormalizedUnitGroup[102X  works  in  the same way, but uses the function
+  [10XParPcNormalizedUnitGroup[110X  to  parallelise  the  computation  using  the  [5XGAP[105X
+  package [5XSCSCP[105X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XSavePcNormalizedUnitGroup( SmallGroup( 256, 56092 ) );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XPcNormalizedUnitGroupSmallGroup( 256, 56092 );[127X[104X
+    [4X[28XWARNING : the library of V(KG) for groups of order [128X[104X
+    [4X[28X256 is not available yet !!! [128X[104X
+    [4X[28XYou can use only groups from the unitlib/userdata directory [128X[104X
+    [4X[28Xin case if you already computed their descriptions [128X[104X
+    [4X[28X(See the manual for SavePcNormalizedUnitGroup).[128X[104X
+    [4X[28X#I  Description of V(KG) for G=SmallGroup(256,[128X[104X
+    [4X[28X56092) accepted, started its generation...[128X[104X
+    [4X[28X<pc group of size [128X[104X
+    [4X[28X57896044618658097711785492504343953926634992332820282019728792003956564819968[128X[104X
+    [4X[28X  with 255 generators>[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  

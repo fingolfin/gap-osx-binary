@@ -1,0 +1,418 @@
+<!-- 
+  HAPPRIME - examples.xml
+  Introduction documentation section 
+  Paul Smith
+  
+  Copyright (C)  2008
+  National University of Ireland Galway
+  Copyright (C)  2011
+  University of St Andrews
+     
+  This file is part of HAPprime. 
+
+  HAPprime is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  HAPprime is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+  
+<!-- ********************************************************** -->
+<Chapter Label="Examples"> 
+  <Heading>Examples</Heading>
+  
+  <Section>
+    <Heading>Computing the mod &p; group cohomology</Heading>
+    
+    Let <M>G</M> be a group and &FF; be a field, and let &FG; be the group
+    ring of &G; over &FF;. A free &FG;-resolution of the ground ring is an exact 
+    sequence of module homomorphisms
+    <Alt Only="LaTeX">
+      <Display>
+        \ldots \rightarrow M_{n+1} \rightarrow M_n \rightarrow M_{n-1} \rightarrow \ldots
+          \rightarrow M_1 \rightarrow \mathbb{F}G \twoheadrightarrow \mathbb{F}
+      </Display>
+    </Alt>
+    <Alt Not="LaTeX">
+      <Display>
+        ... ---> M_(n+1) ---> M_n ---> M_(n-1) ---> ... ---> M_1 ---> FG --->> F
+      </Display>
+    </Alt>
+    Where each <M>M_n</M> is a free &FG;-module and the image of 
+    <M>d_{n+1}: M_{n+1} \rightarrow M_{n}</M> equals the kernel of 
+    <M>d_n: M_n \rightarrow M_{n-1}</M> for all <M>n > 0</M>. The maps 
+    <M>d_n</M> are called boundary homomorphisms. In &HAPprime; we consider the
+    case where &G; is a &p;-group and &FF; is the prime field <M>GF(p)</M>,
+    and this is assumed from now on.
+    <P/>
+    If we now define the Abelian group <M>D_n</M> to be <M>Hom(M_n, \mathbb{F})</M>,
+    the set of all homomorphisms <M>M_n \to \mathbb{F}</M>, we can obtain the 
+    dual of this sequence, which will be a cochain complex of Abelian group
+    homomorphisms
+    <Alt Only="LaTeX">
+      <Display>
+        \ldots \leftarrow D_{n+1} \leftarrow D_n \leftarrow D_{n-1} \leftarrow \ldots
+          \leftarrow D_1 \leftarrow \mathbb{F} \leftarrow \mathbb{F}
+      </Display>
+    </Alt>
+    <Alt Not="LaTeX">
+      <Display><![CDATA[
+        ... <--- D_(n+1) <--- D_n ---> D_(n-1) <--- ... <--- D_1 <--- F <--- F
+      ]]></Display>
+    </Alt>
+    Each group <M>D_n</M> will be isomorphic to <M>\mathbb{F}^{|M_n|}</M> where
+    <M>|M_n|</M> is the rank of the module <M>M_n</M>. Unlike the resolution, 
+    this sequence will generally not be exact, but one can define the 
+    mod-&p; cohomology group of &G; at degree <M>n</M> to be
+    <Alt Only="LaTeX">
+      <Display>
+        H^n(G, \mathbb{F}) = \frac{ker(D_n \to D_{n+1})}{im(D_{n-1} \to D_n)}
+      </Display>
+    </Alt>
+    <Alt Not="LaTeX">
+      <Display>
+        H^n(G, F) = ker(D_n ---> D_(n+1))  /  im(D_(n-1) ---> D_n)
+      </Display>
+    </Alt>
+    for all <M>n > 0 </M>. As with the <M>D_n</M>, the mod-&p; cohomology groups 
+    will also be isomorphic to vector spaces over &FF;. 
+    In the case where the resolution <M>R</M> is minimal (where each module
+    <M>M_n</M> has the minimal number of generators), the dimensions of the
+    (co)homology groups <M>H^n(G, \mathbb{F})</M> are identical to the dimensions
+    of the resolution modules <M>M_n</M>.
+    The group cohomology (and the similar group homology)
+    is an invariant of &G;, and does not depend on a particular free 
+    &FG;-resolution.
+    <P/>
+    In the general case, there are thus two stages to computing the 
+    group cohomology of <M>G</M> up to the <M>n</M>th cohomology group:
+    <Enum>
+      <Item>Compute <M>R</M>, a free &FG;-resolution for &FG;, with at least
+        <M>n+1</M> terms.</Item>
+      <Item>Construct the cochain complex <M>C</M> from <M>R</M> and compute
+        the <M>n</M> homology groups of <M>C</M></Item>
+    </Enum>
+    For example, to calculate the 9th mod-&p; cohomology group of 
+    the 134th order 64 in the &GAP; small groups library (which is the 
+    Sylow 2-subgroup of the Mathieu group <M>M_{12}</M>), we can use the 
+    &HAPprime; function
+    <Ref Oper="ResolutionPrimePowerGroupRadical" Label="for group"/> to compute
+    10 terms of a free &FG;-resolution for &G; and then use &HAP; functions
+    to find the rank <M>b_9</M> of the cohomology group, which will be
+    isomorphic to <M>\mathbb{F}^{b_9}</M>. Alternatively, since
+    <Ref Oper="ResolutionPrimePowerGroupRadical" Label="for group"/> always
+    returns a minimal resolution, the cohomology group dimensions can be read
+    directly from the resolution.
+<!--
+gap> SetInfoLevel(InfoHAPprime, 0);
+
+gap> G := SmallGroup(64, 134);;
+gap> # First construct a FG-resolution for the group G
+gap> R := ResolutionPrimePowerGroupRadical(G, 10);
+gap> # Convert this into a cochain complex (over the prime field with p=2)
+gap> C := HomToIntegersModP(R, 2);
+gap> # And get the rank of the 9th cohomology group
+gap> b9 := Cohomology(C, 9);
+
+gap> # Since R is a free resolution, the ranks of the cohomology groups
+gap> # are the same as the module ranks in R
+gap> ResolutionModuleRanks(R);
+-->
+<Example><![CDATA[
+gap> G := SmallGroup(64, 134);;
+gap> # First construct a FG-resolution for the group G
+gap> R := ResolutionPrimePowerGroupRadical(G, 10);
+Resolution of length 10 in characteristic 2 for <pc group of size 64 with
+6 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> # Convert this into a cochain complex (over the prime field with p=2)
+gap> C := HomToIntegersModP(R, 2);
+Cochain complex of length 10 in characteristic 2 .
+
+gap> # And get the rank of the 9th cohomology group
+gap> b9 := Cohomology(C, 9);
+55
+gap> 
+gap> # Since R is a free resolution, the ranks of the cohomology groups
+gap> # are the same as the module ranks in R
+gap> ResolutionModuleRanks(R);
+[ 3, 6, 10, 15, 21, 28, 36, 45, 55, 66 ]]]></Example>
+  </Section>
+    
+    
+  <!-- ********************************************************** -->
+  <Section Label="ExResolution">
+    <Heading>Comparing the memory usage and speed of &HAPprime; and &HAP;'s 
+      <K>ResolutionPrimePowerGroup</K> functions</Heading>
+
+    For small &p;-groups, the group ring &FG; can be considered as a vector
+    space of rank <M>|G|</M> with the elements of &G; as its basis elements.
+    Each module <M>M_n</M> in a &FG;-resolution is also a vector space
+    (of dimension <M>|M_n||G|</M>) and the boundary maps <M>d_n</M> can be
+    represented as vector space homomorphisms. As a result, standard linear
+    algebra techniques can be used to compute a minimal resolution by
+    constructing a sequence of module homomorphisms where the kernel
+    of one map is the image of the next, and where the modules have minimal
+    generating sets. See Chapter <Ref Chap="Resolution" BookName="HAPprime Datatypes"/>
+    in the datatypes manual for further details.
+    <P/>
+    As the groups get larger, this approach becomes less feasible due to the
+    amount of time and memory needed to store and compute the null space
+    of large matrices. The &HAP; function
+    <Ref Func="ResolutionPrimePowerGroup" BookName="HAP"/> and the &HAPprime;
+    functions <Ref Func="ResolutionPrimePowerGroupRadical" Label="for group"/> and
+    <Ref Func="ResolutionPrimePowerGroupGF" Label="for group"/> all use this linear algebra
+    approach, but the &HAPprime; functions are optimised to save memory,
+    allowing the computation of resolutions which are longer, or are of
+    larger groups, than are possible using &HAP; alone.
+    
+    <Subsection>
+      <Heading>&HAPprime; takes less memory to store resolutions</Heading>
+    Consider computing a resolution of a group of an arbitrary group of order
+    128, <C>G = SmallGroup(128, 844)</C> using &HAP;. Computation is performed 
+    on a dual-core Intel Core2Duo running at 2.66MHz, and the memory 
+    available to &GAP; is the standard initial allocation of 256Mb.
+<!--
+gap> SetInfoLevel(InfoHAPprime, 0);
+
+gap> G := SmallGroup(128, 844);;
+gap> R := ResolutionPrimePowerGroup(G, 9);
+gap> time;
+gap> # Can we construct a resolution of length ten?
+gap> R := ResolutionPrimePowerGroup(G, 10);
+-->
+<Log><![CDATA[
+gap> G := SmallGroup(128, 844);;
+gap> R := ResolutionPrimePowerGroup(G, 9);
+Resolution of length 9 in characteristic 2 for <pc group of size 128 with
+7 generators> .
+
+gap> time;
+27685
+gap> # Can we construct a resolution of length ten?
+gap> R := ResolutionPrimePowerGroup(G, 10);
+exceeded the permitted memory (`-o' command line option) at
+res := SemiEchelonMatDestructive( List( mat, ShallowCopy ) );
+ called from
+SemiEchelonMat( NullspaceMat( BndMat ) ) called from
+ZGbasisOfKernel( i - 1 ) called from
+<function>( <arguments> ) called from read-eval-loop
+Entering break read-eval-print loop ...
+you can 'quit;' to quit to outer loop, or
+you can 'return;' to continue
+]]></Log>
+    The &HAPprime; function <Ref Oper="ResolutionPrimePowerGroupRadical" Label="for group"/>
+    uses an almost identical algorithm, but stores its boundary maps more
+    efficiently. As a result, with the same memory allowance:
+<!--
+gap> SetInfoLevel(InfoHAPprime, 0);
+
+gap> G := SmallGroup(128, 844);;
+gap> R := ResolutionPrimePowerGroupRadical(G, 9);
+gap> time;
+gap> # Can we construct a resolution of length ten?
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap> # Yes! How about eleven?
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);
+gap> ResolutionModuleRanks(R);
+gap>
+gap> # But it will run out of memory if we try to go further
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);
+-->
+<Log><![CDATA[
+gap> G := SmallGroup(128, 844);;
+gap> R := ResolutionPrimePowerGroupRadical(G, 9);
+Resolution of length 9 in characteristic 2 for <pc group of size 128 with
+7 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> time;
+25321
+gap> # Can we construct a resolution of length ten?
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap> # Yes! How about eleven?
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);
+Resolution of length 11 in characteristic 2 for <pc group of size 128 with
+7 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> ResolutionModuleRanks(R);
+[ 3, 6, 11, 19, 30, 44, 62, 85, 113, 146, 185 ]
+gap> 
+gap> # But it will run out of memory if we try to go to twelve terms
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);
+exceeded the permitted memory (`-o' command line option) at
+...
+]]></Log>
+    The &HAPprime; version can compute two further terms of the resolution, 
+    which given the sizes of the additional modules represents a considerable
+    improvement. Just representing the homomorphism 
+    <M>d_{10}: (\mathbb{F}G)^{146} \to (\mathbb{F}G)^{113}</M> as vectors
+    requires nearly as much memory again as representing the first nine
+    homomorphisms. To compute and store the same resolution of length 11 using
+    <Ref Func="ResolutionPrimePowerGroup" BookName="HAP"/> would need
+    a little over three times the memory used here by &HAPprime;. The time taken 
+    by both versions is very similar.
+    <P/>
+    In the example above, note also the use of the &HAPprime; function
+    <Ref Oper="ExtendResolutionPrimePowerGroupRadical"/>, which makes it much
+    easier to add terms to an existing resolution. In standard &HAP;, if one
+    decides that a resolution is too short and that more terms are required,
+    then the entire resolution must be computed again from scratch.
+    </Subsection>
+    
+    <Subsection>
+      <Heading>&HAPprime; takes less memory to compute resolutions</Heading>
+    The function <Ref Oper="ResolutionPrimePowerGroupGF" Label="for group"/>
+    uses a new algorithm to compute the kernel of &FG;-module homomorphisms
+    when &FG;-modules are represented using a set of &G;-generating
+    vectors (see <Ref Chap="FG-module homomorphisms" BookName="HAPprime Datatypes"/>
+    in the datatypes
+    reference manual). This provides a further memory saving over
+    <Ref Oper="ResolutionPrimePowerGroupRadical" Label="for group"/>,
+    although at the cost of a much slower computation time:
+<!--
+gap> SetInfoLevel(InfoHAPprime, 0);
+
+gap> G := SmallGroup(128, 844);;
+gap> R := ResolutionPrimePowerGroupGF(G, 9);
+gap> time;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);
+gap> ResolutionModuleRanks(R);
+gap> # But it will run out of (the inital 256Mb) of memory at sixteen terms
+-->
+<Log><![CDATA[
+gap> G := SmallGroup(128, 844);;
+gap> R := ResolutionPrimePowerGroupGF(G, 9);
+Resolution of length 9 in characteristic 2 for <pc group of size 128 with
+7 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> time;
+422742
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+gap> R := ExtendResolutionPrimePowerGroupGF(R);;
+Resolution of length 15 in characteristic 2 for <pc group of size 128 with
+7 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> ResolutionModuleRanks(R);
+[ 3, 6, 11, 19, 30, 44, 62, 85, 113, 146, 185, 231, 284, 344, 412 ]
+gap> # But it will run out of (the inital 256Mb) of memory at sixteen terms
+]]></Log>
+    Using <Ref Oper="ResolutionPrimePowerGroupGF" Label="for group"/> we
+    can get a further four terms of the resolution. For this resolution, 
+    this represents a memory
+    saving of a factor of five over 
+    <Ref Oper="ResolutionPrimePowerGroupRadical" Label="for group"/>
+    and fifteen over <Ref Oper="ResolutionPrimePowerGroup" BookName="HAP"/>,
+    although it does take fifteen times as long as either of those just to 
+    compute the first nine terms, and scales less well with size.
+    </Subsection>
+    <Subsection>
+      <Heading>Automatic selection of the best method</Heading>
+    The two functions <Ref Oper="ResolutionPrimePowerGroupRadical" Label="for group"/>
+    and <Ref Oper="ResolutionPrimePowerGroupGF" Label="for group"/> offer a
+    trade-off between time and memory. The function
+    <Ref Oper="ResolutionPrimePowerGroupAutoMem" Label="for group"/>
+    automates the decision of which version to use, switching from
+    the <C>Radical</C> to the <C>GF</C> version when it estimates that
+    it is about to run out of available memory for the faster version.
+    In this example, we have also increase the
+    <Ref InfoClass="InfoHAPprime"/> info level to display progress
+    information. At level two, the rank of each module in the resolution is
+    displayed as it is calculated, giving an indication of progress. With
+    this setting, the user is also notified when the <C>AutoMem</C> function
+    switches, and the <C>GF</C> function displays a rolling estimate of its
+    completion time (which is not shown since that output is overwritten when
+    completed)
+<!--
+gap> G := SmallGroup(128, 844);;
+gap> SetInfoLevel(InfoHAPprime, 2);
+gap> R := ResolutionPrimePowerGroupAutoMem(G, 15);
+gap> StringTime(time);
+-->
+<Log><![CDATA[
+gap> G := SmallGroup(128, 844);;
+gap> SetInfoLevel(InfoHAPprime, 2);
+gap> R := ResolutionPrimePowerGroupAutoMem(G, 15);
+#I  Dimension 2: rank 6
+#I  Dimension 3: rank 11
+#I  Dimension 4: rank 19
+#I  Dimension 5: rank 30
+#I  Dimension 6: rank 44
+#I  Dimension 7: rank 62
+#I  Dimension 8: rank 85
+#I  Dimension 9: rank 113
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 10: rank 146
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 11: rank 185
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 12: rank 231
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 13: rank 284
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 14: rank 344
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 15: rank 412
+Resolution of length 15 in characteristic 2 for <pc group of size 128 with
+7 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> StringTime(time);
+" 5:45:53.613"
+]]></Log>
+    </Subsection>
+
+  </Section>
+    
+</Chapter>
+  

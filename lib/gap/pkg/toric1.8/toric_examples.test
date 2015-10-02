@@ -1,0 +1,76 @@
+##
+## these examples should return the same output as described in 
+## the toric documentation
+##
+## LogTo("/home/wdj/gapfiles/toric_gapdoc_examples.log");
+
+LoadPackage("toric");
+L:=[[1,0,0],[1,1,0],[1,1,1],[1,0,1]];; v:=[0,0,1];;
+InDualCone(v,L);
+L:=[[1,0],[3,4]];; v:=[1,-7];; InDualCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-3];; InDualCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-4];; InDualCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-2];; InDualCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-1];; InDualCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,1];; InDualCone(v,L);
+
+L:=[[1,0,0],[1,1,0],[1,1,1],[1,0,1]];; v:=[0,0,1];;
+InsideCone(v,L);
+L:=[[1,0],[3,4]];; v:=[1,-7];; InsideCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-3];; InsideCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-4];; InsideCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-2];; InsideCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,-1];; InsideCone(v,L);
+L:=[[1,0],[3,4]];; v:=[4,1];; InsideCone(v,L);
+
+
+L:=[[1,0],[3,4]];; DualSemigroupGenerators(L);
+L:=[[1,0,0],[1,1,0],[1,1,1],[1,0,1]];;
+DualSemigroupGenerators(L);
+
+Perps:=[[1,0],[-1,0],[0,1],[0,-1]];
+A:=[0,4,0,3];
+PolytopeLatticePoints(A,Perps);
+
+Cones1:=[[[2,-1],[-1,2]],[[-1,2],[-1,-1]],[[-1,-1],[2,-1]]];
+Faces(Cones1[1]); 
+Faces(Cones1[2]); 
+Cones2:=[ [ [2,0,0],[0,2,0],[0,0,2] ], [[2,0,0],[0,2,0],[2,-2,1],[1,2,-2]]];
+Faces(Cones2[1]); 
+Faces(Cones2[2]); 
+
+J:=IdealAffineToricVariety([[1,0],[3,4]]);
+GeneratorsOfIdeal(J);
+
+phi:=EmbeddingAffineToricVariety([[1,0],[3,4]]);
+L:=[[1,0,0],[1,1,0],[1,1,1],[1,0,1]];;
+phi:=EmbeddingAffineToricVariety(L);
+
+MaxCones:=[[[2,0,0],[0,2,0],[0,0,2]],[[2,0,0],[0,2,0],[2,-2,1],[1,2,-2]]];;
+#this is the set of maximal cones in the fan Delta
+ToricStar([[1,0]],MaxCones);
+ToricStar([[2,0,0],[0,2,0]],MaxCones);
+MaxCones:=[ [ [2,0,0],[0,2,0],[0,0,2] ], [ [2,0,0],[0,2,0],[1,1,-2] ] ];;
+ToricStar([[2,0,0],[0,2,0]],MaxCones);
+ToricStar([[1,0]],MaxCones);
+
+DivisorPolytope([6,6,0],[[2,-1],[-1,2],[-1,-1]]);
+
+
+Div:=[6,6,0];; Rays:=[[2,-1],[-1,2],[-1,-1]];;
+Cones:=[[[2,-1],[-1,2]],[[-1,2],[-1,-1]],[[-1,-1],[2,-1]]];;
+P_Div:=DivisorPolytopeLatticePoints(Div,Cones,Rays);
+
+RiemannRochBasis(Div,Cones,Rays);
+
+
+Cones:=[[[2,-1],[-1,2]],[[-1,2],[-1,-1]],[[-1,-1],[2,-1]]];;
+BettiNumberToric(Cones,1);
+BettiNumberToric(Cones,2);
+
+EulerCharacteristic(Cones);
+
+CardinalityOfToricVariety(Cones,3);
+CardinalityOfToricVariety(Cones,4);
+CardinalityOfToricVariety(Cones,5);
+CardinalityOfToricVariety(Cones,7);

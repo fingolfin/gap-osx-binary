@@ -1,0 +1,175 @@
+  
+  [1X2 The General Factorization Routine[0X
+  
+  
+  [1X2.1 The method for [10XFactors[1X[0X
+  
+  The  [5XFactInt[0m  package provides a better method for the operation [10XFactors[0m for
+  integer arguments, which supersedes the one included in the [5XGAP[0m Library:
+  
+  [1X2.1-1 Factors[0m
+  
+  [2X> Factors( [0X[3Xn[0X[2X ) _______________________________________________________[0Xmethod
+  [6XReturns:[0X  A sorted list of the prime factors of [3Xn[0m.
+  
+  The  returned  factors pass the built-in probabilistic primality test of [5XGAP[0m
+  ([10XIsProbablyPrimeInt[0m,  Baillie-PSW  Primality  Test;  see  the  [5XGAP[0m Reference
+  Manual).  If  the  method  fails to compute the prime factorization of [3Xn[0m, an
+  error  is  signalled.  The  same  holds for all other factorization routines
+  provided   by   this  package.  It  follows  a  rough  description  how  the
+  factorization method works:
+  
+  First of all, the method checks whether n = b^k pm 1 for some b, k and looks
+  for factors corresponding to polynomial factors of x^k pm 1. Provided that b
+  and  k  are  not too large, the factors that do not correspond to polynomial
+  factors  are  taken  from Richard P. Brent's Factor Tables [Bre04]. The code
+  for accessing these tables has been contributed by Frank Lübeck.
+  
+  Then  the  method  uses  trial  division  and  a number of cheap methods for
+  various  common special cases. After the small and other "easy" factors have
+  been  found  this  way, [5XFactInt[0m's method searches for "medium-sized" factors
+  using  Pollard's  Rho  (by  the  library  function  [10XFactorsRho[0m,  see the [5XGAP[0m
+  Reference Manual), Pollard's p-1 (see [2XFactorsPminus1[0m ([14X3.2-1[0m)), Williams' p+1
+  (see [2XFactorsPplus1[0m   ([14X3.3-1[0m))   and   the   Elliptic   Curves  Method  (ECM,
+  see [2XFactorsECM[0m ([14X3.4-1[0m)) in this order.
+  
+  If  there  is  still an unfactored part remaining after that, it is factored
+  using   the  Multiple  Polynomial  Quadratic  Sieve  (MPQS,  see [2XFactorsMPQS[0m
+  ([14X3.6-1[0m)).
+  
+  The following options are interpreted:
+  
+  [8X[3XTDHints[0m[8X[0m
+        A  list  of  additional trial divisors. This is useful only if certain
+        primes p  are  expected  to  divide  n  with probability significantly
+        larger than frac1p.
+  
+  [8X[3XRhoSteps[0m[8X[0m
+        The number of steps for Pollard's Rho.
+  
+  [8X[3XRhoCluster[0m[8X[0m
+        The number of steps between two gcd computations in Pollard's Rho.
+  
+  [8X[3XPminus1Limit1[0m[8X / [3XPminus1Limit2[0m[8X[0m
+        The  first- / second stage limit for Pollard's p-1 (see [2XFactorsPminus1[0m
+        ([14X3.2-1[0m)).
+  
+  [8X[3XPplus1Residues[0m[8X[0m
+        The number of residues to be tried by Williams' p+1 (see [2XFactorsPplus1[0m
+        ([14X3.3-1[0m)).
+  
+  [8X[3XPplus1Limit1[0m[8X / [3XPplus1Limit2[0m[8X[0m
+        The  first-  / second stage limit for Williams' p+1 (see [2XFactorsPplus1[0m
+        ([14X3.3-1[0m)).
+  
+  [8X[3XECMCurves[0m[8X[0m
+        The  number  of  elliptic  curves  to  be tried by the Elliptic Curves
+        Method  (ECM)  (see [2XFactorsECM[0m  ([14X3.4-1[0m)).  Also admissible: a function
+        that  takes the number n to be factored as an argument and returns the
+        desired number of curves to be tried.
+  
+  [8X[3XECMLimit1[0m[8X / [3XECMLimit2[0m[8X[0m
+        The  initial  first-  /  second  stage  limit  for ECM (see [2XFactorsECM[0m
+        ([14X3.4-1[0m)).
+  
+  [8X[3XECMDelta[0m[8X[0m
+        The  increment  per curve for the first stage limit in ECM. The second
+        stage limit is adjusted appropriately (see [2XFactorsECM[0m ([14X3.4-1[0m)).
+  
+  [8X[3XECMDeterministic[0m[8X[0m
+        If  true,  ECM  chooses  its curves deterministically, i.e. repeatable
+        (see [2XFactorsECM[0m ([14X3.4-1[0m)).
+  
+  [8X[3XFBMethod[0m[8X[0m
+        Specifies  which  of  the factor base methods should be used to do the
+        "hard    work".    Currently    implemented:    [10X"CFRAC"[0m   and   [10X"MPQS"[0m
+        (see [2XFactorsCFRAC[0m   ([14X3.5-1[0m)  and [2XFactorsMPQS[0m  ([14X3.6-1[0m),  respectively).
+        Default: [10X"MPQS"[0m.
+  
+  For  the  use of the [5XGAP[0m Options Stack, see Chapter [13XOptions Stack[0m in the [5XGAP[0m
+  Reference Manual.
+  
+  Setting  [3XRhoSteps[0m, [3XPminus1Limit1[0m, [3XPplus1Residues[0m, [3XPplus1Limit1[0m, [3XECMCurves[0m or
+  [3XECMLimit1[0m  equal  to  zero  switches  the  respective method off. The method
+  chooses  defaults  for  all option values that are not explicitly set by the
+  user.  The  option  values  are  also  interpreted  by  the routines for the
+  particular factorization methods described in the next chapter.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4X[0X
+    [4Xgap> Factors( Factorial(44) + 1 );[0X
+    [4X[ 694763, 9245226412016162109253, 413852053257739876455072359 ][0X
+    [4Xgap> Factors( 2^997 - 1 );[0X
+    [4X[ 167560816514084819488737767976263150405095191554732902607, [0X
+    [4X  79934306053602222928609369601238840619880168466272137576868879760059\[0X
+    [4X3002563860297371289151859287894468775962208410650878341385577817736702\[0X
+    [4X2158878920741413700868182301410439178049533828082651513160945607018874\[0X
+    [4X830040978453228378816647358334681553 ][0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  above  method  for  [10XFactors[0m  calls the following function, which is the
+  actual "working horse" of this package:
+  
+  [1X2.1-2 FactInt[0m
+  
+  [2X> FactInt( [0X[3Xn[0X[2X ) _____________________________________________________[0Xfunction
+  [6XReturns:[0X  A  list of two lists, where the first list contains the determined
+            prime  factors  of [3Xn[0m  and  the  second list contains the remaining
+            unfactored parts of [3Xn[0m, if there are any.
+  
+  This function interprets all options which are interpreted by the method for
+  [10XFactors[0m  described  above.  In addition, it interprets the options [3Xcheap[0m and
+  [3XFactIntPartial[0m. If the option [3Xcheap[0m is set, only usually cheap factorization
+  attempts  are  made.  If the option [3XFactIntPartial[0m is set, the factorization
+  process  is  stopped  before  invoking  the (usually time-consuming) MPQS or
+  CFRAC,  if the number of digits of the remaining unfactored part exceeds the
+  bound passed as option value [3XMPQSLimit[0m or [3XCFRACLimit[0m, respectively.
+  
+  [10XFactors([3Xn[0m[10X)[0m        is       equivalent       to       [10XFactInt([3Xn[0m[10X:[3Xcheap[0m[10X:=false,
+  [3XFactIntPartial[0m[10X:=false)[1][0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4X[0X
+    [4Xgap> FactInt( Factorial(300) + 1 : cheap );[0X
+    [4X[ [ 461, 259856122109, 995121825812791, 3909669044842609, [0X
+    [4X      4220826953750952739, 14841043839896940772689086214475144339 ], [0X
+    [4X  [ 104831288231765723173983836560438594053336296629073932563520618687\[0X
+    [4X9287645058010688827246061541065631119345674081834085960064144597037243\[0X
+    [4X9235869682208979384309498719255615067943353399357029226058930732298505\[0X
+    [4X5816977495398426741656633461747046623641451042655247093315505417820370\[0X
+    [4X9451745871701742000546384614472756584182478531880962594857275869690727\[0X
+    [4X9733563594352516014206081210368516157890709802912711149521530885498556\[0X
+    [4X1244667790208245620301404499928532222524585946881528337257061789593197\[0X
+    [4X99211283640357942345263781351 ] ][0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X2.2 Getting information about the factoring process[0X
+  
+  Optionally,  the  [5XFactInt[0m  package prints information on the progress of the
+  factorization process:
+  
+  [1X2.2-1 InfoFactInt[0m
+  
+  [2X> InfoFactInt_____________________________________________________[0Xinfo class
+  [2X> FactIntInfo( [0X[3Xlevel[0X[2X ) _____________________________________________[0Xfunction
+  
+  This Info class allows to monitor what happens during the factoring process.
+  
+  If  [10XInfoLevel(InfoFactInt)  =  1[0m, then basic information about the factoring
+  techniques   used   is  displayed.  If  this  InfoLevel  has  value 2,  then
+  additionally all "relevant" steps in the factoring algorithms are mentioned.
+  If  it  is  set equal to 3, then large amounts of details of the progress of
+  the factoring process are shown.
+  
+  Enter [10XFactIntInfo([3Xlevel[0m[10X)[0m to set the [10XInfoLevel[0m of [10XInfoFactInt[0m to the positive
+  integer    [3Xlevel[0m.    The   call   [10XFactIntInfo([3Xlevel[0m[10X);[0m   is   equivalent   to
+  [10XSetInfoLevel(InfoFactInt,[3Xlevel[0m[10X);[0m.
+  
+  The  informational  output  is  usually  not  literally  the  same  in  each
+  factorization  attempt  to  a  given  integer  with  given parameters. For a
+  description  of  the  Info  mechanism, see Section [13XInfo Functions[0m in the [5XGAP[0m
+  Reference Manual.
+  

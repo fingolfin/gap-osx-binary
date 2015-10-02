@@ -1,0 +1,664 @@
+  
+  [1X5 [33X[0;0YBrowsing Tables in [5XGAP[105X[101X[1X using [10Xncurses[110X[101X[1X –The Programming Interface[133X[101X
+  
+  [33X[0;0YThis  chapter  describes  some  aspects of the internals of the browse table
+  handling.  The  relevant  objects  are  [13Xaction  functions[113X that implement the
+  individual  navigation steps (see Section [14X5.1[114X), [13Xmodes[113X that describe the sets
+  of  available  navigation  steps  in given situations (see Section [14X5.2[114X), and
+  [13Xbrowse  applications[113X that are given by the combination of several modes (see
+  Section [14X5.3[114X).  Most  of  the  related  data is stored in the global variable
+  [2XBrowseData[102X  ([14X5.4-1[114X).  For more details, one should look directly at the code
+  in the file [11Xlib/browse.gi[111X of the [5XBrowse[105X package.[133X
+  
+  
+  [1X5.1 [33X[0;0YNavigation Steps in Browse Tables[133X[101X
+  
+  [33X[0;0YNavigating  in  a  browse  table  means  that  after entering visual mode by
+  calling [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X), the user hits one or several keys, or
+  uses  a  mouse  button,  and  if  this input is in a given set of admissible
+  inputs  then  a  corresponding function is executed with argument the browse
+  table  (plus  additional  information  in  the  case  of  mouse events). The
+  function  call  then  may  change  components  in  this  table (recommended:
+  components in its [10Xdynamic[110X component), such that the appearance in the window
+  may  be  different  afterwards,  and  also  the  admissible inputs and their
+  effects may have changed.[133X
+  
+  [33X[0;0YThe  relation  between the admissible inputs and the corresponding functions
+  is  application  dependent. However, it is recommended to associate the same
+  input  to  the same function in different situations; for example, the [12X?[112X key
+  and  the  [12XF1[112X  key  should belong to a function that shows a help window (see
+  Section  [14X5.4-4[114X),  the [12Xq[112X key and the [12XEsc[112X key should belong to a function that
+  exits  the  current  mode  (Note that the [12XEsc[112X key may be recognized as input
+  only  after  a  delay  of  about  a  second.),  the [12XQ[112X key should belong to a
+  function  that  exits the browse application (see Section [14X5.4-6[114X), the [12XF2[112X key
+  should  belong  to  a  function  that saves the current window contents in a
+  global  variable  (see  Section  [14X5.4-5[114X),  and  the  [12XE[112X key should belong to a
+  function  that enters a break loop (see Section [14X5.4-7[114X). The [12XEnter[112X and [12XReturn[112X
+  keys  should  belong to a [21Xclick[121X on a selected table entry, and if a category
+  row  is  selected  then they should expand/collapse this category. The [12XM[112X key
+  should toggle enabling and disabling mouse events. Mouse events on a cell or
+  on  a  category row of a browse table should move the selected entry to this
+  position; it is recommended that no functionality is lost if no mouse events
+  are  used,  although  the number of steps might be reduced when the mouse is
+  used.[133X
+  
+  [33X[0;0YEach  such function is wrapped into a record with the components [10Xaction[110X (the
+  function  itself)  and  [10Xhelplines[110X  (a list of attribute lines that describes
+  what  the  function  does).  The  help lines are used by the help feature of
+  [10XNCurses.BrowseGeneric[110X, see Section [14X5.4-4[114X.[133X
+  
+  [33X[0;0YThe  action  functions  need  not return anything. Whenever the shown screen
+  shall  be  recomputed after the function call, the component [10Xdynamic.changed[110X
+  of the browse table must be set to [9Xtrue[109X by the action functions.[133X
+  
+  [33X[0;0YAfter  entering the first characters of an admissible input that consists of
+  more  characters,  the  last  line of the window with the browse table shows
+  these  characters  behind the prefix [21Xpartial input:[121X. One can delete the last
+  entered  character  of a partial input via the [12XDelete[112X and [12XBackspace[112X keys. It
+  is  not  possible  to  make  these  keys part of an admissible input. When a
+  partial  input  is  given, only those user inputs have an effect that extend
+  the  partial input to (a prefix of) an admissible input. For example, asking
+  for  help  by  hitting the [12X?[112X key will in general not work if a partial input
+  had been entered before.[133X
+  
+  
+  [1X5.2 [33X[0;0YModes in Browse Tables[133X[101X
+  
+  [33X[0;0YIn  different  situations,  different  inputs may be admissible for the same
+  browse  table,  and  different  functions  may belong to the same input. For
+  example,  the meaning of [21Xmoving down[121X can be different depending on whether a
+  cell is selected or not.[133X
+  
+  [33X[0;0YThe  set  of  admissible  user  inputs  and  corresponding  functions  for a
+  particular  situation  is  collected  in  a [13Xmode[113X of the browse table. (There
+  should  be  no  danger  to  mix  up this notion of mode with the [21Xvisual mode[121X
+  introduced  in  Section [14X1.1[114X.)  A  mode  is  represented by a record with the
+  components  [10Xname[110X (a string used to associate the mode with the components of
+  [10Xheader[110X, [10XheaderLength[110X, [10Xfooter[110X, [10XfooterLength[110X, [10XClick[110X, and for the help screen),
+  [10Xflag[110X  (a  string that describes properties of the mode but that can be equal
+  for  different  modes), [10Xactions[110X (a list of records describing the navigation
+  steps that are admissible in the mode, see Section [14X5.1[114X), and [10XShowTables[110X (the
+  function  used  to eventually print the current window contents, the default
+  is  [10XBrowseData.ShowTables[110X). Due to the requirement that each admissible user
+  input uniquely determines a corresponding function, no admissible user input
+  can be a prefix of another admissible input, for the same mode.[133X
+  
+  [33X[0;0YNavigation  steps  (see Section [14X5.1[114X) can change the current mode or keep the
+  mode.  It  is  recommended  that each mode has an action to leave this mode;
+  also an action to leave the browse table application is advisable.[133X
+  
+  [33X[0;0YIn  a  browse  table,  all  available  modes  are  stored  in  the component
+  [10Xwork.availableModes[110X, whose value is a list of mode records. The value of the
+  component  [10Xdynamic.activeModes[110X  is  a list of mode records that is used as a
+  stack: The [13Xcurrent mode[113X is the last entry in this list, changing the current
+  mode  is  achieved  by  unbinding the last entry (so one returns to the mode
+  from  which  the current mode had been entered by adding it to the list), by
+  adding  a  new mode record (so one can later return to the current mode), or
+  by  replacing  the  last  entry  by  another  mode  record.  As  soon as the
+  [10Xdynamic.activeModes[110X  list  becomes  empty,  the  browse table application is
+  left.  (In this situation, if the browse table had been entered from the [5XGAP[105X
+  prompt then visual mode is left, and one returns to the [5XGAP[105X prompt.)[133X
+  
+  [33X[0;0YThe  following  modes  are  predefined  by the [5XBrowse[105X package. Each of these
+  modes  admits  the user inputs [12X?[112X, [12XF1[112X, [12Xq[112X, [12XEsc[112X, [12XQ[112X, [12XF2[112X, [12XE[112X, and [12XM[112X that have been
+  mentioned in Section [14X5.1[114X.[133X
+  
+  [8Xbrowse[108X
+        [33X[0;6YThis  mode  admits  scrolling  of  the  browse table by a cell or by a
+        screen,  searching  for  a  string,  selecting  a row, a column, or an
+        entry, and expanding or collapsing all category rows.[133X
+  
+  [8Xhelp[108X
+        [33X[0;6YThis  mode  is entered by calling [10XBrowseData.ShowHelpTable[110X; it shows a
+        help  window  concerning  the actions available in the mode from which
+        the  [10Xhelp[110X mode was entered. The [10Xhelp[110X mode admits scrolling in the help
+        table by a cell or by a screen. See Section [14X5.4-4[114X for details.[133X
+  
+  [8Xselect_entry[108X
+        [33X[0;6YIn  this  mode,  one  table cell is regarded as selected; this cell is
+        highlighted using the attribute in the component [10Xwork.startSelect[110X as a
+        prefix  of  each  attribute line, see the remark in Section [14X2.2-3[114X. The
+        mode  admits  moving the selection by one cell in the four directions,
+        searching  for  a  string  and for further occurrences of this string,
+        expanding or collapsing the current category row or all category rows,
+        and  executing  the  [21Xclick[121X  function  of  this mode, provided that the
+        component [10Xwork.Click.( "select_entry" )[110X of the browse table is bound.[133X
+  
+  [8Xselect_row[108X
+        [33X[0;6YThis  is  like  the  [10Xselect_entry[110X mode, except that a whole row of the
+        browse  table  is highlighted. Searching is restricted to the selected
+        row, and [21Xclick[121X refers to the function [10Xwork.Click.( "select_row" )[110X.[133X
+  
+  [8Xselect_row_and_entry[108X
+        [33X[0;6YThis  is  a  combination  of  the [10Xselect_entry[110X mode and the [10Xselect_row[110X
+        mode.[133X
+  
+  [8Xselect_column[108X
+        [33X[0;6YThis is like the [10Xselect_row[110X mode, just a column is selected not a row.[133X
+  
+  [8Xselect_column_and_entry[108X
+        [33X[0;6YThis  is like the [10Xselect_row_and_entry[110X mode, just a column is selected
+        not a row.[133X
+  
+  
+  [1X5.3 [33X[0;0YBrowse Applications[133X[101X
+  
+  [33X[0;0YThe  data in a browse table together with the set of its available modes and
+  the  stack of active modes forms a browse application. So the part of or all
+  functionality of the [5XBrowse[105X package can be available ([21Xstandard application[121X),
+  or  additional functionality can be provided by extending available modes or
+  adding new modes.[133X
+  
+  [33X[0;0YWhen  [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) has been called with the browse table [3Xt[103X,
+  say, the following loop is executed.[133X
+  
+  [31X1[131X   [33X[0;6YIf the list [3Xt[103X[10X.dynamic.activeModes[110X is empty then exit the browse table,
+        and  if the component [3Xt[103X[10X.dynamic.Return[110X is bound then return its value.
+        Otherwise proceed with step 2.[133X
+  
+  [31X2[131X   [33X[0;6YIf  [3Xt[103X[10X.dynamic.changed[110X is [9Xtrue[109X then call the [10XShowTables[110X function of the
+        current mode; this causes a redraw of the window that shows the browse
+        table. Then go to step 3.[133X
+  
+  [31X3[131X   [33X[0;6YGet one character of user input. If then the current user input string
+        is  the  name  of  an  action  of  the  current  mode  then  call  the
+        corresponding  action  function  and go to step 1; if the current user
+        input  string  is  just  a  prefix  of the name of some actions of the
+        current  mode  then  go to step 3; if the current user input string is
+        not a prefix of any name of an action of the current mode then discard
+        the last read character and go to step 3.[133X
+  
+  [33X[0;0YWhen  one  designs  a  new  application,  it may be not obvious whether some
+  functionality  shall  be implemented via one mode or via several modes. As a
+  rule  of  thumb,  introducing a new mode is recommended when one needs a new
+  set  of  admissible  actions  in a given situation, and also if one wants to
+  allow  the  user  to perform some actions and then to return to the previous
+  status.[133X
+  
+  
+  [1X5.4 [33X[0;0YPredefined Browse Functionalities[133X[101X
+  
+  [1X5.4-1 BrowseData[101X
+  
+  [29X[2XBrowseData[102X[32X global variable
+  
+  [33X[0;0YThis  is  the  record  that  contains  the  global data used by the function
+  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X).  The  components  are [10Xactions[110X, [10Xdefaults[110X, and
+  several capitalized names for which the values are functions.[133X
+  
+  [33X[0;0Y[10XBrowseData.actions[110X  is  a  record  containing  the  action  records that are
+  provided by the package, see Section [14X5.1[114X. These actions are used in standard
+  applications of [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X). Of course there is no problem
+  with using actions that are not stored in [10XBrowseData.actions[110X.[133X
+  
+  [33X[0;0Y[10XBrowseData.defaults[110X  is  a  record that contains the defaults for the browse
+  table used as the first argument of [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X). Important
+  components  have been described above, see [2XBrowseData.IsBrowseTable[102X ([14X4.2-3[114X),
+  in the sense that these components provide default values of [10Xwork[110X components
+  in browse tables. Here is a list of further interesting components.[133X
+  
+  [33X[0;0YThe following components are provided in [10XBrowseData.defaults.work[110X.[133X
+  
+  [8X[10XwindowParameters[110X[108X
+        [33X[0;6Yis  a  list  of  four  nonnegative integers, denoting the arguments of
+        [10XNCurses.newwin[110X  for  the  window  in  which  the browse table shall be
+        shown. The default is [10X[ 0, 0, 0, 0 ][110X, i. e., the window for the browse
+        table is the full screen.[133X
+  
+  [8X[10Xminyx[110X[108X
+        [33X[0;6Yis  a  list  of  length  two,  the  entries must be either nonnegative
+        integers,  denoting  the  minimal  number of rows and columns that are
+        required  by  the  browse  table, or unary functions that return these
+        values  when they are applied to the browse table; this is interesting
+        for  applications  that  do not support scrolling, or for applications
+        that may have large row or column labels tables. The default is a list
+        with  two functions, the return value of the first function is the sum
+        of the heights of the table header, the column labels table, the first
+        table  row,  and  the table footer, and the return value of the second
+        function is the sum of widths of the row labels table and the width of
+        the  first  column.  (If the header/footer is given by a function then
+        this part of the table is ignored in the [10Xminyx[110X default.) Note that the
+        conditions  are  checked  only  when  [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+        called, not after later changes of the screen size in a running browse
+        table application.[133X
+  
+  [8X[10Xalign[110X[108X
+        [33X[0;6Yis  a substring of [10X"bclt"[110X, which describes the alignment of the browse
+        table  in  the window. The meaning and the default are the same as for
+        [2XBrowseData.IsBrowseTableCellData[102X  ([14X4.2-1[114X). (Of course this is relevant
+        only if the table is smaller than the window.)[133X
+  
+  [8X[10XheaderLength[110X[108X
+        [33X[0;6Ydescribes  the  lengths  of  the headers in the modes for which [10Xheader[110X
+        functions  are  provided.  The value is a record whose component names
+        are  names  of  modes and the corresponding components are nonnegative
+        integers. This component is ignored if the [10Xheader[110X component is unbound
+        or  bound  to  a  list,  missing  values  are computed by calls to the
+        corresponding [10Xheader[110X function as soon as they are needed.[133X
+  
+  [8X[10XfooterLength[110X[108X
+        [33X[0;6Ycorresponds to [10Xfooter[110X in the same way as [10XheaderLength[110X to [10Xheader[110X.[133X
+  
+  [8X[10XMain[110X[108X
+        [33X[0;6Yif  bound  to  a  function  then  this function can be used to compute
+        missing  values  for  the  component  [10Xmain[110X;  this  way  one  can avoid
+        computing/storing  all [10Xmain[110X values at the same time. The access to the
+        entries   of   the   main   matrix   is   defined   as   follows:   If
+        [10XmainFormatted[i][j][110X is bound then take it, if [10Xmain[i][j][110X is bound then
+        take  it and compute the formatted version, if [10XMain[110X is a function then
+        call  it  with  arguments  the browse table, [10Xi[110X, and [10Xj[110X, and compute the
+        formatted   version,   otherwise  compute  the  formatted  version  of
+        [10Xwork.emptyCell[110X.  (For  the  condition whether entries in [10XmainFormatted[110X
+        can   be  bound,  see  below  in  the  description  of  the  component
+        [10XcacheEntries[110X.)[133X
+  
+  [8X[10XcacheEntries[110X[108X
+        [33X[0;6Ydescribes  whether  formatted  values  of  the entries in the matrices
+        given by the components [10Xcorner[110X, [10XlabelsCol[110X, [10XlabelsRow[110X, [10Xmain[110X, and of the
+        corresponding  row  and  column  separators  shall  be  stored  in the
+        components  [10XcornerFormatted[110X,  [10XlabelsColFormatted[110X,  [10XlabelsRowFormatted[110X,
+        and  [10XmainFormatted[110X. The value must be a Boolean, the default is [9Xfalse[109X;
+        it should be set to [9Xtrue[109X only if the tables are reasonably small.[133X
+  
+  [8X[10XcornerFormatted[110X[108X
+        [33X[0;6Yis  a  list  of lists of formatted entries corresponding to the [10Xcorner[110X
+        component.  Each  entry  is  either  an  attribute  line  or a list of
+        attribute  lines  (with  the same number of displayed characters), the
+        values    can    be    computed    from    the   input   format   with
+        [10XBrowseData.FormattedEntry[110X.  The  entries  are stored in this component
+        only  if the component [10XcacheEntries[110X has the value [9Xtrue[109X. The default is
+        an empty list.[133X
+  
+  [8X[10XlabelsColFormatted[110X[108X
+        [33X[0;6Ycorresponds to [10XlabelsCol[110X in the same way as [10XcornerFormatted[110X to [10Xcorner[110X.[133X
+  
+  [8X[10XlabelsRowFormatted[110X[108X
+        [33X[0;6Ycorresponds to [10XlabelsRow[110X in the same way as [10XcornerFormatted[110X to [10Xcorner[110X.[133X
+  
+  [8X[10XmainFormatted[110X[108X
+        [33X[0;6Ycorresponds to [10Xmain[110X in the same way as [10XcornerFormatted[110X to [10Xcorner[110X.[133X
+  
+  [8X[10Xm0[110X[108X
+        [33X[0;6Yis  the  maximal  number  of  rows in the column labels table. If this
+        value  is not bound then it is computed from the components [10Xcorner[110X and
+        [10XlabelsCol[110X.[133X
+  
+  [8X[10Xn0[110X[108X
+        [33X[0;6Yis the maximal number of columns in [10Xcorner[110X and [10XlabelsRow[110X.[133X
+  
+  [8X[10Xm[110X[108X
+        [33X[0;6Yis  the  maximal number of rows in [10XlabelsRow[110X and [10Xmain[110X. This value [13Xmust[113X
+        be  set  in  advance  if  the values of [10Xmain[110X are computed using a [10XMain[110X
+        function,  and  if  the  number of rows in [10Xmain[110X is larger than that in
+        [10XlabelsRow[110X.[133X
+  
+  [8X[10Xn[110X[108X
+        [33X[0;6Yis  the  maximal  number  of columns in [10XlabelsCol[110X and [10Xmain[110X. This value
+        [13Xmust[113X be set in advance if the values of [10Xmain[110X are computed using a [10XMain[110X
+        function,  and if the number of columns in [10Xmain[110X is larger than that in
+        [10XlabelsCol[110X.[133X
+  
+  [8X[10XheightLabelsCol[110X[108X
+        [33X[0;6Yis  a list of [22X2[122X [10Xm0[110X[22X+ 1[122X nonnegative integers, the entry at position [22Xi[122X is
+        the  maximal  height of the entries in the [22Xi[122X-th row of [10XcornerFormatted[110X
+        and  [10XlabelsColFormatted[110X.  Values  that  are  not bound are computed on
+        demand     from    the    table    entries,    with    the    function
+        [10XBrowseData.HeightLabelsCol[110X.  (So  if  one  knows the needed heights in
+        advance,  it  is  advisable  to set the values, in order to avoid that
+        formatted  table  entries are computed just for computing their size.)
+        The default is an empty list.[133X
+  
+  [8X[10XwidthLabelsRow[110X[108X
+        [33X[0;6Yis  the  corresponding  list  of  [22X2[122X [10Xn0[110X[22X+ 1[122X maximal widths of entries in
+        [10XcornerFormatted[110X and [10XlabelsRowFormatted[110X.[133X
+  
+  [8X[10XheightRow[110X[108X
+        [33X[0;6Yis  the  corresponding  list  of  [22X2[122X [10Xm[110X[22X+ 1[122X maximal heights of entries in
+        [10XlabelsRowFormatted[110X and [10XmainFormatted[110X.[133X
+  
+  [8X[10XwidthCol[110X[108X
+        [33X[0;6Yis  the  corresponding  list  of  [22X2[122X  [10Xn[110X[22X+ 1[122X maximal widths of entries in
+        [10XlabelsColFormatted[110X and [10XmainFormatted[110X.[133X
+  
+  [8X[10XemptyCell[110X[108X
+        [33X[0;6Yis  a  table  cell  data  object to be used as the default for unbound
+        positions in the four matrices. The default is the empty list.[133X
+  
+  [8X[10XsepCategories[110X[108X
+        [33X[0;6Yis  an  attribute  line  to  be  used  repeatedly as a separator below
+        expanded category rows. The default is the string [10X"-"[110X.[133X
+  
+  [8X[10XstartCollapsedCategory[110X[108X
+        [33X[0;6Yis  a  list  of attribute lines to be used as prefixes of unhidden but
+        collapsed  category rows. For category rows of level [22Xi[122X, the last bound
+        entry  before  the [22X(i+1)[122X-th position is used. The default is a list of
+        length  one,  the entry is the boldface variant of the string [10X"> "[110X, so
+        collapsed category rows on different levels are treated equally.[133X
+  
+  [8X[10XstartExpandedCategory[110X[108X
+        [33X[0;6Yis  a  list  of  attribute  lines  to  be used as prefixes of expanded
+        category rows, analogously to [10XstartCollapsedCategory[110X. The default is a
+        list of length one, the entry is the boldface variant of the string [10X"*
+        "[110X, so expanded category rows on different levels are treated equally.[133X
+  
+  [8X[10XstartSelect[110X[108X
+        [33X[0;6Yis  an  attribute  line  to be used as a prefix of each attribute line
+        that  belongs  to  a  selected  cell.  The  default  is  to switch the
+        attribute [10XNCurses.attrs.STANDOUT[110X on, see Section [14X2.1-7[114X.[133X
+  
+  [8X[10XClick[110X[108X
+        [33X[0;6Yis  a record whose component names are names of available modes of the
+        browse  table.  The  values  are  unary functions that take the browse
+        table  as  their  argument.  If  the  action [10XClick[110X is available in the
+        current  mode and the corresponding input is entered then the function
+        in the relevant component of the [10XClick[110X record is called.[133X
+  
+  [8X[10XavailableModes[110X[108X
+        [33X[0;6Yis a list whose entries are the mode records that can be used when one
+        navigates through the browse table, see Section [14X5.2[114X.[133X
+  
+  [8X[10XSpecialGrid[110X[108X
+        [33X[0;6Yis a function that takes a browse table and a record as its arguments.
+        It  is  called  by [10XBrowseData.ShowTables[110X after the current contents of
+        the window has been computed, and it is intended to draw an individual
+        grid  into  the  table  that  fits  better  than  anything that can be
+        specified  in  terms of row and column separators. (If other functions
+        than [10XBrowseData.ShowTables[110X are used in some modes of the browse table,
+        these functions must deal with this aspect themselves.) The default is
+        to do nothing.[133X
+  
+  [33X[0;0YThe following components are provided in [10XBrowseData.defaults.dynamic[110X.[133X
+  
+  [8X[10Xchanged[110X[108X
+        [33X[0;6Yis  a  Boolean that must be set to [9Xtrue[109X by action functions whenever a
+        refresh of the window is necessary; it is automatically reset to [9Xfalse[109X
+        after the refresh.[133X
+  
+  [8X[10XindexRow[110X[108X
+        [33X[0;6Yis  a  list of positive integers. The entry [22Xk[122X at position [22Xi[122X means that
+        the [22Xk[122X-th row in the [10XmainFormatted[110X table is shown as the [22Xi[122X-th row. Note
+        that  depending on the current status of the browse table, the rows of
+        [10XmainFormatted[110X  (and  of  [10Xmain[110X)  may be permuted, or it may even happen
+        that  a row in [10XmainFormatted[110X is shown several times, for example under
+        different category rows. It is assumed (as a [21Xsort convention[121X) that the
+        [13Xeven[113X  positions  in  [10XindexRow[110X  point  to  [13Xeven[113X  numbers,  and that the
+        subsequent  [13Xodd[113X  positions (corresponding to the following separators)
+        point  to  the subsequent [13Xodd[113X numbers. The default value is the list [22X[
+        1,  2,  ...,  m  ][122X,  where  [22Xm[122X  is  the number of rows in [10XmainFormatted[110X
+        (including the separator rows, so [22Xm[122X is always odd).[133X
+  
+  [8X[10XindexCol[110X[108X
+        [33X[0;6Yis the analogous list of positive integers that refers to columns.[133X
+  
+  [8X[10Xtopleft[110X[108X
+        [33X[0;6Yis  a  list  of  four  positive  integers denoting the current topleft
+        position  of  the  main table. The value [22X[ i, j, k, l ][122X means that the
+        topleft entry is indexed by the [22Xi[122X-th entry in [10XindexRow[110X, the [22Xj[122X-th entry
+        in [10XindexCol[110X, and the [22Xk[122X-th row and [22Xl[122X-th column inside the corresponding
+        cell. The default is [22X[ 1, 1, 1, 1 ][122X.[133X
+  
+  [8X[10XisCollapsedRow[110X[108X
+        [33X[0;6Yis  a  list  of Booleans, of the same length as the [10XindexRow[110X value. If
+        the  entry  at  position  [22Xi[122X is [9Xtrue[109X then the [22Xi[122X-th row is currently not
+        shown  because  it  belongs to a collapsed category row. It is assumed
+        (as  a [21Xhide convention[121X) that the value at any even position equals the
+        value  at the subsequent odd position. The default is that all entries
+        are [9Xfalse[109X.[133X
+  
+  [8X[10XisCollapsedCol[110X[108X
+        [33X[0;6Yis the corresponding list for [10XindexCol[110X.[133X
+  
+  [8X[10XisRejectedRow[110X[108X
+        [33X[0;6Yis  a  list  of  Booleans. If the entry at position [22Xi[122X is [9Xtrue[109X then the
+        [22Xi[122X-th  row is currently not shown because it does not match the current
+        filtering  of  the table. Defaults, length, and hide convention are as
+        for [10XisCollapsedRow[110X.[133X
+  
+  [8X[10XisRejectedCol[110X[108X
+        [33X[0;6Yis the corresponding list for [10XindexCol[110X.[133X
+  
+  [8X[10XisRejectedLabelsRow[110X[108X
+        [33X[0;6Yis  a  list  of  Booleans. If the entry at position [22Xi[122X is [9Xtrue[109X then the
+        [22Xi[122X-th column of row labels is currently not shown.[133X
+  
+  [8X[10XisRejectedLabelsCol[110X[108X
+        [33X[0;6Yis the corresponding list for the column labels.[133X
+  
+  [8X[10XactiveModes[110X[108X
+        [33X[0;6Yis  a  list  of  mode records that are contained in the [10XavailableModes[110X
+        list  of  the  [10Xwork[110X component of the browse table. The current mode is
+        the  last  entry in this list. The default depends on the application,
+        [10XBrowseData.defaults[110X  prescribes the list containing only the mode with
+        [10Xname[110X component [10X"browse"[110X.[133X
+  
+  [8X[10XselectedEntry[110X[108X
+        [33X[0;6Yis  a  list  [22X[  i,  j  ][122X. If [22Xi = j = 0[122X then no table cell is selected,
+        otherwise  [22Xi[122X  and [22Xj[122X are the row and column index of the selected cell.
+        (Note that [22Xi[122X and [22Xj[122X are always even.) The default is [22X[ 0, 0 ][122X.[133X
+  
+  [8X[10XselectedCategory[110X[108X
+        [33X[0;6Yis  a  list  [22X[  i, l ][122X. If [22Xi = l = 0[122X then no category row is selected,
+        otherwise  [22Xi[122X  and  [22Xl[122X  are  the row index and the level of the selected
+        category row. (Note that [22Xi[122X is always even.) The default is [22X[ 0, 0 ][122X.[133X
+  
+  [8X[10XsearchString[110X[108X
+        [33X[0;6Yis  the  last string for which the user has searched in the table. The
+        default is the empty string.[133X
+  
+  [8X[10XsearchParameters[110X[108X
+        [33X[0;6Yis   a   list   of  parameters  that  are  modified  by  the  function
+        [10XBrowseData.SearchStringWithStartParameters[110X.    If   one   sets   these
+        parameters  in  a  search  then  these values hold also for subsequent
+        searches.  So  it  may  make sense to set the parameters to personally
+        preferred ones.[133X
+  
+  [8X[10XsortFunctionForColumnsDefault[110X[108X
+        [33X[0;6Yis  a  function  with two arguments used to compare two entries in the
+        same  column  of  the  main  table  (or  two category row values). The
+        default  is  the  operation  [10X\<[110X.  (Note  that  this default may be not
+        meaningful if some of the rows or columns contain strings representing
+        numbers.)[133X
+  
+  [8X[10XsortFunctionForRowsDefault[110X[108X
+        [33X[0;6Yis the analogous function for comparing two entries in the same row of
+        the main table.[133X
+  
+  [8X[10XsortFunctionsForRows[110X[108X
+        [33X[0;6Yis  a list of comparison functions, if the [22Xi[122X-th entry is bound then it
+        replaces the [10XsortFunctionForRowsDefault[110X value when the table is sorted
+        w.r.t. the [22Xi[122X-th row.[133X
+  
+  [8X[10XsortFunctionsForColumns[110X[108X
+        [33X[0;6Yis  the  analogous  list  of  functions for the case that the table is
+        sorted w.r.t. columns.[133X
+  
+  [8X[10XsortParametersForRowsDefault[110X[108X
+        [33X[0;6Yis  a  list of parameters for sorting the main table w.r.t. entries in
+        given rows, e. g., whether one wants to sort ascending or descending.[133X
+  
+  [8X[10XsortParametersForColumnsDefault[110X[108X
+        [33X[0;6Yis  the analogous list of parameters for sorting w.r.t. given columns.
+        In  addition  to  the  parameters for rows, also parameters concerning
+        category  rows are available, e. g., whether the data columns that are
+        transformed into category rows shall be hidden afterwards or not.[133X
+  
+  [8X[10XsortParametersForRows[110X[108X
+        [33X[0;6Yis  a list that contains ar position [22Xi[122X, if bound, a list of parameters
+        that  shall  replace  those  in  [10XsortParametersForRowsDefault[110X when the
+        table is sorted w.r.t. the [22Xi[122X-th row.[133X
+  
+  [8X[10XsortParametersForColumns[110X[108X
+        [33X[0;6Yis the analogous list of parameters lists for sorting w.r.t. columns.[133X
+  
+  [8X[10Xcategories[110X[108X
+        [33X[0;6Ydescribes  the  current category rows. The value is a list [22X[ l_1, l_2,
+        l_3  ][122X  where  [22Xl_1[122X is a [13Xsorted[113X list [22X[ i_1, i_2, ..., i_k ][122X of positive
+        integers,  [22Xl_2[122X  is a list of length [22Xk[122X where the [22Xj[122X-th entry is a record
+        with  the  components  [10Xpos[110X  (with  value [22Xi_j[122X), [10Xlevel[110X (the level of the
+        category  row),  [10Xvalue[110X (an attribute line to be shown), [10Xseparator[110X (the
+        separator  below  this  category  row is a repetition of this string),
+        [10XisUnderCollapsedCategory[110X ([9Xtrue[109X if the category row is hidden because a
+        category  row  of  an outer level is collapsed; note that in the [9Xfalse[109X
+        case,  the  category  row itself can be collapsed), [10XisRejectedCategory[110X
+        ([9Xtrue[109X  if  the  category  row  is hidden because none of th edata rows
+        below  this  category  match  the current filtering of the table); the
+        list [22Xl_3[122X contains the levels for which the category rows shall include
+        the  numbers of data rows under these category rows. The default value
+        is  [10X[ [], [], [] ][110X. (Note that this [21Xhide convention[121X makes sense mainly
+        if  together  with  a  hidden  category row, also the category rows on
+        higher  levels  and  the  corresponding data rows are hidden –but this
+        property  is  [13Xnot[113X  checked.)  Category  rows  are  computed  with  the
+        [10XCategoryValues[110X function in the [10Xwork[110X component of the browse table.[133X
+  
+  [8X[10Xlog[110X[108X
+        [33X[0;6Ydescribes  the  session log which is currently written. The value is a
+        list of positive integers, representing the user inputs in the current
+        session.  When  [5XGAP[105X  returns  from  a  call  to  [2XNCurses.BrowseGeneric[102X
+        ([14X4.3-1[114X),  one  can access the log list of the user interactions in the
+        browse table as the value of its component [10Xdynamic.log[110X.[133X
+  
+        [33X[0;6YIf    [10XBrowseData.logStore[110X    had    been    set    to    [9Xtrue[109X   before
+        [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X)  had been called then the list can also
+        be  accessed as the value of [10XBrowseData.log[110X. If [10XBrowseData.logStore[110X is
+        unbound  or has a value different from [9Xtrue[109X then [10XBrowseData.log[110X is not
+        written.  (This  can  be  interesting  in  the  case  of  browse table
+        applications  where  the  user does not get access to the browse table
+        itself.)[133X
+  
+  [8X[10Xreplay[110X[108X
+        [33X[0;6Ydescribes  the non-interactive input for the current browse table. The
+        value  is  a record with the components [10Xlogs[110X (a dense list of records,
+        the  default  is  an  empty list) and [10Xpointer[110X (a positive integer, the
+        default  is  [22X1[122X).  If  [10Xpointer[110X is a position in [10Xlogs[110X then currently the
+        [10Xpointer[110X-th  record  is  processed,  otherwise  the  browse  table  has
+        exhausted  its  non-interactive  part, and requires interactive input.
+        The  records  in [10Xlog[110X have the components [10Xsteps[110X (a list of user inputs,
+        the  default  is an empty list), [10Xposition[110X (a positive integer denoting
+        the  current  position  in  the  [10Xsteps[110X  list  if  the log is currently
+        processed,  the default is [22X1[122X), [10XreplayInterval[110X (the timeout between two
+        steps  in milliseconds if the log is processed, the default is [22X0[122X), and
+        [10Xquiet[110X  (a  Boolean, [9Xtrue[109X if the steps shall not be shown on the screen
+        until the end of the log is reached, the default is [9Xfalse[109X).[133X
+  
+  [1X5.4-2 BrowseData.SetReplay[101X
+  
+  [29X[2XBrowseData.SetReplay[102X( [3Xdata[103X ) [32X function
+  
+  [33X[0;0YThis      function      sets      and      resets      the      value     of
+  [10XBrowseData.defaults.dynamic.replay[110X.[133X
+  
+  [33X[0;0YWhen  [2XBrowseData.SetReplay[102X  is  called with a list [3Xdata[103X as its argument then
+  the entries are assumed to describe user inputs for a browse table for which
+  [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) will be called afterwards, such that replay of
+  the  inputs  runs.  (Valid  input  lists  can be obtained from the component
+  [10Xdynamic.log[110X of the browse table in question.)[133X
+  
+  [33X[0;0YWhen  [2XBrowseData.SetReplay[102X  is  called  with  the  only  argument [9Xfalse[109X, the
+  component   is   unbound   (so   replay  is  disabled,  and  thus  calls  to
+  [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) will require interactive user input).[133X
+  
+  [33X[0;0YThe  replay feature should be used by initially setting the input list, then
+  running  the  replay  (perhaps  several  times),  and  finally unbinding the
+  inputs,  such that subsequent uses of other browse tables do not erroneously
+  expect their input in [10XBrowseData.defaults.dynamic.replay[110X.[133X
+  
+  [33X[0;0YNote  that the value of [10XBrowseData.defaults.dynamic.replay[110X is used in a call
+  to  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X) only if the browse table in question does
+  not have a component [10Xdynamic.replay[110X before the call.[133X
+  
+  [1X5.4-3 BrowseData.AlertWithReplay[101X
+  
+  [29X[2XBrowseData.AlertWithReplay[102X( [3Xt[103X, [3Xmessages[103X[, [3Xattrs[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer representing a (simulated) user input.[133X
+  
+  [33X[0;0YThe  function  [2XBrowseData.AlertWithReplay[102X  is  a  variant  of  [2XNCurses.Alert[102X
+  ([14X3.1-1[114X)  that  is  adapted for the replay feature of the browse table [3Xt[103X, see
+  Section  [14X4.1[114X.  The  arguments  [3Xmessages[103X  and  [3Xattrs[103X  are  the  same  as  the
+  corresponding  arguments  of  [2XNCurses.Alert[102X ([14X3.1-1[114X), the argument [10Xtimeout[110X of
+  [2XNCurses.Alert[102X  ([14X3.1-1[114X)  is  taken  from  the  browse table [3Xt[103X, as follows. If
+  [10XBrowseData.IsDoneReplay[110X  returns  [9Xtrue[109X for [10Xt[110X then [10Xtimeout[110X is zero, so a user
+  input  is requested for closing the alert box; otherwise the requested input
+  character is fetched from [10Xt.dynamic.replay[110X.[133X
+  
+  [33X[0;0YIf  [10Xtimeout[110X  is  zero  and  mouse  events  are enabled (see [2XNCurses.UseMouse[102X
+  ([14X2.2-10[114X)) then the box can be moved inside the window via mouse events.[133X
+  
+  [33X[0;0YNo  alert box is shown if [10XBrowseData.IsQuietSession[110X returns [9Xtrue[109X when called
+  with  [3Xt[103X[10X.dynamic.replay[110X, otherwise the alert box is closed after the time (in
+  milliseconds) that is given by the [10XreplayInterval[110X value of the current entry
+  in [3Xt[103X[10X.dynamic.replay.logs[110X.[133X
+  
+  [33X[0;0YThe  function  returns  either the return value of the call to [2XNCurses.Alert[102X
+  ([14X3.1-1[114X)  (in  the  interactive  case) or the value that was fetched from the
+  current replay record (in the replay case).[133X
+  
+  [1X5.4-4 BrowseData.actions.ShowHelp[101X
+  
+  [29X[2XBrowseData.actions.ShowHelp[102X[32X global variable
+  
+  [33X[0;0YThere  are  two  predefined  ways  for showing an overview of the admissible
+  inputs and their meaning in the current mode of a browse table. The function
+  [10XBrowseData.ShowHelpTable[110X displays this overview in a browse table (using the
+  [10Xhelp[110X mode), and [10XBrowseData.ShowHelpPager[110X uses [10XNCurses.Pager[110X.[133X
+  
+  [33X[0;0YTechnically,  the  only  difference  between  these  two  functions  is that
+  [10XBrowseData.ShowHelpTable[110X      supports     the     replay     feature     of
+  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X), whereas [10XBrowseData.ShowHelpPager[110X simply does
+  not call the pager in replay situations.[133X
+  
+  [33X[0;0YThe  action  record  [10XBrowseData.actions.ShowHelp[110X is associated with the user
+  inputs  [12X?[112X  or [12XF1[112X in standard [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) applications, and
+  it  is  recommended  to  do  the same in other [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X)
+  applications.  This  action  calls  the  function  stored  in  the component
+  [10Xwork.ShowHelp[110X  of  the  browse  table,  the  default  (i. e.,  the  value of
+  [10XBrowseData.defaults.work.ShowHelp[110X) is [10XBrowseData.ShowHelpTable[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xxpl1.work.ShowHelp:= BrowseData.ShowHelpPager;;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( "?Q" );[127X[104X
+    [4X[25Xgap>[125X [27XUnbind( xpl1.dynamic );[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.BrowseGeneric( xpl1 );[127X[104X
+    [4X[25Xgap>[125X [27Xxpl1.work.ShowHelp:= BrowseData.ShowHelpTable;;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( "?dQQ" );[127X[104X
+    [4X[25Xgap>[125X [27XUnbind( xpl1.dynamic );[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.BrowseGeneric( xpl1 );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+    [4X[25Xgap>[125X [27XUnbind( xpl1.dynamic );[127X[104X
+  [4X[32X[104X
+  
+  [1X5.4-5 BrowseData.actions.SaveWindow[101X
+  
+  [29X[2XBrowseData.actions.SaveWindow[102X[32X global variable
+  
+  [33X[0;0YThe function [10XBrowseData.actions.SaveWindow.action[110X asks the user to enter the
+  name  of  a  global  [5XGAP[105X variable, using [2XNCurses.GetLineFromUser[102X ([14X3.1-3[114X). If
+  this  variable  name  is valid and if no value is bound to this variable yet
+  then the current contents of the window of the browse table that is given as
+  the argument is saved in this variable, using [2XNCurses.SaveWin[102X ([14X2.2-11[114X).[133X
+  
+  [1X5.4-6 BrowseData.actions.QuitMode[101X
+  
+  [29X[2XBrowseData.actions.QuitMode[102X[32X global variable
+  [29X[2XBrowseData.actions.QuitTable[102X[32X global variable
+  
+  [33X[0;0YThe  function [10XBrowseData.actions.QuitMode.action[110X unbinds the current mode in
+  the  browse  table  that  is given as its argument (see Section [14X5.2[114X), so the
+  browse  table  returns  to the mode from which this mode had been called. If
+  the  current  mode is the only one, first the user is asked for confirmation
+  whether  she  really  wants to quit the table; only if the [12Xy[112X key is hit, the
+  last mode is unbound.[133X
+  
+  [33X[0;0YThe  function  [10XBrowseData.actions.QuitTable.action[110X  unbinds all modes in the
+  browse table that is given as its argument, without asking for confirmation;
+  the effect is to exit the browse application (see Section [14X5.3[114X).[133X
+  
+  [1X5.4-7 BrowseData.actions.Error[101X
+  
+  [29X[2XBrowseData.actions.Error[102X[32X global variable
+  
+  [33X[0;0YAfter [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) has been called, interrupting by hitting
+  the  [12XCtrl-C[112X  keys  is  not possible. It is recommended to provide the action
+  [2XBrowseData.actions.Error[102X  for  each  mode of a [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X)
+  application,  which  enters  a  break  loop  and  admits  returning  to  the
+  application. The recommended user input for this action is the [12XE[112X key.[133X
+  

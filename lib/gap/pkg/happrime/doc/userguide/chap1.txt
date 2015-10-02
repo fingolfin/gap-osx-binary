@@ -1,0 +1,146 @@
+  
+  [1X1 Introduction[0X
+  
+  
+  [1X1.1 Introduction to the [5XHAPprime[1X package[0X
+  
+  [5XHAPprime[0m    is   a   package   for   the   [5XGAP[0m   computer   algebra   system
+  ([7Xhttp://www.gap-system.org/[0m), and which extends the [5XHAP[0m `Homological Algebra
+  Progamming'        package        written        by       Graham       Ellis
+  ([7Xhttp://hamilton.nuigalway.ie/Hap/www/[0m).  It  provides  algorithms  and data
+  structures  for  calculating  resolutions  of  small prime-power groups. The
+  [5XHAPprime[0m  functions  use  significantly  less  memory  than  the  equivalent
+  function in [5XHAP[0m, allowing resolutions (and cohomology ring presentations) of
+  larger groups to be calculated (see Section [14X2.2[0m).
+  
+  Earlier  versions  of [5XHAPprime[0m also included functions to compute polynomial
+  ring  presentations  of cohomology rings, and to ensure that these rings are
+  complete  and  correct.  These  functions  have  now been moved into the [5XHAP[0m
+  package  and  are  documented  as  part  of  that  package  (see for example
+  [2XMod2CohomologyRingPresentation[0m      ([14XHAP:     Mod2CohomologyRingPresentation
+  (HAPprime)[0m) and [2XPoincareSeriesLHS[0m ([14XHAP: PoincareSeriesLHS (HAPprime)[0m)).
+  
+  
+  [1X1.2 Required software[0X
+  
+  The  [5XHAPprime[0m  package  requires  [5XGAP[0m version 4.4 or greater and [5XHAP[0m version
+  1.9.3 or greater.
+  
+  
+  [1X1.3 Installing [5XHAPprime[1X[0X
+  
+  To  install  the  [5XHAPprime[0m  Package,  unpack  the archive file into your [5XGAP[0m
+  packages  directory  (either  usually  the  [11Xpkg[0m  directory  of  your  [5XGAP[0m  4
+  installation  if you have access to it, or some local [11Xpkg[0m directory that [5XGAP[0m
+  can find). The [5XHAPprime[0m files will all be installed in a subdirectory called
+  [11Xhapprime[0m.
+  
+  
+  [1X1.4 Loading and testing [5XHAPprime[1X[0X
+  
+  The  [5XHAPprime[0m  package is not loaded by default when [5XGAP[0m is started. To load
+  the package, type the following at the [5XGAP[0m prompt:
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> LoadPackage( "HAPprime");[0X
+  [4X------------------------------------------------------------------[0X
+  
+  If [5XHAPprime[0m isn't already in memory, it is loaded and the author information
+  is  displayed.  If  you  are a frequent user of [5XHAPprime[0m, you might consider
+  putting this line in your [11X.gaprc[0m file, or using the [10XPackagesToLoad[0m option in
+  your [11Xgap.ini[0m file.
+  
+  The correct installation of [5XHAPprime[0m can be tested by using the test routine
+  [11Xtst/testall.g[0m:
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> ReadPackage("HAPprime", "tst/testall.g");[0X
+    [4X+ HAPprime version 0.5.1[0X
+    [4X general tests[0X
+    [4X+ GAP4stones: 371057[0X
+    [4X+ HAPprime version 0.5.1[0X
+    [4X userguide examples[0X
+    [4X+ GAP4stones: 387662[0X
+    [4X+ HAPprime version 0.5.1[0X
+    [4X datatypes reference manual examples[0X
+    [4X+ GAP4stones: 382653[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  number  of  [10XGAP4stones[0m  will  vary  depending  on your machine, but any
+  additional lines of messages indicate problems with your installation.
+  
+  The test routine calls a set of test files [14X'Reference: Test Files'[0m which can
+  be  found  in  the  [11Xtst[0m  directory  of the [5XHAPprime[0m installation. All of the
+  routines  listed  in this user guide are tested, as are many of those in the
+  datatype reference manual.
+  
+  
+  [1X1.5 Documentation[0X
+  
+  The  documentation  for  [5XHAPprime[0m is in two parts. This document is the user
+  guide,  which covers the main functions provided by [5XHAPprime[0m and examples of
+  their  use.  There  is  also  a  more technical [5XHAPprime[0m datatypes reference
+  manual  which  gives  details  of  the  new  [5XGAP[0m  datatypes defined and used
+  internally  by  [5XHAPprime[0m,  as  well  as outlining the algorithms used by the
+  package.
+  
+  [1X1.5-1 MakeHAPprimeDoc[0m
+  
+  [2X> MakeHAPprimeDoc( [0X[3X[manual-name][0X[2X ) _________________________________[0Xfunction
+  [6XReturns:[0X  nothing
+  
+  The  two  manuals supplied with [5XHAPprime[0m - this user guide and the datatypes
+  reference manual - are written using the [5XGAPDoc[0m package and are available in
+  PDF,  HTML  and  text  format.  It  should not be necessary to rebuild these
+  files, but should you wish to do so then this can be done using the function
+  [2XMakeHAPprimeDoc[0m.
+  
+  The  optional  argument  [3Xmanual-name[0m is a string specifying which manuals to
+  build. It may be one of the following
+  
+  --    [10X"all"[0m builds both manuals. This is the default
+  
+  --    [10X"userguide"[0m builds just the user guide
+  
+  --    [10X"datatypes"[0m builds just the datatypes reference manual
+  
+  --    [10X"internal"[0m  builds  both manuals, including the otherwise undocumented
+        internal functions
+  
+  --    [10X"testexamples"[0m  builds  neither  manual, but tests all of the examples
+        using [2XTestManualExamples[0m ([14XGAPDoc: TestManualExamples[0m)
+  
+  As  well  as building the manuals, this function at the same time builds [5XGAP[0m
+  test  files  [14X'Reference:  Test  Files'[0m  which means that all of the testable
+  examples in the manuals are added to the [5XHAPprime[0m test routines described in
+  Section [14X1.4[0m.
+  
+  
+  [1X1.6 Displaying progress and calculation information[0X
+  
+  By  default,  the  functions  in  [5XHAPprime[0m  display  no  output  (except for
+  returning the result). The [10XInfoHAPprime[0m info class can be used to enable the
+  printing  of  progress  and calculation information during processing. Since
+  some  computations  with  [5XHAPprime[0m can take several hours, setting this to a
+  higher  level  can  be  particularly  useful  for monitoring the progress of
+  computations.
+  
+  [1X1.6-1 InfoHAPprime[0m
+  
+  [2X> InfoHAPprime____________________________________________________[0Xinfo class
+  
+  The  [10XInfoHAPprime[0m  info  class  is used throughout the [5XHAPprime[0m package. Use
+  [10XSetInfoLevel(InfoHAPprime,  [0m[3Xlevel[0m[10X)[0m  to  change  the  amount  of  information
+  displayed   about   the   progress  of  the  computation  (see  [2XSetInfoLevel[0m
+  ([14XReference:  SetInfoLevel[0m)  in  the  [5XGAP[0m  reference  manual).  The different
+  distinct levels are:
+  
+  --    [10X0[0m print nothing (this is the default)
+  
+  --    [10X1[0m   print   some   information,  mainly  progress  information  during
+        computations that may take some time
+  
+  --    [10X2[0m  print  more  detailed  information,  incluing  details  of internal
+        calculations
+  

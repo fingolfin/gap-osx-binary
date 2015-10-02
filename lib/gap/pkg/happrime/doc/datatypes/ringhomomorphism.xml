@@ -1,0 +1,299 @@
+<!-- 
+  HAPPRIME - derivation.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  Paul Smith
+  National University of Ireland Galway
+
+  $Id: functions.xml.in 200 2008-02-05 14:29:47Z pas $
+-->
+
+<!-- ********************************************************** -->
+<Chapter Label="RingHomomorphism">
+  <Heading>Ring homomorphisms</Heading>
+
+  A ring homomorphism is a linear function <M>f: R \to S</M> that maps between 
+  two rings <M>R</M> and <M>S</M> and which preserves the operations of
+  multiplication and addition:
+  <Alt Only="LaTeX">
+    <Display>
+      \begin{align*}
+      f(a + b) &amp;= f(a) + f(b) \\
+      f(ab) &amp;= f(a)f(b) \\
+      f(1) &amp;= 1 
+      \end{align*}
+    </Display>
+  </Alt>
+  <Alt Not="LaTeX">
+    <Display><![CDATA[
+      f(a + b) = f(a) + f(b) 
+      f(ab)    = f(a)f(b) 
+      f(1)     = 1 
+    ]]></Display>
+  </Alt>
+  
+  <Section>
+  <Heading>The <K>HAPRingHomomorphism</K> datatype</Heading>
+  
+  The <K>HAPRingHomomorphism</K> datatype represents a particular class of
+  ring homomorphisms (in fact usually ring isomorphisms), namely those between 
+  rings presented as quotient rings of polynomial rings, where the source and
+  target rings have the same coefficient ring. They represent the mapping
+  <Alt Only="LaTeX">
+    <Display>
+      \frac{R}{I} \to \frac{S}{J} 
+    </Display>
+  </Alt>
+  <Alt Not="LaTeX">
+    <Display><![CDATA[
+      R/I  ->  S/J
+    ]]></Display>
+  </Alt>
+  where <M>R = k[x_1, \ldots, x_n]</M> and <M>S = k[y_1, \ldots, x_m]</M> and 
+  <M>I</M> and <M>J</M> are ideals in <M>R</M> and <M>S</M> respectively.
+  <P/>
+  Such a ring homomorphism may be specified by the following information 
+  <List>
+    <Item>a polynomial ring <M>R</M></Item> 
+    <Item>a list of polynomials in <M>R</M> that generate the ideal 
+      <M>I</M></Item>
+    <Item>a list <M>Q = [q_1, ..., q_n]</M> where each <M>q_i \in S/J</M> is 
+      the image of the indeterminate <M>x_i</M> in <M>R</M> under the 
+      homomorphism.</Item>
+  </List>
+  The target ideal <M>J</M> is assumed to be the image of <M>I</M> under the
+  homomorphism.
+  
+  <Subsection>
+    <Heading>Implementation details</Heading>
+    
+    Various different internal representations are used for ring homomorphisms 
+    in &HAPprime;, depending on the source and target ring. The user need not be 
+    concerned with the different representations, which correspond to the 
+    five constructors <Ref Func="HAPRingToSubringHomomorphism"/>, 
+    <Ref Func="HAPSubringToRingHomomorphism" Label="for relations defined at source"/>, 
+    <Ref Func="HAPRingHomomorphismByIndeterminateMap"/>,
+    <Ref Func="HAPRingReductionHomomorphism" Label="for ring presentation"/> and
+    <Ref Func="HAPZeroRingHomomorphism"/>, and which are hopefully largely
+    self-explanatory.
+    <P/>
+    Most of the provided representations of ring homomorphisms use
+    Gröbner bases and polynomial reduction to perform the mapping. This uses
+    the <Package>singular</Package> package 
+    <Ref Chap="singular" BookName="singular"/> which gives good speed and access 
+    to improved monomial orderings. This datatype cannot be used without the 
+    <Package>singular</Package> package.
+  </Subsection>
+  
+  <Subsection Label="RingHomEliminationOrdering">
+    <Heading>Elimination orderings</Heading>
+    Using Gröbner bases to map from one polynomial ring <M>R</M> to another 
+    polynomial ring <M>S</M> relies on applying a global ordering to the joint
+    ring <M>R \cup S</M>. For all polynomials <M>p \in R</M> and <M>q \in S</M>,
+    this ordering must give <M>p &gt; q</M>, so that terms involving elements
+    of <M>R</M> will be replaced by those in <M>S</M>. A straightforward 
+    solution is to use a lexicographic term ordering 
+    which orders the indeterminates of <M>R</M> before those of <M>S</M>. 
+    However, computing Gröbner bases using a lexicographic ordering can be much 
+    more expensive that with other orderings, or sometimes even a change of the 
+    order of indeterminates is enough change the order of the computation. 
+    A range of different ordering can be requested by using the &GAP; 
+    options stack <Ref Chap="Options Stack" BookName="ref"/>, and setting the
+    options <C>EliminationIndexOrder</C> and <C>EliminationBlockOrdering</C> as
+    described below.
+    <P/>
+    The option <C>EliminationIndexOrder</C> determines the indeterminate 
+    ordering to use. Possible values are the following strings:
+    <List>
+      <Item><C>"Forward"</C> (default) Indeterminates are ordered as in 
+        the definition of <M>R</M> and <M>S</M>: <M>p_1 &gt; p_2 &gt; \ldots 
+        &gt; p_n &gt; q_1 &gt; q_2 &gt; \ldots &gt; q_m</M>.</Item>
+      <Item><C>"Reverse"</C> Lexicographic ordering in reverse order to that
+        in the definition of <M>R</M> and <M>S</M>: <M>p_n &gt; p_{n-1} &gt; 
+        \ldots &gt; p_1 &gt; q_m &gt; q_{m-1} &gt; \ldots &gt; q_1</M>.</Item>
+      <Item><C>"Shuffle"</C> Lexicographic ordering using a random shuffle
+        of the indeterminates in <M>R</M> and <M>S</M>.</Item>
+      <Item><C>"ShuffleNN"</C> where <C>NN</C> is some non-negative 
+        integer. This is the same as <C>Shuffle</C>, but using the value
+        of <C>NN</C> as the random seed (and hence is deterministic).</Item>
+    </List>
+    <P/>
+    When comparing two monomials, the elimination ordering ensures that the 
+    parts of the two monomials involving the indeterminates from <M>R</M> are
+    compared first, and then in the event of a tie, the part involving those 
+    from <M>S</M> are compared. The option <C>EliminationBlockOrdering</C> 
+    determines the monomial ordering to use for each of these two comparisons.
+    This is given as a string which is the concatenation of the two required
+    orderings. For example, the default ordering is <C>"LexGrlex"</C> which
+    means lexicographic ordering over the indeterminates of <M>R</M>, and
+    graded lexicographic over the indeterminates of <M>S</M>.
+    <List>
+      <Item><C>"Lex"</C> Lexicographic ordering, the equivalent of the &GAP; 
+        ordering <Ref Func="MonomialLexOrdering" BookName="ref"/>).</Item>
+      <Item><C>"Grlex"</C> Graded lexicographic ordering, the equivalent of
+        <Ref Func="MonomialGrlexOrdering" BookName="ref"/>.</Item>
+      <Item><C>"Grevlex"</C> Graded reverse lexicographic ordering, the 
+        equivalent of <Ref Func="MonomialGrevlexOrdering" 
+        BookName="ref"/>.</Item>
+    </List>
+  </Subsection>
+  </Section>
+  
+  <Section>
+    <Heading>Construction functions</Heading>
+  </Section>
+
+  <Section>
+    <Heading>Data access functions</Heading>
+  
+  </Section>
+
+  <Section>
+    <Heading>General functions</Heading>
+  
+  </Section>
+
+  <Section Label="RingHomomorphismExample">
+    <Heading>Example: Constructing and using a <K>HAPRingHomomorphism</K></Heading>
+    
+    As an initial example, we shall construct a ring homomorphism 
+    <M>\phi: k[x_1, x_2] \to k[x_3, x_4]</M> (i.e. ideal)
+    with the mapping <M>x_1 \mapsto x_3</M> and <M>x_2 \mapsto x_3 + x_4</M>. 
+    In all these examples, we shall take <M>k</M> to be the field of two 
+    elements, GF(2). We demonstrate that this is an isomorphism by mapping a 
+    polynomial from the source ring to the target and back again.
+<!--
+gap> R := PolynomialRing(GF(2), 2);;
+gap> S := PolynomialRing(GF(2), 2, IndeterminatesOfPolynomialRing(R));;
+gap> phi := HAPRingToSubringHomomorphism(R, [], [S.1, S.1+S.2]);
+gap> p := ImageOfRingHomomorphism(phi, R.1^3+R.1*R.2+R.2);
+gap> PreimageOfRingHomomorphism(phi, p);
+-->
+<Example><![CDATA[
+gap> R := PolynomialRing(GF(2), 2);;
+gap> S := PolynomialRing(GF(2), 2, IndeterminatesOfPolynomialRing(R));;
+gap> phi := HAPRingToSubringHomomorphism(R, [], [S.1, S.1+S.2]);
+<Ring homomorphism>
+gap> p := ImageOfRingHomomorphism(phi, R.1^3+R.1*R.2+R.2);
+x_3^3+x_3^2+x_3*x_4+x_3+x_4
+gap> PreimageOfRingHomomorphism(phi, p);
+x_1^3+x_1*x_2+x_2
+]]></Example>
+  <P/>
+  Some ring presentations are not in minimal form: there is an isomorphic 
+  ring in fewer indeterminates. The <Ref Func="HAPRingReductionHomomorphism"
+    Label="for ring presentation"/> function can find and return an isomorphism
+  that maps to this reduced ring. For example, the ring 
+  <M>k[x_1, x_2, x_3]/(x_1^2 + x_2^3, x_2^2 + x_3)</M> has an 
+  isomorphic presentation in only two indeterminates, as this computation
+  shows:
+<!--
+gap> R := PolynomialRing(GF(2), 3);;
+gap> I := [R.1^2+R.2^3, R.2^2+R.3];
+gap> phi := HAPRingReductionHomomorphism(R, I);
+gap> ImagePolynomialRing(phi);
+gap> ImageRelations(phi);
+-->
+<Example><![CDATA[
+gap> R := PolynomialRing(GF(2), 3);;
+gap> I := [R.1^2+R.2^3, R.2^2+R.3];
+[ x_2^3+x_1^2, x_2^2+x_3 ]
+gap> phi := HAPRingReductionHomomorphism(R, I);
+<Ring homomorphism>
+gap> ImagePolynomialRing(phi);
+GF(2)[x_4,x_5]
+gap> ImageRelations(phi);
+[ x_5^3+x_4^2 ]
+]]></Example>
+  <P/>
+  The source and target of <C>HAPRingHomomorphism</C>s can be quotient rings, 
+  and any relations can be specified at the source of target. When mapping from
+  a subring to a full ring, the source relations do not necessarily need to be
+  specified in the source ring, but could instead be given in its containing 
+  ring. For example, consider the ring <M>R/I</M> where 
+  <M>R = k[x_1, x_2, x_3]</M> and <M>I = x_1^3+x_3</M> and the 
+  subring generated by <M>(x_1, x_2, x_3^2)</M>. If we wish to specify the 
+  homomorphism <M>\phi: R/I \to S/J</M> where <M>S = k[x_4, x_5, x_6]</M>
+  with the natural map from the generators of <M>R</M> to those of <M>S</M>
+  then we only need specify the original ideal <M>I</M>, even though it is not 
+  in the subring.   The intersection between <M>I</M> and the subring is found 
+  to be <M>x_1^4+x_3^2</M>, and it is this ideal that is used in the 
+  homomorphism, as this example shows:
+<!--
+gap> R := PolynomialRing(GF(2), 3);;
+gap> I := [R.1^2+R.3];
+gap> S := PolynomialRing(GF(2), 3, IndeterminatesOfPolynomialRing(R));;
+gap> phi := HAPSubringToRingHomomorphism([R.1, R.2, R.3^2], I, S);
+gap> Display(phi);
+gap> Display(InverseRingHomomorphism(phi));
+-->
+<Example><![CDATA[
+gap> R := PolynomialRing(GF(2), 3);;
+gap> I := [R.1^2+R.3];
+[ x_1^2+x_3 ]
+gap> S := PolynomialRing(GF(2), 3, IndeterminatesOfPolynomialRing(R));;
+gap> phi := HAPSubringToRingHomomorphism([R.1, R.2, R.3^2], I, S);
+<Ring homomorphism>
+gap> Display(phi);
+Ring homomorphism
+  x_1 -> x_4
+  x_2 -> x_5
+  x_3^2 -> x_6
+with relations
+  [ x_1^2+x_3 ]
+and
+  [ x_4^4+x_6 ]
+gap> Display(InverseRingHomomorphism(phi));
+Ring homomorphism
+  x_4 -> x_1
+  x_5 -> x_2
+  x_6 -> x_3^2
+with relations
+  [ x_4^4+x_6 ]
+and
+  [ x_1^4+x_3^2 ]
+]]></Example>
+  <P/>
+  Ring homomorphisms can also be composed with each other. For example, 
+  we can take the <Ref Func="HAPSubringToRingHomomorphism" Label="for relations defined at image"/> 
+  above and change the target indeterminates by composing this with a 
+  <Ref Func="HAPRingHomomorphismByIndeterminateMap"/>:
+<!--
+gap> R := PolynomialRing(GF(2), 3);;
+gap> I := [R.1^2+R.3];
+gap> S := PolynomialRing(GF(2), 3, IndeterminatesOfPolynomialRing(R));;
+gap> phi := HAPSubringToRingHomomorphism([R.1, R.2, R.3^2], I, S);
+gap> #
+gap> T := PolynomialRing(GF(2), 3, [R.1, R.2, R.3, S.1, S.2, S.3]);;
+gap> phi2 := HAPRingHomomorphismByIndeterminateMap(
+  ImagePolynomialRing(phi), ImageRelations(phi), T);
+gap> Display(CompositionRingHomomorphism(phi, phi2));
+-->
+<Example><![CDATA[
+gap> R := PolynomialRing(GF(2), 3);;
+gap> I := [R.1^2+R.3];
+[ x_1^2+x_3 ]
+gap> S := PolynomialRing(GF(2), 3, IndeterminatesOfPolynomialRing(R));;
+gap> phi := HAPSubringToRingHomomorphism([R.1, R.2, R.3^2], I, S);
+<Ring homomorphism>
+gap> #
+gap> T := PolynomialRing(GF(2), 3, [R.1, R.2, R.3, S.1, S.2, S.3]);;
+gap> phi2 := HAPRingHomomorphismByIndeterminateMap(
+>   ImagePolynomialRing(phi), ImageRelations(phi), T);
+<Ring homomorphism>
+gap> Display(CompositionRingHomomorphism(phi, phi2));
+Ring homomorphism
+  x_1 -> x_7
+  x_2 -> x_8
+  x_3^2 -> x_9
+with relations
+  [ x_1^2+x_3 ]
+and
+  [ x_7^4+x_9 ]
+]]></Example>
+  </Section>
+
+</Chapter>
+

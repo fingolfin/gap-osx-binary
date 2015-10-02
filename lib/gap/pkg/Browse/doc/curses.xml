@@ -1,0 +1,570 @@
+
+<Chapter Label="ch:curses">
+<Heading>Interface to the <C>ncurses</C> Library</Heading>
+
+In this chapter we describe the &GAP; interface to the <Package>GNU</Package>
+<C>curses</C>/<C>ncurses</C>  <C>C</C>-library. This library contains
+routines to manipulate the contents of terminal windows. It allows one  to
+write programs which should work on a wide variety of terminal
+emulations with different sets of capabilities.
+<P/>
+This technical chapter is intended for readers who want to program new 
+applications
+using the <C>ncurses</C> functionality. If you
+are only interested in the function <Ref Func="NCurses.BrowseGeneric" /> from
+this package or some of its applications you can skip this chapter.
+<P/>
+Detailed documentation of the <C>ncurses</C> library is probably
+available in your operating system (try <C>man ncurses</C>) and from the 
+web (see for example <Cite Key="NCursesWeb"/>).
+Here, we
+only give short reminders about the functions provided in the &GAP; interface
+and explain how to use the &GAP; functions.
+
+<Section Label="sec:cursesC"><Heading>The <C>ncurses</C> Library</Heading>
+
+In this section we list the functions from the GNU
+<C>ncurses</C> library and its <C>panel</C> extension which are made
+available in &GAP; via the <Package>Browse</Package> package. See the
+following section  <Ref Sect="sec:cursesGAP" /> for explanations how to use
+these functions from within &GAP;.
+<P/>
+The basic objects to manipulate are called <Emph>windows</Emph>, they 
+correspond to rectangular regions of the terminal screen. Windows can
+overlap but <C>ncurses</C> cannot handle this for the display. Therefore
+windows can be wrapped in <Emph>panels</Emph>, they provide a display
+depth for windows and it is possible to move panels to the top and
+bottom of the display or to hide  a panel. 
+<P/>
+We will not import all the functions of the <C>ncurses</C> library to
+&GAP;. For example, there are many pairs of functions with the same name
+except for a leading <C>w</C> (like <C>move</C> and <C>wmove</C> for
+moving the cursor in a window). Here, we only import the versions 
+with <C>w</C>, which get a window as first argument. The functions
+without <C>w</C> are for the <C>ncurses</C> standard 
+screen window <C>stdscr</C> 
+which is available as window <C>0</C> in &GAP;. Similarly, there are
+functions with the same name except for an extra <C>n</C> (like
+<C>waddstr</C> and <C>waddnstr</C> for placing a string into a window).
+Here, we only import the safer functions with <C>n</C> which get the
+number of characters to write as argument. (More convenient functions
+are then implemented on the &GAP; level.)
+
+<Subsection Label="ssec:ncursesTermset">
+<Heading>Setting the terminal</Heading>
+
+We first list flags for setting the basic behavior of a terminal. With 
+<C>savetty</C>/<C>resetty</C> a setting can be stored and recovered.
+
+<List >
+<Mark><Index Key="savetty"><C>savetty</C></Index><C>savetty()</C></Mark>
+<Item>This stores the current setting of the terminal in a buffer.</Item>
+<Mark><Index Key="resetty"><C>resetty</C></Index><C>resetty()</C></Mark>
+<Item>This resets the terminal to what was stored in the last call to 
+<C>savetty</C>.</Item>
+<Mark><Index Key="cbreak"><C>cbreak</C></Index>
+<Index Key="nocbreak"><C>nocbreak</C></Index><C>cbreak()/nocbreak()</C></Mark>
+<Item>In <C>cbreak</C> mode each input character from a terminal is
+directly forwarded to the application (but see <C>keypad</C>). With 
+<C>nocbreak</C> this only happens after a newline or return is typed.</Item>
+<Mark><Index Key="keypad"><C>keypad</C></Index><C>keypad(win, bool)</C></Mark>
+<Item>If set to <K>true</K> some special input like arrow or function
+keys can be read as single characters from the input (such keys actually
+generate certain sequences of characters), see also <Ref
+Subsect="ssec:ncursesInput" />. (The <Arg>win</Arg> argument
+is irrelevant.)</Item>
+<Mark><Index Key="echo"><C>echo</C></Index>
+<Index Key="noecho"><C>noecho</C></Index><C>echo()</C>/<C>noecho()</C></Mark>
+<Item>This determines if input characters are automatically echoed by
+the terminal at the current cursor position.</Item>
+<Mark><Index Key="curs_set"><C>curs_set</C></Index><C>curs_set(vis)</C></Mark>
+<Item>This determines the visibility of the cursor. The argument 
+<Arg>vis</Arg>=0 makes the cursor invisible. With <Arg>vis</Arg>=1
+it becomes visible; some terminals allow also higher levels of
+visibility.</Item>
+<Mark><Index Key="wtimeout"><C>wtimeout</C></Index><C>wtimeout(win, delay)</C></Mark>
+<Item>Here <Arg>delay</Arg> determines a timeout in milliseconds for reading
+characters from the input of a window. Negative values mean infinity,
+that is a blocking read.</Item>
+<Mark><Index Key="nonl"><C>nonl</C></Index>
+<Index Key="nl"><C>nl</C></Index><C>nl()</C>/<C>nonl()</C></Mark>
+<Item>With <C>nl</C> a return on input is translated to a newline
+character and a newline on output is interpreted as return and linefeed.</Item>
+<Mark><Index Key="intrflush"><C>intrflush</C></Index><C>intrflush(win, bool)</C></Mark>
+<Item>This flag determines if after an interrupt pending output to the
+terminal is flushed. (The <Arg>win</Arg> argument is irrelevant.)</Item>
+<Mark><Index Key="idlok"><C>idlok</C></Index><C>idlok(win, bool)</C></Mark>
+<Item>With <K>true</K> the library tries to use a hardware line
+insertion functionality (in particular for scrolling).</Item>
+<Mark><Index Key="scrollok"><C>scrollok</C></Index><C>scrollok(win, bool)</C></Mark>
+<Item>If set to <K>true</K> moving the cursor down from the last line of
+a window causes scrolling of the whole window, otherwise nothing
+happens.</Item>
+<Mark><Index Key="leaveok"><C>leaveok</C></Index><C>leaveok(win, bool)</C></Mark>
+<Item>If set to <K>true</K> a refresh of the window leaves the cursor at
+its current location, otherwise this is not guaranteed.</Item>
+<Mark><Index Key="clearok"><C>clearok</C></Index><C>clearok(win, bool)</C></Mark>
+<Item>If set to <K>true</K> the next refresh of the window will clear the 
+screen completely and redraw everything.</Item>
+<Mark><Index Key="immedok"><C>immedok</C></Index><C>immedok(win, bool)</C></Mark>
+<Item>If set to <K>true</K>  all changes of the window will
+automatically also call a <C>wrefresh</C>.</Item>
+<Mark><Index Key="noraw"><C>noraw</C></Index>
+<Index Key="raw"><C>raw</C></Index><C>raw()</C>/<C>noraw()</C></Mark>
+<Item>Similar to <C>cbreak</C>, usually not needed (see the <C>ncurses</C>
+documentation for details).</Item>
+</List>
+
+</Subsection>
+
+<Subsection Label="ssec:ncursesWin">
+<Heading>Manipulating windows</Heading>
+
+In <C>ncurses</C> an arbitrary number of windows which correspond to
+rectangular regions (maybe overlapping) of the screen can be handled.
+You should always delete windows which are no longer needed. To get a
+proper display of overlapping windows (which may occur by recursively
+called functions using this library) we suggest that you always wrap
+windows in panels, see <Ref Subsect="ssec:ncursesPan" />.
+<P/>
+For functions which involve coordinates recall that the upper left
+corner of the screen or internally of any window has the coordinates (0,0). 
+<List>
+<Mark><Index Key="newwin"><C>newwin</C></Index><C>newwin(nlines, ncols, y, x)</C></Mark>
+<Item>This creates a new window whose upper left corner has the coordinates
+(<Arg>y</Arg>,<Arg>x</Arg>) on the screen and has <Arg>nlines</Arg> lines
+and <Arg>ncols</Arg> columns, if this is possible. The arguments 
+<Arg>nlines</Arg> and <Arg>ncols</Arg> can be zero, then their maximal
+possible values are assumed.</Item>
+<Mark><Index Key="delwin"><C>delwin</C></Index><C>delwin(win)</C></Mark>
+<Item>Deletes a window.</Item>
+<Mark><Index Key="mvwin"><C>mvwin</C></Index><C>mvwin(win, y, x)</C></Mark>
+<Item>Moves the upper left corner of the window to the given coordinates,
+if the window still fits on the screen. With panels don't use this function,
+but use <C>move_panel</C> mentioned below.</Item>
+<Mark><Index Key="wrefresh"><C>wrefresh</C></Index><C>wrefresh(win)</C></Mark>
+<Item>Writing to a window only changes some internal buffers, this
+function copies the window content to the actual display screen.
+You don't need this function if you wrap your windows in panels, use
+<C>update_panels</C> and <C>doupdate</C> instead.</Item>
+<Mark><Index Key="doupdate"><C>doupdate</C></Index><C>doupdate()</C></Mark>
+<Item>Use this function to update the content of your display screen to
+the current content of all windows. If your terminal is not yet in
+visual mode this function changes to visual mode.</Item>
+<Mark><Index Key="endwin"><C>endwin</C></Index><C>endwin()</C></Mark>
+<Item>Use this function to leave the visual mode of your terminal.
+(Remark: If you use this function while not in visual mode the cursor
+will be moved to the line where the visual mode was started last time.
+To avoid this use <C>isendwin</C> first.)</Item>
+<Mark><Index Key="isendwin"><C>isendwin</C></Index><C>isendwin()</C></Mark>
+<Item>Returns <K>true</K> if called while not in visual mode and <K>false</K> 
+otherwise</Item>
+<Mark><Index Key="getbegyx"><C>getbegyx</C></Index><C>getbegyx(win)</C></Mark>
+<Item>Get the coordinates of the upper left corner of a window on the
+screen.</Item>
+<Mark><Index Key="getmaxyx"><C>getmaxyx</C></Index><C>getmaxyx(win)</C></Mark>
+<Item>Get the number of lines and columns of a window.</Item>
+</List>
+</Subsection>
+
+<Subsection Label="ssec:ncursesPan">
+<Heading>Manipulating panels</Heading>
+
+Wrap windows in panels to get a proper handling of overlapping windows on
+the display. Don't forget to delete a panel before deleting the
+corresponding window.
+
+<List>
+<Mark><Index Key="new_panel"><C>new_panel</C></Index><C>new_panel(win)</C></Mark>
+<Item>Create a panel for a window.</Item>
+<Mark><Index Key="del_panel"><C>del_panel</C></Index><C>del_panel(pan)</C></Mark>
+<Item>Delete a panel.</Item>
+<Mark><Index Key="update_panels"><C>update_panels</C></Index><C>update_panels()</C></Mark>
+<Item>Use this function to copy changes of windows and panels to a
+screen buffer. Then call <C>doupdate()</C> to update the display screen.</Item>
+<Mark><Index Key="move_panel"><C>move_panel</C></Index><C>move_panel(pan, y, x)</C></Mark>
+<Item>Move top left corner of a panel wrapped window to coordinates 
+(<Arg>y</Arg>,<Arg>x</Arg>) if possible.</Item>
+<Mark><Index Key="show_panel"><C>show_panel</C></Index>
+<Index Key="hide_panel"><C>hide_panel</C></Index><C>hide_panel(pan)</C>/<C>show_panel(pan)</C></Mark>
+<Item>Hide or show, respectively, the content of a panel on the display
+screen.</Item>
+<Mark><Index Key="bottom_panel"><C>bottom_panel</C></Index>
+<Index Key="top_panel("><C>top_panel</C></Index><C>top_panel(pan)</C>/<C>bottom_panel(pan)</C></Mark>
+<Item>Move a panel to the top or bottom of all panels, respectively.</Item>
+<Mark><Index Key="panel_above"><C>panel_above</C></Index>
+<Index Key="panel_below"><C>panel_below</C></Index><C>panel_below(pan)</C>/<C>panel_above(pan)</C></Mark>
+<Item>Return the panel directly below or above the given one,
+respectively. With argument <C>0</C> the top or bottom panel are
+returned, respectively. If argument is the bottom or top panel,
+respectively, then <K>false</K> is returned.</Item>
+
+</List>
+</Subsection>
+
+<Subsection Label="ssec:ncursesInput">
+<Heading>Getting keyboard input</Heading>
+
+If you want to read input from the user first adjust the terminal settings of 
+<C>cbreak</C>, <C>keypad</C>, <C>echo</C>, <C>wtimeout</C> and 
+<C>curs_set</C> to your needs, see <Ref
+Subsect="ssec:ncursesTermset" />.
+The basic functions are as follows.
+
+<List>
+<Mark><Index Key="wgetch"><C>wgetch</C></Index><C>wgetch(win)</C></Mark>
+<Item>Reads one character from user input (returned as integer). If 
+<C>wtimeout</C> was set with a positive <Arg>delay</Arg> then the 
+function returns <K>false</K> if there was no input for <Arg>delay</Arg>
+milliseconds. Note that in <C>nocbreak</C> mode typed characters 
+reach the application only after typing a return. If the <C>keypad</C> flag
+is set to <K>true</K> some special keys can be read like single
+characters; the keys are explained below. (Note that there is only
+one input queue for all windows.)</Item>
+<Mark><Index Key="ungetch"><C>ungetch</C></Index><C>ungetch(char)</C></Mark>
+<Item>Puts back the character <Arg>char</Arg> on the input queue.</Item>
+</List>
+
+<Index Key="NCurses.keys"><C>NCurses.keys</C></Index>
+Some terminals allow one to read special keys like one character, we import
+some of the symbolic names of such keys into &GAP;. You can
+check for such characters by comparing with the components of the
+record <C>NCurses.keys</C>, these are 
+
+<List >
+<Mark><C>UP</C>/<C>DOWN</C>/<C>LEFT</C>/<C>RIGHT</C></Mark>
+<Item>the arrow keys</Item>
+<Mark><C>PPAGE</C>/<C>NPAGE</C></Mark>
+<Item>the page up and page down keys</Item>
+<Mark><C>HOME</C>/<C>END</C></Mark>
+<Item>the home and end keys</Item>
+<Mark><C>BACKSPACE</C>/<C>DC</C></Mark>
+<Item>the backspace and delete keys</Item>
+<Mark><C>IC</C></Mark>
+<Item>the insert key</Item>
+<Mark><C>ENTER</C></Mark>
+<Item>the enter key</Item>
+<Mark><C>F1</C>/<C>F2</C>/../<C>F24</C></Mark>
+<Item>the function keys</Item>
+<Mark><C>MOUSE</C></Mark>
+<Item>a pseudo key to detect mouse events</Item>
+<Mark><C>A1</C>/<C>A3</C>/<C>B2</C>/<C>C1</C>/<C>C3</C></Mark>
+<Item>the keys around the arrow keys on a num pad</Item>
+</List>
+It can happen that on a specific keyboard there is no key for some of
+these. Also, not all terminals can interpret all of these keys. 
+You can check this with the function
+
+<List >
+<Mark><Index Key="has_key"><C>has_key</C></Index><C>has_key(key)</C></Mark>
+<Item>Checks if the special key <Arg>key</Arg> is recognized by the
+terminal.</Item>
+</List>
+
+
+
+</Subsection>
+
+<Subsection Label="ssec:ncursesWrite">
+<Heading>Writing to windows</Heading>
+
+The display of text in <C>ncurses</C> windows has two aspects. The first is to
+get actual characters on the screen. The second is to specify attributes
+which influence the display, for example normal or bold fonts or colors.
+This subsection is for the first aspect. Possible attributes are
+explained below in <Ref Subsect="ssec:ncursesAttrs" />.
+
+<List >
+<Mark><Index Key="wmove"><C>wmove</C></Index><C>wmove(win, y, x)</C></Mark>
+<Item>Moves the cursor to position (<Arg>y</Arg>,<Arg>x</Arg>), recall
+that the coordinates are zero based, (0,0) being the top left corner.</Item>
+<Mark><Index Key="waddnstr"><C>waddnstr</C></Index><C>waddnstr(win, str, len)</C></Mark>
+<Item>Writes the string <Arg>str</Arg> to the window starting from the
+current cursor position. Writes at most <Arg>len</Arg> characters. At
+end of line the cursor moves to the beginning of next line. The behavior 
+at the end of the window depends on the setting of <C>scrollok</C>, see
+<Ref Subsect="ssec:ncursesTermset" />.</Item>
+<Mark><Index Key="waddch"><C>waddch</C></Index><C>waddch(win, char)</C></Mark>
+<Item>Writes a character to the window at the current cursor position and
+moves the cursor on. The character <Arg>char</Arg> is given as integer
+and can include attribute information.</Item>
+<Mark><Index Key="wborder"><C>wborder</C></Index><C>wborder(win, charlist)</C></Mark>
+<Item>Draws a border around the window. If <Arg>charlist</Arg> is a
+plain list of eight &GAP; characters these are taken for left/right/top/bottom
+sides and top-left/top-right/bottom-left/bottom-right corners. Otherwise 
+default characters are used. (See <Ref Func="NCurses.WBorder" /> for a
+more user friendly interface.) </Item>
+<Mark><Index Key="wvline"><C>wvline</C></Index><C>wvline(win, char, len)</C></Mark>
+<Item>Writes a vertical line of length <Arg>len</Arg> (or as long as
+fitting into the window) starting from the
+current cursor position to the bottom, using the character <Arg>char</Arg>.
+If <Arg>char</Arg>=<C>0</C> the default character is used.</Item>
+<Mark><Index Key="whline"><C>whline</C></Index><C>whline(win, char, len)</C></Mark>
+<Item>Same as <C>wvline</C> but for horizontal lines starting from the
+cursor position to the right.</Item>
+<Mark><Index Key="werase"><C>werase</C></Index><C>werase(win)</C></Mark>
+<Item>Deletes all characters in the window.</Item>
+<Mark><Index Key="wclear"><C>wclear</C></Index><C>wclear(win)</C></Mark>
+<Item>Like <C>werase</C>, but also calls <C>clearok</C>.</Item>
+<Mark><Index Key="wclrtobot"><C>wclrtobot</C></Index><C>wclrtobot(win)</C></Mark>
+<Item>Deletes all characters from cursor position to the right and
+bottom.</Item>
+<Mark><Index Key="wclrtoeol"><C>wclrtoeol</C></Index><C>wclrtoeol(win)</C></Mark>
+<Item>Deletes all characters from cursor position to end of line.</Item>
+<Mark><Index Key="winch"><C>winch</C></Index><C>winch(win)</C></Mark>
+<Item>Returns the character at current cursor position, as integer and
+including color and attribute information.</Item>
+<Mark><Index Key="getyx"><C>getyx</C></Index><C>getyx(win)</C></Mark>
+<Item>Returns the current cursor position.</Item>
+<Mark><Index Key="waddstr"><C>waddstr</C></Index><C>waddstr(win, str)</C></Mark>
+<Item>Delegates to <C>waddnstr(win, str, Length(str))</C>.</Item>
+</List>
+</Subsection>
+
+<Subsection Label="ssec:ncursesLines">
+<Heading>Line drawing characters</Heading>
+
+<Index Key="NCurses.lineDraw" ><C>NCurses.lineDraw</C></Index>
+For drawing lines and grids in a terminal window you should use some
+"virtual" characters which are available as components of the record
+<C>NCurses.lineDraw</C>. On some terminals these are nicely displayed 
+as proper lines (on others they are simulated by ASCII characters).
+These are:
+
+<List>
+<Mark><C>BLOCK</C></Mark><Item>solid block</Item>
+<Mark><C>BOARD</C></Mark><Item>board of squares</Item>
+<Mark><C>BTEE/LTEE/RTEE/TTEE</C></Mark><Item>bottom/left/right/top tee</Item>
+<Mark><C>BULLET</C></Mark><Item>bullet</Item>
+<Mark><C>CKBOARD</C></Mark><Item>checker board</Item>
+<Mark><C>DARROW/LARROW/RARROW/UARROW</C></Mark><Item>down/left/right/up 
+arrow</Item>
+<Mark><C>DEGREE</C></Mark><Item>degree symbol</Item>
+<Mark><C>DIAMOND</C></Mark><Item>diamond</Item>
+<Mark><C>GEQUAL</C></Mark><Item>greater than or equal</Item>
+<Mark><C>HLINE/VLINE</C></Mark><Item>horizontal/vertical line</Item>
+<Mark><C>LANTERN</C></Mark><Item>lantern symbol</Item>
+<Mark><C>LEQUAL</C></Mark><Item>less than or equal</Item>
+<Mark><C>LLCORNER/LRCORNER/ULCORNER/URCORNER</C></Mark>
+<Item>lower left/lower right/upper left/upper right corner</Item>
+<Mark><C>NEQUAL</C></Mark><Item>not equal</Item>
+<Mark><C>PI</C></Mark><Item>letter pi</Item>
+<Mark><C>PLMINUS</C></Mark><Item>plus-minus</Item>
+<Mark><C>PLUS</C></Mark><Item>crossing lines like a plus</Item>
+<Mark><C>S1/S3/S7/S9</C></Mark><Item>scan line 1/3/7/9</Item>
+<Mark><C>STERLING</C></Mark><Item>pound sterling</Item>
+</List>
+
+</Subsection>
+
+<Subsection Label="ssec:ncursesAttrs">
+<Heading>Text attributes and colors</Heading>
+
+In addition to the actual characters to be written to the screen the way
+they are displayed can be changed by additional <Emph>attributes</Emph>.
+<Index>attributes of text</Index>
+(There should be no danger to mix up this notion of attributes with the one
+introduced in&nbsp;<Ref Sect="Attributes" BookName="ref"/>.)
+
+<Index Key="NCurses.attrs" ><C>NCurses.attrs</C></Index>
+The available attributes are stored in the record <C>NCurses.attrs</C>, 
+they are
+<List >
+<Mark><C>NORMAL</C></Mark>
+<Item>normal display with no extra attributes.</Item>
+<Mark><C>STANDOUT</C></Mark>
+<Item>displays text in the best highlighting mode of the terminal.</Item>
+<Mark><C>UNDERLINE</C></Mark>
+<Item>underlines the text.</Item>
+<Mark><C>REVERSE</C></Mark>
+<Item>display in reverse video by exchanging the foreground and
+background color.</Item>
+<Mark><C>BLINK</C></Mark>
+<Item>displays the text blinking.</Item>
+<Mark><C>DIM</C></Mark>
+<Item>displays the text half bright.</Item>
+<Mark><C>BOLD</C></Mark>
+<Item>displays the text in a bold font.</Item>
+</List>
+
+Note that not all of these work with all types of terminals, or some may
+cause the same display.
+
+Furthermore, if <C>NCurses.attrs.has_colors</C> is <K>true</K>
+there is a list <C>NCurses.attrs.ColorPairs</C> of attributes to set the
+foreground and background color. These should be accessed indirectly
+with <Ref Func="NCurses.ColorAttr" />. Attributes can be combined by
+adding their values (internally, they are represented by integers). They
+can also be added to the integer representing a character for use with 
+<C>waddch</C>.
+<P/>
+The library functions for setting attributes are:
+
+<List >
+<Mark><Index Key="wattrset"><C>wattrset</C></Index><C>wattrset(win, attr)</C></Mark>
+<Item>This sets the default (combined) attributes for a window which is added
+to all characters written to it;
+using <C>NCurses.attrs.NORMAL</C> as attribute is a reset.</Item>
+<Mark><Index Key="wattroff"><C>wattroff</C></Index>
+<Index Key="wattron"><C>wattron</C></Index><C>wattron(win, attr)</C>/<C>wattroff(win, attr)</C></Mark>
+<Item>This sets or unsets one or some default attributes of the window
+without changing the others.</Item>
+<Mark><Index Key="wattr_get"><C>wattr_get</C></Index><C>wattr_get(win)</C></Mark>
+<Item>This returns the current default attribute and default color pair of a
+window.</Item>
+<Mark><Index Key="wbkgdset"><C>wbkgdset</C></Index><C>wbkgdset(win, attr)</C></Mark>
+<Item>This is similar to <C>wattrset</C> but you can also add a
+character to <Arg>attr</Arg> which is used as default instead of blanks.</Item>
+<Mark><Index Key="wbkgd"><C>wbkgd</C></Index><C>wbkgd(win, attr)</C></Mark>
+<Item>This function changes the attributes for all characters in the
+window to <Arg>attr</Arg>, also used for further characters written to
+that window.</Item>
+</List>
+
+</Subsection>
+
+<Subsection Label="ssec:ncursesMouse">
+<Heading>Low level <C>ncurses</C> mouse support</Heading>
+Many <C>xterm</C> based terminals support mouse events. The recognition
+of mouse events by the <C>ncurses</C> input queue can be switched on and off. 
+If switched on and a mouse event occurs, then <C>NCurses.wgetch</C> 
+gets <C>NCurses.keys.MOUSE</C> if the <C>keypad</C> flag is <K>true</K>
+(see <Ref Subsect="ssec:ncursesInput"/>).
+If this is read one must call <C>NCurses.getmouse</C> which reads
+further characters from the input queue and interprets them as details
+on the mouse event. In most cases the function <Ref
+Func="NCurses.GetMouseEvent"/> can be used in applications (it calls
+<C>NCurses.getmouse</C>). The following low level functions are available as 
+components of the record <C>NCurses</C>.<P/>
+
+The names of mouse events which may be possible are stored in the list
+<C>NCurses.mouseEvents</C>, which starts
+<C>[</C> <C>"BUTTON1_PRESSED",</C> <C>"BUTTON1_RELEASED",</C> 
+<C>"BUTTON1_CLICKED",</C> <C>"BUTTON1_DOUBLE_CLICKED",</C> 
+<C>"BUTTON1_TRIPLE_CLICKED",</C> <C>...</C>
+and contains the same for buttons number 2 to 5 and a few other events.
+<!-- For convenience there is also a record <C>NCurses.rMouseEvents</C>
+with these mouse event names as components which are bound to the
+position of the event in <C>NCurses.mouseEvents</C>. -->
+
+<List>
+<Mark><Index Key="mousemask"><C>mousemask</C></Index>
+<C>mousemask(intlist)</C></Mark>
+<Item>The argument <A>intlist</A> is a list of integers specifying mouse
+events. An entry <C>i</C> refers to the event described in 
+<C>NCurses.mouseEvents[i+1]</C>.
+It returns a record with components <C>.new</C> (for the current
+setting) and <C>.old</C> (for the previous setting) which
+are again lists of integers with the same meaning. Note that <C>.new</C> may
+be different from <A>intlist</A>, it is always the empty list if the
+terminal does not support mouse events. In applications use <Ref
+Func="NCurses.UseMouse"/> instead of this low level function.</Item> 
+<Mark><Index Key="getmouse"><C>getmouse</C></Index>
+<C>getmouse()</C></Mark>
+<Item>This function must be called after a key <C>NCurses.keys.MOUSE</C>
+was read. It returns a list with  three entries <C>[y, x, intlist]</C>
+where <C>y</C> and <C>x</C> are the coordinates of the character cell
+where the mouse event occured and <C>intlist</C> describes the event,
+it should have length one and refers to a position in
+<C>NCurses.mouseEvents</C>. </Item>
+<Mark><Index Key="wenclose"><C>wenclose</C></Index>
+<C>wenclose(win, y, x)</C></Mark>
+<Item>This functions returns <K>true</K> if the screen position 
+<A>y</A>, <A>x</A> is within window <A>win</A> and <K>false</K>
+otherwise.</Item>
+<Mark><Index Key="mouseinterval"><C>mouseinterval</C></Index>
+<C>mouseinterval(t)</C></Mark>
+<Item>Sets the time to recognize a press and release of a mouse button
+as a click to <A>t</A> milliseconds. (Note that this may have no effect 
+because a window manager may catch this.)</Item>
+</List>
+ 
+</Subsection>
+
+<Subsection Label="ssec:ncursesMisc">
+<Heading>Miscellaneous function</Heading>
+<Index Key="mnap" ><C>mnap</C></Index>
+<Index Key="IsStdinATty" ><C>IsStdinATty</C></Index>
+<Index Key="IsStdoutATty" ><C>IsStdoutATty</C></Index>
+We also provide the <C>ncurses</C> function <C>mnap(msec)</C> which
+is a sleep for <Arg>msec</Arg> milliseconds. <P/>
+Furthermore, there a two utilities which can be useful for scripts and testing,
+namely a check if standard input or standard output are connected to terminals.
+These can be called as <C>NCurses.IsStdinATty()</C> or 
+<C>NCurses.IsStdoutATty()</C>, respectively.
+</Subsection>
+
+
+</Section>
+
+<Section Label="sec:cursesGAP"><Heading>The <C>ncurses</C> &GAP;
+functions</Heading>
+
+The functions of the <C>ncurses</C> library are used within &GAP; very
+similarly to their <C>C</C> equivalents. The functions are available as
+components of a record <C>NCurses</C> with the name of the <C>C</C>
+function (e.g., <C>NCurses.newwin</C>).
+<P/>
+In &GAP; the <C>ncurses</C> windows are accessed via integers (as
+returned by <C>NCurses.newwin</C>). The
+standard screen <C>stdscr</C> from the <C>ncurses</C> library is available
+as window number <C>0</C>. But this should not be used; to allow
+recursive applications of <C>ncurses</C> always create a new window,
+wrap it in a panel and delete both when they are no longer needed. 
+<P/>
+Each window can be wrapped in one panel which is accessed by the same
+integer. (Window <C>0</C> cannot be used with a panel.)
+<P/>
+Coordinates in windows are the same zero based integers as in the
+corresponding <C>C</C> functions. The interface of functions which 
+<Emph>return</Emph> coordinates is slightly different from the <C>C</C>
+version; they just return lists of integers and you just give the window
+as argument, e.g., <C>NCurses.getmaxyx(win)</C> returns a list
+<C>[nrows, ncols]</C> of two integers.
+<P/>
+Characters to be written to a window can be given either as &GAP;
+characters like <C>'a'</C> or as integers like <C>INT_CHAR('a') =
+97</C>. If you use the integer version you can also add attributes
+including color settings to it for use with <C>NCurses.waddch</C>.
+<P/>
+When writing an application decide about an appropriate terminal setting
+for your visual mode windows, see <Ref Subsect="ssec:ncursesTermset"/>
+and the utility function <Ref Func="NCurses.SetTerm"/> below.
+Use <C>NCurses.savetty()</C> and <C>NCurses.resetty()</C> to save and
+restore the previous setting.
+<P/>
+We also provide some higher level functionality for displaying marked up
+text,
+see <Ref Func="NCurses.PutLine"/> and <Ref Func="NCurses.IsAttributeLine"/>.
+<P/>
+We now describe some utility functions for putting text on a terminal
+window.
+
+<#Include Label="NCurses.ColorAttr">
+
+<#Include Label="NCurses.SetTerm">
+
+<#Include Label="IsAttributeLine_man">
+
+<#Include Label="ConcatenationAttributeLines_man">
+
+<#Include Label="RepeatedAttributeLine_man">
+
+<#Include Label="NCurses.PutLine">
+
+<#Include Label="NCurses.WidthAttributeLine">
+
+
+<#Include Label="NCurses.Grid">
+
+<#Include Label="NCurses.WBorder">
+
+<#Include Label="NCurses.Mouse">
+
+<#Include Label="NCurses.SaveRestoreWin">
+
+</Section>
+
+
+</Chapter>
+

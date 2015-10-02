@@ -1,0 +1,93 @@
+  
+  [1X26 [33X[0;0YVector and matrix objects[133X[101X
+  
+  [33X[0;0YThis  chapter  is  work  in  progress.  It  will eventually describe the new
+  interface to vector and matrix objects.[133X
+  
+  [33X[0;0YTraditionally,  vectors  in [5XGAP[105X have been lists and matrices have been lists
+  of  lists  (of  equal  length). Unfortunately, such lists cannot store their
+  type  and  so  it  is  impossible to use the full advantages of [5XGAP[105X's method
+  selection  on  them.  This  situation is unsustainable in the long run since
+  more  special  representations  (compressed, sparse, etc.) have already been
+  and  even  more  will be implemented. To eventually solve this problem, this
+  chapter describes a new programming interface to vectors and matrices.[133X
+  
+  
+  [1X26.1 [33X[0;0YFundamental ideas and rules[133X[101X
+  
+  [33X[0;0YThe whole idea of this interface is that (row-) vectors and matrices must be
+  proper  objects  with  a  stored  type  (i.e.  created by Objectify allowing
+  inheritance) to benefit from method selection. We therefore refer to the new
+  style   vectors   and   matrices   as  [21Xvector  objects[121X  and  [21Xmatrix  objects[121X
+  respectively.[133X
+  
+  [33X[0;0YIt  should  be possible to write (efficient) code that is independent of the
+  actual  representation  (in  the  sense of [5XGAP[105X's representation filters) and
+  preserves it.[133X
+  
+  [33X[0;0YThis latter requirement makes it necessary to distinguish between (at least)
+  two classes of matrices:[133X
+  
+  [30X    [33X[0;6Y[21XRowList[121X-Matrices  which  behave  basically  like  lists  of  rows,  in
+        particular  are  the  rows  individual  [5XGAP[105X objects that can be shared
+        between different matrix objects.[133X
+  
+  [30X    [33X[0;6Y[21XFlat[121X  matrices  which behave basically like one [5XGAP[105X object that cannot
+        be  split  up  further. In particular a row is only a part of a matrix
+        and no GAP object in itself.[133X
+  
+  [33X[0;0YFor  various reasons these two classes have to be distinguished already with
+  respect to the definition of the operations for them.[133X
+  
+  [33X[0;0YIn   particular  vectors  and  matrices  know  their  BaseDomain  and  their
+  dimensions.  Note  that  the basic condition is that the elements of vectors
+  and  matrices  must  either  lie in the BaseDomain or naturally embed in the
+  sense  that  +  and * and = automatically work with all elements of the base
+  domain (example: integers in polynomials over integers).[133X
+  
+  [33X[0;0YVectors  are  equal with respect to "=" if they have the same length and the
+  same  entries.  It  is  not  necessary  that  they have the same BaseDomain.
+  Matrices  are equal with respect to "=" if they have the same dimensions and
+  the  same  entries. It is possible that not for all pairs of representations
+  methods exist.[133X
+  
+  [33X[0;0YIt is not guaranteed that all rows of a matrix have the same vector type! It
+  is  for  example thinkable that a matrix stores some of its rows in a sparse
+  representation  and  some in a dense one! However, it is guaranteed that the
+  rows of matrices in the same representation are compatible in the sense that
+  all  vector  operations defined in this interface can be applied to them and
+  that  new  matrices in the same representation as the original matrix can be
+  formed out of them.[133X
+  
+  [33X[0;0YNote  that  there  is  neither  a  default  mapping  from  the set of matrix
+  representations  to the set of vector representations nor one in the reverse
+  direction!  There is nothing like an "associated" vector representation to a
+  matrix representation or vice versa.[133X
+  
+  [33X[0;0YThe  way  to write code that preserves the representation basically works by
+  using constructing operations that take template objects to decide about the
+  actual representation of the new object.[133X
+  
+  [33X[0;0YVectors  do  not  have  to  be  lists  in the sense that they do not have to
+  support  all  list operations. The same holds for matrices. However, RowList
+  matrices  behave nearly like lists of row vectors that insist on being dense
+  and containing only vectors of the same length and with the same BaseDomain.[133X
+  
+  [33X[0;0YThere  are  some  rules embedded in the comments to the following code. They
+  are marked with the word "Rule". FIXME: Collect all rules here.[133X
+  
+  
+  [1X26.2 [33X[0;0YCategories of vectors and matrices[133X[101X
+  
+  
+  [1X26.3 [33X[0;0YConstructing vector and matrix objects[133X[101X
+  
+  
+  [1X26.4 [33X[0;0YOperations for row vector objects[133X[101X
+  
+  
+  [1X26.5 [33X[0;0YOperations for row list matrix objects[133X[101X
+  
+  
+  [1X26.6 [33X[0;0YOperations for flat matrix objects[133X[101X
+  

@@ -1,0 +1,1192 @@
+<!--  chap2.xml    SpinSym GAP package    Lukas Maas  -->
+
+<Chapter Label="chap2">
+<Heading>Usage and features</Heading>
+
+<Section Label="chap2:Accessing the tables">
+<Heading>Accessing the tables</Heading>
+All Brauer tables in this package are relative to a 
+<E>generic</E> ordinary character table obtained by one of the 
+following constructions
+<List> 
+	<Mark></Mark><Item><C>CharacterTable( "2.Sym(n)" )</C>, 
+	the character table of 
+	<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+	<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>,</Item> 
+	<Mark></Mark><Item><C>CharacterTable( "2.Alt(n)" )</C>, 
+	the character table of 
+	<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+	<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>,</Item> 
+	<Mark></Mark><Item><C>CharacterTable( "Sym(n)" )</C>, 
+	the character table of 
+	<Alt Only="LaTeX"><M>S_n</M></Alt><Alt Not="LaTeX"><M>Sym(n)</M></Alt>,</Item> 
+	<Mark></Mark><Item><C>CharacterTable( "Alt(n)" )</C>, 
+	the character table of 
+	<Alt Only="LaTeX"><M>A_n</M></Alt><Alt Not="LaTeX"><M>Alt(n)</M></Alt>.</Item> 
+</List>
+Note that these are synonymous expressions for 
+<List> 
+	<Mark></Mark><Item><C>CharacterTable( 
+	"DoubleCoverSymmetric", n )</C>,</Item> 
+	<Mark></Mark><Item><C>CharacterTable( 
+	"DoubleCoverAlternating", n )</C>,</Item> 
+	<Mark></Mark><Item><C>CharacterTable( 
+	"Symmetric", n )</C>,</Item> 
+	<Mark></Mark><Item><C>CharacterTable( 
+	"Alternating", n )</C>,</Item> 
+</List>
+respectively. More detailed information on these tables is to 
+be found in <Cite Key="Noeske2002"/>.
+In this manual, we call such a character table an (ordinary)
+<E>SpinSym table</E>. 
+If <C>ordtbl</C> is an ordinary SpinSym table, the relative 
+Brauer table in 
+characteristic <C>p</C> can be accessed using the 
+<C>mod</C>-operator (i.e. <C>ordtbl mod p;</C>).
+Such a Brauer table is called a (<M>p</M>-modular) 
+<E>SpinSym table</E> in the following.
+<Log>
+<![CDATA[
+gap> ordtbl:= CharacterTable( "2.Sym(18)" );
+CharacterTable( "2.Sym(18)" )
+gap> modtbl:= ordtbl mod 3;
+BrauerTable( "2.Sym(18)", 3 )
+gap> OrdinaryCharacterTable(modtbl)=ordtbl;
+true
+]]>
+</Log>
+</Section>
+
+<Section Label="chap2:Character parameters"> 
+<Heading>Character parameters</Heading>
+An ordinary SpinSym table has character parameters, 
+that is, a list of suitable labels corresponding to the rows
+of <C>ordtbl</C> and therefore the irreducible ordinary
+characters of the underlying group.
+See <C>CharacterParameters()</C> in the GAP Reference Manual.
+
+<Subsection Label="subsec:characterparameters:ordinary">
+<Heading>Parameters of ordinary characters</Heading>
+In the following, `ordinary (spin) character' is used 
+synonymously for `irreducible ordinary (spin) character'.
+It is well known that there is a bijection between the 
+set of ordinary characters of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt>
+and the set <M>P(n)</M> of all partitions 
+of <M>n</M>. Recall that a partition of a natural number 
+<M>n</M> is a list of  non-increasing positive integers 
+(its <E>parts</E>) that sum up to <M>n</M>.
+In this way, every ordinary character <M>\chi</M> of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt> 
+has a label of the form <C>[1,c]</C> where <C>c</C> is a 
+partition of <M>n</M>.
+The labels of the ordinary characters of 
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt> 
+are induced by Clifford theory as follows.  
+Either the restriction
+<Alt Only="LaTeX"><M>\psi=\chi|_{A_n}</M></Alt>
+<Alt Not="LaTeX"><M>\psi=\chi|_{Alt(n)}</M></Alt> 
+of <M>\chi</M> to 
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt> 
+is an ordinary character of 
+<Alt Only="LaTeX"><M>A_n</M></Alt><Alt Not="LaTeX"><M>Alt(n)</M></Alt>, 
+or <M>\psi</M> decomposes as the sum of two distinct 
+ordinary characters <M>\psi_1</M> and <M>\psi_2</M>. <P/> 
+In the first case there is another 
+ordinary character of <Alt Only="LaTeX"><M>S_n</M></Alt><Alt Not="LaTeX"><M>Sym(n)</M></Alt>, 
+say <M>\xi</M> labelled by <C>[1,d]</C>, such that the 
+restriction of  <M>\xi</M> to 
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt> 
+is equal to <M>\psi</M>. Moreover, 
+the induced character of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt>
+obtained from <M>\psi</M> decomposes as the 
+sum of <M>\chi</M> and <M>\xi</M>.
+Then <M>\psi</M> is labelled by <C>[1,c]</C> or <C>[1,d]</C>.<P/>
+In the second case, both <M>\psi_1</M> and <M>\psi_2</M> induce 
+irreducibly up to <M>\chi</M>.
+Then <M>\psi_1</M> and <M>\psi_2</M> are labelled by 
+<C>[1,[c,'+']]</C> and <C>[1,[c,'-']]</C>.<P />
+
+<Log>
+<![CDATA[
+gap> ctS:= CharacterTable( "Sym(5)" );;
+gap> CharacterParameters(ctS);
+[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], 
+  [ 1, [ 3, 1, 1 ] ], [ 1, [ 3, 2 ] ], [ 1, [ 4, 1 ] ], [ 1, [ 5 ] ] ]
+gap> ctA:= CharacterTable( "Alt(5)" );;
+gap> CharacterParameters(ctA);
+[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], 
+  [ 1, [ [ 3, 1, 1 ], '+' ] ], [ 1, [ [ 3, 1, 1 ], '-' ] ] ]
+gap> chi:= Irr(ctS)[1];;
+gap> psi:= RestrictedClassFunction(chi,ctA);;           
+gap> Position(Irr(ctA),psi);    
+1
+gap> xi:= Irr(ctS)[7];;
+gap> RestrictedClassFunction(xi,ctA) = psi;
+true
+gap> InducedClassFunction(psi,ctS) = chi + xi;
+true
+gap> chi:= Irr(ctS)[4];;
+gap> psi:= RestrictedClassFunction(chi,ctA);;
+gap> psi1:= Irr(ctA)[4];; psi2:= Irr(ctA)[5];;
+gap> psi = psi1 + psi2;
+true
+gap> InducedClassFunction(psi1,ctS) = chi;              
+true
+gap> InducedClassFunction(psi2,ctS) = chi;
+true
+]]>
+</Log>
+
+If <M>\chi</M> is an ordinary character of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+or 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>, 
+then <M>\chi(z)=\chi(1)</M> or <M>\chi(z)=-\chi(1)</M>. 
+If <M>\chi(z)=\chi(1)</M>, then <M>\chi</M> is 
+obtained by inflation (along the central subgroup generated by 
+<M>z</M>) from an ordinary character of 
+<Alt Only="LaTeX"><M>S_n</M></Alt><Alt Not="LaTeX"><M>Sym(n)</M></Alt>
+or 
+<Alt Only="LaTeX"><M>A_n</M></Alt><Alt Not="LaTeX"><M>Alt(n)</M></Alt>, 
+respectively, whose label is given to <M>\chi</M>. 
+Otherwise, if <M>\chi</M> is a spin character, that is 
+<M>\chi(z)=-\chi(1)</M>, then its label is described next. <P />
+The set of ordinary spin characters of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+is parameterized by 
+the subset <M>D(n)</M> of <M>P(n)</M> of all distinct-parts 
+partitions of <M>n</M> (also called bar partitions).
+If <C>c</C> is an even distinct-parts partition of <M>n</M>, 
+then there is a unique ordinary spin character of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+that is labelled by <C>[2,c]</C>. In contrast, if <C>c</C> 
+is an odd distinct-parts partition of <M>n</M>, 
+then there are two distinct ordinary spin characters of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+that are labelled by <C>[2,[c,'+']]</C> and <C>[2,[c,'-']]</C>. 
+Now the labels of the ordinary spin characters of 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt> 
+follow from the labels of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+in the same way as those of 
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt>
+follow from the labels of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt> 
+(see the beginning of this subsection 
+<Ref Subsect="subsec:characterparameters:ordinary"/>).
+
+<Log>
+<![CDATA[
+gap> ctS:= CharacterTable( "Sym(5)" );;
+gap> ct2S:= CharacterTable( "2.Sym(5)" );;
+gap> ch:= CharacterParameters(ct2S);
+[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], 
+  [ 1, [ 3, 1, 1 ] ], [ 1, [ 3, 2 ] ], [ 1, [ 4, 1 ] ], [ 1, [ 5 ] ], 
+  [ 2, [ [ 3, 2 ], '+' ] ], [ 2, [ [ 3, 2 ], '-' ] ], 
+  [ 2, [ [ 4, 1 ], '+' ] ], [ 2, [ [ 4, 1 ], '-' ] ], [ 2, [ 5 ] ] ]
+gap> pos:= Positions( List(ch, x-> x[1]), 1 );;
+gap> RestrictedClassFunctions( Irr(ctS), ct2S ) = Irr(ct2S){pos}; #inflation
+true
+gap> ct2A:= CharacterTable( "2.Alt(5)" );;
+gap> CharacterParameters(ct2A);
+[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], 
+  [ 1, [ [ 3, 1, 1 ], '+' ] ], [ 1, [ [ 3, 1, 1 ], '-' ] ], [ 2, [ 3, 2 ] ], 
+  [ 2, [ 4, 1 ] ], [ 2, [ [ 5 ], '+' ] ], [ 2, [ [ 5 ], '-' ] ] ]
+]]>
+</Log>
+
+</Subsection>
+
+<Subsection Label="subsec:characterparameters:modular">
+<Heading>Parameters of modular characters</Heading>
+In the following, `<M>p</M>-modular (spin) character' 
+is used synonymously for `irreducible <M>p</M>-modular (spin) 
+character'. The set of <M>p</M>-modular characters of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt>
+is parameterized by the set of all <M>p</M>-regular partitions 
+of <M>n</M>. A partition is <M>p</M>-regular
+if no part is repeated more than <M>p-1</M> times.
+Now every <M>p</M>-modular character <M>\chi</M> of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt> 
+has a label of the form <C>[1,c]</C> where <C>c</C> is a 
+<M>p</M>-regular partition of <M>n</M>. <P />
+Again, the labels for the <M>p</M>-modular spin characters of
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt> 
+follow from the labels of 
+<Alt Only="LaTeX"><M>S_n</M></Alt><Alt Not="LaTeX"><M>Sym(n)</M></Alt>.
+However, comparing subsection 
+<Ref Subsect="subsec:characterparameters:ordinary"/>, 
+their format is slightly different. <P/>
+If <M>\chi</M> and <M>\xi</M> are distinct 
+<M>p</M>-modular characters of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt> 
+that restrict to the same <M>p</M>-modular character 
+<M>\psi</M> of
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt>, 
+then <M>\psi</M> is labelled by <C>[1,[c,'0']]</C> 
+where either <M>\chi</M> or <M>\xi</M> 
+is labelled by <C>[1,c]</C>. 
+If <M>\chi</M> is a <M>p</M>-modular character of 
+<Alt Only="LaTeX"><M>S_n</M></Alt><Alt Not="LaTeX"><M>Sym(n)</M></Alt> 
+whose restriction to 
+<Alt Only="LaTeX"><M>A_n</M></Alt><Alt Not="LaTeX"><M>Alt(n)</M></Alt> 
+decomposes as the sum of two distinct 
+<M>p</M>-modular characters, then these are labelled by 
+<C>[1,[c,'+']]</C> and <C>[1,[c,'-']]</C> where <M>\chi</M>
+is labelled by <C>[1,c]</C>. <P/>
+
+As in the ordinary case, the set of <M>p</M>-modular 
+characters of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+is the union of the subset
+consisting of all inflated <M>p</M>-modular characters of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt>
+and the subset of spin characters 
+characterized by negative integer values on the central element 
+<M>z</M>. The analogue statement holds for 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt><Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>.
+The set of <M>p</M>-modular spin characters of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+is parameterized by the set of all restricted <M>p</M>-strict 
+partitions of <M>n</M>. 
+A partition is called <M>p</M>-strict if every repeated part 
+is divisible by <M>p</M>, and a <M>p</M>-strict partition 
+<M>\lambda</M> is restricted if  
+<M>\lambda_i-\lambda_{i+1}&lt;p</M> whenever <M>\lambda_i</M> 
+is divisible <M>p</M>, and 
+<M>\lambda_i-\lambda_{i+1}\leq p</M> otherwise for all parts 
+<M>\lambda_i</M> of 
+<M>\lambda</M> (where we set <M>\lambda_{i+1}=0</M> if 
+<M>\lambda_i</M> is the last part).
+If <C>c</C> is a restricted <M>p</M>-strict partition of <M>n</M> 
+such that <M>n</M> minus the number of parts not divisible by 
+<M>p</M> is even, then there is a unique 
+<M>p</M>-modular spin character of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+that is labelled by 
+<C>[2,[c,'0']]</C>. Its restriction to 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt> 
+decomposes as the sum 
+of two distinct <M>p</M>-modular characters which are labelled by 
+<C>[2,[c,'+']]</C> and <C>[2,[c,'-']]</C>. 
+If <M>n</M> minus the number of parts of <C>c</C> that are not 
+divisible by <M>p</M> is odd, 
+then there are two distinct <M>p</M>-modular spin characters of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+that are labelled by 
+<C>[2,[c,'+']]</C> and <C>[2,[c,'-']]</C>. 
+Both of these characters restrict to the same irreducible 
+<M>p</M>-modular spin character of 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt> 
+which is labelled by 
+<C>[2,[c,'0']]</C>.
+<Log>
+<![CDATA[
+gap> ctS:= CharacterTable( "Sym(5)" ) mod 3;;
+gap> ct2S:= CharacterTable( "2.Sym(5)" ) mod 3;;
+gap> ch:= CharacterParameters(ct2S);
+[ [ 1, [ 5 ] ], [ 1, [ 4, 1 ] ], [ 1, [ 3, 2 ] ], 
+  [ 1, [ 3, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], 
+  [ 2, [ [ 4, 1 ], '+' ] ], [ 2, [ [ 4, 1 ], '-' ] ], 
+  [ 2, [ [ 3, 2 ], '0' ] ] ]
+gap> pos:= Positions( List(ch, x-> x[1]), 1 );;
+gap> RestrictedClassFunctions( Irr(ctS), ct2S ) = Irr(ct2S){pos}; #inflation
+true
+gap> ct2A:= CharacterTable( "2.Alt(5)" ) mod 3;;
+gap> CharacterParameters(ct2A);
+[ [ 1, [ [ 5 ], '0' ] ], [ 1, [ [ 4, 1 ], '0' ] ], 
+  [ 1, [ [ 3, 1, 1 ], '+' ] ], [ 1, [ [ 3, 1, 1 ], '-' ] ], 
+  [ 2, [ [ 4, 1 ], '0' ] ], [ 2, [ [ 3, 2 ], '+' ] ], [ 2, [ [ 3, 2 ], '-' ] ] ]
+]]>
+</Log>
+</Subsection>
+</Section>
+
+
+<Section Label="chap2:Class parameters"> 
+<Heading>Class parameters</Heading>
+
+Let <C>ct</C> be an ordinary SpinSym table. Then <C>ct</C> 
+has a list of class parameters, that is, a list of suitable 
+labels corresponding to the columns of <C>ct</C> and therefore 
+the conjugacy classes of the underlying group. 
+See <C>ClassParameters()</C> in the GAP Reference Manual. 
+If <C>bt</C> is a Brauer table in characteristic <M>p</M> 
+relative to <C>ct</C>, its class parameters are inherited from
+<C>ct</C> in correspondence with the <M>p</M>-regular conjugacy 
+classes of the underlying group.<P/> 
+Let <M>P(n)</M> denote the set of partitions of <M>n</M>.<P/>
+The conjugacy classes of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt>
+are naturally parameterized by the cycle types of 
+their elements, and each cycle type corresponds to a partition 
+of <M>n</M>. Therefore a conjugacy class <M>C</M> of 
+<Alt Only="LaTeX"><M>S_n</M></Alt>
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt> 
+is characterized by its <E>type</E> 
+<Alt Only="LaTeX"><M>c\in P(n)</M></Alt><Alt Not="LaTeX"><M>c</M> in <M>P(n)</M></Alt>. 
+The corresponding entry in the list of 
+class parameters is <C>[1,c]</C>.
+Assume that <Alt Only="LaTeX"><M>C\subset A_n</M></Alt>
+<Alt Not="LaTeX"><M>C</M> is a subset of <M>Alt(n)</M></Alt>.
+Then <M>C</M> is also a conjugacy class of 
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt> 
+if and only if not all
+parts of  <M>c</M> are odd and pairwise distinct. Otherwise, 
+<M>C</M> splits as the union of two distinct 
+<Alt Only="LaTeX"><M>A_n</M></Alt>
+<Alt Not="LaTeX"><M>Alt(n)</M></Alt>-classes of the same size, 
+<M>C^+</M> of type  <M>c^+</M> and 
+<M>C^-</M> of type  <M>c^-</M>. The corresponding entries 
+in the list of class parameters are <C>[1,[c,'+']]</C> and 
+<C>[1,[c,'-']]</C>, respectively.<P/>
+Furthermore, 
+<Alt Not="LaTeX">the preimage <M>C'=C^{{\pi^-1}}</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{C}=C^{\pi^{-1}}\subset\tilde{S}_n</M></Alt>
+is either a conjugacy class of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+of type <M>c</M> with
+class parameter <C>[1,c]</C>, or 
+<Alt Not="LaTeX"><M>C'</M></Alt><Alt Only="LaTeX"><M>\tilde{C}</M></Alt>  
+splits as the union of two distinct  
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>-classes 
+<Alt Not="LaTeX"><M>C'_1</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{C}_1</M></Alt>  
+and <Alt Not="LaTeX"><M>C'_2=zC'_1</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{C}_2=z\tilde{C}_1</M></Alt>, 
+both of type <M>c</M> with corresponding  
+class parameters <C>[1,c]</C> and <C>[2,c]</C>, respectively.
+An analogous description applies for the conjugacy classes of 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>. 
+
+<Log>
+<![CDATA[
+gap> ct:= CharacterTable( "Sym(3)" );;  
+gap> ClassParameters(ct);
+[ [ 1, [ 1, 1, 1 ] ], [ 1, [ 2, 1 ] ], [ 1, [ 3 ] ] ]
+gap> ct:= CharacterTable( "Alt(3)" );;  
+gap> ClassParameters(ct);
+[ [ 1, [ 1, 1, 1 ] ], [ 1, [ [ 3 ], '+' ] ], [ 1, [ [ 3 ], '-' ] ] ]
+gap> ct:= CharacterTable( "2.Sym(3)" );;
+gap> ClassParameters(ct);
+[ [ 1, [ 1, 1, 1 ] ], [ 2, [ 1, 1, 1 ] ], [ 1, [ 2, 1 ] ], [ 2, [ 2, 1 ] ], 
+  [ 1, [ 3 ] ], [ 2, [ 3 ] ] ]
+gap> ct:= CharacterTable( "2.Alt(3)" );;
+gap> ClassParameters(ct);
+[ [ 1, [ 1, 1, 1 ] ], [ 2, [ 1, 1, 1 ] ], 
+  [ 1, [ [ 3 ], '+' ] ], [ 2, [ [ 3 ], '+' ] ], 
+  [ 1, [ [ 3 ], '-' ] ], [ 2, [ [ 3 ], '-' ] ] ]
+]]>
+</Log>
+
+To each conjugacy class of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+or 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt> 
+a certain standard representative is assigned in the 
+following way. Let <M>c=[c_1,c_2,\ldots,c_m]</M> be a partition 
+of <M>n</M>. We set <M>d_1=0</M>, 
+<M>d_i=c_1+\ldots +c_{i-1}</M> for <M>i\geq 2</M>, and 
+<Display Mode="M">t(c_i,d_i)= t_{d_i+1}t_{d_i+2}\ldots t_{d_i+c_i-1}</Display>
+for <M>1\leq i\leq m-1</M>, where <M>t(c_i,d_i)= 1</M> if 
+<M>c_i=1</M>. The <E>standard representative of type</E> 
+<M>c</M> is defined as
+<Alt Only="LaTeX"><Display Mode="M">t_c=t(c_1,d_1)t(c_2,d_2)\cdots t(c_{m-1},d_{m-1}).</Display></Alt> 
+<Alt Not="LaTeX"><Display Mode="M">t_c=t(c_1,d_1)t(c_2,d_2)...t(c_{m-1},d_{m-1}).</Display></Alt> 
+Furthermore, we define the standard representatives of type 
+<M>c^+=</M><C>[c,'+']</C> and <M>c^-=</M><C>[c,'-']</C> to be 
+<M>t_{c^+}=t_{c}</M> and 
+<M>t_{c^-}=t_1^{-1}t_c t_1 </M>, respectively. <P/>
+For example, the standard representative of type 
+<Alt Only="LaTeX"><M>c=[7,4,3,1]\in P(15)</M></Alt>
+<Alt Not="LaTeX"><M>c=[7,4,3,1]</M> in <M>P(15)</M></Alt>
+is <Display Mode="M">t_c=t_1t_2t_3t_4t_5t_6t_8t_9t_{10}t_{12}t_{13}.</Display>
+Now <Alt Not="LaTeX"><M>C'</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{C}</M></Alt>
+is a conjugacy class of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+or <Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>  
+with parameter 
+<List>
+	<Mark></Mark><Item><C>[1,c]</C> if and only if 
+	<Alt Not="LaTeX"><M>t_c </M> is an element of <M>C'</M></Alt>
+	<Alt Only="LaTeX"><M>t_c\in\tilde{C}</M></Alt>,</Item>
+	<Mark></Mark><Item><C>[2,c]</C> if and only if 
+		<Alt Not="LaTeX"><M>zt_c</M> is an element of <M>C'</M></Alt>
+		<Alt Only="LaTeX"><M>zt_c\in\tilde{C}</M></Alt>,</Item>
+	<Mark></Mark><Item><C>[1,[c,'+']]</C> if and only if 
+	<Alt Not="LaTeX"><M>t_{c^+}</M> is an element of <M>C'</M></Alt>
+	<Alt Only="LaTeX"><M>t_{c^+}\in\tilde{C}</M></Alt>,</Item>
+	<Mark></Mark><Item><C>[2,[c,'+']]</C> if and only if 
+	<Alt Not="LaTeX"><M>zt_{c^+}</M> is an element of <M>C'</M></Alt>
+	<Alt Only="LaTeX"><M>zt_{c^+}\in\tilde{C}</M></Alt>,</Item>
+	<Mark></Mark><Item><C>[1,[c,'-']]</C> if and only if 
+	<Alt Not="LaTeX"><M>t_{c^-}</M> is an element of <M>C'</M></Alt>
+	<Alt Only="LaTeX"><M>t_{c^-}\in\tilde{C}</M></Alt>,</Item>
+	<Mark></Mark><Item><C>[2,[c,'-']]</C> if and only if 
+	<Alt Not="LaTeX"><M>zt_{c^-}</M> is an element of <M>C'</M></Alt>
+	<Alt Only="LaTeX"><M>zt_{c^-}\in\tilde{C}</M></Alt>.</Item>
+</List>
+
+<ManSection>
+<Func Name="SpinSymStandardRepresentative" Arg="c,rep"
+Comm="computes the standard representative of type c under 
+			a given representation"/>
+<Returns>the image of the standard representative of type <A>c</A> under 
+a given
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>-representation.
+</Returns>
+<Description>
+Expecting the second entry of a class parameter of
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+or 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>, say <A>c</A>,
+the standard representative of type <A>c</A> under a given 
+representation of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> is computed.
+The argument <A>rep</A> is assumed to be a list 
+<M>[t_1^R,t_2^R,\ldots,t_{n-1}^R]</M>
+given by the images of the generators 
+<M>t_1,\ldots,t_{n-1}</M> of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+under a (not necessarily faithful)
+representation <M>R</M> of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> ct:= CharacterTable("2.Sym(15)") mod 5;;
+gap> cl:= ClassParameters(ct)[99];
+[ 1, [ 7, 4, 3, 1 ] ]
+gap> c:= cl[2];;
+gap> rep:= BasicSpinRepresentationOfSymmetricGroup(15,5);;
+gap> t:= SpinSymStandardRepresentative(c,rep); 
+< immutable compressed matrix 64x64 over GF(25) >
+gap> OrdersClassRepresentatives(ct)[99];
+168
+gap> Order(t);
+168
+gap> BrauerCharacterValue(t);
+0
+]]>
+</Log>
+ 
+<ManSection>
+<Func Name="SpinSymStandardRepresentativeImage" Arg="c[,j]"
+Comm="computes the canonical image of the standard 
+			representative of type c"/>
+<Returns>the image of the standard representative of type 
+<A>c</A> under the natural epimorphism 
+<Alt Only="LaTeX"><M>\pi:\tilde{S}_{\{j,\ldots,j+n-1\}}\to S_{\{j,\ldots,j+n-1\}}</M></Alt>
+<Alt Not="LaTeX"><M>\pi:2.Sym({{j,...,j+n-1}}) \to Sym({{j,...,j+n-1}})</M></Alt>.</Returns>
+<Description> 
+Given the second entry <A>c</A> of a class parameter of
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+or 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>,
+and optionally a positive integer <A>j</A>,
+the image of the standard representative of type <A>c</A> under 
+<Alt Only="LaTeX"><M>\pi:\tilde{S}_{\{j,\ldots,j+n-1\}}\to S_{\{j,\ldots,j+n-1\}}</M></Alt>
+<Alt Not="LaTeX"><M>\pi:2.Sym({{j,...,j+n-1}}) \to Sym({{j,...,j+n-1}})</M></Alt> with 
+<M>t_i^\pi=(i,i+1)</M> for <M>j\leq i\leq j+n-2</M>
+ is computed by calling 
+<K>SpinSymStandardRepresentative(c,rep)</K> where 
+<C>rep</C> is the list
+<C>[(j,j+1),(j+1,j+2),...,(j+n-2,j+n-1)]</C>. 
+By default, <C>j=1</C>.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> s1:= SpinSymStandardRepresentativeImage([7,4,3,1]);         
+(1,7,6,5,4,3,2)(8,11,10,9)(12,14,13)
+gap> s2:= SpinSymStandardRepresentativeImage([[7,4,3,1],'-']);
+(1,2,7,6,5,4,3)(8,11,10,9)(12,14,13)
+gap> s2 = s1^(1,2);
+true
+gap> SpinSymStandardRepresentativeImage([7,4,3,1],3);       
+(3,9,8,7,6,5,4)(10,13,12,11)(14,16,15)
+]]>
+</Log>
+
+<ManSection>
+<Func Name="SpinSymPreimage" Arg="c,rep"
+Comm="computes a (standard) lift of c under a given representation"/>
+<Returns>a (standard) lift of the element <A>c</A> of 
+<Alt Not="LaTeX"><M>Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>S_n</M></Alt> in 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+under a given
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>-representation.
+</Returns>
+<Description>See <Cite Key="Maas2011" Where="(5.1.12)"/> for the 
+definition of the lift that is returned by this function.
+The permutation <A>c</A> is written as a product of simple 
+transpositions <M>(i,i+1)</M>, then these are replaced by 
+the images of their canonical lifts <M>t_i</M> under a given
+representation <M>R</M> of <Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt> (recall the beginning of Chapter 
+<Ref Chap="chap1"/> for the definition of <M>t_i</M>). 
+Here <A>rep</A> is assumed to be the list 
+<M>[t_1^R,t_2^R,\ldots,t_{n-1}^R]</M>. <P/>
+Note that a more efficient computation may be achieved by 
+computing and storing a list of all necessary transpositions once and for all, 
+before lifting (many) elements (under a possibly large representation).
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> rep:= BasicSpinRepresentationOfSymmetricGroup(15);;
+gap> c:= SpinSymStandardRepresentativeImage([5,4,3,2,1]);
+(1,5,4,3,2)(6,9,8,7)(10,12,11)(13,14)
+gap> C:= SpinSymPreimage(c,rep);
+< immutable compressed matrix 64x64 over GF(9) >
+gap> C = SpinSymStandardRepresentative([5,4,3,2,1],rep);
+true
+]]>
+</Log>
+
+<ManSection>
+<Func Name="SpinSymBrauerCharacter" Arg="ccl, ords, rep"
+Comm="computes the Brauer character of a given representation"/>
+<Returns>the Brauer character afforded by a given representation 
+of <Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>. 
+</Returns>
+<Description>
+This function is based on a simplified computation of the &GAP; attribute 
+<C>BrauerCharacterValue(mat)</C> for an invertible matrix <C>mat</C> 
+over a finite field whose characteristic is coprime to the order of
+<C>mat</C>. <P/>
+The arguments <A>ccl</A> and <A>ords</A> are expected to 
+be the values of the attributes <C>ClassParameters(modtbl)</C> and 
+<C>OrdersClassRepresentatives(modtbl)</C> of a (possibly incomplete)  
+<M>p</M>-modular SpinSym table <C>modtbl</C> of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>.<P/> 
+The argument <A>rep</A> is assumed to be a list 
+<M>[t_1^R,t_2^R,\ldots,t_{n-1}^R]</M>
+given by the images of the generators 
+<M>t_1,\ldots,t_{n-1}</M> of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+under a (not necessarily faithful)
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>-representation <M>R</M>.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> ct:= CharacterTable("DoubleCoverSymmetric",15);;
+gap> bt:= CharacterTableRegular(ct,5);;
+gap> fus:= GetFusionMap(bt,ct);;
+gap> ccl:= ClassParameters(ct){fus};;
+gap> ords:= OrdersClassRepresentatives(bt);;
+gap> rep:= BasicSpinRepresentationOfSymmetricGroup(15,5);;
+gap> phi:= SpinSymBrauerCharacter(ccl,ords,rep);;
+gap> phi in Irr(ct mod 5);
+true
+]]>
+</Log>
+
+<ManSection>
+<Func Name="SpinSymBasicCharacter" Arg="modtbl"
+Comm="computes a basic spin character of modtbl"/>
+<Returns>a <M>p</M>-modular basic spin character of the 
+(possibly incomplete) <M>p</M>-modular SpinSym table  <A>modtbl</A> of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>.
+</Returns>
+<Description>
+This is just a shortcut for constructing a basic spin representation of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> in characteristic <M>p</M> 
+and computing its Brauer character by calling 
+<Ref Func="SpinSymBrauerCharacter"/> afterwards.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[ 
+gap> SetClassParameters(bt,ccl);
+gap> SpinSymBasicCharacter(bt) = phi;
+true
+]]>
+</Log>
+
+</Section> 
+
+<Section Label="sec:youngsubgroups">
+<Heading>Young subgroups</Heading>
+Let <M>k</M> and <M>l</M> be integers greater than 
+<M>1</M> and set <M>n=k+l</M>.
+The following subgroup of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>,
+<Alt Only="LaTeX"><Display Mode="M">\tilde{S}_{k,l} = 
+\langle t_1,\ldots,t_{k-1}, t_{k+1},\ldots,t_{n-1}\rangle,</Display></Alt>
+<Alt Not="LaTeX"><Display Mode="M">2.(Sym(k){\times}Sym(l)) = 
+&lt; t_1,...,t_{k-1}, t_{k+1},...,t_{n-1} &gt;,</Display></Alt>
+is called a (maximal) <E>Young subgroup</E> of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>. 
+Similarly, 
+<Alt Only="LaTeX"><M>\tilde{A}_{k,l}=\tilde{S}_{k,l}\cap\tilde{A}_{n}</M></Alt> 
+<Alt Not="LaTeX">the intersection <M>2.(Alt(k){\times}Alt(l))</M> 
+of <M>2.(Sym(k){\times}Sym(l))</M> and <M>2.Alt(n)</M></Alt> is
+a (maximal) Young subgroup of 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>. 
+Note that 
+<Alt Only="LaTeX"><M>(\tilde{S}_{k,l})^\pi \cong S_k\times S_{l}</M></Alt>
+<Alt Not="LaTeX"><M>(2.(Sym(k){\times}Sym(l)))^\pi</M> 
+is isomorphic to <M>Sym(k){\times}Sym(l)</M></Alt> and
+<Alt Only="LaTeX"><M>(\tilde{A}_{k,l})^\pi \cong A_k\times A_{l}</M></Alt>
+<Alt Not="LaTeX"><M>(2.(Alt(k){\times}Alt(l)))^\pi</M> 
+is isomorphic to <M> Alt(k){\times}Alt(l)</M></Alt> but only
+<Alt Only="LaTeX"><M>\tilde{A}_{k,l}\cong (\tilde{A}_k\times\tilde{A}_{l})/\langle(z,z)\rangle</M></Alt>
+<Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M> 
+which is isomorphic to 
+<M>(2.Alt(k){\times}2.Alt(l))/ &lt;(z,z)&gt;</M></Alt>
+is a central product. 
+In between 
+<Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+<Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt> 
+and 
+<Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt>
+<Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt> 
+there are further central products 
+<Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_{l}\cong 
+(\tilde{S}_k\times\tilde{A}_{l})/\langle(z,z)\rangle</M></Alt>
+<Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M> which is isomorphic to
+<M>(2.Sym(k){\times}2.Alt(l))/&lt;(z,z)&gt;</M></Alt>
+and <Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_{l}\cong 
+(\tilde{A}_k\times\tilde{S}_{l})/\langle(z,z)\rangle</M></Alt>
+<Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l)) </M> which is isomorphic to
+<M>(2.Alt(k){\times}2.Sym(l))/&lt;(z,z)&gt;</M></Alt>
+which are <M>\pi</M>-preimages of 
+<Alt Only="LaTeX"><M>S_k\times A_{l}</M></Alt>
+<Alt Not="LaTeX"><M>Sym(k){\times}Alt(l)</M></Alt> and 
+<Alt Only="LaTeX"><M>A_k\times S_{l}</M></Alt> 
+<Alt Not="LaTeX"><M>Alt(k){\times}Sym(l)</M></Alt>, respectively. 
+See <Cite Key="Maas2011" Where="Section 5.2"/>.
+
+<ManSection>
+<Func Name="SpinSymCharacterTableOfMaximalYoungSubgroup" 
+			Arg="k, l, type"
+Comm="computes the character table of a maximal Young subgroup"/>
+<Returns>the ordinary character table of a maximal Young subgroup 
+depending on <A>type</A>.</Returns>
+
+<Description> 
+For integers <A>k</A> and <A>l</A> greater than <M>1</M> 
+the function returns the ordinary character table of 
+<Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt>, 
+<Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt><Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt>, 
+<Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt>, or
+<Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt>	
+depending on the string <A>type</A> being 
+<C>"Alternating"</C>,
+<C>"AlternatingSymmetric"</C>,
+<C>"SymmetricAlternating"</C>, or
+<C>"Symmetric"</C>, respectively.<P/>
+
+If <A>type</A> is <C>"Symmetric"</C> then the output
+is computed by means of Clifford's theory from the character 
+tables of  
+		<Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt>,
+		<Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt>, and 
+		<Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt><Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt> 
+(see <Cite Key="Maas2011" Where="Section 5.2"/>). 
+These `ingredients' are computed and then stored in the 
+attribute <C>SpinSymIngredients</C> so they can be accessed during 
+the construction (and for the construction of a relative 
+Brauer table too, see 
+<Ref Func="SpinSymBrauerTableOfMaximalYoungSubgroup"/>). <P/>
+The construction of the character tables of <A>type</A> 
+<C>"Alternating"</C>,
+<C>"AlternatingSymmetric"</C>, or
+<C>"SymmetricAlternating"</C> is straightforward and may be 
+accomplished by first construcing a direct product, 
+for example, the character table of 
+<Alt Only="LaTeX"><M>\tilde{S}_k\times\tilde{A}_{l}</M></Alt><Alt Not="LaTeX"><M>2.Sym(k){\times}2.Alt(l)</M></Alt>, 
+followed by the construction of the character table of the
+factor group mod 
+<Alt Only="LaTeX"><M>\langle(z,z)\rangle</M></Alt><Alt Not="LaTeX"><M>&lt;(z,z)&gt;</M></Alt>.<P/> 
+However, we use a faster method that builds up the table from 
+scratch, using the appropriate component tables as ingredients 
+(for example, the generic character tables of 
+<Alt Not="LaTeX"><M>2.Sym(k)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_k</M></Alt>
+and 
+<Alt Not="LaTeX"><M>2.Alt(l)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_l</M></Alt>). 
+In this way we can easily build up a suitable list of 
+class parameters that are needed to determine the class fusion 
+in the construction of <A>type</A> 
+<C>"Symmetric"</C>.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> 2AA:= SpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"Alternating"); 
+CharacterTable( "2.(Alt(8)xAlt(5))" )
+gap> SpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"AlternatingSymmetric");
+CharacterTable( "2.(Alt(8)xSym(5))" )
+gap> SpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"SymmetricAlternating");     
+CharacterTable( "2.(Sym(8)xAlt(5))" )
+gap> 2SS:= SpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"Symmetric");           
+CharacterTable( "2.(Sym(8)xSym(5))" )
+]]>
+</Log>
+
+
+<ManSection>
+<Func Name="SpinSymBrauerTableOfMaximalYoungSubgroup" 
+			Arg="ordtbl, p"
+Comm="computes the Brauer table of a maximal Young subgroup"/>
+<Returns>the <A>p</A>-modular character table of 
+the ordinary character table <A>ordtbl</A>
+returned by the function
+<Ref Func="SpinSymCharacterTableOfMaximalYoungSubgroup"/>.
+</Returns>
+<Description> 
+If the rational prime <A>p</A> is odd, then the construction of the irreducible 
+Brauer characters is really the same as in the ordinary case 
+but it depends on the <A>p</A>-modular tables of 
+of <A>ordtbl</A>'s `ingredients'. 
+If some Brauer table that is 
+necessary for the construction is not available then 
+<C>fail</C> is returned. <P/>
+Alternatively, the <C>mod</C>-operator may be used.<P/> 
+For <A>p</A> <M>=2</M> the Brauer table is essentially 
+constructed as a direct product by standard &GAP; methods written by Thomas Breuer.
+</Description>
+</ManSection>
+
+We call a character table returned by 
+<Ref Func="SpinSymCharacterTableOfMaximalYoungSubgroup"/> or 
+<Ref Func="SpinSymBrauerTableOfMaximalYoungSubgroup"/>
+a SpinSym table too. It has lists of class and 
+character parameters whose format 
+is explained in <Cite Key="Maas2011" Where="Sections 5.2, 5.3"/>.
+</Section>
+
+<Log>
+<![CDATA[
+gap> SpinSymBrauerTableOfMaximalYoungSubgroup(2AA,3);
+BrauerTable( "2.(Alt(8)xAlt(5))", 3 )
+gap> 2SS mod 5;
+BrauerTable( "2.(Sym(8)xSym(5))", 5 )
+gap> ct:= 2SS mod 2;  
+BrauerTable( "2.(Sym(8)xSym(5))", 2 )
+gap> ct1:= CharacterTable("Sym(8)") mod 2;;
+gap> ct2:= CharacterTable("Sym(5)") mod 2;;     
+gap> Irr(ct1*ct2) = Irr(ct);
+true
+]]>
+</Log>
+
+<Section Label="sec:classfusions">
+<Heading>Class Fusions</Heading>
+The following functions determine class fusion maps between 
+SpinSym tables by means of their class parameters. 
+Such `default' class fusion maps allow to induce 
+characters from various subgroups of 
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt> 
+or 
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+consistently. 
+
+<ManSection>
+<Func Name="SpinSymClassFusion" Arg="ctSource,ctDest"
+			Comm="computes the class fusion map between SpinSym tables"/>
+<Returns>a fusion map from the SpinSym table <A>ctSource</A> 
+to the SpinSym table <A>ctDest</A>. This map is
+stored if there is no other fusion map from 
+<A>ctSource</A> to <A>ctDest</A> stored yet.</Returns>
+<Description> 
+The possible input tables are expected to be 
+either ordinary or <M>p</M>-modular SpinSym tables 
+of the following pairs of groups 
+<Table Align="ccc"> 
+<Row> <Item>Source</Item><Item><M>\to</M></Item><Item>Dest</Item></Row>
+
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+						<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt></Item><Item></Item>
+			<Item><Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+						<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt></Item></Row> 
+						
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{S}_k</M></Alt>
+						<Alt Not="LaTeX"><M>2.Sym(k)</M></Alt></Item><Item></Item>
+						<Item><Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+						<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt></Item> </Row>
+						
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{A}_k</M></Alt>
+						<Alt Not="LaTeX"><M>2.Alt(k)</M></Alt></Item><Item></Item>
+						<Item><Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+						<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt></Item> </Row> 
+						
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{S}_{n-2}</M></Alt>
+						<Alt Not="LaTeX"><M>2.Sym(n-2)</M></Alt></Item><Item></Item>
+						<Item><Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+						<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt></Item></Row> 
+						
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt></Item><Item></Item>
+						<Item><Alt Only="LaTeX"><M>\tilde{S}_{k+l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.Sym(k+l)</M></Alt></Item> </Row> 
+						
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt> 
+		<Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt></Item><Item></Item>
+		<Item><Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt></Item> </Row> 
+						
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt> 
+		<Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt></Item><Item></Item>
+		<Item><Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt></Item> </Row> 
+						
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt></Item><Item></Item>
+						<Item><Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt> 
+		<Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt></Item> </Row> 
+		
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt></Item><Item></Item>
+						<Item><Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt> 
+		<Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt></Item> </Row> 
+		
+<Row> <Item><Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt></Item><Item></Item>
+						<Item><Alt Only="LaTeX"><M>\tilde{A}_{k+l}</M></Alt>
+						<Alt Not="LaTeX"><M>2.Alt(k+l)</M></Alt></Item> </Row> 
+						
+ </Table>
+ 
+The appropriate function (see the descriptions below) is called to determine 
+the fusion map <C>fus</C>. If 
+<C>GetFusionMap(ctSource, ctDest)</C> fails, then 
+<C>fus</C> is stored by calling 
+<C>StoreFusion(ctSource, fus, ctDest)</C>.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> ctD:= CharacterTable("2.Sym(18)");;                                  
+gap> ctS:= SpinSymCharacterTableOfMaximalYoungSubgroup(10,8,"Symmetric");;
+gap> GetFusionMap(ctS,ctD);
+fail
+gap> SpinSymClassFusion(ctS,ctD);;
+#I SpinSymClassFusion: stored fusion map from 2.(Sym(10)xSym(8)) to 2.Sym(18)
+gap> GetFusionMap(ctS,ctD) <> fail;
+true
+]]>
+</Log>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2Ain2S" Arg="cclSource, cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt> 
+and 
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt><Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>.</Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt> and 
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt><Alt Not="LaTeX"><M>2.Sym(n)</M></Alt>, 
+respectively, a corresponding class fusion map is determined. 
+See <Cite Key="Maas2011" Where="(5.4.1)"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2Sin2S" Arg="cclSource, cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{S}_k</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(k)</M></Alt> 
+and 
+<Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt> 
+for <M>k\leq n</M>.</Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{S}_k</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(k)</M></Alt> 
+and <Alt Only="LaTeX"><M>\tilde{S}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(n)</M></Alt> for <M>k\leq n</M>, 
+respectively, a corresponding class fusion map is determined. 
+See <Cite Key="Maas2011" Where="(5.4.2)"/>.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> ctD:= CharacterTable("2.Sym(18)");;
+gap> ctS:= CharacterTable("2.Sym(6)");;
+gap> cclD:= ClassParameters(ctD);;
+gap> cclS:= ClassParameters(ctS);;
+gap> fus:= SpinSymClassFusion2Sin2S(cclS,cclD);;
+gap> StoreFusion(ctS,fus,ctD);
+]]>
+</Log>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2Ain2A" Arg="cclSource, cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{A}_k</M></Alt>
+<Alt Not="LaTeX"><M>2.Alt(k)</M></Alt>
+and 
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>  
+for <M>k\leq n</M>.</Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{A}_k</M></Alt>
+<Alt Not="LaTeX"><M>2.Alt(k)</M></Alt>
+and <Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt> 
+for <M>k\leq n</M>, 
+respectively, a corresponding class fusion map is determined. 
+See <Cite Key="Maas2011" Where="(5.4.3)"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2Sin2A" Arg="cclSource,cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{S}_{n-2}</M></Alt>
+<Alt Not="LaTeX"><M>2.Sym(n-2)</M></Alt>
+and 
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt><Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>.
+</Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{S}_{n-2}</M></Alt>
+ <Alt Not="LaTeX"><M>2.Sym(n-2)</M></Alt>
+and <Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt><Alt Not="LaTeX"><M>2.Alt(n)</M></Alt>, 
+respectively, a corresponding class fusion map with respect 
+to the embedding of 
+<Alt Only="LaTeX"><M>\langle t_1t_{n-2},\ldots,t_{n-3}t_{n-1}\rangle\cong\tilde{S}_{n-2}</M></Alt>
+<Alt Not="LaTeX"><M>&lt; t_1t_{n-2},\ldots,t_{n-3}t_{n-1} &gt;</M> isomorphic to <M>2.Sym(n-2)</M></Alt> 
+in 
+<Alt Only="LaTeX"><M>\tilde{A}_n</M></Alt>
+<Alt Not="LaTeX"><M>2.Alt(n)</M></Alt> is determined. 
+See <Cite Key="Maas2011" Where="(5.4.4)"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2SSin2S" Arg="cclSource,cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt> 
+ and <Alt Only="LaTeX"><M>\tilde{S}_{k+l}</M></Alt><Alt Not="LaTeX"><M>2.Sym(k+l)</M></Alt>. 
+ </Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt> 
+ and <Alt Only="LaTeX"><M>\tilde{S}_{k+l}</M></Alt><Alt Not="LaTeX"><M>2.Sym(k+l)</M></Alt>, 
+respectively, 
+a corresponding class fusion map is determined by means of
+<Cite Key="Maas2011" Where="(5.1.6)"/>.
+</Description>
+</ManSection>
+
+<Log>
+<![CDATA[
+gap> ctD:= CharacterTable("2.Sym(18)");;                                  
+gap> ctS:= SpinSymCharacterTableOfMaximalYoungSubgroup(10,8,"Symmetric");;
+gap> cclD:= ClassParameters(ctD);;
+gap> cclS:= ClassParameters(ctS);;
+gap> fus:= SpinSymClassFusion2SSin2S(cclS,cclD);;
+gap> StoreFusion(ctS,fus,ctD);
+]]>
+</Log>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2SAin2SS" Arg="cclSource,cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of
+ <Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt>
+and 
+<Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt>. 
+</Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt> 
+ and 
+ <Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt>, 
+respectively, 
+a corresponding class fusion map is determined.
+See <Cite Key="Maas2011" Where="(5.4.6)"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2ASin2SS" Arg="cclSource,cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt>
+and 
+<Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt>. </Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt> 
+ and 
+ <Alt Only="LaTeX"><M>\tilde{S}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Sym(l))</M></Alt>, 
+respectively, 
+a corresponding class fusion map is determined analogously to 
+<Cite Key="Maas2011" Where="(5.4.6)"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2AAin2SA" Arg="cclSource,cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt>
+and 
+<Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt>. </Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> 
+and <A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+<Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt> 
+and 
+<Alt Only="LaTeX"><M>\tilde{S}_k\circ\tilde{A}_l</M></Alt><Alt Not="LaTeX"><M>2.(Sym(k){\times}Alt(l))</M></Alt>, 
+respectively, 
+a corresponding class fusion map is determined. 
+See <Cite Key="Maas2011" Where="(5.4.7)"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2AAin2AS" Arg="cclSource,cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt>
+and 
+ <Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt><Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt>.  
+</Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> and 
+<A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+<Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+<Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt>
+and 
+ <Alt Only="LaTeX"><M>\tilde{A}_k\circ\tilde{S}_l</M></Alt><Alt Not="LaTeX"><M>2.(Alt(k){\times}Sym(l))</M></Alt>, 
+respectively, 
+a corresponding class fusion map is determined
+analogously to <Cite Key="Maas2011" Where="(5.4.7)"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="SpinSymClassFusion2AAin2A" Arg="cclSource,cclDest"
+Comm="computes the class fusion between the SpinSym tables Source and Dest"/>
+<Returns>a fusion map between the SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt>
+ <Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt> 
+ and <Alt Only="LaTeX"><M>\tilde{A}_{k+l}</M></Alt><Alt Not="LaTeX"><M>2.Alt(k+l)</M></Alt>. 
+ </Returns>
+<Description> 
+Given lists of class parameters <A>cclSource</A> 
+and <A>cclDest</A> of (ordinary or <M>p</M>-modular) 
+SpinSym tables of 
+ <Alt Only="LaTeX"><M>\tilde{A}_{k,l}</M></Alt><Alt Not="LaTeX"><M>2.(Alt(k){\times}Alt(l))</M></Alt> 
+ and <Alt Only="LaTeX"><M>\tilde{A}_{k+l}</M></Alt><Alt Not="LaTeX"><M>2.Alt(k+l)</M></Alt>, 
+respectively, 
+a corresponding class fusion map is determined. 
+See <Cite Key="Maas2011" Where="(5.4.8)"/>.
+</Description>
+</ManSection>
+</Section>
+
+</Chapter>

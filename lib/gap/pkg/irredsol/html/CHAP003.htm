@@ -1,0 +1,193 @@
+<html><head><title>[IRREDSOL] 3 Recognition of matrix groups</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>3 Recognition of matrix groups</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP003.htm#SECT001">Identification of irreducible groups</a>
+<li> <A HREF="CHAP003.htm#SECT002">Compatibility with other data libraries</a>
+<li> <A HREF="CHAP003.htm#SECT003">Loading and unloading recognition data manually</a>
+</ol><p>
+<p>
+This chapter describes some functions which, given an irreducible matrix 
+group, identify a group in the <font face="Gill Sans,Helvetica,Arial">IRREDSOL</font> library which is conjugate
+to that group, see Section&nbsp;<a href="CHAP003.htm#SECT001">Identification of irreducible groups</a>.
+Moreover,  Section <a href="CHAP003.htm#SECT002">Compatibility with other data libraries</a> describes
+how to  translate between groups in the <font face="Gill Sans,Helvetica,Arial">IRREDSOL</font> library and the
+<font face="Gill Sans,Helvetica,Arial">GAP</font>  library of irreducible solvable groups. 
+Section&nbsp;<a href="CHAP003.htm#SECT003">Loading and unloading recognition data manually</a> describes some 
+functions which allow to load and unload the recognition data in the 
+<font face="Gill Sans,Helvetica,Arial">IRREDSOL</font> package manually.
+<p>
+<p>
+<h2><a name="SECT001">3.1 Identification of irreducible groups</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>IsAvailableIdIrreducibleSolvableMatrixGroup(</code><var>G</var><code>) F</code>
+<p>
+This function returns <code>true</code> if <code>IdIrreducibleSolvableMatrixGroup</code> (see
+<a href="CHAP003.htm#SSEC001.3">IdIrreducibleSolvableMatrixGroup</a>) will work for the irreducible matrix group <var>G</var>, and <code>false</code> otherwise.
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>IsAvailableIdAbsolutelyIrreducibleSolvableMatrixGroup(</code><var>G</var><code>) F</code>
+<p>
+This function returns <code>true</code> if <code>IdIrreducibleSolvableMatrixGroup</code> (see
+<a href="CHAP003.htm#SSEC001.3">IdIrreducibleSolvableMatrixGroup</a>) will work for the absolutely irreducible matrix group <var>G</var>, and <code>false</code> otherwise.
+<p>
+<a name = "SSEC001.3"></a>
+<li><code>IdIrreducibleSolvableMatrixGroup(</code><var>G</var><code>) A</code>
+<p>
+If the matrix group <var>G</var> is solvable and irreducible over <var>F
+= <code>FieldOfMatrixGroup</code>(<var>G</var>)</var>, (see <a href="../../../doc/ref/chap44.html#X78A9F0E580DA613A">FieldOfMatrixGroup</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> reference manual), and a conjugate in
+<var>GL(<var>n</var>, <var>F</var>)</var> of <var><var>G</var></var> belongs to the data base of  irreducible solvable groups in
+<font face="Gill Sans,Helvetica,Arial">IRREDSOL</font>, this function returns a list <code>[</code><var>n</var><code>, </code><var>q</var><code>, </code><var>d</var><code>, </code><var>k</var><code>]</code> such that <var>G</var> is
+conjugate to  <code>IrreducibleSolvableMatrixGroup</code>(<var>n</var>, <var>q</var>, <var>d</var>, <var>k</var>) (see
+<a href="CHAP002.htm#SSEC002.3">IrreducibleSolvableMatrixGroup</a>).
+<p>
+<pre>
+gap&gt; G := IrreducibleSolvableMatrixGroup (12, 2, 3, 52)^RandomInvertibleMat (12, GF(2));;
+# &lt;matrix group of size 2340 with 6 generators&gt;
+gap&gt; IdIrreducibleSolvableMatrixGroup (G);
+[ 12, 2, 3, 52 ]
+</pre>
+<p>
+<a name = "SSEC001.4"></a>
+<li><code>RecognitionIrreducibleSolvableMatrixGroup(</code><var>G</var><code>[, </code><var>wantmat</var><code>[, </code><var>wantgroup</var><code>[,</code><var>wantiso</var><code>]]]) F</code>
+<a name = "SSEC001.4"></a>
+<li><code>RecognitionIrreducibleSolvableMatrixGroupNC(</code><var>G</var><code>[, </code><var>wantmat</var><code>[, </code><var>wantgroup</var><code>[,</code><var>wantiso</var><code>]]]) F</code>
+<p>
+Let <var>G</var> be an irreducible solvable matrix group over a finite field, and let
+<var>wantmat</var> and <var>wantmat</var> be <code>true</code> or <code>false</code>. 
+These functions identify a conjugate <var>H</var> of <var>G</var> group in the library. 
+They return a record which has the following entries:
+<p>
+<dl compact>
+<dt><code>id</code> <dd>  contains the id of <var>H</var> (and thus of <var>G</var>); 
+    cf. <code>IdIrreducibleSolvableMatrixGroup</code>  (<a href="CHAP003.htm#SSEC001.3">IdIrreducibleSolvableMatrixGroup</a>)
+<p>
+<dt><code>mat</code> (present if <code>wantmat</code> is <code>true</code>) <dd>
+    a matrix <var>x</var> such that <var>G<sup>x</sup> = H</var>
+<p>
+<dt><code>group</code> (present if <code>wantgroup</code> is <code>true</code>) <dd> the group <var>H</var> 
+<p>
+<dt><code>iso</code> (present if <code>wantiso</code> is <code>true</code>) <dd> a group isomorphism from the source of
+    <code>RepresentationIsomorphism(</code><var>G</var><code>)</code> to the source of <code>RepresentationIsomorphism(</code><var>H</var><code>)</code>.
+<p>
+</dl>
+Note that in most cases, <code>RecognitionIrreducibleSolvableMatrixGroup</code> and 
+<code>RecognitionIrreducibleSolvableMatrixGroupNC</code> are 
+much slower if <var>wantmat</var> is set to true.   
+<p>
+<code>RecognitionIrreducibleSolvableMatrixGroupNC</code> does not check its arguments. If
+the group <var>G</var> is beyond the scope of the <font face="Gill Sans,Helvetica,Arial">IRREDSOL</font> library (see <a href="CHAP003.htm#SSEC001.1">IsAvailableIdIrreducibleSolvableMatrixGroup</a>), <code>RecognitionIrreducibleSolvableMatrixGroupNC</code> returns <code>fail</code>, while <code>RecognitionIrreducibleSolvableMatrixGroup</code> raises an error.
+<p>
+<pre>
+gap&gt; G := IrreducibleSolvableMatrixGroup (6, 2, 3, 5) ^
+&gt;         RandomInvertibleMat (6, GF(4));
+&lt;matrix group of size 42 with 3 generators&gt;
+gap&gt; r := RecognitionIrreducibleSolvableMatrixGroup (G, true, false);;
+gap&gt; r.id;
+[ 6, 2, 3, 5 ]
+gap&gt; G^r.mat = CallFuncList (IrreducibleSolvableMatrixGroup, r.id);
+true
+</pre>
+<p>
+<a name = "SSEC001.5"></a>
+<li><code>IdAbsolutelyIrreducibleSolvableMatrixGroup(</code><var>G</var><code>) A</code>
+<a name = "SSEC001.5"></a>
+<li><code>RecognitionAbsolutelyIrreducibleSolvableMatrixGroup(</code><var>G</var><code>, </code><var>wantmat</var><code>, </code><var>wantgroup</var><code>) F</code>
+<a name = "SSEC001.5"></a>
+<li><code>RecognitionAbsolutelyIrreducibleSolvableMatrixGroupNC(</code><var>G</var><code>, </code><var>wantmat</var><code>,</code><var>wantgroup</var><code>) F</code>
+<p>
+These functions are no longer available. These functions have been replaced by the
+functions 
+<code>IdIrreducibleSolvableMatrixGroup</code> (<a href="CHAP003.htm#SSEC001.3">IdIrreducibleSolvableMatrixGroup</a>), 
+<code>RecognitionIrreducibleSolvableMatrixGroup</code> (<a href="CHAP003.htm#SSEC001.4">RecognitionIrreducibleSolvableMatrixGroup</a>), or
+<code>RecognitionIrreducibleSolvableMatrixGroupNC</code> (<a href="CHAP003.htm#SSEC001.4">RecognitionIrreducibleSolvableMatrixGroupNC</a>).
+<p>
+Note that the ids returned by the functions for absolutely irreducible groups was a triple <code>[</code><var>n</var><code>, </code><var>d</var><code>, </code><var>k</var><code>]</code>, while the replacement functions use ids of the form <code>[</code><var>n</var><code>, </code><var>d</var><code>, </code><var>d</var><code>, </code><var>k</var><code>]</code>, where <var><var>d</var> = 1</var> in the absolutely irreducible case.
+<p>
+<p>
+<h2><a name="SECT002">3.2 Compatibility with other data libraries</a></h2>
+<p><p>
+A library of irreducible solvable subgroups of <var>GL(n, p)</var>, where <var>p</var> is a 
+prime and <var>p<sup>n</sup> leq255</var> already exists in <font face="Gill Sans,Helvetica,Arial">GAP</font>, see Section <a href="../../../doc/ref/chap50.html#X82FD673384BF353B">Irreducible Solvable Matrix Groups</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> reference manual. The following functions
+allow one to translate between between that library and the <font face="Gill Sans,Helvetica,Arial">IRREDSOL</font> library. 
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>IdIrreducibleSolvableMatrixGroupIndexMS(</code><var>n</var><code>, </code><var>p</var><code>, </code><var>k</var><code>) F</code>
+<p>
+This function returns the id (see <a href="CHAP003.htm#SSEC001.3">IdIrreducibleSolvableMatrixGroup</a>) of <var>G</var>, 
+where <var>G</var> is <code>IrreducibleSolvableGroupMS</code>(<var>n</var>, <var>p</var>, <var>k</var>) (see <a href="../../../doc/ref/chap50.html#X7DF4B4D683A727E8">IrreducibleSolvableGroupMS</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> reference manual).
+<p>
+<pre>
+gap&gt; IdIrreducibleSolvableMatrixGroupIndexMS (6, 2, 5);
+[ 6, 2, 2, 4 ]
+gap&gt; G := IrreducibleSolvableGroupMS (6,2,5);
+&lt;matrix group of size 27 with 2 generators&gt;
+gap&gt; H := IrreducibleSolvableMatrixGroup (6, 2, 2, 4);
+&lt;matrix group of size 27 with 3 generators&gt;
+gap&gt; G = H;
+false 
+# groups in the libraries need not be the same
+gap&gt; r := RecognitionIrreducibleSolvableMatrixGroup (G, true, false);;
+gap&gt; G^r.mat = H;
+true
+</pre>
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>IndexMSIdIrreducibleSolvableMatrixGroup(</code><var>n</var><code>, </code><var>q</var><code>, </code><var>d</var><code>, </code><var>k</var><code>) F</code>
+<p>
+This function returns a triple [<var>n</var>, <var>p</var>, <var>l</var>] such that
+<code>IrreducibleSolvableGroupMS</code>(<var>n</var>, <var>p</var>, <var>l</var>) (see <a href="../../../doc/ref/chap50.html#X7DF4B4D683A727E8">IrreducibleSolvableGroupMS</a> in the <font face="Gill Sans,Helvetica,Arial">GAP</font> reference manual) is conjugate to
+<code>IrreducibleSolvableMatrixGroup</code>(<var>n</var>, <var>q</var>, <var>d</var>, <var>k</var>) (see <a href="CHAP002.htm#SSEC002.3">IrreducibleSolvableMatrixGroup</a>).
+<p>
+<pre>
+gap&gt; IndexMSIdIrreducibleSolvableMatrixGroup (6, 2, 2, 7);
+[ 6, 2, 13 ]
+gap&gt; G := IrreducibleSolvableGroupMS (6,2,13);
+&lt;matrix group of size 63 with 3 generators&gt;
+gap&gt; H := IrreducibleSolvableMatrixGroup (6, 2, 2, 7);
+&lt;matrix group of size 63 with 3 generators&gt;
+gap&gt; G = H;
+false 
+gap&gt; r := RecognitionIrreducibleSolvableMatrixGroup (G, true, false);;
+gap&gt; G^r.mat = H;
+true
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">3.3 Loading and unloading recognition data manually</a></h2>
+<p><p>
+The data required by the <font face="Gill Sans,Helvetica,Arial">IRREDSOL</font> library is loaded into <font face="Gill Sans,Helvetica,Arial">GAP</font>'s workspace automatically whenever required, but is never unloaded automatically. The functions described in this
+and the previous section describe how to load and unload this data manually. 
+They are only relevant if timing or conservation of memory is an issue.
+<a name = "I0"></a>
+
+<a name = "SSEC003.1"></a>
+<li><code>LoadAbsolutelyIrreducibleSolvableGroupFingerprints(</code><var>n</var><code>, </code><var>q</var><code>) F</code>
+This function loads the fingerprint data required for the recognition
+of absolutely irreducible solvable subgroups of <var>GL(<var>n</var>, <var>q</var>)</var>.
+<p>
+<a name = "SSEC003.2"></a>
+<li><code>LoadedAbsolutelyIrreducibleSolvableGroupFingerprints() F</code>
+<p>
+This function returns a list. Each entry consists of an integer <var>n</var> and a set <var>l</var>. The set
+<var>l</var> contains all prime powers <var>q</var> such that the recognition data for <var>GL(<var>n</var>, <var>q</var>)</var> is currently in
+memory.
+<p>
+<a name = "SSEC003.3"></a>
+<li><code>UnloadAbsolutelyIrreducibleSolvableGroupFingerprints([n [,q]]) F</code>
+<p>
+This function can be used to delete recognition data for irreducible groups from the <font face="Gill Sans,Helvetica,Arial">GAP</font> workspace. If no
+argument is given, all data will be deleted. If only <var>n</var> is given, all data for degree <var>n</var> (and any
+<var>q</var>) will be deleted. If <var>n</var> and <var>q</var> are given, only the data for <var>GL(n, q)</var> will be deleted from the
+<font face="Gill Sans,Helvetica,Arial">GAP</font> workspace. Use this function if you run out of <font face="Gill Sans,Helvetica,Arial">GAP</font> workspace. The
+data is automatically re-loaded when required.
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>IRREDSOL manual<br>February 2014
+</address></body></html>

@@ -1,0 +1,194 @@
+  
+  [1X2 [33X[0;0YThe [5XIntPic[105X[101X[1X package main function[133X[101X
+  
+  [33X[0;0YThis  chapter consists of two sections, the first of which decribes the main
+  function of the package. The second one can be thought just as an example to
+  produce a table where the integers appear ordered in a non standard way.[133X
+  
+  
+  [1X2.1 [33X[0;0YThe main function[133X[101X
+  
+  [33X[0;0YThe  function  [2XIP_TikzArrayOfIntegers[102X  ([14X2.1-1[114X)  is  the main function of the
+  [5XIntPic[105X  package.  It  aims  to  produce  [10Xtikz[110X  code for displaying arrays of
+  integers.[133X
+  
+  
+  [1X2.1-1 [33X[0;0YTikz code for arrays of integers[133X[101X
+  
+  [29X[2XIP_TikzArrayOfIntegers[102X( [3Xarg[103X ) [32X function
+  
+  [33X[0;0YThe arguments (at most 3) are:[133X
+  
+  [31X1[131X   [33X[0;6Y(optional)[133X
+  
+        [30X    [33X[0;12Ya table of integers. In this case, the length of the rows is the
+              maximum of the lengths of the sublists in the table, [13Xor[113X[133X
+  
+        [30X    [33X[0;12Ya  list  of integers and, optionally, an integer which indicates
+              the  length  of  the  rows;  when  the length of the rows is not
+              indicated,  a  compromise  between  the  width and the height is
+              tried.[133X
+  
+  [31X2[131X   [33X[0;6Ya  record  of  options.  One  of  the  fields  of  this  record, named
+        [10Xhighlights[110X,   is  an  array  whose  entries  are  the  numbers  to  be
+        highlighted:  one  color per sublist. See details and other options in
+        Chapter [14X5[114X.[133X
+  
+  [33X[0;0YWhen  no  list  nor  table is present, the smallest range containing all the
+  integers to be highlighted is taken.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xrg := [81..89];;[127X[104X
+    [4X[25Xgap>[125X [27Xlen := 10;;[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [Filtered(rg,IsPrime),Filtered(rg,u->(u mod 2)=0),[127X[104X
+    [4X[25X>[125X [27X        Filtered(rg,u->(u mod 3)=0)];;[127X[104X
+    [4X[25Xgap>[125X [27Xtkz := IP_TikzArrayOfIntegers(rg,len,rec(highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  aspect  of  the  string  [3Xtkz[103X produced is not very appealing. We show it
+  once,  by  asking  it  exlicitly  in  the  next example. In the forthcomming
+  examples we keep using two semicolons to avoid showing this kind of strings.[133X
+  
+  [4X[32X  The tkz string  [32X[104X
+    [4Xgap> tkz;[104X
+    [4X"%tikz\n\\begin{tikzpicture}[every node/.style={draw,scale=1pt,\nminimum width\[104X
+    [4X=20pt,inner sep=3pt,\nline width=1pt,draw=black}]\n\\matrix[row sep=2pt,column\[104X
+    [4X sep=2pt]\n{\\node[fill=-red]{86};&\n\\node[fill=green]{87};&\n\\node[fill=-re\[104X
+    [4Xd]{88};&\n\\node[fill=red]{89};\\\\\n\\node[fill=green]{81};&\n\\node[fill=-re\[104X
+    [4Xd]{82};&\n\\node[fill=red]{83};&\n\\node[left color=-red,right color=green]{84\[104X
+    [4X};&\n\\node[]{85};\\\\\n};\n\\end{tikzpicture}\n"[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  string can be used at the users wish. In particular, it can be sent to
+  the standard output using the command [2XPrint[102X ([14XReference: Print[114X).[133X
+  
+  [4X[32X  The tikz code  [32X[104X
+    [4Xgap> Print(tkz);[104X
+    [4X%tikz[104X
+    [4X\begin{tikzpicture}[every node/.style={draw,scale=1pt,[104X
+    [4Xminimum width=20pt,inner sep=3pt,[104X
+    [4Xline width=1pt,draw=black}][104X
+    [4X\matrix[row sep=2pt,column sep=2pt][104X
+    [4X{\node[fill=-red]{86};&[104X
+    [4X\node[fill=green]{87};&[104X
+    [4X\node[fill=-red]{88};&[104X
+    [4X\node[fill=red]{89};\\[104X
+    [4X\node[fill=green]{81};&[104X
+    [4X\node[fill=-red]{82};&[104X
+    [4X\node[fill=red]{83};&[104X
+    [4X\node[left color=-red,right color=green]{84};&[104X
+    [4X\node[]{85};\\[104X
+    [4X};[104X
+    [4X\end{tikzpicture}[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIt  can now be copied and pasted in a LaTeX document (having the appropriate
+  packages in the preamble). See Chapter [14X4[114X for details and alternatives.[133X
+  
+  [33X[0;0YThe  next  function  uses  the  previous  one,  but is called with a simpler
+  argument.  It  will  hopefully  be useful for simple drawings. The length of
+  each  row  and  the  umber  of  columns  varies.  A compromise based on some
+  experiments  has  been  established in order to obtain not too large nor too
+  high images.[133X
+  
+  
+  [1X2.1-2 [33X[0;0YTikz code for arrays, in a simplified way[133X[101X
+  
+  [29X[2XIP_SimpleTikzArrayOfIntegers[102X( [3Xarg[103X ) [32X function
+  
+  [33X[0;0YThe  argument  is  either  a  list  of integers or a matrix of integers. The
+  integers  involved  are  embeded  in  a  range  [3Xrg[103X  of  minimum  length  and
+  highlighted by using the list of default colors.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xd := DivisorsInt(30);[127X[104X
+    [4X[28X[ 1, 2, 3, 5, 6, 10, 15, 30 ][128X[104X
+    [4X[25Xgap>[125X [27XIP_SimpleTizkArrayOfIntegers(d);;[127X[104X
+  [4X[32X[104X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xd30 := DivisorsInt(30);[127X[104X
+    [4X[28X[ 1, 2, 3, 5, 6, 10, 15, 30 ][128X[104X
+    [4X[25Xgap>[125X [27Xd40 := DivisorsInt(40);[127X[104X
+    [4X[28X[ 1, 2, 4, 5, 8, 10, 20, 40 ][128X[104X
+    [4X[25Xgap>[125X [27Xtkz := IP_SimpleTizkArrayOfIntegers([d30,d40]);;[127X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.2 [33X[0;0YProducing tables[133X[101X
+  
+  [33X[0;0YWhen  the  user  is interested in tables of a certain kind, it may be a good
+  idea  to  write  some  code  to produce these tables. The following function
+  (whose  code  is  part  of  the  file [13Xip_tables.gi[113X in the [13Xgap[113X folder of this
+  package) is convenient to deal with numerical semigroups with two generators
+  and has been used to produce the images contained in [DFGL13].[133X
+  
+  [1X2.2-1 IP_TableWithModularOrder[101X
+  
+  [29X[2XIP_TableWithModularOrder[102X( [3Xo[103X, [3Xa[103X, [3Xb[103X, [3Xdepth[103X, [3Xheight[103X, [3Xrep[103X, [3Xpos[103X ) [32X function
+  
+  [33X[0;0YThe  arguments  [3Xrep[103X  and  [3Xpos[103X are booleans ([10Xtrue[110X or [10Xfalse[110X). When [3Xrep[103X is [10Xtrue[110X
+  there  is some repetition: the last column is equal to the first, but pushed
+  down  some  rows.  When  [3Xpos[103X  is  [10Xtrue[110X,  no  rows  below  0  are considered,
+  (contradicting [3Xdepth[103X, if needed).[133X
+  
+  [33X[0;0YThe  first  five  arguments arguments [3Xo, a, b,depth[103X and [3Xheight[103X are integers.
+  What  they  represent  is  described in what follows. There is assigned some
+  kind  of  a  referential  on the constructed table and the fist argument, [3Xo[103X,
+  stands for the origin. A table with [3Xb[103X columns ([22X[3Xb[103X+1[122X columns when [3Xrep[103X is [10Xtrue[110X)
+  is constructed as follows. The row containing the origin is[133X
+  
+  [30X    [33X[0;6Y[22X[3Xo[103X+ [0..[3Xb[103X-1]*[3Xa[103X[122X, if [3Xrep[103X is [10Xfalse[110X, [13Xor[113X[133X
+  
+  [30X    [33X[0;6Y[22X[3Xo[103X+ [0..[3Xb[103X]*[3Xa[103X[122X, if [3Xrep[103X is [10Xtrue[110X[133X
+  
+  [33X[0;0YThe  remaining rows are obtained by adding [3Xb[103X (the upper ones) or subtracting
+  [3Xb[103X (the others) to these rows.[133X
+  
+  [33X[0;0YNote:  when  [22X[3Xa[103X < [3Xb[103X[122X are co-prime, this construction provides a representation
+  of the integers as an array.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xa := 8;; b := 19;;  [127X[104X
+    [4X[25Xgap>[125X [27Xns := NumericalSemigroup(a,b);;[127X[104X
+    [4X[25Xgap>[125X [27Xc := ConductorOfNumericalSemigroup(ns);;[127X[104X
+    [4X[25Xgap>[125X [27Xorigin := 2*c-1;[127X[104X
+    [4X[28X251[128X[104X
+    [4X[25Xgap>[125X [27Xground := [origin..origin+b-1];;[127X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27Xheight:=2;;[127X[104X
+    [4X[25Xgap>[125X [27Xdepth:=8;;[127X[104X
+    [4X[25Xgap>[125X [27X  xaxis := [origin];;[127X[104X
+    [4X[25Xgap>[125X [27X  for n in [1..b-1] do[127X[104X
+    [4X[25X>[125X [27X    Add(xaxis, origin+n*a);[127X[104X
+    [4X[25X>[125X [27X  od;[127X[104X
+    [4X[25Xgap>[125X [27X  yaxis := [];;[127X[104X
+    [4X[25Xgap>[125X [27X  for n in [-depth..height] do[127X[104X
+    [4X[25X>[125X [27X    Add(yaxis, origin+n*b);[127X[104X
+    [4X[25X>[125X [27X  od;[127X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+    [4X[25Xgap>[125X [27Xtable := TableWithModularOrder(origin,a,b,depth,height,false,false);;[127X[104X
+    [4X[25Xgap>[125X [27Xarr := [xaxis,yaxis,ground];[127X[104X
+    [4X[28X[ [ 251, 259, 267, 275, 283, 291, 299, 307, 315, 323, 331, 339, 347, 355, [128X[104X
+    [4X[28X      363, 371, 379, 387, 395 ], [128X[104X
+    [4X[28X  [ 99, 118, 137, 156, 175, 194, 213, 232, 251, 270, 289 ], [ 251 .. 269 ] ][128X[104X
+    [4X[25Xgap>[125X [27Xtkz:=IP_TikzArrayOfIntegers(table,rec(highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  next picture is obtained in the same way. The information that only the
+  shape  has  interest  is  given by including the option [10Xshape_only:=" "[110X. The
+  variable [10Xtkz[110X should be defined in a similar manner to the following one.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xtkz:=IP_TikzArrayOfIntegers(table,rec(highlights:=arr,shape_only:=" ",[127X[104X
+    [4X[25X>[125X [27X             cell_width := "6",colsep:="1",rowsep:="1",inner_sep:="2",[127X[104X
+    [4X[25X>[125X [27X             line_color:="black!20"));;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNext, a minimum of changes, just to illustrate the effect of [3Xrep[103X and [3Xpos[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xtable := TableWithModularOrder(origin,a,b,depth,50,true,true);;[127X[104X
+    [4X[25Xgap>[125X [27Xtkz:=IP_TikzArrayOfIntegers(table,rec(highlights:=arr));;[127X[104X
+  [4X[32X[104X
+  

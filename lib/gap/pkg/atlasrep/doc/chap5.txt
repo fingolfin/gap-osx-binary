@@ -1,0 +1,333 @@
+  
+  [1X5 [33X[0;0YPrivate Extensions of the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YIt  may  be  interesting  to use the functions of the [5XGAP[105X interface also for
+  representations  or  programs  that  are  [13Xnot[113X  part  of  the  [5XATLAS[105X of Group
+  Representations. This chapter describes how to achieve this.[133X
+  
+  [33X[0;0YThe  main  idea  is that users can notify directories containing the [21Xprivate[121X
+  data files, which may consist of[133X
+  
+  [31X1[131X   [33X[0;6Ynew faithful representations and programs for groups that are declared
+        already in the [21Xofficial[121X [5XATLAS[105X of Group Representations,[133X
+  
+  [31X2[131X   [33X[0;6Ythe  declaration of groups that are not declared in the [21Xofficial[121X [5XATLAS[105X
+        of  Group  Representations, and representations and programs for them,
+        and[133X
+  
+  [31X3[131X   [33X[0;6Ythe definition of new kinds of representations and programs.[133X
+  
+  [33X[0;0YThe first two issues are dealt with in Section [14X5.1[114X and Section [14X5.2[114X. The last
+  is described in Section [14X7.5[114X.[133X
+  
+  [33X[0;0YFinally, an example of using private extensions is given in Section [14X5.3[114X.[133X
+  
+  [33X[0;0YSeveral  of  the sanity checks for the official part of the [5XAtlasRep[105X package
+  make   sense   also   for  private  extensions,  see  Section [14X7.8[114X  for  more
+  information.[133X
+  
+  
+  [1X5.1 [33X[0;0YAdding a Private Data Directory[133X[101X
+  
+  [33X[0;0YAfter the [5XAtlasRep[105X package has been loaded into the [5XGAP[105X session, one can add
+  private  data.  However,  one should [13Xnot[113X add private files to the local data
+  directories  of  the package, or modify files in these directories. Instead,
+  additional  data should be put into separate directories. It should be noted
+  that a data file is fetched from a server only if the local data directories
+  do  not  contain  a  file with this name, independent of the contents of the
+  files.  (As a consequence, corrupted files in the local data directories are
+  [13Xnot[113X automatically replaced by a correct server file.)[133X
+  
+  [1X5.1-1 AtlasOfGroupRepresentationsNotifyPrivateDirectory[101X
+  
+  [29X[2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X( [3Xdir[103X[, [3Xdirid[103X][, [3Xtest[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X  if  none  of  the  filenames  with  admissible format in the
+            directory  [3Xdir[103X  is  contained in other data directories and if the
+            data  belongs  to groups whose names have been declared, otherwise
+            [9Xfalse[109X.[133X
+  
+  [33X[0;0YLet  [3Xdir[103X  be a directory (see [14X'Reference: Directories'[114X) or a string denoting
+  the  name of a directory (such that the [5XGAP[105X object describing this directory
+  can  be  obtained  by  calling  [2XDirectory[102X  ([14XReference:  Directory[114X)  with the
+  argument  [3Xdir[103X).  In the following, let [3Xdirname[103X be the name of the directory.
+  So  [3Xdirname[103X can be an absolute path or a path relative to the home directory
+  of  the  user  (starting with a tilde character [10X~[110X) or a path relative to the
+  directory where [5XGAP[105X was started.[133X
+  
+  [33X[0;0YIf  the  optional  argument  [3Xdirid[103X is given, it must be a string. This value
+  will  be  used in the [10Xidentifier[110X components of the records that are returned
+  by interface functions (see Section [14X3.5[114X) for data contained in the directory
+  [3Xdir[103X. Note that the directory name may be different in different [5XGAP[105X sessions
+  or  for  different  users  who  want  to  access  the same data, whereas the
+  [10Xidentifier[110X  components shall be independent of such differences. The default
+  for [3Xdirid[103X is [3Xdirname[103X.[133X
+  
+  [33X[0;0YIf  the  optional  argument  [3Xtest[103X is given, it must be [9Xtrue[109X or [9Xfalse[109X. In the
+  [9Xtrue[109X  case, consistency checks are switched on while the file [11Xtoc.g[111X is read.
+  This  costs  some  extra time, but it is recommended after each extension of
+  the file [11Xtoc.g[111X. The default for [3Xtest[103X is [9Xfalse[109X.[133X
+  
+  [33X[0;0Y[2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X  notifies  the data in the
+  directory  [3Xdir[103X to the [5XAtlasRep[105X package. First the pair [10X[ [3Xdirname[103X[10X, [3Xdirid[103X[10X ][110X is
+  added  to  the [10Xprivate[110X component of [2XAtlasOfGroupRepresentationsInfo[102X ([14X7.1-6[114X).
+  If the directory contains a file with the name [11Xtoc.g[111X then this file is read;
+  this file is useful for adding new group names using [10XAGR.GNAN[110X and for adding
+  describing  data  about the representations, see Section [14X7.7[114X. Next the table
+  of  contents  of  the  private  directory  is  built  from the list of files
+  contained  in  the  private  directory  or  in its subdirectories (one layer
+  deep).[133X
+  
+  [33X[0;0YOnly  those files are considered whose names match an admissible format (see
+  Section [14X7.6[114X). Filenames that are already contained in another data directory
+  of  the [5XAtlasRep[105X package are ignored, and messages about these filenames are
+  printed if the info level of [2XInfoAtlasRep[102X ([14X7.1-1[114X) is at least [22X1[122X.[133X
+  
+  [33X[0;0YNote  that  this  implies  that the files of the [21Xofficial[121X (i.e. non-private)
+  data directories have priority over files in private directories.[133X
+  
+  [33X[0;0YIf  the  directory  contains  files  for  groups  whose  names have not been
+  declared  before and if the info level of [2XInfoAtlasRep[102X ([14X7.1-1[114X) is at least [22X1[122X
+  then a message about these names is printed.[133X
+  
+  [33X[0;0YFor  convenience,  the  user  may  collect the notifications of private data
+  directories in the file [11Xgaprc[111X (see Section [14X'Reference: The gap.ini and gaprc
+  files'[114X).[133X
+  
+  [1X5.1-2 AtlasOfGroupRepresentationsForgetPrivateDirectory[101X
+  
+  [29X[2XAtlasOfGroupRepresentationsForgetPrivateDirectory[102X( [3Xdirid[103X ) [32X function
+  
+  [33X[0;0YIf  [3Xdirid[103X  is  the  identifier  of  a  private  data directory that has been
+  notified with [2XAtlasOfGroupRepresentationsNotifyPrivateDirectory[102X ([14X5.1-1[114X) then
+  [2XAtlasOfGroupRepresentationsForgetPrivateDirectory[102X removes the directory from
+  the  list of notified private directories; this means that from then on, the
+  data in this directory cannot be accessed anymore in the current session.[133X
+  
+  
+  [1X5.2 [33X[0;0YThe Effect of Private Extensions on the User Interface[133X[101X
+  
+  [33X[0;0YFirst suppose that only new groups or new data for known groups are added.[133X
+  
+  [33X[0;0YIn this case, [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) lists the private representations and
+  programs in the same way as the [21Xofficial[121X data, except that private parts are
+  marked   with   the   string   stored   in   the  component  [10Xmarkprivate[110X  of
+  [2XAtlasOfGroupRepresentationsInfo[102X  ([14X7.1-6[114X);  by default, this is a star [10X*[110X. The
+  ordering of representations listed by [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) (and referred
+  to   by  [2XAtlasGenerators[102X  ([14X3.5-2[114X))  will  in  general  change  when  private
+  directories  are  notified. If several private directories are used then the
+  ordering  of data may depend on the ordering of notifications. For the other
+  interface functions described in Chapter [14X3[114X, the only difference is that also
+  the   private   data   can  be  accessed.  In  particular  the  [21Xfree  format[121X
+  [10X[3Xgroupname[103X[10XG[3Xi[103X[10X-X[3Xdescr[103X[10XW[3Xn[103X[10X[110X  for  straight  line  programs (see Section [14X7.6[114X) may be
+  used  in  private  directories;  the  data can be accessed with [2XAtlasProgram[102X
+  ([14X3.5-3[114X), where the last two arguments are the strings [10X"other"[110X and [3Xdescr[103X.[133X
+  
+  [33X[0;0YIf  also private data types are introduced (see Section [14X7.5[114X) then additional
+  columns  or  rows  can appear in the output of [2XDisplayAtlasInfo[102X ([14X3.5-1[114X), and
+  new  inputs  can become meaningful for all interface functions. Examples for
+  these changes can be found in Section [14X5.3[114X.[133X
+  
+  
+  [1X5.3 [33X[0;0YAn Example of Extending the [5XAtlasRep[105X[101X[1X Package[133X[101X
+  
+  [33X[0;0YIn the beginning we set the info level of [2XInfoAtlasRep[102X ([14X7.1-1[114X) to [22X1[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xlevel:= InfoLevel( InfoAtlasRep );;[127X[104X
+    [4X[25Xgap>[125X [27XSetInfoLevel( InfoAtlasRep, 1 );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YLet  us assume that the directory [11Xprivdir[111X contains data for the cyclic group
+  [22XC_4[122X  of order [22X4[122X and for the alternating group [22XA_5[122X on [22X5[122X points, respectively.
+  Note  that  it  is  obvious  what the term [21Xstandard generators[121X means for the
+  group [22XC_4[122X.[133X
+  
+  [33X[0;0YFurther let us assume that [11Xprivdir[111X contains the following files.[133X
+  
+  [8X[11XC4G1-p4B0.m1[111X[108X
+        [33X[0;6Ya faithful permutation representation of [22XC_4[122X on [22X4[122X points,[133X
+  
+  [8X[11XC4G1-max1W1[111X[108X
+        [33X[0;6Ythe straight line program that returns the square of its unique input,[133X
+  
+  [8X[11XC4G1-a2W1[111X[108X
+        [33X[0;6Ythe  straight  line  program that raises its unique input to the third
+        power,[133X
+  
+  [8X[11XC4G1-XtestW1[111X[108X
+        [33X[0;6Ythe straight line program that returns the square of its unique input,[133X
+  
+  [8X[11XA5G1-p60B0.m1[111X and [11XA5G1-p60B0.m2[111X[108X
+        [33X[0;6Ythe regular permutation representation of [22XA_5[122X.[133X
+  
+  [33X[0;0YThe directory and the files can be created as follows.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xprv:= DirectoryTemporary( "privdir" );;[127X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "C4G1-p4B0.m1" ),[127X[104X
+    [4X[25X>[125X [27X               MeatAxeString( [ (1,2,3,4) ], 4 ) );;[127X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "C4G1-max1W1" ),[127X[104X
+    [4X[25X>[125X [27X               "inp 1\npwr 2 1 2\noup 1 2\n" );;[127X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "C4G1-XtestW1" ),[127X[104X
+    [4X[25X>[125X [27X               "inp 1\npwr 2 1 2\noup 1 2\n" );;[127X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "C4G1-a2W1" ),[127X[104X
+    [4X[25X>[125X [27X               "inp 1\npwr 3 1 2\noup 1 2\n" );;[127X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "C4G1-Ar1aB0.g" ),[127X[104X
+    [4X[25X>[125X [27X               "return rec( generators:= [ [[E(4)]] ] );\n" );;[127X[104X
+    [4X[25Xgap>[125X [27Xpoints:= Elements( AlternatingGroup( 5 ) );;[127X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "A5G1-p60B0.m1" ),[127X[104X
+    [4X[25X>[125X [27X     MeatAxeString( [ Permutation( (1,2)(3,4), points, OnRight ) ], 60 ) );;[127X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "A5G1-p60B0.m2" ),[127X[104X
+    [4X[25X>[125X [27X     MeatAxeString( [ Permutation( (1,3,5), points, OnRight ) ], 60 ) );;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y(We  could also introduce intermediate directories [11XC4[111X and [11XA5[111X, say, each with
+  the  data  for  one  group  only.  Here we do not show this because creating
+  directories  programmatically seems to be possible only with the [5XGAP[105X package
+  [5XIO[105X.)[133X
+  
+  [33X[0;0YThe official part of the [5XAtlasRep[105X package does not contain information about
+  [22XC_4[122X,  so  we first notify this group, in the file [11Xprivdir/toc.g[111X. Besides the
+  name  of the group, we store the following information: the group order, the
+  number  of  (classes  of) maximal subgroups, their orders, their structures,
+  and  describing  data  about the two permutation representations. (The group
+  [22XA_5[122X  is  known with name [10XA5[110X in the official part of the [5XAtlasRep[105X package, so
+  it cannot be notified again.)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XFileString( Filename( prv, "toc.g" ), Concatenation( [[127X[104X
+    [4X[25X>[125X [27X       "AGR.GNAN(\"C4\",\"C4\");\n",[127X[104X
+    [4X[25X>[125X [27X       "AGR.GRS(\"C4\",4);\n",[127X[104X
+    [4X[25X>[125X [27X       "AGR.MXN(\"C4\",1);\n",[127X[104X
+    [4X[25X>[125X [27X       "AGR.MXO(\"C4\",[2]);\n",[127X[104X
+    [4X[25X>[125X [27X       "AGR.MXS(\"C4\",[\"C2\"]);\n",[127X[104X
+    [4X[25X>[125X [27X       "AGR.API(\"C4G1-p4B0\",[1,4,\"imprim\",\"1 < C2\"]);\n",[127X[104X
+    [4X[25X>[125X [27X       "AGR.API(\"A5G1-p60B0\",[1,60,\"imprim\",\"1 < A4\"]);\n",[127X[104X
+    [4X[25X>[125X [27X       ] ) );;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThen we notify the private directory.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XAtlasOfGroupRepresentationsNotifyPrivateDirectory( prv, "priv", true );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNow we can use the interface functions for accessing the data in the private
+  directory.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDisplayAtlasInfo( [ "C4" ] );[127X[104X
+    [4X[28Xgroup | # | maxes | cl | cyc | out | fnd | chk | prs[128X[104X
+    [4X[28X------+---+-------+----+-----+-----+-----+-----+----[128X[104X
+    [4X[28XC4*   | 2 |     1 |    |     |   2 |     |     |    [128X[104X
+    [4X[25Xgap>[125X [27XDisplayAtlasInfo( "C4" );[127X[104X
+    [4X[28XRepresentations for G = C4:    (all refer to std. generators 1)[128X[104X
+    [4X[28X---------------------------[128X[104X
+    [4X[28X1: G <= Sym(4)*   rank 4, on cosets of 1 < C2[128X[104X
+    [4X[28X2: G <= GL(1a,C)*[128X[104X
+    [4X[28X[128X[104X
+    [4X[28XPrograms for G = C4:    (all refer to std. generators 1)[128X[104X
+    [4X[28X--------------------[128X[104X
+    [4X[28Xautomorphisms:[128X[104X
+    [4X[28X  2*[128X[104X
+    [4X[28Xmaxes (all 1):[128X[104X
+    [4X[28X  1*:  C2[128X[104X
+    [4X[28Xother scripts:[128X[104X
+    [4X[28X  "test"*[128X[104X
+    [4X[25Xgap>[125X [27XDisplayAtlasInfo( "C4", IsPermGroup, true );[127X[104X
+    [4X[28XRepresentations for G = C4:    (all refer to std. generators 1)[128X[104X
+    [4X[28X---------------------------[128X[104X
+    [4X[28X1: G <= Sym(4)* rank 4, on cosets of 1 < C2[128X[104X
+    [4X[25Xgap>[125X [27XDisplayAtlasInfo( "C4", IsMatrixGroup );[127X[104X
+    [4X[28XRepresentations for G = C4:    (all refer to std. generators 1)[128X[104X
+    [4X[28X---------------------------[128X[104X
+    [4X[28X2: G <= GL(1a,C)*[128X[104X
+    [4X[25Xgap>[125X [27XDisplayAtlasInfo( "C4", Dimension, 2 );[127X[104X
+    [4X[25Xgap>[125X [27XDisplayAtlasInfo( "A5", NrMovedPoints, 60 );[127X[104X
+    [4X[28XRepresentations for G = A5:    (all refer to std. generators 1)[128X[104X
+    [4X[28X---------------------------[128X[104X
+    [4X[28X4: G <= Sym(60)* rank 60, on cosets of 1 < A4[128X[104X
+    [4X[25Xgap>[125X [27Xinfo:= OneAtlasGeneratingSetInfo( "C4" );[127X[104X
+    [4X[28Xrec( groupname := "C4", id := "", [128X[104X
+    [4X[28X  identifier := [ [ "priv", "C4" ], [ "C4G1-p4B0.m1" ], 1, 4 ],[128X[104X
+    [4X[28X  isPrimitive := false, p := 4, rankAction := 4, repname := "C4G1-p4B0",[128X[104X
+    [4X[28X  repnr := 1, size := 4, stabilizer := "1 < C2", standardization := 1,[128X[104X
+    [4X[28X  transitivity := 1, type := "perm" )[128X[104X
+    [4X[25Xgap>[125X [27XAtlasGenerators( info.identifier );[127X[104X
+    [4X[28Xrec( generators := [ (1,2,3,4) ], groupname := "C4", id := "",[128X[104X
+    [4X[28X  identifier := [ [ "priv", "C4" ], [ "C4G1-p4B0.m1" ], 1, 4 ],[128X[104X
+    [4X[28X  isPrimitive := false, p := 4, rankAction := 4, repname := "C4G1-p4B0",[128X[104X
+    [4X[28X  repnr := 1, size := 4, stabilizer := "1 < C2", standardization := 1,[128X[104X
+    [4X[28X  transitivity := 1, type := "perm" )[128X[104X
+    [4X[25Xgap>[125X [27XAtlasProgram( "C4", 1 );[127X[104X
+    [4X[28Xrec( groupname := "C4", identifier := [ [ "priv", "C4" ], "C4G1-max1W1", 1 ], [128X[104X
+    [4X[28X  program := <straight line program>, size := 2, standardization := 1, [128X[104X
+    [4X[28X  subgroupname := "C2" )[128X[104X
+    [4X[25Xgap>[125X [27XAtlasProgram( "C4", "maxes", 1 );[127X[104X
+    [4X[28Xrec( groupname := "C4", identifier := [ [ "priv", "C4" ], "C4G1-max1W1", 1 ],[128X[104X
+    [4X[28X  program := <straight line program>, size := 2, standardization := 1, [128X[104X
+    [4X[28X  subgroupname := "C2" )[128X[104X
+    [4X[25Xgap>[125X [27XAtlasProgram( "C4", "maxes", 2 );[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XAtlasGenerators( "C4", 1 );[127X[104X
+    [4X[28Xrec( generators := [ (1,2,3,4) ], groupname := "C4", id := "", [128X[104X
+    [4X[28X  identifier := [ [ "priv", "C4" ], [ "C4G1-p4B0.m1" ], 1, 4 ],[128X[104X
+    [4X[28X  isPrimitive := false, p := 4, rankAction := 4, repname := "C4G1-p4B0",[128X[104X
+    [4X[28X  repnr := 1, size := 4, stabilizer := "1 < C2", standardization := 1,[128X[104X
+    [4X[28X  transitivity := 1, type := "perm" )[128X[104X
+    [4X[25Xgap>[125X [27XAtlasGenerators( "C4", 2 );[127X[104X
+    [4X[28Xrec( dim := 1, generators := [ [ [ E(4) ] ] ], groupname := "C4", id := "a", [128X[104X
+    [4X[28X  identifier := [ [ "priv", "C4" ], "C4G1-Ar1aB0.g", 1, 1 ], [128X[104X
+    [4X[28X  repname := "C4G1-Ar1aB0", repnr := 2, size := 4, standardization := 1, [128X[104X
+    [4X[28X  type := "matalg" )[128X[104X
+    [4X[25Xgap>[125X [27XAtlasGenerators( "C4", 3 );[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XAtlasProgram( "C4", "other", "test" );[127X[104X
+    [4X[28Xrec( groupname := "C4", identifier := [ [ "priv", "C4" ], "C4G1-XtestW1", 1 ],[128X[104X
+    [4X[28X  program := <straight line program>, standardization := 1 )[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YWe  can  restrict  the data shown by [2XDisplayAtlasInfo[102X ([14X3.5-1[114X) to the private
+  directory, as follows.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDisplayAtlasInfo( "contents", "priv" );[127X[104X
+    [4X[28Xgroup                    | # | maxes | cl | cyc | out | fnd | chk | prs[128X[104X
+    [4X[28X-------------------------+---+-------+----+-----+-----+-----+-----+----[128X[104X
+    [4X[28XA5*                      | 1 |       |    |     |     |     |     |[128X[104X
+    [4X[28XC4*                      | 2 |     1 |    |     |   2 |     |     |[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YFor checking the data in the private directory, we apply the relevant sanity
+  checks (see Section [14X7.8[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xif not IsBound( AGR.Test ) then[127X[104X
+    [4X[25X>[125X [27X     ReadPackage( "atlasrep", "gap/test.g" );[127X[104X
+    [4X[25X>[125X [27X   fi;[127X[104X
+    [4X[25Xgap>[125X [27XAGR.Test.Words( "priv" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XAGR.Test.FileHeaders( "priv" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XAGR.Test.Files( "priv" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XAGR.Test.BinaryFormat( "priv" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XAGR.Test.Primitivity( "priv" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XAGR.Test.Characters( "priv" );[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YFinally,  we  [21Xuninstall[121X the private directory, and reset the info level that
+  had  been set to [22X1[122X in the beginning. (Also the group name [10XC4[110X is removed this
+  way,  which  is  an  advantage  of  using  a [11Xtoc.g[111X file over calling [10XAGRGNAN[110X
+  directly.),  Note  that  we  need  not  remove  the  data  in  the temporary
+  directory, [5XGAP[105X will do this automatically.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XAtlasOfGroupRepresentationsForgetPrivateDirectory( "priv" );[127X[104X
+    [4X[25Xgap>[125X [27XSetInfoLevel( InfoAtlasRep, level );[127X[104X
+  [4X[32X[104X
+  

@@ -1,0 +1,781 @@
+<!-- 
+  HAPPRIME - fpgmodule.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  Paul Smith
+  National University of Ireland Galway
+
+  $Id: functions.xml.in 200 2008-02-05 14:29:47Z pas $
+-->
+
+<!-- ********************************************************** -->
+<Chapter Label="FpGModuleGF">
+  <Heading>&FG;-modules</Heading>
+
+  Let &FG; be the group ring of the group &G; over the field &FF;. In this 
+  package we only consider the case where &G; is a finite <M>p</M>-groups and 
+  <M>\mathbb{F} = \mathbb{F}_p</M> is the field of <M>p</M> elements. 
+  In addition, we only consider free &FG;-modules.
+
+  <Section Label="FpGModuleGFdatatype">
+    <Heading>The <K>FpGModuleGF</K> datatype</Heading>
+
+    Modules and submodules of free &FG;-modules are represented in
+    &HAPprime; using the <K>FpGModuleGF</K> datatype, where the
+    `<C>GF</C>' stands for `Generator Form'. This defines a module using a group
+    <M>G</M> and a set of <M>G</M>-generating vectors for the module's vector 
+    space, together with a group action which operates on those vectors.
+    A free &FG;-module &FG; can be considered as a vector space 
+    <M>\mathbb{F}^{|G|}</M> whose basis is the elements 
+    of <M>G</M>. An element of &FGn; is the direct sum of <M>n</M> copies
+    of &FG; and, as an element of <K>FpGModuleGF</K>, is 
+    represented as a vector of length <M>n|G|</M> with coefficients in &FF;. 
+    Representing our &FG;-module 
+    elements as vectors is ideal for our purposes since &GAP;'s representation 
+    and manipulation of vectors and matrices over small prime fields is very 
+    efficient in both memory and computation time.
+    <P/>
+    The &HAP; package defines a <K>FpGModule</K> object, which is similar but 
+    stores a vector space 
+    basis rather than a &G;-generating set for the module's vector space. 
+    Storing a &G;-generating set saves memory, both
+    in passive storage and in allowing more efficient versions of some 
+    computation algorithms.
+    <P/>
+    There are a number of construction functions for <K>FpGModuleGF</K>s: see
+    <Ref Label="FpGModuleConstructors"/> for details. A &FG;-module 
+    is defined by the following:
+    <List>
+    <Item>
+      <C>gens</C>, a list of &G;-generating vectors for the 
+      underlying vector space. These do not need to be minimal - they could even 
+      be a vector space basis. The <C>MinimalGeneratorsModule</C> functions
+      (<Ref Label="MinimalGeneratorsModuleGF"/>) can be
+      used to convert a module to one with a minimal set of generators.
+    </Item>
+    <Item>
+      <C>group</C>, the group &G; for the module
+    </Item>
+    <Item>
+      <C>action</C>, a function <C>action(g, u)</C> that represents the 
+      module's group action on vectors. It takes a group element <M>g \in G</M> 
+      and a vector <C>u</C> of length <C>actionBlockSize</C> and returns
+      another vector <C>v</C> of the same length that is the product 
+      <M>v = gu</M>. If <C>action</C> is not provided, the canonical group 
+      permutation action is used. If the vector <C>u</C> is an integer multiple
+      of <C>actionBlockSize</C> in length, the function <C>action</C> acts
+      block-wise on the vector.
+    </Item>
+    <Item>
+      <C>actionBlockSize</C>, the length of vectors upon which <C>action</C>
+      operates. This is usually the order of
+      the group, <M>|G|</M> (for example for the canonical action), but it is 
+      possible to specify this to support other possible group actions that 
+      might act on larger vectors.  <C>actionBlockSize</C> will always be equal 
+      to the ambient dimension of the module <M>\mathbb{F}G^1</M>.
+    </Item>
+    </List>
+    The group, action and block size are internally wrapped up into a record
+    <C>groupAndAction</C>, with entries <C>group</C>, <C>action</C>
+    and <C>actionBlockSize</C>. This is used to simplify the passing of 
+    parameters to some functions.
+    <P/>
+    Some additional information is sometimes needed to construct particular
+    classes of <K>FpGModuleGF</K>:
+    <List>
+    <Item>
+      <C>ambientDimension</C>, the length of vectors in the generating set: 
+      for a module &FGn;, this is equal to 
+      <M>n\times</M><C>actionBlockSize</C>. This is needed in the
+      case when the list of generating vectors is empty.
+    </Item>
+    <Item>
+      <C>form</C>, a string detailing whether the generators are known to be
+      minimal or not, and if so in which format. It can be one of 
+      <C>"unknown"</C>, <C>"fullcanonical"</C>, <C>"minimal"</C>, 
+      <C>"echelon"</C> or <C>"semiechelon"</C>. Some algorithms require a 
+      particular form, and algorithms such as 
+      <Ref Oper="EchelonModuleGenerators" Style="text"/> that manipulate a 
+      module's generators to create these forms set this entry.
+    </Item>
+    </List>
+  </Section>
+  
+  <!-- ********************************************************** -->
+  <Section Label="FpGModuleGFalgo">
+    <Heading>Implementation details: Block echelon form</Heading>
+
+    <Subsection Label="FpGModuleGFalgoblock">
+      <Heading>Generating vectors and their block structure</Heading>
+
+      Consider the vector representation of an element in the &FG;-module 
+      <M>(\mathbb{F}G)^2</M>, where <M>G</M> is a group of order four:
+      <Alt Only="LaTeX">
+        <Display>
+          v \in (\mathbb{F}G)^2 = (g_1 + g_3, g_1 + g_2 + g_4) = [1 0 1 0 | 1 1 0 1]
+        </Display>
+      </Alt>
+      <Alt Not="LaTeX">
+        <Display>
+          v in (FG)^2 = (g_1 + g_3, g_1 + g_2 + g_4) = [1 0 1 0 | 1 1 0 1]
+        </Display>
+      </Alt>
+      The first block of four entries in the vector correspond to the first &FG; 
+      summand and the second block to the second summand (and the group elements 
+      are numbered in the order provided by the &GAP; function 
+      <Ref Oper="Elements" BookName="Ref"/>). 
+      <P/>
+      Given a <M>G</M>-generating set for a &FG;-module, the usual group action 
+      permutes the group elements, and thus the effect on the vector is to 
+      permute the equivalent vector elements. Each summand is independent, and 
+      so elements are permuted within the blocks (normally of size <M>|G|</M>)
+      seen in the example above. A consequence of this is that if any block
+      (i.e. summand) in a generator is entirely zero, then it remains zero under 
+      group (or &FF;) multiplication and so that generator contributes nothing
+      to that part of the vector space. This fact enables some of the structure 
+      of the module's vector space to be inferred from the <M>G</M>-generators, 
+      without needing a full vector space basis . A desirable set of 
+      <M>G</M>-generators is one that has many zero blocks, and what we call the 
+      `block echelon' form is one that has this property.
+      
+    </Subsection>
+
+    <Subsection>
+      <Heading>Matrix echelon reduction and head elements</Heading>
+      
+      The block echelon form of a &FG;-module generating set is analagous to the
+      echelon form of matrices, used as a first stage in many matrix algorithms,
+      and we first briefly review matrix echelon form. In a (row) echelon-form 
+      matrix, the head element in each row (the first non-zero entry) is
+      the identity, and is to the right of the head in the previous row. A
+      consequence of this is that the values below each head are all zero. All
+      zero rows are at the bottom of the matrix (or are removed). &GAP;
+      also defines a semi-echelon form, in which it is guaranteed that all
+      values below each head is zero, but not that each head is to the right of
+      those above it. 
+      <P/> 
+      Matrices can be converted into (semi-)echelon form by using Gaussian
+      elimination to perform row reduction (for example the &GAP; function
+      <Ref Oper="SemiEchelonMat" BookName="ref"/>). A typical algorithm 
+      gradually builds up a list of matrix rows with unique heads, which will 
+      eventually be an echelon-form set of basis elements for the row space of 
+      the matrix. This set is initialised with the first row of the matrix, and 
+      the algorithm is then applied to each subsequent row in turn. 
+      The basis rows in the current set are used to reduce the next row of the 
+      matrix: if, after reduction, it is non-zero then it will have a unique
+      head and is added to the list of basis rows; if it is zero then it may
+      be removed. The final set of vectors will be a semi-echelon basis for the 
+      row space of the original matrix, which can then be permuted to give an 
+      echelon basis if required.
+    </Subsection>
+
+    <Subsection>
+      <Heading>Echelon block structure and minimal generators</Heading>
+
+      In the same way that the echelon form is useful for vector space 
+      generators, we can convert a set of &FG;-module generators into 
+      echelon form. However, unlike multiplication by a field element, the 
+      group action on generating vectors also permutes the vector elements, so
+      a strict echelon form is less useful. Instead, we define a `block echelon'
+      form, treating the blocks in the vector (see example above) as the 
+      &FG;-elements to be converted into echelon form.
+      In block-echelon form, the first non-zero block in 
+      each row is as far to the right as possible. Often, the first non-zero 
+      block in a row will be to the right of the first non-zero block in the row 
+      above, but when several generating vectors are needed in a block, this may 
+      not be the case. The following example creates a random submodule of &FGn; 
+      by picking five generating vectors at random. This module is first 
+      displayed with the original generators, and then they are converted to 
+      block echelon form using the the &HAPprime; function
+      <Ref Oper="EchelonModuleGenerators"/>. The two generating sets both span 
+      the same vector space (i.e. the same &FG; module), but the latter 
+      representation is much more useful.
+<Log><![CDATA[
+gap> M := FpGModuleGF(RandomMat(5, 32, GF(2)), DihedralGroup(8));;
+gap> Display(M);
+Module over the group ring of Group( [ f1, f2, f3 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[.1..1.1.|.1....1.|1111.11.|11.1111.]
+[11.1..1.|1....11.|1...111.|1...11..]
+[11..1.1.|1.1.1...|11...1..|.11.11..]
+[11111111|111...1.|.11...1.|.1..1111]
+[.1111111|1.1.111.|..1..1..|1.111...]
+gap> echM := EchelonModuleGenerators(M);
+rec( module := Module over the group ring of <pc group of size 8 with
+    3 generators> in characteristic 2 with 4 generators in FG^
+    4. Generators are in minimal echelon form., headblocks := [ 1, 2, 3, 4 ] )
+gap> Display(echM.module);
+Module over the group ring of Group( [ f1, f2, f3 ] )
+ in characteristic 2 with 4 generators in FG^4.
+[.1..1.1.|.1....1.|1111.11.|11.1111.]
+[........|.1111..1|111.1...|.11.11.1]
+[........|........|.1..1.1.|.1.1.111]
+[........|........|........|..1111.1]
+Generators are in minimal echelon form.gap>
+gap> M = echM.module;
+true
+]]></Log>
+      <P/>
+      The main algorithm for converting a set of generators into echelon form 
+      is <Ref Oper="SemiEchelonModuleGeneratorsDestructive"/>. The generators 
+      for the &FG; module are represented as rows of a matrix, and 
+      (with the canonical action) the first <M>|G|</M> columns of this matrix
+      correspond to the first block, the next <M>|G|</M> columns to the second
+      block, and so on. The first block of the matrix is taken and the vector
+      space <M>V_b</M> spanned by the rows of that block is found (which will be 
+      a a subspace of <M>\mathbb{F}^{|G|}</M>). Taking the rows in the first block, 
+      find (by gradually leaving out rows) a minimal subset that generates 
+      <M>V_b</M>. The rows of the full matrix that correspond to this minimal
+      subset form the first rows of the block-echelon form generators. Taking 
+      those rows, and all <M>G</M>-multiples of them, now calculate a 
+      semi-echelon basis for the vector space that they generate (using 
+      <Ref Oper="SemiEchelonMatDestructive" BookName="ref"/>). This is used to 
+      reduce all of the other generators. Since the rows we have chosen span 
+      the space of the first block, the first block in all the other rows will
+      be reduced to zero. We can now move on to the second block.
+      <P/>
+
+      We now look at the rows of the matrix that start (have their first 
+      non-zero entry) in the second block. In addition, some of the generators 
+      used for the first block might additionally give rise to vector space 
+      basis vectors with head elements in the second blocks. The rows need to 
+      be stored during the first stage and reused here. We find a minimal set of 
+      the matrix rows with second-block heads that, when taken with any
+      second-block heads from the first stage, generate the entire space spanned 
+      by the second block. The vector-space basis from this new minimal set is 
+      then used to reduce the rest of the generating rows as before, reducing 
+      all of the other rows' second blocks to zero. The process is then repeated 
+      for each other block. Any generators that are completely zero are then 
+      removed. The algorithm is summarised in the following pseudocode:
+      <Verb>
+Let X be the list of generators still to convert (initially all the generators)
+Let Xe = [] be the list of generators already in block-echelon form
+Define X{b} to represent the $b$th block from generators X
+Define V(X) to represent the vector space generated by generators X
+-------------------------------------------------------------------------------
+for b in [1..blocks] 
+  1. Find a minimal set of generators Xm from X such that 
+     V(Xm{b} + Xe{b}) = V(X{b} + Xe{b})
+  2. Remove Xm from X and add them to Xe
+  3. Find a semi-echelon basis for V(Xe) and use this to reduce the elements 
+     of block b in remaining vectors of X to zero
+end for
+      </Verb>
+      <P/>
+      The result of this algorithm is a new generating set for the module that
+      is minimal in the sense that no vector can be removed from the set and 
+      leave it still spanning the same vector space. In the case of a 
+      &FG;-module with &FF;=GF(2), this is a globally minimal set: there is no
+      possible alternative set with fewer generators.
+    </Subsection>
+    
+    <Subsection Label="FpGModuleGFalgoint">
+      <Heading>Intersection of two modules</Heading>
+
+      Knowing the block structure of the modules enables the intersection of
+      two modules to be calculated more efficiently. Consider two modules
+      <M>U</M> and <M>V</M> with the block structure as given in
+      this example:
+<Log><![CDATA[
+gap> DisplayBlocks(U);
+[*..]
+[**.]
+[.*.]
+gap> DisplayBlocks(V);
+[.**]
+[.**]
+[..*]
+]]></Log>
+      To calculate the intersection of the two modules, it is normal to expand 
+      out the two modules to find the vector space <M>U_\mathbb{F}</M> and <M>V_\mathbb{F}</M> of the
+      two modules and calculate the intersection as a standard vector-space
+      intersection. However, in this case, since <M>U</M> has no elements
+      in the last block, and <M>V</M> has no elements in the first block,
+      the intersection must only have elements in the middle block. This means
+      that the first generator of <M>U</M> and the last generator of
+      <M>V</M> can not be in the intersection and can be ignored for the
+      purposes of the intersection calculation. In general, rather than
+      expanding the entirety of <M>U</M> and <M>V</M> into an
+      <M>\mathbb{F}</M>-basis to calculate their intersection, one can expand 
+      <M>U</M> and
+      <M>V</M> more intelligently into <M>\mathbb{F}</M>-bases 
+      <M>U'_\mathbb{F}</M> and <M>V'_\mathbb{F}</M>
+      which are smaller than <M>U_\mathbb{F}</M> and <M>V_\mathbb{F}</M> but have 
+      the same intersection.
+      <P/>
+      Having determined (by comparing the block structure of <M>U</M> and 
+      <M>V</M>) that only the middle block in our example contributes to the
+      intersection, we only need to expand out the rows of  <M>U</M> and
+      <M>V</M> that have heads in that block. The first generator of 
+      <M>U</M> generates no elements in the middle block, and trivially be 
+      ignored. The second row of <M>U</M>
+      may or may not contribute to the intersection: this will need expanding
+      out and echelon reduced. The expanded rows that don't have heads in
+      the central block can then be discarded, with the other rows forming part
+      of the basis of <M>U'_\mathbb{F}</M>. Likewise, the third generator of <M>U</M>
+      is expanded and echelon reduced to give the rest of the basis for 
+      <M>U'_\mathbb{F}</M>. To find <M>V'_\mathbb{F}</M>, the first two generators  are expanded,   
+      semi-echelon reduced and the rows with heads in the middle block kept.   
+      The third generator can be ignored. Finally, the intersection of <M>U'_\mathbb{F}</M>
+      and <M>V'_\mathbb{F}</M> can found using, for example,
+      <Ref Oper="SumIntersectionMatDestructive" BookName="HAPprime Datatypes"/>. 
+      <P/>
+      This algorithm, implemented in the function
+      <Ref Oper="IntersectionModulesGF"/>, will (for modules
+      whose generators have zero columns) use less memory than a full 
+      vector-space expansion, and in the case where <M>U</M> and <M>V</M> have
+      no intersection, may need to perform no expansion at all. In the worst
+      case, both <M>U</M> and <M>V</M> will need a full expansion, using no more
+      memory than the naive implementation. Since any full expansion is done
+      row-by-row, with echelon reduction each time, it will in general still
+      require less memory (but will be slower).
+    </Subsection>
+  </Section>
+  
+  <!-- ********************************************************** -->
+  <Section>
+    <Heading>Construction functions</Heading>
+    <!-- GAPDocSourceSuffix="_DTmanFpGModule_Con" -->
+
+    <Subsection Label="FPGModuleExample0">
+      <Heading>Example: Constructing a <K>FpGModuleGF</K></Heading>
+      
+      The example below constructs four different &FG;-modules, where
+      &G; is the quaternion group of order eight, and the action is the
+      canonical action in each case:
+      <Enum>
+        <Item><C>M</C> is the module <M>(\mathbb{F}G)^3</M></Item>
+        <Item><C>S</C> is the submodule of <M>(\mathbb{F}G)^3</M> with elements only in the first summand</Item>
+        <Item><C>T</C> is a random submodule <C>M</C> generated by five elements</Item>
+        <Item><C>U</C> is the trivial (zero) submodule of <M>(\mathbb{F}G)^4</M></Item>
+      </Enum>
+      We check whether <C>S</C>, <C>T</C> and <C>U</C> are submodules of 
+      <C>M</C>, examine a random element from <C>M</C>, and convert <C>S</C> 
+      into a &HAP; <K>FpGModule</K>. For the other functions
+      used in this example, see Section <Ref Sect="FpGModuleGFmisc"/>.
+<!--
+gap> G := SmallGroup(8, 4);;
+gap> M := FpGModuleGF(G, 3);
+gap> gen := ListWithIdenticalEntries(24, Zero(GF(2)));; 
+gap> gen[1] := One(GF(2));;
+gap> S := FpGModuleGF([gen], G);
+gap> T := RandomSubmodule(M, 5);
+gap> U := FpGModuleGF(32, CanonicalGroupAndAction(G));
+
+gap> IsSubModule(M, S);
+gap> IsSubModule(M, T);
+gap> IsSubModule(M, U);
+
+gap> e := RandomElement(M);
+gap> Display([e]);
+gap> IsModuleElement(S, e);
+gap> IsModuleElement(T, e);
+
+gap> FpGModuleFromFpGModuleGF(S);
+-->
+<Log><![CDATA[
+gap> G := SmallGroup(8, 4);;
+gap> M := FpGModuleGF(G, 3);
+Full canonical module FG^3 over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2
+gap> gen := ListWithIdenticalEntries(24, Zero(GF(2)));;
+gap> gen[1] := One(GF(2));;
+gap> S := FpGModuleGF([gen], G);
+Module over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2 with 1 generator in FG^
+3. Generators are in minimal echelon form.
+gap> T := RandomSubmodule(M, 5);
+Module over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2 with 5 generators in FG^3.
+gap> U := FpGModuleGF(32, CanonicalGroupAndAction(G));
+Module over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2 with 0 generators in FG^
+4. Generators are in minimal echelon form.
+gap>
+gap> IsSubModule(M, S);
+true
+gap> IsSubModule(M, T);
+true
+gap> IsSubModule(M, U);
+false
+gap>
+gap> e := RandomElement(M);
+<a GF2 vector of length 24>
+gap> Display([e]);
+ . 1 1 . . 1 . . . . . 1 . . 1 1 . . 1 . 1 . . 1
+gap> IsModuleElement(S, e);
+false
+gap> IsModuleElement(T, e);
+true
+gap>
+gap> FpGModuleFromFpGModuleGF(S);
+Module of dimension 8 over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2
+
+]]></Log>
+    </Subsection>
+  </Section>
+  
+  <!-- ********************************************************** -->
+  <Section>
+    <Heading>Data access functions</Heading>
+    <!-- GAPDocSourceSuffix="_DTmanFpGModule_Dat" -->
+    <Subsection Label="FPGModuleExample1">
+      <Heading>Example: Accessing data about a <K>FpGModuleGF</K></Heading>
+      
+      In the following example, we construct three terms of a (minimal) 
+      resolution of the dihedral group of order eight, which is a chain complex
+      of &FG;-modules. 
+      <Alt Only="LaTeX">
+        <Display>
+          (\mathbb{F}G)^3 \to (\mathbb{F}G)^3 \to \mathbb{F}G \to \mathbb{F} \to 0
+        </Display>
+      </Alt>
+      <Alt Not="LaTeX">
+        <Display>
+          (FG)^3 -> (FG)^2 -> FG -> F -> 0
+        </Display>
+      </Alt>
+      We obtain the last homomorphism in this chain complex and 
+      calculate its kernel, returning this as a <K>FpGModuleGF</K>. We can
+      use the data access functions described above to extract information
+      about this module.
+      <P/>
+      See Chapters <Ref Chap="FpGModuleGFHom"/> and <Ref Chap="Resolution"/> 
+      respectively for more information about &FG;-module homomorphisms and 
+      resolutions in &HAPprime;
+      
+<Example><![CDATA[
+gap> R := ResolutionPrimePowerGroupRadical(DihedralGroup(8), 2);
+Resolution of length 2 in characteristic 2 for <pc group of size 8 with
+3 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> phi := BoundaryFpGModuleHomomorphismGF(R, 2);
+<Module homomorphism>
+
+gap> M := KernelOfModuleHomomorphism(phi);
+Module over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2 with 15 generators in FG^3.
+
+gap> # Now find out things about this module M
+gap> ModuleGroup(M);
+<pc group of size 8 with 3 generators>
+gap> ModuleGroupOrder(M);
+8
+gap> ModuleAction(M);
+function( g, v ) ... end
+gap> ModuleActionBlockSize(M);
+8
+gap> ModuleGroupAndAction(M);
+rec( group := <pc group of size 8 with 3 generators>,
+  action := function( g, v ) ... end,
+  actionOnRight := function( g, v ) ... end, actionBlockSize := 8 )
+gap> ModuleCharacteristic(M);
+2
+gap> ModuleField(M);
+GF(2)
+gap> ModuleAmbientDimension(M);
+24
+gap> AmbientModuleDimension(M);
+3
+]]></Example>
+    </Subsection>
+  </Section>
+  
+  <!-- ********************************************************** -->
+  <Section>
+    <Heading>Generator and vector space functions</Heading>
+    <!-- GAPDocSourceSuffix="_DTmanFpGModule_Gen" -->
+    
+    <Subsection Label="FPGModuleExample2">
+      <Heading>Example: Generators and basis vectors of a <K>FpGModuleGF</K></Heading>
+      
+      Starting with the same module as in the earlier example (Section
+      <Ref Subsect="FPGModuleExample1"/>), we now investigate the generators of
+      the module <C>M</C>. The generating vectors (of which there are 15) 
+      returned by the function <Ref Oper="KernelOfModuleHomomorphism"/> are not 
+      a minimal set, but the function <Ref Oper="MinimalGeneratorsModuleGF"/>
+      creates a new object <C>N</C> representing the same module, but now with
+      only four generators. The vector space spanned by these generators has
+      15 basis vectors, so representing the module by a <M>G</M>-generating set 
+      instead is much more efficient. (The original generating set in <C>M</C>
+      was in fact an &FF;-basis, so the dimension of the vector space
+      should come as no surprise.)
+      <P/>
+      We can also find the radical of the module, and this is used internally
+      for the faster, but more memory-hungry, 
+      <Ref Oper="MinimalGeneratorsModuleRadical"/>.
+<Example><![CDATA[
+gap> R := ResolutionPrimePowerGroupRadical(DihedralGroup(8), 2);;
+gap> phi := BoundaryFpGModuleHomomorphismGF(R, 2);;
+gap> M := KernelOfModuleHomomorphism(phi);;
+gap> #
+gap> ModuleGenerators(M);
+[ <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24> ]
+gap> ModuleGeneratorsAreMinimal(M);
+false
+gap> ModuleGeneratorsForm(M);
+"unknown"
+gap> #
+gap> N := MinimalGeneratorsModuleGF(M);
+Module over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2 with 4 generators in FG^
+3. Generators are in minimal echelon form.
+
+gap> M = N;    # Check that the new module spans the same space
+true
+gap> ModuleGeneratorsAreEchelonForm(N);
+true
+gap> ModuleIsFullCanonical(N);
+false
+gap> M = N;
+true
+gap> ModuleVectorSpaceBasis(N);
+[ <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24>, <a GF2 vector of length 24>,
+  <a GF2 vector of length 24> ]
+gap> ModuleVectorSpaceDimension(N);
+15
+gap> #
+gap> N2 := MinimalGeneratorsModuleRadical(M);
+Module over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2 with 4 generators in FG^
+3. Generators are minimal.
+
+gap> #
+gap> R := RadicalOfModule(M);
+Module over the group ring of <pc group of size 8 with
+3 generators> in characteristic 2 with 120 generators in FG^3.
+
+gap> N2 = N;
+true
+]]></Example>
+    </Subsection>
+  </Section>
+  
+  <!-- ********************************************************** -->
+  <Section>
+    <Heading>Block echelon functions</Heading>
+    <!-- GAPDocSourceSuffix="_DTmanFpGModule_Blo" -->
+  
+    <Subsection Label="FPGModuleExample3">
+      <Heading>Example: Converting a <K>FpGModuleGF</K> to block echelon form</Heading>
+
+      We can construct a larger module than in the earlier examples (Sections
+      <Ref Subsect="FPGModuleExample1"/> and <Ref Subsect="FPGModuleExample2"/>) by taking
+      the kernel of the third boundary homomorphism of a minimal resolution 
+      of a group of order 32, which as returned by the function 
+      <Ref Oper="KernelOfModuleHomomorphism"/> has a generating set with many 
+      redundant generators. We display the block structure of the generators
+      of this module after applying various block echelon reduction functions.
+<!--
+gap> R := ResolutionPrimePowerGroupRadical(SmallGroup(32, 10), 3);;
+gap> phi := BoundaryFpGModuleHomomorphismGF(R, 3);;
+gap> #
+gap> M := KernelOfModuleHomomorphism(phi);
+gap> #
+gap> N := SemiEchelonModuleGenerators(M);
+gap> DisplayBlocks(N.module);
+gap> #
+gap> N2 := SemiEchelonModuleGeneratorsMinMem(M);
+gap> DisplayBlocks(N2.module);
+gap> #
+gap> EchelonModuleGeneratorsDestructive(M);;
+gap> DisplayBlocks(M);
+gap> #
+gap> ReverseEchelonModuleGeneratorsDestructive(M);
+gap> DisplayBlocks(M);
+-->
+<Example><![CDATA[
+gap> R := ResolutionPrimePowerGroupRadical(SmallGroup(32, 10), 3);;
+gap> phi := BoundaryFpGModuleHomomorphismGF(R, 3);;
+gap> #
+gap> M := KernelOfModuleHomomorphism(phi);
+Module over the group ring of <pc group of size 32 with
+5 generators> in characteristic 2 with 65 generators in FG^4.
+
+gap> #
+gap> N := SemiEchelonModuleGenerators(M);
+rec( module := Module over the group ring of <pc group of size 32 with
+    5 generators> in characteristic 2 with 5 generators in FG^
+    4. Generators are in minimal semi-echelon form.
+    , headblocks := [ 2, 3, 1, 1, 3 ] )
+gap> DisplayBlocks(N.module);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[.*.*]
+[..**]
+[***.]
+[****]
+[..**]
+Generators are in minimal semi-echelon form.
+gap> N2 := SemiEchelonModuleGeneratorsMinMem(M);
+rec( module := Module over the group ring of <pc group of size 32 with
+    5 generators> in characteristic 2 with 9 generators in FG^4. 
+    , headblocks := [ 2, 1, 3, 1, 1, 4, 1, 3, 4 ] )
+gap> DisplayBlocks(N2.module);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 9 generators in FG^4.
+[.*..]
+[**..]
+[..**]
+[****]
+[****]
+[...*]
+[****]
+[..**]
+[...*]
+
+gap> #
+gap> EchelonModuleGeneratorsDestructive(M);;
+gap> DisplayBlocks(M);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[***.]
+[****]
+[.*.*]
+[..**]
+[..**]
+Generators are in minimal echelon form.
+gap> ReverseEchelonModuleGeneratorsDestructive(M);
+Module over the group ring of <pc group of size 32 with
+5 generators> in characteristic 2 with 5 generators in FG^
+4. Generators are in minimal echelon form.
+
+gap> DisplayBlocks(M);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[***.]
+[****]
+[.*..]
+[..*.]
+[..**]
+Generators are in minimal echelon form.
+]]></Example>
+    </Subsection>
+  </Section>
+  
+  <!-- ********************************************************** -->
+  <Section>
+    <Heading>Sum and intersection functions</Heading>
+    <!-- GAPDocSourceSuffix="_DTmanFpGModule_Sum" -->
+
+    <Subsection Label="FPGModuleExample4">
+      <Heading>Example: Sum and intersection of <K>FpGModuleGF</K>s</Heading>
+
+      We can construct the direct sum of &FG;-modules, and (attempt to)
+      calculate a direct decomposition of a module. For example, we can show
+      that
+      <Alt Only="LaTeX">
+        <Display>
+          (\mathbb{F}G)^2 \oplus \mathbb{F}G  = \mathbb{F}G \oplus \mathbb{F}G \oplus \mathbb{F}G
+        </Display>
+      </Alt>
+      <Alt Not="LaTeX">
+        <Display>
+          (FG)^2 (+) FG = FG (+) FG (+) FG
+        </Display>
+      </Alt>
+<!--
+gap> G := CyclicGroup(64);;
+gap> FG := FpGModuleGF(G, 1);
+gap> FG2 := FpGModuleGF(G, 2);
+gap> M := DirectSumOfModules(FG, FG2);
+gap> DirectDecompositionOfModule(M);
+-->
+<Example><![CDATA[
+gap> G := CyclicGroup(64);;
+gap> FG := FpGModuleGF(G, 1);
+Full canonical module FG^1 over the group ring of <pc group of size 64 with
+6 generators> in characteristic 2
+
+gap> FG2 := FpGModuleGF(G, 2);
+Full canonical module FG^2 over the group ring of <pc group of size 64 with
+6 generators> in characteristic 2
+
+gap> M := DirectSumOfModules(FG2, FG);
+Full canonical module FG^3 over the group ring of <pc group of size 64 with
+6 generators> in characteristic 2
+
+gap> DirectDecompositionOfModule(M);
+[ Module over the group ring of <pc group of size 64 with
+    6 generators> in characteristic 2 with 1 generator in FG^
+    1. Generators are in minimal echelon form.
+    , Module over the group ring of <pc group of size 64 with
+    6 generators> in characteristic 2 with 1 generator in FG^
+    1. Generators are in minimal echelon form.
+    , Module over the group ring of <pc group of size 64 with
+    6 generators> in characteristic 2 with 1 generator in FG^
+    1. Generators are in minimal echelon form.
+     ]
+]]></Example>
+      <P/>
+      We can also compute the sum and intersection of &FG;-modules. In the
+      example below we construct two submodules of &FG;, where &G; is the
+      dihedral group of order four: <C>M</C> is the submodule generated by
+      <M>g_1 + g_2</M>, and <C>N</C> is the submodule generated by
+      <M>g_1 + g_2 + g_3 + g_4</M>. We calculate their sum and intersection.
+      Since <C>N</C> is in this case a submodule of <C>M</C> it is easy
+      to check that the correct results are obtained.
+<!--
+gap> G := DihedralGroup(4);;
+gap> M := FpGModuleGF([[1,1,0,0]]*One(GF(2)), G);
+gap> N := FpGModuleGF([[1,1,1,1]]*One(GF(2)), G);
+gap> #
+gap> S := SumModules(M,N);
+gap> I := IntersectionModules(M,N);
+gap> #
+gap> S = M and I = N;
+-->
+<Example><![CDATA[
+gap> G := DihedralGroup(4);;
+gap> M := FpGModuleGF([[1,1,0,0]]*One(GF(2)), G);
+Module over the group ring of <pc group of size 4 with
+2 generators> in characteristic 2 with 1 generator in FG^
+1. Generators are in minimal echelon form.
+
+gap> N := FpGModuleGF([[1,1,1,1]]*One(GF(2)), G);
+Module over the group ring of <pc group of size 4 with
+2 generators> in characteristic 2 with 1 generator in FG^
+1. Generators are in minimal echelon form.
+
+gap> #
+gap> S := SumModules(M,N);
+Module over the group ring of <pc group of size 4 with
+2 generators> in characteristic 2 with 2 generators in FG^1.
+
+gap> I := IntersectionModules(M,N);
+Module over the group ring of <pc group of size 4 with
+2 generators> in characteristic 2 with 1 generator in FG^1.
+
+gap> #
+gap> S = M and I = N;
+true
+]]></Example>
+    </Subsection>
+  </Section>
+  
+  <!-- ********************************************************** -->
+  <Section Label="FpGModuleGFmisc">
+    <Heading>Miscellaneous functions</Heading>
+    <!-- GAPDocSourceSuffix="_DTmanFpGModule_Misc" -->
+  </Section>
+  
+</Chapter>
+

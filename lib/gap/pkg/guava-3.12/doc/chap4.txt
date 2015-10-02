@@ -1,0 +1,2088 @@
+  
+  [1X4 Codes[0X
+  
+  A  [13Xcode[0m  is  a  set  of  codewords  (recall  a codeword in [5XGUAVA[0m is simply a
+  sequence  of elements of a finite field GF(q), where q is a prime power). We
+  call  these  the  [13Xelements[0m  of  the  code.  Depending on the type of code, a
+  codeword  can  be  interpreted  as  a  vector  or  as  a polynomial. This is
+  explained in more detail in Chapter [14X3.[0m.
+  
+  In  [5XGUAVA[0m, codes can be a set specified by its elements (this will be called
+  an [13Xunrestricted code[0m), by a generator matrix listing a set of basis elements
+  (for a linear code) or by a generator polynomial (for a cyclic code).
+  
+  Any  code can be defined by its elements. If you like, you can give the code
+  a name.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := ElementsCode(["1100", "1010", "0001"], "example code", GF(2) );[0X
+    [4Xa (4,3,1..4)2..4 example code over GF(2) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  An (n,M,d) code is a code with word [13Xlength[0m n, [13Xsize[0m M and [13Xminimum distance[0m d.
+  If  the  minimum  distance  has not yet been calculated, the lower bound and
+  upper  bound  are  printed  (except  in  the case where the code is a random
+  linear codes, where these are not printed for efficiency reasons). So
+  
+  a (4,3,1..4)2..4 code over GF(2)
+  
+  means  a  binary  unrestricted  code  of  length  4, with 3 elements and the
+  minimum  distance  is greater than or equal to 1 and less than or equal to 4
+  and the covering radius is greater than or equal to 2 and less than or equal
+  to 4.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := ElementsCode(["1100", "1010", "0001"], "example code", GF(2) );[0X
+    [4Xa (4,3,1..4)2..4 example code over GF(2) [0X
+    [4Xgap> MinimumDistance(C);[0X
+    [4X2[0X
+    [4Xgap> C;[0X
+    [4Xa (4,3,2)2..4 example code over GF(2) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  If  the  set of elements is a linear subspace of GF(q)^n, the code is called
+  [13Xlinear[0m.  If  a  code is linear, it can be defined by its [13Xgenerator matrix[0m or
+  [13Xparity  check  matrix[0m.  By definition, the rows of the generator matrix is a
+  basis  for  the code (as a vector space over GF(q)). By definition, the rows
+  of the parity check matrix is a basis for the dual space of the code,
+  
+  
+       C^* = \{ v \in GF(q)^n\ |\ v\cdot c = 0,\ for \ all\ c \in C \}.
+  
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := GeneratorMatCode([[1,0,1],[0,1,2]], "demo code", GF(3) );[0X
+    [4Xa linear [3,2,1..2]1 demo code over GF(3) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  So  a  linear  [n,  k,  d]r  code is a code with word [13Xlength[0m n, [13Xdimension[0m k,
+  [13Xminimum distance[0m d and [13Xcovering radius[0m r.
+  
+  If  the  code  is linear and all cyclic shifts of its codewords (regarded as
+  n-tuples)  are again codewords, the code is called [13Xcyclic[0m. All elements of a
+  cyclic  code  are  multiples of the monic polynomial modulo a polynomial x^n
+  -1,  where  n  is the word length of the code. Such a polynomial is called a
+  [13Xgenerator  polynomial[0m  The  generator  polynomial  must divide x^n-1 and its
+  quotient  is  called  a [13Xcheck polynomial[0m. Multiplying a codeword in a cyclic
+  code  by the check polynomial yields zero (modulo the polynomial x^n -1). In
+  [5XGUAVA[0m,  a  cyclic  code can be defined by either its generator polynomial or
+  check polynomial.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := GeneratorPolCode(Indeterminate(GF(2))+Z(2)^0, 7, GF(2) );[0X
+    [4Xa cyclic [7,6,1..2]1 code defined by generator polynomial over GF(2)[0X
+  [4X------------------------------------------------------------------[0X
+  
+  It is possible that [5XGUAVA[0m does not know that an unrestricted code is in fact
+  linear.  This  situation  occurs for example when a code is generated from a
+  list  of elements with the function [10XElementsCode[0m (see [2XElementsCode[0m ([14X5.1-1[0m)).
+  By calling the function [10XIsLinearCode[0m (see [2XIsLinearCode[0m ([14X4.3-4[0m)), [5XGUAVA[0m tests
+  if the code can be represented by a generator matrix. If so, the code record
+  and the operations are converted accordingly.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> L := Z(2)*[ [0,0,0], [1,0,0], [0,1,1], [1,1,1] ];;[0X
+    [4Xgap> C := ElementsCode( L, GF(2) );[0X
+    [4Xa (3,4,1..3)1 user defined unrestricted code over GF(2)[0X
+    [4X# so far, GUAVA does not know what kind of code this is[0X
+    [4Xgap> IsLinearCode( C );[0X
+    [4Xtrue                      # it is linear[0X
+    [4Xgap> C;[0X
+    [4Xa linear [3,2,1]1 user defined unrestricted code over GF(2) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  Of  course the same holds for unrestricted codes that in fact are cyclic, or
+  codes, defined by a generator matrix, that actually are cyclic.
+  
+  Codes  are printed simply by giving a small description of their parameters,
+  the  word  length,  size  or  dimension  and  perhaps  the minimum distance,
+  followed by a short description and the base field of the code. The function
+  [10XDisplay[0m  gives a more detailed description, showing the construction history
+  of the code.
+  
+  [5XGUAVA[0m  doesn't  place  much  emphasis  on  the  actual encoding and decoding
+  processes;  some algorithms have been included though. Encoding works simply
+  by  multiplying  an  information vector with a code, decoding is done by the
+  functions  [10XDecode[0m  or  [10XDecodeword[0m.  For  more information about encoding and
+  decoding, see sections [14X4.2[0m and [14X4.10-1[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R := ReedMullerCode( 1, 3 );[0X
+    [4Xa linear [8,4,4]2 Reed-Muller (1,3) code over GF(2)[0X
+    [4Xgap> w := [ 1, 0, 1, 1 ] * R;[0X
+    [4X[ 1 0 0 1 1 0 0 1 ][0X
+    [4Xgap> Decode( R, w );[0X
+    [4X[ 1 0 1 1 ][0X
+    [4Xgap> Decode( R, w + "10000000" ); # One error at the first position[0X
+    [4X[ 1 0 1 1 ]                       # Corrected by Guava [0X
+  [4X------------------------------------------------------------------[0X
+  
+  Sections  [14X4.1[0m  and [14X4.2[0m describe the operations that are available for codes.
+  Section  [14X4.3[0m  describe  the functions that tests whether an object is a code
+  and  what  kind  of  code  it  is  (see  [10XIsCode[0m,  [2XIsLinearCode[0m  ([14X4.3-4[0m)  and
+  [10XIsCyclicCode[0m)  and  various  other  boolean functions for codes. Section [14X4.4[0m
+  describe   functions   about  equivalence  and  isomorphism  of  codes  (see
+  [2XIsEquivalent[0m   ([14X4.4-1[0m),   [2XCodeIsomorphism[0m   ([14X4.4-2[0m)   and  [2XAutomorphismGroup[0m
+  ([14X4.4-3[0m)).  Section [14X4.5[0m describes functions that work on [13Xdomains[0m (see Chapter
+  "Domains  and  their  Elements"  in  the  GAP Reference Manual). Section [14X4.6[0m
+  describes functions for printing and displaying codes. Section [14X4.7[0m describes
+  functions  that  return the matrices and polynomials that define a code (see
+  [2XGeneratorMat[0m  ([14X4.7-1[0m),  [2XCheckMat[0m  ([14X4.7-2[0m),  [2XGeneratorPol[0m  ([14X4.7-3[0m),  [2XCheckPol[0m
+  ([14X4.7-4[0m),  [2XRootsOfCode[0m  ([14X4.7-5[0m)). Section [14X4.8[0m describes functions that return
+  the  basic  parameters  of codes (see [2XWordLength[0m ([14X4.8-1[0m), [2XRedundancy[0m ([14X4.8-2[0m)
+  and  [2XMinimumDistance[0m  ([14X4.8-3[0m)).  Section [14X4.9[0m describes functions that return
+  distance   and   weight   distributions   (see  [2XWeightDistribution[0m  ([14X4.9-2[0m),
+  [2XInnerDistribution[0m      ([14X4.9-3[0m),      [2XOuterDistribution[0m      ([14X4.9-5[0m)      and
+  [2XDistancesDistribution[0m  ([14X4.9-4[0m)).  Section  [14X4.10[0m describes functions that are
+  related  to  decoding  (see  [2XDecode[0m  ([14X4.10-1[0m), [2XDecodeword[0m ([14X4.10-2[0m), [2XSyndrome[0m
+  ([14X4.10-8[0m),  [2XSyndromeTable[0m  ([14X4.10-9[0m) and [2XStandardArray[0m ([14X4.10-10[0m)). In Chapters
+  [14X5.[0m  and  [14X6.[0m which follow, we describe functions that generate and manipulate
+  codes.
+  
+  
+  [1X4.1 Comparisons of Codes[0X
+  
+  [1X4.1-1 =[0m
+  
+  [2X> =( [0X[3XC1, C2[0X[2X ) ______________________________________________________[0Xfunction
+  
+  The equality operator [10XC1 = C2[0m evaluates to `true' if the codes [3XC1[0m and [3XC2[0m are
+  equal, and to `false' otherwise.
+  
+  The  equality operator is also denoted [10XEQ[0m, and [10XEq(C1,C2)[0m is the same as [10XC1 =
+  C2[0m. There is also an inequality operator, < >, or [10Xnot EQ[0m.
+  
+  Note  that  codes  are equal if and only if their set of elements are equal.
+  Codes  can  also be compared with objects of other types. Of course they are
+  never equal.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> M := [ [0, 0], [1, 0], [0, 1], [1, 1] ];;[0X
+    [4Xgap> C1 := ElementsCode( M, GF(2) );[0X
+    [4Xa (2,4,1..2)0 user defined unrestricted code over GF(2)[0X
+    [4Xgap> M = C1;[0X
+    [4Xfalse[0X
+    [4Xgap> C2 := GeneratorMatCode( [ [1, 0], [0, 1] ], GF(2) );[0X
+    [4Xa linear [2,2,1]0 code defined by generator matrix over GF(2)[0X
+    [4Xgap> C1 = C2;[0X
+    [4Xtrue[0X
+    [4Xgap> ReedMullerCode( 1, 3 ) = HadamardCode( 8 );[0X
+    [4Xtrue[0X
+    [4Xgap> WholeSpaceCode( 5, GF(4) ) = WholeSpaceCode( 5, GF(2) );[0X
+    [4Xfalse[0X
+  [4X------------------------------------------------------------------[0X
+  
+  Another  way  of  comparing codes is [10XIsEquivalent[0m, which checks if two codes
+  are   equivalent  (see  [2XIsEquivalent[0m  ([14X4.4-1[0m)).  By  the  way,  this  called
+  [10XCodeIsomorphism[0m.  For  the current version of [5XGUAVA[0m, unless one of the codes
+  is  unrestricted,  this  calls Leon's C program (which only works for binary
+  linear codes and only on a unix/linux computer).
+  
+  
+  [1X4.2 Operations for Codes[0X
+  
+  [1X4.2-1 +[0m
+  
+  [2X> +( [0X[3XC1, C2[0X[2X ) ______________________________________________________[0Xfunction
+  
+  The  operator  `+'  evaluates  to the direct sum of the codes [3XC1[0m and [3XC2[0m. See
+  [2XDirectSumCode[0m ([14X6.2-1[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C1:=RandomLinearCode(10,5);[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> C2:=RandomLinearCode(9,4);[0X
+    [4Xa  [9,4,?] randomly generated code over GF(2)[0X
+    [4Xgap> C1+C2;[0X
+    [4Xa linear [10,9,1]0..10 unknown linear code over GF(2)[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.2-2 *[0m
+  
+  [2X> *( [0X[3XC1, C2[0X[2X ) ______________________________________________________[0Xfunction
+  
+  The operator `*' evaluates to the direct product of the codes [3XC1[0m and [3XC2[0m. See
+  [2XDirectProductCode[0m ([14X6.2-3[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C1 := GeneratorMatCode( [ [1, 0,0,0], [0, 1,0,0] ], GF(2) );[0X
+    [4Xa linear [4,2,1]1 code defined by generator matrix over GF(2)[0X
+    [4Xgap> C2 := GeneratorMatCode( [ [0,0,1, 1], [0,0,0, 1] ], GF(2) );[0X
+    [4Xa linear [4,2,1]1 code defined by generator matrix over GF(2)[0X
+    [4Xgap> C1*C2;[0X
+    [4Xa linear [16,4,1]4..12 direct product code[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.2-3 *[0m
+  
+  [2X> *( [0X[3Xm, C[0X[2X ) ________________________________________________________[0Xfunction
+  
+  The operator [10Xm*C[0m evaluates to the element of [3XC[0m belonging to information word
+  ('message')  [3Xm[0m.  Here [3Xm[0m may be a vector, polynomial, string or codeword or a
+  list  of  those.  This is the way to do encoding in [5XGUAVA[0m. [3XC[0m must be linear,
+  because  in  [5XGUAVA[0m,  encoding  by  multiplication is only defined for linear
+  codes. If [3XC[0m is a cyclic code, this multiplication is the same as multiplying
+  an  information  polynomial  [3Xm[0m  by  the generator polynomial of [3XC[0m. If [3XC[0m is a
+  linear code, it is equal to the multiplication of an information vector [3Xm[0m by
+  a generator matrix of [3XC[0m.
+  
+  To  invert  this,  use  the  function  [10XInformationWord[0m  (see [2XInformationWord[0m
+  ([14X4.2-4[0m), which simply calls the function [10XDecode[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := GeneratorMatCode( [ [1, 0,0,0], [0, 1,0,0] ], GF(2) );[0X
+    [4Xa linear [4,2,1]1 code defined by generator matrix over GF(2)[0X
+    [4Xgap> m:=Codeword("11");[0X
+    [4X[ 1 1 ][0X
+    [4Xgap> m*C;[0X
+    [4X[ 1 1 0 0 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.2-4 InformationWord[0m
+  
+  [2X> InformationWord( [0X[3XC, c[0X[2X ) __________________________________________[0Xfunction
+  
+  Here  [3XC[0m  is  a  linear  code  and  [3Xc[0m  is  a  codeword  in  it.  The  command
+  [10XInformationWord[0m  returns  the  message  word  (or  'information  digits')  m
+  satisfying [10Xc=m*C[0m. This command simply calls [10XDecode[0m, provided [10Xc in C[0m is true.
+  Otherwise, it returns an error.
+  
+  To invert this, use the encoding function [10X*[0m (see [2X*[0m ([14X4.2-3[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=HammingCode(3);[0X
+    [4Xa linear [7,4,3]1 Hamming (3,2) code over GF(2)[0X
+    [4Xgap> c:=Random(C);[0X
+    [4X[ 0 0 0 1 1 1 1 ][0X
+    [4Xgap> InformationWord(C,c);[0X
+    [4X[ 0 1 1 1 ][0X
+    [4Xgap> c:=Codeword("1111100");[0X
+    [4X[ 1 1 1 1 1 0 0 ][0X
+    [4Xgap> InformationWord(C,c);[0X
+    [4X"ERROR: codeword must belong to code"[0X
+    [4Xgap> C:=NordstromRobinsonCode();[0X
+    [4Xa (16,256,6)4 Nordstrom-Robinson code over GF(2)[0X
+    [4Xgap> c:=Random(C);[0X
+    [4X[ 0 0 0 1 0 0 0 1 0 0 1 0 1 1 0 1 ][0X
+    [4Xgap> InformationWord(C,c);[0X
+    [4X"ERROR: code must be linear"[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.3 Boolean Functions for Codes[0X
+  
+  [1X4.3-1 in[0m
+  
+  [2X> in( [0X[3Xc, C[0X[2X ) _______________________________________________________[0Xfunction
+  
+  The command [10Xc in C[0m evaluates to `true' if [3XC[0m contains the codeword or list of
+  codewords specified by [3Xc[0m. Of course, [3Xc[0m and [3XC[0m must have the same word lengths
+  and base fields.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:= HammingCode( 2 );; eC:= AsSSortedList( C );[0X
+    [4X[ [ 0 0 0 ], [ 1 1 1 ] ][0X
+    [4Xgap> eC[2] in C;[0X
+    [4Xtrue[0X
+    [4Xgap> [ 0 ] in C;[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-2 IsSubset[0m
+  
+  [2X> IsSubset( [0X[3XC1, C2[0X[2X ) _______________________________________________[0Xfunction
+  
+  The command [10XIsSubset(C1,C2)[0m returns `true' if [3XC2[0m is a subcode of [3XC1[0m, i.e. if
+  [3XC1[0m contains all the elements of [3XC2[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsSubset( HammingCode(3), RepetitionCode( 7 ) );[0X
+    [4Xtrue[0X
+    [4Xgap> IsSubset( RepetitionCode( 7 ), HammingCode( 3 ) );[0X
+    [4Xfalse[0X
+    [4Xgap> IsSubset( WholeSpaceCode( 7 ), HammingCode( 3 ) );[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-3 IsCode[0m
+  
+  [2X> IsCode( [0X[3Xobj[0X[2X ) ____________________________________________________[0Xfunction
+  
+  [10XIsCode[0m returns `true' if [3Xobj[0m, which can be an object of arbitrary type, is a
+  code  and  `false'  otherwise.  Will  cause  an  error  if [3Xobj[0m is an unbound
+  variable.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsCode( 1 );[0X
+    [4Xfalse[0X
+    [4Xgap> IsCode( ReedMullerCode( 2,3 ) );[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-4 IsLinearCode[0m
+  
+  [2X> IsLinearCode( [0X[3Xobj[0X[2X ) ______________________________________________[0Xfunction
+  
+  [10XIsLinearCode[0m checks if object [3Xobj[0m (not necessarily a code) is a linear code.
+  If  a  code  has  already  been  marked  as  linear  or cyclic, the function
+  automatically returns `true'. Otherwise, the function checks if a basis G of
+  the  elements  of [3Xobj[0m exists that generates the elements of [3Xobj[0m. If so, G is
+  recorded  as  a  generator matrix of [3Xobj[0m and the function returns `true'. If
+  not, the function returns `false'.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := ElementsCode( [ [0,0,0],[1,1,1] ], GF(2) );[0X
+    [4Xa (3,2,1..3)1 user defined unrestricted code over GF(2)[0X
+    [4Xgap> IsLinearCode( C );[0X
+    [4Xtrue[0X
+    [4Xgap> IsLinearCode( ElementsCode( [ [1,1,1] ], GF(2) ) );[0X
+    [4Xfalse[0X
+    [4Xgap> IsLinearCode( 1 );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-5 IsCyclicCode[0m
+  
+  [2X> IsCyclicCode( [0X[3Xobj[0X[2X ) ______________________________________________[0Xfunction
+  
+  [10XIsCyclicCode[0m  checks  if  the  object  [3Xobj[0m  is  a cyclic code. If a code has
+  already  been  marked  as cyclic, the function automatically returns `true'.
+  Otherwise,  the  function checks if a polynomial g exists that generates the
+  elements  of  [3Xobj[0m. If so, g is recorded as a generator polynomial of [3Xobj[0m and
+  the function returns `true'. If not, the function returns `false'.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := ElementsCode( [ [0,0,0], [1,1,1] ], GF(2) );[0X
+    [4Xa (3,2,1..3)1 user defined unrestricted code over GF(2)[0X
+    [4Xgap> # GUAVA does not know the code is cyclic[0X
+    [4Xgap> IsCyclicCode( C );      # this command tells GUAVA to find out[0X
+    [4Xtrue[0X
+    [4Xgap> IsCyclicCode( HammingCode( 4, GF(2) ) );[0X
+    [4Xfalse[0X
+    [4Xgap> IsCyclicCode( 1 );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-6 IsPerfectCode[0m
+  
+  [2X> IsPerfectCode( [0X[3XC[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XIsPerfectCode(C)[0m  returns  `true' if [3XC[0m is a perfect code. If Csubset GF(q)^n
+  then,  by definition, this means that for some positive integer t, the space
+  GF(q)^n is covered by non-overlapping spheres of (Hamming) radius t centered
+  at  the  codewords in [3XC[0m. For a code with odd minimum distance d = 2t+1, this
+  is  the case when every word of the vector space of [3XC[0m is at distance at most
+  t  from exactly one element of [3XC[0m. Codes with even minimum distance are never
+  perfect.
+  
+  In fact, a code that is not "trivially perfect" (the binary repetition codes
+  of odd length, the codes consisting of one word, and the codes consisting of
+  the  whole  vector  space), and does not have the parameters of a Hamming or
+  Golay code, cannot be perfect (see section 1.12 in [HP03]).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> H := HammingCode(2);[0X
+    [4Xa linear [3,1,3]1 Hamming (2,2) code over GF(2)[0X
+    [4Xgap> IsPerfectCode( H );[0X
+    [4Xtrue[0X
+    [4Xgap> IsPerfectCode( ElementsCode([[1,1,0],[0,0,1]],GF(2)) );[0X
+    [4Xtrue[0X
+    [4Xgap> IsPerfectCode( ReedSolomonCode( 6, 3 ) );[0X
+    [4Xfalse[0X
+    [4Xgap> IsPerfectCode( BinaryGolayCode() );[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-7 IsMDSCode[0m
+  
+  [2X> IsMDSCode( [0X[3XC[0X[2X ) ___________________________________________________[0Xfunction
+  
+  [10XIsMDSCode(C)[0m returns true if [3XC[0m is a maximum distance separable (MDS) code. A
+  linear  [n, k, d]-code of length n, dimension k and minimum distance d is an
+  MDS  code  if  k=n-d+1,  in  other words if [3XC[0m meets the Singleton bound (see
+  [2XUpperBoundSingleton[0m  ([14X7.1-1[0m)).  An unrestricted (n, M, d) code is called [13XMDS[0m
+  if  k=n-d+1,  with  k equal to the largest integer less than or equal to the
+  logarithm of M with base q, the size of the base field of [3XC[0m.
+  
+  Well-known  MDS  codes  include the repetition codes, the whole space codes,
+  the  even  weight  codes  (these  are  the  only  [13Xbinary[0m  MDS codes) and the
+  Reed-Solomon codes.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C1 := ReedSolomonCode( 6, 3 );[0X
+    [4Xa cyclic [6,4,3]2 Reed-Solomon code over GF(7)[0X
+    [4Xgap> IsMDSCode( C1 );[0X
+    [4Xtrue    # 6-3+1 = 4[0X
+    [4Xgap> IsMDSCode( QRCode( 23, GF(2) ) );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-8 IsSelfDualCode[0m
+  
+  [2X> IsSelfDualCode( [0X[3XC[0X[2X ) ______________________________________________[0Xfunction
+  
+  [10XIsSelfDualCode(C)[0m  returns `true' if [3XC[0m is self-dual, i.e. when [3XC[0m is equal to
+  its  dual  code  (see  also  [2XDualCode[0m  ([14X6.1-14[0m)).  A code is self-dual if it
+  contains  all  vectors  that  its  elements  are orthogonal to. If a code is
+  self-dual,  it  automatically  is  self-orthogonal (see [2XIsSelfOrthogonalCode[0m
+  ([14X4.3-9[0m)).
+  
+  If  [3XC[0m  is a non-linear code, it cannot be self-dual (the dual code is always
+  linear),  so  `false'  is returned. A linear code can only be self-dual when
+  its dimension k is equal to the redundancy r.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsSelfDualCode( ExtendedBinaryGolayCode() );[0X
+    [4Xtrue[0X
+    [4Xgap> C := ReedMullerCode( 1, 3 );[0X
+    [4Xa linear [8,4,4]2 Reed-Muller (1,3) code over GF(2)[0X
+    [4Xgap> DualCode( C ) = C;[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-9 IsSelfOrthogonalCode[0m
+  
+  [2X> IsSelfOrthogonalCode( [0X[3XC[0X[2X ) ________________________________________[0Xfunction
+  
+  [10XIsSelfOrthogonalCode(C)[0m  returns  `true'  if [3XC[0m is self-orthogonal. A code is
+  [13Xself-orthogonal[0m  if  every  element of [3XC[0m is orthogonal to all elements of [3XC[0m,
+  including  itself. (In the linear case, this simply means that the generator
+  matrix of [3XC[0m multiplied with its transpose yields a null matrix.)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R := ReedMullerCode(1,4);[0X
+    [4Xa linear [16,5,8]6 Reed-Muller (1,4) code over GF(2)[0X
+    [4Xgap> IsSelfOrthogonalCode(R);[0X
+    [4Xtrue[0X
+    [4Xgap> IsSelfDualCode(R);[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-10 IsDoublyEvenCode[0m
+  
+  [2X> IsDoublyEvenCode( [0X[3XC[0X[2X ) ____________________________________________[0Xfunction
+  
+  [10XIsDoublyEvenCode(C)[0m  returns  `true'  if [3XC[0m is a binary linear code which has
+  codewords  of weight divisible by 4 only. According to [HP03], a doubly-even
+  code  is  self-orthogonal  and  every row in its generator matrix has weight
+  that is divisible by 4.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=BinaryGolayCode();[0X
+    [4Xa cyclic [23,12,7]3 binary Golay code over GF(2)[0X
+    [4Xgap> WeightDistribution(C);[0X
+    [4X[ 1, 0, 0, 0, 0, 0, 0, 253, 506, 0, 0, 1288, 1288, 0, 0, 506, 253, 0, 0, 0, 0, 0, 0, 1 ][0X
+    [4Xgap> IsDoublyEvenCode(C);  [0X
+    [4Xfalse[0X
+    [4Xgap> C:=ExtendedCode(C);  [0X
+    [4Xa linear [24,12,8]4 extended code[0X
+    [4Xgap> WeightDistribution(C);[0X
+    [4X[ 1, 0, 0, 0, 0, 0, 0, 0, 759, 0, 0, 0, 2576, 0, 0, 0, 759, 0, 0, 0, 0, 0, 0, 0, 1 ][0X
+    [4Xgap> IsDoublyEvenCode(C);  [0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-11 IsSinglyEvenCode[0m
+  
+  [2X> IsSinglyEvenCode( [0X[3XC[0X[2X ) ____________________________________________[0Xfunction
+  
+  [10XIsSinglyEvenCode(C)[0m  returns  `true' if [3XC[0m is a binary self-orthogonal linear
+  code which is not doubly-even. In other words, [3XC[0m is a binary self-orthogonal
+  code which has codewords of even weight.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> x:=Indeterminate(GF(2));                     [0X
+    [4Xx_1[0X
+    [4Xgap> C:=QuasiCyclicCode( [x^0, 1+x^3+x^5+x^6+x^7], 11, GF(2) );[0X
+    [4Xa linear [22,11,1..6]4..7 quasi-cyclic code over GF(2)[0X
+    [4Xgap> IsSelfDualCode(C);  # self-dual is a restriction of self-orthogonal[0X
+    [4Xtrue[0X
+    [4Xgap> IsDoublyEvenCode(C);[0X
+    [4Xfalse[0X
+    [4Xgap> IsSinglyEvenCode(C);[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-12 IsEvenCode[0m
+  
+  [2X> IsEvenCode( [0X[3XC[0X[2X ) __________________________________________________[0Xfunction
+  
+  [10XIsEvenCode(C)[0m  returns  `true'  if  [3XC[0m  is  a  binary  linear  code which has
+  codewords of even weight--regardless whether or not it is self-orthogonal.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=BinaryGolayCode();[0X
+    [4Xa cyclic [23,12,7]3 binary Golay code over GF(2)[0X
+    [4Xgap> IsSelfOrthogonalCode(C);[0X
+    [4Xfalse[0X
+    [4Xgap> IsEvenCode(C);[0X
+    [4Xfalse[0X
+    [4Xgap> C:=ExtendedCode(C);[0X
+    [4Xa linear [24,12,8]4 extended code[0X
+    [4Xgap> IsSelfOrthogonalCode(C);[0X
+    [4Xtrue[0X
+    [4Xgap> IsEvenCode(C);[0X
+    [4Xtrue[0X
+    [4Xgap> C:=ExtendedCode(QRCode(17,GF(2)));[0X
+    [4Xa linear [18,9,6]3..5 extended code[0X
+    [4Xgap> IsSelfOrthogonalCode(C);[0X
+    [4Xfalse[0X
+    [4Xgap> IsEvenCode(C);[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-13 IsSelfComplementaryCode[0m
+  
+  [2X> IsSelfComplementaryCode( [0X[3XC[0X[2X ) _____________________________________[0Xfunction
+  
+  [10XIsSelfComplementaryCode[0m returns `true' if
+  
+  
+       v \in C \Rightarrow 1 - v \in C,
+  
+  
+  where 1 is the all-one word of length n.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsSelfComplementaryCode( HammingCode( 3, GF(2) ) );[0X
+    [4Xtrue[0X
+    [4Xgap> IsSelfComplementaryCode( EvenWeightSubcode([0X
+    [4X> HammingCode( 3, GF(2) ) ) );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-14 IsAffineCode[0m
+  
+  [2X> IsAffineCode( [0X[3XC[0X[2X ) ________________________________________________[0Xfunction
+  
+  [10XIsAffineCode[0m  returns `true' if [3XC[0m is an affine code. A code is called [13Xaffine[0m
+  if  it is an affine space. In other words, a code is affine if it is a coset
+  of a linear code.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsAffineCode( HammingCode( 3, GF(2) ) );[0X
+    [4Xtrue[0X
+    [4Xgap> IsAffineCode( CosetCode( HammingCode( 3, GF(2) ),[0X
+    [4X> [ 1, 0, 0, 0, 0, 0, 0 ] ) );[0X
+    [4Xtrue[0X
+    [4Xgap> IsAffineCode( NordstromRobinsonCode() );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.3-15 IsAlmostAffineCode[0m
+  
+  [2X> IsAlmostAffineCode( [0X[3XC[0X[2X ) __________________________________________[0Xfunction
+  
+  [10XIsAlmostAffineCode[0m  returns  `true' if [3XC[0m is an almost affine code. A code is
+  called  [13Xalmost affine[0m if the size of any punctured code of [3XC[0m is q^r for some
+  r,  where  q  is  the size of the alphabet of the code. Every affine code is
+  also  almost  affine,  and  every  code  over GF(2) and GF(3) that is almost
+  affine is also affine.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> code := ElementsCode( [ [0,0,0], [0,1,1], [0,2,2], [0,3,3],[0X
+    [4X>                             [1,0,1], [1,1,0], [1,2,3], [1,3,2],[0X
+    [4X>                             [2,0,2], [2,1,3], [2,2,0], [2,3,1],[0X
+    [4X>                             [3,0,3], [3,1,2], [3,2,1], [3,3,0] ],[0X
+    [4X>                             GF(4) );;[0X
+    [4Xgap> IsAlmostAffineCode( code );[0X
+    [4Xtrue[0X
+    [4Xgap> IsAlmostAffineCode( NordstromRobinsonCode() );[0X
+    [4Xfalse [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.4 Equivalence and Isomorphism of Codes[0X
+  
+  [1X4.4-1 IsEquivalent[0m
+  
+  [2X> IsEquivalent( [0X[3XC1, C2[0X[2X ) ___________________________________________[0Xfunction
+  
+  We say that [3XC1[0m is [13Xpermutation equivalent[0m to [3XC2[0m if [3XC1[0m can be obtained from [3XC2[0m
+  by  carrying out column permutations. [10XIsEquivalent[0m returns true if [3XC1[0m and [3XC2[0m
+  are  equivalent codes. At this time, [10XIsEquivalent[0m only handles [13Xbinary[0m codes.
+  (The  external  unix/linux  program  [12Xdesauto[0m  from  J.  S. Leon is called by
+  [10XIsEquivalent[0m.) Of course, if [3XC1[0m and [3XC2[0m are equal, they are also equivalent.
+  
+  Note that the algorithm is [13Xvery slow[0m for non-linear codes.
+  
+  More  generally,  we  say  that [3XC1[0m is [13Xequivalent[0m to [3XC2[0m if [3XC1[0m can be obtained
+  from  [3XC2[0m  by  carrying  out  column  permutations  and  a permutation of the
+  alphabet.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> x:= Indeterminate( GF(2) );; pol:= x^3+x+1; [0X
+    [4XZ(2)^0+x_1+x_1^3[0X
+    [4Xgap> H := GeneratorPolCode( pol, 7, GF(2));          [0X
+    [4Xa cyclic [7,4,1..3]1 code defined by generator polynomial over GF(2)[0X
+    [4Xgap> H = HammingCode(3, GF(2));[0X
+    [4Xfalse[0X
+    [4Xgap> IsEquivalent(H, HammingCode(3, GF(2)));[0X
+    [4Xtrue                        # H is equivalent to a Hamming code[0X
+    [4Xgap> CodeIsomorphism(H, HammingCode(3, GF(2)));[0X
+    [4X(3,4)(5,6,7) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.4-2 CodeIsomorphism[0m
+  
+  [2X> CodeIsomorphism( [0X[3XC1, C2[0X[2X ) ________________________________________[0Xfunction
+  
+  If   the  two  codes  [3XC1[0m  and  [3XC2[0m  are  permutation  equivalent  codes  (see
+  [2XIsEquivalent[0m   ([14X4.4-1[0m)),   [10XCodeIsomorphism[0m   returns  the  permutation  that
+  transforms [3XC1[0m into [3XC2[0m. If the codes are not equivalent, it returns `false'.
+  
+  At  this  time, [10XIsEquivalent[0m only computes isomorphisms between [13Xbinary[0m codes
+  on a linux/unix computer (since it calls Leon's C program [12Xdesauto[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> x:= Indeterminate( GF(2) );; pol:= x^3+x+1; [0X
+    [4XZ(2)^0+x_1+x_1^3[0X
+    [4Xgap> H := GeneratorPolCode( pol, 7, GF(2));          [0X
+    [4Xa cyclic [7,4,1..3]1 code defined by generator polynomial over GF(2)[0X
+    [4Xgap> CodeIsomorphism(H, HammingCode(3, GF(2)));[0X
+    [4X(3,4)(5,6,7) [0X
+    [4Xgap> PermutedCode(H, (3,4)(5,6,7)) = HammingCode(3, GF(2));[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.4-3 AutomorphismGroup[0m
+  
+  [2X> AutomorphismGroup( [0X[3XC[0X[2X ) ___________________________________________[0Xfunction
+  
+  [10XAutomorphismGroup[0m  returns  the automorphism group of a linear code [3XC[0m. For a
+  binary  code,  the  automorphism  group  is the largest permutation group of
+  degree n such that each permutation applied to the columns of [3XC[0m again yields
+  [3XC[0m.  [5XGUAVA[0m  calls  the  external program [12Xdesauto[0m written by J. S. Leon, if it
+  exists, to compute the automorphism group. If Leon's program is not compiled
+  on  the system (and in the default directory) then it calls instead the much
+  slower program [10XPermutationAutomorphismGroup[0m.
+  
+  See  Leon  [Leo82]  for  a  more  precise description of the method, and the
+  [11Xguava/src/leon/doc[0m subdirectory for for details about Leon's C programs.
+  
+  The  function  [10XPermutedCode[0m permutes the columns of a code (see [2XPermutedCode[0m
+  ([14X6.1-4[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R := RepetitionCode(7,GF(2));[0X
+    [4Xa cyclic [7,1,7]3 repetition code over GF(2)[0X
+    [4Xgap> AutomorphismGroup(R);[0X
+    [4XSym( [ 1 .. 7 ] )[0X
+    [4X                        # every permutation keeps R identical[0X
+    [4Xgap> C := CordaroWagnerCode(7);[0X
+    [4Xa linear [7,2,4]3 Cordaro-Wagner code over GF(2)[0X
+    [4Xgap> AsSSortedList(C);[0X
+    [4X[ [ 0 0 0 0 0 0 0 ], [ 0 0 1 1 1 1 1 ], [ 1 1 0 0 0 1 1 ], [ 1 1 1 1 1 0 0 ] ][0X
+    [4Xgap> AutomorphismGroup(C);[0X
+    [4XGroup([ (3,4), (4,5), (1,6)(2,7), (1,2), (6,7) ])[0X
+    [4Xgap> C2 :=  PermutedCode(C, (1,6)(2,7));[0X
+    [4Xa linear [7,2,4]3 permuted code[0X
+    [4Xgap> AsSSortedList(C2);[0X
+    [4X[ [ 0 0 0 0 0 0 0 ], [ 0 0 1 1 1 1 1 ], [ 1 1 0 0 0 1 1 ], [ 1 1 1 1 1 0 0 ] ][0X
+    [4Xgap> C2 = C;[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.4-4 PermutationAutomorphismGroup[0m
+  
+  [2X> PermutationAutomorphismGroup( [0X[3XC[0X[2X ) ________________________________[0Xfunction
+  
+  [10XPermutationAutomorphismGroup[0m returns the permutation automorphism group of a
+  linear  code  [3XC[0m. This is the largest permutation group of degree n such that
+  each  permutation  applied to the columns of [3XC[0m again yields [3XC[0m. It is written
+  in GAP, so is much slower than [10XAutomorphismGroup[0m.
+  
+  When    [3XC[0m    is    binary   [10XPermutationAutomorphismGroup[0m   does   [13Xnot[0m   call
+  [10XAutomorphismGroup[0m,  even though they agree mathematically in that case. This
+  way  [10XPermutationAutomorphismGroup[0m  can  be called on any platform which runs
+  GAP.
+  
+  The  older  name for this command, [10XPermutationGroup[0m, will become obsolete in
+  the next version of GAP.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R := RepetitionCode(3,GF(3));[0X
+    [4Xa cyclic [3,1,3]2 repetition code over GF(3)[0X
+    [4Xgap> G:=PermutationAutomorphismGroup(R);[0X
+    [4XGroup([ (), (1,3), (1,2,3), (2,3), (1,3,2), (1,2) ])[0X
+    [4Xgap> G=SymmetricGroup(3);[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.5 Domain Functions for Codes[0X
+  
+  These  are  some  GAP  functions  that  work  on `Domains' in general. Their
+  specific effect on `Codes' is explained here.
+  
+  [1X4.5-1 IsFinite[0m
+  
+  [2X> IsFinite( [0X[3XC[0X[2X ) ____________________________________________________[0Xfunction
+  
+  [10XIsFinite[0m  is  an  implementation  of  the  GAP  domain function [10XIsFinite[0m. It
+  returns true for a code [3XC[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> IsFinite( RepetitionCode( 1000, GF(11) ) );[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.5-2 Size[0m
+  
+  [2X> Size( [0X[3XC[0X[2X ) ________________________________________________________[0Xfunction
+  
+  [10XSize[0m  returns the size of [3XC[0m, the number of elements of the code. If the code
+  is  linear, the size of the code is equal to q^k, where q is the size of the
+  base field of [3XC[0m and k is the dimension.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> Size( RepetitionCode( 1000, GF(11) ) );[0X
+    [4X11[0X
+    [4Xgap> Size( NordstromRobinsonCode() );[0X
+    [4X256 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.5-3 LeftActingDomain[0m
+  
+  [2X> LeftActingDomain( [0X[3XC[0X[2X ) ____________________________________________[0Xfunction
+  
+  [10XLeftActingDomain[0m  returns  the  base  field  of  a code [3XC[0m. Each element of [3XC[0m
+  consists  of  elements  of  this base field. If the base field is F, and the
+  word  length  of the code is n, then the codewords are elements of F^n. If [3XC[0m
+  is  a  cyclic  code,  its  elements  are  interpreted  as  polynomials  with
+  coefficients over F.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C1 := ElementsCode([[0,0,0], [1,0,1], [0,1,0]], GF(4));[0X
+    [4Xa (3,3,1..3)2..3 user defined unrestricted code over GF(4)[0X
+    [4Xgap> LeftActingDomain( C1 );[0X
+    [4XGF(2^2)[0X
+    [4Xgap> LeftActingDomain( HammingCode( 3, GF(9) ) );[0X
+    [4XGF(3^2) [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.5-4 Dimension[0m
+  
+  [2X> Dimension( [0X[3XC[0X[2X ) ___________________________________________________[0Xfunction
+  
+  [10XDimension[0m  returns  the  parameter k of [3XC[0m, the dimension of the code, or the
+  number of information symbols in each codeword. The dimension is not defined
+  for non-linear codes; [10XDimension[0m then returns an error.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> Dimension( NullCode( 5, GF(5) ) );[0X
+    [4X0[0X
+    [4Xgap> C := BCHCode( 15, 4, GF(4) );[0X
+    [4Xa cyclic [15,9,5]3..4 BCH code, delta=5, b=1 over GF(4)[0X
+    [4Xgap> Dimension( C );[0X
+    [4X9[0X
+    [4Xgap> Size( C ) = Size( LeftActingDomain( C ) ) ^ Dimension( C );[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.5-5 AsSSortedList[0m
+  
+  [2X> AsSSortedList( [0X[3XC[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XAsSSortedList[0m (as strictly sorted list) returns an immutable, duplicate free
+  list  of  the elements of [3XC[0m. For a finite field GF(q) generated by powers of
+  Z(q), the ordering on
+  
+  
+       GF(q)=\{ 0 , Z(q)^0, Z(q), Z(q)^2, ...Z(q)^{q-2} \}
+  
+  
+  is  that  determined  by  the  exponents  i.  These elements are of the type
+  codeword  (see  [2XCodeword[0m ([14X3.1-1[0m)). Note that for large codes, generating the
+  elements  may  be very time- and memory-consuming. For generating a specific
+  element  or  a  subset  of  the  elements,  use  [10XCodewordNr[0m  (see [2XCodewordNr[0m
+  ([14X3.1-2[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := ConferenceCode( 5 );[0X
+    [4Xa (5,12,2)1..4 conference code over GF(2)[0X
+    [4Xgap> AsSSortedList( C );[0X
+    [4X[ [ 0 0 0 0 0 ], [ 0 0 1 1 1 ], [ 0 1 0 1 1 ], [ 0 1 1 0 1 ], [ 0 1 1 1 0 ], [0X
+    [4X  [ 1 0 0 1 1 ], [ 1 0 1 0 1 ], [ 1 0 1 1 0 ], [ 1 1 0 0 1 ], [ 1 1 0 1 0 ], [0X
+    [4X  [ 1 1 1 0 0 ], [ 1 1 1 1 1 ] ][0X
+    [4Xgap> CodewordNr( C, [ 1, 2 ] );[0X
+    [4X[ [ 0 0 0 0 0 ], [ 0 0 1 1 1 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.6 Printing and Displaying Codes[0X
+  
+  [1X4.6-1 Print[0m
+  
+  [2X> Print( [0X[3XC[0X[2X ) _______________________________________________________[0Xfunction
+  
+  [10XPrint[0m  prints information about [3XC[0m. This is the same as typing the identifier
+  [3XC[0m at the GAP-prompt.
+  
+  If the argument is an unrestricted code, information in the form
+  
+  a (n,M,d)r ... code over GF(q)
+  
+  is  printed,  where  [3Xn[0m  is  the word length, [3XM[0m the number of elements of the
+  code, [3Xd[0m the minimum distance and [3Xr[0m the covering radius.
+  
+  If the argument is a linear code, information in the form
+  
+  a linear [n,k,d]r ... code over GF(q)
+  
+  is  printed,  where [3Xn[0m is the word length, [3Xk[0m the dimension of the code, [3Xd[0m the
+  minimum distance and [3Xr[0m the covering radius.
+  
+  Except  for codes produced by [10XRandomLinearCode[0m, if [3Xd[0m is not yet known, it is
+  displayed in the form
+  
+  lowerbound..upperbound
+  
+  and  if  [3Xr[0m  is  not  yet known, it is displayed in the same way. For certain
+  ranges  of  n,  the  values  of  [3Xlowerbound[0m and [3Xupperbound[0m are obtained from
+  tables.
+  
+  The function [10XDisplay[0m gives more information. See [2XDisplay[0m ([14X4.6-3[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C1 := ExtendedCode( HammingCode( 3, GF(2) ) );[0X
+    [4Xa linear [8,4,4]2 extended code[0X
+    [4Xgap> Print( "This is ", NordstromRobinsonCode(), ". \n");[0X
+    [4XThis is a (16,256,6)4 Nordstrom-Robinson code over GF(2). [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.6-2 String[0m
+  
+  [2X> String( [0X[3XC[0X[2X ) ______________________________________________________[0Xfunction
+  
+  [10XString[0m  returns  information  about  [3XC[0m in a string. This function is used by
+  [10XPrint[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> x:= Indeterminate( GF(3) );; pol:= x^2+1;[0X
+    [4Xx_1^2+Z(3)^0[0X
+    [4Xgap> Factors(pol);[0X
+    [4X[ x_1^2+Z(3)^0 ][0X
+    [4Xgap> H := GeneratorPolCode( pol, 8, GF(3));[0X
+    [4Xa cyclic [8,6,1..2]1..2 code defined by generator polynomial over GF(3)[0X
+    [4Xgap> String(H);[0X
+    [4X"a cyclic [8,6,1..2]1..2 code defined by generator polynomial over GF(3)"[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.6-3 Display[0m
+  
+  [2X> Display( [0X[3XC[0X[2X ) _____________________________________________________[0Xfunction
+  
+  [10XDisplay[0m  prints  the method of construction of code [3XC[0m. With this history, in
+  most  cases  an  equal  or  equivalent code can be reconstructed. If [3XC[0m is an
+  unmanipulated code, the result is equal to output of the function [10XPrint[0m (see
+  [2XPrint[0m ([14X4.6-1[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> Display( RepetitionCode( 6, GF(3) ) );[0X
+    [4Xa cyclic [6,1,6]4 repetition code over GF(3)[0X
+    [4Xgap> C1 := ExtendedCode( HammingCode(2) );;[0X
+    [4Xgap> C2 := PuncturedCode( ReedMullerCode( 2, 3 ) );;[0X
+    [4Xgap> Display( LengthenedCode( UUVCode( C1, C2 ) ) );[0X
+    [4Xa linear [12,8,2]2..4 code, lengthened with 1 column(s) of[0X
+    [4Xa linear [11,8,1]1..2 U U+V construction code of[0X
+    [4XU: a linear [4,1,4]2 extended code of[0X
+    [4X   a linear [3,1,3]1 Hamming (2,2) code over GF(2)[0X
+    [4XV: a linear [7,7,1]0 punctured code of[0X
+    [4X   a cyclic [8,7,2]1 Reed-Muller (2,3) code over GF(2)[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.6-4 DisplayBoundsInfo[0m
+  
+  [2X> DisplayBoundsInfo( [0X[3Xbds[0X[2X ) _________________________________________[0Xfunction
+  
+  [10XDisplayBoundsInfo[0m  prints the method of construction of the code C indicated
+  in [10Xbds:= BoundsMinimumDistance( n, k, GF(q) )[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> bounds := BoundsMinimumDistance( 20, 17, GF(4) );[0X
+    [4Xgap> DisplayBoundsInfo(bounds);[0X
+    [4Xan optimal linear [20,17,d] code over GF(4) has d=3[0X
+    [4X--------------------------------------------------------------------------------------------------[0X
+    [4XLb(20,17)=3, by shortening of:[0X
+    [4XLb(21,18)=3, by applying contruction B to a [81,77,3] code[0X
+    [4XLb(81,77)=3, by shortening of:[0X
+    [4XLb(85,81)=3, reference: Ham[0X
+    [4X--------------------------------------------------------------------------------------------------[0X
+    [4XUb(20,17)=3, by considering shortening to:[0X
+    [4XUb(7,4)=3, by considering puncturing to:[0X
+    [4XUb(6,4)=2, by construction B applied to:[0X
+    [4XUb(2,1)=2, repetition code[0X
+    [4X--------------------------------------------------------------------------------------------------[0X
+    [4XReference Ham:[0X
+    [4X%T this reference is unknown, for more info[0X
+    [4X%T contact A.E. Brouwer (aeb@cwi.nl)[0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.7 Generating (Check) Matrices and Polynomials[0X
+  
+  [1X4.7-1 GeneratorMat[0m
+  
+  [2X> GeneratorMat( [0X[3XC[0X[2X ) ________________________________________________[0Xfunction
+  
+  [10XGeneratorMat[0m  returns  a  generator  matrix  of  [3XC[0m. The code consists of all
+  linear combinations of the rows of this matrix.
+  
+  If  until  now  no generator matrix of [3XC[0m was determined, it is computed from
+  either  the  parity  check  matrix,  the  generator  polynomial,  the  check
+  polynomial or the elements (if possible), whichever is available.
+  
+  If [3XC[0m is a non-linear code, the function returns an error.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> GeneratorMat( HammingCode( 3, GF(2) ) );[0X
+    [4X[ [ an immutable GF2 vector of length 7], [0X
+    [4X  [ an immutable GF2 vector of length 7], [0X
+    [4X  [ an immutable GF2 vector of length 7], [0X
+    [4X  [ an immutable GF2 vector of length 7] ][0X
+    [4Xgap> Display(last);[0X
+    [4X 1 1 1 . . . .[0X
+    [4X 1 . . 1 1 . .[0X
+    [4X . 1 . 1 . 1 .[0X
+    [4X 1 1 . 1 . . 1[0X
+    [4Xgap> GeneratorMat( RepetitionCode( 5, GF(25) ) );[0X
+    [4X[ [ Z(5)^0, Z(5)^0, Z(5)^0, Z(5)^0, Z(5)^0 ] ][0X
+    [4Xgap> GeneratorMat( NullCode( 14, GF(4) ) );[0X
+    [4X[  ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.7-2 CheckMat[0m
+  
+  [2X> CheckMat( [0X[3XC[0X[2X ) ____________________________________________________[0Xfunction
+  
+  [10XCheckMat[0m  returns a parity check matrix of [3XC[0m. The code consists of all words
+  orthogonal  to  each of the rows of this matrix. The transpose of the matrix
+  is  a  right  inverse  of  the  generator matrix. The parity check matrix is
+  computed  from  either  the  generator matrix, the generator polynomial, the
+  check polynomial or the elements of [3XC[0m (if possible), whichever is available.
+  
+  If [3XC[0m is a non-linear code, the function returns an error.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CheckMat( HammingCode(3, GF(2) ) );[0X
+    [4X[ [ 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, Z(2)^0, Z(2)^0, Z(2)^0 ], [0X
+    [4X  [ 0*Z(2), Z(2)^0, Z(2)^0, 0*Z(2), 0*Z(2), Z(2)^0, Z(2)^0 ],[0X
+    [4X  [ Z(2)^0, 0*Z(2), Z(2)^0, 0*Z(2), Z(2)^0, 0*Z(2), Z(2)^0 ] ][0X
+    [4Xgap> Display(last);[0X
+    [4X . . . 1 1 1 1[0X
+    [4X . 1 1 . . 1 1[0X
+    [4X 1 . 1 . 1 . 1[0X
+    [4Xgap> CheckMat( RepetitionCode( 5, GF(25) ) );[0X
+    [4X[ [ Z(5)^0, Z(5)^2, 0*Z(5), 0*Z(5), 0*Z(5) ],[0X
+    [4X  [ 0*Z(5), Z(5)^0, Z(5)^2, 0*Z(5), 0*Z(5) ],[0X
+    [4X  [ 0*Z(5), 0*Z(5), Z(5)^0, Z(5)^2, 0*Z(5) ],[0X
+    [4X  [ 0*Z(5), 0*Z(5), 0*Z(5), Z(5)^0, Z(5)^2 ] ][0X
+    [4Xgap> CheckMat( WholeSpaceCode( 12, GF(4) ) );[0X
+    [4X[  ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.7-3 GeneratorPol[0m
+  
+  [2X> GeneratorPol( [0X[3XC[0X[2X ) ________________________________________________[0Xfunction
+  
+  [10XGeneratorPol[0m returns the generator polynomial of [3XC[0m. The code consists of all
+  multiples  of  the  generator  polynomial  modulo x^n-1, where n is the word
+  length  of  [3XC[0m.  The generator polynomial is determined from either the check
+  polynomial,  the  generator  or  check  matrix  or  the  elements  of  [3XC[0m (if
+  possible), whichever is available.
+  
+  If [3XC[0m is not a cyclic code, the function returns `false'.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> GeneratorPol(GeneratorMatCode([[1, 1, 0], [0, 1, 1]], GF(2)));[0X
+    [4XZ(2)^0+x_1[0X
+    [4Xgap> GeneratorPol( WholeSpaceCode( 4, GF(2) ) );[0X
+    [4XZ(2)^0[0X
+    [4Xgap> GeneratorPol( NullCode( 7, GF(3) ) );[0X
+    [4X-Z(3)^0+x_1^7[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.7-4 CheckPol[0m
+  
+  [2X> CheckPol( [0X[3XC[0X[2X ) ____________________________________________________[0Xfunction
+  
+  [10XCheckPol[0m  returns  the  check  polynomial  of  [3XC[0m.  The  code consists of all
+  polynomials f with
+  
+  
+       f\cdot h \equiv 0 \ ({\rm mod}\ x^n-1),
+  
+  
+  where  h  is  the check polynomial, and n is the word length of [3XC[0m. The check
+  polynomial  is  computed  from  the  generator  polynomial, the generator or
+  parity  check  matrix  or  the  elements  of  [3XC[0m  (if possible), whichever is
+  available.
+  
+  If [3XC[0m if not a cyclic code, the function returns an error.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> CheckPol(GeneratorMatCode([[1, 1, 0], [0, 1, 1]], GF(2)));[0X
+    [4XZ(2)^0+x_1+x_1^2[0X
+    [4Xgap> CheckPol(WholeSpaceCode(4, GF(2)));[0X
+    [4XZ(2)^0+x_1^4[0X
+    [4Xgap> CheckPol(NullCode(7,GF(3)));[0X
+    [4XZ(3)^0[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.7-5 RootsOfCode[0m
+  
+  [2X> RootsOfCode( [0X[3XC[0X[2X ) _________________________________________________[0Xfunction
+  
+  [10XRootsOfCode[0m  returns  a  list  of all zeros of the generator polynomial of a
+  cyclic code [3XC[0m. These are finite field elements in the splitting field of the
+  generator  polynomial, GF(q^m), m is the multiplicative order of the size of
+  the base field of the code, modulo the word length.
+  
+  The reverse process, constructing a code from a set of roots, can be carried
+  out by the function [10XRootsCode[0m (see [2XRootsCode[0m ([14X5.5-3[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C1 := ReedSolomonCode( 16, 5 );[0X
+    [4Xa cyclic [16,12,5]3..4 Reed-Solomon code over GF(17)[0X
+    [4Xgap> RootsOfCode( C1 );[0X
+    [4X[ Z(17), Z(17)^2, Z(17)^3, Z(17)^4 ][0X
+    [4Xgap> C2 := RootsCode( 16, last );[0X
+    [4Xa cyclic [16,12,5]3..4 code defined by roots over GF(17)[0X
+    [4Xgap> C1 = C2;[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.8 Parameters of Codes[0X
+  
+  [1X4.8-1 WordLength[0m
+  
+  [2X> WordLength( [0X[3XC[0X[2X ) __________________________________________________[0Xfunction
+  
+  [10XWordLength[0m  returns  the  parameter n of [3XC[0m, the word length of the elements.
+  Elements  of  cyclic  codes  are  polynomials  of  maximum  degree  n-1,  as
+  calculations are carried out modulo x^n-1.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> WordLength( NordstromRobinsonCode() );[0X
+    [4X16[0X
+    [4Xgap> WordLength( PuncturedCode( WholeSpaceCode(7) ) );[0X
+    [4X6[0X
+    [4Xgap> WordLength( UUVCode( WholeSpaceCode(7), RepetitionCode(7) ) );[0X
+    [4X14 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.8-2 Redundancy[0m
+  
+  [2X> Redundancy( [0X[3XC[0X[2X ) __________________________________________________[0Xfunction
+  
+  [10XRedundancy[0m  returns  the  redundancy r of [3XC[0m, which is equal to the number of
+  check  symbols  in each element. If [3XC[0m is not a linear code the redundancy is
+  not defined and [10XRedundancy[0m returns an error.
+  
+  If  a  linear  code  [3XC[0m  has dimension k and word length n, it has redundancy
+  r=n-k.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := TernaryGolayCode();[0X
+    [4Xa cyclic [11,6,5]2 ternary Golay code over GF(3)[0X
+    [4Xgap> Redundancy(C);[0X
+    [4X5[0X
+    [4Xgap> Redundancy( DualCode(C) );[0X
+    [4X6 [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.8-3 MinimumDistance[0m
+  
+  [2X> MinimumDistance( [0X[3XC[0X[2X ) _____________________________________________[0Xfunction
+  
+  [10XMinimumDistance[0m  returns  the  minimum  distance of [3XC[0m, the largest integer d
+  with  the property that every element of [3XC[0m has at least a Hamming distance d
+  (see  [2XDistanceCodeword[0m ([14X3.6-2[0m)) to any other element of [3XC[0m. For linear codes,
+  the  minimum  distance  is equal to the minimum weight. This means that d is
+  also    the    smallest   positive   value   with   w[d+1]   <>   0,   where
+  w=(w[1],w[2],...,w[n])    is    the    weight   distribution   of   [3XC[0m   (see
+  [2XWeightDistribution[0m  ([14X4.9-2[0m)).  For  unrestricted  codes,  d  is the smallest
+  positive value with w[d+1] <> 0, where w is the inner distribution of [3XC[0m (see
+  [2XInnerDistribution[0m ([14X4.9-3[0m)).
+  
+  For codes with only one element, the minimum distance is defined to be equal
+  to the word length.
+  
+  For  linear  codes [3XC[0m, the algorithm used is the following: After replacing [3XC[0m
+  by  a permutation equivalent [3XC'[0m, one may assume the generator matrix has the
+  following  form  G=(I_k | A), for some kx (n-k) matrix A. If A=0 then return
+  d(C)=1.  Next,  find the minimum distance of the code spanned by the rows of
+  A.  Call  this  distance  d(A).  Note  that d(A) is equal to the the Hamming
+  distance d(v,0) where v is some proper linear combination of i distinct rows
+  of A. Return d(C)=d(A)+i, where i is as in the previous step.
+  
+  This  command  may also be called using the syntax [10XMinimumDistance(C, w)[0m. In
+  this  form,  [10XMinimumDistance[0m returns the minimum distance of a codeword [3Xw[0m to
+  the code [3XC[0m, also called the [13Xdistance from [3Xw[0m[13X to[0m [3XC[0m. This is the smallest value
+  d  for which there is an element c of the code [3XC[0m which is at distance d from
+  [3Xw[0m.  So  d  is  also  the minimum value for which D[d+1] <> 0, where D is the
+  distance distribution of [3Xw[0m to [3XC[0m (see [2XDistancesDistribution[0m ([14X4.9-4[0m)).
+  
+  Note  that  [3Xw[0m must be an element of the same vector space as the elements of
+  [3XC[0m.  [3Xw[0m  does  not  necessarily  belong  to  the code (if it does, the minimum
+  distance is zero).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := MOLSCode(7);; MinimumDistance(C);[0X
+    [4X3[0X
+    [4Xgap> WeightDistribution(C);[0X
+    [4X[ 1, 0, 0, 24, 24 ][0X
+    [4Xgap> MinimumDistance( WholeSpaceCode( 5, GF(3) ) );[0X
+    [4X1[0X
+    [4Xgap> MinimumDistance( NullCode( 4, GF(2) ) );[0X
+    [4X4[0X
+    [4Xgap> C := ConferenceCode(9);; MinimumDistance(C);[0X
+    [4X4[0X
+    [4Xgap> InnerDistribution(C);[0X
+    [4X[ 1, 0, 0, 0, 63/5, 9/5, 18/5, 0, 9/10, 1/10 ] [0X
+    [4Xgap> C := MOLSCode(7);; w := CodewordNr( C, 17 );[0X
+    [4X[ 3 3 6 2 ][0X
+    [4Xgap> MinimumDistance( C, w );[0X
+    [4X0[0X
+    [4Xgap> C := RemovedElementsCode( C, w );; MinimumDistance( C, w );[0X
+    [4X3                           # so w no longer belongs to C [0X
+  [4X------------------------------------------------------------------[0X
+  
+  See  also  the  [5XGUAVA[0m commands relating to bounds on the minimum distance in
+  section [14X7.1[0m.
+  
+  [1X4.8-4 MinimumDistanceLeon[0m
+  
+  [2X> MinimumDistanceLeon( [0X[3XC[0X[2X ) _________________________________________[0Xfunction
+  
+  [10XMinimumDistanceLeon[0m  returns  the  ``probable'' minimum distance d_Leon of a
+  linear  binary  code  [3XC[0m,  using  an  implementation  of Leon's probabilistic
+  polynomial  time  algorithm.  Briefly: Let [3XC[0m be a linear code of dimension k
+  over  GF(q)  as above. The algorithm has input parameters s and rho, where s
+  is an integer between 2 and n-k, and rho is an integer between 2 and k.
+  
+  --    Find a generator matrix G of C.
+  
+  --    Randomly permute the columns of G.
+  
+  --    Perform  Gaussian  elimination  on the permuted matrix to obtain a new
+        matrix of the following form:
+  
+  
+             G=(I_{k} \, | \, Z \, | \, B)
+  
+  
+        with  Z  a  kx s matrix. If (Z,B) is the zero matrix then return 1 for
+        the  minimum  distance.  If  Z=0  but not B then either choose another
+        permutation of the rows of [3XC[0m or return `method fails'.
+  
+  --    Search  Z  for  at most rho rows that lead to codewords of weight less
+        than rho.
+  
+  --    For these codewords, compute the weight of the whole word in [3XC[0m. Return
+        this weight.
+  
+  (See for example J. S. Leon, [Leo88] for more details.) Sometimes (as is the
+  case  in  [5XGUAVA[0m)  this probabilistic algorithm is repeated several times and
+  the  most commonly occurring value is taken. (This function actually has two
+  optional  arguments:  [10Xp[0m  and  [10Xnum[0m.  The command [10XMinimumDistanceLeon(C,p,num)[0m
+  allows  a bit more flexibility for the user - see the GAP code in codeops.gi
+  for details.)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(50,22,GF(2));[0X
+    [4Xa  [50,22,?] randomly generated code over GF(2)[0X
+    [4Xgap> MinimumDistanceLeon(C); time;[0X
+    [4X6[0X
+    [4X211[0X
+    [4Xgap> MinimumDistance(C); time;[0X
+    [4X6[0X
+    [4X1204[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.8-5 MinimumWeight[0m
+  
+  [2X> MinimumWeight( [0X[3XC[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XMinimumWeight[0m  returns the minimum Hamming weight of a linear code [3XC[0m. At the
+  moment,  this  function  works  for  binary  and  ternary  codes  only.  The
+  [10XMinimumWeight[0m  function  relies  on  an external executable program which is
+  written in C language. As a consequence, the execution time of [10XMinimumWeight[0m
+  function is faster than that of [2XMinimumDistance[0m ([14X4.8-3[0m) function.
+  
+  The  [10XMinimumWeight[0m  function  implements  Chen's  [Che69]  algorithm if [3XC[0m is
+  cyclic,  and  Zimmermann's  [Zim96] algorithm if [3XC[0m is a general linear code.
+  This  function has a built-in check on the constraints of the minimum weight
+  codewords.  For  example, for a self-orthogonal code over GF(3), the minimum
+  weight  codewords  have  weight  that  is  divisible  by  3,  i.e.  0  mod 3
+  congruence. Similary, self-orthogonal codes over GF(2) have codeword weights
+  that  are  divisible  by  4 and even codes over GF(2) have codewords weights
+  that  are  divisible by 2. By taking these constraints into account, in many
+  cases, the execution time may be significantly reduced. Consider the minimum
+  Hamming  weight  enumeration  of  the  [151,45]  binary  cyclic code (second
+  example  below).  This  cyclic code is self-orthogonal, so the weight of all
+  codewords  is  divisible  by  4.  Without  considering  this constraint, the
+  computation  will finish at information weight 10, rather than 9. We can see
+  that,  this  0  mod  4 constraint on the codeword weights, has allowed us to
+  avoid  enumeration  of  b(45,10) = 3,190,187,286 additional codewords, where
+  b(n,k)=n!/((n-k)!k!) is the binomial coefficient of integers n and k.
+  
+  Note  that the C source code for this minimum weight computation has not yet
+  been  optimised,  especially  the  code  for GF(3), and there are chances to
+  improve the speed of this function. Your contributions are most welcomed.
+  
+  If   you   find   any   bugs   on   this   function,  please  report  it  to
+  ctjhai@plymouth.ac.uk.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> # Extended ternary quadratic residue code of length 48[0X
+    [4Xgap> n := 47;;[0X
+    [4Xgap> x := Indeterminate(GF(3));;[0X
+    [4Xgap> F := Factors(x^n-1);;[0X
+    [4Xgap> v := List([1..n], i->Zero(GF(3)));;[0X
+    [4Xgap> v := v + MutableCopyMat(VectorCodeword( Codeword(F[2]) ));;[0X
+    [4Xgap> G := CirculantMatrix(24, v);;[0X
+    [4Xgap> for i in [1..Size(G)] do; s:=Zero(GF(3));[0X
+    [4X> for j in [1..Size(G[i])] do; s:=s+G[i][j]; od; Append(G[i], [ s ]);[0X
+    [4X> od;;[0X
+    [4Xgap> C := GeneratorMatCodeNC(G, GF(3));[0X
+    [4Xa  [48,24,?] randomly generated code over GF(3)[0X
+    [4Xgap> MinimumWeight(C);[0X
+    [4X[48,24] linear code over GF(3) - minimum weight evaluation[0X
+    [4XKnown lower-bound: 1[0X
+    [4XThere are 2 generator matrices, ranks : 24 24 [0X
+    [4XThe weight of the minimum weight codeword satisfies 0 mod 3 congruence[0X
+    [4XEnumerating codewords with information weight 1 (w=1)[0X
+    [4X    Found new minimum weight 15[0X
+    [4XNumber of matrices required for codeword enumeration 2[0X
+    [4XCompleted w= 1, 48 codewords enumerated, lower-bound 6, upper-bound 15[0X
+    [4XTermination expected with information weight 6 at matrix 1[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 2 (w=2) using 2 matrices[0X
+    [4XCompleted w= 2, 1104 codewords enumerated, lower-bound 6, upper-bound 15[0X
+    [4XTermination expected with information weight 6 at matrix 1[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 3 (w=3) using 2 matrices[0X
+    [4XCompleted w= 3, 16192 codewords enumerated, lower-bound 9, upper-bound 15[0X
+    [4XTermination expected with information weight 6 at matrix 1[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 4 (w=4) using 2 matrices[0X
+    [4XCompleted w= 4, 170016 codewords enumerated, lower-bound 12, upper-bound 15[0X
+    [4XTermination expected with information weight 6 at matrix 1[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 5 (w=5) using 2 matrices[0X
+    [4XCompleted w= 5, 1360128 codewords enumerated, lower-bound 12, upper-bound 15[0X
+    [4XTermination expected with information weight 6 at matrix 1[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 6 (w=6) using 1 matrices[0X
+    [4XCompleted w= 6, 4307072 codewords enumerated, lower-bound 15, upper-bound 15[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XMinimum weight: 15[0X
+    [4X15[0X
+    [4Xgap> [0X
+    [4X[0X
+    [4Xgap> # Binary cyclic code [151,45,36][0X
+    [4Xgap> n := 151;;[0X
+    [4Xgap> x := Indeterminate(GF(2));;[0X
+    [4Xgap> F := Factors(x^n-1);;[0X
+    [4Xgap> C := CheckPolCode(F[2]*F[3]*F[3]*F[4], n, GF(2));[0X
+    [4Xa cyclic [151,45,1..50]31..75 code defined by check polynomial over GF(2)[0X
+    [4Xgap> MinimumWeight(C);[0X
+    [4X[151,45] cyclic code over GF(2) - minimum weight evaluation[0X
+    [4XKnown lower-bound: 1[0X
+    [4XThe weight of the minimum weight codeword satisfies 0 mod 4 congruence[0X
+    [4XEnumerating codewords with information weight 1 (w=1)[0X
+    [4X    Found new minimum weight 56[0X
+    [4X    Found new minimum weight 44[0X
+    [4XNumber of matrices required for codeword enumeration 1[0X
+    [4XCompleted w= 1, 45 codewords enumerated, lower-bound 8, upper-bound 44[0X
+    [4XTermination expected with information weight 11[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 2 (w=2) using 1 matrix[0X
+    [4XCompleted w= 2, 990 codewords enumerated, lower-bound 12, upper-bound 44[0X
+    [4XTermination expected with information weight 11[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 3 (w=3) using 1 matrix[0X
+    [4X   Found new minimum weight 40[0X
+    [4X   Found new minimum weight 36[0X
+    [4XCompleted w= 3, 14190 codewords enumerated, lower-bound 16, upper-bound 36[0X
+    [4XTermination expected with information weight 9[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 4 (w=4) using 1 matrix[0X
+    [4XCompleted w= 4, 148995 codewords enumerated, lower-bound 20, upper-bound 36[0X
+    [4XTermination expected with information weight 9[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 5 (w=5) using 1 matrix[0X
+    [4XCompleted w= 5, 1221759 codewords enumerated, lower-bound 24, upper-bound 36[0X
+    [4XTermination expected with information weight 9[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 6 (w=6) using 1 matrix[0X
+    [4XCompleted w= 6, 8145060 codewords enumerated, lower-bound 24, upper-bound 36[0X
+    [4XTermination expected with information weight 9[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 7 (w=7) using 1 matrix[0X
+    [4XCompleted w= 7, 45379620 codewords enumerated, lower-bound 28, upper-bound 36[0X
+    [4XTermination expected with information weight 9[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 8 (w=8) using 1 matrix[0X
+    [4XCompleted w= 8, 215553195 codewords enumerated, lower-bound 32, upper-bound 36[0X
+    [4XTermination expected with information weight 9[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XEnumerating codewords with information weight 9 (w=9) using 1 matrix[0X
+    [4XCompleted w= 9, 886163135 codewords enumerated, lower-bound 36, upper-bound 36[0X
+    [4X-----------------------------------------------------------------------------[0X
+    [4XMinimum weight: 36[0X
+    [4X36[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.8-6 DecreaseMinimumDistanceUpperBound[0m
+  
+  [2X> DecreaseMinimumDistanceUpperBound( [0X[3XC, t, m[0X[2X ) _____________________[0Xfunction
+  
+  [10XDecreaseMinimumDistanceUpperBound[0m  is an implementation of the algorithm for
+  the  minimum  distance  of  a  linear  binary  code  [3XC[0m by Leon [Leo88]. This
+  algorithm  tries to find codewords with small minimum weights. The parameter
+  [3Xt[0m  is  at  least  1  and  less than the dimension of [3XC[0m. The best results are
+  obtained  if it is close to the dimension of the code. The parameter [3Xm[0m gives
+  the number of runs that the algorithm will perform.
+  
+  The  result  returned is a record with two fields; the first, [10Xmindist[0m, gives
+  the  lowest  weight  found, and [10Xword[0m gives the corresponding codeword. (This
+  was  implemented  before  [10XMinimumDistanceLeon[0m  but  independently. The older
+  manual  had  given  the  command  incorrectly, so the command was only found
+  after  reading  all  the  [13X*.gi[0m  files  in  the  [5XGUAVA[0m  library.  Though both
+  [10XMinimumDistance[0m   and   [10XMinimumDistanceLeon[0m   often  run  much  faster  than
+  [10XDecreaseMinimumDistanceUpperBound[0m, [10XDecreaseMinimumDistanceUpperBound[0m appears
+  to be more accurate than [10XMinimumDistanceLeon[0m.)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(5,2,GF(2));[0X
+    [4Xa  [5,2,?] randomly generated code over GF(2)[0X
+    [4Xgap> DecreaseMinimumDistanceUpperBound(C,1,4);[0X
+    [4Xrec( mindist := 3, word := [ 0*Z(2), Z(2)^0, Z(2)^0, 0*Z(2), Z(2)^0 ] )[0X
+    [4Xgap> MinimumDistance(C);[0X
+    [4X3[0X
+    [4Xgap> C:=RandomLinearCode(8,4,GF(2));[0X
+    [4Xa  [8,4,?] randomly generated code over GF(2)[0X
+    [4Xgap> DecreaseMinimumDistanceUpperBound(C,3,4);[0X
+    [4Xrec( mindist := 2,[0X
+    [4X  word := [ Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] )[0X
+    [4Xgap> MinimumDistance(C);[0X
+    [4X2[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.8-7 MinimumDistanceRandom[0m
+  
+  [2X> MinimumDistanceRandom( [0X[3XC, num, s[0X[2X ) _______________________________[0Xfunction
+  
+  [10XMinimumDistanceRandom[0m  returns  an  upper  bound  for  the  minimum distance
+  d_random  of  a  linear binary code [3XC[0m, using a probabilistic polynomial time
+  algorithm.  Briefly:  Let  [3XC[0m  be  a linear code of dimension k over GF(q) as
+  above.  The  algorithm has input parameters num and s, where s is an integer
+  between 2 and n-1, and num is an integer greater than or equal to 1.
+  
+  --    Find a generator matrix G of C.
+  
+  --    Randomly permute the columns of G, written G_p..
+  
+  --          G=(A, B)
+  
+  
+        with  A  a  kx  s  matrix. If A is the zero matrix then return `method
+        fails'.
+  
+  --    Search  A  for  at most 5 rows that lead to codewords, in the code C_A
+        with generator matrix A, of minimum weight.
+  
+  --    For  these codewords, use the associated linear combination to compute
+        the weight of the whole word in [3XC[0m. Return this weight and codeword.
+  
+  This  probabilistic  algorithm  is repeated [3Xnum[0m times (with different random
+  permutations  of the rows of G each time) and the weight and codeword of the
+  lowest occurring weight is taken.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=RandomLinearCode(60,20,GF(2));[0X
+    [4Xa  [60,20,?] randomly generated code over GF(2)[0X
+    [4Xgap> #mindist(C);time;[0X
+    [4Xgap> #mindistleon(C,10,30);time; #doesn't work well[0X
+    [4Xgap> a:=MinimumDistanceRandom(C,10,30);time; # done 10 times -with fastest time!![0X
+    [4X[0X
+    [4X This is a probabilistic algorithm which may return the wrong answer.[0X
+    [4X[ 12, [ 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 1 0 0 0 0 0 0 1 0 0 [0X
+    [4X        1 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 ] ][0X
+    [4X130[0X
+    [4Xgap> a[2] in C;[0X
+    [4Xtrue[0X
+    [4Xgap> b:=DecreaseMinimumDistanceUpperBound(C,10,1); time; #only done once![0X
+    [4Xrec( mindist := 12, word := [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), [0X
+    [4X      Z(2)^0, 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), [0X
+    [4X      0*Z(2), Z(2)^0, Z(2)^0, 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), [0X
+    [4X      Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), [0X
+    [4X      0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), [0X
+    [4X      0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), [0X
+    [4X      0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ] )[0X
+    [4X649[0X
+    [4Xgap> Codeword(b!.word) in C;[0X
+    [4Xtrue[0X
+    [4Xgap> MinimumDistance(C);time;[0X
+    [4X12[0X
+    [4X196[0X
+    [4Xgap> c:=MinimumDistanceLeon(C);time;[0X
+    [4X12[0X
+    [4X66[0X
+    [4Xgap> C:=RandomLinearCode(30,10,GF(3));[0X
+    [4Xa  [30,10,?] randomly generated code over GF(3)[0X
+    [4Xgap> a:=MinimumDistanceRandom(C,10,10);time;[0X
+    [4X[0X
+    [4X This is a probabilistic algorithm which may return the wrong answer.[0X
+    [4X[ 13, [ 0 0 0 1 0 0 0 0 0 0 1 0 2 2 1 1 0 2 2 0 1 0 2 1 0 0 0 1 0 2 ] ][0X
+    [4X229[0X
+    [4Xgap> a[2] in C;[0X
+    [4Xtrue[0X
+    [4Xgap> MinimumDistance(C);time;[0X
+    [4X9[0X
+    [4X45[0X
+    [4Xgap> c:=MinimumDistanceLeon(C);[0X
+    [4XCode must be binary. Quitting.[0X
+    [4X0[0X
+    [4Xgap> a:=MinimumDistanceRandom(C,1,29);time;[0X
+    [4X[0X
+    [4X This is a probabilistic algorithm which may return the wrong answer.[0X
+    [4X[ 10, [ 0 0 1 0 2 0 2 0 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 0 2 2 2 0 ] ][0X
+    [4X53[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.8-8 CoveringRadius[0m
+  
+  [2X> CoveringRadius( [0X[3XC[0X[2X ) ______________________________________________[0Xfunction
+  
+  [10XCoveringRadius[0m  returns  the [13Xcovering radius[0m of a linear code [3XC[0m. This is the
+  smallest  number  r  with  the  property  that each element v of the ambient
+  vector space of [3XC[0m has at most a distance r to the code [3XC[0m. So for each vector
+  v  there  must  be an element c of [3XC[0m with d(v,c) <= r. The smallest covering
+  radius  of  any  [n,k] binary linear code is denoted t(n,k). A binary linear
+  code with reasonable small covering radius is called a [13Xcovering code[0m.
+  
+  If  [3XC[0m  is a perfect code (see [2XIsPerfectCode[0m ([14X4.3-6[0m)), the covering radius is
+  equal  to t, the number of errors the code can correct, where d = 2t+1, with
+  d the minimum distance of [3XC[0m (see [2XMinimumDistance[0m ([14X4.8-3[0m)).
+  
+  If  there exists a function called [10XSpecialCoveringRadius[0m in the `operations'
+  field of the code, then this function will be called to compute the covering
+  radius   of  the  code.  At  the  moment,  no  code-specific  functions  are
+  implemented.
+  
+  If the length of [10XBoundsCoveringRadius[0m (see [2XBoundsCoveringRadius[0m ([14X7.2-1[0m)), is
+  1, then the value in
+  
+  C.boundsCoveringRadius
+  
+  is returned. Otherwise, the function
+  
+  C.operations.CoveringRadius
+  
+  is  executed,  unless  the redundancy of [3XC[0m is too large. In the last case, a
+  warning is issued.
+  
+  The  algorithm  used to compute the covering radius is the following. First,
+  [10XCosetLeadersMatFFE[0m  is  used  to  compute  the  list of coset leaders (which
+  returns  a  codeword  in  each  coset  of GF(q)^n/C of minimum weight). Then
+  [10XWeightVecFFE[0m  is  used to compute the weight of each of these coset leaders.
+  The program returns the maximum of these weights.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> H := RandomLinearCode(10, 5, GF(2));[0X
+    [4Xa  [10,5,?] randomly generated code over GF(2)[0X
+    [4Xgap> CoveringRadius(H);[0X
+    [4X3[0X
+    [4Xgap> H := HammingCode(4, GF(2));; IsPerfectCode(H);[0X
+    [4Xtrue[0X
+    [4Xgap> CoveringRadius(H);[0X
+    [4X1                       # Hamming codes have minimum distance 3[0X
+    [4Xgap> CoveringRadius(ReedSolomonCode(7,4));[0X
+    [4X3 [0X
+    [4Xgap> CoveringRadius( BCHCode( 17, 3, GF(2) ) );[0X
+    [4X3[0X
+    [4Xgap> CoveringRadius( HammingCode( 5, GF(2) ) );[0X
+    [4X1[0X
+    [4Xgap> C := ReedMullerCode( 1, 9 );;[0X
+    [4Xgap> CoveringRadius( C );[0X
+    [4XCoveringRadius: warning, the covering radius of[0X
+    [4Xthis code cannot be computed straightforward.[0X
+    [4XTry to use IncreaseCoveringRadiusLowerBound( code ).[0X
+    [4X(see the manual for more details).[0X
+    [4XThe covering radius of code lies in the interval:[0X
+    [4X[ 240 .. 248 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  See  also  the  [5XGUAVA[0m commands relating to bounds on the minimum distance in
+  section [14X7.2[0m.
+  
+  [1X4.8-9 SetCoveringRadius[0m
+  
+  [2X> SetCoveringRadius( [0X[3XC, intlist[0X[2X ) __________________________________[0Xfunction
+  
+  [10XSetCoveringRadius[0m  enables  the  user  to  set  the covering radius herself,
+  instead  of  letting  [5XGUAVA[0m compute it. If [3Xintlist[0m is an integer, [5XGUAVA[0m will
+  simply  put  it  in  the  `boundsCoveringRadius'  field.  If it is a list of
+  integers,    however,    it    will    intersect    this   list   with   the
+  `boundsCoveringRadius'  field,  thus  taking the best of both lists. If this
+  would  leave  an empty list, the field is set to [3Xintlist[0m. Because some other
+  computations  use  the covering radius of the code, it is important that the
+  entered value is not wrong, otherwise new results may be invalid.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := BCHCode( 17, 3, GF(2) );;[0X
+    [4Xgap> BoundsCoveringRadius( C );[0X
+    [4X[ 3 .. 4 ][0X
+    [4Xgap> SetCoveringRadius( C, [ 2 .. 3 ] );[0X
+    [4Xgap> BoundsCoveringRadius( C );[0X
+    [4X[ [ 2 .. 3 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.9 Distributions[0X
+  
+  [1X4.9-1 MinimumWeightWords[0m
+  
+  [2X> MinimumWeightWords( [0X[3XC[0X[2X ) __________________________________________[0Xfunction
+  
+  [10XMinimumWeightWords[0m returns the list of minimum weight codewords of [3XC[0m.
+  
+  This  algorithm  is  written  in  GAP is slow, so is only suitable for small
+  codes.
+  
+  This  does  not call the very fast function [10XMinimumWeight[0m (see [2XMinimumWeight[0m
+  ([14X4.8-5[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=HammingCode(3,GF(2));[0X
+    [4Xa linear [7,4,3]1 Hamming (3,2) code over GF(2)[0X
+    [4Xgap> MinimumWeightWords(C);[0X
+    [4X[ [ 1 0 0 0 0 1 1 ], [ 0 1 0 1 0 1 0 ], [ 0 1 0 0 1 0 1 ], [ 1 0 0 1 1 0 0 ], [ 0 0 1 0 1 1 0 ],[0X
+    [4X  [ 0 0 1 1 0 0 1 ], [ 1 1 1 0 0 0 0 ] ][0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.9-2 WeightDistribution[0m
+  
+  [2X> WeightDistribution( [0X[3XC[0X[2X ) __________________________________________[0Xfunction
+  
+  [10XWeightDistribution[0m  returns  the  weight distribution of [3XC[0m, as a vector. The
+  i^th element of this vector contains the number of elements of [3XC[0m with weight
+  i-1.  For  linear  codes,  the  weight  distribution  is  equal to the inner
+  distribution   (see   [2XInnerDistribution[0m   ([14X4.9-3[0m)).   If  w  is  the  weight
+  distribution of a linear code [3XC[0m, it must have the zero codeword, so w[1] = 1
+  (one word of weight 0).
+  
+  Some   codes,   such   as   the   Hamming  codes,  have  precomputed  weight
+  distributions.  For  others,  the  program  WeightDistribution calls the GAP
+  program  [10XDistancesDistributionMatFFEVecFFE[0m,  which is written in C. See also
+  [10XCodeWeightEnumerator[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> WeightDistribution( ConferenceCode(9) );[0X
+    [4X[ 1, 0, 0, 0, 0, 18, 0, 0, 0, 1 ][0X
+    [4Xgap> WeightDistribution( RepetitionCode( 7, GF(4) ) );[0X
+    [4X[ 1, 0, 0, 0, 0, 0, 0, 3 ][0X
+    [4Xgap> WeightDistribution( WholeSpaceCode( 5, GF(2) ) );[0X
+    [4X[ 1, 5, 10, 10, 5, 1 ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.9-3 InnerDistribution[0m
+  
+  [2X> InnerDistribution( [0X[3XC[0X[2X ) ___________________________________________[0Xfunction
+  
+  [10XInnerDistribution[0m  returns  the inner distribution of [3XC[0m. The i^th element of
+  the  vector  contains the average number of elements of [3XC[0m at distance i-1 to
+  an  element  of  [3XC[0m. For linear codes, the inner distribution is equal to the
+  weight distribution (see [2XWeightDistribution[0m ([14X4.9-2[0m)).
+  
+  Suppose  w  is  the  inner  distribution  of  [3XC[0m. Then w[1] = 1, because each
+  element  of [3XC[0m has exactly one element at distance zero (the element itself).
+  The  minimum  distance  of  [3XC[0m  is the smallest value d > 0 with w[d+1] <> 0,
+  because  a  distance  between  zero  and d never occurs. See [2XMinimumDistance[0m
+  ([14X4.8-3[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> InnerDistribution( ConferenceCode(9) );[0X
+    [4X[ 1, 0, 0, 0, 63/5, 9/5, 18/5, 0, 9/10, 1/10 ][0X
+    [4Xgap> InnerDistribution( RepetitionCode( 7, GF(4) ) );[0X
+    [4X[ 1, 0, 0, 0, 0, 0, 0, 3 ] [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.9-4 DistancesDistribution[0m
+  
+  [2X> DistancesDistribution( [0X[3XC, w[0X[2X ) ____________________________________[0Xfunction
+  
+  [10XDistancesDistribution[0m  returns  the  distribution  of  the  distances of all
+  elements  of [3XC[0m to a codeword [3Xw[0m in the same vector space. The i^th element of
+  the distance distribution is the number of codewords of [3XC[0m that have distance
+  i-1  to [3Xw[0m. The smallest value d with w[d+1] <> 0, is defined as the [13Xdistance
+  to[0m [3XC[0m (see [2XMinimumDistance[0m ([14X4.8-3[0m)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> H := HadamardCode(20);[0X
+    [4Xa (20,40,10)6..8 Hadamard code of order 20 over GF(2)[0X
+    [4Xgap> c := Codeword("10110101101010010101", H);[0X
+    [4X[ 1 0 1 1 0 1 0 1 1 0 1 0 1 0 0 1 0 1 0 1 ][0X
+    [4Xgap> DistancesDistribution(H, c);[0X
+    [4X[ 0, 0, 0, 0, 0, 1, 0, 7, 0, 12, 0, 12, 0, 7, 0, 1, 0, 0, 0, 0, 0 ][0X
+    [4Xgap> MinimumDistance(H, c);[0X
+    [4X5                           # distance to H [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.9-5 OuterDistribution[0m
+  
+  [2X> OuterDistribution( [0X[3XC[0X[2X ) ___________________________________________[0Xfunction
+  
+  The  function [10XOuterDistribution[0m returns a list of length q^n, where q is the
+  size  of  the  base field of [3XC[0m and n is the word length. The elements of the
+  list  consist  of  pairs,  the  first coordinate being an element of GF(q)^n
+  (this  is a codeword type) and the second coordinate being a distribution of
+  distances  to  the  code (a list of integers). This table is [13Xvery[0m large, and
+  for  n  >  20  it will not fit in the memory of most computers. The function
+  [10XDistancesDistribution[0m  (see  [2XDistancesDistribution[0m  ([14X4.9-4[0m))  can be used to
+  calculate one entry of the list.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := RepetitionCode( 3, GF(2) );[0X
+    [4Xa cyclic [3,1,3]1 repetition code over GF(2)[0X
+    [4Xgap> OD := OuterDistribution(C);[0X
+    [4X[ [ [ 0 0 0 ], [ 1, 0, 0, 1 ] ], [ [ 1 1 1 ], [ 1, 0, 0, 1 ] ],[0X
+    [4X  [ [ 0 0 1 ], [ 0, 1, 1, 0 ] ], [ [ 1 1 0 ], [ 0, 1, 1, 0 ] ],[0X
+    [4X  [ [ 1 0 0 ], [ 0, 1, 1, 0 ] ], [ [ 0 1 1 ], [ 0, 1, 1, 0 ] ],[0X
+    [4X  [ [ 0 1 0 ], [ 0, 1, 1, 0 ] ], [ [ 1 0 1 ], [ 0, 1, 1, 0 ] ] ][0X
+    [4Xgap> WeightDistribution(C) = OD[1][2];[0X
+    [4Xtrue[0X
+    [4Xgap> DistancesDistribution( C, Codeword("110") ) = OD[4][2];[0X
+    [4Xtrue [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X4.10 Decoding Functions[0X
+  
+  [1X4.10-1 Decode[0m
+  
+  [2X> Decode( [0X[3XC, r[0X[2X ) ___________________________________________________[0Xfunction
+  
+  [10XDecode[0m  decodes [3Xr[0m (a 'received word') with respect to code [3XC[0m and returns the
+  `message word' (i.e., the information digits associated to the codeword c in
+  C  closest  to  [3Xr[0m).  Here  [3Xr[0m can be a [5XGUAVA[0m codeword or a list of codewords.
+  First,  possible  errors in [3Xr[0m are corrected, then the codeword is decoded to
+  an  [13Xinformation codeword[0m m (and not an element of [3XC[0m). If the code record has
+  a  field  `specialDecoder',  this  special  algorithm  is used to decode the
+  vector.  Hamming codes, cyclic codes, and generalized Reed-Solomon have such
+  a  special  algorithm.  (The  algorithm  used  for BCH codes is the Sugiyama
+  algorithm  described,  for  example,  in  section 5.4.3 of [HP03]. A special
+  decoder  has  also being written for the generalized Reed-Solomon code using
+  the  interpolation algorithm. For cyclic codes, the error-trapping algorithm
+  is  used.)  If  [3XC[0m  is  linear and no special decoder field has been set then
+  syndrome  decoding  is  used.  Otherwise (when [3XC[0m is non-linear), the nearest
+  neighbor decoding algorithm is used (which is very slow).
+  
+  A special decoder can be created by defining a function
+  
+  C!.SpecialDecoder := function(C, r) ... end;
+  
+  The  function  uses the arguments [3XC[0m (the code record itself) and [3Xr[0m (a vector
+  of the codeword type) to decode [3Xr[0m to an information vector. A normal decoder
+  would  take  a  codeword [3Xr[0m of the same word length and field as [3XC[0m, and would
+  return  an  information  vector of length k, the dimension of [3XC[0m. The user is
+  not restricted to these normal demands though, and can for instance define a
+  decoder for non-linear codes.
+  
+  Encoding  is  done  by multiplying the information vector with the code (see
+  [14X4.2[0m).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := HammingCode(3);[0X
+    [4Xa linear [7,4,3]1 Hamming (3,2) code over GF(2)[0X
+    [4Xgap> c := "1010"*C;                    # encoding[0X
+    [4X[ 1 0 1 1 0 1 0 ][0X
+    [4Xgap> Decode(C, c);                     # decoding[0X
+    [4X[ 1 0 1 0 ][0X
+    [4Xgap> Decode(C, Codeword("0010101"));[0X
+    [4X[ 1 1 0 1 ]                            # one error corrected[0X
+    [4Xgap> C!.SpecialDecoder := function(C, c)[0X
+    [4X> return NullWord(Dimension(C));[0X
+    [4X> end;[0X
+    [4Xfunction ( C, c ) ... end[0X
+    [4Xgap> Decode(C, c);[0X
+    [4X[ 0 0 0 0 ]           # new decoder always returns null word [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-2 Decodeword[0m
+  
+  [2X> Decodeword( [0X[3XC, r[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XDecodeword[0m  decodes [3Xr[0m (a 'received word') with respect to code [3XC[0m and returns
+  the  codeword  c in C closest to [3Xr[0m. Here [3Xr[0m can be a [5XGUAVA[0m codeword or a list
+  of  codewords. If the code record has a field `specialDecoder', this special
+  algorithm   is  used  to  decode  the  vector.  Hamming  codes,  generalized
+  Reed-Solomon  codes,  and  BCH  codes  have  such  a special algorithm. (The
+  algorithm  used  for  BCH  codes  is  the  Sugiyama algorithm described, for
+  example,  in  section  5.4.3  of  [HP03]. The algorithm used for generalized
+  Reed-Solomon  codes is the ``interpolation algorithm'' described for example
+  in  chapter  5  of  [JH04].) If [3XC[0m is linear and no special decoder field has
+  been  set  then  syndrome decoding is used. Otherwise, when [3XC[0m is non-linear,
+  the  nearest  neighbor  algorithm has been implemented (which should only be
+  used for small-sized codes).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := HammingCode(3);[0X
+    [4Xa linear [7,4,3]1 Hamming (3,2) code over GF(2)[0X
+    [4Xgap> c := "1010"*C;                    # encoding[0X
+    [4X[ 1 0 1 1 0 1 0 ][0X
+    [4Xgap> Decodeword(C, c);                     # decoding[0X
+    [4X[ 1 0 1 1 0 1 0 ][0X
+    [4Xgap>[0X
+    [4Xgap> R:=PolynomialRing(GF(11),["t"]);[0X
+    [4XGF(11)[t][0X
+    [4Xgap> P:=List([1,3,4,5,7],i->Z(11)^i);[0X
+    [4X[ Z(11), Z(11)^3, Z(11)^4, Z(11)^5, Z(11)^7 ][0X
+    [4Xgap> C:=GeneralizedReedSolomonCode(P,3,R);[0X
+    [4Xa linear [5,3,1..3]2  generalized Reed-Solomon code over GF(11)[0X
+    [4Xgap> MinimumDistance(C);[0X
+    [4X3[0X
+    [4Xgap> c:=Random(C);[0X
+    [4X[ 0 9 6 2 1 ][0X
+    [4Xgap> v:=Codeword("09620");[0X
+    [4X[ 0 9 6 2 0 ][0X
+    [4Xgap> GeneralizedReedSolomonDecoderGao(C,v);[0X
+    [4X[ 0 9 6 2 1 ][0X
+    [4Xgap> Decodeword(C,v); # calls the special interpolation decoder[0X
+    [4X[ 0 9 6 2 1 ][0X
+    [4Xgap> G:=GeneratorMat(C);[0X
+    [4X[ [ Z(11)^0, 0*Z(11), 0*Z(11), Z(11)^8, Z(11)^9 ],[0X
+    [4X  [ 0*Z(11), Z(11)^0, 0*Z(11), Z(11)^0, Z(11)^8 ],[0X
+    [4X  [ 0*Z(11), 0*Z(11), Z(11)^0, Z(11)^3, Z(11)^8 ] ][0X
+    [4Xgap> C1:=GeneratorMatCode(G,GF(11));[0X
+    [4Xa linear [5,3,1..3]2 code defined by generator matrix over GF(11)[0X
+    [4Xgap> Decodeword(C,v); # calls syndrome decoding[0X
+    [4X[ 0 9 6 2 1 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-3 GeneralizedReedSolomonDecoderGao[0m
+  
+  [2X> GeneralizedReedSolomonDecoderGao( [0X[3XC, r[0X[2X ) _________________________[0Xfunction
+  
+  [10XGeneralizedReedSolomonDecoderGao[0m decodes [3Xr[0m (a 'received word') to a codeword
+  c  in C in a generalized Reed-Solomon code [3XC[0m (see [2XGeneralizedReedSolomonCode[0m
+  ([14X5.6-2[0m)),  closest to [3Xr[0m. Here [3Xr[0m must be a [5XGUAVA[0m codeword. If the code record
+  does  not  have  name  `generalized  Reed-Solomon  code'  then  an  error is
+  returned. Otherwise, the Gao decoder [Gao03] is used to compute c.
+  
+  For  long  codes,  this  method is faster in practice than the interpolation
+  method used in [10XDecodeword[0m.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> R:=PolynomialRing(GF(11),["t"]);[0X
+    [4XGF(11)[t][0X
+    [4Xgap> P:=List([1,3,4,5,7],i->Z(11)^i);[0X
+    [4X[ Z(11), Z(11)^3, Z(11)^4, Z(11)^5, Z(11)^7 ][0X
+    [4Xgap> C:=GeneralizedReedSolomonCode(P,3,R);[0X
+    [4Xa linear [5,3,1..3]2  generalized Reed-Solomon code over GF(11)[0X
+    [4Xgap> MinimumDistance(C);[0X
+    [4X3[0X
+    [4Xgap> c:=Random(C);[0X
+    [4X[ 0 9 6 2 1 ][0X
+    [4Xgap> v:=Codeword("09620");[0X
+    [4X[ 0 9 6 2 0 ][0X
+    [4Xgap> GeneralizedReedSolomonDecoderGao(C,v); [0X
+    [4X[ 0 9 6 2 1 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-4 GeneralizedReedSolomonListDecoder[0m
+  
+  [2X> GeneralizedReedSolomonListDecoder( [0X[3XC, r, tau[0X[2X ) ___________________[0Xfunction
+  
+  [10XGeneralizedReedSolomonListDecoder[0m  implements Sudans list-decoding algorithm
+  (see section 12.1 of [JH04]) for ``low rate'' Reed-Solomon codes. It returns
+  the list of all codewords in C which are a distance of at most [3Xtau[0m from [3Xr[0m (a
+  'received  word').  [3XC[0m  must  be  a  generalized  Reed-Solomon  code  [3XC[0m  (see
+  [2XGeneralizedReedSolomonCode[0m ([14X5.6-2[0m)) and [3Xr[0m must be a [5XGUAVA[0m codeword.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(16);[0X
+    [4XGF(2^4)[0X
+    [4Xgap>[0X
+    [4Xgap> a:=PrimitiveRoot(F);; b:=a^7;; b^4+b^3+1; [0X
+    [4X0*Z(2)[0X
+    [4Xgap> Pts:=List([0..14],i->b^i);[0X
+    [4X[ Z(2)^0, Z(2^4)^7, Z(2^4)^14, Z(2^4)^6, Z(2^4)^13, Z(2^2), Z(2^4)^12, Z(2^4)^4,[0X
+    [4X  Z(2^4)^11, Z(2^4)^3, Z(2^2)^2, Z(2^4)^2, Z(2^4)^9, Z(2^4), Z(2^4)^8 ][0X
+    [4Xgap> x:=X(F);;[0X
+    [4Xgap> R1:=PolynomialRing(F,[x]);;[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R1);;[0X
+    [4Xgap> y:=X(F,vars);;[0X
+    [4Xgap> R2:=PolynomialRing(F,[x,y]);;[0X
+    [4Xgap> C:=GeneralizedReedSolomonCode(Pts,3,R1); [0X
+    [4Xa linear [15,3,1..13]10..12  generalized Reed-Solomon code over GF(16)[0X
+    [4Xgap> MinimumDistance(C); ## 6 error correcting[0X
+    [4X13[0X
+    [4Xgap> z:=Zero(F);;[0X
+    [4Xgap> r:=[z,z,z,z,z,z,z,z,b^6,b^2,b^5,b^14,b,b^7,b^11];; [0X
+    [4Xgap> r:=Codeword(r);[0X
+    [4X[ 0 0 0 0 0 0 0 0 a^12 a^14 a^5 a^8 a^7 a^4 a^2 ][0X
+    [4Xgap> cs:=GeneralizedReedSolomonListDecoder(C,r,2); time;[0X
+    [4X[ [ 0 a^9 a^3 a^13 a^6 a^10 a^11 a a^12 a^14 a^5 a^8 a^7 a^4 a^2 ],[0X
+    [4X  [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ] ][0X
+    [4X250[0X
+    [4Xgap> c1:=cs[1]; c1 in C;[0X
+    [4X[ 0 a^9 a^3 a^13 a^6 a^10 a^11 a a^12 a^14 a^5 a^8 a^7 a^4 a^2 ][0X
+    [4Xtrue[0X
+    [4Xgap> c2:=cs[2]; c2 in C;[0X
+    [4X[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ][0X
+    [4Xtrue[0X
+    [4Xgap> WeightCodeword(c1-r);[0X
+    [4X7[0X
+    [4Xgap> WeightCodeword(c2-r);[0X
+    [4X7[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-5 BitFlipDecoder[0m
+  
+  [2X> BitFlipDecoder( [0X[3XC, r[0X[2X ) ___________________________________________[0Xfunction
+  
+  The  iterative  decoding  method [10XBitFlipDecoder[0m must only be applied to LDPC
+  codes.  For  more information on LDPC codes, refer to Section [14X5.8[0m. For these
+  codes,  [10XBitFlipDecoder[0m  decodes  very  quickly. (Warning: it can give wildly
+  wrong results for arbitrary binary linear codes.) The bit flipping algorithm
+  is described for example in Chapter 13 of [JH04].
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C:=HammingCode(4,GF(2));[0X
+    [4Xa linear [15,11,3]1 Hamming (4,2) code over GF(2)[0X
+    [4Xgap> c:=Random(C);[0X
+    [4X[ 0 0 0 1 0 0 1 0 0 1 1 0 1 0 1 ][0X
+    [4Xgap> v:=List(c);[0X
+    [4X[ 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2),[0X
+    [4X  Z(2)^0, Z(2)^0, 0*Z(2), Z(2)^0, 0*Z(2), Z(2)^0 ][0X
+    [4Xgap> v[1]:=Z(2)+v[1]; # flip 1st bit of c to create an error[0X
+    [4XZ(2)^0[0X
+    [4Xgap> v:=Codeword(v);[0X
+    [4X[ 1 0 0 1 0 0 1 0 0 1 1 0 1 0 1 ][0X
+    [4Xgap> BitFlipDecoder(C,v);[0X
+    [4X[ 0 0 0 1 0 0 1 0 0 1 1 0 1 0 1 ][0X
+    [4X[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-6 NearestNeighborGRSDecodewords[0m
+  
+  [2X> NearestNeighborGRSDecodewords( [0X[3XC, v, dist[0X[2X ) ______________________[0Xfunction
+  
+  [10XNearestNeighborGRSDecodewords[0m  finds  all generalized Reed-Solomon codewords
+  within  distance  [3Xdist[0m  from  [3Xv[0m [13Xand[0m the associated polynomial, using ``brute
+  force''.  Input: [3Xv[0m is a received vector (a [5XGUAVA[0m codeword), [3XC[0m is a GRS code,
+  [3Xdist[0m  >  0  is  the  distance from [3Xv[0m to search in [3XC[0m. Output: a list of pairs
+  [c,f(x)], where wt(c-v)<= dist-1 and c = (f(x_1),...,f(x_n)).
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(16);[0X
+    [4XGF(2^4)[0X
+    [4Xgap> a:=PrimitiveRoot(F);; b:=a^7; b^4+b^3+1;[0X
+    [4XZ(2^4)^7[0X
+    [4X0*Z(2)[0X
+    [4Xgap> Pts:=List([0..14],i->b^i);[0X
+    [4X[ Z(2)^0, Z(2^4)^7, Z(2^4)^14, Z(2^4)^6, Z(2^4)^13, Z(2^2), Z(2^4)^12,[0X
+    [4X  Z(2^4)^4, Z(2^4)^11, Z(2^4)^3, Z(2^2)^2, Z(2^4)^2, Z(2^4)^9, Z(2^4),[0X
+    [4X  Z(2^4)^8 ][0X
+    [4Xgap> x:=X(F);;[0X
+    [4Xgap> R1:=PolynomialRing(F,[x]);;[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R1);;[0X
+    [4Xgap> y:=X(F,vars);;[0X
+    [4Xgap> R2:=PolynomialRing(F,[x,y]);;[0X
+    [4Xgap> C:=GeneralizedReedSolomonCode(Pts,3,R1);[0X
+    [4Xa linear [15,3,1..13]10..12  generalized Reed-Solomon code over GF(16)[0X
+    [4Xgap> MinimumDistance(C); # 6 error correcting[0X
+    [4X13[0X
+    [4Xgap> z:=Zero(F);[0X
+    [4X0*Z(2)[0X
+    [4Xgap> r:=[z,z,z,z,z,z,z,z,b^6,b^2,b^5,b^14,b,b^7,b^11];; # 7 errors[0X
+    [4Xgap> r:=Codeword(r);[0X
+    [4X[ 0 0 0 0 0 0 0 0 a^12 a^14 a^5 a^8 a^7 a^4 a^2 ][0X
+    [4Xgap> cs:=NearestNeighborGRSDecodewords(C,r,7);[0X
+    [4X[ [ [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ], 0*Z(2) ],[0X
+    [4X  [ [ 0 a^9 a^3 a^13 a^6 a^10 a^11 a a^12 a^14 a^5 a^8 a^7 a^4 a^2 ], x_1+Z(2)^0 ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-7 NearestNeighborDecodewords[0m
+  
+  [2X> NearestNeighborDecodewords( [0X[3XC, v, dist[0X[2X ) _________________________[0Xfunction
+  
+  [10XNearestNeighborDecodewords[0m  finds  all  codewords  in a linear code [3XC[0m within
+  distance  [3Xdist[0m  from [3Xv[0m, using ``brute force''. Input: [3Xv[0m is a received vector
+  (a  [5XGUAVA[0m  codeword), [3XC[0m is a linear code, [3Xdist[0m > 0 is the distance from [3Xv[0m to
+  search in [3XC[0m. Output: a list of c in C, where wt(c-v)<= dist-1.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> F:=GF(16);[0X
+    [4XGF(2^4)[0X
+    [4Xgap> a:=PrimitiveRoot(F);; b:=a^7; b^4+b^3+1;[0X
+    [4XZ(2^4)^7[0X
+    [4X0*Z(2)[0X
+    [4Xgap> Pts:=List([0..14],i->b^i);[0X
+    [4X[ Z(2)^0, Z(2^4)^7, Z(2^4)^14, Z(2^4)^6, Z(2^4)^13, Z(2^2), Z(2^4)^12,[0X
+    [4X  Z(2^4)^4, Z(2^4)^11, Z(2^4)^3, Z(2^2)^2, Z(2^4)^2, Z(2^4)^9, Z(2^4),[0X
+    [4X  Z(2^4)^8 ][0X
+    [4Xgap> x:=X(F);;[0X
+    [4Xgap> R1:=PolynomialRing(F,[x]);;[0X
+    [4Xgap> vars:=IndeterminatesOfPolynomialRing(R1);;[0X
+    [4Xgap> y:=X(F,vars);;[0X
+    [4Xgap> R2:=PolynomialRing(F,[x,y]);;[0X
+    [4Xgap> C:=GeneralizedReedSolomonCode(Pts,3,R1);[0X
+    [4Xa linear [15,3,1..13]10..12  generalized Reed-Solomon code over GF(16)[0X
+    [4Xgap> MinimumDistance(C);[0X
+    [4X13[0X
+    [4Xgap> z:=Zero(F);[0X
+    [4X0*Z(2)[0X
+    [4Xgap> r:=[z,z,z,z,z,z,z,z,b^6,b^2,b^5,b^14,b,b^7,b^11];;[0X
+    [4Xgap> r:=Codeword(r);[0X
+    [4X[ 0 0 0 0 0 0 0 0 a^12 a^14 a^5 a^8 a^7 a^4 a^2 ][0X
+    [4Xgap> cs:=NearestNeighborDecodewords(C,r,7);[0X
+    [4X[ [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ], [0X
+    [4X  [ 0 a^9 a^3 a^13 a^6 a^10 a^11 a a^12 a^14 a^5 a^8 a^7 a^4 a^2 ] ][0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-8 Syndrome[0m
+  
+  [2X> Syndrome( [0X[3XC, v[0X[2X ) _________________________________________________[0Xfunction
+  
+  [10XSyndrome[0m  returns  the syndrome of word [3Xv[0m with respect to a linear code [3XC[0m. [3Xv[0m
+  is a codeword in the ambient vector space of [3XC[0m. If [3Xv[0m is an element of [3XC[0m, the
+  syndrome  is a zero vector. The syndrome can be used for looking up an error
+  vector  in the syndrome table (see [2XSyndromeTable[0m ([14X4.10-9[0m)) that is needed to
+  correct an error in v.
+  
+  A  syndrome  is  not  defined for non-linear codes. [10XSyndrome[0m then returns an
+  error.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C := HammingCode(4);[0X
+    [4Xa linear [15,11,3]1 Hamming (4,2) code over GF(2)[0X
+    [4Xgap> v := CodewordNr( C, 7 );[0X
+    [4X[ 1 1 0 0 0 0 0 0 0 0 0 0 1 1 0 ][0X
+    [4Xgap> Syndrome( C, v );[0X
+    [4X[ 0 0 0 0 ][0X
+    [4Xgap> Syndrome( C, Codeword( "000000001100111" ) );[0X
+    [4X[ 1 1 1 1 ][0X
+    [4Xgap> Syndrome( C, Codeword( "000000000000001" ) );[0X
+    [4X[ 1 1 1 1 ]    # the same syndrome: both codewords are in the same[0X
+    [4X               # coset of C [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-9 SyndromeTable[0m
+  
+  [2X> SyndromeTable( [0X[3XC[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XSyndromeTable[0m returns a [13Xsyndrome table[0m of a linear code [3XC[0m, consisting of two
+  columns.  The  first column consists of the error vectors that correspond to
+  the  syndrome  vectors  in  the second column. These vectors both are of the
+  codeword type. After calculating the syndrome of a word [3Xv[0m with [10XSyndrome[0m (see
+  [2XSyndrome[0m ([14X4.10-8[0m)), the error vector needed to correct [3Xv[0m can be found in the
+  syndrome  table.  Subtracting  this vector from [3Xv[0m yields an element of [3XC[0m. To
+  make  the search for the syndrome as fast as possible, the syndrome table is
+  sorted according to the syndrome vectors.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> H := HammingCode(2);[0X
+    [4Xa linear [3,1,3]1 Hamming (2,2) code over GF(2)[0X
+    [4Xgap> SyndromeTable(H);[0X
+    [4X[ [ [ 0 0 0 ], [ 0 0 ] ], [ [ 1 0 0 ], [ 0 1 ] ],[0X
+    [4X  [ [ 0 1 0 ], [ 1 0 ] ], [ [ 0 0 1 ], [ 1 1 ] ] ][0X
+    [4Xgap> c := Codeword("101");[0X
+    [4X[ 1 0 1 ][0X
+    [4Xgap> c in H;[0X
+    [4Xfalse          # c is not an element of H[0X
+    [4Xgap> Syndrome(H,c);[0X
+    [4X[ 1 0 ]        # according to the syndrome table,[0X
+    [4X               # the error vector [ 0 1 0 ] belongs to this syndrome[0X
+    [4Xgap> c - Codeword("010") in H;[0X
+    [4Xtrue           # so the corrected codeword is[0X
+    [4X               # [ 1 0 1 ] - [ 0 1 0 ] = [ 1 1 1 ],[0X
+    [4X               # this is an element of H [0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-10 StandardArray[0m
+  
+  [2X> StandardArray( [0X[3XC[0X[2X ) _______________________________________________[0Xfunction
+  
+  [10XStandardArray[0m  returns the standard array of a code [3XC[0m. This is a matrix with
+  elements  of  the codeword type. It has q^r rows and q^k columns, where q is
+  the  size of the base field of [3XC[0m, r=n-k is the redundancy of [3XC[0m, and k is the
+  dimension of [3XC[0m. The first row contains all the elements of [3XC[0m. Each other row
+  contains  words  that  do  not  belong to the code, with in the first column
+  their syndrome vector (see [2XSyndrome[0m ([14X4.10-8[0m)).
+  
+  A non-linear code does not have a standard array. [10XStandardArray[0m then returns
+  an error.
+  
+  Note  that  calculating  a  standard  array  can  be  very time- and memory-
+  consuming.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> StandardArray(RepetitionCode(3)); [0X
+    [4X[ [ [ 0 0 0 ], [ 1 1 1 ] ], [ [ 0 0 1 ], [ 1 1 0 ] ], [0X
+    [4X  [ [ 0 1 0 ], [ 1 0 1 ] ], [ [ 1 0 0 ], [ 0 1 1 ] ] ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-11 PermutationDecode[0m
+  
+  [2X> PermutationDecode( [0X[3XC, v[0X[2X ) ________________________________________[0Xfunction
+  
+  [10XPermutationDecode[0m  performs  permutation  decoding when possible and returns
+  original vector and prints 'fail' when not possible.
+  
+  This   uses   [10XAutomorphismGroup[0m   in  the  binary  case,  and  (the  slower)
+  [10XPermutationAutomorphismGroup[0m   otherwise,   to   compute   the   permutation
+  automorphism  group  P  of [3XC[0m. The algorithm runs through the elements p of P
+  checking  if  the  weight of H(p* v) is less than (d-1)/2. If it is then the
+  vector  p*  v  is  used  to  decode  v:  assuming [3XC[0m is in standard form then
+  c=p^-1Em  is  the decoded word, where m is the information digits part of p*
+  v.  If no such p exists then ``fail'' is returned. See, for example, section
+  10.2 of Huffman and Pless [HP03] for more details.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> C0:=HammingCode(3,GF(2));[0X
+    [4Xa linear [7,4,3]1 Hamming (3,2) code over GF(2)[0X
+    [4Xgap> G0:=GeneratorMat(C0);;[0X
+    [4Xgap> G := List(G0, ShallowCopy);;[0X
+    [4Xgap> PutStandardForm(G);[0X
+    [4X()[0X
+    [4Xgap> Display(G);[0X
+    [4X 1 . . . . 1 1[0X
+    [4X . 1 . . 1 . 1[0X
+    [4X . . 1 . 1 1 .[0X
+    [4X . . . 1 1 1 1[0X
+    [4Xgap> H0:=CheckMat(C0);;[0X
+    [4Xgap> Display(H0);[0X
+    [4X . . . 1 1 1 1[0X
+    [4X . 1 1 . . 1 1[0X
+    [4X 1 . 1 . 1 . 1[0X
+    [4Xgap> c0:=Random(C0);[0X
+    [4X[ 0 0 0 1 1 1 1 ][0X
+    [4Xgap> v01:=c0[1]+Z(2)^2;;[0X
+    [4Xgap> v1:=List(c0, ShallowCopy);;[0X
+    [4Xgap> v1[1]:=v01;;[0X
+    [4Xgap> v1:=Codeword(v1);[0X
+    [4X[ 1 0 0 1 1 1 1 ][0X
+    [4Xgap> c1:=PermutationDecode(C0,v1);[0X
+    [4X[ 0 0 0 1 1 1 1 ][0X
+    [4Xgap> c1=c0;[0X
+    [4Xtrue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  [1X4.10-12 PermutationDecodeNC[0m
+  
+  [2X> PermutationDecodeNC( [0X[3XC, v, P[0X[2X ) ___________________________________[0Xfunction
+  
+  Same  as  [10XPermutationDecode[0m  except  that  one  may  enter  the  permutation
+  automorphism group [3XP[0m in as an argument, saving time. Here [3XP[0m is a subgroup of
+  the symmetric group on n letters, where n is the word length of [3XC[0m.
+  

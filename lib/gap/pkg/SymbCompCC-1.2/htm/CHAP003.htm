@@ -1,0 +1,282 @@
+<html><head><title>[SymbCompCC] 3 p-power-poly-pcp-groups</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>3 p-power-poly-pcp-groups</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP003.htm#SECT001">Example</a>
+<li> <A HREF="CHAP003.htm#SECT002">Obtaining p-power-poly-pcp-groups</a>
+<li> <A HREF="CHAP003.htm#SECT003">Operations and functions for p-power-poly-pcp-group elements</a>
+<li> <A HREF="CHAP003.htm#SECT004">Operations and functions for p-power-poly-pcp-groups</a>
+<li> <A HREF="CHAP003.htm#SECT005">Info classes for the p-power-poly-pcp-groups</a>
+<li> <A HREF="CHAP003.htm#SECT006">Global variables for the p-power-poly-pcp-groups</a>
+</ol><p>
+<p>
+Eick and Leedham-Green <a href="biblio.htm#ELG08"><cite>ELG08</cite></a> defined for a prime <var>p</var> and a fixed
+coclass <var>r</var> infinite coclass sequences. These sequences consist of finite 
+<var>p</var>-groups of coclass <var>r</var>. For each infinite coclass sequence there exists a 
+consistent pp-presentation (see 
+Section&nbsp;<a href="CHAP002.htm#SECT002">Background on (polycyclic) parametrised presentations</a>) 
+such that if we choose a natural number for the parameter and possibly reduce
+the exponents modulo the relative orders, we obtain a consistent polycyclic 
+presentation for a group in the sequence; and for each group in the sequence 
+there exists a natural number such that using this as a value for the 
+parameter, we obtain a polycyclic presentation for the group.
+<p>
+We use these consistent pp-presentations to compute parametrised 
+groups, which we call <var>p</var>-power-poly-pcp-groups. Furthermore, methods for 
+these are presented. Without specifying the parameter we compute certain 
+properties and using the <var>p</var>-power-poly-pcp-groups we do this for all groups 
+they represent at once.
+<p>
+The <var>p</var>-power-poly-pcp-groups have a consistent pp-presentation with 
+generators <i>g</i><sub>1</sub>, &#8230;, <i>g</i><sub><i>n</i></sub>, <i>t</i><sub>1</sub>, &#8230;<i>t</i><sub><i>d</i></sub> and <i>c</i><sub>1</sub>, &#8230;, <i>c</i><sub><i>m</i></sub>, for some 
+non-negative integers <var>n</var>, <var>d</var> and <var>m</var>, and relations of the form, where 
+<i>rel</i>[<i>i</i>,<i>j</i>] stores the right hand sides of the relations (see 
+Section&nbsp;<a href="CHAP002.htm#SECT002">Background on (polycyclic) parametrised presentations</a> for more 
+information on pp-presentations),
+<p>
+<br clear="all" /><table border="0" width="100%"><tr><td> <table border="0" cellspacing="0" cellpadding="0"> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub><i>i</i></sub><sup><i>p</i></sup>=<i>rel</i>[<i>i</i>,<i>i</i>],</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>t</i><sub><i>i</i></sub><sup><i>expo</i></sup> = <i>rel</i>[<i>n</i>+<i>i</i>,<i>n</i>+<i>i</i>],</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>c</i><sub><i>i</i></sub><sup><i>expo</i>_<i>vec</i>[<i>i</i>]</sup> = <i>rel</i>[<i>n</i>+<i>d</i>+<i>i</i>,<i>n</i>+<i>d</i>+<i>i</i>],</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub><i>i</i></sub><sup><i>g</i><sub><i>j</i></sub></sup> = <i>rel</i>[<i>j</i>,<i>i</i>], </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>t</i><sub><i>i</i></sub><sup><i>g</i><sub><i>j</i></sub></sup> = <i>rel</i>[<i>j</i>,<i>n</i>+<i>i</i>], </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table><tr><td nowrap="nowrap" align="right" colspan="1">&nbsp;<i>t</i><sub><i>i</i></sub><sup><i>t</i><sub><i>j</i></sub></sup> = <i>rel</i>[<i>n</i>+<i>j</i>,<i>n</i>+<i>i</i>], </td></tr></table></td></tr></table> </td></tr></table>
+where the <i>t</i><sub><i>i</i></sub>'s commute modulo &#9001;<i>c</i><sub>1</sub>,&#8230;, <i>c</i><sub><i>m</i></sub>&#9002; and the 
+<i>c</i><sub><i>i</i></sub>'s are central. So <var>rel</var> (see Section&nbsp;<a href="CHAP003.htm#SECT002">Obtaining p-power-poly-pcp-groups</a>)
+are the right hand sides of the relations, where some depend on the parameter. 
+The relative orders <var>expo</var> and <var>expo_vec[i]</var> of the generators <i>t</i><sub><i>j</i></sub> and 
+<i>c</i><sub><i>i</i></sub> depend on the parameter.
+<p>
+<p>
+<h2><a name="SECT001">3.1 Example</a></h2>
+<p><p>
+In this section we present the well-known example of quaternion groups 
+<i>Q</i><sub>2<sup><i>x</i>+3</sup></sub>. They have a pp-presentation of the following form:
+<p>
+<br clear="all" /><table border="0" width="100%"><tr><td> <table border="0" cellspacing="0" cellpadding="0"> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> { <i>g</i><sub>1</sub>,<i>g</i><sub>2</sub>,<i>t</i><sub>1</sub>  | </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"><i>g</i><sub>1</sub><sup>2</sup> = <i>t</i><sub>1</sub><sup>2<sup><i>x</i></sup></sup>,&nbsp;<i>g</i><sub>2</sub><sup><i>g</i><sub>1</sub></sup> = <i>g</i><sub>2</sub> <i>t</i><sub>1</sub><sup>&#8722;1+2<sup><i>x</i>+1</sup></sup>,</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub>2</sub><sup>2</sup> = <i>t</i><sub>1</sub>,&nbsp;<i>t</i><sub>1</sub><sup><i>g</i><sub>1</sub></sup> = <i>t</i><sub>1</sub><sup>&#8722;1+2<sup><i>x</i>+1</sup></sup>,</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table><tr><td nowrap="nowrap" align="right" colspan="1">&nbsp;<i>t</i><sub>1</sub><sup>2<sup><i>x</i>+1</sup></sup> = 1 }&#183;</td></tr></table></td></tr></table> </td></tr></table>
+<p>
+<p>
+<h2><a name="SECT002">3.2 Obtaining p-power-poly-pcp-groups</a></h2>
+<p><p>
+To obtain <var>p</var>-power-poly-pcp-groups:
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>PPPPcpGroups( </code><var>rel</var><code>, </code><var>n</var><code>, </code><var>d</var><code>, </code><var>m</var><code>, </code><var>expo</var><code>, </code><var>expo_vec</var><code>, </code><var>prime</var><code>, </code><var>cc</var><code>, </code><var>name</var><code> ) F</code>
+<li><code>PPPPcpGroups( </code><var>rec</var><code> ) F</code>
+<p>
+returns the p-power-poly-pcp-groups described by the consistent 
+pp-presentation with generators <i>g</i><sub>1</sub>, &#8230;, <i>g</i><sub><i>n</i></sub>, <i>t</i><sub>1</sub>, &#8230;<i>t</i><sub><i>d</i></sub>, 
+<i>c</i><sub>1</sub>, &#8230;, <i>c</i><sub><i>m</i></sub>, for some non-negative integers <var>n</var>, <var>d</var> and <var>m</var>, and 
+relations of the form 
+<p>
+<br clear="all" /><table border="0" width="100%"><tr><td> <table border="0" cellspacing="0" cellpadding="0"> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub><i>i</i></sub><sup><i>p</i></sup>=<i>rel</i>[<i>i</i>,<i>i</i>],</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>t</i><sub><i>i</i></sub><sup><i>expo</i></sup> = <i>rel</i>[<i>n</i>+<i>i</i>,<i>n</i>+<i>i</i>],</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>c</i><sub><i>i</i></sub><sup><i>expo</i>_<i>vec</i>[<i>i</i>]</sup> = <i>rel</i>[<i>n</i>+<i>d</i>+<i>i</i>,<i>n</i>+<i>d</i>+<i>i</i>],</td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>g</i><sub><i>i</i></sub><sup><i>g</i><sub><i>j</i></sub></sup> = <i>rel</i>[<i>j</i>,<i>i</i>], </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">&nbsp;<i>t</i><sub><i>i</i></sub><sup><i>g</i><sub><i>j</i></sub></sup> = <i>rel</i>[<i>j</i>,<i>n</i>+<i>i</i>], </td></tr></table></td><td width="50%"></td></tr> <tr><td width="50%"></td><td nowrap="nowrap" align="right" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> </td></tr></table></td><td nowrap="nowrap" align="left"><table><tr><td nowrap="nowrap" align="right" colspan="1">&nbsp;<i>t</i><sub><i>i</i></sub><sup><i>t</i><sub><i>j</i></sub></sup> = <i>rel</i>[<i>n</i>+<i>j</i>,<i>n</i>+<i>i</i>]&#183;</td></tr></table></td></tr></table> </td></tr></table>
+<p>
+The input consists of the following:
+<p>
+<p>
+<dl compact>
+<dt><code></code><var>rel</var><code></code> <dd> is the list of relations, where each relation is presented by a 
+list consisting of tuples; the first entry <var>i</var> of a tuple is the index of the 
+generator (if <i>i</i>  &#8804; <i>n</i>, then it represents generator <i>g</i><sub><i>i</i></sub>, if <i>n</i>  &lt;  <i>i</i>  &#8804; <i>d</i>,
+then it represents generator <i>t</i><sub><i>i</i>&#8722;<i>n</i></sub> and otherwise it represents generator
+<i>c</i><sub><i>i</i>&#8722;<i>n</i>&#8722;<i>d</i></sub>) and the second entry of the tuple is the corresponding exponent. 
+Note that the exponents of the <i>g</i><sub><i>i</i></sub>'s are saved as integers and all other 
+exponents as lists, representing elements depending on the parameter. 
+<dt><code></code><var>n</var><code></code> <dd> is the number of generators <i>g</i><sub><i>i</i></sub>, 
+<dt><code></code><var>d</var><code></code> <dd> is the number of generators <i>t</i><sub><i>i</i></sub>, 
+<dt><code></code><var>m</var><code></code> <dd> is the number of generators <i>c</i><sub><i>i</i></sub>,
+<dt><code></code><var>expo</var><code></code> <dd> is the relative order of all generators <i>t</i><sub><i>i</i></sub>; note that expo is
+given as a list to represent an element depending on the parameter,
+<dt><code></code><var>expo_vec</var><code></code> <dd> is the list of relative orders, where the <var>i</var>th entry of the 
+list gives the relative order of the generator <i>c</i><sub><i>i</i></sub>; note that  each 
+relative order is given as a list to represent an element depending on the 
+parameter, 
+<dt><code></code><var>prime</var><code></code> <dd> is the underlying prime <var>p</var>,
+<dt><code></code><var>cc</var><code></code> <dd> if the <var>p</var>-power-poly-pcp-groups represent an infinite coclass
+sequence of <var>p</var>-groups of coclass <var>r</var>, then <var>cc</var> = <var>r</var>. If they represent
+Schur extensions of groups in an infinite coclass sequence, then <var>cc</var> is
+the coclass of the groups in this infinite coclass sequence.
+<dt><code></code><var>name</var><code></code> <dd> a string to name the <var>p</var>-power-poly-pcp-groups. 
+<dt><code></code><var>rec</var><code></code> <dd> is a record of the form
+<var>rec( rel, expo, n, d, m, prime, cc, expo_vec, name )</var>. 
+</dl>
+<p>
+The pp-presentation is described at the beginning of Chapter 
+<a href="badlink:SymbCompCC:p-power-poly-pcp-group">p-power-poly-pcp-group</a>. Note that the consistency of the presentation is 
+checked and that the presentation has to be consistent.
+<p>
+<pre>
+gap&gt; ParPresGlobalVar_2_1[1];
+rec( 
+  rel := [ [ [ [ 1, 0 ] ] ], [ [ [ 2, 1 ], [ 3, -1+2*2^x ] ], [ [ 3, 1 ] ] ], 
+      [ [ [ 3, -1+2*2^x ] ], [ [ 3, 1 ] ], [ [ 3, 0 ] ] ] ], expo := 2*2^x, 
+  n := 2, d := 1, m := 0, prime := 2, cc := 1, expo_vec := [  ], name := "D" )
+gap&gt; G := PPPPcpGroups( ParPresGlobalVar_2_1[1] );
+&lt; P-Power-Poly-pcp-groups with 3 generators with relative orders [ 2,2,2*2^x ] &gt;
+</pre>
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>PPPPcpGroupsElement( </code><var>G</var><code>, </code><var>word</var><code> ) F</code>
+<p>
+constructs an element in <var>p</var>-power-poly-pcp-groups, where <var>G</var> is a 
+<var>p</var>-power-poly-pcp-group (thus representing an infinite coclass sequence 
+through a pp-presentation) with generators <i>g</i><sub>1</sub>, &#8230;, <i>g</i><sub><i>n</i></sub>, <i>t</i><sub>1</sub>, &#8230;, <i>t</i><sub><i>d</i></sub>, <i>c</i><sub>1</sub>, &#8230;, <i>c</i><sub><i>m</i></sub> and <var>word</var> is a list of tuples, where the first 
+entry <var>i</var> in the tuple gives the index of the generator (if <i>i</i>  &#8804; <i>n</i>, then 
+it represents generator <i>g</i><sub><i>i</i></sub>, if <i>n</i>  &lt;  <i>i</i>  &#8804; <i>d</i>, then it represents generator
+<i>t</i><sub><i>i</i>&#8722;<i>n</i></sub> and otherwise it represents generator <i>c</i><sub><i>i</i>&#8722;<i>n</i>&#8722;<i>d</i></sub>) and the second 
+entry of the tuple is the corresponding exponent. Note that the exponents 
+of the <i>g</i><sub><i>i</i></sub>'s must be integers, while all other exponents can be integers 
+or lists, representing an element depending on the parameter.
+<p>
+<pre>
+gap&gt; G := PPPPcpGroups( ParPresGlobalVar_2_1[3] );
+&lt; P-Power-Poly pcp-groups with orders [ 2,2,2*2^x ] &gt;
+gap&gt; g1 := PPPPcpGroupsElement( G , [[1,1]] );
+g1
+gap&gt; g := PPPPcpGroupsElement( G , [[1,1],[2,1],[3,1]] );
+g1*g2*t1
+gap&gt; h := PPPPcpGroupsElement( G , [[1,1],[2,1],[3,G!.expo-1]] );
+g1*g2*t1^(-1+2*2^x)
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">3.3 Operations and functions for p-power-poly-pcp-group elements</a></h2>
+<p><p>
+The typical operations for group elements can be carried out for 
+<var>p</var>-power-poly-pcp-group elements, like <code>*</code>, <code>/</code>, Inverse, One, equality and 
+ShallowCopy.
+<p>
+<a name = "SSEC003.1"></a>
+<li><code>CollectPPPPcp( </code><var>a</var><code> ) F</code>
+<p>
+collects the <var>p</var>-power-poly-pcp-group element <var>a</var> so that after reducing to
+integers for every specific value for the parameter <var>x</var>, the element is 
+collected in the polycyclic group, represented by <var>x</var> in the underlying 
+pp-presentation. 
+<p>
+Note that the global
+variable <code>COLLECT_PPOWERPOLY_PCP</code> determines whether every element will be 
+collected immediately, when created, or not, see
+<a href="CHAP003.htm#SSEC006.1">COLLECT_PPOWERPOLY_PCP</a>.
+<p>
+<p>
+<h2><a name="SECT004">3.4 Operations and functions for p-power-poly-pcp-groups</a></h2>
+<p><p>
+For <var>p</var>-power-poly-pcp-groups:
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>GeneratorsOfGroup( </code><var>G</var><code> )</code>
+<p>
+returns a set of generators for the <var>p</var>-power-poly-pcp-groups <var>G</var>. 
+<p>
+<a name = "SSEC004.2"></a>
+<li><code>One( </code><var>G</var><code> )</code>
+<p>
+obtains the identity element of the <var>p</var>-power-poly-pcp-groups <var>G</var>.
+<p>
+<a name = "SSEC004.3"></a>
+<li><code>IsConsistentPPPPcp( </code><var>G</var><code> ) F</code>
+<li><code>IsConsistentPPPPcp( </code><var>ParPres</var><code> ) F</code>
+<p>
+checks if the underlying pp-presentation of the 
+<var>p</var>-power-poly-pcp-groups <var>G</var> is consistent or if the pp-presenta-tion 
+<var>ParPres</var> is consistent.
+<p>
+<a name = "SSEC004.4"></a>
+<li><code>GetPcGroupPPowerPoly( </code><var>ParPres</var><code>, </code><var>n</var><code> ) F</code>
+<li><code>GetPcGroupPPowerPoly( </code><var>G</var><code>, </code><var>n</var><code> ) F</code>
+<p>
+takes the pp-presentation given by the record <var>ParPres</var> as in
+<a href="CHAP003.htm#SSEC002.1">PPPPcpGroups</a> or the <var>p</var>-power-poly-pcp-groups <var>G</var> and takes <var>n</var>, a 
+non-negative integer, as a value for the parameter to obtain a 
+pc-presentation for the corresponding finite <var>p</var>-group.
+<p>
+<a name = "SSEC004.5"></a>
+<li><code>GetPcpGroupPPowerPoly( </code><var>ParPres</var><code>, </code><var>n</var><code> ) F</code>
+<li><code>GetPcpGroupPPowerPoly( </code><var>G</var><code>, </code><var>n</var><code> ) F</code>
+<p>
+takes pp-presentation given by the record <var>ParPres</var> as in
+<a href="CHAP003.htm#SSEC002.1">PPPPcpGroups</a> or the <var>p</var>-power-poly-pcp-groups <var>G</var> and takes <var>n</var>, a 
+non-negative integer, as the parameter to obtain a pcp-presentation for the 
+corresponding finite <var>p</var>-group, for further information we refer to the 
+polycyclic package.
+<p>
+<a name = "SSEC004.6"></a>
+<li><code>GAPInputPPPPcpGroups( </code><var>file</var><code>, </code><var>G</var><code> ) F</code>
+<li><code>GAPInputPPPPcpGroups( </code><var>file</var><code>, </code><var>ParPres</var><code> ) F</code>
+<p>
+prints the <var>p</var>-power-poly-pcp-groups <var>G</var> defined by <var>ParPres</var> in the file 
+<var>file</var> as a record that could be used as input to
+<a href="CHAP003.htm#SSEC002.1">PPPPcpGroups</a> to create <var>p</var>-power-poly-pcp-groups.
+<p>
+<a name = "SSEC004.7"></a>
+<li><code>GAPInputPPPPcpGroupsAppend( </code><var>file</var><code>, </code><var>G</var><code> ) F</code>
+<li><code>GAPInputPPPPcpGroupsAppend( </code><var>file</var><code>, </code><var>ParPres</var><code> ) F</code>
+<p>
+appends the pp-presentation of the <var>p</var>-power-poly-pcp-groups <var>G</var> defined by 
+<var>ParPres</var> to the file <var>file</var>  as a record that could be used as input to
+<a href="CHAP003.htm#SSEC002.1">PPPPcpGroups</a> to create <var>p</var>-power-poly-pcp-groups.
+<p>
+<a name = "SSEC004.8"></a>
+<li><code>LatexInputPPPPcpGroups( </code><var>file</var><code>, </code><var>G</var><code> ) F</code>
+<li><code>LatexInputPPPPcpGroups( </code><var>file</var><code>, </code><var>ParPres</var><code> ) F</code>
+<p>
+prints the pp-presentation of <var>G</var> as given by <var>ParPres</var> in latex-code to the 
+file <var>file</var>. Note that only non-trivial relations are printed.
+<p>
+<a name = "SSEC004.9"></a>
+<li><code>LatexInputPPPPcpGroupsAppend( </code><var>file</var><code>, </code><var>G</var><code> ) F</code>
+<li><code>LatexInputPPPPcpGroupsAppend( </code><var>file</var><code>, </code><var>ParPres</var><code> ) F</code>
+<p>
+appends the pp-presentation of <var>G</var> as given by <var>ParPres</var> in latex-code to the 
+file <var>file</var>. Note that only non-trivial relations are appended.
+<p>
+<a name = "SSEC004.10"></a>
+<li><code>LatexInputPPPPcpGroupsAllAppend( </code><var>file</var><code>, </code><var>G</var><code> ) F</code>
+<li><code>LatexInputPPPPcpGroupsAllAppend( </code><var>file</var><code>, </code><var>ParPres</var><code> ) F</code>
+<p>
+appends the pp-presentation of <var>G</var> as given by <var>ParPres</var> in latex-code to the 
+file <var>file</var>. Note that all relations are appended.
+<p>
+<p>
+<h2><a name="SECT005">3.5 Info classes for the p-power-poly-pcp-groups</a></h2>
+<p><p>
+The following info classes are available:
+<p>
+<a name = "SSEC005.1"></a>
+<li><code>InfoConsistencyPPPPcp V</code>
+<p>
+is an InfoClass with the following levels.
+<p>
+<p>
+<dl compact>
+<dt><code>level 1</code> <dd> displays the first consistency relation that fails during the consistency check;
+<dt><code>level 2</code> <dd> displays which family of consistency relations have been checked during a consistency check.
+</dl>
+<p>
+the default value is 1.
+<p>
+<a name = "SSEC005.2"></a>
+<li><code>InfoCollectingPPPPcp V</code>
+<p>
+is an InfoClass with the following levels.
+<p>
+<p>
+<dl compact>
+<dt><code>level 1</code> <dd> displays some information during collecting;
+</dl>
+<p>
+the default value is 0.
+<p>
+<p>
+<h2><a name="SECT006">3.6 Global variables for the p-power-poly-pcp-groups</a></h2>
+<p><p>
+The following global variables are available with default value:
+<p>
+<a name = "SSEC006.1"></a>
+<li><code>COLLECT_PPOWERPOLY_PCP V</code>
+<p>
+is a global variable determining if every <var>p</var>-power-poly-pcp-group
+element is collected, when created, the default value is true.
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>SymbCompCC manual<br>November 2011
+</address></body></html>

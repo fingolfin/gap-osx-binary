@@ -1,0 +1,479 @@
+<html><head><title>[loops] 4 Creating quasigroups and loops</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>4 Creating quasigroups and loops</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP004.htm#SECT001">About Cayley tables</a>
+<li> <A HREF="CHAP004.htm#SECT002">Testing Cayley tables</a>
+<li> <A HREF="CHAP004.htm#SECT003">Canonical and normalized Cayley tables</a>
+<li> <A HREF="CHAP004.htm#SECT004">Creating quasigroups and loops manually</a>
+<li> <A HREF="CHAP004.htm#SECT005">Creating quasigroups and loops from a file</a>
+<li> <A HREF="CHAP004.htm#SECT006">Creating quasigroups and loops by sections</a>
+<li> <A HREF="CHAP004.htm#SECT007">Creating quasigroups and loops by extensions</a>
+<li> <A HREF="CHAP004.htm#SECT008">Random quasigroups and loops</a>
+<li> <A HREF="CHAP004.htm#SECT009">Conversions</a>
+<li> <A HREF="CHAP004.htm#SECT010">Products of loops</a>
+<li> <A HREF="CHAP004.htm#SECT011">Opposite quasigroups and loops</a>
+</ol><p>
+<p>
+In this chapter we describe several ways in which quasigroups and loops can be created in <font face="Gill Sans,Helvetica,Arial">LOOPS</font>.
+<p>
+<p>
+<h2><a name="SECT001">4.1 About Cayley tables</a></h2>
+<p><p>
+Let <i>X</i>={<i>x</i><sub>1</sub>,...,<i>x</i><sub><i>n</i></sub>} be a set and &#183; a binary operation on <i>X</i>. Then
+an <i>n</i> by <i>n</i> array with rows and columns bordered by <i>x</i><sub>1</sub>, ..., <i>x</i><sub><i>n</i></sub>, in
+this order, is a <var>Cayley table</var>, or a
+<var>multiplication table</var> of &#183;, if the entry in the row <i>x</i><sub><i>i</i></sub> and column <i>x</i><sub><i>j</i></sub> is <i>x</i><sub><i>i</i></sub>&#183;<i>x</i><sub><i>j</i></sub>.
+<p>
+A Cayley table is a <var>quasigroup
+table</var> if it is a <var>Latin
+square</var>, i.e., if every entry <i>x</i><sub><i>i</i></sub> appears in every column
+and every row exactly once.
+<p>
+An annoying feature of quasigroup tables in practice is that they are often not
+bordered, and it is up to the reader to figure out what is meant. Throughout
+this manual and in <font face="Gill Sans,Helvetica,Arial">LOOPS</font>, we therefore make the following assumption: <var>All
+distinct entries in a quasigroup table must be integers, say</var>
+<i>x</i><sub>1</sub> &lt; <i>x</i><sub>2</sub> &lt; &#8230; &lt; <i>x</i><sub><i>n</i></sub><var>, and if no border is specified, we assume that the
+table is bordered by</var> <i>x</i><sub>1</sub>, ..., <i>x</i><sub><i>n</i></sub><var>, in this order.</var> Note that we do
+not assume that the distinct entries <i>x</i><sub>1</sub>, ..., <i>x</i><sub><i>n</i></sub> form the interval
+1, ..., <i>n</i>. The significance of this observation will become clear in
+Chapter <a href="CHAP006.htm">Methods based on permutation groups</a>.
+<p>
+Finally, we say that a quasigroup table is a <var>loop
+table</var> if the first row and the first
+column are the same, and if the entries in the first row are ordered in an
+ascending fashion.
+<p>
+<p>
+<h2><a name="SECT002">4.2 Testing Cayley tables</a></h2>
+<p><p>
+A square array with integral entries is called a <var>matrix</var> in <font face="Gill Sans,Helvetica,Arial">GAP</font>. The
+following synonymous operations test if a matrix <i>T</i> is a quasigroup table, as
+defined above:
+<p>
+<a name = "SSEC002.1"></a>
+<li><code>IsQuasigroupTable( </code><var>T</var><code> ) O</code>
+<a name = "SSEC002.1"></a>
+<li><code>IsQuasigroupCayleyTable( </code><var>T</var><code> ) O</code>
+<p>
+The following synonymous operations test if a matrix <i>T</i> is a loop table:
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>IsLoopTable( </code><var>T</var><code> ) O</code>
+<a name = "SSEC002.2"></a>
+<li><code>IsLoopCayleyTable( </code><var>T</var><code> ) O</code>
+<p>
+We would like to call attention to the fact that the package <font face="Gill Sans,Helvetica,Arial">GUAVA</font>
+also has some operations dealing with Latin squares. In particular,
+<code>IsLatinSquare</code> is declared in <font face="Gill Sans,Helvetica,Arial">GUAVA</font>.
+<p>
+<p>
+<h2><a name="SECT003">4.3 Canonical and normalized Cayley tables</a></h2>
+<p><p>
+Although we do not assume that a quasigroup table with distinct entries
+<i>x</i><sub>1</sub> &lt; &#8230; &lt; <i>x</i><sub><i>n</i></sub> satisfies <i>x</i><sub><i>i</i></sub>=<i>i</i>, it is often desirable to present
+quasigroup tables in the latter way. The rather general operation
+<p>
+<a name = "SSEC003.1"></a>
+<li><code>CanonicalCayleyTable( </code><var>T</var><code> ) O</code>
+<p>
+takes any Cayley table <i>T</i> with distinct entries <i>x</i><sub>1</sub> &lt; &#8230; &lt; <i>x</i><sub><i>n</i></sub>, and
+returns a Cayley table in which <i>x</i><sub><i>i</i></sub> has been replaced by <i>i</i>.
+<p>
+The operation
+<p>
+<a name = "SSEC003.2"></a>
+<li><code>NormalizedQuasigroupTable( </code><var>T</var><code> ) O</code>
+<p>
+makes a quasigroup table <i>T</i> into a loop table by:
+<ul>
+<li> first calling <code>CanonicalCayleyTable</code> to rename the entries to 1,
+    ..., <i>n</i>,
+<li> then permuting the columns of <i>T</i> so that the first row reads
+    1, ..., <i>n</i>,
+<li> and then permuting the rows of <i>T</i> so that the first column
+    reads 1, ..., <i>n</i>.
+</ul>
+<p>
+<p>
+<h2><a name="SECT004">4.4 Creating quasigroups and loops manually</a></h2>
+<p><p>
+When <i>T</i> is a quasigroup table, the corresponding quasigroup is obtained by
+<p>
+<a name = "SSEC004.1"></a>
+<li><code>QuasigroupByCayleyTable( </code><var>T</var><code> ) O</code>
+<p>
+Since <code>CanonicalCayleyTable</code> is called within the above operation, the
+resulting quasigroup will have a Cayley table with distinct entries 1,
+..., <i>n</i>.
+<p>
+Here is the analogous operation for a loop table <i>T</i>:
+<p>
+<a name = "SSEC004.2"></a>
+<li><code>LoopByCayleyTable( </code><var>T</var><code> ) O</code>
+<p>
+And here is an example for methods concerning Cayley tables:
+<p>
+<pre>
+gap&gt; ct := CanonicalCayleyTable( [[5,3],[3,5]] );
+[ [ 2, 1 ], [ 1, 2 ] ]
+gap&gt; NormalizedQuasigroupTable( ct );
+[ [ 1, 2 ], [ 2, 1 ] ]
+gap&gt; LoopByCayleyTable( last );
+&lt;loop of order 2&gt;
+gap&gt; [ IsQuasigroupTable( ct ), IsLoopTable( ct ) ];
+[ true, false ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT005">4.5 Creating quasigroups and loops from a file</a></h2>
+<p><p>
+Typing a large multiplication table manually is tedious and error-prone. We
+have therefore included a universal algorithm in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> that reads
+multiplication tables of quasigroups from a file.
+<p>
+Instead of writing a separate algorithm for each common format, our algorithm
+relies on the user to provide a bit of information about the input file. Here
+is an outline of the algorithm, with file named <i>F</i> and a string <i>D</i> as
+arguments on the input:
+<ul>
+<li> read the entire content of <i>F</i> into a string <i>S</i>,
+<li> replace all end-of-line characters in <i>S</i> by spaces,
+<li> replace by spaces all characters of <i>S</i> that appear in <i>D</i>,
+<li> split <i>S</i> into maximal substrings without spaces, called
+    <var>chunks</var>,
+<li> recognize distinct chunks (let <i>n</i> be the number of distinct
+    chunks),
+<li> if the number of chunks is not <i>n</i><sup>2</sup>, report error,
+<li> construct the multiplication table by assigning numerical
+    values 1, ..., <i>n</i> to chunks, depending on their position among
+    distinct chunks.
+</ul>
+<p>
+The following examples clarify the algorithm and document its versatility. All
+examples are of the form <i>F</i>+<i>D</i>&#8658; <i>T</i>, meaning that an input file
+containing <i>F</i> together with the string <i>D</i> produce multiplication table <i>T</i>.
+<p>
+<p>
+<strong>Example 1:</strong> Data does not have to be arranged into an array of any kind.
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 0</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">2</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">1</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 2</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">0</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">2</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"></td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 0</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"></td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1"></td></tr></table></td></tr></table></td><td nowrap="nowrap"></td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">+</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">""</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">&#8658;</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1"></td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 1</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">2</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">3</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 2</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">3</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">1</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 3</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1">2 </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table>
+<p>
+<strong>Example 2:</strong> Chunks can be any strings.
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> <span class="roman">red</span></td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"><span class="roman">green</span></td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> <span class="roman">green</span></td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1"><span class="roman">red</span> </td></tr></table></td></tr></table></td><td nowrap="nowrap"></td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">+</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">""</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">&#8658;</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1"></td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 1</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">2</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 2</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1">1 </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table>
+<p>
+<strong>Example 3:</strong> A typical table produced by <font face="Gill Sans,Helvetica,Arial">GAP</font> is easily parsed by deleting
+brackets and commas.
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> [&nbsp;[0, 1],&nbsp;[1, 0]&nbsp;]</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">+</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">"[,]"</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1">&#8658; </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 1</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">2</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 2</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1">1 </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table>
+<p>
+<strong>Example 4:</strong> A typical TeX table with rows separated by lines is also easily
+converted. Note that we have to use \\ to make sure that
+every occurrence of \ is deleted, since \\
+represents the character \ in <font face="Gill Sans,Helvetica,Arial">GAP</font>.
+<br clear="all" /><table border="0" width="100%"><tr><td><table align="center" cellspacing="0"  cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> </td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> <span class="roman">x</span><span class="roman">&amp;</span>&nbsp;<span class="roman">y</span><span class="roman">&amp;</span>&nbsp;<span class="roman">z</span>\<span class="roman">cr</span></td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left"> <span class="roman">y</span><span class="roman">&amp;</span>&nbsp;<span class="roman">z</span><span class="roman">&amp;</span>&nbsp;<span class="roman">x</span>\<span class="roman">cr</span></td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table><tr><td nowrap="nowrap" align="center" colspan="1"> <span class="roman">z</span><span class="roman">&amp;</span>&nbsp;<span class="roman">x</span><span class="roman">&amp;</span>&nbsp;<span class="roman">y</span> </td></tr></table></td></tr></table></td><td nowrap="nowrap"> +</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">"\\<span class="roman">cr</span><span class="roman">&amp;</span>"</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">&#8658;</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1"></td><td nowrap="nowrap"><table border="0" align="left" cellspacing="0" cellpadding="0"><tr><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 1</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">2</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">3</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 2</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">3</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="left">1</td></tr></table></td></tr> <tr><td nowrap="nowrap" align="center" colspan="1"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center"> 3</td></tr></table></td><td nowrap="nowrap" align="center"><table border="0" cellspacing="0" cellpadding="2"><tr><td nowrap="nowrap" align="center">1</td></tr></table></td><td nowrap="nowrap" align="center"><table><tr><td nowrap="nowrap" align="center" colspan="1">2 </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table></td><td nowrap="nowrap"> </td></tr></table></td></tr></table>
+<p>
+<p>
+And here are the needed \LOOPS commands:
+<p>
+<a name = "SSEC005.1"></a>
+<li><code>QuasigroupFromFile( </code><var>F</var><code>, </code><var>D</var><code> ) O</code>
+<a name = "SSEC005.1"></a>
+<li><code>LoopFromFile( </code><var>F</var><code>, </code><var>D</var><code> ) O</code>
+<p>
+<p>
+<h2><a name="SECT006">4.6 Creating quasigroups and loops by sections</a></h2>
+<p><p>
+Let <i>P</i> be a set of <i>n</i> permutations of an <i>n</i>-element set <i>X</i>. If at most one
+permutation of <i>P</i> is the identity permutation, and if all other permutations of <i>P</i> move
+all points of <i>X</i>, the operation
+<p>
+<a name = "SSEC006.1"></a>
+<li><code>CayleyTableByPerms( </code><var>P</var><code> ) O</code>
+<p>
+returns an <i>n</i>&times;<i>n</i> Cayley table <i>C</i> such that <code>C[i][j] = X[j]^P[i]</code>.
+<p>
+In particular, if <i>P</i> is the left section of a quasigroup <i>Q</i>, the above
+operation returns the multiplication table of <i>Q</i>.
+<p>
+If <i>P</i> is a set of permutations corresponding to the left
+translations of a quasigroup (or loop) <i>Q</i>, the operation
+<p>
+<a name = "SSEC006.2"></a>
+<li><code>QuasigroupByLeftSection( </code><var>P</var><code> ) O</code>
+<a name = "SSEC006.2"></a>
+<li><code>LoopByLeftSection( </code><var>P</var><code> ) O</code>
+<p>
+returns the corresponding quasigroup (or loop). The order of permutations in
+<i>P</i> is important in the quasigroup case, but it is disregarded in the loop
+case, since the order of rows in the corresponding multiplication table is
+determined by the presence of the neutral element.
+<p>
+Analogously, we define
+<p>
+<a name = "SSEC006.4"></a>
+<li><code>QuasigroupByRightSection( </code><var>P</var><code> ) O</code>
+<a name = "SSEC006.4"></a>
+<li><code>LoopByRightSection( </code><var>P</var><code> ) O</code>
+<p>
+Here is an example:
+<p>
+<pre>
+gap&gt; S := Subloop( MoufangLoop( 12, 1 ), [ 3 ] );;
+gap&gt; ls := LeftSection( S );
+[ (), (1,3,5), (1,5,3) ]
+gap&gt; CayleyTableByPerms( ls );
+[ [ 1, 3, 5 ], [ 3, 5, 1 ], [ 5, 1, 3 ] ]
+gap&gt; CayleyTable( LoopByLeftSection( ls ) );
+[ [ 1, 2, 3 ], [ 2, 3, 1 ], [ 3, 1, 2 ] ]
+</pre>
+<p>
+Let <i>G</i> be a group, <i>H</i> a subgroup, and <i>T</i> a right
+transversal to <i>H</i> in <i>G</i>. Then the operation &#176;
+defined on the right cosets <i>Q</i> = {<i>Ht</i>;&nbsp;&nbsp;<i>t</i> &#8712; <i>T</i>} by <i>Ht</i>&#176;<i>Ht</i>&#8242; = <i>H</i>(<i>tt</i>&#8242;)
+turns <i>Q</i> into a quasigroup if and only if <i>T</i> is a right transversal to all
+conjugates <i>g</i><sup>&#8722;1</sup><i>Hg</i> of <i>H</i> in <i>G</i>. In fact, every quasigroup <i>Q</i> can be
+obtained in this way (let <i>G</i>=<span class="roman">Mlt</span>(<i>Q</i>), <i>H</i>=<span class="roman">RMlt</span>(<i>Q</i>) and
+<i>T</i>={<i>R</i><sub><i>x</i></sub>;&nbsp;&nbsp;<i>x</i> &#8712; <i>Q</i>}).
+<p>
+The resulting quasigroup (or loop) is returned via
+<p>
+<li><code>QuasigroupByRightSection( </code><var>G</var><code>, </code><var>H</var><code>, </code><var>T</var><code> ) O</code>
+<li><code>LoopByRightSection( </code><var>G</var><code>, </code><var>H</var><code>, </code><var>T</var><code> ) O</code>
+<p>
+We do not support the dual operations for left sections since, by default,
+actions in <font face="Gill Sans,Helvetica,Arial">GAP</font> act on the right.
+<p>
+To demonstrate <code>LoopByRightSection</code>, let us recall a construction due to Nagy <a href="biblio.htm#Na"><cite>Na</cite></a>:
+<p>
+Let <i>X</i> be a simple group with subgroups <i>Y</i><sub>0</sub>, <i>Y</i><sub>1</sub> such that <i>Y</i><sub>0</sub>&#8745;<i>Y</i><sub>1</sub>=1
+and <i>X</i>=<i>Y</i><sub>0</sub><i>Y</i><sub>1</sub>. Let <i>G</i>=<i>X</i>&times;<i>X</i> and <i>H</i>=<i>Y</i><sub>0</sub>&times;<i>Y</i><sub>1</sub>. Then <i>T</i> = {(<i>x</i>,<i>x</i><sup>&#8722;1</sup>);&nbsp;&nbsp;<i>x</i> &#8712; <i>X</i>} is a right transversal of <i>H</i> in <i>G</i>, and the
+corresponding loop is a simple (right) Bol loop.
+<p>
+The next example illustrates this construction with <i>X</i>=<i>A</i><sub>5</sub>, <i>Y</i><sub>0</sub>=<i>A</i><sub>4</sub>, and
+<i>Y</i><sub>1</sub> = &#9001;(1,2,3,4,5)&#9002;.
+<p>
+<pre>
+gap&gt; Shift := function( p ) # shifts permutation "up" by 5
+&gt;       local ls;
+&gt;       ls := ListPerm( p );
+&gt;       ls := Concatenation( [1,2,3,4,5], List( ls, x -&gt; x + 5 ) );
+&gt;       return PermList( ls );
+&gt; end;
+function( p ) ... end
+gap&gt; A := AlternatingGroup( 5 );;
+gap&gt; G := DirectProduct( A, A );;
+gap&gt; H := Subgroup( G, [ (1,2,3), (2,3,4), (6,7,8,9,10) ] );;
+gap&gt; T := List( A, x -&gt; x * Shift(x)^(-1) );;
+gap&gt; L := LoopByRightSection( G, H, T );
+&lt;loop of order 60&gt;
+gap&gt; [ IsRightBolLoop( L ), IsSimple( L ), IsMoufangLoop( L ) ];
+[ true, true, false ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT007">4.7 Creating quasigroups and loops by extensions</a></h2>
+<p><p>
+If <i>Q</i> is a loop and <i>K</i> an abelian subgroup of <i>N</i>(<i>Q</i>) then
+<p>
+<a name = "SSEC007.1"></a>
+<li><code>NuclearExtension( </code><var>Q</var><code>, </code><var>K</var><code> ) O</code>
+<p>
+returns [<i>K</i><sub>0</sub>, <i>F</i>, &#981;, &#952;], where <i>K</i><sub>0</sub> &#8773; <i>K</i>, <i>F</i> &#8773; <i>Q</i>/<i>K</i>,
+&#981;:<i>F</i>&#8594;<span class="roman">Aut</span><i>K</i> is a homomorphism, &#952;:<i>F</i>&times;<i>F</i>&#8594; <i>K</i> is a
+cocycle, and <i>Q</i> is isomorphic to <i>K</i><sub>0</sub>&times;<i>F</i> with multiplication (<i>a</i>,<i>x</i>)(<i>b</i>,<i>y</i>) = (<i>a</i>&#981;<sub><i>x</i></sub>(<i>b</i>)&#952;(<i>x</i>,<i>y</i>),<i>xy</i>).
+<p>
+If <i>n</i>=&#124;<i>F</i>&#124; and <i>m</i>=&#124;<i>K</i>&#124;, the cocycle &#952; is returned as an <i>n</i>&times;<i>n</i>
+array with entries in {1,...,<i>m</i>}, and &#981; is returned as a list of
+length <i>n</i> of permutations of {1,...,<i>m</i>}.
+<p>
+Conversely, given <i>K</i>, <i>F</i>, <i>f</i> = &#981;, and <i>t</i> = &#952; as above,
+<p>
+<a name = "SSEC007.2"></a>
+<li><code>LoopByExtension( </code><var>K</var><code>, </code><var>F</var><code>, </code><var>f</var><code>, </code><var>t</var><code> ) O</code>
+<p>
+returns the extension of <i>K</i> by <i>F</i> using the action <i>f</i> and cocycle <i>t</i>.
+<p>
+<pre>
+gap&gt; F := IntoLoop( Group( (1,2) ) );
+&lt;loop of order 2&gt;
+gap&gt; K := DirectProduct( F, F );;
+gap&gt; phi := [ (), (2,3) ];;
+gap&gt; theta := [ [ 1, 1 ], [ 1, 3 ] ];;
+gap&gt; LoopByExtension( K, F, phi, theta );
+&lt;loop of order 8&gt;
+gap&gt; IsAssociative( last );
+false
+</pre>
+<p>
+<p>
+<h2><a name="SECT008">4.8 Random quasigroups and loops</a></h2>
+<p><p>
+We say that an algorithm selects a latin square of order <i>n</i> <var>at
+random</var> if every latin
+square of order <i>n</i> is returned by the algorithm with the same probability.
+Selecting a latin square at random is a nontrivial problem.
+<p>
+In <a href="biblio.htm#JaMa"><cite>JaMa</cite></a>, Jacobson and Matthews defined a random walk on the space of
+latin squares and so-called <var>improper latin squares</var> that visits every latin
+square with the same probability. The diameter of the space is no more than
+4(<i>n</i>&#8722;1)<sup>3</sup>, that is, no more than 4(<i>n</i>&#8722;1)<sup>3</sup> steps are needed to travel from
+one latin square of order <i>n</i> to another.
+<p>
+The Jacobson-Matthews algorithm can be used to generate random quasigroups as
+follows: (i) select any latin square of order <i>n</i>, for instance the canonical
+multiplication table of the cyclic group of order <i>n</i>, (ii) perform
+sufficiently many steps of the random walk, stopping at a proper or improper
+latin square, (iii) if necessary, perform a few more steps to end up with a
+proper latin square. Upon normalizing the resulting latin square, we obtain a
+random loop of order <i>n</i>.
+<p>
+By the above result, it suffices to use about <i>n</i><sup>3</sup> steps to arrive at any
+latin square of order <i>n</i> from the initial latin square. In fact, a much
+smaller number of steps is probably
+sufficient.
+<p>
+<a name = "SSEC008.2"></a>
+<li><code>RandomLoop( </code><var>n</var><code> ) O</code>
+<p>
+returns a random loop of order <i>n</i>, using the Jacobson-Matthews algorithm with
+<i>n</i><sup>3</sup> steps. Every loop of order <i>n</i> is potentially returned, but the method is
+slow for <i>n</i> &gt; 50, say. You can control the trade-off between randomness and speed with
+<p>
+<li><code>RandomLoop( </code><var>n</var><code>, </code><var>iter</var><code> ) O</code>
+<p>
+returns a random loop of order <i>n</i>, using the Jacobson-Matthews algorithm with
+<var>iter</var> many steps. When <var>iter</var> is small, the returned loop will be close to the
+canonical Cayley table of the cyclic group of order <i>n</i>.
+<p>
+The corresponding commands for random quasigroups
+are
+<p>
+<a name = "SSEC008.3"></a>
+<li><code>RandomQuasigroup( </code><var>n</var><code> ) O</code>
+<li><code>RandomQuasigroup( </code><var>n</var><code>, </code><var>iter</var><code> ) O</code>
+<p>
+Finally,
+<p>
+<a name = "SSEC008.4"></a>
+<li><code>RandomNilpotentLoop( </code><var>lst</var><code> ) O</code>
+<p>
+returns a random nilpotent loop as follows (see Section <a href="CHAP006.htm#SECT010">Nilpotency and central series</a> for more on nilpotency):
+<p>
+<var>lst</var> must be a list of positive integers and/or finite abelian groups. If
+<var>lst</var>  = [<i>a</i><sub>1</sub>] and <i>a</i><sub>1</sub> is an integer, a random abelian group of order <i>a</i><sub>1</sub>
+is returned, else <i>a</i><sub>1</sub> is an abelian group and <code>AsLoop(</code> <i>a</i><sub>1</sub> <code>)</code> is
+returned. If <var>lst</var> =[<i>a</i><sub>1</sub>,...,<i>a</i><sub><i>m</i></sub>], a random central extension of
+<code>RandomNilpotentLoop(</code> [<i>a</i><sub>1</sub>] <code>)</code> by <code>RandomNilpotentLoop(</code> [<i>a</i><sub>2</sub>,...,<i>a</i><sub><i>m</i></sub>]
+<code>)</code> is returned.
+<p>
+To determine the nilpotency class <i>c</i> of the resulting loop, assume that <var>lst</var>
+has length at least 2, contains only integers bigger than 1, and let <i>m</i> be
+the last entry of <var>lst</var>. If <i>m</i> &gt; 2 then <i>c</i>= <code>Length(</code><var>lst</var><code>)</code>, else <i>c</i>=
+<code>Length(</code><var>lst</var><code>)</code>&#8722;1.
+<p>
+<p>
+<h2><a name="SECT009">4.9 Conversions</a></h2>
+<p><p>
+As we have already mentioned, <font face="Gill Sans,Helvetica,Arial">LOOPS</font> contains methods that convert between
+magmas, quasigroups, loops and groups, provided such conversions are possible.
+<p>
+If <i>M</i> is a declared magma that happens to be a quasigroup, the corresponding
+quasigroup is returned via
+<p>
+<a name = "SSEC009.1"></a>
+<li><code>IntoQuasigroup( </code><var>M</var><code> ) O</code>
+<p>
+Note that if <var>M</var> is already declared as a quasigroup, <code>IntoQuasigroup( </code><var>M</var><code> )</code>
+merely returns <var>M</var>.
+<p>
+Given a quasigroup <i>M</i> and two of its elements <i>f</i>, <i>g</i>, the principal loop
+isotope <i>x</i>&#176;<i>y</i> = <i>R</i><sub><i>g</i></sub><sup>&#8722;1</sup>(<i>x</i>)&#183;<i>L</i><sub><i>f</i></sub><sup>&#8722;1</sup>(<i>y</i>) turns (<i>M</i>,&#176;) into a loop
+with neutral element <i>f</i>&#183;<i>g</i> (see Section <a href="CHAP002.htm#SECT003">Homomorphisms and homotopisms</a>).
+Since loops in <font face="Gill Sans,Helvetica,Arial">LOOPS</font> have to have neutral element labeled as 1, the
+function
+<p>
+<a name = "SSEC009.2"></a>
+<li><code>PrincipalLoopIsotope( </code><var>M</var><code>, </code><var>f</var><code>, </code><var>g</var><code> )</code>
+<p>
+returns an isomorphic copy of the principal isotope (<i>M</i>,&#176;) via the
+transposition (1,<i>f</i>&#183;<i>g</i>).
+<p>
+If <i>M</i> is a declared magma that happens to be a quasigroup (not necessarily a
+loop!), the operation
+<p>
+<a name = "SSEC009.3"></a>
+<li><code>IntoLoop( </code><var>M</var><code> ) O</code>
+<p>
+returns a loop <i>L</i> as follows:
+<ul>
+<li> if <i>M</i> is already declared as a loop, <i>L</i>=<i>M</i>, else
+<li>
+    if <i>M</i> possesses a neutral element <i>e</i> and <i>f</i> is the first element of <i>M</i>,
+    then <i>L</i> is an isomorphic copy of <i>M</i> via the transposition (<i>e</i>,<i>f</i>), else
+<li>
+    if <i>M</i> does not posses a neutral element, <i>L</i> is returned as
+    <code>PrincipalLoopIsotope( </code><var>M</var><code>, </code><var>M.1</var><code>, </code><var>M.1</var><code> )</code>
+</ul>
+<p>
+One could obtain a loop from <i>M</i> in yet another way, by normalizing the Cayley
+table of <i>M</i>. These three approaches can result in nonisomorphic loops in
+general.
+<p>
+Finally, when <i>M</i> is a declared magma that happens to be a group, the
+corresponding group is returned by
+<p>
+<a name = "SSEC009.4"></a>
+<li><code>IntoGroup( </code><var>M</var><code> ) O</code>
+<p>
+as follows:
+<ul>
+<li> if <i>M</i> is already declared as a group, <i>M</i> is returned, else
+<li> <code>RightMultiplciationGroup( IntoLoop( </code><var>M</var><code> ) )</code> is returned, i.e.,
+    a permutation group isomorphic to <i>M</i>.
+</ul>
+<p>
+All three conversion methods return <code>fail</code> if the requested conversion is not
+possible.
+<p>
+Up to version 2.0.0, we have supported <code>AsQuasigroup</code>, <code>AsLoop</code> and <code>AsGroup</code>
+in place of <code>IntoQuasigroup</code>, <code>IntoLoop</code> and <code>IntoGroup</code>, respectively. We have
+changed the terminology starting with version 2.1.0 in order to comply with
+<font face="Gill Sans,Helvetica,Arial">GAP</font> naming rules for <code>AsSomething</code>, as explained in Chapter <a href="CHAP003.htm">How the package works</a>. Finally, the method <code>AsGroup</code> is built into the core of <font face="Gill Sans,Helvetica,Arial">GAP</font> and it
+returns an fp group if its argument is an associative loop.
+<p>
+<p>
+<h2><a name="SECT010">4.10 Products of loops</a></h2>
+<p><p>
+noindentLet <i>L</i>1, ..., <i>Ln</i> be a list consisting of loops and groups,
+where <i>n</i> &#8805; 1. Then
+<p>
+<a name = "SSEC010.1"></a>
+<li><code>DirectProduct( </code><var>L1</var><code>, ..., </code><var>Ln</var><code>) O</code>
+<p>
+returns the direct product of <i>L</i>1, ..., <i>Ln</i>.
+<p>
+If there are only groups among <i>L</i>1, ..., <i>Ln</i>, a group is returned.
+Otherwise a loop is returned. If <i>n</i>=1, <i>L</i>1 is returned.
+<p>
+<p>
+<h2><a name="SECT011">4.11 Opposite quasigroups and loops</a></h2>
+<p><p>
+When <i>Q</i> is a quasigroup with multiplication &#183;, the <var>opposite
+quasigroup</var> of <i>Q</i> is a
+quasigroup with the same underlying set as <i>Q</i> and with multiplication *
+defined by <i>x</i>*<i>y</i>=<i>y</i>&#183;<i>x</i>.
+<p>
+Since the quasigroup-theoretical concepts are often chiral (cf. left Bol loops
+versus right Bol loops), it is useful to have access to the opposite quasigroup
+of <i>Q</i>:
+<p>
+<a name = "SSEC011.1"></a>
+<li><code>Opposite( </code><var>Q</var><code> ) O</code>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>loops manual<br>July 2012
+</address></body></html>

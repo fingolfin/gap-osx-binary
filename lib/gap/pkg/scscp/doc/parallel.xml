@@ -1,0 +1,193 @@
+<Chapter Label="Parallel">
+<Heading>Parallel computing with &SCSCP;</Heading>    
+
+<Section Label="Workflows">
+<Heading>Managing multiple requests</Heading>
+
+Using procedure calls explained in the previous section, the user can
+create several requests to multiple services to execute them in parallel, 
+or to wait until the fastest result will be available.
+
+<#Include Label="SynchronizeProcesses">
+<#Include Label="FirstProcess">
+
+<ManSection>
+<Var Name="SCSCPservers" />
+<Description>
+<Ref Var="SCSCPservers" /> is
+a list of hosts and ports to search for &SCSCP; services 
+(which may be not only represented by &GAP; services, but also
+by another &SCSCP;-compliant systems). 
+<P/>
+It is used by parallel skeletons <Ref Func="ParQuickWithSCSCP" />
+and <Ref Func="ParListWithSCSCP" />.
+<P/>
+The initial value of this variable is specified in the file 
+<File>scscp/configpar.g</File> and may be reassigned later.
+</Description>
+</ManSection>
+
+<#Include Label="ParQuickWithSCSCP">
+<#Include Label="FirstTrueProcess">
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+<Section Label="MasterWorker">
+<Heading>MasterWorker skeleton</Heading>
+
+In this section we will present more general framework to run parallel 
+computations, which has a number of useful features:
+<List>
+<Item>
+it is implemented purely in &GAP;;
+</Item>
+<Item>
+the client (i.e. master, which orchestrates the computation) 
+will work in UNIX/Linux, Mac OS X and MS Windows;
+</Item>
+<Item>
+it may orchestrate both &GAP; and non-&GAP; &SCSCP; servers;
+</Item>
+<Item>
+if one of servers (i.e. workers) will be lost, it will retry the
+computation on another available server;
+</Item>
+<Item>
+it allows to add dynamically new workers during the computation
+on hostnames and ports from a range perviously declared in
+<Ref Var="SCSCPservers" />.
+</Item>
+</List>
+
+To configure this functionality, 
+the file <File>scscp/configpar.g</File> assigns the global variable 
+<C>SCSCPservers</C> which specifies a list of hosts and ports to 
+search for &SCSCP; services (which may be not only represented by 
+&GAP; services, but also by another &SCSCP;-compliant systems). 
+See comments in this file for further instructions.
+
+<#Include Label="ParListWithSCSCP">
+<#Include Label="SCSCPreset">
+<#Include Label="SCSCPLogTracesToGlobal">
+
+<Ref Func="ParListWithSCSCP" /> can be easily modified to have parallel versions 
+of other list operations like 
+<Ref BookName="ref" Func="ForAll" />,
+<Ref BookName="ref" Func="ForAny" />,
+<Ref BookName="ref" Func="First" />,
+<Ref BookName="ref" Func="Number" />,
+<Ref BookName="ref" Func="Filtered" />,
+and also to have the skeleton in which the queue may be modified during
+the computation (for example, to compute orbits). 
+We plan to provide such tools in one of the next versions of the package.
+
+</Section>
+
+<Section Label="Karatsuba">
+<Heading>Example: parallelising Karatsuba multiplication for polynomials</Heading>
+
+The file <File>scscp/example/karatsuba.g</File> contains an implementation of
+the Karatsuba multiplication algorithm for polynomials. This algorithm can
+be easily parallelized since each recursive step creates three recursive 
+calls of the same function for other polynomials. <E>We will not parallelize
+each</E> recursive call, since this will create enormous data flow. Instead
+of this we parallelize only the top-level function.
+
+For our experiments with parallelising Karatsuba multiplication for
+polynomials with integer coefficients we used the multi-core workstation, 
+on which we started one &SCSCP; client and two &SCSCP; servers. To use
+it, modify the server configuration file adding to it the command to
+read the file <File>scscp/example/karatsuba.g</File>, then define there
+the following function
+
+<Log>
+<![CDATA[
+KaratsubaPolynomialMultiplicationExtRepByString:=function(s1,s2)
+    return String( KaratsubaPolynomialMultiplicationExtRep( 
+                   EvalString(s1), EvalString(s2) ) );
+end;;
+]]>
+</Log>
+
+and finally add the following lines to made it available as an &SCSCP; 
+procedure under the name <C>WS_Karatsuba</C>:
+
+<Log>
+<![CDATA[
+InstallSCSCPprocedure( "WS_Karatsuba", 
+                       KaratsubaPolynomialMultiplicationExtRepByString);
+]]>
+</Log>
+
+(we do not include it into the default <File>scscp/example/myserver.g</File>
+since the code contains a call to <Ref BookName="ref" Func="EvalString"/>).
+<P/>
+
+This function provides a "bridge" between the client's function 
+<C>KaratsubaPolynomialMultiplicationWS</C> and the server's function 
+<C>KaratsubaPolynomialMultiplicationExtRep</C>, which performs the 
+actual work on the server. <C>WS_Karatsuba</C> converts its string arguments
+into internal representation of univariate polynomials (basically, lists of 
+integers) and then converts the result back into string (since such data
+exchange format was chosen).
+
+<Alt Only="LaTeX">
+\newpage
+</Alt>         
+        
+We are going to parallelize the following part of the client's code:
+
+<Log>
+<![CDATA[
+...
+u := KaratsubaPolynomialMultiplicationExtRep(f1,g1);
+v := KaratsubaPolynomialMultiplicationExtRep(f0,g0);
+w := KaratsubaPolynomialMultiplicationExtRep(
+       PlusLaurentPolynomialsExtRep(f1,f0),
+       PlusLaurentPolynomialsExtRep(g1,g0) );
+...
+]]>
+</Log>
+
+and this can be done straightforwardly - we replace two first calls by
+calls of the appropriate &SCSCP; services, then perform the 3rd call locally
+and then collect the results from the two remote calls:
+          
+<Log>
+<![CDATA[
+...
+u := NewProcess( "WS_Karatsuba",[ String(f1), String(g1) ],"localhost", 26133);   
+v := NewProcess( "WS_Karatsuba",[ String(f0), String(g0) ],"localhost", 26134);   
+w := KaratsubaPolynomialMultiplicationExtRep(
+       PlusLaurentPolynomialsExtRep(f1,f0),
+       PlusLaurentPolynomialsExtRep(g1,g0) );
+wsresult:=SynchronizeProcesses2( u,v );
+u := EvalString( wsresult[1].object );
+v := EvalString( wsresult[2].object );
+...
+]]>
+</Log>
+
+We obtain almost double speedup on three cores on randomly generated polynomials
+of degree 32000:
+
+<Example>
+<![CDATA[
+gap> ReadPackage("scscp/example/karatsuba.g");
+gap> fam:=FamilyObj(1);;
+gap> f:=LaurentPolynomialByCoefficients( fam, 
+>         List([1..32000],i->Random(Integers)), 0, 1 );;
+gap> g:=LaurentPolynomialByCoefficients( fam, 
+>         List([1..32000],i->Random(Integers)), 0, 1 );;
+gap> t2:=KaratsubaPolynomialMultiplication(f,g);;time;
+5892
+gap> t3:=KaratsubaPolynomialMultiplicationWS(f,g);;time;
+2974
+]]>
+</Example>
+
+</Section>
+
+</Chapter>

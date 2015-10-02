@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (HAPprime) - Chapter 2: Examples</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+</head>
+<body>
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap1.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap3.html">Next Chapter</a>&nbsp;  </div>
+
+<p><a id="X7A489A5D79DA9E5C" name="X7A489A5D79DA9E5C"></a></p>
+<div class="ChapSects"><a href="chap2.html#X7A489A5D79DA9E5C">2 <span class="Heading">Examples</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X81FB934A87FCAA22">2.1 <span class="Heading">Computing the mod p group cohomology</span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X87AD96A584D60140">2.2 <span class="Heading">Comparing the memory usage and speed of <strong class="pkg">HAPprime</strong> and <strong class="pkg">HAP</strong>'s 
+      <code class="keyw">ResolutionPrimePowerGroup</code> functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X85FFD31A7B362DFF">2.2-1 <span class="Heading"><strong class="pkg">HAPprime</strong> takes less memory to store resolutions</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X848CF4C483C3F6E4">2.2-2 <span class="Heading"><strong class="pkg">HAPprime</strong> takes less memory to compute resolutions</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7CA386948072CFF4">2.2-3 <span class="Heading">Automatic selection of the best method</span></a>
+</span>
+</div></div>
+</div>
+
+<h3>2 <span class="Heading">Examples</span></h3>
+
+<p><a id="X81FB934A87FCAA22" name="X81FB934A87FCAA22"></a></p>
+
+<h4>2.1 <span class="Heading">Computing the mod p group cohomology</span></h4>
+
+<p>Let G be a group and F be a field, and let FG be the group ring of G over F. A free FG-resolution of the ground ring is an exact sequence of module homomorphisms</p>
+
+<p class="pcenter">
+        ... ---&gt; M_(n+1) ---&gt; M_n ---&gt; M_(n-1) ---&gt; ... ---&gt; M_1 ---&gt; FG ---&gt;&gt; F
+      </p>
+
+<p>Where each M_n is a free FG-module and the image of d_n+1: M_n+1 -&gt; M_n equals the kernel of d_n: M_n -&gt; M_n-1 for all n &gt; 0. The maps d_n are called boundary homomorphisms. In <strong class="pkg">HAPprime</strong> we consider the case where G is a p-group and F is the prime field GF(p), and this is assumed from now on.</p>
+
+<p>If we now define the Abelian group D_n to be Hom(M_n, F), the set of all homomorphisms M_n -&gt; F, we can obtain the dual of this sequence, which will be a cochain complex of Abelian group homomorphisms</p>
+
+<p class="pcenter">
+        ... &lt;--- D_(n+1) &lt;--- D_n ---&gt; D_(n-1) &lt;--- ... &lt;--- D_1 &lt;--- F &lt;--- F
+      </p>
+
+<p>Each group D_n will be isomorphic to F^|M_n| where |M_n| is the rank of the module M_n. Unlike the resolution, this sequence will generally not be exact, but one can define the mod-p cohomology group of G at degree n to be</p>
+
+<p class="pcenter">
+        H^n(G, F) = ker(D_n ---&gt; D_(n+1))  /  im(D_(n-1) ---&gt; D_n)
+      </p>
+
+<p>for all n &gt; 0. As with the D_n, the mod-p cohomology groups will also be isomorphic to vector spaces over F. In the case where the resolution R is minimal (where each module M_n has the minimal number of generators), the dimensions of the (co)homology groups H^n(G, F) are identical to the dimensions of the resolution modules M_n. The group cohomology (and the similar group homology) is an invariant of G, and does not depend on a particular free FG-resolution.</p>
+
+<p>In the general case, there are thus two stages to computing the group cohomology of G up to the nth cohomology group:</p>
+
+<ol>
+<li><p>Compute R, a free FG-resolution for FG, with at least n+1 terms.</p>
+
+</li>
+<li><p>Construct the cochain complex C from R and compute the n homology groups of C</p>
+
+</li>
+</ol>
+<p>For example, to calculate the 9th mod-p cohomology group of the 134th order 64 in the <strong class="pkg">GAP</strong> small groups library (which is the Sylow 2-subgroup of the Mathieu group M_12), we can use the <strong class="pkg">HAPprime</strong> function <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) to compute 10 terms of a free FG-resolution for G and then use <strong class="pkg">HAP</strong> functions to find the rank b_9 of the cohomology group, which will be isomorphic to F^b_9. Alternatively, since <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) always returns a minimal resolution, the cohomology group dimensions can be read directly from the resolution.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := SmallGroup(64, 134);;
+gap&gt; # First construct a FG-resolution for the group G
+gap&gt; R := ResolutionPrimePowerGroupRadical(G, 10);
+Resolution of length 10 in characteristic 2 for &lt;pc group of size 64 with
+6 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; # Convert this into a cochain complex (over the prime field with p=2)
+gap&gt; C := HomToIntegersModP(R, 2);
+Cochain complex of length 10 in characteristic 2 .
+
+gap&gt; # And get the rank of the 9th cohomology group
+gap&gt; b9 := Cohomology(C, 9);
+55
+gap&gt; 
+gap&gt; # Since R is a free resolution, the ranks of the cohomology groups
+gap&gt; # are the same as the module ranks in R
+gap&gt; ResolutionModuleRanks(R);
+[ 3, 6, 10, 15, 21, 28, 36, 45, 55, 66 ]</pre></td></tr></table>
+
+<p><a id="X87AD96A584D60140" name="X87AD96A584D60140"></a></p>
+
+<h4>2.2 <span class="Heading">Comparing the memory usage and speed of <strong class="pkg">HAPprime</strong> and <strong class="pkg">HAP</strong>'s 
+      <code class="keyw">ResolutionPrimePowerGroup</code> functions</span></h4>
+
+<p>For small p-groups, the group ring FG can be considered as a vector space of rank |G| with the elements of G as its basis elements. Each module M_n in a FG-resolution is also a vector space (of dimension |M_n||G|) and the boundary maps d_n can be represented as vector space homomorphisms. As a result, standard linear algebra techniques can be used to compute a minimal resolution by constructing a sequence of module homomorphisms where the kernel of one map is the image of the next, and where the modules have minimal generating sets. See Chapter <a href="/home/pas/GAP/gap/pkg/HAPprime/doc/datatypes/chap2.html#X7C0B125E7D5415B4"><b>HAPprime Datatypes: Resolutions</b></a> in the datatypes manual for further details.</p>
+
+<p>As the groups get larger, this approach becomes less feasible due to the amount of time and memory needed to store and compute the null space of large matrices. The <strong class="pkg">HAP</strong> function <code class="func">ResolutionPrimePowerGroup</code> (<a href="/home/pas/GAP/gap/pkg/Hap1.9/doc/chap1.html#X8735FC5E7BB5CE3A"><b>HAP: ResolutionPrimePowerGroup</b></a>) and the <strong class="pkg">HAPprime</strong> functions <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) and <code class="func">ResolutionPrimePowerGroupGF</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) all use this linear algebra approach, but the <strong class="pkg">HAPprime</strong> functions are optimised to save memory, allowing the computation of resolutions which are longer, or are of larger groups, than are possible using <strong class="pkg">HAP</strong> alone.</p>
+
+<p><a id="X85FFD31A7B362DFF" name="X85FFD31A7B362DFF"></a></p>
+
+<h5>2.2-1 <span class="Heading"><strong class="pkg">HAPprime</strong> takes less memory to store resolutions</span></h5>
+
+<p>Consider computing a resolution of a group of an arbitrary group of order 128, <code class="code">G = SmallGroup(128, 844)</code> using <strong class="pkg">HAP</strong>. Computation is performed on a dual-core Intel Core2Duo running at 2.66MHz, and the memory available to <strong class="pkg">GAP</strong> is the standard initial allocation of 256Mb.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := SmallGroup(128, 844);;
+gap&gt; R := ResolutionPrimePowerGroup(G, 9);
+Resolution of length 9 in characteristic 2 for &lt;pc group of size 128 with
+7 generators&gt; .
+
+gap&gt; time;
+27685
+gap&gt; # Can we construct a resolution of length ten?
+gap&gt; R := ResolutionPrimePowerGroup(G, 10);
+exceeded the permitted memory (`-o' command line option) at
+res := SemiEchelonMatDestructive( List( mat, ShallowCopy ) );
+ called from
+SemiEchelonMat( NullspaceMat( BndMat ) ) called from
+ZGbasisOfKernel( i - 1 ) called from
+&lt;function&gt;( &lt;arguments&gt; ) called from read-eval-loop
+Entering break read-eval-print loop ...
+you can 'quit;' to quit to outer loop, or
+you can 'return;' to continue
+</pre></td></tr></table>
+
+<p>The <strong class="pkg">HAPprime</strong> function <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) uses an almost identical algorithm, but stores its boundary maps more efficiently. As a result, with the same memory allowance:</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := SmallGroup(128, 844);;
+gap&gt; R := ResolutionPrimePowerGroupRadical(G, 9);
+Resolution of length 9 in characteristic 2 for &lt;pc group of size 128 with
+7 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; time;
+25321
+gap&gt; # Can we construct a resolution of length ten?
+gap&gt; R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap&gt; # Yes! How about eleven?
+gap&gt; R := ExtendResolutionPrimePowerGroupRadical(R);
+Resolution of length 11 in characteristic 2 for &lt;pc group of size 128 with
+7 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; ResolutionModuleRanks(R);
+[ 3, 6, 11, 19, 30, 44, 62, 85, 113, 146, 185 ]
+gap&gt; 
+gap&gt; # But it will run out of memory if we try to go to twelve terms
+gap&gt; R := ExtendResolutionPrimePowerGroupRadical(R);
+exceeded the permitted memory (`-o' command line option) at
+...
+</pre></td></tr></table>
+
+<p>The <strong class="pkg">HAPprime</strong> version can compute two further terms of the resolution, which given the sizes of the additional modules represents a considerable improvement. Just representing the homomorphism d_10: (FG)^146 -&gt; (FG)^113 as vectors requires nearly as much memory again as representing the first nine homomorphisms. To compute and store the same resolution of length 11 using <code class="func">ResolutionPrimePowerGroup</code> (<a href="/home/pas/GAP/gap/pkg/Hap1.9/doc/chap1.html#X8735FC5E7BB5CE3A"><b>HAP: ResolutionPrimePowerGroup</b></a>) would need a little over three times the memory used here by <strong class="pkg">HAPprime</strong>. The time taken by both versions is very similar.</p>
+
+<p>In the example above, note also the use of the <strong class="pkg">HAPprime</strong> function <code class="func">ExtendResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X7B435C307F28D44F"><b>3.1-2</b></a>), which makes it much easier to add terms to an existing resolution. In standard <strong class="pkg">HAP</strong>, if one decides that a resolution is too short and that more terms are required, then the entire resolution must be computed again from scratch.</p>
+
+<p><a id="X848CF4C483C3F6E4" name="X848CF4C483C3F6E4"></a></p>
+
+<h5>2.2-2 <span class="Heading"><strong class="pkg">HAPprime</strong> takes less memory to compute resolutions</span></h5>
+
+<p>The function <code class="func">ResolutionPrimePowerGroupGF</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) uses a new algorithm to compute the kernel of FG-module homomorphisms when FG-modules are represented using a set of G-generating vectors (see <a href="/home/pas/GAP/gap/pkg/HAPprime/doc/datatypes/chap4.html#X82F28552819A6542"><b>HAPprime Datatypes: FG-module homomorphisms</b></a> in the datatypes reference manual). This provides a further memory saving over <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>), although at the cost of a much slower computation time:</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := SmallGroup(128, 844);;
+gap&gt; R := ResolutionPrimePowerGroupGF(G, 9);
+Resolution of length 9 in characteristic 2 for &lt;pc group of size 128 with
+7 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; time;
+422742
+gap&gt; R := ExtendResolutionPrimePowerGroupGF(R);;
+gap&gt; R := ExtendResolutionPrimePowerGroupGF(R);;
+gap&gt; R := ExtendResolutionPrimePowerGroupGF(R);;
+gap&gt; R := ExtendResolutionPrimePowerGroupGF(R);;
+gap&gt; R := ExtendResolutionPrimePowerGroupGF(R);;
+gap&gt; R := ExtendResolutionPrimePowerGroupGF(R);;
+Resolution of length 15 in characteristic 2 for &lt;pc group of size 128 with
+7 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; ResolutionModuleRanks(R);
+[ 3, 6, 11, 19, 30, 44, 62, 85, 113, 146, 185, 231, 284, 344, 412 ]
+gap&gt; # But it will run out of (the inital 256Mb) of memory at sixteen terms
+</pre></td></tr></table>
+
+<p>Using <code class="func">ResolutionPrimePowerGroupGF</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) we can get a further four terms of the resolution. For this resolution, this represents a memory saving of a factor of five over <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) and fifteen over <code class="func">ResolutionPrimePowerGroup</code> (<a href="/home/pas/GAP/gap/pkg/Hap1.9/doc/chap1.html#X8735FC5E7BB5CE3A"><b>HAP: ResolutionPrimePowerGroup</b></a>), although it does take fifteen times as long as either of those just to compute the first nine terms, and scales less well with size.</p>
+
+<p><a id="X7CA386948072CFF4" name="X7CA386948072CFF4"></a></p>
+
+<h5>2.2-3 <span class="Heading">Automatic selection of the best method</span></h5>
+
+<p>The two functions <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) and <code class="func">ResolutionPrimePowerGroupGF</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) offer a trade-off between time and memory. The function <code class="func">ResolutionPrimePowerGroupAutoMem</code> (<a href="chap3.html#X86934BE9858F7199"><b>3.1-1</b></a>) automates the decision of which version to use, switching from the <code class="code">Radical</code> to the <code class="code">GF</code> version when it estimates that it is about to run out of available memory for the faster version. In this example, we have also increase the <code class="func">InfoHAPprime</code> (<a href="chap1.html#X80E9D70E843A8C2C"><b>1.6-1</b></a>) info level to display progress information. At level two, the rank of each module in the resolution is displayed as it is calculated, giving an indication of progress. With this setting, the user is also notified when the <code class="code">AutoMem</code> function switches, and the <code class="code">GF</code> function displays a rolling estimate of its completion time (which is not shown since that output is overwritten when completed)</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := SmallGroup(128, 844);;
+gap&gt; SetInfoLevel(InfoHAPprime, 2);
+gap&gt; R := ResolutionPrimePowerGroupAutoMem(G, 15);
+#I  Dimension 2: rank 6
+#I  Dimension 3: rank 11
+#I  Dimension 4: rank 19
+#I  Dimension 5: rank 30
+#I  Dimension 6: rank 44
+#I  Dimension 7: rank 62
+#I  Dimension 8: rank 85
+#I  Dimension 9: rank 113
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 10: rank 146
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 11: rank 185
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 12: rank 231
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 13: rank 284
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 14: rank 344
+#I  Finding kernel of homomorphism by splitting:
+#I   - Finding kernel of U
+#I   - Finding kernel of V
+#I   - Finding intersection of U and V
+#I   - Finding intersection preimages
+#I  Dimension 15: rank 412
+Resolution of length 15 in characteristic 2 for &lt;pc group of size 128 with
+7 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; StringTime(time);
+" 5:45:53.613"
+</pre></td></tr></table>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap1.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap3.html">Next Chapter</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

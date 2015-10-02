@@ -1,0 +1,212 @@
+<!-- 
+  HAPPRIME - gradedalgebra.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  Paul Smith
+  National University of Ireland Galway
+
+  $Id: functions.xml.in 200 2008-02-05 14:29:47Z pas $
+-->
+
+<!-- ********************************************************** -->
+<Chapter  Label="GradedAlgebraPresentationDatatype">
+  <Heading>Presentations of graded algebras</Heading>
+
+  A graded algebra <M>A</M> is a an algebra that has additional structure,
+  called a grading (see Section <Ref Sect="GradedAlgebra"/>). Graded algebras 
+  of the type found in &HAPprime; have a presentation as a quotient of a 
+  polynomial ring
+  <Alt Only="LaTeX">
+    <Display>
+      H^*(G, \mathbb{F}) = \frac{\mathbb{F}[x_1, x_2, \ldots, x_n]}{\langle I_1, I_2, \ldots, I_m \rangle}
+    </Display>
+  </Alt>
+  <Alt Not="LaTeX">
+    <Display><![CDATA[
+      H^*(G, F) = F[x_1, x_2, ..., x_n] / <I_1, I_2, ..., I_m>
+    ]]></Display>
+  </Alt>
+  where the polynomial ring indeterminates <M>x_i</M> each have an associated
+  degree <M>d_i</M> and the <M>I_j</M> are relations which together generate an 
+  ideal in the ring.
+  
+  <Section>
+    <Heading>The <K>GradedAlgebraPresentation</K> datatype</Heading>
+  
+    For algebras that have a presentation as a quotient of a 
+    polynomial ring, the <K>GradedAlgebraPresentation</K> datatype stores a 
+    quotient <M>R/I</M> where:
+    <List>
+      <Item><M>R</M> is a polynomial ring</Item>
+      <Item><M>I</M> is a set of relations in <M>R</M> that generate an ideal</Item>
+    </List>
+    and it also stores a grading in the form of 
+    <List>
+      <Item>the degree of each indeterminate of <M>R</M></Item>
+    </List>
+  </Section>
+    
+  <Section>
+    <Heading>Construction function</Heading>
+  </Section>
+
+  <Section>
+    <Heading>Data access functions</Heading>
+  
+    <Subsection Label="GradedAlgebraExample1">
+      <Heading>Example: Constructing and accessing data of a 
+        <K>GradedAlgebraPresentation</K></Heading>
+      
+      We demonstrate creating a <K>GradedAlgebraPresentation</K> object and 
+      reading back its data by creating the graded algebra <M>A</M> with 
+      presentation <M>\mathbb{F}_2[x_1, x_2, x_3] / (x_1x_2, x_1^3+x_2^3)</M> 
+      where <M>x_1</M> and <M>x_2</M> have degree 1 and <M>x_3</M> has degree 4
+<!--
+gap> R := PolynomialRing(GF(2), 3);;
+gap> A := GradedAlgebraPresentation(R, [R.1*R.2, R.1^3+R.2^3], [1,1,4]);
+gap> BaseRing(A);
+gap> CoefficientsRing(A);
+gap> IndeterminatesOfGradedAlgebraPresentation(A);
+gap> PresentationIdeal(A);
+gap> GeneratorsOfPresentationIdeal(A);
+gap> IndeterminateDegrees(A);
+-->
+<Example><![CDATA[
+gap> R := PolynomialRing(GF(2), 3);;
+gap> A := GradedAlgebraPresentation(R, [R.1*R.2, R.1^3+R.2^3], [1,1,4]);
+Graded algebra GF(2)[ x_1, x_2, x_3 ] / [ x_1*x_2, x_1^3+x_2^3
+ ] with indeterminate degrees [ 1, 1, 4 ]
+gap> BaseRing(A);
+GF(2)[x_1,x_2,x_3]
+gap> CoefficientsRing(A);
+GF(2)
+gap> IndeterminatesOfGradedAlgebraPresentation(A);
+[ x_1, x_2, x_3 ]
+gap> PresentationIdeal(A);
+<two-sided ideal in GF(2)[x_1,x_2,x_3], (2 generators)>
+gap> GeneratorsOfPresentationIdeal(A);
+[ x_1*x_2, x_1^3+x_2^3 ]
+gap> IndeterminateDegrees(A);
+[ 1, 1, 4 ]
+]]></Example>
+    </Subsection>
+  </Section>
+  
+  <Section>
+    <Heading>Other functions</Heading>
+  
+  </Section>
+
+  <Section Label="GradedAlgebraExample2">
+    <Heading>Example: Computing the Lyndon-Hoschild-Serre spectral sequence
+      and mod-&p; cohomology ring for a small &p;-group</Heading>
+    
+    The Lyndon-Hoschild-Serre spectral sequence is relates the cohomologies of
+    a normal subgroup <M>N</M> and a quotient group <M>G/N</M> to the cohomology
+    of the total group <M>G</M>: the limiting sheet of the sequence is an
+    associated graded ring of the cohomology of <M>G</M>. 
+    <P/>
+    In this example we calculate the Lyndon-Hoschild-Serre spectral sequence 
+    for a group of order 16 using the centre of <M>G</M> as our normal
+    subgroup. By asking for an infinite number of terms, this function 
+    calculates enough terms to be sure that the sequence has converged. 
+    We compare the dimensions in the first (<M>E_2</M>) and last 
+    (<M>E_\infty</M>) sheet, we demonstrate that 
+    the limiting sheet (the last in the list) is a graded algebra by 
+    multiplying some elements, and we calculate the Poincaré series of the last 
+    sheet.
+<!--
+gap> G := SmallGroup(16, 4);;
+gap> SS := LHSSpectralSequence(G, Centre(G), infinity);
+gap> # i.e. we identify convergence after 3 terms
+gap> #
+gap> # Compare the dimensions of the first and last sheet
+gap> SubspaceDimensionDegree(SS[2], [1..10]);
+gap> SubspaceDimensionDegree(SS[3], [1..10]);
+gap> #
+gap> # Take the two basis elements from degree 1 and check that the 
+gap> # product is in degree two
+gap> B := SubspaceBasisRepsByDegree(SS[3], 1);
+gap> DegreeOfRepresentative(SS[3], B[1]*B[2]);
+gap> #
+gap> # And find the Poincare series
+gap> HilbertPoincareSeries(SS[3]);
+-->
+<Example><![CDATA[
+gap> G := SmallGroup(16, 4);;
+gap> SS := LHSSpectralSequence(G, Centre(G), infinity);
+[ , Graded algebra GF(2)[ x_1, x_2, x_3, x_4 ] /
+    [  ] with indeterminate degrees [ 1, 1, 1, 1 ],
+  Graded algebra GF(2)[ x_1, x_2, x_3, x_4 ] / [ x_2^2, x_1^2+x_1*x_2
+     ] with indeterminate degrees [ 1, 1, 2, 2 ],
+  Graded algebra GF(2)[ x_1, x_2, x_3, x_4 ] / [ x_2^2, x_1^2+x_1*x_2
+     ] with indeterminate degrees [ 1, 1, 2, 2 ] ]
+gap> # i.e. we identify convergence after 3 terms
+gap> #
+gap> # Compare the dimensions of the first and last sheet
+gap> SubspaceDimensionDegree(SS[2], [1..10]);
+[ 4, 10, 20, 35, 56, 84, 120, 165, 220, 286 ]
+gap> SubspaceDimensionDegree(SS[3], [1..10]);
+[ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+gap> #
+gap> # Take the two basis elements from degree 1 and check that the
+gap> # product is in degree two
+gap> B := SubspaceBasisRepsByDegree(SS[3], 1);
+[ x_1, x_2 ]
+gap> DegreeOfRepresentative(SS[3], B[1]*B[2]);
+2
+gap> #
+gap> # And find the Poincare series
+gap> HilbertPoincareSeries(SS[3]);
+(1)/(x_1^2-2*x_1+1)
+]]></Example>
+  
+  The largest degree in the presentation for the limiting sheet in the 
+  Lyndon-Hoschild-Serre spectral sequence for &G; is the same
+  as the largest degree in the presentation for the mod-&p; cohomology ring of
+  &G;. We continue this example by calculating this maximum degree, <M>n</M>, 
+  for our group &G; and then computing the mod-&p; cohomology ring. We confirm
+  that the cohomology ring is an associated graded ring of the limiting sheet
+  of the spectral sequence, and check whether in this case it is in fact also
+  isomorphic.
+<!--
+gap> G := SmallGroup(16, 4);;
+gap> Einf := LHSSpectralSequenceLastSheet(G, Centre(G));
+gap> #
+gap> # Find the maximum degree
+gap> n := MaximumDegreeForPresentation(Einf);
+gap> #
+gap> # And calculate the cohomology ring
+gap> H := Mod2CohomologyRingPresentation(G, n);
+gap> #
+gap> # Check for an associated graded ring, and isomorphism
+gap> IsAssociatedGradedRing(H, Einf);
+gap> IsIsomorphicGradedAlgebra(H, Einf);
+-->
+<Example><![CDATA[
+gap> G := SmallGroup(16, 4);;
+gap> Einf := LHSSpectralSequenceLastSheet(G, Centre(G));
+Graded algebra GF(2)[ x_1, x_2, x_3, x_4 ] / [ x_2^2, x_1^2+x_1*x_2
+ ] with indeterminate degrees [ 1, 1, 2, 2 ]
+gap> #
+gap> # Find the maximum degree
+gap> n := MaximumDegreeForPresentation(Einf);
+2
+gap> #
+gap> # And calculate the cohomology ring
+gap> H := Mod2CohomologyRingPresentation(G, n);
+Graded algebra GF(2)[ x_1, x_2, x_3, x_4 ] / [ x_1*x_2+x_2^2, x_1^2
+ ] with indeterminate degrees [ 1, 1, 2, 2 ]
+gap> #
+gap> # Check for an associated graded ring, and isomorphism
+gap> IsAssociatedGradedRing(H, Einf);
+true
+gap> IsIsomorphicGradedAlgebra(H, Einf);
+true
+]]></Example>
+  </Section>
+
+</Chapter>
+

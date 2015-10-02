@@ -1,0 +1,95 @@
+#!/usr/bin/sh
+
+PNAME="happrime";
+# Read the version number from the file
+VERSION=`cat VERSION`;
+
+DISTPKGDIR="distpkg"
+DISTDIR=$PNAME
+TARNAME=$PNAME-$VERSION
+
+# If the destination directory exists, delete it,
+# and then make the destination directory
+if test ! -d $DISTPKGDIR
+then
+  mkdir $DISTPKGDIR
+fi
+if test -d $DISTPKGDIR/$DISTDIR
+then
+  rm -r $DISTPKGDIR/$DISTDIR
+fi
+mkdir $DISTPKGDIR/$DISTDIR
+mkdir $DISTPKGDIR/$DISTDIR/lib
+mkdir -p $DISTPKGDIR/$DISTDIR/doc/userguide
+mkdir -p $DISTPKGDIR/$DISTDIR/doc/datatypes
+mkdir $DISTPKGDIR/$DISTDIR/tst
+
+# Copy the files to the destination directory
+FILES_ROOT="\
+  CHANGES \
+  init.g \
+  LICENCE \
+  make_tarball \
+  PackageInfo.g \
+  read.g \
+  README \
+  VERSION"
+  
+FILES_LIB="\
+  basemat.gd \
+  basemat.gi \
+  fpgmoduleG.gd \
+  fpgmoduleG.gi \
+  fpgmodulehomG.gd \
+  fpgmodulehomG.gi \
+  fpgmoduleint.gd  \
+  fpgmoduleint.gi \
+  groups.gd  \
+  groups.gi \
+  happrime.gd  \
+  happrime.gi \
+  resolutions.gd \
+  resolutions.gi \
+  test2.gi \
+  test.gd \
+  test.gi"
+  
+cd doc
+FILES_USERGUIDE=`ls userguide/*.xml userguide/*.xml.in userguide/*.xml.none userguide/*.html userguide/*.txt`
+FILES_USERGUIDE="\
+  $FILES_USERGUIDE \
+  userguide/manual.css \
+  userguide/manual.pdf \
+  userguide/manual.six"
+FILES_DATATYPES=`ls datatypes/*.xml datatypes/*.xml.in datatypes/*.xml.none datatypes/*.html datatypes/*.txt`
+FILES_DATATYPES="\
+  $FILES_DATATYPES \
+  datatypes/manual.css \
+  datatypes/manual.pdf \
+  datatypes/manual.six"
+cd ..
+
+FILES_TST="\
+  happrime.tst \
+  userguideexamples.tst \
+  datatypesexamples.tst \
+  testall.g"
+  
+cd lib
+cp $FILES_LIB ../$DISTPKGDIR/$DISTDIR/lib/
+cd ..
+cd doc
+cp $FILES_USERGUIDE ../$DISTPKGDIR/$DISTDIR/doc/userguide
+cp $FILES_DATATYPES ../$DISTPKGDIR/$DISTDIR/doc/datatypes
+cp includesourcedoc.sh ../$DISTPKGDIR/$DISTDIR/doc/includesourcedoc.sh
+cd ..
+cd tst
+cp $FILES_TST ../$DISTPKGDIR/$DISTDIR/tst/
+cd ..
+cp $FILES_ROOT $DISTPKGDIR/$DISTDIR/
+cp README $DISTPKGDIR/README.$PNAME
+
+cd $DISTPKGDIR
+tar -cvf $TARNAME.tar README.$PNAME $DISTDIR/*
+gzip $TARNAME.tar
+#rm -r $DISTDIR

@@ -1,0 +1,88 @@
+<Chapter Label="Server">
+<Heading>Running SCSCP server</Heading>    
+
+<Section Label="InstallProcedures">
+<Heading>Installation of &SCSCP; procedures</Heading>
+
+There may various ways to run &SCSCP; server, for example:
+<List>
+<Item>
+allowing generic services like evaluation of arbitrary &OpenMath; code;
+</Item>
+<Item>
+offering highly specialized procedures like identification of groups of order 512;
+</Item>
+<Item>
+providing access to a database of mathematical objects.
+</Item>
+</List>
+Each of these use cases requires certain control over the level of functionality 
+exposed to the client. To achieve this, before starting &SCSCP; service its 
+provider must call the function <Ref Func="InstallSCSCPprocedure" /> to make 
+required procedures <Q>visible</Q> for the client. 
+<P/>
+Additionally, the service can be made made accessible only for clients running 
+on the same computer, or accessible only through a particular network interface,
+or generally accessible. This customization is made at the stage of starting 
+the &SCSCP; server with the function <Ref Func="RunSCSCPserver" />.
+
+<#Include Label="InstallSCSCPprocedure"/>
+
+<ManSection>
+    <Var Name="OMsymRecord"
+      Comm="" />
+    <Description>
+    This is the global record from the &OpenMath; package used for the conversion
+    from &OpenMath; to &GAP;. It is extended in the &SCSCP; package by adding 
+    support for symbols from <C>scscp1</C> and <C>scscp2</C> content dictionaries
+    (<Cite Key="scscp1cd"/>, <Cite Key="scscp2cd"/>). Additionally, 
+    <Ref Func="InstallSCSCPprocedure" /> adds to this record a component
+    corresponding to the appropriate transient content dictionary 
+    (by default, <C>scscp_transient_1</C>) defining mappings between
+    &OpenMath; symbols from this content dictionary and installed &SCSCP; procedures.
+   </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="RunServer">
+<Heading>Starting SCSCP server</Heading>
+
+<#Include Label="RunSCSCPserver"/>
+
+Actually, there is more than one way to run &GAP; &SCSCP; server:
+<List>
+    <Item>from the &GAP; session as shown in the example above;
+    </Item>
+    <Item>starting &GAP; as <C>gap myserver.g</C>, where <File>myserver.g</File>
+        is the server configuration file with the last command being the call 
+        <Ref Func="RunSCSCPserver" />, which may take its arguments from the
+        configuration file <File>scscp/config.g</File> (an example of such 
+        configuration file is given in <File>scscp/example/myserver.g</File> );
+    </Item>
+    <Item>start &GAP; as a daemon using the script <File>gapd.sh</File> which
+        is supplied in the root directory of the package (for the description
+        of all available options see comments in <File>gapd.sh</File>) and
+        may overwrite parameters from <File>scscp/config.g</File>.
+    </Item>
+</List>
+
+See Section <Ref Sect="Config" /> about configuring files 
+<File>config.g</File> and <File>gapd.sh</File>.
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+<Section Label="SpecialProcedures">
+<Heading>Procedures to get information about the &SCSCP; server</Heading>
+
+<#Include Label="GetServiceDescription"/>
+<#Include Label="GetAllowedHeads"/>
+<#Include Label="IsAllowedHead"/>
+<#Include Label="GetTransientCD"/>
+<#Include Label="GetSignature"/>
+
+</Section>
+
+</Chapter>

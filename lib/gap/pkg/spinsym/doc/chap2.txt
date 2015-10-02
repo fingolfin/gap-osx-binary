@@ -1,0 +1,719 @@
+  
+  [1X2 [33X[0;0YUsage and features[133X[101X
+  
+  
+  [1X2.1 [33X[0;0YAccessing the tables[133X[101X
+  
+  [33X[0;0YAll  Brauer  tables  in  this  package  are  relative  to a [13Xgeneric[113X ordinary
+  character table obtained by one of the following constructions[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "2.Sym(n)" )[110X, the character table of [22X2.Sym(n)[122X ,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "2.Alt(n)" )[110X, the character table of [22X2.Alt(n)[122X ,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "Sym(n)" )[110X, the character table of [22XSym(n)[122X,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "Alt(n)" )[110X, the character table of [22XAlt(n)[122X.[133X
+  
+  [33X[0;0YNote that these are synonymous expressions for[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "DoubleCoverSymmetric", n )[110X,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "DoubleCoverAlternating", n )[110X,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "Symmetric", n )[110X,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10XCharacterTable( "Alternating", n )[110X,[133X
+  
+  [33X[0;0Yrespectively.  More  detailed  information on these tables is to be found in
+  [Noe02].  In  this  manual,  we  call  such  a character table an (ordinary)
+  [13XSpinSym  table[113X.  If [10Xordtbl[110X is an ordinary SpinSym table, the relative Brauer
+  table  in  characteristic  [10Xp[110X  can  be  accessed using the [10Xmod[110X-operator (i.e.
+  [10Xordtbl mod p;[110X). Such a Brauer table is called a ([22Xp[122X-modular) [13XSpinSym table[113X in
+  the following.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xordtbl:= CharacterTable( "2.Sym(18)" );[127X[104X
+    [4X[28XCharacterTable( "2.Sym(18)" )[128X[104X
+    [4X[25Xgap>[125X [27Xmodtbl:= ordtbl mod 3;[127X[104X
+    [4X[28XBrauerTable( "2.Sym(18)", 3 )[128X[104X
+    [4X[25Xgap>[125X [27XOrdinaryCharacterTable(modtbl)=ordtbl;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.2 [33X[0;0YCharacter parameters[133X[101X
+  
+  [33X[0;0YAn  ordinary  SpinSym  table  has  character  parameters, that is, a list of
+  suitable  labels  corresponding  to  the  rows  of  [10Xordtbl[110X and therefore the
+  irreducible    ordinary    characters   of   the   underlying   group.   See
+  [10XCharacterParameters()[110X in the GAP Reference Manual.[133X
+  
+  
+  [1X2.2-1 [33X[0;0YParameters of ordinary characters[133X[101X
+  
+  [33X[0;0YIn  the  following,  `ordinary  (spin)  character'  is used synonymously for
+  `irreducible  ordinary  (spin)  character'. It is well known that there is a
+  bijection  between the set of ordinary characters of [22XSym(n)[122X and the set [22XP(n)[122X
+  of  all  partitions of [22Xn[122X. Recall that a partition of a natural number [22Xn[122X is a
+  list  of  non-increasing  positive integers (its [13Xparts[113X) that sum up to [22Xn[122X. In
+  this way, every ordinary character [22Xχ[122X of [22XSym(n)[122X has a label of the form [10X[1,c][110X
+  where [10Xc[110X is a partition of [22Xn[122X. The labels of the ordinary characters of [22XAlt(n)[122X
+  are   induced   by  Clifford  theory  as  follows.  Either  the  restriction
+  [22Xψ=χ|_Alt(n)[122X  of  [22Xχ[122X  to  [22XAlt(n)[122X  is  an  ordinary  character  of [22XAlt(n)[122X, or [22Xψ[122X
+  decomposes as the sum of two distinct ordinary characters [22Xψ_1[122X and [22Xψ_2[122X.[133X
+  
+  [33X[0;0YIn  the  first  case  there  is  another ordinary character of [22XSym(n)[122X, say [22Xξ[122X
+  labelled  by  [10X[1,d][110X, such that the restriction of [22Xξ[122X to [22XAlt(n)[122X is equal to [22Xψ[122X.
+  Moreover,  the induced character of [22XSym(n)[122X obtained from [22Xψ[122X decomposes as the
+  sum of [22Xχ[122X and [22Xξ[122X. Then [22Xψ[122X is labelled by [10X[1,c][110X or [10X[1,d][110X.[133X
+  
+  [33X[0;0YIn  the  second  case, both [22Xψ_1[122X and [22Xψ_2[122X induce irreducibly up to [22Xχ[122X. Then [22Xψ_1[122X
+  and [22Xψ_2[122X are labelled by [10X[1,[c,'+']][110X and [10X[1,[c,'-']][110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XctS:= CharacterTable( "Sym(5)" );;[127X[104X
+    [4X[25Xgap>[125X [27XCharacterParameters(ctS);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], [128X[104X
+    [4X[28X  [ 1, [ 3, 1, 1 ] ], [ 1, [ 3, 2 ] ], [ 1, [ 4, 1 ] ], [ 1, [ 5 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XctA:= CharacterTable( "Alt(5)" );;[127X[104X
+    [4X[25Xgap>[125X [27XCharacterParameters(ctA);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], [128X[104X
+    [4X[28X  [ 1, [ [ 3, 1, 1 ], '+' ] ], [ 1, [ [ 3, 1, 1 ], '-' ] ] ][128X[104X
+    [4X[25Xgap>[125X [27Xchi:= Irr(ctS)[1];;[127X[104X
+    [4X[25Xgap>[125X [27Xpsi:= RestrictedClassFunction(chi,ctA);;           [127X[104X
+    [4X[25Xgap>[125X [27XPosition(Irr(ctA),psi);    [127X[104X
+    [4X[28X1[128X[104X
+    [4X[25Xgap>[125X [27Xxi:= Irr(ctS)[7];;[127X[104X
+    [4X[25Xgap>[125X [27XRestrictedClassFunction(xi,ctA) = psi;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XInducedClassFunction(psi,ctS) = chi + xi;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xchi:= Irr(ctS)[4];;[127X[104X
+    [4X[25Xgap>[125X [27Xpsi:= RestrictedClassFunction(chi,ctA);;[127X[104X
+    [4X[25Xgap>[125X [27Xpsi1:= Irr(ctA)[4];; psi2:= Irr(ctA)[5];;[127X[104X
+    [4X[25Xgap>[125X [27Xpsi = psi1 + psi2;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XInducedClassFunction(psi1,ctS) = chi;              [127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XInducedClassFunction(psi2,ctS) = chi;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIf  [22Xχ[122X  is  an ordinary character of [22X2.Sym(n)[122X or [22X2.Alt(n)[122X , then [22Xχ(z)=χ(1)[122X or
+  [22Xχ(z)=-χ(1)[122X. If [22Xχ(z)=χ(1)[122X, then [22Xχ[122X is obtained by inflation (along the central
+  subgroup  generated  by  [22Xz[122X)  from an ordinary character of [22XSym(n)[122X or [22XAlt(n)[122X,
+  respectively,  whose  label  is  given  to  [22Xχ[122X.  Otherwise,  if  [22Xχ[122X  is a spin
+  character, that is [22Xχ(z)=-χ(1)[122X, then its label is described next.[133X
+  
+  [33X[0;0YThe  set  of  ordinary  spin  characters of [22X2.Sym(n)[122X is parameterized by the
+  subset  [22XD(n)[122X  of [22XP(n)[122X of all distinct-parts partitions of [22Xn[122X (also called bar
+  partitions).  If [10Xc[110X is an even distinct-parts partition of [22Xn[122X, then there is a
+  unique  ordinary  spin  character  of [22X2.Sym(n)[122X that is labelled by [10X[2,c][110X. In
+  contrast,  if  [10Xc[110X is an odd distinct-parts partition of [22Xn[122X, then there are two
+  distinct   ordinary  spin  characters  of  [22X2.Sym(n)[122X  that  are  labelled  by
+  [10X[2,[c,'+']][110X  and [10X[2,[c,'-']][110X. Now the labels of the ordinary spin characters
+  of  [22X2.Alt(n)[122X  follow from the labels of [22X2.Sym(n)[122X in the same way as those of
+  [22XAlt(n)[122X  follow  from  the  labels  of  [22XSym(n)[122X  (see  the  beginning  of this
+  subsection [14X2.2-1[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XctS:= CharacterTable( "Sym(5)" );;[127X[104X
+    [4X[25Xgap>[125X [27Xct2S:= CharacterTable( "2.Sym(5)" );;[127X[104X
+    [4X[25Xgap>[125X [27Xch:= CharacterParameters(ct2S);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], [128X[104X
+    [4X[28X  [ 1, [ 3, 1, 1 ] ], [ 1, [ 3, 2 ] ], [ 1, [ 4, 1 ] ], [ 1, [ 5 ] ], [128X[104X
+    [4X[28X  [ 2, [ [ 3, 2 ], '+' ] ], [ 2, [ [ 3, 2 ], '-' ] ], [128X[104X
+    [4X[28X  [ 2, [ [ 4, 1 ], '+' ] ], [ 2, [ [ 4, 1 ], '-' ] ], [ 2, [ 5 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27Xpos:= Positions( List(ch, x-> x[1]), 1 );;[127X[104X
+    [4X[25Xgap>[125X [27XRestrictedClassFunctions( Irr(ctS), ct2S ) = Irr(ct2S){pos}; #inflation[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xct2A:= CharacterTable( "2.Alt(5)" );;[127X[104X
+    [4X[25Xgap>[125X [27XCharacterParameters(ct2A);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1, 1, 1 ] ], [ 1, [ 2, 1, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], [128X[104X
+    [4X[28X  [ 1, [ [ 3, 1, 1 ], '+' ] ], [ 1, [ [ 3, 1, 1 ], '-' ] ], [ 2, [ 3, 2 ] ], [128X[104X
+    [4X[28X  [ 2, [ 4, 1 ] ], [ 2, [ [ 5 ], '+' ] ], [ 2, [ [ 5 ], '-' ] ] ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.2-2 [33X[0;0YParameters of modular characters[133X[101X
+  
+  [33X[0;0YIn  the  following,  `[22Xp[122X-modular  (spin)  character' is used synonymously for
+  `irreducible [22Xp[122X-modular (spin) character'. The set of [22Xp[122X-modular characters of
+  [22XSym(n)[122X  is  parameterized  by  the  set  of all [22Xp[122X-regular partitions of [22Xn[122X. A
+  partition is [22Xp[122X-regular if no part is repeated more than [22Xp-1[122X times. Now every
+  [22Xp[122X-modular  character  [22Xχ[122X of [22XSym(n)[122X has a label of the form [10X[1,c][110X where [10Xc[110X is a
+  [22Xp[122X-regular partition of [22Xn[122X.[133X
+  
+  [33X[0;0YAgain,  the  labels  for the [22Xp[122X-modular spin characters of [22XAlt(n)[122X follow from
+  the  labels  of [22XSym(n)[122X. However, comparing subsection [14X2.2-1[114X, their format is
+  slightly different.[133X
+  
+  [33X[0;0YIf  [22Xχ[122X and [22Xξ[122X are distinct [22Xp[122X-modular characters of [22XSym(n)[122X that restrict to the
+  same  [22Xp[122X-modular  character  [22Xψ[122X  of  [22XAlt(n)[122X, then [22Xψ[122X is labelled by [10X[1,[c,'0']][110X
+  where  either  [22Xχ[122X or [22Xξ[122X is labelled by [10X[1,c][110X. If [22Xχ[122X is a [22Xp[122X-modular character of
+  [22XSym(n)[122X  whose  restriction  to  [22XAlt(n)[122X decomposes as the sum of two distinct
+  [22Xp[122X-modular characters, then these are labelled by [10X[1,[c,'+']][110X and [10X[1,[c,'-']][110X
+  where [22Xχ[122X is labelled by [10X[1,c][110X.[133X
+  
+  [33X[0;0YAs  in the ordinary case, the set of [22Xp[122X-modular characters of [22X2.Sym(n)[122X is the
+  union  of  the  subset  consisting  of  all inflated [22Xp[122X-modular characters of
+  [22XSym(n)[122X  and  the subset of spin characters characterized by negative integer
+  values  on the central element [22Xz[122X. The analogue statement holds for [22X2.Alt(n)[122X.
+  The set of [22Xp[122X-modular spin characters of [22X2.Sym(n)[122X is parameterized by the set
+  of  all  restricted [22Xp[122X-strict partitions of [22Xn[122X. A partition is called [22Xp[122X-strict
+  if  every  repeated  part  is  divisible by [22Xp[122X, and a [22Xp[122X-strict partition [22Xλ[122X is
+  restricted  if  [22Xλ_i-λ_i+1<p[122X  whenever  [22Xλ_i[122X  is divisible [22Xp[122X, and [22Xλ_i-λ_i+1≤ p[122X
+  otherwise  for  all  parts [22Xλ_i[122X of [22Xλ[122X (where we set [22Xλ_i+1=0[122X if [22Xλ_i[122X is the last
+  part).  If  [10Xc[110X  is a restricted [22Xp[122X-strict partition of [22Xn[122X such that [22Xn[122X minus the
+  number of parts not divisible by [22Xp[122X is even, then there is a unique [22Xp[122X-modular
+  spin  character of [22X2.Sym(n)[122X that is labelled by [10X[2,[c,'0']][110X. Its restriction
+  to [22X2.Alt(n)[122X decomposes as the sum of two distinct [22Xp[122X-modular characters which
+  are  labelled by [10X[2,[c,'+']][110X and [10X[2,[c,'-']][110X. If [22Xn[122X minus the number of parts
+  of  [10Xc[110X  that  are  not  divisible  by  [22Xp[122X  is odd, then there are two distinct
+  [22Xp[122X-modular  spin  characters of [22X2.Sym(n)[122X that are labelled by [10X[2,[c,'+']][110X and
+  [10X[2,[c,'-']][110X.  Both  of  these  characters  restrict  to the same irreducible
+  [22Xp[122X-modular spin character of [22X2.Alt(n)[122X which is labelled by [10X[2,[c,'0']][110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XctS:= CharacterTable( "Sym(5)" ) mod 3;;[127X[104X
+    [4X[25Xgap>[125X [27Xct2S:= CharacterTable( "2.Sym(5)" ) mod 3;;[127X[104X
+    [4X[25Xgap>[125X [27Xch:= CharacterParameters(ct2S);[127X[104X
+    [4X[28X[ [ 1, [ 5 ] ], [ 1, [ 4, 1 ] ], [ 1, [ 3, 2 ] ], [128X[104X
+    [4X[28X  [ 1, [ 3, 1, 1 ] ], [ 1, [ 2, 2, 1 ] ], [128X[104X
+    [4X[28X  [ 2, [ [ 4, 1 ], '+' ] ], [ 2, [ [ 4, 1 ], '-' ] ], [128X[104X
+    [4X[28X  [ 2, [ [ 3, 2 ], '0' ] ] ][128X[104X
+    [4X[25Xgap>[125X [27Xpos:= Positions( List(ch, x-> x[1]), 1 );;[127X[104X
+    [4X[25Xgap>[125X [27XRestrictedClassFunctions( Irr(ctS), ct2S ) = Irr(ct2S){pos}; #inflation[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xct2A:= CharacterTable( "2.Alt(5)" ) mod 3;;[127X[104X
+    [4X[25Xgap>[125X [27XCharacterParameters(ct2A);[127X[104X
+    [4X[28X[ [ 1, [ [ 5 ], '0' ] ], [ 1, [ [ 4, 1 ], '0' ] ], [128X[104X
+    [4X[28X  [ 1, [ [ 3, 1, 1 ], '+' ] ], [ 1, [ [ 3, 1, 1 ], '-' ] ], [128X[104X
+    [4X[28X  [ 2, [ [ 4, 1 ], '0' ] ], [ 2, [ [ 3, 2 ], '+' ] ], [ 2, [ [ 3, 2 ], '-' ] ] ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.3 [33X[0;0YClass parameters[133X[101X
+  
+  [33X[0;0YLet [10Xct[110X be an ordinary SpinSym table. Then [10Xct[110X has a list of class parameters,
+  that  is,  a  list of suitable labels corresponding to the columns of [10Xct[110X and
+  therefore   the   conjugacy   classes   of   the   underlying   group.   See
+  [10XClassParameters()[110X  in  the  GAP Reference Manual. If [10Xbt[110X is a Brauer table in
+  characteristic  [22Xp[122X relative to [10Xct[110X, its class parameters are inherited from [10Xct[110X
+  in  correspondence  with  the  [22Xp[122X-regular conjugacy classes of the underlying
+  group.[133X
+  
+  [33X[0;0YLet [22XP(n)[122X denote the set of partitions of [22Xn[122X.[133X
+  
+  [33X[0;0YThe  conjugacy  classes  of  [22XSym(n)[122X are naturally parameterized by the cycle
+  types  of  their elements, and each cycle type corresponds to a partition of
+  [22Xn[122X. Therefore a conjugacy class [22XC[122X of [22XSym(n)[122X is characterized by its [13Xtype[113X [22Xc[122X in
+  [22XP(n)[122X.  The  corresponding  entry  in  the list of class parameters is [10X[1,c][110X.
+  Assume  that  [22XC[122X  is  a subset of [22XAlt(n)[122X. Then [22XC[122X is also a conjugacy class of
+  [22XAlt(n)[122X  if  and  only  if  not all parts of [22Xc[122X are odd and pairwise distinct.
+  Otherwise,  [22XC[122X splits as the union of two distinct [22XAlt(n)[122X-classes of the same
+  size,  [22XC^+[122X of type [22Xc^+[122X and [22XC^-[122X of type [22Xc^-[122X. The corresponding entries in the
+  list of class parameters are [10X[1,[c,'+']][110X and [10X[1,[c,'-']][110X, respectively.[133X
+  
+  [33X[0;0YFurthermore,  the  preimage  [22XC'=C^{π^-1}[122X  is  either  a  conjugacy  class of
+  [22X2.Sym(n)[122X  of type [22Xc[122X with class parameter [10X[1,c][110X, or [22XC'[122X splits as the union of
+  two  distinct  [22X2.Sym(n)[122X  -classes  [22XC'_1[122X and [22XC'_2=zC'_1[122X , both of type [22Xc[122X with
+  corresponding  class  parameters [10X[1,c][110X and [10X[2,c][110X, respectively. An analogous
+  description applies for the conjugacy classes of [22X2.Alt(n)[122X .[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xct:= CharacterTable( "Sym(3)" );;  [127X[104X
+    [4X[25Xgap>[125X [27XClassParameters(ct);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1 ] ], [ 1, [ 2, 1 ] ], [ 1, [ 3 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27Xct:= CharacterTable( "Alt(3)" );;  [127X[104X
+    [4X[25Xgap>[125X [27XClassParameters(ct);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1 ] ], [ 1, [ [ 3 ], '+' ] ], [ 1, [ [ 3 ], '-' ] ] ][128X[104X
+    [4X[25Xgap>[125X [27Xct:= CharacterTable( "2.Sym(3)" );;[127X[104X
+    [4X[25Xgap>[125X [27XClassParameters(ct);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1 ] ], [ 2, [ 1, 1, 1 ] ], [ 1, [ 2, 1 ] ], [ 2, [ 2, 1 ] ], [128X[104X
+    [4X[28X  [ 1, [ 3 ] ], [ 2, [ 3 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27Xct:= CharacterTable( "2.Alt(3)" );;[127X[104X
+    [4X[25Xgap>[125X [27XClassParameters(ct);[127X[104X
+    [4X[28X[ [ 1, [ 1, 1, 1 ] ], [ 2, [ 1, 1, 1 ] ], [128X[104X
+    [4X[28X  [ 1, [ [ 3 ], '+' ] ], [ 2, [ [ 3 ], '+' ] ], [128X[104X
+    [4X[28X  [ 1, [ [ 3 ], '-' ] ], [ 2, [ [ 3 ], '-' ] ] ][128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YTo  each  conjugacy  class  of  [22X2.Sym(n)[122X  or  [22X2.Alt(n)[122X  a  certain  standard
+  representative  is assigned in the following way. Let [22Xc=[c_1,c_2,...,c_m][122X be
+  a partition of [22Xn[122X. We set [22Xd_1=0[122X, [22Xd_i=c_1+... +c_i-1[122X for [22Xi≥ 2[122X, and[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Yt(c_i,d_i)= t_d_i+1t_d_i+2... t_d_i+c_i-1[133X[124X[133X
+  
+  
+  [33X[0;0Yfor  [22X1≤ i≤ m-1[122X, where [22Xt(c_i,d_i)= 1[122X if [22Xc_i=1[122X. The [13Xstandard representative of
+  type[113X [22Xc[122X is defined as[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Yt_c=t(c_1,d_1)t(c_2,d_2)...t(c_m-1,d_m-1).[133X[124X[133X
+  
+  
+  [33X[0;0YFurthermore,  we define the standard representatives of type [22Xc^+=[122X[10X[c,'+'][110X and
+  [22Xc^-=[122X[10X[c,'-'][110X to be [22Xt_c^+=t_c[122X and [22Xt_c^-=t_1^-1t_c t_1[122X, respectively.[133X
+  
+  [33X[0;0YFor example, the standard representative of type [22Xc=[7,4,3,1][122X in [22XP(15)[122X is[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Yt_c=t_1t_2t_3t_4t_5t_6t_8t_9t_10t_12t_13.[133X[124X[133X
+  
+  
+  [33X[0;0YNow [22XC'[122X is a conjugacy class of [22X2.Sym(n)[122X or [22X2.Alt(n)[122X with parameter[133X
+  
+  [8X[108X
+        [33X[0;6Y[10X[1,c][110X if and only if [22Xt_c[122X is an element of [22XC'[122X ,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10X[2,c][110X if and only if [22Xzt_c[122X is an element of [22XC'[122X ,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10X[1,[c,'+']][110X if and only if [22Xt_c^+[122X is an element of [22XC'[122X ,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10X[2,[c,'+']][110X if and only if [22Xzt_c^+[122X is an element of [22XC'[122X ,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10X[1,[c,'-']][110X if and only if [22Xt_c^-[122X is an element of [22XC'[122X ,[133X
+  
+  [8X[108X
+        [33X[0;6Y[10X[2,[c,'-']][110X if and only if [22Xzt_c^-[122X is an element of [22XC'[122X .[133X
+  
+  [1X2.3-1 SpinSymStandardRepresentative[101X
+  
+  [29X[2XSpinSymStandardRepresentative[102X( [3Xc[103X, [3Xrep[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  image  of the standard representative of type [3Xc[103X under a given
+            [22X2.Sym(n)[122X-representation.[133X
+  
+  [33X[0;0YExpecting  the  second  entry of a class parameter of [22X2.Sym(n)[122X or [22X2.Alt(n)[122X ,
+  say [3Xc[103X, the standard representative of type [3Xc[103X under a given representation of
+  [22X2.Sym(n)[122X   is   computed.   The  argument  [3Xrep[103X  is  assumed  to  be  a  list
+  [22X[t_1^R,t_2^R,...,t_n-1^R][122X   given   by   the   images   of   the  generators
+  [22Xt_1,...,t_n-1[122X  of [22X2.Sym(n)[122X under a (not necessarily faithful) representation
+  [22XR[122X of [22X2.Sym(n)[122X .[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xct:= CharacterTable("2.Sym(15)") mod 5;;[127X[104X
+    [4X[25Xgap>[125X [27Xcl:= ClassParameters(ct)[99];[127X[104X
+    [4X[28X[ 1, [ 7, 4, 3, 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27Xc:= cl[2];;[127X[104X
+    [4X[25Xgap>[125X [27Xrep:= BasicSpinRepresentationOfSymmetricGroup(15,5);;[127X[104X
+    [4X[25Xgap>[125X [27Xt:= SpinSymStandardRepresentative(c,rep); [127X[104X
+    [4X[28X< immutable compressed matrix 64x64 over GF(25) >[128X[104X
+    [4X[25Xgap>[125X [27XOrdersClassRepresentatives(ct)[99];[127X[104X
+    [4X[28X168[128X[104X
+    [4X[25Xgap>[125X [27XOrder(t);[127X[104X
+    [4X[28X168[128X[104X
+    [4X[25Xgap>[125X [27XBrauerCharacterValue(t);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-2 SpinSymStandardRepresentativeImage[101X
+  
+  [29X[2XSpinSymStandardRepresentativeImage[102X( [3Xc[103X[, [3Xj[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  image  of  the  standard  representative  of type [3Xc[103X under the
+            natural epimorphism [22Xπ:2.Sym({j,...,j+n-1}) -> Sym({j,...,j+n-1})[122X.[133X
+  
+  [33X[0;0YGiven  the second entry [3Xc[103X of a class parameter of [22X2.Sym(n)[122X or [22X2.Alt(n)[122X , and
+  optionally a positive integer [3Xj[103X, the image of the standard representative of
+  type [3Xc[103X under [22Xπ:2.Sym({j,...,j+n-1}) -> Sym({j,...,j+n-1})[122X with [22Xt_i^π=(i,i+1)[122X
+  for  [22Xj≤ i≤ j+n-2[122X is computed by calling [9XSpinSymStandardRepresentative(c,rep)[109X
+  where  [10Xrep[110X  is  the  list [10X[(j,j+1),(j+1,j+2),...,(j+n-2,j+n-1)][110X. By default,
+  [10Xj=1[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xs1:= SpinSymStandardRepresentativeImage([7,4,3,1]);         [127X[104X
+    [4X[28X(1,7,6,5,4,3,2)(8,11,10,9)(12,14,13)[128X[104X
+    [4X[25Xgap>[125X [27Xs2:= SpinSymStandardRepresentativeImage([[7,4,3,1],'-']);[127X[104X
+    [4X[28X(1,2,7,6,5,4,3)(8,11,10,9)(12,14,13)[128X[104X
+    [4X[25Xgap>[125X [27Xs2 = s1^(1,2);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XSpinSymStandardRepresentativeImage([7,4,3,1],3);       [127X[104X
+    [4X[28X(3,9,8,7,6,5,4)(10,13,12,11)(14,16,15)[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-3 SpinSymPreimage[101X
+  
+  [29X[2XSpinSymPreimage[102X( [3Xc[103X, [3Xrep[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  (standard)  lift of the element [3Xc[103X of [22XSym(n)[122X in [22X2.Sym(n)[122X under a
+            given [22X2.Sym(n)[122X-representation.[133X
+  
+  [33X[0;0YSee  [Maa11,  (5.1.12)]  for  the definition of the lift that is returned by
+  this  function.  The  permutation  [3Xc[103X  is  written  as  a  product  of simple
+  transpositions  [22X(i,i+1)[122X,  then  these  are  replaced  by the images of their
+  canonical  lifts  [22Xt_i[122X under a given representation [22XR[122X of [22X2.Sym(n)[122X (recall the
+  beginning of Chapter [14X1[114X for the definition of [22Xt_i[122X). Here [3Xrep[103X is assumed to be
+  the list [22X[t_1^R,t_2^R,...,t_n-1^R][122X.[133X
+  
+  [33X[0;0YNote  that  a  more  efficient  computation may be achieved by computing and
+  storing  a  list  of  all  necessary transpositions once and for all, before
+  lifting (many) elements (under a possibly large representation).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xrep:= BasicSpinRepresentationOfSymmetricGroup(15);;[127X[104X
+    [4X[25Xgap>[125X [27Xc:= SpinSymStandardRepresentativeImage([5,4,3,2,1]);[127X[104X
+    [4X[28X(1,5,4,3,2)(6,9,8,7)(10,12,11)(13,14)[128X[104X
+    [4X[25Xgap>[125X [27XC:= SpinSymPreimage(c,rep);[127X[104X
+    [4X[28X< immutable compressed matrix 64x64 over GF(9) >[128X[104X
+    [4X[25Xgap>[125X [27XC = SpinSymStandardRepresentative([5,4,3,2,1],rep);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-4 SpinSymBrauerCharacter[101X
+  
+  [29X[2XSpinSymBrauerCharacter[102X( [3Xccl[103X, [3Xords[103X, [3Xrep[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  Brauer  character  afforded  by  a  given  representation  of
+            [22X2.Sym(n)[122X .[133X
+  
+  [33X[0;0YThis  function  is  based  on  a simplified computation of the [5XGAP[105X attribute
+  [10XBrauerCharacterValue(mat)[110X  for  an invertible matrix [10Xmat[110X over a finite field
+  whose characteristic is coprime to the order of [10Xmat[110X.[133X
+  
+  [33X[0;0YThe  arguments  [3Xccl[103X and [3Xords[103X are expected to be the values of the attributes
+  [10XClassParameters(modtbl)[110X    and   [10XOrdersClassRepresentatives(modtbl)[110X   of   a
+  (possibly incomplete) [22Xp[122X-modular SpinSym table [10Xmodtbl[110X of [22X2.Sym(n)[122X .[133X
+  
+  [33X[0;0YThe  argument [3Xrep[103X is assumed to be a list [22X[t_1^R,t_2^R,...,t_n-1^R][122X given by
+  the  images  of  the  generators  [22Xt_1,...,t_n-1[122X  of  [22X2.Sym(n)[122X  under  a (not
+  necessarily faithful) [22X2.Sym(n)[122X -representation [22XR[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27Xct:= CharacterTable("DoubleCoverSymmetric",15);;[127X[104X
+    [4X[25Xgap>[125X [27Xbt:= CharacterTableRegular(ct,5);;[127X[104X
+    [4X[25Xgap>[125X [27Xfus:= GetFusionMap(bt,ct);;[127X[104X
+    [4X[25Xgap>[125X [27Xccl:= ClassParameters(ct){fus};;[127X[104X
+    [4X[25Xgap>[125X [27Xords:= OrdersClassRepresentatives(bt);;[127X[104X
+    [4X[25Xgap>[125X [27Xrep:= BasicSpinRepresentationOfSymmetricGroup(15,5);;[127X[104X
+    [4X[25Xgap>[125X [27Xphi:= SpinSymBrauerCharacter(ccl,ords,rep);;[127X[104X
+    [4X[25Xgap>[125X [27Xphi in Irr(ct mod 5);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-5 SpinSymBasicCharacter[101X
+  
+  [29X[2XSpinSymBasicCharacter[102X( [3Xmodtbl[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  [22Xp[122X-modular  basic  spin  character  of the (possibly incomplete)
+            [22Xp[122X-modular SpinSym table [3Xmodtbl[103X of [22X2.Sym(n)[122X .[133X
+  
+  [33X[0;0YThis  is  just  a  shortcut  for constructing a basic spin representation of
+  [22X2.Sym(n)[122X  in  characteristic [22Xp[122X and computing its Brauer character by calling
+  [2XSpinSymBrauerCharacter[102X ([14X2.3-4[114X) afterwards.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X [128X[104X
+    [4X[25Xgap>[125X [27XSetClassParameters(bt,ccl);[127X[104X
+    [4X[25Xgap>[125X [27XSpinSymBasicCharacter(bt) = phi;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.4 [33X[0;0YYoung subgroups[133X[101X
+  
+  [33X[0;0YLet [22Xk[122X and [22Xl[122X be integers greater than [22X1[122X and set [22Xn=k+l[122X. The following subgroup
+  of [22X2.Sym(n)[122X ,[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Y2.(Sym(k)×Sym(l)) = < t_1,...,t_k-1, t_k+1,...,t_n-1 >,[133X[124X[133X
+  
+  
+  [33X[0;0Yis   called  a  (maximal)  [13XYoung  subgroup[113X  of  [22X2.Sym(n)[122X  .  Similarly,  the
+  intersection  [22X2.(Alt(k)×Alt(l))[122X  of  [22X2.(Sym(k)×Sym(l))[122X  and  [22X2.Alt(n)[122X  is  a
+  (maximal)  Young  subgroup  of [22X2.Alt(n)[122X . Note that [22X(2.(Sym(k)×Sym(l)))^π[122X is
+  isomorphic  to  [22XSym(k)×Sym(l)[122X  and  [22X(2.(Alt(k)×Alt(l)))^π[122X  is  isomorphic to
+  [22XAlt(k)×Alt(l)[122X   but   only   [22X2.(Alt(k)×Alt(l))[122X   which   is   isomorphic  to
+  [22X(2.Alt(k)×2.Alt(l))/    <(z,z)>[122X   is   a   central   product.   In   between
+  [22X2.(Alt(k)×Alt(l))[122X  and  [22X2.(Sym(k)×Sym(l))[122X there are further central products
+  [22X2.(Sym(k)×Alt(l))[122X  which  is  isomorphic  to [22X(2.Sym(k)×2.Alt(l))/<(z,z)>[122X and
+  [22X2.(Alt(k)×Sym(l))[122X  which  is isomorphic to [22X(2.Alt(k)×2.Sym(l))/<(z,z)>[122X which
+  are  [22Xπ[122X-preimages  of  [22XSym(k)×Alt(l)[122X  and  [22XAlt(k)×Sym(l)[122X,  respectively.  See
+  [Maa11, Section 5.2].[133X
+  
+  [1X2.4-1 SpinSymCharacterTableOfMaximalYoungSubgroup[101X
+  
+  [29X[2XSpinSymCharacterTableOfMaximalYoungSubgroup[102X( [3Xk[103X, [3Xl[103X, [3Xtype[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe ordinary character table of a maximal Young subgroup depending
+            on [3Xtype[103X.[133X
+  
+  [33X[0;0YFor  integers  [3Xk[103X  and  [3Xl[103X  greater  than  [22X1[122X the function returns the ordinary
+  character  table of [22X2.(Alt(k)×Alt(l))[122X, [22X2.(Alt(k)×Sym(l))[122X, [22X2.(Sym(k)×Alt(l))[122X,
+  or  [22X2.(Sym(k)×Sym(l))[122X  depending  on  the  string  [3Xtype[103X being [10X"Alternating"[110X,
+  [10X"AlternatingSymmetric"[110X,      [10X"SymmetricAlternating"[110X,     or     [10X"Symmetric"[110X,
+  respectively.[133X
+  
+  [33X[0;0YIf  [3Xtype[103X  is  [10X"Symmetric"[110X then the output is computed by means of Clifford's
+  theory  from  the  character tables of [22X2.(Sym(k)×Alt(l))[122X, [22X2.(Alt(k)×Alt(l))[122X,
+  and  [22X2.(Alt(k)×Sym(l))[122X  (see  [Maa11, Section 5.2]). These `ingredients' are
+  computed  and then stored in the attribute [10XSpinSymIngredients[110X so they can be
+  accessed  during  the  construction  (and for the construction of a relative
+  Brauer table too, see [2XSpinSymBrauerTableOfMaximalYoungSubgroup[102X ([14X2.4-2[114X)).[133X
+  
+  [33X[0;0YThe   construction   of   the   character   tables  of  [3Xtype[103X  [10X"Alternating"[110X,
+  [10X"AlternatingSymmetric"[110X, or [10X"SymmetricAlternating"[110X is straightforward and may
+  be  accomplished  by  first  construcing  a direct product, for example, the
+  character  table  of  [22X2.Sym(k)×2.Alt(l)[122X, followed by the construction of the
+  character table of the factor group mod [22X<(z,z)>[122X.[133X
+  
+  [33X[0;0YHowever, we use a faster method that builds up the table from scratch, using
+  the  appropriate  component  tables as ingredients (for example, the generic
+  character tables of [22X2.Sym(k)[122X and [22X2.Alt(l)[122X ). In this way we can easily build
+  up  a  suitable  list  of  class parameters that are needed to determine the
+  class fusion in the construction of [3Xtype[103X [10X"Symmetric"[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27X2AA:= SpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"Alternating"); [127X[104X
+    [4X[28XCharacterTable( "2.(Alt(8)xAlt(5))" )[128X[104X
+    [4X[25Xgap>[125X [27XSpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"AlternatingSymmetric");[127X[104X
+    [4X[28XCharacterTable( "2.(Alt(8)xSym(5))" )[128X[104X
+    [4X[25Xgap>[125X [27XSpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"SymmetricAlternating");     [127X[104X
+    [4X[28XCharacterTable( "2.(Sym(8)xAlt(5))" )[128X[104X
+    [4X[25Xgap>[125X [27X2SS:= SpinSymCharacterTableOfMaximalYoungSubgroup(8,5,"Symmetric");           [127X[104X
+    [4X[28XCharacterTable( "2.(Sym(8)xSym(5))" )[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.4-2 SpinSymBrauerTableOfMaximalYoungSubgroup[101X
+  
+  [29X[2XSpinSymBrauerTableOfMaximalYoungSubgroup[102X( [3Xordtbl[103X, [3Xp[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe  [3Xp[103X-modular  character  table  of  the ordinary character table
+            [3Xordtbl[103X          returned          by          the         function
+            [2XSpinSymCharacterTableOfMaximalYoungSubgroup[102X ([14X2.4-1[114X).[133X
+  
+  [33X[0;0YIf  the  rational  prime  [3Xp[103X is odd, then the construction of the irreducible
+  Brauer  characters is really the same as in the ordinary case but it depends
+  on  the  [3Xp[103X-modular tables of of [3Xordtbl[103X's `ingredients'. If some Brauer table
+  that  is  necessary  for  the  construction  is  not  available then [10Xfail[110X is
+  returned.[133X
+  
+  [33X[0;0YAlternatively, the [10Xmod[110X-operator may be used.[133X
+  
+  [33X[0;0YFor  [3Xp[103X [22X=2[122X the Brauer table is essentially constructed as a direct product by
+  standard [5XGAP[105X methods written by Thomas Breuer.[133X
+  
+  [33X[0;0YWe        call        a        character       table       returned       by
+  [2XSpinSymCharacterTableOfMaximalYoungSubgroup[102X            ([14X2.4-1[114X)            or
+  [2XSpinSymBrauerTableOfMaximalYoungSubgroup[102X  a  SpinSym table too. It has lists
+  of  class  and  character  parameters  whose  format is explained in [Maa11,
+  Sections 5.2, 5.3].[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XSpinSymBrauerTableOfMaximalYoungSubgroup(2AA,3);[127X[104X
+    [4X[28XBrauerTable( "2.(Alt(8)xAlt(5))", 3 )[128X[104X
+    [4X[25Xgap>[125X [27X2SS mod 5;[127X[104X
+    [4X[28XBrauerTable( "2.(Sym(8)xSym(5))", 5 )[128X[104X
+    [4X[25Xgap>[125X [27Xct:= 2SS mod 2;  [127X[104X
+    [4X[28XBrauerTable( "2.(Sym(8)xSym(5))", 2 )[128X[104X
+    [4X[25Xgap>[125X [27Xct1:= CharacterTable("Sym(8)") mod 2;;[127X[104X
+    [4X[25Xgap>[125X [27Xct2:= CharacterTable("Sym(5)") mod 2;;     [127X[104X
+    [4X[25Xgap>[125X [27XIrr(ct1*ct2) = Irr(ct);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.5 [33X[0;0YClass Fusions[133X[101X
+  
+  [33X[0;0YThe  following  functions determine class fusion maps between SpinSym tables
+  by  means  of their class parameters. Such `default' class fusion maps allow
+  to  induce  characters  from  various  subgroups  of  [22X2.Sym(n)[122X  or  [22X2.Alt(n)[122X
+  consistently.[133X
+  
+  [1X2.5-1 SpinSymClassFusion[101X
+  
+  [29X[2XSpinSymClassFusion[102X( [3XctSource[103X, [3XctDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion map from the SpinSym table [3XctSource[103X to the SpinSym table
+            [3XctDest[103X.  This  map  is stored if there is no other fusion map from
+            [3XctSource[103X to [3XctDest[103X stored yet.[133X
+  
+  [33X[0;0YThe  possible  input  tables are expected to be either ordinary or [22Xp[122X-modular
+  SpinSym tables of the following pairs of groups[133X
+  
+             Source         [22X->[122X         Dest       
+            [22X2.Alt(n)[122X                 [22X2.Sym(n)[122X     
+            [22X2.Sym(k)[122X                 [22X2.Sym(n)[122X     
+            [22X2.Alt(k)[122X                 [22X2.Alt(n)[122X     
+           [22X2.Sym(n-2)[122X                [22X2.Alt(n)[122X     
+        [22X2.(Sym(k)×Sym(l))[122X           [22X2.Sym(k+l)[122X    
+        [22X2.(Sym(k)×Alt(l))[122X        [22X2.(Sym(k)×Sym(l))[122X
+        [22X2.(Alt(k)×Sym(l))[122X        [22X2.(Sym(k)×Sym(l))[122X
+        [22X2.(Alt(k)×Alt(l))[122X        [22X2.(Sym(k)×Alt(l))[122X
+        [22X2.(Alt(k)×Alt(l))[122X        [22X2.(Alt(k)×Sym(l))[122X
+        [22X2.(Alt(k)×Alt(l))[122X           [22X2.Alt(k+l)[122X    
+  
+  [33X[0;0YThe appropriate function (see the descriptions below) is called to determine
+  the  fusion  map  [10Xfus[110X.  If [10XGetFusionMap(ctSource, ctDest)[110X fails, then [10Xfus[110X is
+  stored by calling [10XStoreFusion(ctSource, fus, ctDest)[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XctD:= CharacterTable("2.Sym(18)");;                                  [127X[104X
+    [4X[25Xgap>[125X [27XctS:= SpinSymCharacterTableOfMaximalYoungSubgroup(10,8,"Symmetric");;[127X[104X
+    [4X[25Xgap>[125X [27XGetFusionMap(ctS,ctD);[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XSpinSymClassFusion(ctS,ctD);;[127X[104X
+    [4X[28X#I SpinSymClassFusion: stored fusion map from 2.(Sym(10)xSym(8)) to 2.Sym(18)[128X[104X
+    [4X[25Xgap>[125X [27XGetFusionMap(ctS,ctD) <> fail;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.5-2 SpinSymClassFusion2Ain2S[101X
+  
+  [29X[2XSpinSymClassFusion2Ain2S[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya fusion map between the SpinSym tables of [22X2.Alt(n)[122X and [22X2.Sym(n)[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular)   SpinSym  tables  of  [22X2.Alt(n)[122X  and  [22X2.Sym(n)[122X,  respectively,  a
+  corresponding class fusion map is determined. See [Maa11, (5.4.1)].[133X
+  
+  [1X2.5-3 SpinSymClassFusion2Sin2S[101X
+  
+  [29X[2XSpinSymClassFusion2Sin2S[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.Sym(k)[122X and [22X2.Sym(n)[122X
+            for [22Xk≤ n[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular) SpinSym tables of [22X2.Sym(k)[122X and [22X2.Sym(n)[122X for [22Xk≤ n[122X, respectively, a
+  corresponding class fusion map is determined. See [Maa11, (5.4.2)].[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XctD:= CharacterTable("2.Sym(18)");;[127X[104X
+    [4X[25Xgap>[125X [27XctS:= CharacterTable("2.Sym(6)");;[127X[104X
+    [4X[25Xgap>[125X [27XcclD:= ClassParameters(ctD);;[127X[104X
+    [4X[25Xgap>[125X [27XcclS:= ClassParameters(ctS);;[127X[104X
+    [4X[25Xgap>[125X [27Xfus:= SpinSymClassFusion2Sin2S(cclS,cclD);;[127X[104X
+    [4X[25Xgap>[125X [27XStoreFusion(ctS,fus,ctD);[127X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.5-4 SpinSymClassFusion2Ain2A[101X
+  
+  [29X[2XSpinSymClassFusion2Ain2A[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.Alt(k)[122X and [22X2.Alt(n)[122X
+            for [22Xk≤ n[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular) SpinSym tables of [22X2.Alt(k)[122X and [22X2.Alt(n)[122X for [22Xk≤ n[122X, respectively, a
+  corresponding class fusion map is determined. See [Maa11, (5.4.3)].[133X
+  
+  [1X2.5-5 SpinSymClassFusion2Sin2A[101X
+  
+  [29X[2XSpinSymClassFusion2Sin2A[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map  between  the  SpinSym  tables  of  [22X2.Sym(n-2)[122X  and
+            [22X2.Alt(n)[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular)  SpinSym  tables  of  [22X2.Sym(n-2)[122X  and  [22X2.Alt(n)[122X,  respectively, a
+  corresponding   class  fusion  map  with  respect  to  the  embedding  of  [22X<
+  t_1t_n-2,...,t_n-3t_n-1   >[122X   isomorphic   to   [22X2.Sym(n-2)[122X  in  [22X2.Alt(n)[122X  is
+  determined. See [Maa11, (5.4.4)].[133X
+  
+  [1X2.5-6 SpinSymClassFusion2SSin2S[101X
+  
+  [29X[2XSpinSymClassFusion2SSin2S[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.(Sym(k)×Sym(l))[122X and
+            [22X2.Sym(k+l)[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular) SpinSym tables of [22X2.(Sym(k)×Sym(l))[122X and [22X2.Sym(k+l)[122X, respectively,
+  a corresponding class fusion map is determined by means of [Maa11, (5.1.6)].[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[25Xgap>[125X [27XctD:= CharacterTable("2.Sym(18)");;                                  [127X[104X
+    [4X[25Xgap>[125X [27XctS:= SpinSymCharacterTableOfMaximalYoungSubgroup(10,8,"Symmetric");;[127X[104X
+    [4X[25Xgap>[125X [27XcclD:= ClassParameters(ctD);;[127X[104X
+    [4X[25Xgap>[125X [27XcclS:= ClassParameters(ctS);;[127X[104X
+    [4X[25Xgap>[125X [27Xfus:= SpinSymClassFusion2SSin2S(cclS,cclD);;[127X[104X
+    [4X[25Xgap>[125X [27XStoreFusion(ctS,fus,ctD);[127X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  [1X2.5-7 SpinSymClassFusion2SAin2SS[101X
+  
+  [29X[2XSpinSymClassFusion2SAin2SS[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.(Sym(k)×Alt(l))[122X and
+            [22X2.(Sym(k)×Sym(l))[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular)   SpinSym  tables  of  [22X2.(Sym(k)×Alt(l))[122X  and  [22X2.(Sym(k)×Sym(l))[122X,
+  respectively,  a  corresponding  class fusion map is determined. See [Maa11,
+  (5.4.6)].[133X
+  
+  [1X2.5-8 SpinSymClassFusion2ASin2SS[101X
+  
+  [29X[2XSpinSymClassFusion2ASin2SS[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.(Alt(k)×Sym(l))[122X and
+            [22X2.(Sym(k)×Sym(l))[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular)   SpinSym  tables  of  [22X2.(Alt(k)×Sym(l))[122X  and  [22X2.(Sym(k)×Sym(l))[122X,
+  respectively,  a corresponding class fusion map is determined analogously to
+  [Maa11, (5.4.6)].[133X
+  
+  [1X2.5-9 SpinSymClassFusion2AAin2SA[101X
+  
+  [29X[2XSpinSymClassFusion2AAin2SA[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.(Alt(k)×Alt(l))[122X and
+            [22X2.(Sym(k)×Alt(l))[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular)   SpinSym  tables  of  [22X2.(Alt(k)×Alt(l))[122X  and  [22X2.(Sym(k)×Alt(l))[122X,
+  respectively,  a  corresponding  class fusion map is determined. See [Maa11,
+  (5.4.7)].[133X
+  
+  [1X2.5-10 SpinSymClassFusion2AAin2AS[101X
+  
+  [29X[2XSpinSymClassFusion2AAin2AS[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.(Alt(k)×Alt(l))[122X and
+            [22X2.(Alt(k)×Sym(l))[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular)   SpinSym  tables  of  [22X2.(Alt(k)×Alt(l))[122X  and  [22X2.(Alt(k)×Sym(l))[122X,
+  respectively,  a corresponding class fusion map is determined analogously to
+  [Maa11, (5.4.7)].[133X
+  
+  [1X2.5-11 SpinSymClassFusion2AAin2A[101X
+  
+  [29X[2XSpinSymClassFusion2AAin2A[102X( [3XcclSource[103X, [3XcclDest[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya  fusion  map between the SpinSym tables of [22X2.(Alt(k)×Alt(l))[122X and
+            [22X2.Alt(k+l)[122X.[133X
+  
+  [33X[0;0YGiven  lists  of  class  parameters  [3XcclSource[103X  and  [3XcclDest[103X of (ordinary or
+  [22Xp[122X-modular) SpinSym tables of [22X2.(Alt(k)×Alt(l))[122X and [22X2.Alt(k+l)[122X, respectively,
+  a corresponding class fusion map is determined. See [Maa11, (5.4.8)].[133X
+  

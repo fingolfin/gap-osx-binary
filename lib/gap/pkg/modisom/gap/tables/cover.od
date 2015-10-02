@@ -1,0 +1,324 @@
+
+##
+## this is the old version of CoveringAlgebra which does not use
+## sparse vectors
+##
+
+AssocRelation1 := function( R, S, i, j, k )
+    local a, v, r;
+
+    # (ij) k  
+    v := GetEntryTable( R, i, j );
+    a := v[1] * S[1][k];
+    for r in [2..R.dim] do
+        if v[r] <> Zero(R.fld) then 
+            AddRowVector( a, S[r][k], v[r] );
+        fi;
+    od;
+    return a;
+end;
+
+AssocRelation2 := function( R, S, i, j, k )
+    local b, v, s;
+
+    # i (jk)
+    v := GetEntryTable( R, j, k );
+    b := v[1] * S[i][1];
+    for s in [2..R.dim] do
+        if v[s] <> Zero(R.fld) then 
+            AddRowVector( b, S[i][s], v[s] );
+        fi;
+    od;
+    return b;
+end;
+
+CheckAssoc := function( R, S, pw, n, i, j, k )
+    local a, b;
+    if pw[i][j] + R.wgs[k] <= n+1 and R.wgs[i] + pw[j][k] <= n+1 then
+        a := AssocRelation1( R, S, i, j, k );
+        b := AssocRelation2( R, S, i, j, k );
+        return a-b;
+    elif pw[i][j] + R.wgs[k] <= n+1 then
+        return AssocRelation1( R, S, i, j, k );
+    elif R.wgs[i] + pw[j][k] <= n+1 then
+        return AssocRelation2( R, S, i, j, k );
+    fi;
+    return false;
+end;
+
+Weight := function( wg, i )
+    if i > Length(wg) then return wg[Length(wg)]+1; fi;
+    return wg[i];
+end;
+
+ProductWeights := function( R )
+    local pw, i, j, a, b;
+
+    # init 
+    pw := MutableNullMat(R.dim, R.dim);
+
+    # start with sum-weights
+    for i in [1..R.dim] do
+        for j in [1..R.dim] do
+            pw[i][j] := R.wgs[i] + R.wgs[j];
+        od;
+    od;
+
+    # improve with SC-table
+    for i in [1..R.dim] do
+        if IsBound(R.tab[i]) then 
+            for j in [1..R.dim] do
+                if IsBound(R.tab[i][j]) then 
+                    a := Weight( R.wgs, PositionNonZero(R.tab[i][j]) );
+                    pw[i][j] := Maximum(pw[i][j], a);
+                fi;
+            od;
+        fi;
+    od;
+
+    # improve by defs
+    for i in [1..R.dim] do
+        for j in [1..R.dim] do
+            if IsBound(R.wds[j]) then 
+                a := R.wgs[i] + pw[R.wds[j][1]][R.wds[j][2]];
+                b := pw[i][R.wds[j][1]] + R.wgs[R.wds[j][2]];
+                pw[i][j] := Maximum(pw[i][j],a,b);
+            fi;
+        od;
+    od;
+
+    # symmetrise if commutative
+    if IsBound(R.com) and R.com then 
+        for i in [1..R.dim] do
+            for j in [i+1..R.dim] do
+                if pw[i][j] > pw[j][i] then pw[j][i] := pw[i][j]; fi;
+                if pw[i][j] < pw[j][i] then pw[i][j] := pw[j][i]; fi;
+            od;
+        od;
+    fi;
+                 
+    return pw;
+end;
+
+TailsTableCom := function( R, pw )
+    local d, r, n, q, F, l, S, rl, df, i, j, k, h, v, s;
+
+    d := R.rnk;
+    r := R.dim;
+    F := R.fld;
+    n := R.wgs[R.dim];
+    q := Size(F);
+
+    # determine the size of the pre-extension
+    l := 0;
+    for i in [1..d] do
+        for j in [i..r] do
+            if not [i,j] in R.wds and not [j,i] in R.wds and pw[i][j]<=n+1 
+            then l := l+1; fi;
+        od;
+    od;
+    #Print("      extend table of dim ",r," by ",l,"\n");
+
+    # create table of tails
+    S := List([1..r], x -> MutableNullMat(r,l,F));
+    rl := [];
+    df := [];
+    for i in [1..r] do
+        for j in [1..r] do
+            if not [i,j] in R.wds and not [j,i] in R.wds and pw[i][j] <= n+1 
+            then
+                if j < i then 
+                    S[i][j] := S[j][i];
+                elif R.wgs[i] = 1 then
+                    Add(df, [i,j]);
+                    S[i][j][Length(df)] := One(F);
+                    #ConvertToVectorRepNC( S[i][j], q );
+                else
+                    k := R.wds[i][1]; h := R.wds[i][2];
+                    v := GetEntryTable(R, h, j );
+                    #ConvertToVectorRepNC( S[i][j], q);
+                    for s in [1..r] do
+                        if v[s] <> Zero(F) then
+                            AddRowVector( S[i][j], S[k][s], v[s] );
+                        fi;
+                    od;
+                    Add( rl, [k, h, j] );
+                fi;
+            fi;
+        od;
+    od;
+    return rec( tab := S, rl := rl, dim := l, df := df );
+end;
+
+TailsTable := function( R, pw )
+    local d, r, F, q, n, l, S, rl, i, j, k, h, v, s, df;
+   
+    if IsBound(R.com) and R.com then return TailsTableCom(R, pw); fi;
+
+    d := R.rnk;
+    r := R.dim;
+    F := R.fld;
+    q := Size(F);
+    n := R.wgs[R.dim];
+
+    # determine the size of the pre-extension
+    l := 0;
+    for i in [1..d] do
+        for j in [1..r] do
+            if not [i,j] in R.wds and pw[i][j] <= n+1 then l := l+1; fi;
+        od;
+    od;
+    #Print("      extend table of dim ",r," by ",l,"\n");
+
+    # create table of tails
+    S := List([1..r], x -> MutableNullMat(r,l,F));
+    rl := [];
+    df := [];
+    for i in [1..r] do
+        for j in [1..r] do
+            if not [i,j] in R.wds and pw[i][j] <= n+1 then
+                if R.wgs[i] = 1 then
+                    Add(df, [i,j]);
+                    S[i][j][Length(df)] := One(F);
+                    #ConvertToVectorRepNC( S[i][j], q );
+                else
+                    k := R.wds[i][1]; h := R.wds[i][2];
+                    v := GetEntryTable(R, h, j );
+                    #ConvertToVectorRepNC( S[i][j], q);
+                    for s in [1..r] do
+                        if v[s] <> Zero(F) then
+                            AddRowVector( S[i][j], S[k][s], v[s] );
+                        fi;
+                    od;
+                    Add( rl, [k, h, j] );
+                fi;
+            fi;
+        od;
+    od;
+    return rec( tab := S, rl := rl, dim := l, df := df );
+end;
+
+SetEntryCover := function( C, R, S, BB, pw, u, i, j )
+    C.tab[i][j] := ShallowCopy(GetEntryTable( R, i, j ));
+    if not [i,j] in R.wds and pw[i][j] <= R.wgs[R.dim]+1 then 
+        Append( C.tab[i][j], S.tab[i][j] * BB );
+    else
+        Append( C.tab[i][j], List([u+1..S.dim], x -> Zero(C.fld)) );
+    fi;
+end;
+
+QuotientTable := function( R, S, pw, U )
+    local r, u, c, d, n, s, F, C, I, B, w, J, i, j, k, t, BB;
+
+    # catch arguments
+    r := R.dim;
+    u := Length(U);
+    c := r + S.dim - u;
+    d := R.rnk;
+    n := R.wgs[R.dim];
+    s := Position(R.wgs, R.wgs[r]);
+    F := R.fld;
+
+    # set up table
+    C := rec( fld := F, dim := c, rnk := d );
+
+    # get good basis for mult
+    I := IdentityMat( S.dim, R.fld );
+    B := U;
+    w := [];
+    J := [];
+    for j in [s .. r] do
+        for i in [1 .. d] do
+            k := Position( S.df, [i,j] );
+            if not IsBool(k) and not k in J and SiftInto(B, I[k]) then 
+                Add(J, k);
+                Add(w, [i,j]);
+            fi;
+        od;
+    od;
+    C.nuc := Length(w);
+    for j in Reversed([1 .. s-1]) do
+        for i in [1..d] do
+            k := Position( S.df, [i,j] );
+            if not IsBool(k) and not k in J and SiftInto(B, I[k]) then 
+                Add(J, k);
+                t := GetEntryTable(R, i, j);
+                if t = 0 * t then 
+                    Add(w, [i,j]);
+                else
+                    Add( w, [i, j, t]);
+                fi;
+            fi;
+        od;
+    od;
+    C.mul := Length(w);
+
+    # reset B, invert and cut
+    I := IdentityMat( S.dim, R.fld );
+    B := Concatenation(B{[1..u]}, I{J});
+    BB := B^-1; BB := BB{[1..S.dim]}{[u+1..S.dim]};
+
+    # add entries
+    C.tab := [];
+    for i in [1..d] do
+        C.tab[i] := [];
+        for j in [1..r] do
+            SetEntryCover( C, R, S, BB, pw, u, i, j );
+        od;
+        for j in [r+1..c] do
+            C.tab[i][j] := List([1..c], x -> Zero(F));
+        od;
+    od;
+
+    for i in [d+1..r] do
+        if IsBound(R.tab[i]) then 
+            C.tab[i] := []; 
+            for j in [1..r] do
+                if IsBound(R.tab[i][j]) then 
+                    SetEntryCover( C, R, S, BB, pw, u, i, j );
+                fi;
+            od;
+        fi;
+    od;
+
+    # words and weights
+    C.wds := ShallowCopy(R.wds);
+    for i in [r+1..c] do C.wds[i] := w[i-r]; od;
+    C.wgs := ShallowCopy(R.wgs);
+    for i in [r+1..c] do C.wgs[i] := R.wgs[r]+1; od;
+
+    return C;
+end;
+
+CoveringTable := function( R )
+    local r, d, n, pw, S, u, v, i, j, k, V, U, h;
+
+    # catch arguments
+    r := R.dim;
+    d := R.rnk;
+    n := R.wgs[r];
+
+    # compute weights for products
+    pw := ProductWeights( R );
+
+    # set up tails
+    S := TailsTable( R, pw );
+
+    # check associativity
+    #Print("      check associativity \n");
+    u := [];
+    for i in [1..d] do
+        for j in [1..r] do
+            for k in [1..d] do
+                if not [i,j,k] in S.rl then
+                    v := CheckAssoc( R, S.tab, pw, n, i, j, k );
+                    if not IsBool(v) then SiftInto(u, v); fi;
+                fi;
+            od;
+        od;
+    od;
+
+    # get quotient and return
+    return QuotientTable( R, S, pw, OrderByDepth(u));
+end;
+

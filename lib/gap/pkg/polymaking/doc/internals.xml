@@ -1,0 +1,266 @@
+<Chapter Label="chap:GlobalVars"><Heading>Global Variables</Heading>
+
+ <Section Label="chap:InfoClass"><Heading>Getting information about polymake
+output</Heading> 
+   
+    <ManSection>
+     <InfoClass Name="InfoPolymaking" />
+    <Description>
+     If set to at least <M>2</M>, the output of polymake is shown.
+     At level <M>1</M>, warnings are shown. This is the default.
+     And at level <M>0</M>, the polymake package remains silent.
+    </Description>
+   </ManSection>
+
+    <ManSection>
+     <Var Name="POLYMAKE_LAST_FAIL_REASON"/>
+    <Description>
+     Contains a string that explains the last occurence of <K>fail</K> as a
+     return value of <Ref Meth="Polymake"/>.
+    </Description>
+    </ManSection>
+   </Section>
+
+
+ <Section Label="variables">
+  <Heading>Variables for system interaction</Heading>
+
+  The variables for interaction with the system are contained in the
+  file <F>environment.gi</F>. Each of these variables has a function
+  to set it, see <Ref Sect="chap:varsetters"/>.  If
+  <K>POLYMAKE&uscore;COMMAND</K> or <K>POLYMAKE&uscore;DATA&uscore;DIR</K> are set at
+  startup, they are not overwritten. So if you don't want (or don't
+  have the rights) to modify <F>environment.gi</F>, you can set the
+  variables in your <F>.gaprc</F> file.
+    
+   <ManSection>
+    <Var Name="POLYMAKE_COMMAND"/>
+    <Description>
+     This variable should contain the name of the polymake program in
+     the form as returned by <C>Filename</C> So a probable value is
+     <C>Filename(Directory("/usr/local/bin"),"polymake")</C>.
+     </Description> 
+   </ManSection>
+
+
+   <ManSection>
+    <Var Name="POLYMAKE_DATA_DIR"/>
+     <Description>
+     In this directory the files for polymake will be created. By
+     default, this generates a temporary directory using
+     <K>DirectoryTemporary</K>
+     </Description>
+   </ManSection>
+
+</Section>
+
+</Chapter>
+
+
+
+ <Chapter Label="Converting"><Heading>Converting Polymake Output</Heading>
+
+<Section><Heading>The General Method</Heading>
+
+When polymake is called, its output is read as a string and then
+processed as follows: 
+
+<Enum>
+ <Item>  the lines containing upper case letters are found. These
+ are treated as lines containing the keywords. Each of those lines
+ marks the beginning of a block of data. </Item>
+ <Item>The string is then cut into a list of blocks (also strings). Each
+ block starts with a line containing the keyword and continues with some lines of data.
+ </Item>
+<Item>for each of the blocks, the appropriate function of
+ <C>ObjectConverters</C> is called. Here "appropriate" just means,
+ that the keyword of the block coincides with the name of the
+ function.</Item>
+<Item>The output of the conversion function is then added to
+ the known properties of the <C>PolymakeObject</C> for which
+ <C>Polymake</C> was called.</Item>
+</Enum>
+
+<Subsection><Heading>Converter- Philosopy</Heading>
+
+The converter functions should take meaningful polymake data into meaningful
+&GAP; data. This sometimes means that the (mathematical) representation is
+changed. Here is an example: polymake writes vectors as augmented affine
+vectors of the form  <Code>1 a1 a2 a3...</Code> which does not go very well
+with the usual &GAP; conventions of column vectors and multiplying matrices
+from the right. So <Package>polymaking</Package> converts such a vector to
+<Code>[a1,a2,a3,...]</Code> and the user is left with the problem of
+augmentation and left or right multiplication.
+<P/>
+Another area where the &GAP; object isn't a literal translation from the
+polymake world is combinatorics. In Polymake, list elements are enumerated
+starting from 0. &GAP; enumerates lists starting at 1. So the conversion
+process adds 1 to the numbers corresponding to vertices in facet lists, for
+example. 
+<P/>
+</Subsection>
+
+The conversion process is done by the following methods:
+
+
+  <ManSection>
+  <Meth Name="ConvertPolymakeOutputToGapNotation" Arg="string"/>
+   <Returns>Record having polymake keywords as entry names and
+   the respective converted polymake output as entries.
+   </Returns>
+   <Description>
+
+    Given a the output of the polymake program as a string
+    <A>string</A>, this method first calls <Ref
+    Meth="SplitPolymakeOutputStringIntoBlocks"/>.  For each of the returned
+    blocks, the name (=first line) of the block is read and the record
+    <Ref Var="ObjectConverters"/> is looked up for an entry with that
+    name. If such an entry exists, it (being a function!) is called
+    and passed the block. The returned value is then given the name of
+    the block and added to the record returned by
+    <C>ConvertPolymakeOutputToGapNotation</C>.
+
+   </Description>
+  </ManSection>
+
+
+<ManSection>
+ <Meth Name="SplitPolymakeOutputStringIntoBlocks" Arg="string"/>
+  <Returns>List of strings -- "blocks"--</Returns>
+  <Description>
+    The string <A>string</A> is cut at the lines starting with an upper case
+    character and  consisting only of upper case
+    letters, numbers and underscore (&uscore;) characters. 
+    The parts are returned as a list of
+    strings. The initial string <A>string</A> remains unchanged.
+  </Description>
+</ManSection>
+
+
+ <ManSection>
+  <Var Name="ObjectConverters"/> <Description> The entries of this
+    record are labeled by polymake keywords. Each of the entries is a
+    function which converts a string returned by polymake to &GAP;
+    format.  So far, only a few converters are implemented. To see
+    which, try
+     <C>RecNames(ObjectConverters);</C>
+     <Par></Par>
+      You can define new converters using the basic functions
+      described in section <Ref Sect="conversionFunctions"/>.
+     </Description>
+    </ManSection>
+
+
+</Section>
+ 
+
+<Section Label="conversionFunctions"><Heading>Conversion Functions</Heading>
+
+  The following functions are used for the functions in
+ <Ref Var="ObjectConverters"></Ref>.
+
+  <ManSection>
+  <Meth Name="ConvertPolymakeNumber" Arg="string"/>
+   <Description>
+    The string <A>string</A> is converted to a rational number. Unlike
+    <C>Rat</C>, it tests, if the number represented by <A>string</A>
+    is a floating point number an converts it correctly. If this is
+    the case, a waring is issued.
+   </Description>
+  </ManSection>
+
+  <ManSection>
+  <Meth Name="ConvertPolymakeScalarToGAP" Arg="list"/>
+   <Description>
+    If <A>list</A> contains a single string, this string is converted
+    into a number using <Ref Meth="ConvertPolymakeNumber" />.
+   </Description>
+  </ManSection>
+
+  <ManSection>
+   <Meth Name="ConvertPolymakeMatrixOrListOfSetsToGAP" Arg="list"/>
+   <Meth Name="ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne" Arg="list"/>
+    <Description>
+     Tries to decide if the list <A>list</A> of strings represents a matrix or
+     a list of sets by testing if they start with "{". It then calls either
+     <Ref Meth="ConvertPolymakeMatrixToGAP"/> or <Ref
+     Meth="ConvertPolymakeListOfSetsToGAP"/>.
+     The "PlusOne" version calls <Ref
+Meth="ConvertPolymakeListOfSetsToGAPPlusOne"/> if <A>list</A> represents a list
+of sets.
+    </Description>
+  </ManSection>
+
+  <ManSection>
+  <Meth Name="ConvertPolymakeMatrixToGAP" Arg="list"/>
+  <Meth Name="ConvertPolymakeMatrixToGAPKillOnes" Arg="list"/>
+   <Description>
+    The list <A>list</A> of strings is interpreted as a list of row
+    vectors and converted into a matrix.
+    
+    The "KillOnes" version removes the leading ones.
+   </Description>
+  </ManSection>
+
+
+  <ManSection>
+   <Meth Name="ConvertPolymakeVectorToGAP" Arg="list"/>
+   <Meth Name="ConvertPolymakeVectorToGAPKillOne" Arg="list"/>
+   <Meth Name="ConvertPolymakeIntVectorToGAPPlusOne" Arg="list"/>
+     <Description>
+      As the corresponding "Matrix" version. Just for vectors.
+      <K>ConvertPolymakeIntVectorToGAPPlusOne</K> requires the vector to
+      contain integers. It also adds 1 to every entry.
+     </Description>
+  </ManSection>
+
+
+  <ManSection>
+   <Meth Name="ConvertPolymakeBoolToGAP" Arg="list"/>
+     <Description>
+      If <A>list</A> contains a single string, which is either
+      0,false,1, or true this function returns <K>false</K> or
+      <K>true</K>, respectively.
+     </Description>
+  </ManSection>
+
+
+  <ManSection>
+   <Meth Name="ConvertPolymakeSetToGAP" Arg="list"/>
+     <Description>
+
+      Let <A>list</A> be a list containing a single string, which is a
+      list of numbers separated by whitespaces and enclosed by
+      &obrace; and &cbrace; . The returned value is then a set of
+      rational numbers (in the GAP sense).
+
+    </Description> 
+  </ManSection>
+
+  <ManSection>
+   <Meth Name="ConvertPolymakeListOfSetsToGAP" Arg="list"/>
+   <Meth Name="ConvertPolymakeListOfSetsToGAPPlusOne" Arg="list"/>
+     <Description>
+
+      Let <A>list</A> be a list containing several strings representing sets.
+      Then each of these strings is converted to a set of rational numbers and
+      the returned value is the list of all those sets.
+      The "PlusOne" version adds 1 to every entry.
+
+    </Description> 
+  </ManSection>
+
+
+  <ManSection>
+   <Meth Name="ConvertPolymakeGraphToGAP" Arg="list"/>
+     <Description>
+      Let <A>list</A> be a list of strings representing sets (that is,
+      a list of integers enclosed by &obrace; and &cbrace;). Then a record is returned
+      containing two sets named <C>.vertices</C> and <C>.edges</C>.
+    </Description> 
+  </ManSection>
+
+
+ </Section>
+
+</Chapter>

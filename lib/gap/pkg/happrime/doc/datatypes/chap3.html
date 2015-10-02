@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (HAPprime Datatypes) - Chapter 3: FG-modules</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+</head>
+<body>
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap2.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap4.html">Next Chapter</a>&nbsp;  </div>
+
+<p><a id="X820435E87D83DF34" name="X820435E87D83DF34"></a></p>
+<div class="ChapSects"><a href="chap3.html#X820435E87D83DF34">3 <span class="Heading">FG-modules</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X85FA0B237AC4A19D">3.1 <span class="Heading">The <code class="keyw">FpGModuleGF</code> datatype</span></a>
+<div class="ContSSBlock">
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X79DF42E686679AFE">3.2 <span class="Heading">Implementation details: Block echelon form</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79DDD8C37A0B8425">3.2-1 <span class="Heading">Generating vectors and their block structure</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X82F0E0067C40FDD5">3.2-2 <span class="Heading">Matrix echelon reduction and head elements</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X814C05FC87ED4035">3.2-3 <span class="Heading">Echelon block structure and minimal generators</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X86F4852785A509BF">3.2-4 <span class="Heading">Intersection of two modules</span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X83D8009086035BCB">3.3 <span class="Heading">Construction functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X862AC894821415A4">3.3-1 <span class="Heading">FpGModuleGF construction functions</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X83232B1886BE75F0">3.3-2 FpGModuleFromFpGModuleGF</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X832C55197A46CB77">3.3-3 MutableCopyModule</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8315A82E7812289F">3.3-4 CanonicalAction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X814553E382BC777E">3.3-5 <span class="Heading">Example: Constructing a <code class="keyw">FpGModuleGF</code></span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X7DE3278D7E5DEE03">3.4 <span class="Heading">Data access functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X85CF62207B6F6099">3.4-1 ModuleGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X81C2789D85109789">3.4-2 ModuleGroupOrder</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7EE4E7ED86696752">3.4-3 ModuleAction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7CFEF3B887425980">3.4-4 ModuleActionBlockSize</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X81F860F380EB55FC">3.4-5 ModuleGroupAndAction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78BDED977DA309FD">3.4-6 ModuleCharacteristic</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X86AC3239861EAB8A">3.4-7 ModuleField</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7A020F6F7EFDFFC7">3.4-8 ModuleAmbientDimension</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X86B97B587B7C12E7">3.4-9 AmbientModuleDimension</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DF15EFA78F1DDF6">3.4-10 DisplayBlocks</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7E4C3C5C7CC7B559">3.4-11 <span class="Heading">Example: Accessing data about a <code class="keyw">FpGModuleGF</code></span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X85D634767E456A9D">3.5 <span class="Heading">Generator and vector space functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7D6B0216838295A2">3.5-1 ModuleGenerators</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7F643D50826E15E2">3.5-2 ModuleGeneratorsAreMinimal</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7978F2DD787C2BB6">3.5-3 ModuleGeneratorsAreEchelonForm</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X85178CA8858B8616">3.5-4 ModuleIsFullCanonical</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X87572B78824FB28E">3.5-5 ModuleGeneratorsForm</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DFFBBD6809A2B41">3.5-6 ModuleRank</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DFAF92283C6FFDC">3.5-7 ModuleVectorSpaceBasis</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8377A6E986D36D12">3.5-8 ModuleVectorSpaceDimension</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X81C340AD7EE8FA63">3.5-9 <span class="Heading">MinimalGeneratorsModule</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7E44920683157DE2">3.5-10 RadicalOfModule</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7F9E3DF87FE60C1A">3.5-11 <span class="Heading">Example: Generators and basis vectors of a <code class="keyw">FpGModuleGF</code></span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X7B989D1181EBBBB5">3.6 <span class="Heading">Block echelon functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84E3AA228784BF01">3.6-1 EchelonModuleGenerators</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X856E45CC84B53128">3.6-2 ReverseEchelonModuleGenerators</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X83306CFA857F177C">3.6-3 <span class="Heading">Example: Converting a <code class="keyw">FpGModuleGF</code> to block echelon form</span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X7B22D74482E6EF40">3.7 <span class="Heading">Sum and intersection functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X879541298181840D">3.7-1 <span class="Heading">DirectSumOfModules</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X82A18B41872A8149">3.7-2 DirectDecompositionOfModule</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X83D609B679B53F5C">3.7-3 IntersectionModules</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84A6FBC37BD8EEAB">3.7-4 SumModules</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8198B7C986776BA8">3.7-5 <span class="Heading">Example: Sum and intersection of <code class="keyw">FpGModuleGF</code>s</span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X8308D685809A4E2F">3.8 <span class="Heading">Miscellaneous functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X81A073C47FB50620">3.8-1 =</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78EB919D85362902">3.8-2 <span class="Heading">IsModuleElement</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8071ECEB7A92965A">3.8-3 IsSubModule</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X82FB0B387E53B073">3.8-4 RandomElement</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84EB237885A48F03">3.8-5 <span class="Heading">Random Submodule</span></a>
+</span>
+</div></div>
+</div>
+
+<h3>3 <span class="Heading">FG-modules</span></h3>
+
+<p>Let FG be the group ring of the group G over the field F. In this package we only consider the case where G is a finite p-groups and F = F_p is the field of p elements. In addition, we only consider free FG-modules.</p>
+
+<p><a id="X85FA0B237AC4A19D" name="X85FA0B237AC4A19D"></a></p>
+
+<h4>3.1 <span class="Heading">The <code class="keyw">FpGModuleGF</code> datatype</span></h4>
+
+<p>Modules and submodules of free FG-modules are represented in <strong class="pkg">HAPprime</strong> using the <code class="keyw">FpGModuleGF</code> datatype, where the `<code class="code">GF</code>' stands for `Generator Form'. This defines a module using a group G and a set of G-generating vectors for the module's vector space, together with a group action which operates on those vectors. A free FG-module FG can be considered as a vector space F^|G| whose basis is the elements of G. An element of (FG)^n is the direct sum of n copies of FG and, as an element of <code class="keyw">FpGModuleGF</code>, is represented as a vector of length n|G| with coefficients in F. Representing our FG-module elements as vectors is ideal for our purposes since <strong class="pkg">GAP</strong>'s representation and manipulation of vectors and matrices over small prime fields is very efficient in both memory and computation time.</p>
+
+<p>The <strong class="pkg">HAP</strong> package defines a <code class="keyw">FpGModule</code> object, which is similar but stores a vector space basis rather than a G-generating set for the module's vector space. Storing a G-generating set saves memory, both in passive storage and in allowing more efficient versions of some computation algorithms.</p>
+
+<p>There are a number of construction functions for <code class="keyw">FpGModuleGF</code>s: see <a href="chap3.html#X862AC894821415A4"><b>3.3-1</b></a> for details. A FG-module is defined by the following:</p>
+
+
+<ul>
+<li><p><code class="code">gens</code>, a list of G-generating vectors for the underlying vector space. These do not need to be minimal - they could even be a vector space basis. The <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) can be used to convert a module to one with a minimal set of generators.</p>
+
+</li>
+<li><p><code class="code">group</code>, the group G for the module</p>
+
+</li>
+<li><p><code class="code">action</code>, a function <code class="code">action(g, u)</code> that represents the module's group action on vectors. It takes a group element g in G and a vector <code class="code">u</code> of length <code class="code">actionBlockSize</code> and returns another vector <code class="code">v</code> of the same length that is the product v = gu. If <code class="code">action</code> is not provided, the canonical group permutation action is used. If the vector <code class="code">u</code> is an integer multiple of <code class="code">actionBlockSize</code> in length, the function <code class="code">action</code> acts block-wise on the vector.</p>
+
+</li>
+<li><p><code class="code">actionBlockSize</code>, the length of vectors upon which <code class="code">action</code> operates. This is usually the order of the group, |G| (for example for the canonical action), but it is possible to specify this to support other possible group actions that might act on larger vectors. <code class="code">actionBlockSize</code> will always be equal to the ambient dimension of the module FG^1.</p>
+
+</li>
+</ul>
+<p>The group, action and block size are internally wrapped up into a record <code class="code">groupAndAction</code>, with entries <code class="code">group</code>, <code class="code">action</code> and <code class="code">actionBlockSize</code>. This is used to simplify the passing of parameters to some functions.</p>
+
+<p>Some additional information is sometimes needed to construct particular classes of <code class="keyw">FpGModuleGF</code>:</p>
+
+
+<ul>
+<li><p><code class="code">ambientDimension</code>, the length of vectors in the generating set: for a module (FG)^n, this is equal to nx<code class="code">actionBlockSize</code>. This is needed in the case when the list of generating vectors is empty.</p>
+
+</li>
+<li><p><code class="code">form</code>, a string detailing whether the generators are known to be minimal or not, and if so in which format. It can be one of <code class="code">"unknown"</code>, <code class="code">"fullcanonical"</code>, <code class="code">"minimal"</code>, <code class="code">"echelon"</code> or <code class="code">"semiechelon"</code>. Some algorithms require a particular form, and algorithms such as <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>) that manipulate a module's generators to create these forms set this entry.</p>
+
+</li>
+</ul>
+<p><a id="X79DF42E686679AFE" name="X79DF42E686679AFE"></a></p>
+
+<h4>3.2 <span class="Heading">Implementation details: Block echelon form</span></h4>
+
+<p><a id="X79DDD8C37A0B8425" name="X79DDD8C37A0B8425"></a></p>
+
+<h5>3.2-1 <span class="Heading">Generating vectors and their block structure</span></h5>
+
+<p>Consider the vector representation of an element in the FG-module (FG)^2, where G is a group of order four:</p>
+
+<p class="pcenter">
+          v in (FG)^2 = (g_1 + g_3, g_1 + g_2 + g_4) = [1 0 1 0 | 1 1 0 1]
+        </p>
+
+<p>The first block of four entries in the vector correspond to the first FG summand and the second block to the second summand (and the group elements are numbered in the order provided by the <strong class="pkg">GAP</strong> function <code class="func">Elements</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP028.htm#SECT002"><b>Reference: Elements</b></a>)).</p>
+
+<p>Given a G-generating set for a FG-module, the usual group action permutes the group elements, and thus the effect on the vector is to permute the equivalent vector elements. Each summand is independent, and so elements are permuted within the blocks (normally of size |G|) seen in the example above. A consequence of this is that if any block (i.e. summand) in a generator is entirely zero, then it remains zero under group (or F) multiplication and so that generator contributes nothing to that part of the vector space. This fact enables some of the structure of the module's vector space to be inferred from the G-generators, without needing a full vector space basis . A desirable set of G-generators is one that has many zero blocks, and what we call the `block echelon' form is one that has this property.</p>
+
+<p><a id="X82F0E0067C40FDD5" name="X82F0E0067C40FDD5"></a></p>
+
+<h5>3.2-2 <span class="Heading">Matrix echelon reduction and head elements</span></h5>
+
+<p>The block echelon form of a FG-module generating set is analagous to the echelon form of matrices, used as a first stage in many matrix algorithms, and we first briefly review matrix echelon form. In a (row) echelon-form matrix, the head element in each row (the first non-zero entry) is the identity, and is to the right of the head in the previous row. A consequence of this is that the values below each head are all zero. All zero rows are at the bottom of the matrix (or are removed). <strong class="pkg">GAP</strong> also defines a semi-echelon form, in which it is guaranteed that all values below each head is zero, but not that each head is to the right of those above it.</p>
+
+<p>Matrices can be converted into (semi-)echelon form by using Gaussian elimination to perform row reduction (for example the <strong class="pkg">GAP</strong> function <code class="func">SemiEchelonMat</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP024.htm#SECT009"><b>Reference: SemiEchelonMat</b></a>)). A typical algorithm gradually builds up a list of matrix rows with unique heads, which will eventually be an echelon-form set of basis elements for the row space of the matrix. This set is initialised with the first row of the matrix, and the algorithm is then applied to each subsequent row in turn. The basis rows in the current set are used to reduce the next row of the matrix: if, after reduction, it is non-zero then it will have a unique head and is added to the list of basis rows; if it is zero then it may be removed. The final set of vectors will be a semi-echelon basis for the row space of the original matrix, which can then be permuted to give an echelon basis if required.</p>
+
+<p><a id="X814C05FC87ED4035" name="X814C05FC87ED4035"></a></p>
+
+<h5>3.2-3 <span class="Heading">Echelon block structure and minimal generators</span></h5>
+
+<p>In the same way that the echelon form is useful for vector space generators, we can convert a set of FG-module generators into echelon form. However, unlike multiplication by a field element, the group action on generating vectors also permutes the vector elements, so a strict echelon form is less useful. Instead, we define a `block echelon' form, treating the blocks in the vector (see example above) as the FG-elements to be converted into echelon form. In block-echelon form, the first non-zero block in each row is as far to the right as possible. Often, the first non-zero block in a row will be to the right of the first non-zero block in the row above, but when several generating vectors are needed in a block, this may not be the case. The following example creates a random submodule of (FG)^n by picking five generating vectors at random. This module is first displayed with the original generators, and then they are converted to block echelon form using the the <strong class="pkg">HAPprime</strong> function <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>). The two generating sets both span the same vector space (i.e. the same FG module), but the latter representation is much more useful.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; M := FpGModuleGF(RandomMat(5, 32, GF(2)), DihedralGroup(8));;
+gap&gt; Display(M);
+Module over the group ring of Group( [ f1, f2, f3 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[.1..1.1.|.1....1.|1111.11.|11.1111.]
+[11.1..1.|1....11.|1...111.|1...11..]
+[11..1.1.|1.1.1...|11...1..|.11.11..]
+[11111111|111...1.|.11...1.|.1..1111]
+[.1111111|1.1.111.|..1..1..|1.111...]
+gap&gt; echM := EchelonModuleGenerators(M);
+rec( module := Module over the group ring of &lt;pc group of size 8 with
+    3 generators&gt; in characteristic 2 with 4 generators in FG^
+    4. Generators are in minimal echelon form., headblocks := [ 1, 2, 3, 4 ] )
+gap&gt; Display(echM.module);
+Module over the group ring of Group( [ f1, f2, f3 ] )
+ in characteristic 2 with 4 generators in FG^4.
+[.1..1.1.|.1....1.|1111.11.|11.1111.]
+[........|.1111..1|111.1...|.11.11.1]
+[........|........|.1..1.1.|.1.1.111]
+[........|........|........|..1111.1]
+Generators are in minimal echelon form.gap&gt;
+gap&gt; M = echM.module;
+true
+</pre></td></tr></table>
+
+<p>The main algorithm for converting a set of generators into echelon form is <code class="func">SemiEchelonModuleGeneratorsDestructive</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>). The generators for the FG module are represented as rows of a matrix, and (with the canonical action) the first |G| columns of this matrix correspond to the first block, the next |G| columns to the second block, and so on. The first block of the matrix is taken and the vector space V_b spanned by the rows of that block is found (which will be a a subspace of F^|G|). Taking the rows in the first block, find (by gradually leaving out rows) a minimal subset that generates V_b. The rows of the full matrix that correspond to this minimal subset form the first rows of the block-echelon form generators. Taking those rows, and all G-multiples of them, now calculate a semi-echelon basis for the vector space that they generate (using <code class="func">SemiEchelonMatDestructive</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP024.htm#SECT009"><b>Reference: SemiEchelonMatDestructive</b></a>)). This is used to reduce all of the other generators. Since the rows we have chosen span the space of the first block, the first block in all the other rows will be reduced to zero. We can now move on to the second block.</p>
+
+<p>We now look at the rows of the matrix that start (have their first non-zero entry) in the second block. In addition, some of the generators used for the first block might additionally give rise to vector space basis vectors with head elements in the second blocks. The rows need to be stored during the first stage and reused here. We find a minimal set of the matrix rows with second-block heads that, when taken with any second-block heads from the first stage, generate the entire space spanned by the second block. The vector-space basis from this new minimal set is then used to reduce the rest of the generating rows as before, reducing all of the other rows' second blocks to zero. The process is then repeated for each other block. Any generators that are completely zero are then removed. The algorithm is summarised in the following pseudocode:</p>
+
+
+<pre class="normal">
+
+Let X be the list of generators still to convert (initially all the generators)
+Let Xe = [] be the list of generators already in block-echelon form
+Define X{b} to represent the $b$th block from generators X
+Define V(X) to represent the vector space generated by generators X
+-------------------------------------------------------------------------------
+for b in [1..blocks] 
+  1. Find a minimal set of generators Xm from X such that 
+     V(Xm{b} + Xe{b}) = V(X{b} + Xe{b})
+  2. Remove Xm from X and add them to Xe
+  3. Find a semi-echelon basis for V(Xe) and use this to reduce the elements 
+     of block b in remaining vectors of X to zero
+end for
+      
+</pre>
+
+<p>The result of this algorithm is a new generating set for the module that is minimal in the sense that no vector can be removed from the set and leave it still spanning the same vector space. In the case of a FG-module with F=GF(2), this is a globally minimal set: there is no possible alternative set with fewer generators.</p>
+
+<p><a id="X86F4852785A509BF" name="X86F4852785A509BF"></a></p>
+
+<h5>3.2-4 <span class="Heading">Intersection of two modules</span></h5>
+
+<p>Knowing the block structure of the modules enables the intersection of two modules to be calculated more efficiently. Consider two modules U and V with the block structure as given in this example:</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; DisplayBlocks(U);
+[*..]
+[**.]
+[.*.]
+gap&gt; DisplayBlocks(V);
+[.**]
+[.**]
+[..*]
+</pre></td></tr></table>
+
+<p>To calculate the intersection of the two modules, it is normal to expand out the two modules to find the vector space U_F and V_F of the two modules and calculate the intersection as a standard vector-space intersection. However, in this case, since U has no elements in the last block, and V has no elements in the first block, the intersection must only have elements in the middle block. This means that the first generator of U and the last generator of V can not be in the intersection and can be ignored for the purposes of the intersection calculation. In general, rather than expanding the entirety of U and V into an F-basis to calculate their intersection, one can expand U and V more intelligently into F-bases U'_F and V'_F which are smaller than U_F and V_F but have the same intersection.</p>
+
+<p>Having determined (by comparing the block structure of U and V) that only the middle block in our example contributes to the intersection, we only need to expand out the rows of U and V that have heads in that block. The first generator of U generates no elements in the middle block, and trivially be ignored. The second row of U may or may not contribute to the intersection: this will need expanding out and echelon reduced. The expanded rows that don't have heads in the central block can then be discarded, with the other rows forming part of the basis of U'_F. Likewise, the third generator of U is expanded and echelon reduced to give the rest of the basis for U'_F. To find V'_F, the first two generators are expanded, semi-echelon reduced and the rows with heads in the middle block kept. The third generator can be ignored. Finally, the intersection of U'_F and V'_F can found using, for example, <code class="func">SumIntersectionMatDestructive</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/datatypes/chap5.html#X845EA1B28618D9A7"><b>HAPprime Datatypes: SumIntersectionMatDestructive</b></a>).</p>
+
+<p>This algorithm, implemented in the function <code class="func">IntersectionModulesGF</code> (<a href="chap3.html#X83D609B679B53F5C"><b>3.7-3</b></a>), will (for modules whose generators have zero columns) use less memory than a full vector-space expansion, and in the case where U and V have no intersection, may need to perform no expansion at all. In the worst case, both U and V will need a full expansion, using no more memory than the naive implementation. Since any full expansion is done row-by-row, with echelon reduction each time, it will in general still require less memory (but will be slower).</p>
+
+<p><a id="X83D8009086035BCB" name="X83D8009086035BCB"></a></p>
+
+<h4>3.3 <span class="Heading">Construction functions</span></h4>
+
+<p><a id="X862AC894821415A4" name="X862AC894821415A4"></a></p>
+
+<h5>3.3-1 <span class="Heading">FpGModuleGF construction functions</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGF</code>( <var class="Arg">gens, G[, action, actionBlockSize]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGF</code>( <var class="Arg">gens, groupAndAction</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGF</code>( <var class="Arg">ambientDimension, G[, action, actionBlockSize]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGF</code>( <var class="Arg">ambientDimension, groupAndAction</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGF</code>( <var class="Arg">G, n</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGF</code>( <var class="Arg">groupAndAction, n</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGF</code>( <var class="Arg">HAPmod</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGFNC</code>( <var class="Arg">gens, G, form, action, actionBlockSize</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGFNC</code>( <var class="Arg">ambientDimension, G, action, actionBlockSize</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleGFNC</code>( <var class="Arg">gens, groupAndAction[, form]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Creates and returns a <code class="keyw">FpGModuleGF</code> module object. The most commonly-used constructor requires a list of generators <var class="Arg">gens</var> and a group <var class="Arg">G</var>. The group action and block size can be specified using the <var class="Arg">action</var> and <var class="Arg">actionBlockSize</var> parameters, or if these are omitted then the canonical action is assumed. These parameters can also be wrapped up in a <code class="code">groupAndAction</code> record (see <a href="chap3.html#X85FA0B237AC4A19D"><b>3.1</b></a>).</p>
+
+<p>An empty <code class="keyw">FpGModuleGF</code> can be constructed by specifying a group and an <var class="Arg">ambientDimension</var> instead of a set of generators. A module spanning (FG)^n with canonical generators and action can be constructed by giving a group <var class="Arg">G</var> and a rank <var class="Arg">n</var>. A <code class="keyw">FpGModuleGF</code> can also be constructed from a <strong class="pkg">HAP</strong> <code class="keyw">FpGModule</code> <var class="Arg">HAPmod</var>.</p>
+
+<p>The generators in a <code class="keyw">FpGModuleGF</code> do not need to be a minimal set. If you wish to create a module with minimal generators, construct the module from a non-minimal set <var class="Arg">gens</var> and then use one of the <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>). When constructing a <code class="keyw">FpGModuleGF</code> from a <code class="keyw">FpGModule</code>, the <strong class="pkg">HAP</strong> function <code class="func">GeneratorsOfFpGModule</code> (<a href="/home/pas/GAP/gap/pkg/Hap1.9/doc/chap16.html#X81A2A3C97C09685E"><b>HAP: GeneratorsOfFpGModule</b></a>) is used to provide a set of generators, so in this case the generators will be minimal.</p>
+
+<p>Most of the forms of this function perform a few (cheap) tests to make sure that the arguments are self-consistent. The <code class="code">NC</code> versions of the constructors are provided for internal use, or when you know what you are doing and wish to skip the tests. See Section <a href="chap3.html#X814553E382BC777E"><b>3.3-5</b></a> below for an example of usage.</p>
+
+<p><a id="X83232B1886BE75F0" name="X83232B1886BE75F0"></a></p>
+
+<h5>3.3-2 FpGModuleFromFpGModuleGF</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; FpGModuleFromFpGModuleGF</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModule</p>
+
+<p>Returns a <strong class="pkg">HAP</strong> <code class="keyw">FpGModule</code> that represents the same module as the <code class="keyw">FpGModuleGF</code> <var class="Arg">M</var>. This uses <code class="func">ModuleVectorSpaceBasis</code> (<a href="chap3.html#X7DFAF92283C6FFDC"><b>3.5-7</b></a>) to find the vector space basis for <var class="Arg">M</var> and constructs a <code class="keyw">FpGModule</code> with this vector space and the same group and action as <var class="Arg">M</var> See Section <a href="chap3.html#X814553E382BC777E"><b>3.3-5</b></a> below for an example of usage.</p>
+
+<p><em>TODO: This currently constructs an FpGModule object explicitly. It should use a constructor once one is provided</em></p>
+
+<p><a id="X832C55197A46CB77" name="X832C55197A46CB77"></a></p>
+
+<h5>3.3-3 MutableCopyModule</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; MutableCopyModule</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Returns a copy of the module <var class="Arg">M</var> where the generating vectors are fully mutable. The group and action in the new module is identical to that in <var class="Arg">M</var> - only the list of generators is copied and made mutable. (The assumption is that this function used in situations where you just want a new generating set.)</p>
+
+<p><a id="X8315A82E7812289F" name="X8315A82E7812289F"></a></p>
+
+<h5>3.3-4 CanonicalAction</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CanonicalAction</code>( <var class="Arg">G</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CanonicalActionOnRight</code>( <var class="Arg">G</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CanonicalGroupAndAction</code>( <var class="Arg">G</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<p><b>Returns: </b>Function <code class="code">action(g,v)</code> or a record with elements <code class="code">(group, action, actionOnRight, actionBlockSize)</code></p>
+
+<p>Returns a function of the form <code class="code">action(g,v)</code> that performs the canonical group action of an element <code class="code">g</code> of the group <var class="Arg">G</var> on a vector <code class="code">v</code> (acting on the left by default, or on the right with the <code class="code">OnRight</code> version). The <code class="code">GroupAndAction</code> version of this function returns the actions in a record together with the group and the action block size. Under the canonical action, a free module FG is represented as a vector of length |G| over the field F, and the action is a permutation of the vector elements.</p>
+
+<p>Note that these functions are attributes of a group, so that the canonical action for a particular group object will always be an identical function (which is desirable for comparing and combining modules and submodules).</p>
+
+<p><a id="X814553E382BC777E" name="X814553E382BC777E"></a></p>
+
+<h5>3.3-5 <span class="Heading">Example: Constructing a <code class="keyw">FpGModuleGF</code></span></h5>
+
+<p>The example below constructs four different FG-modules, where G is the quaternion group of order eight, and the action is the canonical action in each case:</p>
+
+<ol>
+<li><p><code class="code">M</code> is the module (FG)^3</p>
+
+</li>
+<li><p><code class="code">S</code> is the submodule of (FG)^3 with elements only in the first summand</p>
+
+</li>
+<li><p><code class="code">T</code> is a random submodule <code class="code">M</code> generated by five elements</p>
+
+</li>
+<li><p><code class="code">U</code> is the trivial (zero) submodule of (FG)^4</p>
+
+</li>
+</ol>
+<p>We check whether <code class="code">S</code>, <code class="code">T</code> and <code class="code">U</code> are submodules of <code class="code">M</code>, examine a random element from <code class="code">M</code>, and convert <code class="code">S</code> into a <strong class="pkg">HAP</strong> <code class="keyw">FpGModule</code>. For the other functions used in this example, see Section <a href="chap3.html#X8308D685809A4E2F"><b>3.8</b></a>.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := SmallGroup(8, 4);;
+gap&gt; M := FpGModuleGF(G, 3);
+Full canonical module FG^3 over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2
+gap&gt; gen := ListWithIdenticalEntries(24, Zero(GF(2)));;
+gap&gt; gen[1] := One(GF(2));;
+gap&gt; S := FpGModuleGF([gen], G);
+Module over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2 with 1 generator in FG^
+3. Generators are in minimal echelon form.
+gap&gt; T := RandomSubmodule(M, 5);
+Module over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2 with 5 generators in FG^3.
+gap&gt; U := FpGModuleGF(32, CanonicalGroupAndAction(G));
+Module over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2 with 0 generators in FG^
+4. Generators are in minimal echelon form.
+gap&gt;
+gap&gt; IsSubModule(M, S);
+true
+gap&gt; IsSubModule(M, T);
+true
+gap&gt; IsSubModule(M, U);
+false
+gap&gt;
+gap&gt; e := RandomElement(M);
+&lt;a GF2 vector of length 24&gt;
+gap&gt; Display([e]);
+ . 1 1 . . 1 . . . . . 1 . . 1 1 . . 1 . 1 . . 1
+gap&gt; IsModuleElement(S, e);
+false
+gap&gt; IsModuleElement(T, e);
+true
+gap&gt;
+gap&gt; FpGModuleFromFpGModuleGF(S);
+Module of dimension 8 over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2
+
+</pre></td></tr></table>
+
+<p><a id="X7DE3278D7E5DEE03" name="X7DE3278D7E5DEE03"></a></p>
+
+<h4>3.4 <span class="Heading">Data access functions</span></h4>
+
+<p><a id="X85CF62207B6F6099" name="X85CF62207B6F6099"></a></p>
+
+<h5>3.4-1 ModuleGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleGroup</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Group</p>
+
+<p>Returns the group of the module <var class="Arg">M</var>. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X81C2789D85109789" name="X81C2789D85109789"></a></p>
+
+<h5>3.4-2 ModuleGroupOrder</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleGroupOrder</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the order of the group of the module <var class="Arg">M</var>. This function is identical to <code class="code">Order(ModuleGroup(M))</code>, and is provided for convenience. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7EE4E7ED86696752" name="X7EE4E7ED86696752"></a></p>
+
+<h5>3.4-3 ModuleAction</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleAction</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Function</p>
+
+<p>Returns the group action function of the module <var class="Arg">M</var>. This is a function <code class="code">action(g, v)</code> that takes a group element <code class="code">g</code> and a vector <code class="code">v</code> and returns a vector <code class="code">w</code> that is the result of w = gv. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7CFEF3B887425980" name="X7CFEF3B887425980"></a></p>
+
+<h5>3.4-4 ModuleActionBlockSize</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleActionBlockSize</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the block size of the group action of the module <var class="Arg">M</var>. This is the length of vectors (or the factor of the length) upon which the group action function acts. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X81F860F380EB55FC" name="X81F860F380EB55FC"></a></p>
+
+<h5>3.4-5 ModuleGroupAndAction</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleGroupAndAction</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Record with elements <code class="code">(group, action, actionOnRight, actionBlockSize)</code></p>
+
+<p>Returns details of the module's group and action in a record with the following elements:</p>
+
+
+<ul>
+<li><p><code class="code">group</code> The module's group</p>
+
+</li>
+<li><p><code class="code">action</code> The module's group action, as a function of the form <code class="code">action(g, v)</code> that takes a vector <code class="code">v</code> and returns the vector w = gv</p>
+
+</li>
+<li><p><code class="code">actionOnRight</code> The module's group action when acting on the right, as a function of the form <code class="code">action(g, v)</code> that takes a vector <code class="code">v</code> and returns the vector w = vg</p>
+
+</li>
+<li><p><code class="code">actionBlockSize</code> The module's group action block size. This is the ambient dimension of vectors in the module FG</p>
+
+</li>
+</ul>
+<p>This function is provided for convenience, and is used by a number of internal functions. The canonical groups and action can be constructed using the function <code class="func">CanonicalGroupAndAction</code> (<a href="chap3.html#X8315A82E7812289F"><b>3.3-4</b></a>). See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X78BDED977DA309FD" name="X78BDED977DA309FD"></a></p>
+
+<h5>3.4-6 ModuleCharacteristic</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleCharacteristic</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the characteristic of the field F of the FG-module <var class="Arg">M</var>. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X86AC3239861EAB8A" name="X86AC3239861EAB8A"></a></p>
+
+<h5>3.4-7 ModuleField</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleField</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Field</p>
+
+<p>Returns the field F of the FG-module <var class="Arg">M</var>. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7A020F6F7EFDFFC7" name="X7A020F6F7EFDFFC7"></a></p>
+
+<h5>3.4-8 ModuleAmbientDimension</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleAmbientDimension</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the ambient dimension of the module <var class="Arg">M</var>. The module <var class="Arg">M</var> is represented as a submodule of FG^n using generating vectors for a vector space. This function returns the dimension of this underlying vector space. This is equal to the length of each generating vector, and also nx<code class="code">actionBlockSize</code>. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X86B97B587B7C12E7" name="X86B97B587B7C12E7"></a></p>
+
+<h5>3.4-9 AmbientModuleDimension</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; AmbientModuleDimension</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>The module <var class="Arg">M</var> is represented a submodule embedded within the free module FG^n. This function returns n, the dimension of the ambient module. This is the same as the number of blocks. See Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7DF15EFA78F1DDF6" name="X7DF15EFA78F1DDF6"></a></p>
+
+<h5>3.4-10 DisplayBlocks</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; DisplayBlocks</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>nothing</p>
+
+<p>Displays the structure of the module generators <var class="Arg">gens</var> in a compact human-readable form. Since the group action permutes generating vectors in blocks of length <code class="code">actionBlockSize</code>, any block that contains non-zero elements will still contain non-zero elements after the group action, but a block that is all zero will remain all zero. This operation displays the module generators in a per-block form, with a <code class="code">*</code> where the block is non-zero and <code class="code">.</code> where the block is all zero.</p>
+
+<p>The standard <strong class="pkg">GAP</strong> methods <code class="func">View</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP006.htm#SECT003"><b>Reference: View</b></a>), <code class="func">Print</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP006.htm#SECT003"><b>Reference: Print</b></a>) and <code class="func">Display</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP006.htm#SECT003"><b>Reference: Display</b></a>) are also available.) See Section <a href="chap3.html#X83306CFA857F177C"><b>3.6-3</b></a> below for an example of usage.</p>
+
+<p><a id="X7E4C3C5C7CC7B559" name="X7E4C3C5C7CC7B559"></a></p>
+
+<h5>3.4-11 <span class="Heading">Example: Accessing data about a <code class="keyw">FpGModuleGF</code></span></h5>
+
+<p>In the following example, we construct three terms of a (minimal) resolution of the dihedral group of order eight, which is a chain complex of FG-modules.</p>
+
+<p class="pcenter">
+          (FG)^3 -&gt; (FG)^2 -&gt; FG -&gt; F -&gt; 0
+        </p>
+
+<p>We obtain the last homomorphism in this chain complex and calculate its kernel, returning this as a <code class="keyw">FpGModuleGF</code>. We can use the data access functions described above to extract information about this module.</p>
+
+<p>See Chapters <a href="chap4.html#X82F28552819A6542"><b>4</b></a> and <a href="chap2.html#X7C0B125E7D5415B4"><b>2</b></a> respectively for more information about FG-module homomorphisms and resolutions in <strong class="pkg">HAPprime</strong></p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; R := ResolutionPrimePowerGroupRadical(DihedralGroup(8), 2);
+Resolution of length 2 in characteristic 2 for &lt;pc group of size 8 with
+3 generators&gt; .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap&gt; phi := BoundaryFpGModuleHomomorphismGF(R, 2);
+&lt;Module homomorphism&gt;
+
+gap&gt; M := KernelOfModuleHomomorphism(phi);
+Module over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2 with 15 generators in FG^3.
+
+gap&gt; # Now find out things about this module M
+gap&gt; ModuleGroup(M);
+&lt;pc group of size 8 with 3 generators&gt;
+gap&gt; ModuleGroupOrder(M);
+8
+gap&gt; ModuleAction(M);
+function( g, v ) ... end
+gap&gt; ModuleActionBlockSize(M);
+8
+gap&gt; ModuleGroupAndAction(M);
+rec( group := &lt;pc group of size 8 with 3 generators&gt;,
+  action := function( g, v ) ... end,
+  actionOnRight := function( g, v ) ... end, actionBlockSize := 8 )
+gap&gt; ModuleCharacteristic(M);
+2
+gap&gt; ModuleField(M);
+GF(2)
+gap&gt; ModuleAmbientDimension(M);
+24
+gap&gt; AmbientModuleDimension(M);
+3
+</pre></td></tr></table>
+
+<p><a id="X85D634767E456A9D" name="X85D634767E456A9D"></a></p>
+
+<h4>3.5 <span class="Heading">Generator and vector space functions</span></h4>
+
+<p><a id="X7D6B0216838295A2" name="X7D6B0216838295A2"></a></p>
+
+<h5>3.5-1 ModuleGenerators</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleGenerators</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List of vectors</p>
+
+<p>Returns, as the rows of a matrix, a list of the set of currently-stored generating vectors for the vector space of the module <var class="Arg">M</var>. Note that this set is not necessarily minimal. The function <code class="func">ModuleGeneratorsAreMinimal</code> (<a href="chap3.html#X7F643D50826E15E2"><b>3.5-2</b></a>) will return <code class="keyw">true</code> if the set is known to be minimal, and the <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) can be used to ensure a minimal set, if necessary. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7F643D50826E15E2" name="X7F643D50826E15E2"></a></p>
+
+<h5>3.5-2 ModuleGeneratorsAreMinimal</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleGeneratorsAreMinimal</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="code">true</code> if the module generators are known to be minimal, or <code class="code">false</code> otherwise. Generators are known to be minimal if the one of the <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) have been previously used on this module, or if the module was created from a <strong class="pkg">HAP</strong> <code class="keyw">FpGModule</code>. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7978F2DD787C2BB6" name="X7978F2DD787C2BB6"></a></p>
+
+<h5>3.5-3 ModuleGeneratorsAreEchelonForm</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleGeneratorsAreEchelonForm</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Return <code class="keyw">true</code> if the module generators are known to be in echelon form, or (i.e. <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>) has been called for this module), or <code class="keyw">false</code> otherwise. Some algorithms work more efficiently if (or require that) the generators of the module are in block-echelon form, i.e. each generator in the module's list of generators has its first non-zero block in the same location or later than the generator before it in the list. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X85178CA8858B8616" name="X85178CA8858B8616"></a></p>
+
+<h5>3.5-4 ModuleIsFullCanonical</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleIsFullCanonical</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="keyw">true</code> if the module is known to represent the full module FG^n, with canonical generators and group action, or <code class="keyw">false</code> otherwise. A module is only known to be canonical if it was constructed using the canonical module <code class="keyw">FpGModuleGF</code> constructor (<code class="func">FpGModuleGF</code> (<a href="chap3.html#X862AC894821415A4"><b>3.3-1</b></a>)). If this is true, the module is displayed in a concise form, and some functions have a trivial implementation. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X87572B78824FB28E" name="X87572B78824FB28E"></a></p>
+
+<h5>3.5-5 ModuleGeneratorsForm</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleGeneratorsForm</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>String</p>
+
+<p>Returns a string giving the form of the module generators. This may be one of the following:</p>
+
+
+<ul>
+<li><p><code class="code">"unknown"</code> The form is not known</p>
+
+</li>
+<li><p><code class="code">"minimal"</code> The generators are known to be minimal, but not in any particular form</p>
+
+</li>
+<li><p><code class="code">"fullcanonical"</code> The generators are the canonical (and minimal) generators for FG^n</p>
+
+</li>
+<li><p><code class="code">"semiechelon"</code> The generators are minimal and in semi-echelon form.</p>
+
+</li>
+<li><p><code class="code">"echelon"</code> The generators are minimal and in echelon form</p>
+
+</li>
+</ul>
+<p>See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7DFFBBD6809A2B41" name="X7DFFBBD6809A2B41"></a></p>
+
+<h5>3.5-6 ModuleRank</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleRank</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleRankDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the rank of the module <var class="Arg">M</var>, i.e. the number of minimal generators. If the module is already in minimal form (according to <code class="func">ModuleGeneratorsAreMinimal</code> (<a href="chap3.html#X7F643D50826E15E2"><b>3.5-2</b></a>)) then the number of generators is returned with no calculation. Otherwise, <code class="func">MinimalGeneratorsModuleGF</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) or <code class="func">MinimalGeneratorsModuleGFDestructive</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) respectively are used to find a set of minimal generators. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7DFAF92283C6FFDC" name="X7DFAF92283C6FFDC"></a></p>
+
+<h5>3.5-7 ModuleVectorSpaceBasis</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleVectorSpaceBasis</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List of vectors</p>
+
+<p>Returns a matrix whose rows are a basis for the vector space of the <code class="keyw">FpGModuleGF</code> module <var class="Arg">M</var>. Since <code class="keyw">FpGModuleGF</code> stores modules as a minimal G-generating set, this function has to calculate all G-multiples of this generating set and row-reduce this to find a basis. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><em>TODO: A GF version of this one </em></p>
+
+<p><a id="X8377A6E986D36D12" name="X8377A6E986D36D12"></a></p>
+
+<h5>3.5-8 ModuleVectorSpaceDimension</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ModuleVectorSpaceDimension</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the dimension of the vector space of the module <var class="Arg">M</var>. Since <code class="keyw">FpGModuleGF</code> stores modules as a minimal G-generating set, this function has to calculate all G-multiples of this generating set and row-reduce this to find the size of the basis. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><em>TODO: A GF version of this function </em></p>
+
+<p><a id="X81C340AD7EE8FA63" name="X81C340AD7EE8FA63"></a></p>
+
+<h5>3.5-9 <span class="Heading">MinimalGeneratorsModule</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; MinimalGeneratorsModuleGF</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; MinimalGeneratorsModuleGFDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; MinimalGeneratorsModuleRadical</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Returns a module equal to the <code class="keyw">FpGModuleGF</code> <var class="Arg">M</var>, but which has a minimal set of generators. Two algorithms are provided:</p>
+
+
+<ul>
+<li><p>The two <code class="code">GF</code> versions use <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>) and <code class="func">EchelonModuleGeneratorsDestructive</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>) respectively. In characteristic two, these return a set of minimal generators, and use less memory than the <code class="code">Radical</code> version, but take longer. If the characteristic is not two, these functions revert to <code class="func">MinimalGeneratorsModuleRadical</code>.</p>
+
+</li>
+<li><p>The <code class="code">Radical</code> version uses the radical of the module in a manner similar to the function <a href="/home/pas/GAP/gap/pkg/Hap1.9/doc/chap16.html#X81A2A3C97C09685E"><b>HAP: GeneratorsOfFpGModule</b></a>. This is much faster, but requires a considerable amount of temporary storage space.</p>
+
+</li>
+</ul>
+<p>See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7E44920683157DE2" name="X7E44920683157DE2"></a></p>
+
+<h5>3.5-10 RadicalOfModule</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; RadicalOfModule</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Returns radical of the <code class="keyw">FpGModuleGF</code> module <var class="Arg">M</var> as another <code class="keyw">FpGModuleGF</code>. The radical is the module generated by the vectors v-gv for all v in the set of generating vectors for <var class="Arg">M</var> and all g in a set of generators for the module's group.</p>
+
+<p>The generators for the returned module will not be in minimal form: the <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) can be used to convert the module to a minimal form if necessary. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X7F9E3DF87FE60C1A" name="X7F9E3DF87FE60C1A"></a></p>
+
+<h5>3.5-11 <span class="Heading">Example: Generators and basis vectors of a <code class="keyw">FpGModuleGF</code></span></h5>
+
+<p>Starting with the same module as in the earlier example (Section <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a>), we now investigate the generators of the module <code class="code">M</code>. The generating vectors (of which there are 15) returned by the function <code class="func">KernelOfModuleHomomorphism</code> (<a href="chap4.html#X86C7D57A825235EE"><b>4.6-3</b></a>) are not a minimal set, but the function <code class="func">MinimalGeneratorsModuleGF</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) creates a new object <code class="code">N</code> representing the same module, but now with only four generators. The vector space spanned by these generators has 15 basis vectors, so representing the module by a G-generating set instead is much more efficient. (The original generating set in <code class="code">M</code> was in fact an F-basis, so the dimension of the vector space should come as no surprise.)</p>
+
+<p>We can also find the radical of the module, and this is used internally for the faster, but more memory-hungry, <code class="func">MinimalGeneratorsModuleRadical</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>).</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; R := ResolutionPrimePowerGroupRadical(DihedralGroup(8), 2);;
+gap&gt; phi := BoundaryFpGModuleHomomorphismGF(R, 2);;
+gap&gt; M := KernelOfModuleHomomorphism(phi);;
+gap&gt; #
+gap&gt; ModuleGenerators(M);
+[ &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt; ]
+gap&gt; ModuleGeneratorsAreMinimal(M);
+false
+gap&gt; ModuleGeneratorsForm(M);
+"unknown"
+gap&gt; #
+gap&gt; N := MinimalGeneratorsModuleGF(M);
+Module over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2 with 4 generators in FG^
+3. Generators are in minimal echelon form.
+
+gap&gt; M = N;    # Check that the new module spans the same space
+true
+gap&gt; ModuleGeneratorsAreEchelonForm(N);
+true
+gap&gt; ModuleIsFullCanonical(N);
+false
+gap&gt; M = N;
+true
+gap&gt; ModuleVectorSpaceBasis(N);
+[ &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt;, &lt;a GF2 vector of length 24&gt;,
+  &lt;a GF2 vector of length 24&gt; ]
+gap&gt; ModuleVectorSpaceDimension(N);
+15
+gap&gt; #
+gap&gt; N2 := MinimalGeneratorsModuleRadical(M);
+Module over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2 with 4 generators in FG^
+3. Generators are minimal.
+
+gap&gt; #
+gap&gt; R := RadicalOfModule(M);
+Module over the group ring of &lt;pc group of size 8 with
+3 generators&gt; in characteristic 2 with 120 generators in FG^3.
+
+gap&gt; N2 = N;
+true
+</pre></td></tr></table>
+
+<p><a id="X7B989D1181EBBBB5" name="X7B989D1181EBBBB5"></a></p>
+
+<h4>3.6 <span class="Heading">Block echelon functions</span></h4>
+
+<p><a id="X84E3AA228784BF01" name="X84E3AA228784BF01"></a></p>
+
+<h5>3.6-1 EchelonModuleGenerators</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; EchelonModuleGenerators</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; EchelonModuleGeneratorsDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SemiEchelonModuleGenerators</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SemiEchelonModuleGeneratorsDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; EchelonModuleGeneratorsMinMem</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; EchelonModuleGeneratorsMinMemDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SemiEchelonModuleGeneratorsMinMem</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SemiEchelonModuleGeneratorsMinMemDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Record <code class="code">(module, headblocks)</code></p>
+
+<p>Returns a record with two components:</p>
+
+
+<ul>
+<li><p><code class="keyw">module</code> A module whose generators span the same vector space as that of the input module <var class="Arg">M</var>, but whose generators are in a block echelon (or semi-echelon) form</p>
+
+</li>
+<li><p><code class="keyw">headblocks</code> A list giving, for each generating vector in <var class="Arg">M</var>, the block in which the head for that generating row lies</p>
+
+</li>
+</ul>
+<p>In block-echelon form. each generator is row-reduced using Gg-multiples of the other other generators to produce a new, equivalent generating set where the first non-zero block in each generator is as far to the right as possible. The resulting form, with many zero blocks, can allow more memory-efficient operations on the module. See Section <a href="chap3.html#X79DF42E686679AFE"><b>3.2</b></a> for details. In addition, the standard (non-<code class="code">MinMem</code>) form guarantees that the set of generators are minimal in the sense that no generator can be removed from the set while leaving the spanned vector space the same. In the GF(2) case, this is the global minimum.</p>
+
+<p>Several versions of this algorithm are provided. The <code class="code">SemiEchelon</code> versions of these functions do not guarantee a particular generator ordering, while the <code class="code">Echelon</code> versions sort the generators into order of increasing initial zero blocks. The non-<code class="code">Destructive</code> versions of this function return a new module and do not modify the input module; the <code class="code">Destructive</code> versions change the generators of the input module in-place, and return this module. All versions are memory-efficient, and do not need a full vector-space basis. The <code class="code">MinMem</code> versions are guaranteed to expand at most two generators at any one time, while the standard version may, in the (unlikely) worst-case, need to expand half of the generating set. As a result of this difference in the algorithm, the <code class="code">MinMem</code> version is likely to return a greater number of generators (which will not be minimal), but those generators typically have a greater number of zero blocks after the first non-zero block in the generator. The <code class="code">MinMem</code> operations are currently only implemented for GF(2) modules. See Section <a href="chap3.html#X83306CFA857F177C"><b>3.6-3</b></a> below for an example of usage.</p>
+
+<p><a id="X856E45CC84B53128" name="X856E45CC84B53128"></a></p>
+
+<h5>3.6-2 ReverseEchelonModuleGenerators</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ReverseEchelonModuleGenerators</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ReverseEchelonModuleGeneratorsDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Returns an <code class="keyw">FpGModuleGF</code> module whose vector space spans the same space as the input module <var class="Arg">M</var>, but whose generating vectors are modified to try to get as many zero blocks as possible at the end of each vector. This function performs echelon reduction of generating rows in a manner similar to <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>), but working from the bottom upwards. It is guaranteed that this function will not change the head block (the location of the first non-zero block) in each generating row, and hence if the generators are already in an upper-triangular form (e.g. following a call to <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>)) then it will not disturb that form and the resulting generators will be closer to a diagonal form.</p>
+
+<p>The <code class="code">Destructive</code> version of this function modifies the input module's generators in-place and then returns that module; the non-<code class="code">Destructive</code> version works on a copy of the input module and so will not modify the original module.</p>
+
+<p>This operation is currently only implemented for GF(2) modules. See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> below for an example of usage.</p>
+
+<p><a id="X83306CFA857F177C" name="X83306CFA857F177C"></a></p>
+
+<h5>3.6-3 <span class="Heading">Example: Converting a <code class="keyw">FpGModuleGF</code> to block echelon form</span></h5>
+
+<p>We can construct a larger module than in the earlier examples (Sections <a href="chap3.html#X7E4C3C5C7CC7B559"><b>3.4-11</b></a> and <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a>) by taking the kernel of the third boundary homomorphism of a minimal resolution of a group of order 32, which as returned by the function <code class="func">KernelOfModuleHomomorphism</code> (<a href="chap4.html#X86C7D57A825235EE"><b>4.6-3</b></a>) has a generating set with many redundant generators. We display the block structure of the generators of this module after applying various block echelon reduction functions.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; R := ResolutionPrimePowerGroupRadical(SmallGroup(32, 10), 3);;
+gap&gt; phi := BoundaryFpGModuleHomomorphismGF(R, 3);;
+gap&gt; #
+gap&gt; M := KernelOfModuleHomomorphism(phi);
+Module over the group ring of &lt;pc group of size 32 with
+5 generators&gt; in characteristic 2 with 65 generators in FG^4.
+
+gap&gt; #
+gap&gt; N := SemiEchelonModuleGenerators(M);
+rec( module := Module over the group ring of &lt;pc group of size 32 with
+    5 generators&gt; in characteristic 2 with 5 generators in FG^
+    4. Generators are in minimal semi-echelon form.
+    , headblocks := [ 2, 3, 1, 1, 3 ] )
+gap&gt; DisplayBlocks(N.module);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[.*.*]
+[..**]
+[***.]
+[****]
+[..**]
+Generators are in minimal semi-echelon form.
+gap&gt; N2 := SemiEchelonModuleGeneratorsMinMem(M);
+rec( module := Module over the group ring of &lt;pc group of size 32 with
+    5 generators&gt; in characteristic 2 with 9 generators in FG^4. 
+    , headblocks := [ 2, 1, 3, 1, 1, 4, 1, 3, 4 ] )
+gap&gt; DisplayBlocks(N2.module);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 9 generators in FG^4.
+[.*..]
+[**..]
+[..**]
+[****]
+[****]
+[...*]
+[****]
+[..**]
+[...*]
+
+gap&gt; #
+gap&gt; EchelonModuleGeneratorsDestructive(M);;
+gap&gt; DisplayBlocks(M);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[***.]
+[****]
+[.*.*]
+[..**]
+[..**]
+Generators are in minimal echelon form.
+gap&gt; ReverseEchelonModuleGeneratorsDestructive(M);
+Module over the group ring of &lt;pc group of size 32 with
+5 generators&gt; in characteristic 2 with 5 generators in FG^
+4. Generators are in minimal echelon form.
+
+gap&gt; DisplayBlocks(M);
+Module over the group ring of Group( [ f1, f2, f3, f4, f5 ] )
+ in characteristic 2 with 5 generators in FG^4.
+[***.]
+[****]
+[.*..]
+[..*.]
+[..**]
+Generators are in minimal echelon form.
+</pre></td></tr></table>
+
+<p><a id="X7B22D74482E6EF40" name="X7B22D74482E6EF40"></a></p>
+
+<h4>3.7 <span class="Heading">Sum and intersection functions</span></h4>
+
+<p><a id="X879541298181840D" name="X879541298181840D"></a></p>
+
+<h5>3.7-1 <span class="Heading">DirectSumOfModules</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; DirectSumOfModules</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; DirectSumOfModules</code>( <var class="Arg">coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; DirectSumOfModules</code>( <var class="Arg">M, n</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModule</p>
+
+<p>Returns the <code class="keyw">FpGModuleGF</code> module that is the direct sum of the specified modules (which must have a common group and action). The input can be either two modules <var class="Arg">M</var> and <var class="Arg">N</var>, a list of modules <var class="Arg">coll</var>, or one module <var class="Arg">M</var> and an exponent <var class="Arg">n</var> specifying the number of copies of <var class="Arg">M</var> to sum. See Section <a href="chap3.html#X8198B7C986776BA8"><b>3.7-5</b></a> below for an example of usage.</p>
+
+<p>If the input modules all have minimal generators and/or echelon form, the construction of the direct sum guarantees that the output module will share the same form.</p>
+
+<p><a id="X82A18B41872A8149" name="X82A18B41872A8149"></a></p>
+
+<h5>3.7-2 DirectDecompositionOfModule</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; DirectDecompositionOfModule</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; DirectDecompositionOfModuleDestructive</code>( <var class="Arg">M</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List of FpGModuleGFs</p>
+
+<p>Returns a list of <code class="keyw">FpGModuleGF</code>s whose direct sum is equal to the input <code class="keyw">FpGModuleGF</code> module <var class="Arg">M</var>. The list may consist of one element: the original module.</p>
+
+<p>This function relies on the block structure of a set of generators that have been converted to both echelon and reverse-echelon form (see <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>) and <code class="func">ReverseEchelonModuleGenerators</code> (<a href="chap3.html#X856E45CC84B53128"><b>3.6-2</b></a>)), and calls these functions if the module is not already in echelon form. In this form, it can be possible to trivially identify direct summands. There is no guarantee either that this function will return a decomposition if one is available, or that the modules returned in a decomposition are themselves indecomposable. See Section <a href="chap3.html#X8198B7C986776BA8"><b>3.7-5</b></a> below for an example of usage.</p>
+
+<p>The <code class="code">Destructive</code> version of this function uses the <code class="code">Destructive</code> versions of the echelon functions, and so modifies the input module and returns modules who share generating rows with the modified <var class="Arg">M</var>. The non-<code class="code">Destructive</code> version operates on a copy of <var class="Arg">M</var>, and returns modules with unique rows.</p>
+
+<p><a id="X83D609B679B53F5C" name="X83D609B679B53F5C"></a></p>
+
+<h5>3.7-3 IntersectionModules</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; IntersectionModules</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; IntersectionModulesGF</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; IntersectionModulesGFDestructive</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; IntersectionModulesGF2</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Returns the <code class="keyw">FpGModuleGF</code> module that is the intersection of the modules <var class="Arg">M</var> and <var class="Arg">N</var>. This function calculates the intersection using vector space methods (i.e. <code class="func">SumIntersectionMatDestructive</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/datatypes/chap5.html#X845EA1B28618D9A7"><b>HAPprime Datatypes: SumIntersectionMatDestructive</b></a>)). The standard version works on the complete vector space bases of the input modules. The <code class="code">GF</code> version considers the block structure of the generators of <var class="Arg">M</var> and <var class="Arg">N</var> and only expands the necessary rows and blocks. This can lead to a large saving and memory if <var class="Arg">M</var> and <var class="Arg">N</var> are in echelon form and have a small intersection. See Section <a href="chap3.html#X86F4852785A509BF"><b>3.2-4</b></a> for details. See Section <a href="chap3.html#X8198B7C986776BA8"><b>3.7-5</b></a> below for an example of usage. The <code class="code">GF2</code> version computes the intersection by a G-version of the standard vector space algorithm, using <code class="func">EchelonModuleGenerators</code> (<a href="chap3.html#X84E3AA228784BF01"><b>3.6-1</b></a>) to perform echelon reduction on an augmented set of generators. This is much slower than the <code class="code">GF</code> version, but may use less memory.</p>
+
+<p>The vector spaces in <code class="keyw">FpGModuleGF</code>s are assumed to all be with respect to the same canonical basis, so it is assumed that modules are compatible if they have the same group and the same ambient dimension.</p>
+
+<p>The <code class="code">Destructive</code> version of the <code class="code">GF</code> function corrupts or permutes the generating vectors of <var class="Arg">M</var> and <var class="Arg">N</var>, leaving it invalid; the non-destructive version operates on copies of them, leaving the original modules unmodified. The generating vectors in the module returned by this function are in fact also a <em>vector space</em> basis for the module, so will not be minimal. The returned module can be converted to a set of minimal generators using one of the <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>).</p>
+
+<p>This operation is currently only defined for GF(2).</p>
+
+<p><a id="X84A6FBC37BD8EEAB" name="X84A6FBC37BD8EEAB"></a></p>
+
+<h5>3.7-4 SumModules</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SumModules</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Returns the <code class="keyw">FpGModuleGF</code> module that is the sum of the input modules <var class="Arg">M</var> and <var class="Arg">N</var>. This function simply concatenates the generating vectors of the two modules and returns the result. If a set of minimal generators are needed then use one of the <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) on the result. See Section <a href="chap3.html#X8198B7C986776BA8"><b>3.7-5</b></a> below for an example of usage.</p>
+
+<p>The vector spaces in <code class="keyw">FpGModuleGF</code> are assumed to all be with respect to the same canonical basis, so it is assumed that modules are compatible if they have the same group and the same ambient dimension.</p>
+
+<p><a id="X8198B7C986776BA8" name="X8198B7C986776BA8"></a></p>
+
+<h5>3.7-5 <span class="Heading">Example: Sum and intersection of <code class="keyw">FpGModuleGF</code>s</span></h5>
+
+<p>We can construct the direct sum of FG-modules, and (attempt to) calculate a direct decomposition of a module. For example, we can show that</p>
+
+<p class="pcenter">
+          (FG)^2 (+) FG = FG (+) FG (+) FG
+        </p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := CyclicGroup(64);;
+gap&gt; FG := FpGModuleGF(G, 1);
+Full canonical module FG^1 over the group ring of &lt;pc group of size 64 with
+6 generators&gt; in characteristic 2
+
+gap&gt; FG2 := FpGModuleGF(G, 2);
+Full canonical module FG^2 over the group ring of &lt;pc group of size 64 with
+6 generators&gt; in characteristic 2
+
+gap&gt; M := DirectSumOfModules(FG2, FG);
+Full canonical module FG^3 over the group ring of &lt;pc group of size 64 with
+6 generators&gt; in characteristic 2
+
+gap&gt; DirectDecompositionOfModule(M);
+[ Module over the group ring of &lt;pc group of size 64 with
+    6 generators&gt; in characteristic 2 with 1 generator in FG^
+    1. Generators are in minimal echelon form.
+    , Module over the group ring of &lt;pc group of size 64 with
+    6 generators&gt; in characteristic 2 with 1 generator in FG^
+    1. Generators are in minimal echelon form.
+    , Module over the group ring of &lt;pc group of size 64 with
+    6 generators&gt; in characteristic 2 with 1 generator in FG^
+    1. Generators are in minimal echelon form.
+     ]
+</pre></td></tr></table>
+
+<p>We can also compute the sum and intersection of FG-modules. In the example below we construct two submodules of FG, where G is the dihedral group of order four: <code class="code">M</code> is the submodule generated by g_1 + g_2, and <code class="code">N</code> is the submodule generated by g_1 + g_2 + g_3 + g_4. We calculate their sum and intersection. Since <code class="code">N</code> is in this case a submodule of <code class="code">M</code> it is easy to check that the correct results are obtained.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := DihedralGroup(4);;
+gap&gt; M := FpGModuleGF([[1,1,0,0]]*One(GF(2)), G);
+Module over the group ring of &lt;pc group of size 4 with
+2 generators&gt; in characteristic 2 with 1 generator in FG^
+1. Generators are in minimal echelon form.
+
+gap&gt; N := FpGModuleGF([[1,1,1,1]]*One(GF(2)), G);
+Module over the group ring of &lt;pc group of size 4 with
+2 generators&gt; in characteristic 2 with 1 generator in FG^
+1. Generators are in minimal echelon form.
+
+gap&gt; #
+gap&gt; S := SumModules(M,N);
+Module over the group ring of &lt;pc group of size 4 with
+2 generators&gt; in characteristic 2 with 2 generators in FG^1.
+
+gap&gt; I := IntersectionModules(M,N);
+Module over the group ring of &lt;pc group of size 4 with
+2 generators&gt; in characteristic 2 with 1 generator in FG^1.
+
+gap&gt; #
+gap&gt; S = M and I = N;
+true
+</pre></td></tr></table>
+
+<p><a id="X8308D685809A4E2F" name="X8308D685809A4E2F"></a></p>
+
+<h4>3.8 <span class="Heading">Miscellaneous functions</span></h4>
+
+<p><a id="X81A073C47FB50620" name="X81A073C47FB50620"></a></p>
+
+<h5>3.8-1 =</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; =</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="keyw">true</code> if the modules are equal, <code class="keyw">false</code> otherwise. This checks that the groups and actions in each module are equal (i.e. identical), and that the vector space spanned by the two modules are the same. (All vector spaces in <code class="keyw">FpGModuleGF</code>s of the same ambient dimension are assumed to be embedded in the same canonical basis.) See Section <a href="chap3.html#X7F9E3DF87FE60C1A"><b>3.5-11</b></a> above for an example of usage.</p>
+
+<p><a id="X78EB919D85362902" name="X78EB919D85362902"></a></p>
+
+<h5>3.8-2 <span class="Heading">IsModuleElement</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; IsModuleElement</code>( <var class="Arg">M, elm</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; IsModuleElement</code>( <var class="Arg">M, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="keyw">true</code> if the vector <var class="Arg">elm</var> can be interpreted as an element of the module <var class="Arg">M</var>, or <code class="keyw">false</code> otherwise. If a collection of elements is given as the second argument then a list of responses is returned, one for each element in the collection. See Section <a href="chap3.html#X814553E382BC777E"><b>3.3-5</b></a> above for an example of usage.</p>
+
+<p><a id="X8071ECEB7A92965A" name="X8071ECEB7A92965A"></a></p>
+
+<h5>3.8-3 IsSubModule</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; IsSubModule</code>( <var class="Arg">M, N</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="keyw">true</code> if the module <var class="Arg">N</var> is a submodule of <var class="Arg">M</var>. This checks that the modules have the same group and action, and that the generators for module <var class="Arg">N</var> are elements of the module <var class="Arg">M</var>. (All vector spaces in <code class="keyw">FpGModuleGF</code>s of the same ambient dimension are assumed to be embedded in the same canonical basis.) See Section <a href="chap3.html#X814553E382BC777E"><b>3.3-5</b></a> above for an example of usage.</p>
+
+<p><a id="X82FB0B387E53B073" name="X82FB0B387E53B073"></a></p>
+
+<h5>3.8-4 RandomElement</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; RandomElement</code>( <var class="Arg">M[, n]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Vector</p>
+
+<p>Returns a vector which is a random element from the module <var class="Arg">M</var>. If a second argument, <var class="Arg">n</var> is give, then a list of <var class="Arg">n</var> random elements is returned. See Section <a href="chap3.html#X814553E382BC777E"><b>3.3-5</b></a> above for an example of usage.</p>
+
+<p><a id="X84EB237885A48F03" name="X84EB237885A48F03"></a></p>
+
+<h5>3.8-5 <span class="Heading">Random Submodule</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; RandomSubmodule</code>( <var class="Arg">M, ngens</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b><code class="keyw">FpGModuleGF</code></p>
+
+<p>Returns a <code class="keyw">FpGModuleGF</code> module that is a submodule of <var class="Arg">M</var>, with <var class="Arg">ngens</var> generators selected at random from elements of <var class="Arg">M</var>. These generators are not guaranteed to be minimal, so the rank of the submodule will not necessarily be equal to <var class="Arg">ngens</var>. If a module with minimal generators is required, the <code class="code">MinimalGeneratorsModule</code> functions (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) can be used to convert the module to a minimal form See Section <a href="chap3.html#X814553E382BC777E"><b>3.3-5</b></a> above for an example of usage.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap2.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap4.html">Next Chapter</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

@@ -1,0 +1,1667 @@
+  
+  [1X6 [33X[0;0YExamples of Applications based on [10XNCurses.BrowseGeneric[110X[101X[1X[133X[101X
+  
+  [33X[0;0YThis  chapter  introduces  the  operation  [2XBrowse[102X  ([14X6.1-1[114X) and lists several
+  examples  how the function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) can be utilized for
+  rendering  [5XGAP[105X related data or for playing games. Each section describes the
+  relevant  [5XGAP[105X  functions  and  briefly sketches the technical aspects of the
+  implementation;  more  details  can  be  found  in the [5XGAP[105X files, in the [11Xapp[111X
+  directory of the package.[133X
+  
+  [33X[0;0YOnly  Section  [14X6.4[114X  describes  a  standard  application  in the sense of the
+  introduction  to  Chapter  [14X4[114X,  perhaps except for a special function that is
+  needed  to compare table entries. The other examples in this chapter require
+  some of the programming described in Chapter [14X5[114X.[133X
+  
+  [33X[0;0YThe   [5XGAP[105X   examples   in   this   chapter   use   the   [21Xreplay[121X  feature  of
+  [2XNCurses.BrowseGeneric[102X   ([14X4.3-1[114X),  see  Section  [14X4.1[114X.  This  means  that  the
+  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X) based function is called between two calls of
+  [2XBrowseData.SetReplay[102X  ([14X5.4-2[114X).  If you want to paste these examples into the
+  [5XGAP[105X  session with the mouse then do not paste the final [2XBrowseData.SetReplay[102X
+  ([14X5.4-2[114X)   call,   since   [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X)  would  regard  the
+  additional input as a user interrupt.[133X
+  
+  
+  [1X6.1 [33X[0;0YThe Operation [10XBrowse[110X[101X[1X[133X[101X
+  
+  [1X6.1-1 Browse[101X
+  
+  [29X[2XBrowse[102X( [3Xobj[103X[, [3Xarec[103X] ) [32X operation
+  
+  [33X[0;0YThis operation displays the [5XGAP[105X object [3Xobj[103X in a nice, formatted way, similar
+  to the operation [2XDisplay[102X ([14XReference: Display[114X). The difference is that [2XBrowse[102X
+  is intended to use [10Xncurses[110X facilities.[133X
+  
+  [33X[0;0YCurrently there are methods for matrices (see [2XBrowse[102X ([14X6.2-2[114X)), for character
+  tables (see [2XBrowse[102X ([14X6.3-1[114X)) and for tables of marks (see [2XBrowse[102X ([14X6.4-1[114X)).[133X
+  
+  
+  [1X6.2 [33X[0;0YMatrix Display[133X[101X
+  
+  [33X[0;0YThe  [5XGAP[105X  library  provides several [2XDisplay[102X ([14XReference: Display[114X) methods for
+  matrices.  In  order  to  cover  the  functionality of these methods, [5XBrowse[105X
+  provides the function [2XNCurses.BrowseDenseList[102X ([14X6.2-1[114X) that uses the standard
+  facilities  of  the  function  [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X), i. e., one can
+  scroll in the matrix, searching and sorting are provided etc.[133X
+  
+  [33X[0;0YThe  idea  is to customize this function for different special cases, and to
+  install  corresponding  [2XBrowse[102X  ([14X6.1-1[114X)  methods.  Examples  are methods for
+  matrices  over  finite  fields  and  residue  class  rings  of  the rational
+  integers, see [2XBrowse[102X ([14X6.2-2[114X).[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/matdisp.g[111X of the package.[133X
+  
+  [1X6.2-1 NCurses.BrowseDenseList[101X
+  
+  [29X[2XNCurses.BrowseDenseList[102X( [3Xlist[103X, [3Xarec[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing.[133X
+  
+  [33X[0;0YLet  [3Xlist[103X be a dense list whose entries are lists, for example a matrix, and
+  let  [3Xarec[103X  be  a  record.  This  function  displays  [3Xlist[103X  in a window, as a
+  two-dimensional  array  with  row  and  column  positions  as row and column
+  labels, respectively.[133X
+  
+  [33X[0;0YThe following components of [3Xarec[103X are supported.[133X
+  
+  [8X[10Xheader[110X[108X
+        [33X[0;6YIf bound, the value must be a valid value of the [10Xwork.header[110X component
+        of  a browse table, see [2XBrowseData.IsBrowseTable[102X ([14X4.2-3[114X); for example,
+        the  value  can  be  a list of strings. If this component is not bound
+        then the browse table has no header.[133X
+  
+  [8X[10XconvertEntry[110X[108X
+        [33X[0;6YIf  bound,  the  value  must be a unary function that returns a string
+        describing   its   argument.  The  default  is  the  operation  [2XString[102X
+        ([14XReference:      String[114X).      Another      possible      value     is
+        [10XNCurses.ReplaceZeroByDot[110X, which returns the string [10X"."[110X if the argument
+        is  a  zero  element  in  the sense of [2XIsZero[102X ([14XReference: IsZero[114X), and
+        returns the [2XString[102X ([14XReference: String[114X) value otherwise. For each entry
+        in a row of [3Xlist[103X, the [10XconvertEntry[110X value is shown in the browse table.[133X
+  
+  [8X[10XlabelsRow[110X[108X
+        [33X[0;6YIf  bound,  the  value  must  be a list of row label rows for [3Xlist[103X, as
+        described  in Section [2XBrowseData.IsBrowseTable[102X ([14X4.2-3[114X). The default is
+        [10X[ [ "1" ], [ "2" ], ... ][110X.[133X
+  
+  [8X[10XlabelsCol[110X[108X
+        [33X[0;6YIf  bound,  the value must be a list of column label rows for [3Xlist[103X, as
+        described  in Section [2XBrowseData.IsBrowseTable[102X ([14X4.2-3[114X). The default is
+        [10X[ [ "1", "2", ... ] ][110X.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [1X6.2-2 Browse[101X
+  
+  [29X[2XBrowse[102X( [3Xlist[103X ) [32X method
+  [6XReturns:[106X  [33X[0;10Ynothing.[133X
+  
+  [33X[0;0YSeveral  methods for the operation [2XBrowse[102X ([14X6.1-1[114X) are installed for the case
+  that  the  argument is a list of lists. These methods cover a default method
+  for lists of lists and the [2XDisplay[102X ([14XReference: Display[114X) methods for matrices
+  over  finite  fields  and residue class rings of the rational integers. Note
+  that  matrices  over  finite prime fields, small extension fields, and large
+  extension  fields  are  displayed  differently,  and  the same holds for the
+  corresponding [2XBrowse[102X ([14X6.1-1[114X) methods.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= [ 14, 14, 14, 14 ];;[127X[104X
+    [4X[25Xgap>[125X [27Xinput:= Concatenation( n, n, n, "Q" );;  # ``do nothing and quit''[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( input );[127X[104X
+    [4X[25Xgap>[125X [27XBrowse( RandomMat( 10, 10, Integers ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( input );[127X[104X
+    [4X[25Xgap>[125X [27XBrowse( RandomMat( 10, 10, GF(3) ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( input );[127X[104X
+    [4X[25Xgap>[125X [27XBrowse( RandomMat( 10, 10, GF(4) ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( input );[127X[104X
+    [4X[25Xgap>[125X [27XBrowse( RandomMat( 10, 10, Integers mod 6 ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( input );[127X[104X
+    [4X[25Xgap>[125X [27XBrowse( RandomMat( 10, 10, GF( NextPrimeInt( 2^16 ) ) ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( input );[127X[104X
+    [4X[25Xgap>[125X [27XBrowse( RandomMat( 10, 10, GF( 2^20 ) ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  
+  [1X6.3 [33X[0;0YCharacter Table Display[133X[101X
+  
+  [33X[0;0YThe [5XGAP[105X library provides a [2XDisplay[102X ([14XReference: Display[114X) method for character
+  tables  that  breaks  the  table  into columns fitting on the screen. [5XBrowse[105X
+  provides  an  alternative,  using  the  standard  facilities of the function
+  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X),  i. e.,  one  can  scroll  in  the matrix of
+  character values, searching and sorting are provided etc.[133X
+  
+  [33X[0;0YThe  [2XBrowse[102X  ([14X6.1-1[114X)  method  for  character tables can be called instead of
+  [2XDisplay[102X  ([14XReference:  Display[114X).  For  convenience, one can additionally make
+  this  function the default [2XDisplay[102X ([14XReference: Display[114X) method for character
+  tables,  by  assigning  it  to  the  [10XDisplay[110X  component in the global record
+  [10XCharacterTableDisplayDefaults.User[110X,   see [14X'Reference:   Printing   Character
+  Tables'[114X;  for  example, one can do this in one's [11Xgaprc[111X file, see [14X'Reference:
+  The gap.ini and gaprc files'[114X. (This can be undone by unbinding the component
+  [10XCharacterTableDisplayDefaults.User.Display[110X.)[133X
+  
+  [33X[0;0YThe  function  [2XBrowseDecompositionMatrix[102X  ([14X6.3-2[114X)  can  be  used  to display
+  decomposition matrices for Brauer character tables.[133X
+  
+  [1X6.3-1 Browse[101X
+  
+  [29X[2XBrowse[102X( [3Xtbl[103X[, [3Xoptions[103X] ) [32X method
+  
+  [33X[0;0YThis  method  displays  the  character  table  [3Xtbl[103X in a window. The optional
+  record  [3Xoptions[103X  describes what shall be displayed, the supported components
+  and  the  default  values  are  described  in [14X'Reference: Printing Character
+  Tables'[114X.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xif TestPackageAvailability( "CTblLib" ) = true then[127X[104X
+    [4X[25X>[125X [27X     BrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X        # scroll in the table[127X[104X
+    [4X[25X>[125X [27X        "DRULdddddrrrrrlluu",[127X[104X
+    [4X[25X>[125X [27X        # select an entry and move it around[127X[104X
+    [4X[25X>[125X [27X        "seddrruuuddlll",[127X[104X
+    [4X[25X>[125X [27X        # search for the pattern 135 (six times)[127X[104X
+    [4X[25X>[125X [27X        "/135", [ NCurses.keys.ENTER ], "nnnnn",[127X[104X
+    [4X[25X>[125X [27X        # deselect the entry, select the first column[127X[104X
+    [4X[25X>[125X [27X        "qLsc",[127X[104X
+    [4X[25X>[125X [27X        # sort and categorize by this column[127X[104X
+    [4X[25X>[125X [27X        "sc",[127X[104X
+    [4X[25X>[125X [27X        # select the first row, move down the selection[127X[104X
+    [4X[25X>[125X [27X        "srdddd",[127X[104X
+    [4X[25X>[125X [27X        # expand the selected category, scroll the selection down[127X[104X
+    [4X[25X>[125X [27X        "xd",[127X[104X
+    [4X[25X>[125X [27X        # and quit the application[127X[104X
+    [4X[25X>[125X [27X        "Q" ) );[127X[104X
+    [4X[25X>[125X [27X     Browse( CharacterTable( "HN" ) );[127X[104X
+    [4X[25X>[125X [27X     BrowseData.SetReplay( false );[127X[104X
+    [4X[25X>[125X [27Xfi;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The  first  part of the code in the [2XBrowse[102X ([14X6.1-1[114X)
+  method for character tables is almost identical with the code for extracting
+  the  data  to  be  displayed from the input data in the [5XGAP[105X library function
+  [10XCharacterTableDisplayDefault[110X.  The  second part of the code transforms these
+  data  into  a  browse  table.  Character names and (if applicable) indicator
+  values are used as row labels, and centralizer orders, power maps, and class
+  names  are used as column labels. The identifier of the table is used as the
+  static  header.  When an irrational entry is selected, a description of this
+  entry is shown in the dynamic footer.[133X
+  
+  [33X[0;0YThe  standard  modes  in [2XBrowseData[102X ([14X5.4-1[114X) (except the [10Xhelp[110X mode) have been
+  extended  by  three new actions. The first two of them open pagers giving an
+  overview   of   all   irrationalities   in   the  table,  or  of  all  those
+  irrationalities  that  have  been  shown  on the screen in the current call,
+  respectively.  The  corresponding  user inputs are the [12XI[112X and the [12Xi[112X key. (The
+  names assigned to the irrationalities are generated column-wise. If one just
+  scrolls  through  the table, without jumping, then these names coincide with
+  the  names  generated by the default [2XDisplay[102X ([14XReference: Display[114X) method for
+  character  tables;  this  is  in  general  [13Xnot[113X  the case, for example when a
+  row-wise  search  in the table is performed.) The third new action, which is
+  associated with the [12Xp[112X key, toggles the visibility status of the column label
+  rows for centralizer orders and power maps.[133X
+  
+  [33X[0;0YAn  individual  [10Xminyx[110X function does not only check whether the desired table
+  fits  into  the  window but also whether a table with too high column labels
+  (centralizer  orders and power maps) would fit if these labels get collapsed
+  via the [12Xp[112X key. In this case, the labels are automatically collapsed, and the
+  [12Xp[112X key is disabled.[133X
+  
+  [33X[0;0YIn  order  to keep the required space small also for large character tables,
+  caching  of  formatted  matrix  entries  is  disabled, and the strings to be
+  displayed  are computed on demand with a [10XMain[110X function in the [10Xwork[110X component
+  of  the  browse  table. For the same reason, the constant height one for all
+  table  rows  is set in advance, so one need not inspect a whole character if
+  only a few values of it shall be shown.[133X
+  
+  [33X[0;0YSpecial  functions  are  provided  for sorting (concerning the comparison of
+  character values, which can be integers or irrationalities) and categorizing
+  the table by a column (the value in the category row involves the class name
+  of the column in question).[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/ctbldisp.g[111X of the package.[133X
+  
+  [1X6.3-2 BrowseDecompositionMatrix[101X
+  
+  [29X[2XBrowseDecompositionMatrix[102X( [3Xmodtbl[103X[, [3Xb[103X][, [3Xoptions[103X] ) [32X function
+  
+  [33X[0;0YThis  method  displays  the  decomposition matrix of (the [3Xb[103X-th block of) the
+  Brauer character table [3Xmodtbl[103X in a window. The arguments are the same as for
+  [2XLaTeXStringDecompositionMatrix[102X ([14XReference: LaTeXStringDecompositionMatrix[114X).[133X
+  
+  [33X[0;0YThe  positions  of the ordinary and modular irreducible characters are shown
+  in  the  labels  of  the rows and columns, respectively, that are indexed by
+  these characters. When an entry in the decomposition matrix is selected then
+  information  about  the  degrees  of  these characters is shown in the table
+  footer.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X        # select the first entry[127X[104X
+    [4X[25X>[125X [27X        "se",[127X[104X
+    [4X[25X>[125X [27X        # scroll in the table[127X[104X
+    [4X[25X>[125X [27X        "drrrr",[127X[104X
+    [4X[25X>[125X [27X        # keep the table open for a while[127X[104X
+    [4X[25X>[125X [27X        [ 14, 14, 14, 14, 14 ],[127X[104X
+    [4X[25X>[125X [27X        # and quit the application[127X[104X
+    [4X[25X>[125X [27X        "Q" ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseDecompositionMatrix( CharacterTable( "J1" ) mod 2 );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/ctbldisp.g[111X of the package.[133X
+  
+  
+  [1X6.4 [33X[0;0YTable of Marks Display[133X[101X
+  
+  [33X[0;0YThe [5XGAP[105X library provides a [2XDisplay[102X ([14XReference: Display[114X) method for tables of
+  marks  that  breaks the table into columns fitting on the screen. Similar to
+  the  situation  with  character  tables,  see  Section [14X6.3[114X,  but with a much
+  simpler implementation, [5XBrowse[105X provides an alternative based on the function
+  [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X).[133X
+  
+  [33X[0;0Y[2XBrowse[102X  ([14X6.1-1[114X)  can  be  called instead of [2XDisplay[102X ([14XReference: Display[114X) for
+  tables of marks, cf. [14X'Reference: Printing Tables of Marks'[114X.[133X
+  
+  [1X6.4-1 Browse[101X
+  
+  [29X[2XBrowse[102X( [3Xtom[103X[, [3Xoptions[103X] ) [32X method
+  
+  [33X[0;0YThis method displays the table of marks [3Xtom[103X in a window. The optional record
+  [3Xoptions[103X  describes what shall be displayed, the supported components and the
+  default values are described in [14X'Reference: Printing Tables of Marks'[114X.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xif TestPackageAvailability( "TomLib" ) = true then[127X[104X
+    [4X[25X>[125X [27X     BrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X        # scroll in the table[127X[104X
+    [4X[25X>[125X [27X        "DDRRR",[127X[104X
+    [4X[25X>[125X [27X        # search for the (exact) value 100 (three times)[127X[104X
+    [4X[25X>[125X [27X        "/100",[127X[104X
+    [4X[25X>[125X [27X        [ NCurses.keys.DOWN, NCurses.keys.DOWN, NCurses.keys.RIGHT ],[127X[104X
+    [4X[25X>[125X [27X        [ NCurses.keys.DOWN, NCurses.keys.DOWN, NCurses.keys.DOWN ],[127X[104X
+    [4X[25X>[125X [27X        [ NCurses.keys.RIGHT, NCurses.keys.ENTER ], "nn",[127X[104X
+    [4X[25X>[125X [27X        # no more occurrences of 100, confirm[127X[104X
+    [4X[25X>[125X [27X        [ NCurses.keys.ENTER ],[127X[104X
+    [4X[25X>[125X [27X        # and quit the application[127X[104X
+    [4X[25X>[125X [27X        "Q" ) );[127X[104X
+    [4X[25X>[125X [27X     Browse( TableOfMarks( "A10" ) );[127X[104X
+    [4X[25X>[125X [27X     BrowseData.SetReplay( false );[127X[104X
+    [4X[25X>[125X [27X   fi;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation remarks[113X: Rows and columns are indexed by their positions. The
+  identifier of the table is used as the static header, there is no footer.[133X
+  
+  [33X[0;0YIn  order  to  keep the required space small also for large tables of marks,
+  caching  of  formatted  matrix  entries  is  disabled, and the strings to be
+  displayed  are computed on demand with a [10XMain[110X function in the [10Xwork[110X component
+  of  the  browse  table. For the same reason, the constant height one for the
+  table  rows is set in advance. (For example, the table of marks of the group
+  with  identifier  [10X"O8+(2)"[110X,  with  [22X11171[122X rows and columns, can be shown with
+  [2XBrowse[102X ([14X6.1-1[114X) in a [5XGAP[105X session requiring about [22X100[122X MB.)[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/tomdisp.g[111X of the package.[133X
+  
+  
+  [1X6.5 [33X[0;0YTable of Contents of [5XAtlasRep[105X[101X[1X[133X[101X
+  
+  [33X[0;0YThe  [5XGAP[105X  package  [5XAtlasRep[105X (see [WPNBB07]) is an interface to a database of
+  representations and related data. The table of contents of this database can
+  be  displayed via the function [2XDisplayAtlasInfo[102X ([14XAtlasRep: DisplayAtlasInfo[114X)
+  of  this  package.  The  [5XBrowse[105X package provides an alternative based on the
+  function  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X);  one can scroll, search, and fetch
+  data for later use.[133X
+  
+  
+  [1X6.5-1 [33X[0;0YBrowseAtlasInfo[133X[101X
+  
+  [29X[2XBrowseAtlasInfo[102X( [[3Xlistofnames[103X, ][[3X"contents"[103X, [3Xsources[103X, ][[3X...[103X] ) [32X function
+  [29X[2XBrowseAtlasInfo[102X( [3Xgapname[103X[, [3Xstd[103X][, [3X...[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe list of [21Xclicked[121X info records.[133X
+  
+  [33X[0;0YThis  function  shows the information available via the [5XGAP[105X package [5XAtlasRep[105X
+  in  a  browse  table,  cf. Section [14X'AtlasRep: Accessing Data of the AtlasRep
+  Package'[114X in the [5XAtlasRep[105X manual.[133X
+  
+  [33X[0;0YThe  optional  arguments  can  be  used  to  restrict the table to public or
+  private data, or to show an overview for one particular group. The arguments
+  are  the  same as for [2XDisplayAtlasInfo[102X ([14XAtlasRep: DisplayAtlasInfo[114X), see the
+  documentation of this function for details. (Note that additional conditions
+  such as [2XIsPermGroup[102X ([14XReference: IsPermGroup[114X) can be entered also in the case
+  that  no  [3Xgapname[103X is given. In this situation, the additional conditions are
+  evaluated for the [21Xsecond level tables[121X that are opened by [21Xclicking[121X on a table
+  row or entry.)[133X
+  
+  [33X[0;0YWhen one [21Xclicks[121X on one of the table rows or entries then a browse table with
+  an  overview  of  the  information  available  for  this group is shown, and
+  [21Xclicking[121X  on  one  of  the  rows in these tables adds the corresponding info
+  record (see [2XOneAtlasGeneratingSetInfo[102X ([14XAtlasRep: OneAtlasGeneratingSetInfo[114X))
+  to the list of return values of [2XBrowseAtlasInfo[102X.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [33X[0;0YThe  following  example  shows how [2XBrowseAtlasInfo[102X can be used to fetch info
+  records  about permutation representations of the alternating groups [22XA_5[122X and
+  [22XA_6[122X:  We search for the group name [10X"A5"[110X in the overview table, and the first
+  cell in the table row for [22XA_5[122X becomes selected; hitting the [12XEnter[112X key causes
+  a  new  window to be opened, with an overview of the data available for [22XA_5[122X;
+  moving  down  two  rows  and  hitting  the [12XEnter[112X key again causes the second
+  representation  to  be added to the result list; hitting [12XQ[112X closes the second
+  window,  and  we  are back in the overview table; we move the selection down
+  twice  (to  the  row for the group [22XA_6[122X), and choose the first representation
+  for this group; finally we leave the table, and the return value is the list
+  with the data for the two representations.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xd:= [ NCurses.keys.DOWN ];;  r:= [ NCurses.keys.RIGHT ];;[127X[104X
+    [4X[25Xgap>[125X [27Xc:= [ NCurses.keys.ENTER ];;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "/A5",         # Find the string A5 ...[127X[104X
+    [4X[25X>[125X [27X       d, d, r,       # ... such that just the word matches,[127X[104X
+    [4X[25X>[125X [27X       c,             # start the search,[127X[104X
+    [4X[25X>[125X [27X       c,             # click the table entry A5,[127X[104X
+    [4X[25X>[125X [27X       d, d,          # move down two rows,[127X[104X
+    [4X[25X>[125X [27X       c,             # click the row for this representation,[127X[104X
+    [4X[25X>[125X [27X       "Q",           # quit the second level table,[127X[104X
+    [4X[25X>[125X [27X       d, d,          # move down two rows,[127X[104X
+    [4X[25X>[125X [27X       c,             # click the table entry A6,[127X[104X
+    [4X[25X>[125X [27X       d,             # move down one row,[127X[104X
+    [4X[25X>[125X [27X       c,             # click the first row,[127X[104X
+    [4X[25X>[125X [27X       "Q",           # quit the second level table,[127X[104X
+    [4X[25X>[125X [27X       "Q" ) );       # and quit the application.[127X[104X
+    [4X[25Xgap>[125X [27Xif IsBound( BrowseAtlasInfo ) and IsBound( AtlasProgramInfo ) then[127X[104X
+    [4X[25X>[125X [27X     tworeps:= BrowseAtlasInfo();[127X[104X
+    [4X[25X>[125X [27X   else[127X[104X
+    [4X[25X>[125X [27X     tworeps:= [ fail ];[127X[104X
+    [4X[25X>[125X [27X   fi;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+    [4X[25Xgap>[125X [27Xif fail in tworeps then[127X[104X
+    [4X[25X>[125X [27X     Print( "no access to the Web ATLAS\n" );[127X[104X
+    [4X[25X>[125X [27X   else[127X[104X
+    [4X[25X>[125X [27X     Print( List( tworeps, x -> x.identifier[1] ), "\n" );[127X[104X
+    [4X[28X[ "A5", "A6" ][128X[104X
+    [4X[25X>[125X [27X   fi;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation remarks[113X: The first browse table shown has a static header, no
+  footer  and row labels, one row of column labels describing the type of data
+  summarized in the columns.[133X
+  
+  [33X[0;0YRow  and  column  separators  are  drawn as grids (cf. [2XNCurses.Grid[102X ([14X2.2-8[114X))
+  composed  from  the special characters described in Section [14X2.1-6[114X, using the
+  component [10Xwork.SpecialGrid[110X of the browse table, see [2XBrowseData[102X ([14X5.4-1[114X).[133X
+  
+  [33X[0;0YWhen  a  row  is selected, the [21Xclick[121X functionality opens a new window (via a
+  second level call to [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X)), in which a browse table
+  with the list of available data for the given group is shown; in this table,
+  [21Xclick[121X  results  in  adding the info for the selected row to the result list,
+  and a message about this addition is shown in the footer row. One can choose
+  further  data,  return  to  the  first browse table, and perhaps iterate the
+  process  for  other  groups. When the first level table is left, the list of
+  info records for the chosen data is returned.[133X
+  
+  [33X[0;0YFor the two kinds of browse tables, the standard modes in [2XBrowseData[102X ([14X5.4-1[114X)
+  (except the [10Xhelp[110X mode) have been extended by a new action that opens a pager
+  giving  an  overview  of all data that have been chosen in the current call.
+  The corresponding user input is the [12XY[112X key.[133X
+  
+  [33X[0;0YThis function is available only if the [5XGAP[105X package [5XAtlasRep[105X is available.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/atlasbrowse.g[111X of the package.[133X
+  
+  
+  [1X6.6 [33X[0;0YAccess to [5XGAP[105X[101X[1X Manuals–a Variant[133X[101X
+  
+  [33X[0;0YA  [5XBrowse[105X  adapted way to access several manuals is to show the hierarchy of
+  books, chapters, sections, and subsections as collapsible category rows, and
+  to  regard  the  contents  of each subsection as a data row of a matrix with
+  only one column.[133X
+  
+  [33X[0;0YThis  application  is  mainly  intended  as an example with table cells that
+  exceed the screen, and as an example with several category levels.[133X
+  
+  [1X6.6-1 BrowseGapManuals[101X
+  
+  [29X[2XBrowseGapManuals[102X( [[3Xstart[103X] ) [32X function
+  
+  [33X[0;0YThis function displays the contents of the [5XGAP[105X manuals (the main [5XGAP[105X manuals
+  as  well  as  the loaded package manuals) in a window. The optional argument
+  [3Xstart[103X  describes  the  initial  status,  admissible  values  are the strings
+  [10X"inline/collapsed"[110X,      [10X"inline/expanded"[110X,      [10X"pager/collapsed"[110X,      and
+  [10X"pager/expanded"[110X.[133X
+  
+  [33X[0;0YIn the [10Xinline[110X cases, the parts of the manuals are shown in the browse table,
+  and  in  the  [10Xpager[110X  case, the parts of the manuals are shown in a different
+  window  when  they  are [21Xclicked[121X, using the user's favourite help viewer, see
+  [14X'Reference: Changing the Help Viewer'[114X.[133X
+  
+  [33X[0;0YIn  the  [10Xcollapsed[110X cases, all category rows are collapsed, and the first row
+  is  selected; typical next steps are moving down the selection and expanding
+  single category rows. In the [10Xexpanded[110X cases, all category rows are expanded,
+  and  nothing is selected; a typical next step in the [10Xinline/expanded[110X case is
+  a  search  for  a string in the manuals. (Note that searching in quite slow:
+  For  viewing  a part of a manual, the file with the corresponding section is
+  read  into [5XGAP[105X, the text is formatted, the relevant part is cut out from the
+  section, perhaps markup is stripped off, and finally the search is performed
+  in the resulting strings.)[133X
+  
+  [33X[0;0YIf  no  argument  is  given  then the user is asked for selecting an initial
+  status, using [2XNCurses.Select[102X ([14X3.1-2[114X).[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= [ 14, 14, 14 ];;  # ``do nothing''[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "xdxd",                             # expand a Tutorial section[127X[104X
+    [4X[25X>[125X [27X       n, "Q" ) );                         # and quit[127X[104X
+    [4X[25Xgap>[125X [27XBrowseGapManuals( "inline/collapsed" );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "/Browse", [ NCurses.keys.ENTER ],  # search for "Browse"[127X[104X
+    [4X[25X>[125X [27X       "xdxddxd",                          # expand a section[127X[104X
+    [4X[25X>[125X [27X       n, "Q" ) );                         # and quit[127X[104X
+    [4X[25Xgap>[125X [27XBrowseGapManuals( "inline/collapsed" );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The  browse table has a dynamic header showing the
+  name  of  the currently selected manual, no footer, no row or column labels,
+  and  exactly  one  column  of  fixed  width  equal  to the screen width. The
+  category rows are precomputed, i. e., they do not arise from a table column;
+  this  way, the contents of each data cell can be computed on demand, as soon
+  as  it  is  shown  on  the  screen,  in particular the category hierarchy is
+  computed  without  reading the manuals into [5XGAP[105X. Also, the data rows are not
+  cached.  There is no return value. The heights of many cells are bigger than
+  the  screen  height, so scrolling is a mixture of scrolling to the next cell
+  and  scrolling  inside a cell. The different initial states are realized via
+  executing different initial steps before the table is shown to the user.[133X
+  
+  [33X[0;0YFor  the  variants  that  show  the manuals in a pager, the code temporarily
+  replaces  the  [10Xshow[110X function of the default viewer [10X"screen"[110X (see [14X'Reference:
+  Changing  the  Help  Viewer'[114X) by a function that uses [2XNCurses.Pager[102X ([14X3.1-4[114X).
+  Note  that in the case that the manual bit in question fits into one screen,
+  the  default [10Xshow[110X function writes this text directly to the screen, but this
+  is used already by the browse table.[133X
+  
+  [33X[0;0YThe implementation should be regarded as a sketch.[133X
+  
+  [33X[0;0YFor  example, the markup available in the text file format of [5XGAPDoc[105X manuals
+  (using  [12XEsc[112X  sequences)  is stripped off instead of being transferred to the
+  attribute lines that arise, because of the highlighting problem mentioned in
+  Section [14X2.2-3[114X.[133X
+  
+  [33X[0;0YSome  heuristics  used  in  the  code  are due to deficiencies of the manual
+  formats.[133X
+  
+  [33X[0;0YFor  the  inline  variant  of  the  browse  table,  the  titles of chapters,
+  sections, and subsections are [13Xnot[113X regarded as parts of the actual text since
+  they appear already as category rows; however, the functions of the [5XGAP[105X help
+  system  deliver  the text [13Xtogether with[113X these titles, so these lines must be
+  stripped off afterwards.[133X
+  
+  [33X[0;0YThe  category  hierarchy representing the tables of contents is created from
+  the  [11Xmanual.six[111X  files  of  the  manuals.  These files do not contain enough
+  information  for  determining  whether  several  functions  define  the same
+  subsection,  in  the  sense  that there is a common description text after a
+  series  of  manual lines introducing different functions. In such cases, the
+  browse  table  contains a category row for each of these functions (with its
+  own number), but the corresponding text appears only under the [13Xlast[113X of these
+  category  rows,  the  data rows for the others are empty. (This problem does
+  not  occur  in  the  [5XGAPDoc[105X  manual  format because this introduces explicit
+  subsection   titles,   involving   only   the   [13Xfirst[113X  of  several  function
+  definitions.)[133X
+  
+  [33X[0;0YAlso, index entries and sectioning entries in [11Xmanual.six[111X files of manuals in
+  [5XGAPDoc[105X format are not explicitly distinguished.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/manual.g[111X of the package.[133X
+  
+  
+  [1X6.7 [33X[0;0YOverview of the [5XGAP[105X[101X[1X Bibliography[133X[101X
+  
+  [33X[0;0YThe  [5XGAP[105X  documentation contains a bibliography of [5XGAP[105X related publications,
+  see [GAP].  [5XBrowse[105X  provides  access  to  this  information  in  [5XGAP[105X via the
+  function  [2XBrowseBibliography[102X  ([14X6.7-1[114X),  using the standard facilities of the
+  function  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X), i. e., one can scroll in the list,
+  search for entries, sort by year, sort and categorize by authors etc.[133X
+  
+  [33X[0;0YThe   [5XBrowse[105X   package   contains  a  (perhaps  outdated)  version  of  this
+  bibliography. One can get an updated version as follows.[133X
+  
+  [33X[0;0Y[10Xwget -N http://www.gap-system.org/Doc/Bib/gap-publishednicer.bib[110X[133X
+  
+  [33X[0;0YThe  function  [2XBrowseMSC[102X  ([14X6.7-2[114X)  shows  an overview of the AMS Mathematics
+  Subject Classification codes.[133X
+  
+  [1X6.7-1 BrowseBibliography[101X
+  
+  [29X[2XBrowseBibliography[102X( [[3Xbibfiles[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya    record    as   returned   by   [2XParseBibXMLExtFiles[102X   ([14XGAPDoc:
+            ParseBibXMLextFiles[114X).[133X
+  
+  [33X[0;0YThis  function  shows the list of bibliography entries in the files given by
+  [3Xbibfiles[103X, which may be a string or a list of strings (denoting a filename or
+  a  list of filenames, respectively) or a record (see below for the supported
+  components).[133X
+  
+  [33X[0;0YIf  no  argument  is  given then the file [11Xbibl/gap-publishednicer.bib[111X in the
+  [5XBrowse[105X  package  directory  is  taken, and [10X"GAP Bibliography"[110X is used as the
+  header.[133X
+  
+  [33X[0;0YAnother  perhaps  interesting  data file that should be available in the [5XGAP[105X
+  distribution is [11Xdoc/manualbib.xml[111X. This file can be located as follows.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xfile:= Filename( DirectoriesLibrary( "doc" ), "manualbib.xml" );;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YBoth  BibTeX format and the [5XXML[105X based extended format provided by the [5XGAPDoc[105X
+  package  are supported by [2XBrowseBibliography[102X, see Chapter [14X'GAPDoc: Utilities
+  for Bibliographies'[114X.[133X
+  
+  [33X[0;0YIn  the  case  of  BibTeX  format  input, first a conversion to the extended
+  format  takes  place,  via [2XStringBibAsXMLext[102X ([14XGAPDoc: StringBibAsXMLext[114X) and
+  [2XParseBibXMLextString[102X ([14XGAPDoc: ParseBibXMLextString[114X). Note that syntactically
+  incorrect  entries  are  rejected  in this conversion –this is signaled with
+  [2XInfoBibTools[102X  ([14XGAPDoc: InfoBibTools[114X) warnings– and that only a subset of the
+  possible  LaTeX  markup  is  recognized  –other markup appears in the browse
+  table except that the leading backslash is removed.[133X
+  
+  [33X[0;0YIn both cases of input, the problem arises that in visual mode, currently we
+  can  show  only  ASCII  characters (and the symbols in [10XNCurses.lineDraw[110X, but
+  these  are  handled  differently,  see Section [14X2.1-6[114X). Therefore, we use the
+  function   [2XSimplifiedUnicodeString[102X   ([14XGAPDoc:  SimplifiedUnicodeString[114X)  for
+  replacing other unicode characters by ASCII text.[133X
+  
+  [33X[0;0YThe  return  value  is  a record as returned by [2XParseBibXMLExtFiles[102X ([14XGAPDoc:
+  ParseBibXMLextFiles[114X),  its [10Xentries[110X component corresponds to the bibliography
+  entries  that  have  been [21Xclicked[121X in visual mode. This record can be used as
+  input for [2XWriteBibFile[102X ([14XGAPDoc: WriteBibFile[114X) or [2XWriteBibXMLextFile[102X ([14XGAPDoc:
+  WriteBibXMLextFile[114X),  in  order to produce a bibliography file, or it can be
+  used as input for [2XStringBibXMLEntry[102X ([14XGAPDoc: StringBibXMLEntry[114X), in order to
+  produce strings from the entries, in various formats.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27X# sort and categorize by year, scroll down, expand a category row[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( "scrrscsedddddxdddddQ" );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseBibliography();;[127X[104X
+    [4X[25Xgap>[125X [27X# sort & categorize by authors, expand all category rows, scroll down[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( "scscXseddddddQ" );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseBibliography();;[127X[104X
+    [4X[25Xgap>[125X [27X# sort and categorize by journal, search for a journal name, expand[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation( "scrrrsc/J. Algebra",[127X[104X
+    [4X[25X>[125X [27X       [ NCurses.keys.ENTER ], "nxdddQ" ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseBibliography();;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The browse table has a dynamic header (showing the
+  number  of  entries, which can vary when the table is restricted), no footer
+  and row labels; one row of column labels is given by the descriptions of the
+  table columns (authors, title, year, journal, MSC code).[133X
+  
+  [33X[0;0YRow  and  column  separators  are  drawn as grids (cf. [2XNCurses.Grid[102X ([14X2.2-8[114X))
+  composed  from  the special characters described in Section [14X2.1-6[114X, using the
+  component [10Xwork.SpecialGrid[110X of the browse table, see [2XBrowseData[102X ([14X5.4-1[114X).[133X
+  
+  [33X[0;0YFor  categorizing  by  authors  (or by MSC codes), the sort parameter [10X"split
+  rows  on  categorizing"[110X  is  set  to  [10X"yes"[110X,  so  the  authors  (codes)  are
+  distributed  to  different  category rows, hence each entry appears once for
+  each of its authors (or its MSC codes) in the categorized table. When a data
+  row  or  an  entry  in  a data row is selected, [21Xclick[121X adds the corresponding
+  bibliographhy entry to the result.[133X
+  
+  [33X[0;0YThe width of the title column is preset; usually titles are too long for one
+  line, and the contents of this column is formatted as a paragraph, using the
+  function  [2XFormatParagraph[102X  ([14XGAPDoc:  FormatParagraph[114X).  For  the authors and
+  journal columns, maximal widths are prescribed, and [2XFormatParagraph[102X ([14XGAPDoc:
+  FormatParagraph[114X) is used for longer entries.[133X
+  
+  [33X[0;0YFor  four  columns,  the sort parameters are defined as follows: The [13Xauthors[113X
+  and  [13XMSC  code[113X  columns  do  not become hidden when the table is categorized
+  according to this column, sorting by the [13Xyear[113X yields a [13Xde[113Xscending order, and
+  the category rows arising from these columns and the [13Xjournal[113X column show the
+  numbers of the data rows that belong to them.[133X
+  
+  [33X[0;0YThose  standard  modes  in [2XBrowseData[102X ([14X5.4-1[114X) where an entry or a row of the
+  table  is  selected  have  been  extended by three new actions, which open a
+  pager  showing  the  BibTeX,  HTML,  and  Text format of the selected entry,
+  respectively.  The  corresponding user inputs are the [12Xvb[112X, [12Xvh[112X, and [12Xvt[112X. If the
+  [13XMSC  code[113X  column is available then also the user input [12Xvm[112X is admissible; it
+  opens  a  pager  showing  the  descriptions of the MSC codes attached to the
+  selected entry.[133X
+  
+  [33X[0;0YThis  function  requires  some  of the utilities provided by the [5XGAP[105X package
+  [5XGAPDoc[105X  (see [LN07]),  such  as  [2XFormatParagraph[102X  ([14XGAPDoc: FormatParagraph[114X),
+  [2XNormalizeNameAndKey[102X   ([14XGAPDoc:   NormalizeNameAndKey[114X),  [2XNormalizedNameAndKey[102X
+  ([14XGAPDoc:   NormalizedNameAndKey[114X),   [2XParseBibFiles[102X  ([14XGAPDoc:  ParseBibFiles[114X),
+  [2XParseBibXMLextFiles[102X   ([14XGAPDoc:   ParseBibXMLextFiles[114X),  [2XParseBibXMLextString[102X
+  ([14XGAPDoc: ParseBibXMLextString[114X), [2XRecBibXMLEntry[102X ([14XGAPDoc: RecBibXMLEntry[114X), and
+  [2XStringBibAsXMLext[102X ([14XGAPDoc: StringBibAsXMLext[114X).[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/gapbibl.g[111X of the package.[133X
+  
+  [33X[0;0YThe  browse  table can be customized by entering a record as the argument of
+  [2XBrowseBibliography[102X, with the following supported components.[133X
+  
+  [8X[10Xfiles[110X[108X
+        [33X[0;6Ya nonempty list of filenames containing the data to be shown; there is
+        no default for this component.[133X
+  
+  [8X[10Xfilesshort[110X[108X
+        [33X[0;6Ya  list  of  the  same  length as the [10Xfiles[110X component, the entries are
+        strings  which  are  shown in the [10X"sourcefilename"[110X column of the table
+        (if this column is present); the default is the list of filenames.[133X
+  
+  [8X[10Xfilecontents[110X[108X
+        [33X[0;6Ya  list  of  the  same  length as the [10Xfiles[110X component, the entries are
+        strings  which  are  shown  as  category  values  when  the  table  is
+        categorized by the [10X"sourcefilename"[110X column; the default is the list of
+        filenames.[133X
+  
+  [8X[10Xheader[110X[108X
+        [33X[0;6Yis  the  constant part of the header shown above the browse table, the
+        default is the first filename.[133X
+  
+  [8X[10Xcolumns[110X[108X
+        [33X[0;6Yis  a  list  of  records  that  are  valid  as  the second argument of
+        [2XDatabaseAttributeAdd[102X  ([14XA.1-5[114X),  where the first argument is a database
+        id  enumerator  created  from the bibliography entries in the files in
+        question.  Each  entry (and also the corresponding identifier) of this
+        database   id   enumerator   is   a  list  of  records  obtained  from
+        [2XParseBibXMLextFiles[102X  ([14XGAPDoc:  ParseBibXMLextFiles[114X) and [2XRecBibXMLEntry[102X
+        ([14XGAPDoc:    RecBibXMLEntry[114X),    or    from    [2XParseBibFiles[102X   ([14XGAPDoc:
+        ParseBibFiles[114X),  such that the list elements are regarded as equal, in
+        the  sense  that their fingerprints (see below) are equal. The records
+        in  the [10Xcolumns[110X list are available for constructing the desired browse
+        table,  the  actual  appearance  is controlled by the [10Xchoice[110X component
+        described  below.  Columns  showing authors, title, year, journal, MSC
+        code, and filename are predefined and need not be listed here.[133X
+  
+  [8X[10Xchoice[110X[108X
+        [33X[0;6Ya  list of strings denoting the [10Xidentifier[110X components of those columns
+        that shall actually be shown in the table, the default is [10X[ "authors",
+        "title", "year", "journal", "mrclass" ][110X.[133X
+  
+  [8X[10Xfingerprint[110X[108X
+        [33X[0;6Ya  list  of  strings  denoting  component  names of the entries of the
+        database  id enumerator that is constructed from the data (see above);
+        two  data  records  are  regarded  as  equal  if  the  values of these
+        components   are   equal;   the  default  is  [10X[  "mrnumber",  "title",
+        "authorAsList", "editorAsList", "author" ][110X.[133X
+  
+  [8X[10XsortKeyFunction[110X[108X
+        [33X[0;6Yeither  [9Xfail[109X  or  a  function  that  takes  a  record  as  returned by
+        [2XRecBibXMLEntry[102X  ([14XGAPDoc:  RecBibXMLEntry[114X)  and  returns a list that is
+        used  for comparing and thus sorting the records; the default is [9Xfail[109X,
+        which  means that the rows of the table appear in the same ordering as
+        in the source files.[133X
+  
+  [1X6.7-2 BrowseMSC[101X
+  
+  [29X[2XBrowseMSC[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing.[133X
+  
+  [33X[0;0YThis  function shows the currently valid MSC codes in a browse table that is
+  categorized  by  the  [10X..-XX[110X  and  the  [10X...xx[110X codes. (Use [12XX[112X for expanding all
+  categories  or  [12Xx[112X for expanding the currently selected category.) Due to the
+  categorization, only two columns of the table are visible, showing the codes
+  and their descriptions.[133X
+  
+  
+  [1X6.8 [33X[0;0YProfiling [5XGAP[105X[101X[1X functions–a Variant[133X[101X
+  
+  [33X[0;0YA  [5XBrowse[105X  adapted way to evaluate profiling results is to show the overview
+  that   is   printed   by   the   [5XGAP[105X   function  [2XDisplayProfile[102X  ([14XReference:
+  DisplayProfile[114X)  in  a  [5XBrowse[105X  table, which allows one to sort the profiled
+  functions  according  to  the numbers of calls, the time spent, etc., and to
+  search for certain functions one is interested in.[133X
+  
+  [1X6.8-1 BrowseProfile[101X
+  
+  [29X[2XBrowseProfile[102X( [[3Xfunctions[103X, ][[3Xmincount[103X, [3Xmintime[103X] ) [32X function
+  
+  [33X[0;0YThe   arguments  and  their  meaning  are  the  same  as  for  the  function
+  [2XDisplayProfile[102X  ([14XReference:  DisplayProfile[114X),  in  the  sense that the lines
+  printed by that function correspond to the rows of the list that is shown by
+  [2XBrowseProfile[102X.  Initially,  the  table is sorted in the same way as the list
+  shown  by  [2XBrowseProfile[102X; sorting the table by any of the first five columns
+  will yield a non-increasing order of the rows.[133X
+  
+  [33X[0;0YThe  threshold values [3Xmincount[103X and [3Xmintime[103X can be changed in visual mode via
+  the  user  input  [12Xe[112X.  If  mouse  events  are  enabled  (see [2XNCurses.UseMouse[102X
+  ([14X2.2-10[114X)) then one can also use a mouse click on the current parameter value
+  shown  in  the  table  header  in  order  to enter the mode for changing the
+  parameters.[133X
+  
+  [33X[0;0YWhen  a  row  or  an entry in a row is selected, [21Xclick[121X shows the code of the
+  corresponding  function in a pager (see [2XNCurses.Pager[102X ([14X3.1-4[114X)) whenever this
+  is possible, as follows. If the function was read from a file then this file
+  is  opened,  if  the function was entered interactively then the code of the
+  function  is shown in the format produced by [2XPrint[102X ([14XReference: Print[114X); other
+  functions  (for  example  [5XGAP[105X kernel functions) cannot be shown, one gets an
+  alert message (see [2XNCurses.Alert[102X ([14X3.1-1[114X)) in such a case.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= [ 14, 14, 14, 14, 14 ];;  # ``do nothing''[127X[104X
+    [4X[25Xgap>[125X [27XProfileOperationsAndMethods( true );    # collect some data[127X[104X
+    [4X[25Xgap>[125X [27XConjugacyClasses( PrimitiveGroup( 24, 1 ) );;[127X[104X
+    [4X[25Xgap>[125X [27XProfileOperationsAndMethods( false );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "scso",                                 # sort by column 1,[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "rso",                                  # sort by column 2,[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "rso",                                  # sort by column 3,[127X[104X
+    [4X[25X>[125X [27X       n,[127X[104X
+    [4X[25X>[125X [27X       "q",                                    # deselect the column,[127X[104X
+    [4X[25X>[125X [27X       "/Centralizer", [ NCurses.keys.ENTER ], # search for a function,[127X[104X
+    [4X[25X>[125X [27X       n, "Q" ) );                             # and quit[127X[104X
+    [4X[25Xgap>[125X [27XBrowseProfile();[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The browse table has a dynamic header, which shows
+  the  current  values  of  [3Xmincount[103X  and [3Xmintime[103X, and a dynamic footer, which
+  shows the sums of counts and timings for the rows in the table (label [10XTOTAL[110X)
+  and if applicable the sums for the profiled functions not shown in the table
+  (label [10XOTHER[110X). There are no row labels, and the obvious column labels. There
+  is no return value.[133X
+  
+  [33X[0;0YThe  standard  modes  in [2XBrowseData[102X ([14X5.4-1[114X) (except the [10Xhelp[110X mode) have been
+  modified  by  adding  a  new  action  for  changing the threshold parameters
+  [3Xmincount[103X and [3Xmintime[103X (user input [12Xe[112X). The way how this in implemented made it
+  necessary  to  change the standard [21Xreset[121X action (user input [12X![112X) of the table;
+  note  that  resetting  (a  sorting  or filtering of) the table must not make
+  those rows visible that shall be hidden because of the threshold parameters.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/profile.g[111X of the package.[133X
+  
+  
+  [1X6.9 [33X[0;0YVariables defined in [5XGAP[105X[101X[1X packages–a Variant[133X[101X
+  
+  [33X[0;0YA [5XBrowse[105X adapted way to list the variables that are defined in a [5XGAP[105X package
+  is   to   show   the   overview   that   is  printed  by  the  [5XGAP[105X  function
+  [2XShowPackageVariables[102X ([14XReference: ShowPackageVariables[114X) in a [5XBrowse[105X table.[133X
+  
+  [1X6.9-1 BrowsePackageVariables[101X
+  
+  [29X[2XBrowsePackageVariables[102X( [3Xpkgname[103X[, [3Xversion[103X][, [3Xarec[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing.[133X
+  
+  [33X[0;0YThe  arguments  can  be  the  same  as  for [2XShowPackageVariables[102X ([14XReference:
+  ShowPackageVariables[114X),  that  is,  [3Xpkgname[103X is the name of a [5XGAP[105X package, and
+  the optional arguments [3Xversion[103X and [3Xarec[103X are a version number of this package
+  and a record used for customizing the output, respectively.[133X
+  
+  [33X[0;0YAlternatively,   the   second   argument   can   be   the   output  [10Xinfo[110X  of
+  [2XPackageVariablesInfo[102X  ([14XReference:  PackageVariablesInfo[114X)  for the package in
+  question, instead of the version number.[133X
+  
+  [33X[0;0Y[2XBrowsePackageVariables[102X  opens a Browse table that shows the global variables
+  that  become  bound and the methods that become installed when [5XGAP[105X loads the
+  package [3Xpkgname[103X.[133X
+  
+  [33X[0;0YThe  table  is  categorized  by  the  kinds  of variables (new or redeclared
+  operations,  methods,  info  classes,  synonyms,  other globals). The column
+  [21XDoc.?[121X  distinguishes  undocumented  and documented variables, so one can use
+  this  column  as a filter or for categorizing. The column [21XFilename[121X shows the
+  names  of  the package files. Clicking a selected row of the table opens the
+  relevant package file at the code in question.[133X
+  
+  [33X[0;0YThe  idea  behind  the argument [10Xinfo[110X is that using the same arguments as for
+  [2XShowPackageVariables[102X ([14XReference: ShowPackageVariables[114X) does not allow one to
+  apply  [2XBrowsePackageVariables[102X  to  packages that have been loaded before the
+  [5XBrowse[105X  package.  Thus one can compute the underlying data [10Xinfo[110X first, using
+  [2XPackageVariablesInfo[102X ([14XReference: PackageVariablesInfo[114X), then load the [5XBrowse[105X
+  package, and finally call [2XBrowsePackageVariables[102X.[133X
+  
+  [33X[0;0YFor  example,  the  overview of package variables for [5XBrowse[105X can be shown by
+  starting [5XGAP[105X without packages and then entering the following lines.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xpkgname:= "Browse";;[127X[104X
+    [4X[25Xgap>[125X [27Xinfo:= PackageVariablesInfo( pkgname, "" );;[127X[104X
+    [4X[25Xgap>[125X [27XLoadPackage( "Browse" );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowsePackageVariables( pkgname, info );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIf  the  arguments  are  the  same  as  for [2XShowPackageVariables[102X ([14XReference:
+  ShowPackageVariables[114X)  then  this  function  is  actually  called,  with the
+  consequence  that  the  package  gets  loaded when [2XBrowsePackageVariables[102X is
+  called.  This  is  not  the  case  if  the  output  of  [2XPackageVariablesInfo[102X
+  ([14XReference: PackageVariablesInfo[114X) is entered as the second argument.[133X
+  
+  
+  [1X6.10 [33X[0;0YConfiguring User preferences–a Variant[133X[101X
+  
+  [33X[0;0YA  [5XBrowse[105X adapted way to show and edit [5XGAP[105X's user preferences is to show the
+  overview that is printed by the [5XGAP[105X function [2XShowUserPreferences[102X ([14XReference:
+  ShowUserPreferences[114X) in a [5XBrowse[105X table.[133X
+  
+  [1X6.10-1 BrowseUserPreferences[101X
+  
+  [29X[2XBrowseUserPreferences[102X( [3Xpackage1[103X, [3Xpackage2[103X, [3X...[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing.[133X
+  
+  [33X[0;0YThe   arguments   are   the  same  as  for  [2XShowUserPreferences[102X  ([14XReference:
+  ShowUserPreferences[114X),  that is, calling the function with no argument yields
+  an  overview  of  all  known  user  preferences,  and if one or more strings
+  [3Xpackage1[103X,  [22X...[122X  are  given then only the user preferences for these packages
+  are shown.[133X
+  
+  [33X[0;0Y[2XBrowseUserPreferences[102X opens a Browse table with the following columns:[133X
+  
+  [8X[21XPackage[121X[108X
+        [33X[0;6Ycontains  the  names of the [5XGAP[105X packages to which the user preferences
+        belong,[133X
+  
+  [8X[21XPref. names[121X[108X
+        [33X[0;6Ycontains the names of the user preferences, and[133X
+  
+  [8X[21XDescription[121X[108X
+        [33X[0;6Ycontains   the   [10Xdescription[110X   texts  from  the  [2XDeclareUserPreference[102X
+        ([14XReference:  DeclareUserPreference[114X)  calls  and the default values (if
+        applicable), and the actual values.[133X
+  
+  [33X[0;0YWhen  one  [21Xclicks[121X on one of the table rows or entries then the values of the
+  user preference in question can be edited. If a list of admissible values is
+  known  then this means that one can choose from this list via [2XNCurses.Select[102X
+  ([14X3.1-2[114X), otherwise one can enter the desired value as text.[133X
+  
+  [33X[0;0YThe  values  of  the  user preferences are not changed before one closes the
+  Browse  table.  When  the  table is left and if one has changed at least one
+  value, one is asked whether the changes shall be applied.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/userpref.g[111X of the package.[133X
+  
+  
+  [1X6.11 [33X[0;0YOverview of [5XGAP[105X[101X[1X Data[133X[101X
+  
+  [33X[0;0YThe [5XGAP[105X system contains several data collections such as libraries of groups
+  and character tables. Clearly the function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) can
+  be used to visualize interesting information about such data collections, in
+  the  form  of  an [21Xoverview table[121X whose rows correspond to the objects in the
+  collection;  each column of the table shows a piece of information about the
+  objects.   (One   possibility   to   create   such  overviews  is  given  by
+  [2XBrowseTableFromDatabaseIdEnumerator[102X ([14XA.2-2[114X).)[133X
+  
+  [1X6.11-1 BrowseGapData[101X
+  
+  [29X[2XBrowseGapData[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10Ythe return value of the chosen application if there is one.[133X
+  
+  [33X[0;0YThe    function    [2XBrowseGapData[102X    shows    the   choices   in   the   list
+  [10XBrowseData.GapDataOverviews[110X,  in  a  browse  table  with one column. When an
+  entry  is  [21Xclicked[121X  then the associated function is called, and the table of
+  choices is closed.[133X
+  
+  [33X[0;0YThe  idea  is  that  each  entry of [10XBrowseData.GapDataOverviews[110X describes an
+  overview of a data collection.[133X
+  
+  [33X[0;0YThe [5XBrowse[105X package provides overviews of[133X
+  
+  [30X    [33X[0;6Ythe   current   AMS  Mathematics  Subject  Classification  codes  (see
+        [2XBrowseMSC[102X ([14X6.7-2[114X)),[133X
+  
+  [30X    [33X[0;6Ythe  contents  of the [5XAtlasRep[105X package [WPNBB07] (only if this package
+        is loaded, see Section [14X6.5[114X),[133X
+  
+  [30X    [33X[0;6Ythe Conway polynomials in [5XGAP[105X (calls [10XBrowseConwayPolynomials()[110X),[133X
+  
+  [30X    [33X[0;6Yprofile information for [5XGAP[105X functions (see Section [14X6.8[114X),[133X
+  
+  [30X    [33X[0;6Ythe   list   of   [5XGAP[105X   related   bibliography  entries  in  the  file
+        [11Xbibl/gap-publishednicer.bib[111X of the [5XBrowse[105X package (see Section [14X6.7[114X),[133X
+  
+  [30X    [33X[0;6Ythe [5XGAP[105X manuals (see Section [14X6.6[114X),[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X operations and methods (calls [10XBrowseGapMethods()[110X),[133X
+  
+  [30X    [33X[0;6Ythe installed [5XGAP[105X packages (calls [10XBrowseGapPackages()[110X),[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X's user preferences (see Section [14X6.10[114X),[133X
+  
+  [30X    [33X[0;6Ythe  contents  of  the [5XTomLib[105X package [NMP11] (only if this package is
+        loaded, see Section [14XA.5[114X),[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X's Library of Transitive Groups (see Section [14XA.4[114X).[133X
+  
+  [33X[0;0YOther   [5XGAP[105X   packages   may   add   more   overviews,  using  the  function
+  [2XBrowseGapDataAdd[102X ([14X6.11-2[114X). For example, there are overviews of[133X
+  
+  [30X    [33X[0;6Ythe  bibliographies in the [5XATLAS[105X of Finite Groups [CCNPW85] and in the
+        [5XATLAS[105X       of       Brauer       Characters       [JLPW95]       (see
+        [2XBrowseBibliographySporadicSimple[102X                            ([14XAtlasRep:
+        BrowseBibliographySporadicSimple[114X)),[133X
+  
+  [30X    [33X[0;6Yatomic  irrationalities that occur in character tables in the [5XATLAS[105X of
+        Finite  Groups  [CCNPW85]  or  the [5XATLAS[105X of Brauer Characters [JLPW95]
+        (see        Section        [2XBrowseCommonIrrationalities[102X       ([14XCTblLib:
+        BrowseCommonIrrationalities[114X)),[133X
+  
+  [30X    [33X[0;6Ythe  differences  between  the versions of the character table data in
+        the  [5XCTblLib[105X  package  (see Section [2XBrowseCTblLibDifferences[102X ([14XCTblLib:
+        BrowseCTblLibDifferences[114X)),[133X
+  
+  [30X    [33X[0;6Ythe   information   in   [5XGAP[105X  Character  Table  Library  (see  Section
+        [2XBrowseCTblLibInfo[102X ([14XCTblLib: BrowseCTblLibInfo[114X)),[133X
+  
+  [30X    [33X[0;6Yan  overview  of minimal degrees of representations of groups from the
+        [5XATLAS[105X  of  Group  Representations  (see  Section  [2XBrowseMinimalDegrees[102X
+        ([14XAtlasRep: BrowseMinimalDegrees[114X)).[133X
+  
+  [33X[0;0YExcept that always one table cell is selected, the full functionality of the
+  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= [ 14, 14, 14 ];;  # ``do nothing''[127X[104X
+    [4X[25Xgap>[125X [27X# open the overview of Conway polynomials[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation( "/Conway Polynomials",[127X[104X
+    [4X[25X>[125X [27X     [ NCurses.keys.ENTER, NCurses.keys.ENTER ], "srdddd", n, "Q" ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseGapData();;[127X[104X
+    [4X[25Xgap>[125X [27X# open the overview of GAP packages[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation( "/GAP Packages",[127X[104X
+    [4X[25X>[125X [27X     [ NCurses.keys.ENTER, NCurses.keys.ENTER ], "/Browse",[127X[104X
+    [4X[25X>[125X [27X     [ NCurses.keys.ENTER ], "n", n, "Q" ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowseGapData();;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The  browse  table  has a static header, a dynamic
+  footer  showing  the  description of the currently selected entry, no row or
+  column  labels,  and  exactly  one column of fixed width equal to the screen
+  width. If the chosen application has a return value then this is returned by
+  [2XBrowseGapData[102X, otherwise nothing is returned. The component [10Xwork.SpecialGrid[110X
+  of  the browse table is used to draw a border around the list of choices and
+  another  border around the footer. Only one mode is needed in which an entry
+  is selected.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/gapdata.g[111X of the package.[133X
+  
+  [1X6.11-2 BrowseGapDataAdd[101X
+  
+  [29X[2XBrowseGapDataAdd[102X( [3Xtitle[103X, [3Xcall[103X, [3Xret[103X, [3Xdocumentation[103X ) [32X function
+  
+  [33X[0;0YThis  function  extends the list [10XBrowseData.GapDataOverviews[110X by a new entry.
+  The list is used by [2XBrowseGapData[102X ([14X6.11-1[114X).[133X
+  
+  [33X[0;0Y[3Xtitle[103X  must be a string of length at most [22X76[122X; it will be shown in the browse
+  table that is opened by [2XBrowseGapData[102X ([14X6.11-1[114X). [3Xcall[103X must be a function that
+  takes  no  arguments;  it  will be called when [3Xtitle[103X is [21Xclicked[121X. [3Xret[103X must be
+  [9Xtrue[109X  if  [3Xcall[103X has a return value and if [2XBrowseGapData[102X ([14X6.11-1[114X) shall return
+  this  value,  and  [9Xfalse[109X  otherwise.  [3Xdocumentation[103X  must  be  a string that
+  describes what happens when the function [3Xcall[103X is called; it will be shown in
+  the  footer  of  the  table  opened  by [2XBrowseGapData[102X ([14X6.11-1[114X) when [3Xtitle[103X is
+  selected.[133X
+  
+  
+  [1X6.12 [33X[0;0YNavigating in a Directory Tree[133X[101X
+  
+  [33X[0;0YA  natural  way to visualize the contents of a directory is via a tree whose
+  leaves  denote  plain  files,  and the other vertices denote subdirectories.
+  [5XBrowse[105X  provides  a  function  based  on  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X) for
+  displaying such trees; the leaves correspond to the data rows, and the other
+  vertices correspond to category rows.[133X
+  
+  [1X6.12-1 BrowseDirectory[101X
+  
+  [29X[2XBrowseDirectory[102X( [[3Xstartpath[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya list of the [21Xclicked[121X filenames.[133X
+  
+  [33X[0;0YIf no argument is given then the contents of the current directory is shown,
+  see [2XDirectoryCurrent[102X ([14XReference: DirectoryCurrent[114X). If a string [3Xstartpath[103X is
+  given as the only argument then it is understood as a directory path, in the
+  sense  of  [2XDirectory[102X  ([14XReference:  Directory[114X),  and  the  contents  of  this
+  directory is shown.[133X
+  
+  [33X[0;0YThe  full  functionality  of  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) is
+  available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xn:= [ 14, 14, 14 ];;  # ``do nothing''[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       "q",                                  # leave the selection[127X[104X
+    [4X[25X>[125X [27X       "X",                                  # expand all categories[127X[104X
+    [4X[25X>[125X [27X       "/filetree", [ NCurses.keys.ENTER ],  # search for "filetree"[127X[104X
+    [4X[25X>[125X [27X       n, "Q" ) );                           # and quit[127X[104X
+    [4X[25Xgap>[125X [27Xdir:= Filename( DirectoriesPackageLibrary( "Browse", "" ), "" );;[127X[104X
+    [4X[25Xgap>[125X [27Xif IsBound( BrowseDirectory ) then[127X[104X
+    [4X[25X>[125X [27X     BrowseDirectory( dir );[127X[104X
+    [4X[25X>[125X [27X   fi;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X: The browse table has a static header, no footer, no
+  row  or  column  labels,  and exactly one data column. The category rows are
+  precomputed,  i. e.,  they  do  not  arise  from  a  table  column. The tree
+  structure  is  visualized  via a special grid that is shown in the separator
+  column  in  front  of the table column; the width of this column is computed
+  from  the  largest  nesting  depth of files. For technical reasons, category
+  rows  representing  [13Xempty[113X  directories  are realized via [21Xdummy[121X table rows; a
+  special [10XShowTables[110X function guarantees that these rows are always hidden.[133X
+  
+  [33X[0;0YWhen  a  data  row  or  an  entry  in  this  row is selected, [21Xclick[121X adds the
+  corresponding  filename  to  the  result  list.  Initially, the first row is
+  selected.  (So  if you want to search in the whole tree then you should quit
+  this selection by hitting the [12Xq[112X key.)[133X
+  
+  [33X[0;0YThe  category  hierarchy  is  computed  using  [2XDirectoryContents[102X ([14XReference:
+  DirectoryContents[114X).[133X
+  
+  [33X[0;0YThis  function  is  available  only  if  the [5XGAP[105X package [5XIO[105X (see [Neu07]) is
+  available,  because  the  check  for  cycles  uses the function [2XIO_stat[102X ([14XIO:
+  IO_stat[114X) from this package.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/filetree.g[111X of the package.[133X
+  
+  
+  [1X6.13 [33X[0;0YA Puzzle[133X[101X
+  
+  [33X[0;0YWe  consider  an [22Xm[122X by [22Xn[122X rectangle of squares numbered from [22X1[122X to [22Xm n - 1[122X, the
+  bottom  right  square  is  left  empty. The numbered squares are permuted by
+  successively  exchanging the empty square and a neighboring square such that
+  in the end, the empty cell is again in the bottom right corner.[133X
+  
+      ┌────┬────┬────┬────┐
+      │ [22X7[122X  │ [22X13[122X │ [22X14[122X │ [22X2[122X  │ 
+      ├────┼────┼────┼────┤
+      │ [22X1[122X  │ [22X4[122X  │ [22X15[122X │ [22X11[122X │ 
+      ├────┼────┼────┼────┤
+      │ [22X6[122X  │ [22X8[122X  │ [22X3[122X  │ [22X9[122X  │ 
+      ├────┼────┼────┼────┤
+      │ [22X10[122X │ [22X5[122X  │ [22X12[122X │  [22X[122X  │ 
+      └────┴────┴────┴────┘
+  
+  [33X[0;0YThe aim of the game is to order the numbered squares via these moves.[133X
+  
+  [33X[0;0YFor  the  case  [22Xm = n = 4[122X, the puzzle is (erroneously?) known under the name
+  [21XSam Loyd's Fifteen[121X, see [Bog] and [OR] for more information and references.[133X
+  
+  [1X6.13-1 BrowsePuzzle[101X
+  
+  [29X[2XBrowsePuzzle[102X( [[3Xm[103X, [3Xn[103X[, [3Xpi[103X]] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record describing the initial and final status of the puzzle.[133X
+  
+  [33X[0;0YThis function shows the rectangle in a window.[133X
+  
+  [33X[0;0YThe  arguments  [3Xm[103X and [3Xn[103X are the dimensions of the rectangle, the default for
+  both values is [22X4[122X. The initial distribution of the numbers in the squares can
+  be  prescribed  via a permutation [3Xpi[103X, the default is a random element in the
+  alternating  group on the points [22X1, 2, ..., [3Xm[103X [3Xn[103X - 1[122X. (Note that the game has
+  not always a solution.)[133X
+  
+  [33X[0;0YIn  any  case, the empty cell is selected, and the selection can be moved to
+  neighboring  cells  via  the  arrow keys, or to any place in the same row or
+  column via a mouse click.[133X
+  
+  [33X[0;0YThe  return  value  is a record with the components [10Xdim[110X (the pair [10X[ m, n ][110X),
+  [10Xinit[110X  (the  initial  permutation),  [10Xfinal[110X (the final permutation), and [10Xsteps[110X
+  (the number of transpositions that were needed).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       BrowsePuzzleSolution.steps, "Q" ) );[127X[104X
+    [4X[25Xgap>[125X [27XBrowsePuzzle( 4, 4, BrowsePuzzleSolution.init );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAn implementation using only mouse clicks but no key strokes is available in
+  the [5XGAP[105X package [5XXGAP[105X (see [CN04]).[133X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The  game board is implemented via a browse table,
+  without  row  and  column  labels,  with  static header, dynamic footer, and
+  individual  [10Xminyx[110X  function.  Only  one  mode is needed in which one cell is
+  selected,  and  besides  the standard actions for quitting the table, asking
+  for  help,  and  saving the current window contents, only the four moves via
+  the arrow keys and mouse clicks are admissible.[133X
+  
+  [33X[0;0YSome   standard   [2XNCurses.BrowseGeneric[102X   ([14X4.3-1[114X)   functionality,  such  as
+  scrolling, selecting, and searching, are not available in this application.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/puzzle.g[111X of the package.[133X
+  
+  
+  [1X6.14 [33X[0;0YPeg Solitaire[133X[101X
+  
+  [33X[0;0YPeg  solitaire  is  a  board game for one player. The game board consists of
+  several  holes some of which contain pegs. In each step of the game, one peg
+  is  moved  horizontally  or  vertically to an empty hole at distance two, by
+  jumping over a neighboring peg which is then removed from the board.[133X
+  
+                ┌───┬───┬───┐
+                │ o │ o │ o │
+                ├───┼───┼───┤
+                │ o │ o │ o │
+        ┌───┬───┼───┼───┼───┼───┬───┐
+        │ o │ o │ o │ o │ o │ o │ o │
+        ├───┼───┼───┼───┼───┼───┼───┤
+        │ o │ o │ o │   │ o │ o │ o │
+        ├───┼───┼───┼───┼───┼───┼───┤
+        │ o │ o │ o │ o │ o │ o │ o │
+        └───┴───┼───┼───┼───┼───┴───┘
+                │ o │ o │ o │
+                ├───┼───┼───┤
+                │ o │ o │ o │
+                └───┴───┴───┘
+  
+  [33X[0;0YWe  consider  the game that in the beginning, exactly one hole is empty, and
+  in the end, exactly one peg is left.[133X
+  
+  [1X6.14-1 PegSolitaire[101X
+  
+  [29X[2XPegSolitaire[102X( [[3Xformat[103X, ][[3Xnrholes[103X, ][[3XtwoModes[103X] ) [32X function
+  
+  [33X[0;0YThis function shows the game board in a window.[133X
+  
+  [33X[0;0YIf  the  argument [3Xformat[103X is one of the strings [10X"small"[110X or [10X"large"[110X then small
+  or large pegs are shown, the default is [10X"small"[110X.[133X
+  
+  [33X[0;0YThree  shapes  of  the  game board are supported, with [22X33[122X, [22X37[122X, and [22X45[122X holes,
+  respectively;  this  number  can  be specified via the argument [3Xnrholes[103X, the
+  default  is  [22X33[122X.  In  the cases of [22X33[122X and [22X45[122X holes, the position of both the
+  initial  hole  and  the  destination  of  the  final peg is the middle cell,
+  whereas  in  the  case  of  [22X37[122X  holes,  the  initial hole is in the top left
+  position and the final peg has to be placed in the bottom right position.[133X
+  
+  [33X[0;0YIf a Boolean [3XtwoModes[103X is entered as an argument then it determines whether a
+  browse  table  with  one  or  two  modes is used; the default [9Xfalse[109X yields a
+  browse table with only one mode.[133X
+  
+  [33X[0;0YIn  any  case,  one  cell of the board is selected, and the selection can be
+  moved  to  neighboring  cells via the arrow keys. A peg in the selected cell
+  jumps  over  a neighboring peg to an adjacent hole via the [10Xj[110X key followed by
+  the appropriate arrow key.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xfor n in [ 33, 37, 45 ] do[127X[104X
+    [4X[25X>[125X [27X     BrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X         PegSolitaireSolutions.( String( n ) ), "Q" ) );[127X[104X
+    [4X[25X>[125X [27X     PegSolitaire( n );[127X[104X
+    [4X[25X>[125X [27X     PegSolitaire( "large", n );[127X[104X
+    [4X[25X>[125X [27X     PegSolitaire( n, true );[127X[104X
+    [4X[25X>[125X [27X     PegSolitaire( "large", n, true );[127X[104X
+    [4X[25X>[125X [27Xod;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YFor  more  information  such  as  variations  of  the  game  and references,
+  see [Köla].  Also the solutions stored in the variable [10XPegSolitaireSolutions[110X
+  have been taken from this web page.[133X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The  game board is implemented via a browse table,
+  without  row  and  column  labels,  with  static header, dynamic footer, and
+  individual  [10Xminyx[110X  function.  In fact, two implementations are provided. The
+  first  one  needs  only  one  mode in which one cell is selected; moving the
+  selection  and  jumping with the peg in the selected cell in one of the four
+  directions  are  the supported user actions. The second implementation needs
+  two modes, one for moving the selection and one for jumping.[133X
+  
+  [33X[0;0YSome   standard   [2XNCurses.BrowseGeneric[102X   ([14X4.3-1[114X)   functionality,  such  as
+  scrolling, selecting, and searching, are not available in this application.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/solitair.g[111X of the package.[133X
+  
+  
+  [1X6.15 [33X[0;0YRubik's Cube[133X[101X
+  
+  [33X[0;0YWe  visualize  the  transformations of Rubik's magic cube in a model that is
+  given by [21Xunfolding[121X the faces and numbering them as follows.[133X
+  
+                     ┌──────────────┐
+                     │  1    2    3 │
+                     │  4   top   5 │
+                     │  6    7    8 │
+      ┌──────────────┼──────────────┼──────────────┬──────────────┐
+      │  9   10   11 │ 17   18   19 │ 25   26   27 │ 33   34   35 │
+      │ 12  left  13 │ 20 front  21 │ 28 right  29 │ 36  back  37 │
+      │ 14   15   16 │ 22   23   24 │ 30   31   32 │ 38   39   40 │
+      └──────────────┼──────────────┼──────────────┴──────────────┘
+                     │ 41   42   43 │
+                     │ 44  down  45 │
+                     │ 46   47   48 │
+                     └──────────────┘
+  
+  [33X[0;0YClockwise  turns of the six layers (top, left, front, right, back, and down)
+  are represented by the following permutations.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xcubegens := [[127X[104X
+    [4X[25X>[125X [27X  ( 1, 3, 8, 6)( 2, 5, 7, 4)( 9,33,25,17)(10,34,26,18)(11,35,27,19),[127X[104X
+    [4X[25X>[125X [27X  ( 9,11,16,14)(10,13,15,12)( 1,17,41,40)( 4,20,44,37)( 6,22,46,35),[127X[104X
+    [4X[25X>[125X [27X  (17,19,24,22)(18,21,23,20)( 6,25,43,16)( 7,28,42,13)( 8,30,41,11),[127X[104X
+    [4X[25X>[125X [27X  (25,27,32,30)(26,29,31,28)( 3,38,43,19)( 5,36,45,21)( 8,33,48,24),[127X[104X
+    [4X[25X>[125X [27X  (33,35,40,38)(34,37,39,36)( 3, 9,46,32)( 2,12,47,29)( 1,14,48,27),[127X[104X
+    [4X[25X>[125X [27X  (41,43,48,46)(42,45,47,44)(14,22,30,38)(15,23,31,39)(16,24,32,40)[127X[104X
+    [4X[25X>[125X [27X];;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[5XGAP[105X  computations  analyzing  this  permutation  group have been part of the
+  announcements of [5XGAP[105X 3 releases. For a [5XGAP[105X 4 equivalent, see [Sch]. For more
+  information and references (not [5XGAP[105X related) about Rubik's cube, see [Kölb].[133X
+  
+  [1X6.15-1 BrowseRubiksCube[101X
+  
+  [29X[2XBrowseRubiksCube[102X( [[3Xformat[103X, ][[3Xpi[103X] ) [32X function
+  
+  [33X[0;0YThis function shows the model of the cube in a window.[133X
+  
+  [33X[0;0YIf  the  argument [3Xformat[103X is one of the strings [10X"small"[110X or [10X"large"[110X then small
+  or large cells are shown, the default is [10X"small"[110X.[133X
+  
+  [33X[0;0YThe  argument  [3Xpi[103X  is the initial permutation of the faces, the default is a
+  random permutation in the cube group, see [14X'Reference: Random Sources'[114X.[133X
+  
+  [33X[0;0YSupported  user inputs are the keys [12Xt[112X, [12Xl[112X, [12Xf[112X, [12Xr[112X, [12Xb[112X, and [12Xd[112X for clockwise turns
+  of   the   six   layers,   and   the   corresponding   capital  letters  for
+  counter-clockwise  turns.  If the terminal supports colors, according to the
+  global  variable  [2XNCurses.attrs.has_colors[102X  ([14X2.2-1[114X),  the  input  [12Xs[112X switches
+  between  a  screen that shows only the colors of the faces and a screen that
+  shows the numbers; the color screen is the default.[133X
+  
+  [33X[0;0YThe return value is a record with the components [10Xinputs[110X (a string describing
+  the  user inputs), [10Xinit[110X, and [10Xfinal[110X (the initial and final permutation of the
+  faces,  respectively).  (The  [10Xinputs[110X  component  can  be used for the replay
+  feature, see the example below.)[133X
+  
+  [33X[0;0YIn  the  following  example,  a  word  in terms of the generators is used to
+  initialize the browse table, and then the letters in this word are used as a
+  series  of input steps, except that in between, the display is switched once
+  from colors to numbers and back.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xchoice:= List( [ 1 .. 30 ], i -> Random( [ 1 .. 6 ] ) );;[127X[104X
+    [4X[25Xgap>[125X [27Xinput:= List( "tlfrbd", IntChar ){ choice };;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( Concatenation([127X[104X
+    [4X[25X>[125X [27X       input{ [ 1 .. 20 ] },[127X[104X
+    [4X[25X>[125X [27X       "s",                    # switch to number display[127X[104X
+    [4X[25X>[125X [27X       input{ [ 21 .. 25 ] },[127X[104X
+    [4X[25X>[125X [27X       "s",                    # switch to color display[127X[104X
+    [4X[25X>[125X [27X       input{ [ 26 .. 30 ] },[127X[104X
+    [4X[25X>[125X [27X       "Q" ) );;               # quit the browse table[127X[104X
+    [4X[25Xgap>[125X [27XBrowseRubiksCube( Product( cubegens{ choice } ) );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseRubiksCube( "large", Product( cubegens{ choice } ) );;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X: The cube is implemented via a browse table, without
+  row  and  column  labels, with static header, dynamic footer, and individual
+  [10Xminyx[110X  function.  Only  one mode is needed, and besides the standard actions
+  for  quitting  the  table,  asking  for  help, and saving the current window
+  contents,  only  the  twelve  moves  and the switch between color and number
+  display are admissible.[133X
+  
+  [33X[0;0YSwitching  between  the  two  display  formats is implemented via a function
+  [10Xwork.Main[110X, so this relies on [13Xnot[113X caching the formatted cells in [10Xwork.main[110X.[133X
+  
+  [33X[0;0YRow  and  column separators of the browse table are whitespace of height and
+  width  one.  The  separating lines are drawn using an individual [10XSpecialGrid[110X
+  function  in  the  browse  table. Note that the relevant cells do not form a
+  rectangular array.[133X
+  
+  [33X[0;0YSome   standard   [2XNCurses.BrowseGeneric[102X   ([14X4.3-1[114X)   functionality,  such  as
+  scrolling, selecting, and searching, are not available in this application.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/rubik.g[111X of the package.[133X
+  
+  
+  [1X6.16 [33X[0;0YChanging Sides[133X[101X
+  
+  [33X[0;0YWe  consider  a  [22X5[122X by [22X5[122X board of squares filled with two types of stones, as
+  follows. The square in the middle is left empty.[133X
+  
+             ┌───┬───┬───┬───┬───┐
+             │ x │ x │ x │ x │ x │
+             ├───┼───┼───┼───┼───┤
+             │ o │ x │ x │ x │ x │
+             ├───┼───┼───┼───┼───┤
+             │ o │ o │   │ x │ x │
+             ├───┼───┼───┼───┼───┤
+             │ o │ o │ o │ o │ x │
+             ├───┼───┼───┼───┼───┤
+             │ o │ o │ o │ o │ o │
+             └───┴───┴───┴───┴───┘
+  
+  [33X[0;0YThe aim of the game is to exchange the two types of stones via a sequence of
+  single  steps  that  move one stone to the empty position on the board. Only
+  those  moves  are  allowed that increase or decrease one coordinate by [22X2[122X and
+  increase  or  decrease  the  other  by [22X1[122X; these are the allowed moves of the
+  knight in chess.[133X
+  
+  [33X[0;0YThis game has been part of the MacTutor system [OR00].[133X
+  
+  [1X6.16-1 BrowseChangeSides[101X
+  
+  [29X[2XBrowseChangeSides[102X(  ) [32X function
+  
+  [33X[0;0YThis function shows the game board in a window.[133X
+  
+  [33X[0;0YEach  move  is  encoded  as  a  sequence  of  three arrow keys; there are [22X24[122X
+  admissible inputs.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xfor entry in BrowseChangeSidesSolutions do[127X[104X
+    [4X[25X>[125X [27X     BrowseData.SetReplay( Concatenation( entry, "Q" ) );[127X[104X
+    [4X[25X>[125X [27X     BrowseChangeSides();[127X[104X
+    [4X[25X>[125X [27Xod;[127X[104X
+    [4X[25Xgap>[125X [27XBrowseData.SetReplay( false );[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The  game board is implemented via a browse table,
+  without  row  and  column  labels,  with  static header, dynamic footer, and
+  individual [10Xminyx[110X function. Only one mode is needed, and besides the standard
+  actions  for  quitting  the  table,  asking for help, and saving the current
+  window  contents,  only  moves  via  combinations of the four arrow keys are
+  admissible.[133X
+  
+  [33X[0;0YThe  separating  lines are drawn using an individual [10XSpecialGrid[110X function in
+  the browse table.[133X
+  
+  [33X[0;0YSome   standard   [2XNCurses.BrowseGeneric[102X   ([14X4.3-1[114X)   functionality,  such  as
+  scrolling, selecting, and searching, are not available in this application.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/knight.g[111X of the package.[133X
+  
+  
+  [1X6.17 [33X[0;0YSudoku[133X[101X
+  
+  [33X[0;0YWe  consider  a  [22X9[122X  by [22X9[122X board of squares. Some squares are initially filled
+  with  numbers  from [22X1[122X to [22X9[122X. The aim of the game is to fill the empty squares
+  in  such  a  way  that  each row, each column, and each of the marked [22X3[122X by [22X3[122X
+  subsquares contains all numbers from [22X1[122X to [22X9[122X. A [13Xproper Sudoku game[113X is defined
+  as one with a unique solution. Here is an example.[133X
+  
+               ┏━━━┯━━━┯━━━┳━━━┯━━━┯━━━┳━━━┯━━━┯━━━┓
+               ┃   │   │   ┃   │   │   ┃ 5 │   │   ┃
+               ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+               ┃   │ 1 │ 5 ┃ 4 │   │ 6 ┃   │ 2 │   ┃
+               ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+               ┃ 9 │   │   ┃   │ 5 │   ┃ 3 │   │   ┃
+               ┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫
+               ┃ 6 │   │ 4 ┃   │   │   ┃   │   │   ┃
+               ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+               ┃   │   │   ┃ 8 │   │   ┃   │   │   ┃
+               ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+               ┃ 8 │   │   ┃ 9 │   │   ┃   │ 5 │ 3 ┃
+               ┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫
+               ┃   │   │   ┃   │   │ 5 ┃   │   │   ┃
+               ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+               ┃   │ 4 │   ┃   │   │ 7 ┃   │   │ 2 ┃
+               ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+               ┃   │   │ 9 ┃ 1 │   │   ┃ 8 │   │   ┃
+               ┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛
+  
+  [33X[0;0YThe [5XBrowse[105X package contains functions to create, play and solve these games.
+  There  are  basic  command line functions for this, which we describe first,
+  and there is a user interface [2XPlaySudoku[102X ([14X6.17-8[114X) which is implemented using
+  the generic browse functionality described in Chapter [14X4[114X.[133X
+  
+  [1X6.17-1 Sudoku.Init[101X
+  
+  [29X[2XSudoku.Init[102X( [[3Xarg[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10YA record describing a Sudoku board or [9Xfail[109X.[133X
+  
+  [33X[0;0YThis  function constructs a record describing a Sudoku game. This is used by
+  the  other  functions described below. There a several possibilities for the
+  argument [3Xarg[103X.[133X
+  
+  [8X[3Xarg[103X is a string[108X
+        [33X[0;6YThe  entries  of  a Sudoku board are numbered row-wise from 1 to 81. A
+        board  is encoded as a string as follows. If one of the numbers 1 to 9
+        is  in  entry  [22Xi[122X  then the corresponding digit character is written in
+        position  [22Xi[122X  of the string. If an entry is empty any character, except
+        [10X'1'[110X  to  [10X'9'[110X  or  [10X'|'[110X is written in position [22Xi[122X of the string. Trailing
+        empty  entries  can  be  left  out.  Afterwards  [10X'|'[110X-characters can be
+        inserted  in  the string (for example to mark line ends). Such strings
+        can be used for [3Xarg[103X.[133X
+  
+  [8X[3Xarg[103X is a matrix[108X
+        [33X[0;6YA  Sudoku board can also be encoded as a 9 by 9-matrix, that is a list
+        of  9 lists of length 9, whose (i,j)-th entry is the (i,j)-th entry of
+        the  board  as  integer if it is not empty. Empty entries of the board
+        correspond to unbound entries in the matrix.[133X
+  
+  [8X[3Xarg[103X is a list of integers[108X
+        [33X[0;6YInstead of the matrix just described the argument can also be given by
+        the  concatenation  of  the rows of the matrix (so, a list of integers
+        and holes).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xgame := Sudoku.Init(" 3   68  | 85  1 69|  97   53|      79 |\[127X[104X
+    [4X[25X>[125X [27X 6  47   |45  2    |89   2 1 | 4   8 7 | ");;[127X[104X
+  [4X[32X[104X
+  
+  [1X6.17-2 Sudoku.Place[101X
+  
+  [29X[2XSudoku.Place[102X( [3Xgame[103X, [3Xi[103X, [3Xn[103X ) [32X function
+  [29X[2XSudoku.Remove[102X( [3Xgame[103X, [3Xi[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10YThe changed [3Xgame[103X.[133X
+  
+  [33X[0;0YHere  [3Xgame[103X is a record describing a Sudoku board, as returned by [2XSudoku.Init[102X
+  ([14X6.17-1[114X).  The argument [3Xi[103X is the number of an entry, counted row-wise from 1
+  to  81,  and  [3Xn[103X  is  an integer from 1 to 9 to be placed on the board. These
+  functions change [3Xgame[103X.[133X
+  
+  [33X[0;0Y[2XSudoku.Place[102X  tries  to place number [3Xn[103X on entry [3Xi[103X. It is an error if entry [3Xi[103X
+  is  not  empty.  The  number  is not placed if [3Xn[103X is already used in the row,
+  column  or  subsquare of entry [3Xi[103X. In this case the component [10Xgame.impossible[110X
+  is bound.[133X
+  
+  [33X[0;0Y[2XSudoku.Remove[102X  tries to remove the number placed on position [3Xi[103X of the board.
+  It  does  not  change the board if entry [3Xi[103X is empty, or if entry [3Xi[103X was given
+  when  the  board  [3Xgame[103X  was  created.  In the latter case [10Xgame.impossible[110X is
+  bound.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xgame := Sudoku.Init(" 3   68  | 85  1 69|  97   53|      79 |\[127X[104X
+    [4X[25X>[125X [27X 6  47   |45  2    |89   2 1 | 4   8 7 | ");;[127X[104X
+    [4X[25Xgap>[125X [27XSudoku.Place(game, 1, 3);; # 3 is already in first row[127X[104X
+    [4X[25Xgap>[125X [27XIsBound(game.impossible);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XSudoku.Place(game, 1, 2);; # 2 is not in row, col or subsquare[127X[104X
+    [4X[25Xgap>[125X [27XIsBound(game.impossible);[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X6.17-3 Sudoku.RandomGame[101X
+  
+  [29X[2XSudoku.RandomGame[102X( [[3Xseed[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10YA pair [10X[str, seed][110X of string and seed.[133X
+  
+  [33X[0;0YThe  optional argument [3Xseed[103X, if given, must be an integer. If not given some
+  random integer from the current [5XGAP[105X session is used. This function returns a
+  random  proper Sudoku game, where the board is described by a string [10Xstr[110X, as
+  explained  in  [2XSudoku.Init[102X  ([14X6.17-1[114X).  With  the same [3Xseed[103X the same board is
+  returned.[133X
+  
+  [33X[0;0YThe  games  computed  by this function have the property that after removing
+  any given entry the puzzle does no longer have a unique solution.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSudoku.RandomGame(5833750);[127X[104X
+    [4X[28X[ " 1         2     43  2   68   72    8     6 2   1 9 8  8 3   9     \[128X[104X
+    [4X[28X47 3   7  18  ", 5833750 ][128X[104X
+    [4X[25Xgap>[125X [27Xlast = Sudoku.RandomGame(last[2]);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X6.17-4 Sudoku.SimpleDisplay[101X
+  
+  [29X[2XSudoku.SimpleDisplay[102X( [3Xgame[103X ) [32X function
+  
+  [33X[0;0YDisplays  a Sudoku board on the terminal. (But see [2XPlaySudoku[102X ([14X6.17-8[114X) for a
+  fancier interface.)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xgame := Sudoku.Init(" 3   68  | 85  1 69|  97   53|      79 |\[127X[104X
+    [4X[25X>[125X [27X 6  47   |45  2    |89   2 1 | 4   8 7 | ");;[127X[104X
+    [4X[25Xgap>[125X [27XSudoku.SimpleDisplay(game);[127X[104X
+    [4X[28X 3 |  6|8  [128X[104X
+    [4X[28X 85|  1| 69[128X[104X
+    [4X[28X  9|7  | 53[128X[104X
+    [4X[28X-----------[128X[104X
+    [4X[28X   |   |79 [128X[104X
+    [4X[28X 6 | 47|   [128X[104X
+    [4X[28X45 | 2 |   [128X[104X
+    [4X[28X-----------[128X[104X
+    [4X[28X89 |  2| 1 [128X[104X
+    [4X[28X 4 |  8| 7 [128X[104X
+    [4X[28X   |   |   [128X[104X
+  [4X[32X[104X
+  
+  [1X6.17-5 Sudoku.DisplayString[101X
+  
+  [29X[2XSudoku.DisplayString[102X( [3Xgame[103X ) [32X function
+  
+  [33X[0;0YThe string returned by this function can be used to display the Sudoku board
+  [3Xgame[103X     on    the    terminal,    using    [2XPrintFormattedString[102X    ([14XGAPDoc:
+  PrintFormattedString[114X).    The    result    depends    on    the   value   of
+  [10XGAPInfo.TermEncoding[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xgame := Sudoku.Init(" 3   68  | 85  1 69|  97   53|      79 |\[127X[104X
+    [4X[25X>[125X [27X 6  47   |45  2    |89   2 1 | 4   8 7 | ");;[127X[104X
+    [4X[25Xgap>[125X [27Xstr:= Sudoku.DisplayString( game );;[127X[104X
+    [4X[25Xgap>[125X [27XPrintFormattedString( str );[127X[104X
+    [4X[28X                     ┏━━━┯━━━┯━━━┳━━━┯━━━┯━━━┳━━━┯━━━┯━━━┓[128X[104X
+    [4X[28X                     ┃   │ 3 │   ┃   │   │ 6 ┃ 8 │   │   ┃[128X[104X
+    [4X[28X                     ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨[128X[104X
+    [4X[28X                     ┃   │ 8 │ 5 ┃   │   │ 1 ┃   │ 6 │ 9 ┃[128X[104X
+    [4X[28X                     ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨[128X[104X
+    [4X[28X                     ┃   │   │ 9 ┃ 7 │   │   ┃   │ 5 │ 3 ┃[128X[104X
+    [4X[28X                     ┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫[128X[104X
+    [4X[28X                     ┃   │   │   ┃   │   │   ┃ 7 │ 9 │   ┃[128X[104X
+    [4X[28X                     ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨[128X[104X
+    [4X[28X                     ┃   │ 6 │   ┃   │ 4 │ 7 ┃   │   │   ┃[128X[104X
+    [4X[28X                     ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨[128X[104X
+    [4X[28X                     ┃ 4 │ 5 │   ┃   │ 2 │   ┃   │   │   ┃[128X[104X
+    [4X[28X                     ┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫[128X[104X
+    [4X[28X                     ┃ 8 │ 9 │   ┃   │   │ 2 ┃   │ 1 │   ┃[128X[104X
+    [4X[28X                     ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨[128X[104X
+    [4X[28X                     ┃   │ 4 │   ┃   │   │ 8 ┃   │ 7 │   ┃[128X[104X
+    [4X[28X                     ┠───┼───┼───╂───┼───┼───╂───┼───┼───┨[128X[104X
+    [4X[28X                     ┃   │   │   ┃   │   │   ┃   │   │   ┃[128X[104X
+    [4X[28X                     ┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛[128X[104X
+  [4X[32X[104X
+  
+  [1X6.17-6 Sudoku.OneSolution[101X
+  
+  [29X[2XSudoku.OneSolution[102X( [3Xgame[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10YA completed Sudoku board that solves [3Xgame[103X, or [9Xfail[109X.[133X
+  
+  [33X[0;0YHere  [3Xgame[103X must be a Sudoku board as returned by [2XSudoku.Init[102X ([14X6.17-1[114X). It is
+  not  necessary  that  [3Xgame[103X  describes  a  proper  Sudoku  game (has a unique
+  solution).  It  may  have  several  solutions,  then  one random solution is
+  returned. Or it may have no solution, then [9Xfail[109X is returned.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSudoku.SimpleDisplay(Sudoku.OneSolution(Sudoku.Init("  3")));[127X[104X
+    [4X[28X493|876|251[128X[104X
+    [4X[28X861|542|739[128X[104X
+    [4X[28X527|193|648[128X[104X
+    [4X[28X-----------[128X[104X
+    [4X[28X942|618|573[128X[104X
+    [4X[28X156|739|482[128X[104X
+    [4X[28X738|425|916[128X[104X
+    [4X[28X-----------[128X[104X
+    [4X[28X289|354|167[128X[104X
+    [4X[28X375|961|824[128X[104X
+    [4X[28X614|287|395[128X[104X
+  [4X[32X[104X
+  
+  [1X6.17-7 Sudoku.UniqueSolution[101X
+  
+  [29X[2XSudoku.UniqueSolution[102X( [3Xgame[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10YA completed Sudoku board that solves [3Xgame[103X, or [9Xfalse[109X, or [9Xfail[109X.[133X
+  
+  [33X[0;0YHere  [3Xgame[103X must be a Sudoku board as returned by [2XSudoku.Init[102X ([14X6.17-1[114X). It is
+  not  necessary  that  [3Xgame[103X describes a proper Sudoku game. If it has several
+  solutions,  then  [9Xfalse[109X  is  returned.  If  it has no solution, then [9Xfail[109X is
+  returned. Otherwise a board with the unique solution is returned.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xs := "      5  | 154 6 2 |9   5 3  |6 4      |   8     |8  9   53\[127X[104X
+    [4X[25X>[125X [27X|     5   | 4   7  2|  91  8  ";;[127X[104X
+    [4X[25Xgap>[125X [27Xsol := Sudoku.UniqueSolution(Sudoku.Init(s));;[127X[104X
+    [4X[25Xgap>[125X [27XSudoku.SimpleDisplay(sol);[127X[104X
+    [4X[28X438|219|576[128X[104X
+    [4X[28X715|436|928[128X[104X
+    [4X[28X962|758|314[128X[104X
+    [4X[28X-----------[128X[104X
+    [4X[28X694|573|281[128X[104X
+    [4X[28X153|862|749[128X[104X
+    [4X[28X827|941|653[128X[104X
+    [4X[28X-----------[128X[104X
+    [4X[28X281|695|437[128X[104X
+    [4X[28X546|387|192[128X[104X
+    [4X[28X379|124|865[128X[104X
+  [4X[32X[104X
+  
+  [1X6.17-8 PlaySudoku[101X
+  
+  [29X[2XPlaySudoku[102X( [[3Xarg[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10YA record describing the latest status of a Sudoku board.[133X
+  
+  [33X[0;0YThis  function  allows  one to solve Sudoku puzzles interactively. There are
+  several  possibilities  for  the  optional  argument [3Xarg[103X. It can either be a
+  string,  matrix  or  list  of holes and integers as described in [2XSudoku.Init[102X
+  ([14X6.17-1[114X),  or  a  board as returned by [2XSudoku.Init[102X ([14X6.17-1[114X). Furthermore [3Xarg[103X
+  can  be  an integer or not be given, in that case [2XSudoku.RandomGame[102X ([14X6.17-3[114X)
+  is called to produce a random game.[133X
+  
+  [33X[0;0YThe  usage of this function is self-explanatory, pressing the [12X?[112X key displays
+  a  help screen. Here, we mention two keys with a particular action: Pressing
+  the  [12Xh[112X  key  you  get a hint, either an empty entry is filled or the program
+  tells you that there is no solution (so you must delete some entries and try
+  others).  Pressing the [12Xs[112X key the puzzle is solved by the program or it tells
+  you that there is no or no unique solution.[133X
+  
+  [33X[0;0Y[13XImplementation  remarks[113X:  The  game board is implemented via a browse table,
+  without  row  and  column  labels,  with  static header, dynamic footer, and
+  individual  [10Xminyx[110X  function.  Two  modes  are  supported,  with the standard
+  actions  for quitting the table and asking for help; one cell is selected in
+  each  mode. The first mode provides actions for moving the selected cell via
+  arrow  keys, for changing the value in the selected cell, for getting a hint
+  or  the  (unique) solution. (Initial entries of the matrix cannot be changed
+  via  user  input.  They  are  shown in boldface.) The second mode serves for
+  error handling: When the user enters an invalid number, i. e., a number that
+  occurs  already  in  the  current  row  or  column  or  subsquare,  then the
+  application  switches  to this mode, which causes that a message is shown in
+  the  footer,  and the invalid entry is shown in red and blinking; similarly,
+  error mode is entered if a hint or solution does not exist.[133X
+  
+  [33X[0;0YThe  separating  lines are drawn using an individual [10XSpecialGrid[110X function in
+  the  browse  table, since they cannot be specified within the generic browse
+  table functions.[133X
+  
+  [33X[0;0YSome   standard   [2XNCurses.BrowseGeneric[102X   ([14X4.3-1[114X)   functionality,  such  as
+  scrolling, selecting, and searching, are not available in this application.[133X
+  
+  [33X[0;0YThe code can be found in the file [11Xapp/sudoku.g[111X of the package.[133X
+  
+  [1X6.17-9 Sudoku.HTMLGame[101X
+  
+  [29X[2XSudoku.HTMLGame[102X( [3Xgame[103X ) [32X function
+  [29X[2XSudoku.LaTeXGame[102X( [3Xgame[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10YA string with HTML or LaTeX code, respectively.[133X
+  
+  [33X[0;0YThe  argument of these functions is a record describing a Sudoku game. These
+  functions  return  code for including the current status of the board into a
+  webpage or a LaTeX document.[133X
+  

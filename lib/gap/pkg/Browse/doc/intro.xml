@@ -1,0 +1,177 @@
+
+<Chapter Label="ch:intro"><Heading>Introduction and Overview</Heading>
+
+<Section Label="sec:intro"><Heading>Introduction</Heading>
+
+The motivation of the package <Package>Browse</Package> was to provide 
+better functionality for displaying two-dimensional arrays of data (e.g.,
+character tables): moving through the data without loosing row and
+column labels, searching for text, displaying extra information, hiding
+information, allowing interactive user input, ...
+<P/>
+We wanted to achieve this by using the capabilities of the terminal
+emulations in which &GAP; is running, and not by some external graphical 
+user interface. For this we have chosen to use the widely available 
+<C>C</C>-library <C>ncurses</C>, see <Cite Key="NCursesWeb"/>.
+
+It contains functions to find out terminal capabilities,
+to change properties of terminals, to place text, to handle several windows
+with overlapping, ...  To use these functions the terminal is switched
+to a <Emph>visual mode</Emph> <Index>visual mode</Index>
+so that the display of the non-visual 
+mode of your terminal in which &GAP; is running is not clobbered.
+<P/>
+<Package>Browse</Package> has now three levels of functionality:
+<List >
+<Mark>A low level interface to <C>ncurses</C></Mark>
+<Item>
+  This may be interesting for all kinds of applications which want
+  to display text with some markup including
+  <Index>colors as text attributes</Index>colors,
+  maybe in several windows, 
+  using the available capabilities of a terminal.
+</Item>
+<Mark>A medium level interface to a generic function <Ref
+Func="NCurses.BrowseGeneric"/></Mark>
+<Item>
+  This is for displaying two-dimensional arrays of data, handles
+  labels for rows and columns, searching, sorting, binding keys to
+  actions, ...
+  If you want to implement such applications for further kinds of data,
+  first look at the examples
+  in Section <Ref Func="BrowseData.IsBrowseTable" Style="Number"/>,
+  then check what can be copied from the examples
+  in Chapter <Ref Chap="ch:appl"/>,
+  and consult the descriptions
+  in Chapters <Ref Chap="chap:browse-user"/>
+  and <Ref Chap="chap:browse-prg"/>.
+</Item>
+<Mark>Applications of these interfaces</Mark>
+<Item>
+  We provide some applications of the <C>ncurses</C> interface and
+  of the generic <Ref Func="NCurses.BrowseGeneric"/> function. These may be
+  interesting for end users, and also as examples for programmers of
+  further applications. This includes (of course) a method for
+  browsing through character tables, functions for browsing through data
+  collections, several games,<Index>game</Index>
+  and an interface for demos.
+</Item>
+</List>
+
+Users interested only in these applications should perhaps just try
+<C>NCurses.Demo()</C>.
+
+</Section>
+
+<Section Label="sec:overview"><Heading>Overview</Heading>
+
+<Subsection Label="ssec:ov_ncurses">
+<Heading>The <C>ncurses</C> interface</Heading>
+
+Chapter <Ref Chap="ch:curses"/> describes &GAP;'s interface to the
+<C>ncurses</C> <C>C</C>-library. The imported <C>C</C>-functions are shortly
+explained, but for further details we refer to the documentation of that
+library. There are also a few utility functions on &GAP; level, such as
+<Ref Func="NCurses.SetTerm"/>, which simplify the use of the library.
+<P/>
+The concept of an <Emph>attribute line</Emph><Index>attribute line</Index>,
+see <Ref
+Func="NCurses.IsAttributeLine"/>, helps to deal with text with markup
+for its display in a terminal window.
+<P/>
+This chapter is for users who want to write their own applications of
+<C>ncurses</C>.
+</Subsection>
+
+<Subsection Label="ssec:ov_ncappl"><Heading>Applications of 
+<C>ncurses</C></Heading>
+In Chapter <Ref Chap="ch:util"/> we describe some interactive applications 
+of the  <C>ncurses</C> interface. For example, there is <Ref
+Func="NCurses.Select"/> for asking a user to choose one or several of a
+given list of items. There is also a demo function <Ref
+Func="NCurses.Demo"/> which we use to
+demonstrate features of the <Package>Browse</Package> package, but it
+may be interesting for other kinds of demos as well. 
+</Subsection>
+
+<Subsection Label="ssec:ov_genbrowse">
+<Heading>The interface to browse two-dimensional arrays</Heading>
+Chapters <Ref Chap="chap:browse-user"/> and <Ref
+Chap="chap:browse-prg"/> describe the interface to a
+generic function <Ref Func="NCurses.BrowseGeneric"/> which can be used for an
+interactive display of two-dimensional arrays of data. The first of
+these covers the basic functionality which may be sufficient for many
+applications and the second gives more technical details. With
+interactive display we mean that it is not only possible to scroll
+through the data, but one can search for strings, sort by rows or columns,
+select entries, bind arbitrary actions to keys and mouse events,
+ask for help, and more.
+</Subsection>
+
+<Subsection Label="ssec:ov_browseappl">
+<Heading>Applications of the generic function
+<C>NCurses.BrowseGeneric</C></Heading>
+In Chapter <Ref Chap="ch:appl"/> we describe several applications which
+are using the generic <Ref Func="NCurses.BrowseGeneric"/> interface
+introduced before.
+They are provided as prototype applications and so we include some
+implementation remarks in their documentation. 
+<P/>
+Users who just want to use these applications hopefully do not need to 
+read this <Package>Browse</Package> manual, all applications are coming
+with built-in help windows.
+<P/>
+There are different kinds of applications. 
+First, there are  methods for browsing through character tables and tables
+of marks (our original motivation for this package). Then there are
+applications for browsing through data collections, e.g., the data
+available through the <Package>AtlasRep</Package> package, the &GAP;
+bibliography or the sections of the &GAP; manuals. Finally, there are
+several games like Sam Loyd's fifteen puzzle (generalized), peg solitaire,
+and Sudoku (including functions to create new puzzles and to solve
+puzzles).
+</Subsection>
+</Section>
+
+
+<Section Label="sec:pkg_userprefs">
+<Heading>User preferences provided by the &Browse; package</Heading>
+
+<Subsection Label="subsec:EnableMouseEvents">
+<Heading>The user preference <C>EnableMouseEvents</C></Heading>
+
+This user preference defines whether mouse events are enabled by default
+in visual mode (value <K>true</K>) or not
+(value <K>false</K>, this is the default).
+During the &GAP; session, the value can be changed using
+<Ref Func="NCurses.UseMouse"/>.
+Inside browse applications based on <Ref Func="NCurses.BrowseGeneric"/>
+or <Ref Func="NCurses.Select"/>,
+the value can be toggled usually by hitting the <B>M</B> key.
+
+</Subsection>
+
+<Subsection Label="subsec:SelectHelpMatches">
+<Heading>The user preference <C>SelectHelpMatches</C></Heading>
+
+In the case that the &GAP; help system finds multiple matches,
+<K>true</K> (the default) means that the user can choose one entry
+from a list that is shown via <Ref Func="NCurses.Select"/>,
+and <K>false</K> means that the matches are just shown in a pager.
+
+</Subsection>
+
+<Subsection Label="subsec:SelectPackageName">
+<Heading>The user preference <C>SelectPackageName</C></Heading>
+
+In the case that <Ref Func="LoadPackage" BookName="ref"/> is called
+with a prefix of some package names,
+<K>true</K> (the default) means that the user can choose one matching entry,
+and <K>false</K> means that the matches are just printed.
+
+</Subsection>
+
+</Section>
+
+</Chapter>
+

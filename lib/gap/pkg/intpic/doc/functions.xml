@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Chapter Label="functions">
+  <Heading>
+    The <Package>IntPic</Package> package main function
+  </Heading>
+<!--  <Index>&IntPic; - functions</Index> --> 
+This chapter consists of two sections, the first of which decribes the main function of the package. The second one can be thought just as an example to produce a table where the integers appear ordered in a non standard way.
+<Section>
+    <Heading>The main function</Heading>
+    The function <Ref Func="IP_TikzArrayOfIntegers"/> is the main function of the &IntPic; package. It aims to produce <C>tikz</C> code for displaying arrays of integers.
+    <ManSection>
+      <Heading>Tikz code for arrays of integers</Heading>
+      <Func Name="IP_TikzArrayOfIntegers" Arg="arg"/>
+      <Description>
+        The arguments (at most 3) are: <Enum>
+        <Item>(optional)<List>
+          <Item> a table of integers. In this case, the length of the rows is the maximum of the lengths of the sublists in the table, <Emph>or</Emph> </Item>
+          <Item> a list of integers and, optionally, an integer which indicates the length of the rows; when the length of the rows is not indicated, a compromise between the width and the height is tried.</Item>
+        </List></Item>
+          <Item>
+             a record of options. One of the fields of this record, named <C>highlights</C>, is an array whose entries are the numbers to be highlighted: one color per sublist. See details and other options in Chapter&nbsp;<Ref Sect="options"/>.
+          </Item>
+        </Enum>
+When no list nor table is present, the smallest range containing all the integers to be highlighted is taken.
+      </Description>
+    </ManSection>
+    <Example><![CDATA[
+gap> rg := [81..89];;
+gap> len := 10;;
+gap> arr := [Filtered(rg,IsPrime),Filtered(rg,u->(u mod 2)=0),
+>         Filtered(rg,u->(u mod 3)=0)];;
+gap> tkz := IP_TikzArrayOfIntegers(rg,len,rec(highlights:=arr));;
+]]></Example>
+    The aspect of the string <A>tkz</A> produced is not very appealing. We show it once, by asking it exlicitly in the next example. In the forthcomming examples we keep using two semicolons to avoid showing this kind of strings.
+    <P/>
+    <Listing Type="The tkz string"><![CDATA[
+gap> tkz;
+"%tikz\n\\begin{tikzpicture}[every node/.style={draw,scale=1pt,\nminimum width\
+=20pt,inner sep=3pt,\nline width=1pt,draw=black}]\n\\matrix[row sep=2pt,column\
+ sep=2pt]\n{\\node[fill=-red]{86};&\n\\node[fill=green]{87};&\n\\node[fill=-re\
+d]{88};&\n\\node[fill=red]{89};\\\\\n\\node[fill=green]{81};&\n\\node[fill=-re\
+d]{82};&\n\\node[fill=red]{83};&\n\\node[left color=-red,right color=green]{84\
+};&\n\\node[]{85};\\\\\n};\n\\end{tikzpicture}\n"
+]]></Listing>
+This string can be used at the users wish. In particular, it can be sent to the standard output using the command <Ref Func="Print" BookName="ref"/>.
+    <Listing Type="The tikz code"><![CDATA[
+gap> Print(tkz);
+%tikz
+\begin{tikzpicture}[every node/.style={draw,scale=1pt,
+minimum width=20pt,inner sep=3pt,
+line width=1pt,draw=black}]
+\matrix[row sep=2pt,column sep=2pt]
+{\node[fill=-red]{86};&
+\node[fill=green]{87};&
+\node[fill=-red]{88};&
+\node[fill=red]{89};\\
+\node[fill=green]{81};&
+\node[fill=-red]{82};&
+\node[fill=red]{83};&
+\node[left color=-red,right color=green]{84};&
+\node[]{85};\\
+};
+\end{tikzpicture}
+]]></Listing>
+It can now be copied and pasted in a &LaTeX; document (having the appropriate packages in the preamble). See Chapter <Ref Chap="visualisation"/> for details and alternatives.
+    <P />
+    <!-- ###################################################### -->
+The next function uses the previous one, but is called with a simpler argument. It will hopefully be useful for simple drawings. The length of each row and the umber of columns varies. A compromise based on some experiments has been established in order to obtain not too large nor too high images.
+<ManSection>
+      <Heading>Tikz code for arrays, in a simplified way</Heading>
+      <Description>
+      </Description>
+<Func Name="IP_SimpleTikzArrayOfIntegers" Arg="arg"/>
+      <Description>
+        The argument is either a list of integers or a matrix of integers. The integers involved are embeded in a range <A>rg</A> of minimum length and highlighted by using the list of default colors. 
+      </Description>
+    </ManSection>
+    <Example><![CDATA[
+gap> d := DivisorsInt(30);
+[ 1, 2, 3, 5, 6, 10, 15, 30 ]
+gap> IP_SimpleTizkArrayOfIntegers(d);;
+]]></Example>
+    <Alt Only="LaTeX">
+      \begin{center}
+      \includegraphics[width=0.95\textwidth]{../images/divs30}
+      \end{center}
+    </Alt>
+    <Alt Only="HTML">
+      &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/divs30.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+    </Alt>
+    <Example><![CDATA[
+gap> d30 := DivisorsInt(30);
+[ 1, 2, 3, 5, 6, 10, 15, 30 ]
+gap> d40 := DivisorsInt(40);
+[ 1, 2, 4, 5, 8, 10, 20, 40 ]
+gap> tkz := IP_SimpleTizkArrayOfIntegers([d30,d40]);;
+]]></Example>
+    <Alt Only="LaTeX">
+      \begin{center}
+      \includegraphics[width=0.95\textwidth]{../images/divs3040}
+      \end{center}
+    </Alt>
+    <Alt Only="HTML">
+      &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/divs3040.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+    </Alt>
+    <P />
+</Section>
+  <!-- ###################################################### -->
+  <Section>
+    <Heading>Producing tables</Heading>
+    When the user is interested in tables of a certain kind, it may be a good idea to write some code to produce these tables. The following function (whose code is part of the file <Emph>ip_tables.gi</Emph> in the <Emph>gap</Emph> folder of this package) is convenient to deal with numerical semigroups with two generators and has been used to produce the images contained in 
+    <Cite Key="fengraoab"></Cite>.
+    <ManSection>
+      <Func Name="IP_TableWithModularOrder" Arg="o,a,b,depth,height,rep,pos"/>
+      <Description>
+The arguments <A>rep</A> and <A>pos</A> are booleans (<C>true</C> or <C>false</C>). When <A>rep</A> is <C>true</C> there is some repetition: the last column is equal to the first, but pushed down some rows. When <A>pos</A> is <C>true</C>, no rows below 0 are considered, (contradicting <A>depth</A>, if needed).
+<P/>
+        The first five arguments arguments <A>o, a, b,depth</A> and <A>height</A> are integers. What they represent is described in what follows. 
+        There is assigned some kind of a referential on the constructed table and the fist argument, <A>o</A>, stands for the origin.    
+        A table with <A>b</A> columns (<M><A>b</A>+1</M> columns when <A>rep</A> is <C>true</C>) is constructed as follows. The row containing the origin is
+<List>
+<Item><M><A>o</A>+ [0..<A>b</A>-1]*<A>a</A></M>, if <A>rep</A> is <C>false</C>, <Emph>or</Emph></Item>
+<Item><M><A>o</A>+ [0..<A>b</A>]*<A>a</A></M>, if <A>rep</A> is <C>true</C></Item>
+</List>  
+  <P />
+        The remaining rows are obtained by adding <A>b</A> (the upper ones) or subtracting <A>b</A> (the others) to these rows.  <P />
+        Note: when <M><A>a</A> &#60; <A>b</A></M> are co-prime, this construction provides a representation of the integers as an array.   <P />
+        
+      </Description>
+    </ManSection>
+    <Example><![CDATA[
+gap> a := 8;; b := 19;;  
+gap> ns := NumericalSemigroup(a,b);;
+gap> c := ConductorOfNumericalSemigroup(ns);;
+gap> origin := 2*c-1;
+251
+gap> ground := [origin..origin+b-1];;
+gap> 
+gap> height:=2;;
+gap> depth:=8;;
+gap>   xaxis := [origin];;
+gap>   for n in [1..b-1] do
+>     Add(xaxis, origin+n*a);
+>   od;
+gap>   yaxis := [];;
+gap>   for n in [-depth..height] do
+>     Add(yaxis, origin+n*b);
+>   od;
+gap> 
+gap> table := TableWithModularOrder(origin,a,b,depth,height,false,false);;
+gap> arr := [xaxis,yaxis,ground];
+[ [ 251, 259, 267, 275, 283, 291, 299, 307, 315, 323, 331, 339, 347, 355, 
+      363, 371, 379, 387, 395 ], 
+  [ 99, 118, 137, 156, 175, 194, 213, 232, 251, 270, 289 ], [ 251 .. 269 ] ]
+gap> tkz:=IP_TikzArrayOfIntegers(table,rec(highlights:=arr));;
+]]></Example>
+    <Alt Only="LaTeX">
+      \begin{center}
+      \includegraphics[width=0.95\textwidth]{../images/table_axis_ground_8_19}
+      \end{center}
+    </Alt>
+    <Alt Only="HTML">
+      &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/table_axis_ground_8_19.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+    </Alt>
+    The next picture is obtained in the same way. The information that only the shape has interest is given by including the option <C>shape_only:=" "</C>. The variable <C>tkz</C> should be defined in a similar manner to the following one.
+    <Example><![CDATA[
+gap> tkz:=IP_TikzArrayOfIntegers(table,rec(highlights:=arr,shape_only:=" ",
+>              cell_width := "6",colsep:="1",rowsep:="1",inner_sep:="2",
+>              line_color:="black!20"));;
+]]></Example>
+    <Alt Only="LaTeX">
+      \begin{center}
+      \includegraphics[width=0.80\textwidth]{../images/table_axis_ground_shape}
+      \end{center}
+    </Alt>
+    <Alt Only="HTML">
+      &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/table_axis_ground_shape.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+    </Alt>
+Next, a minimum of changes, just to illustrate the effect of <A>rep</A> and <A>pos</A>.
+    <Example><![CDATA[
+gap> table := TableWithModularOrder(origin,a,b,depth,50,true,true);;
+gap> tkz:=IP_TikzArrayOfIntegers(table,rec(highlights:=arr));;
+]]></Example>
+    <Alt Only="LaTeX">
+      \begin{center}
+      \includegraphics[width=0.80\textwidth]{../images/table_axis_ground_8_19_rep_pos}
+      \end{center}
+    </Alt>
+    <Alt Only="HTML">
+      &#60;br&#62;&#60;center&#62;&#60;img src=&#34;../images/table_axis_ground_8_19_rep_pos.jpg&#34;&#62;&#60;/center&#62;&#60;br&#62;
+    </Alt>
+</Section>
+</Chapter>
+
+

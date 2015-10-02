@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (changes) - Chapter 2: Changes between GAP 4.6 and GAP 4.7</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap2"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap2_mj.html">[MathJax on]</a></p>
+<p><a id="X871220D17E7EE651" name="X871220D17E7EE651"></a></p>
+<div class="ChapSects"><a href="chap2.html#X871220D17E7EE651">2 <span class="Heading">Changes between <strong class="pkg">GAP</strong> 4.6 and <strong class="pkg">GAP</strong> 4.7</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X78594AB2871B379E">2.1 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.2 (December 2013)</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8346E4677FA78976">2.1-1 <span class="Heading">Changes in the core <strong class="pkg">GAP</strong> system introduced in <strong class="pkg">GAP</strong> 4.7</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7EF0C705829B5D2B">2.1-2 <span class="Heading">New and updated packages since <strong class="pkg">GAP</strong> 4.6.5</span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X79782A077CCDDD27">2.2 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.3 (February 2014)</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X80C83AF67E5E6C7F">2.3 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.4 (February 2014)</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X864C03527D410BF8">2.4 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.5 (May 2014)</span></a>
+</span>
+</div>
+</div>
+
+<h3>2 <span class="Heading">Changes between <strong class="pkg">GAP</strong> 4.6 and <strong class="pkg">GAP</strong> 4.7</span></h3>
+
+<p>This chapter contains an overview of most important changes introduced in <strong class="pkg">GAP</strong> 4.7.2 release (the first public release of <strong class="pkg">GAP</strong> 4.7).</p>
+
+<p><a id="X78594AB2871B379E" name="X78594AB2871B379E"></a></p>
+
+<h4>2.1 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.2 (December 2013)</span></h4>
+
+<p><a id="X8346E4677FA78976" name="X8346E4677FA78976"></a></p>
+
+<h5>2.1-1 <span class="Heading">Changes in the core <strong class="pkg">GAP</strong> system introduced in <strong class="pkg">GAP</strong> 4.7</span></h5>
+
+<p>Improved and extended functionality:</p>
+
+
+<ul>
+<li><p>The methods for computing conjugacy classes of permutation groups have been rewritten from scratch to enable potential use for groups in different representations. As a byproduct the resulting code is (sometimes notably) faster. It also now is possible to calculate canonical conjugacy class representatives in permutation groups, which can be beneficial when calculating character tables.</p>
+
+</li>
+<li><p>The methods for determining (conjugacy classes of) subgroups in non-solvable groups have been substantially improved in speed and scope for groups with multiple nonabelian composition factors.</p>
+
+</li>
+<li><p>There is a new method for calculating the maximal subgroups of a permutation group (with chief factors of width less or equal 5) without calculating the whole subgroup lattice.</p>
+
+</li>
+<li><p>If available, information from the table of marks library is used to speed up subgroup calculations in almost simple factor groups.</p>
+
+</li>
+<li><p>The broader availability of maximal subgroups is used to improve the calculation of double cosets.</p>
+
+</li>
+<li><p>To illustrate the improvements listed above, one could try, for example</p>
+
+
+<div class="example"><pre>
+g:=WreathProduct(MathieuGroup(11),Group((1,2)));
+Length(ConjugacyClassesSubgroups(g));
+</pre></div>
+
+<p>and</p>
+
+
+<div class="example"><pre>
+g:=SemidirectProduct(GL(3,5),GF(5)^3);
+g:=Image(IsomorphismPermGroup(g));
+MaximalSubgroupClassReps(g);
+</pre></div>
+
+</li>
+<li><p>Computing the exponent of a finite group <span class="SimpleMath">G</span> could be extremely slow. This was due to a slow default method being used, which computed all conjugacy classes of elements in order to compute the exponent. We now instead compute Sylow subgroups <span class="SimpleMath">P_1</span>, ..., <span class="SimpleMath">P_k</span> of <span class="SimpleMath">G</span> and use the easily verified equality <span class="SimpleMath">exp(G) = exp(P_1) x ... x exp(P_k)</span>. This is usually at least as fast and in many cases orders of magnitude faster.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=SmallGroup(2^7*9,33);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H:=DirectProduct(G, ElementaryAbelianGroup(2^10));;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Exponent(H); # should take at most a few milliseconds</span>
+72
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">K := PerfectGroup(2688,3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Exponent(K); # should take at most a few seconds</span>
+168
+</pre></div>
+
+</li>
+<li><p>The functionality in <strong class="pkg">GAP</strong> for transformations and transformation semigroups has been rewritten and extended. Partial permutations and inverse semigroups have been newly implemented. The documentation for transformations and transformation semigroups has been improved. Transformations and partial permutations are implemented in the <strong class="pkg">GAP</strong> kernel. Methods for calculating attributes of transformations and partial permutations, and taking products, and so are also implemented in the kernel. The new implementations are largely backwards compatible; some exceptions are given below.</p>
+
+<p>The degree of a transformation <code class="code">f</code> is usually defined as the largest positive integer where <code class="code">f</code> is defined. In previous versions of <strong class="pkg">GAP</strong>, transformations were only defined on positive integers less than their degree, it was only possible to multiply transformations of equal degree, and a transformation did not act on any point exceeding its degree. Starting with <strong class="pkg">GAP</strong> 4.7, transformations behave more like permutations, in that they fix unspecified points and it is possible to multiply arbitrary transformations.</p>
+
+
+<ul>
+<li><p>in the display of a transformation, the trailing fixed points are no longer printed. More precisely, in the display of a transformation <code class="code">f</code> if <code class="code">n</code> is the largest value such that <code class="code">n^f&lt;&gt;n</code> or <code class="code">i^f=n</code> for some <code class="code">i&lt;&gt;n</code>, then the values exceeding <code class="code">n</code> are not printed.</p>
+
+</li>
+<li><p>the display for semigroups of transformations now includes more information, for example <code class="code">&lt;transformation semigroup on 10 pts with 10 generators&gt;</code> and <code class="code">&lt;inverse partial perm semigroup on 10 pts with 10 generators&gt;</code>.</p>
+
+</li>
+<li><p>transformations which define a permutation can be inverted, and groups of transformations can be created.</p>
+
+</li>
+</ul>
+<p>Further information regarding transformations and partial permutations, can be found in the relevant chapters of the reference manual.</p>
+
+<p>The code for Rees matrix semigroups has been completely rewritten to fix the numerous bugs in the previous versions. The display of a Rees matrix semigroup has also been improved to include the numbers of rows and columns, and the underlying semigroup. Again the new implementations should be backwards compatible with the exception that the display is different.</p>
+
+<p>The code for magmas with a zero adjoined has been improved so that it is possible to access more information about the original magma. The display has also been changed to indicate that the created magma is a magma with zero adjoined (incorporating the display of the underlying magma). Elements of a magma with zero are also printed so that it is clear that they belong to a magma with zero.</p>
+
+<p>If a semigroup is created by generators in the category IsMultiplicativeElementWithOneCollection and CanEasilyCompareElements, then it is now checked if the One of the generators is given as a generator. In this case, the semigroup is created as a monoid.</p>
+
+</li>
+<li><p>Added a new operation <code class="func">GrowthFunctionOfGroup</code> (<a href="../../doc/ref/chap39.html#X871508DD808EB487"><span class="RefLink">Reference: GrowthFunctionOfGroup</span></a>) that gives sizes of distance spheres in the Cayley graph of a group.</p>
+
+</li>
+<li><p>A new group constructor <code class="func">FreeAbelianGroup</code> (<a href="../../doc/ref/chap50.html#X7F43050D8587E767"><span class="RefLink">Reference: FreeAbelianGroup</span></a>) for free abelian groups has been added. By default, it creates suitable fp groups. Though free abelian groups groups do not offer much functionality right now, in the future other implementations may be provided, e.g. by the <strong class="pkg">Polycyclic</strong> package.</p>
+
+</li>
+<li><p>The message about halving the pool size at startup is only shown when <code class="code">-D</code> command line option is used (see <a href="../../doc/ref/chap3.html#X782751D5858A6EAF"><span class="RefLink">Reference: Command Line Options</span></a>). [Suggested by Volker Braun]</p>
+
+</li>
+<li><p>An info class called <code class="func">InfoObsolete</code> (<a href="../../doc/ref/chap77.html#X87348614848EAD64"><span class="RefLink">Reference: InfoObsolete</span></a>) with the default level 0 is introduced. Setting it to 1 will trigger warnings at runtime if an obsolete variable declared with <code class="code">DeclareObsoleteSynonym</code> is used. This is recommended for testing <strong class="pkg">GAP</strong> distribution and packages.</p>
+
+</li>
+<li><p>The <strong class="pkg">GAP</strong> help system now recognises some common different spelling patterns (for example, -ise/-ize, -isation/-ization, solvable/soluble) and searches for all possible spelling options even when the synonyms are not declared.</p>
+
+</li>
+<li><p>Added new function <code class="func">Cite</code> (<a href="../../doc/ref/chap76.html#X79637D9A7B1AD7F7"><span class="RefLink">Reference: Cite</span></a>) which produces citation samples for <strong class="pkg">GAP</strong> and packages.</p>
+
+</li>
+<li><p>It is now possible to compile <strong class="pkg">GAP</strong> with user-supplied <code class="code">CFLAGS</code> which now will not be overwritten by <strong class="pkg">GAP</strong> default settings. [Suggested by Jeroen Demeyer]</p>
+
+</li>
+</ul>
+<p>Fixed bugs:</p>
+
+
+<ul>
+<li><p><code class="func">Union</code> (<a href="../../doc/ref/chap30.html#X799F0E2F7A502DBA"><span class="RefLink">Reference: Union</span></a>) had <span class="SimpleMath">O(n^3)</span> behaviour when given many ranges (e.g. it could take 10 seconds to find a union of 1000 1-element sets). The new implementation reduces that to <span class="SimpleMath">O(n log n)</span> (and 4ms for the 10 second example), at the cost of not merging ranges as well as before in some rare cases.</p>
+
+</li>
+<li><p><code class="code">IsLatticeOrderBinaryRelation</code> only checked the existence of upper bounds but not the uniqueness of the least upper bound (and dually for lower bounds), so in some cases it could return the wrong answer. [Reported by Attila Egri-Nagy]</p>
+
+</li>
+<li><p><code class="func">LowIndexSubgroupsFpGroup</code> (<a href="../../doc/ref/chap47.html#X85C5151380E19122"><span class="RefLink">Reference: LowIndexSubgroupsFpGroup</span></a>) triggered a break loop if the list of generators of the 2nd argument contained the identity element of the group. [Reported by Ignat Soroko]</p>
+
+</li>
+<li><p>Fixed regression in heuristics used by <code class="func">NaturalHomomorphismByNormalSubgroup</code> (<a href="../../doc/ref/chap39.html#X80FC390C7F38A13F"><span class="RefLink">Reference: NaturalHomomorphismByNormalSubgroup</span></a>) that could produce a permutation representation of an unreasonably large degree. [Reported by Izumi Miyamoto]</p>
+
+</li>
+<li><p>Fixed inconsistent behaviour of <code class="code">QuotientMod( Integers, r, s, m )</code> in the case where <var class="Arg">s</var> and <var class="Arg">m</var> are not coprime. This fix also corrects the division behaviour of <code class="code">ZmodnZ</code> objects, see <code class="func">QuotientMod</code> (<a href="../../doc/ref/chap56.html#X8555913A83D716A4"><span class="RefLink">Reference: QuotientMod</span></a>) and <code class="func">ZmodnZ</code> (<a href="../../doc/ref/chap14.html#X79CE76AD82B3E2B2"><span class="RefLink">Reference: ZmodnZ</span></a>). [Reported by Mark Dickinson]</p>
+
+</li>
+<li><p>Fixed an oversight in the loading process causing <code class="func">OnQuit</code> (<a href="../../doc/ref/chap8.html#X78D87D1081BF99FE"><span class="RefLink">Reference: OnQuit</span></a>) not resetting the options stack after exiting the break loop.</p>
+
+</li>
+<li><p>Empty strings were treated slightly differently than other strings in the <strong class="pkg">GAP</strong> kernel, for historical reasons. This resulted in various inconsistencies. For example, <code class="code">IsStringRep("")</code> returned true, but a method installed for arguments of type <code class="code">IsStringRep</code> would NOT be invoked when called with an empty string.</p>
+
+<p>We remove this special case in the <strong class="pkg">GAP</strong> kernel (which dates back the very early days of <strong class="pkg">GAP</strong> 4 in 1996). This uncovered one issue in the kernel function <code class="code">POSITION_SUBSTRING</code> (when calling it with an empty string as second argument), which was also fixed.</p>
+
+</li>
+<li><p>The parser for floating point numbers contained a bug that could cause <strong class="pkg">GAP</strong> to crash or to get into a state where the only action left to the user was to exit <strong class="pkg">GAP</strong> via Ctrl-D. For example, entering four dots with spaces between them on the <strong class="pkg">GAP</strong> prompt and then pressing the return key caused <strong class="pkg">GAP</strong> to exit.</p>
+
+<p>The reason was (ironically) an error check in the innards of the float parser code which invoked the <strong class="pkg">GAP</strong> <code class="code">Error()</code> function at a point where it should not have.</p>
+
+</li>
+<li><p>Removing the last character in a string was supposed to overwrite the old removed character in memory with a zero byte, but failed to do so due to an off-by-one error. For most <strong class="pkg">GAP</strong> operations, this has no visible effect, except for those which directly operate on the underlying memory representation of strings. For example, when trying to use such a string to reference a record entry, a (strange) error could be triggered.</p>
+
+</li>
+<li><p><code class="func">ViewString</code> (<a href="../../doc/ref/chap27.html#X7803FBCA79DB5529"><span class="RefLink">Reference: ViewString</span></a>) and <code class="func">DisplayString</code> (<a href="../../doc/ref/chap27.html#X792FB3A1849FD739"><span class="RefLink">Reference: DisplayString</span></a>) are now handling strings, characters and immediate FFEs in a consistent manner.</p>
+
+</li>
+<li><p>Multiple fixes to the build process for less common Debian platforms (arm, ia64, mips, sparc, GNU/Hurd). [Suggested by Bill Allombert]</p>
+
+</li>
+<li><p>Fixes for several regressions in the <code class="file">gac</code> script. [Suggested by Bill Allombert]</p>
+
+</li>
+</ul>
+<p>Changed functionality:</p>
+
+
+<ul>
+<li><p>It is not possible now to call <code class="func">WreathProduct</code> (<a href="../../doc/ref/chap49.html#X8786EFBC78D7D6ED"><span class="RefLink">Reference: WreathProduct</span></a>) with 2nd argument <var class="Arg">H</var> not being a permutation group, without using the 3rd argument specifying the permutation representation. This is an incompatible change but it will produce an error instead of a wrong result. The former behaviour of <code class="func">WreathProduct</code> (<a href="../../doc/ref/chap49.html#X8786EFBC78D7D6ED"><span class="RefLink">Reference: WreathProduct</span></a>) may now be achieved by using <code class="func">StandardWreathProduct</code> (<a href="../../doc/ref/chap49.html#X8786EFBC78D7D6ED"><span class="RefLink">Reference: StandardWreathProduct</span></a>) which returns the wreath product for the (right regular) permutation action of <var class="Arg">H</var> on its elements.</p>
+
+</li>
+<li><p>The function <code class="code">ViewLength</code> to specify the maximal number of lines that are printed in <code class="func">ViewObj</code> (<a href="../../doc/ref/chap6.html#X815BF22186FD43C9"><span class="RefLink">Reference: ViewObj</span></a>) became obsolete, since there was already a user preference <code class="code">ViewLength</code> to specify this. The value of this preference is also accessible in <code class="code">GAPInfo.ViewLength</code>.</p>
+
+</li>
+</ul>
+<p><a id="X7EF0C705829B5D2B" name="X7EF0C705829B5D2B"></a></p>
+
+<h5>2.1-2 <span class="Heading">New and updated packages since <strong class="pkg">GAP</strong> 4.6.5</span></h5>
+
+<p>At the time of the release of <strong class="pkg">GAP</strong> 4.6.5 there were 107 packages redistributed with <strong class="pkg">GAP</strong>. The first public release of <strong class="pkg">GAP</strong> 4.7 contains 114 packages.</p>
+
+<p>One of essential changes is that the <strong class="pkg">Citrus</strong> package by J.Mitchell has been renamed to <strong class="pkg">Semigroups</strong>. The package has been completely overhauled, the performance has been improved, and the code has been generalized so that in the future the same code can be used to compute with other types of semigroups.</p>
+
+<p>Furthermore, new packages that have been added to the redistribution since the release of <strong class="pkg">GAP</strong> 4.6.5 are:</p>
+
+
+<ul>
+<li><p><strong class="pkg">4ti2interface</strong> package by Sebastian Gutsche, providing an interface to <strong class="pkg">4ti2</strong>, a software package for algebraic, geometric and combinatorial problems on linear spaces (<span class="URL"><a href="http://www.4ti2.de">http://www.4ti2.de</a></span>).</p>
+
+</li>
+<li><p><strong class="pkg">CoReLG</strong> by Heiko Dietrich, Paolo Faccin and Willem de Graaf for calculations in real semisimple Lie algebras.</p>
+
+</li>
+<li><p><strong class="pkg">IntPic</strong> package by Manuel Delgado, aimed at providing a simple way of getting a pictorial view of sets of integers. The main goal of the package is producing <strong class="pkg">Tikz</strong> code for arrays of integers. The code produced is to be included in a LaTeX file, which can then be processed. Some of the integers are emphasized by using different colors for the cells containing them.</p>
+
+</li>
+<li><p><strong class="pkg">LieRing</strong> by Serena Cicalo and Willem de Graaf for constructing finitely-presented Lie rings and calculating the Lazard correspondence. The package also provides a database of small <span class="SimpleMath">n</span>-Engel Lie rings.</p>
+
+</li>
+<li><p><strong class="pkg">LiePRing</strong> package by Michael Vaughan-Lee and Bettina Eick, introducing a new datastructure for nilpotent Lie rings of prime-power order. This allows to define such Lie rings for specific primes as well as for symbolic primes and other symbolic parameters. The package also includes a database of nilpotent Lie rings of order at most <span class="SimpleMath">p^7</span> for all primes <span class="SimpleMath">p &gt; 3</span>.</p>
+
+</li>
+<li><p><strong class="pkg">ModIsom</strong> by Bettina Eick, which contains various methods for computing with nilpotent associative algebras. In particular, it contains a method to determine the automorphism group and to test isomorphisms of such algebras over finite fields and of modular group algebras of finite <span class="SimpleMath">p</span>-groups. Further, it contains a nilpotent quotient algorithm for finitely presented associative algebras and a method to determine Kurosh algebras.</p>
+
+</li>
+<li><p><strong class="pkg">SLA</strong> by Willem de Graaf for computations with simple Lie algebras. The main topics of the package are nilpotent orbits, theta-groups and semisimple subalgebras.</p>
+
+</li>
+</ul>
+<p>Furthermore, some packages have been upgraded substantially since the <strong class="pkg">GAP</strong> 4.6.5 release:</p>
+
+
+<ul>
+<li><p><strong class="pkg">ANUPQ</strong> package by Greg Gamble, Werner Nickel and Eamonn O'Brien has been updated after Max Horn joined it as a maintainer. As a result, it is now much easier to install and use it with the current <strong class="pkg">GAP</strong> release.</p>
+
+</li>
+<li><p><strong class="pkg">Wedderga</strong> package by Osnel Broche Cristo, Allen Herman, Alexander Konovalov, Aurora Olivieri, Gabriela Olteanu, Ángel del Río and Inneke Van Gelder has been extended to include functions for calculating local and global Schur indices of ordinary irreducible characters of finite groups, cyclotomic algebras over abelian number fields, and rational quaternion algebras (contribution by Allen Herman).</p>
+
+</li>
+</ul>
+<p><a id="X79782A077CCDDD27" name="X79782A077CCDDD27"></a></p>
+
+<h4>2.2 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.3 (February 2014)</span></h4>
+
+<p>Fixed bugs which could lead to incorrect results:</p>
+
+
+<ul>
+<li><p>Incorrect result returned by <code class="code">AutomorphismGroup(PSp(4,2^n))</code>. [Reported by Anvita]</p>
+
+</li>
+<li><p>The <code class="func">Order</code> (<a href="../../doc/ref/chap31.html#X84F59A2687C62763"><span class="RefLink">Reference: Order</span></a>) method for group homomorphisms newly introduced in <strong class="pkg">GAP</strong> 4.7 had a bug that caused it to sometimes return incorrect results. [Reported by Benjamin Sambale]</p>
+
+</li>
+</ul>
+<p>Fixed bugs that could lead to break loops:</p>
+
+
+<ul>
+<li><p>Several bugs were fixed and missing methods were introduced in the new code for transformations, partial permutations and semigroups that was first included in <strong class="pkg">GAP</strong> 4.7. Some minor corrections were made in the documentation for transformations.</p>
+
+</li>
+<li><p>Break loop in <code class="code">IsomorphismFpMonoid</code> when prefixes in generators names were longer than one letter. [Reported by Dmytro Savchuk and Yevgen Muntyan]</p>
+
+</li>
+<li><p>Break loop while displaying the result of <code class="func">MagmaWithInversesByMultiplicationTable</code> (<a href="../../doc/ref/chap35.html#X7EDAFB987EE8A770"><span class="RefLink">Reference: MagmaWithInversesByMultiplicationTable</span></a>). [Reported by Grahame Erskine]</p>
+
+</li>
+</ul>
+<p>Improved functionality:</p>
+
+
+<ul>
+<li><p>Better detection of UTF-8 terminal encoding on some systems. [Suggested by Andries Brouwer]</p>
+
+</li>
+</ul>
+<p><a id="X80C83AF67E5E6C7F" name="X80C83AF67E5E6C7F"></a></p>
+
+<h4>2.3 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.4 (February 2014)</span></h4>
+
+<p>This release was prepared immediately after <strong class="pkg">GAP</strong> 4.7.3 to revert the fix of the error handling for the single quote at the end of an input line, contained in <strong class="pkg">GAP</strong> 4.7.3. It happened that (only on Windows) the fix caused error messages in one of the packages.</p>
+
+<p><a id="X864C03527D410BF8" name="X864C03527D410BF8"></a></p>
+
+<h4>2.4 <span class="Heading"><strong class="pkg">GAP</strong> 4.7.5 (May 2014)</span></h4>
+
+<p>Fixed bugs which could lead to incorrect results:</p>
+
+
+<ul>
+<li><p><code class="func">InstallValue</code> (<a href="../../doc/ref/chap79.html#X7A23F09886E936D2"><span class="RefLink">Reference: InstallValue</span></a>) cannot handle immediate values, characters or booleans for technical reasons. A check for such values was introduced to trigger an error message and prevent incorrect results caused by this. [Reported by Sebastian Gutsche]</p>
+
+</li>
+<li><p><code class="func">KnowsDictionary</code> (<a href="../../doc/ref/chap28.html#X808C885D7E267285"><span class="RefLink">Reference: KnowsDictionary</span></a>) and <code class="func">LookupDictionary</code> (<a href="../../doc/ref/chap28.html#X863706BF847A47EB"><span class="RefLink">Reference: LookupDictionary</span></a>) methods for <code class="code">IsListLookupDictionary</code> were using <code class="func">PositionFirstComponent</code> (<a href="../../doc/ref/chap21.html#X8132A2F5823F0CC0"><span class="RefLink">Reference: PositionFirstComponent</span></a>); the latter is only valid on sorted lists, but in <code class="code">IsListLookupDictionary</code> the underlying list is NOT sorted in general, leading to bogus results.</p>
+
+</li>
+</ul>
+<p>Other fixed bugs:</p>
+
+
+<ul>
+<li><p>A bug in <code class="code">DirectProductElementsFamily</code> which used <code class="func">CanEasilyCompareElements</code> (<a href="../../doc/ref/chap31.html#X7EFE013B8634D214"><span class="RefLink">Reference: CanEasilyCompareElements</span></a>) instead of <code class="func">CanEasilySortElements</code> (<a href="../../doc/ref/chap31.html#X7EFE013B8634D214"><span class="RefLink">Reference: CanEasilySortElements</span></a>).</p>
+
+</li>
+<li><p>Fixed wrong <code class="code">Infolevel</code> message that caused a break loop for some automorphism group computations.</p>
+
+</li>
+<li><p>Fixed an error that sometimes caused a break loop in <code class="func">HallSubgroup</code> (<a href="../../doc/ref/chap39.html#X7EDBA19E828CD584"><span class="RefLink">Reference: HallSubgroup</span></a>). [Reported by Benjamin Sambale]</p>
+
+</li>
+<li><p>Fixed a rare error in computation of conjugacy classes of a finite group by homomorphic images, providing fallback to a default algorithm.</p>
+
+</li>
+<li><p>Fixed an error in the calculation of Frattini subgroup in the case of the trivial radical.</p>
+
+</li>
+<li><p>Several minor bugs were fixed in the documentation, kernel, and library code for transformations.</p>
+
+</li>
+<li><p>Fixed errors in <code class="func">NumberPerfectGroups</code> (<a href="../../doc/ref/chap50.html#X7D68BE547FE5C0F5"><span class="RefLink">Reference: NumberPerfectGroups</span></a>) and <code class="func">NumberPerfectLibraryGroups</code> (<a href="../../doc/ref/chap50.html#X7FE695DA86A066E1"><span class="RefLink">Reference: NumberPerfectLibraryGroups</span></a>) not being aware that there are no perfect groups of odd order.</p>
+
+</li>
+<li><p>Restored the ability to build <strong class="pkg">GAP</strong> on OS X 10.4 and 10.5 which was accidentally broken in the previous <strong class="pkg">GAP</strong> release by using the build option not supported by these versions.</p>
+
+</li>
+<li><p>Fixed some problems for ia64 and sparc architectures. [Reported by Bill Allombert and Volker Braun]</p>
+
+</li>
+</ul>
+<p>New package added for the redistribution with <strong class="pkg">GAP</strong>:</p>
+
+
+<ul>
+<li><p><strong class="pkg">permut</strong> package by A.Ballester-Bolinches, E.Cosme-Llópez, and R.Esteban-Romero to deal with permutability in finite groups.</p>
+
+</li>
+</ul>
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

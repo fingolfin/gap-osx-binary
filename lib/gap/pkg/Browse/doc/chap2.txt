@@ -1,0 +1,829 @@
+  
+  [1X2 [33X[0;0YInterface to the [10Xncurses[110X[101X[1X Library[133X[101X
+  
+  [33X[0;0YIn  this  chapter  we  describe  the [5XGAP[105X interface to the [5XGNU[105X [10Xcurses[110X/[10Xncurses[110X
+  [10XC[110X-library.  This  library  contains  routines  to manipulate the contents of
+  terminal  windows.  It  allows  one to write programs which should work on a
+  wide variety of terminal emulations with different sets of capabilities.[133X
+  
+  [33X[0;0YThis  technical  chapter  is  intended  for  readers who want to program new
+  applications  using the [10Xncurses[110X functionality. If you are only interested in
+  the  function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) from this package or some of its
+  applications you can skip this chapter.[133X
+  
+  [33X[0;0YDetailed  documentation of the [10Xncurses[110X library is probably available in your
+  operating system (try [10Xman ncurses[110X) and from the web (see for example [NCu]).
+  Here,  we  only give short reminders about the functions provided in the [5XGAP[105X
+  interface and explain how to use the [5XGAP[105X functions.[133X
+  
+  
+  [1X2.1 [33X[0;0YThe [10Xncurses[110X[101X[1X Library[133X[101X
+  
+  [33X[0;0YIn  this  section we list the functions from the GNU [10Xncurses[110X library and its
+  [10Xpanel[110X  extension which are made available in [5XGAP[105X via the [5XBrowse[105X package. See
+  the  following  section [14X2.2[114X for explanations how to use these functions from
+  within [5XGAP[105X.[133X
+  
+  [33X[0;0YThe  basic  objects  to  manipulate  are  called [13Xwindows[113X, they correspond to
+  rectangular  regions of the terminal screen. Windows can overlap but [10Xncurses[110X
+  cannot  handle  this  for  the  display. Therefore windows can be wrapped in
+  [13Xpanels[113X,  they provide a display depth for windows and it is possible to move
+  panels to the top and bottom of the display or to hide a panel.[133X
+  
+  [33X[0;0YWe  will  not  import  all  the functions of the [10Xncurses[110X library to [5XGAP[105X. For
+  example,  there  are many pairs of functions with the same name except for a
+  leading  [10Xw[110X (like [10Xmove[110X and [10Xwmove[110X for moving the cursor in a window). Here, we
+  only  import  the versions with [10Xw[110X, which get a window as first argument. The
+  functions  without [10Xw[110X are for the [10Xncurses[110X standard screen window [10Xstdscr[110X which
+  is  available  as  window  [10X0[110X in [5XGAP[105X. Similarly, there are functions with the
+  same  name  except  for  an extra [10Xn[110X (like [10Xwaddstr[110X and [10Xwaddnstr[110X for placing a
+  string into a window). Here, we only import the safer functions with [10Xn[110X which
+  get  the  number  of  characters  to  write  as  argument.  (More convenient
+  functions are then implemented on the [5XGAP[105X level.)[133X
+  
+  
+  [1X2.1-1 [33X[0;0YSetting the terminal[133X[101X
+  
+  [33X[0;0YWe  first  list  flags  for  setting  the basic behavior of a terminal. With
+  [10Xsavetty[110X/[10Xresetty[110X a setting can be stored and recovered.[133X
+  
+  [8X[10Xsavetty()[110X[108X
+        [33X[0;6YThis stores the current setting of the terminal in a buffer.[133X
+  
+  [8X[10Xresetty()[110X[108X
+        [33X[0;6YThis  resets  the  terminal  to  what  was  stored in the last call to
+        [10Xsavetty[110X.[133X
+  
+  [8X
+  [10Xcbreak()/nocbreak()[110X[108X
+        [33X[0;6YIn  [10Xcbreak[110X  mode  each  input  character  from  a terminal is directly
+        forwarded to the application (but see [10Xkeypad[110X). With [10Xnocbreak[110X this only
+        happens after a newline or return is typed.[133X
+  
+  [8X[10Xkeypad(win, bool)[110X[108X
+        [33X[0;6YIf  set  to [9Xtrue[109X some special input like arrow or function keys can be
+        read  as single characters from the input (such keys actually generate
+        certain sequences of characters), see also [14X2.1-4[114X. (The [3Xwin[103X argument is
+        irrelevant.)[133X
+  
+  [8X
+  [10Xecho()[110X/[10Xnoecho()[110X[108X
+        [33X[0;6YThis  determines  if  input characters are automatically echoed by the
+        terminal at the current cursor position.[133X
+  
+  [8X[10Xcurs_set(vis)[110X[108X
+        [33X[0;6YThis determines the visibility of the cursor. The argument [3Xvis[103X=0 makes
+        the  cursor  invisible.  With [3Xvis[103X=1 it becomes visible; some terminals
+        allow also higher levels of visibility.[133X
+  
+  [8X[10Xwtimeout(win, delay)[110X[108X
+        [33X[0;6YHere [3Xdelay[103X determines a timeout in milliseconds for reading characters
+        from  the  input of a window. Negative values mean infinity, that is a
+        blocking read.[133X
+  
+  [8X
+  [10Xnl()[110X/[10Xnonl()[110X[108X
+        [33X[0;6YWith  [10Xnl[110X  a return on input is translated to a newline character and a
+        newline on output is interpreted as return and linefeed.[133X
+  
+  [8X[10Xintrflush(win, bool)[110X[108X
+        [33X[0;6YThis  flag  determines  if  after  an  interrupt pending output to the
+        terminal is flushed. (The [3Xwin[103X argument is irrelevant.)[133X
+  
+  [8X[10Xidlok(win, bool)[110X[108X
+        [33X[0;6YWith  [9Xtrue[109X  the  library  tries  to  use  a  hardware  line  insertion
+        functionality (in particular for scrolling).[133X
+  
+  [8X[10Xscrollok(win, bool)[110X[108X
+        [33X[0;6YIf  set  to [9Xtrue[109X moving the cursor down from the last line of a window
+        causes scrolling of the whole window, otherwise nothing happens.[133X
+  
+  [8X[10Xleaveok(win, bool)[110X[108X
+        [33X[0;6YIf  set  to  [9Xtrue[109X  a  refresh  of  the window leaves the cursor at its
+        current location, otherwise this is not guaranteed.[133X
+  
+  [8X[10Xclearok(win, bool)[110X[108X
+        [33X[0;6YIf  set  to  [9Xtrue[109X the next refresh of the window will clear the screen
+        completely and redraw everything.[133X
+  
+  [8X[10Ximmedok(win, bool)[110X[108X
+        [33X[0;6YIf  set to [9Xtrue[109X all changes of the window will automatically also call
+        a [10Xwrefresh[110X.[133X
+  
+  [8X
+  [10Xraw()[110X/[10Xnoraw()[110X[108X
+        [33X[0;6YSimilar  to  [10Xcbreak[110X, usually not needed (see the [10Xncurses[110X documentation
+        for details).[133X
+  
+  
+  [1X2.1-2 [33X[0;0YManipulating windows[133X[101X
+  
+  [33X[0;0YIn  [10Xncurses[110X  an  arbitrary number of windows which correspond to rectangular
+  regions  (maybe overlapping) of the screen can be handled. You should always
+  delete  windows  which  are  no  longer  needed.  To get a proper display of
+  overlapping  windows  (which may occur by recursively called functions using
+  this library) we suggest that you always wrap windows in panels, see [14X2.1-3[114X.[133X
+  
+  [33X[0;0YFor functions which involve coordinates recall that the upper left corner of
+  the screen or internally of any window has the coordinates (0,0).[133X
+  
+  [8X[10Xnewwin(nlines, ncols, y, x)[110X[108X
+        [33X[0;6YThis  creates a new window whose upper left corner has the coordinates
+        ([3Xy[103X,[3Xx[103X) on the screen and has [3Xnlines[103X lines and [3Xncols[103X columns, if this is
+        possible.  The  arguments  [3Xnlines[103X  and  [3Xncols[103X  can be zero, then their
+        maximal possible values are assumed.[133X
+  
+  [8X[10Xdelwin(win)[110X[108X
+        [33X[0;6YDeletes a window.[133X
+  
+  [8X[10Xmvwin(win, y, x)[110X[108X
+        [33X[0;6YMoves the upper left corner of the window to the given coordinates, if
+        the  window  still  fits  on  the  screen.  With panels don't use this
+        function, but use [10Xmove_panel[110X mentioned below.[133X
+  
+  [8X[10Xwrefresh(win)[110X[108X
+        [33X[0;6YWriting  to a window only changes some internal buffers, this function
+        copies the window content to the actual display screen. You don't need
+        this  function  if  you wrap your windows in panels, use [10Xupdate_panels[110X
+        and [10Xdoupdate[110X instead.[133X
+  
+  [8X[10Xdoupdate()[110X[108X
+        [33X[0;6YUse  this function to update the content of your display screen to the
+        current  content of all windows. If your terminal is not yet in visual
+        mode this function changes to visual mode.[133X
+  
+  [8X[10Xendwin()[110X[108X
+        [33X[0;6YUse  this function to leave the visual mode of your terminal. (Remark:
+        If  you  use this function while not in visual mode the cursor will be
+        moved  to  the  line  where  the visual mode was started last time. To
+        avoid this use [10Xisendwin[110X first.)[133X
+  
+  [8X[10Xisendwin()[110X[108X
+        [33X[0;6YReturns [9Xtrue[109X if called while not in visual mode and [9Xfalse[109X otherwise[133X
+  
+  [8X[10Xgetbegyx(win)[110X[108X
+        [33X[0;6YGet  the  coordinates  of  the  upper  left  corner of a window on the
+        screen.[133X
+  
+  [8X[10Xgetmaxyx(win)[110X[108X
+        [33X[0;6YGet the number of lines and columns of a window.[133X
+  
+  
+  [1X2.1-3 [33X[0;0YManipulating panels[133X[101X
+  
+  [33X[0;0YWrap  windows  in  panels to get a proper handling of overlapping windows on
+  the   display.   Don't   forget  to  delete  a  panel  before  deleting  the
+  corresponding window.[133X
+  
+  [8X[10Xnew_panel(win)[110X[108X
+        [33X[0;6YCreate a panel for a window.[133X
+  
+  [8X[10Xdel_panel(pan)[110X[108X
+        [33X[0;6YDelete a panel.[133X
+  
+  [8X[10Xupdate_panels()[110X[108X
+        [33X[0;6YUse  this  function  to copy changes of windows and panels to a screen
+        buffer. Then call [10Xdoupdate()[110X to update the display screen.[133X
+  
+  [8X[10Xmove_panel(pan, y, x)[110X[108X
+        [33X[0;6YMove top left corner of a panel wrapped window to coordinates ([3Xy[103X,[3Xx[103X) if
+        possible.[133X
+  
+  [8X
+  [10Xhide_panel(pan)[110X/[10Xshow_panel(pan)[110X[108X
+        [33X[0;6YHide  or  show,  respectively,  the  content of a panel on the display
+        screen.[133X
+  
+  [8X
+  [10Xtop_panel(pan)[110X/[10Xbottom_panel(pan)[110X[108X
+        [33X[0;6YMove a panel to the top or bottom of all panels, respectively.[133X
+  
+  [8X
+  [10Xpanel_below(pan)[110X/[10Xpanel_above(pan)[110X[108X
+        [33X[0;6YReturn  the panel directly below or above the given one, respectively.
+        With argument [10X0[110X the top or bottom panel are returned, respectively. If
+        argument  is  the  bottom  or  top  panel, respectively, then [9Xfalse[109X is
+        returned.[133X
+  
+  
+  [1X2.1-4 [33X[0;0YGetting keyboard input[133X[101X
+  
+  [33X[0;0YIf  you  want to read input from the user first adjust the terminal settings
+  of [10Xcbreak[110X, [10Xkeypad[110X, [10Xecho[110X, [10Xwtimeout[110X and [10Xcurs_set[110X to your needs, see [14X2.1-1[114X. The
+  basic functions are as follows.[133X
+  
+  [8X[10Xwgetch(win)[110X[108X
+        [33X[0;6YReads one character from user input (returned as integer). If [10Xwtimeout[110X
+        was set with a positive [3Xdelay[103X then the function returns [9Xfalse[109X if there
+        was  no input for [3Xdelay[103X milliseconds. Note that in [10Xnocbreak[110X mode typed
+        characters  reach  the  application only after typing a return. If the
+        [10Xkeypad[110X  flag  is set to [9Xtrue[109X some special keys can be read like single
+        characters; the keys are explained below. (Note that there is only one
+        input queue for all windows.)[133X
+  
+  [8X[10Xungetch(char)[110X[108X
+        [33X[0;6YPuts back the character [3Xchar[103X on the input queue.[133X
+  
+  [33X[0;0YSome  terminals allow one to read special keys like one character, we import
+  some  of  the  symbolic  names of such keys into [5XGAP[105X. You can check for such
+  characters  by  comparing  with  the  components of the record [10XNCurses.keys[110X,
+  these are[133X
+  
+  [8X[10XUP[110X/[10XDOWN[110X/[10XLEFT[110X/[10XRIGHT[110X[108X
+        [33X[0;6Ythe arrow keys[133X
+  
+  [8X[10XPPAGE[110X/[10XNPAGE[110X[108X
+        [33X[0;6Ythe page up and page down keys[133X
+  
+  [8X[10XHOME[110X/[10XEND[110X[108X
+        [33X[0;6Ythe home and end keys[133X
+  
+  [8X[10XBACKSPACE[110X/[10XDC[110X[108X
+        [33X[0;6Ythe backspace and delete keys[133X
+  
+  [8X[10XIC[110X[108X
+        [33X[0;6Ythe insert key[133X
+  
+  [8X[10XENTER[110X[108X
+        [33X[0;6Ythe enter key[133X
+  
+  [8X[10XF1[110X/[10XF2[110X/../[10XF24[110X[108X
+        [33X[0;6Ythe function keys[133X
+  
+  [8X[10XMOUSE[110X[108X
+        [33X[0;6Ya pseudo key to detect mouse events[133X
+  
+  [8X[10XA1[110X/[10XA3[110X/[10XB2[110X/[10XC1[110X/[10XC3[110X[108X
+        [33X[0;6Ythe keys around the arrow keys on a num pad[133X
+  
+  [33X[0;0YIt can happen that on a specific keyboard there is no key for some of these.
+  Also,  not all terminals can interpret all of these keys. You can check this
+  with the function[133X
+  
+  [8X[10Xhas_key(key)[110X[108X
+        [33X[0;6YChecks if the special key [3Xkey[103X is recognized by the terminal.[133X
+  
+  
+  [1X2.1-5 [33X[0;0YWriting to windows[133X[101X
+  
+  [33X[0;0YThe  display of text in [10Xncurses[110X windows has two aspects. The first is to get
+  actual  characters  on the screen. The second is to specify attributes which
+  influence  the  display,  for  example  normal or bold fonts or colors. This
+  subsection  is for the first aspect. Possible attributes are explained below
+  in [14X2.1-7[114X.[133X
+  
+  [8X[10Xwmove(win, y, x)[110X[108X
+        [33X[0;6YMoves  the  cursor  to position ([3Xy[103X,[3Xx[103X), recall that the coordinates are
+        zero based, (0,0) being the top left corner.[133X
+  
+  [8X[10Xwaddnstr(win, str, len)[110X[108X
+        [33X[0;6YWrites  the  string [3Xstr[103X to the window starting from the current cursor
+        position.  Writes  at  most  [3Xlen[103X characters. At end of line the cursor
+        moves  to  the  beginning of next line. The behavior at the end of the
+        window depends on the setting of [10Xscrollok[110X, see [14X2.1-1[114X.[133X
+  
+  [8X[10Xwaddch(win, char)[110X[108X
+        [33X[0;6YWrites  a  character  to the window at the current cursor position and
+        moves  the  cursor  on. The character [3Xchar[103X is given as integer and can
+        include attribute information.[133X
+  
+  [8X[10Xwborder(win, charlist)[110X[108X
+        [33X[0;6YDraws a border around the window. If [3Xcharlist[103X is a plain list of eight
+        [5XGAP[105X  characters  these  are  taken for left/right/top/bottom sides and
+        top-left/top-right/bottom-left/bottom-right corners. Otherwise default
+        characters  are  used.  (See  [2XNCurses.WBorder[102X  ([14X2.2-9[114X) for a more user
+        friendly interface.)[133X
+  
+  [8X[10Xwvline(win, char, len)[110X[108X
+        [33X[0;6YWrites  a  vertical line of length [3Xlen[103X (or as long as fitting into the
+        window) starting from the current cursor position to the bottom, using
+        the character [3Xchar[103X. If [3Xchar[103X=[10X0[110X the default character is used.[133X
+  
+  [8X[10Xwhline(win, char, len)[110X[108X
+        [33X[0;6YSame  as  [10Xwvline[110X  but  for  horizontal  lines starting from the cursor
+        position to the right.[133X
+  
+  [8X[10Xwerase(win)[110X[108X
+        [33X[0;6YDeletes all characters in the window.[133X
+  
+  [8X[10Xwclear(win)[110X[108X
+        [33X[0;6YLike [10Xwerase[110X, but also calls [10Xclearok[110X.[133X
+  
+  [8X[10Xwclrtobot(win)[110X[108X
+        [33X[0;6YDeletes all characters from cursor position to the right and bottom.[133X
+  
+  [8X[10Xwclrtoeol(win)[110X[108X
+        [33X[0;6YDeletes all characters from cursor position to end of line.[133X
+  
+  [8X[10Xwinch(win)[110X[108X
+        [33X[0;6YReturns  the  character  at  current  cursor  position, as integer and
+        including color and attribute information.[133X
+  
+  [8X[10Xgetyx(win)[110X[108X
+        [33X[0;6YReturns the current cursor position.[133X
+  
+  [8X[10Xwaddstr(win, str)[110X[108X
+        [33X[0;6YDelegates to [10Xwaddnstr(win, str, Length(str))[110X.[133X
+  
+  
+  [1X2.1-6 [33X[0;0YLine drawing characters[133X[101X
+  
+  [33X[0;0YFor  drawing  lines  and  grids  in  a  terminal  window you should use some
+  "virtual"  characters  which  are  available  as  components  of  the record
+  [10XNCurses.lineDraw[110X.  On  some  terminals  these are nicely displayed as proper
+  lines (on others they are simulated by ASCII characters). These are:[133X
+  
+  [8X[10XBLOCK[110X[108X
+        [33X[0;6Ysolid block[133X
+  
+  [8X[10XBOARD[110X[108X
+        [33X[0;6Yboard of squares[133X
+  
+  [8X[10XBTEE/LTEE/RTEE/TTEE[110X[108X
+        [33X[0;6Ybottom/left/right/top tee[133X
+  
+  [8X[10XBULLET[110X[108X
+        [33X[0;6Ybullet[133X
+  
+  [8X[10XCKBOARD[110X[108X
+        [33X[0;6Ychecker board[133X
+  
+  [8X[10XDARROW/LARROW/RARROW/UARROW[110X[108X
+        [33X[0;6Ydown/left/right/up arrow[133X
+  
+  [8X[10XDEGREE[110X[108X
+        [33X[0;6Ydegree symbol[133X
+  
+  [8X[10XDIAMOND[110X[108X
+        [33X[0;6Ydiamond[133X
+  
+  [8X[10XGEQUAL[110X[108X
+        [33X[0;6Ygreater than or equal[133X
+  
+  [8X[10XHLINE/VLINE[110X[108X
+        [33X[0;6Yhorizontal/vertical line[133X
+  
+  [8X[10XLANTERN[110X[108X
+        [33X[0;6Ylantern symbol[133X
+  
+  [8X[10XLEQUAL[110X[108X
+        [33X[0;6Yless than or equal[133X
+  
+  [8X[10XLLCORNER/LRCORNER/ULCORNER/URCORNER[110X[108X
+        [33X[0;6Ylower left/lower right/upper left/upper right corner[133X
+  
+  [8X[10XNEQUAL[110X[108X
+        [33X[0;6Ynot equal[133X
+  
+  [8X[10XPI[110X[108X
+        [33X[0;6Yletter pi[133X
+  
+  [8X[10XPLMINUS[110X[108X
+        [33X[0;6Yplus-minus[133X
+  
+  [8X[10XPLUS[110X[108X
+        [33X[0;6Ycrossing lines like a plus[133X
+  
+  [8X[10XS1/S3/S7/S9[110X[108X
+        [33X[0;6Yscan line 1/3/7/9[133X
+  
+  [8X[10XSTERLING[110X[108X
+        [33X[0;6Ypound sterling[133X
+  
+  
+  [1X2.1-7 [33X[0;0YText attributes and colors[133X[101X
+  
+  [33X[0;0YIn  addition  to  the  actual characters to be written to the screen the way
+  they are displayed can be changed by additional [13Xattributes[113X. (There should be
+  no  danger  to  mix  up  this  notion  of attributes with the one introduced
+  in [14X'Reference:  Attributes'[114X.)  The  available  attributes  are stored in the
+  record [10XNCurses.attrs[110X, they are[133X
+  
+  [8X[10XNORMAL[110X[108X
+        [33X[0;6Ynormal display with no extra attributes.[133X
+  
+  [8X[10XSTANDOUT[110X[108X
+        [33X[0;6Ydisplays text in the best highlighting mode of the terminal.[133X
+  
+  [8X[10XUNDERLINE[110X[108X
+        [33X[0;6Yunderlines the text.[133X
+  
+  [8X[10XREVERSE[110X[108X
+        [33X[0;6Ydisplay  in  reverse video by exchanging the foreground and background
+        color.[133X
+  
+  [8X[10XBLINK[110X[108X
+        [33X[0;6Ydisplays the text blinking.[133X
+  
+  [8X[10XDIM[110X[108X
+        [33X[0;6Ydisplays the text half bright.[133X
+  
+  [8X[10XBOLD[110X[108X
+        [33X[0;6Ydisplays the text in a bold font.[133X
+  
+  [33X[0;0YNote  that  not  all  of these work with all types of terminals, or some may
+  cause  the  same  display.  Furthermore, if [10XNCurses.attrs.has_colors[110X is [9Xtrue[109X
+  there is a list [10XNCurses.attrs.ColorPairs[110X of attributes to set the foreground
+  and   background   color.   These   should   be   accessed  indirectly  with
+  [2XNCurses.ColorAttr[102X ([14X2.2-1[114X). Attributes can be combined by adding their values
+  (internally,  they  are  represented by integers). They can also be added to
+  the integer representing a character for use with [10Xwaddch[110X.[133X
+  
+  [33X[0;0YThe library functions for setting attributes are:[133X
+  
+  [8X[10Xwattrset(win, attr)[110X[108X
+        [33X[0;6YThis  sets  the  default  (combined)  attributes for a window which is
+        added  to  all characters written to it; using [10XNCurses.attrs.NORMAL[110X as
+        attribute is a reset.[133X
+  
+  [8X
+  [10Xwattron(win, attr)[110X/[10Xwattroff(win, attr)[110X[108X
+        [33X[0;6YThis  sets  or  unsets  one  or  some default attributes of the window
+        without changing the others.[133X
+  
+  [8X[10Xwattr_get(win)[110X[108X
+        [33X[0;6YThis returns the current default attribute and default color pair of a
+        window.[133X
+  
+  [8X[10Xwbkgdset(win, attr)[110X[108X
+        [33X[0;6YThis  is  similar to [10Xwattrset[110X but you can also add a character to [3Xattr[103X
+        which is used as default instead of blanks.[133X
+  
+  [8X[10Xwbkgd(win, attr)[110X[108X
+        [33X[0;6YThis  function changes the attributes for all characters in the window
+        to [3Xattr[103X, also used for further characters written to that window.[133X
+  
+  
+  [1X2.1-8 [33X[0;0YLow level [10Xncurses[110X[101X[1X mouse support[133X[101X
+  
+  [33X[0;0YMany  [10Xxterm[110X  based  terminals support mouse events. The recognition of mouse
+  events by the [10Xncurses[110X input queue can be switched on and off. If switched on
+  and a mouse event occurs, then [10XNCurses.wgetch[110X gets [10XNCurses.keys.MOUSE[110X if the
+  [10Xkeypad[110X   flag   is  [9Xtrue[109X  (see  [14X2.1-4[114X).  If  this  is  read  one  must  call
+  [10XNCurses.getmouse[110X  which  reads  further  characters from the input queue and
+  interprets  them  as  details on the mouse event. In most cases the function
+  [2XNCurses.GetMouseEvent[102X  ([14X2.2-10[114X)  can  be  used  in  applications  (it  calls
+  [10XNCurses.getmouse[110X).  The  following  low  level  functions  are  available as
+  components of the record [10XNCurses[110X.[133X
+  
+  [33X[0;0YThe  names  of  mouse  events  which  may be possible are stored in the list
+  [10XNCurses.mouseEvents[110X,  which  starts [10X[[110X [10X"BUTTON1_PRESSED",[110X [10X"BUTTON1_RELEASED",[110X
+  [10X"BUTTON1_CLICKED",[110X  [10X"BUTTON1_DOUBLE_CLICKED",[110X  [10X"BUTTON1_TRIPLE_CLICKED",[110X [10X...[110X
+  and contains the same for buttons number 2 to 5 and a few other events.[133X
+  
+  [8X
+  [10Xmousemask(intlist)[110X[108X
+        [33X[0;6YThe argument [3Xintlist[103X is a list of integers specifying mouse events. An
+        entry  [10Xi[110X refers to the event described in [10XNCurses.mouseEvents[i+1][110X. It
+        returns  a  record  with components [10X.new[110X (for the current setting) and
+        [10X.old[110X (for the previous setting) which are again lists of integers with
+        the  same meaning. Note that [10X.new[110X may be different from [3Xintlist[103X, it is
+        always  the  empty list if the terminal does not support mouse events.
+        In  applications  use  [2XNCurses.UseMouse[102X  ([14X2.2-10[114X)  instead of this low
+        level function.[133X
+  
+  [8X
+  [10Xgetmouse()[110X[108X
+        [33X[0;6YThis  function must be called after a key [10XNCurses.keys.MOUSE[110X was read.
+        It returns a list with three entries [10X[y, x, intlist][110X where [10Xy[110X and [10Xx[110X are
+        the  coordinates  of  the character cell where the mouse event occured
+        and  [10Xintlist[110X describes the event, it should have length one and refers
+        to a position in [10XNCurses.mouseEvents[110X.[133X
+  
+  [8X
+  [10Xwenclose(win, y, x)[110X[108X
+        [33X[0;6YThis  functions  returns  [9Xtrue[109X  if  the screen position [3Xy[103X, [3Xx[103X is within
+        window [3Xwin[103X and [9Xfalse[109X otherwise.[133X
+  
+  [8X
+  [10Xmouseinterval(t)[110X[108X
+        [33X[0;6YSets  the time to recognize a press and release of a mouse button as a
+        click  to [3Xt[103X milliseconds. (Note that this may have no effect because a
+        window manager may catch this.)[133X
+  
+  
+  [1X2.1-9 [33X[0;0YMiscellaneous function[133X[101X
+  
+  [33X[0;0YWe  also  provide  the [10Xncurses[110X function [10Xmnap(msec)[110X which is a sleep for [3Xmsec[103X
+  milliseconds.[133X
+  
+  [33X[0;0YFurthermore,  there  a  two  utilities  which  can be useful for scripts and
+  testing,  namely  a check if standard input or standard output are connected
+  to   terminals.   These   can   be   called   as   [10XNCurses.IsStdinATty()[110X  or
+  [10XNCurses.IsStdoutATty()[110X, respectively.[133X
+  
+  
+  [1X2.2 [33X[0;0YThe [10Xncurses[110X[101X[1X [5XGAP[105X[101X[1X functions[133X[101X
+  
+  [33X[0;0YThe  functions  of the [10Xncurses[110X library are used within [5XGAP[105X very similarly to
+  their  [10XC[110X  equivalents. The functions are available as components of a record
+  [10XNCurses[110X with the name of the [10XC[110X function (e.g., [10XNCurses.newwin[110X).[133X
+  
+  [33X[0;0YIn  [5XGAP[105X  the  [10Xncurses[110X  windows  are  accessed  via  integers (as returned by
+  [10XNCurses.newwin[110X).  The  standard  screen  [10Xstdscr[110X  from the [10Xncurses[110X library is
+  available  as  window  number  [10X0[110X.  But  this  should  not  be used; to allow
+  recursive  applications  of [10Xncurses[110X always create a new window, wrap it in a
+  panel and delete both when they are no longer needed.[133X
+  
+  [33X[0;0YEach  window  can  be  wrapped  in  one  panel which is accessed by the same
+  integer. (Window [10X0[110X cannot be used with a panel.)[133X
+  
+  [33X[0;0YCoordinates  in  windows  are  the  same  zero  based  integers  as  in  the
+  corresponding   [10XC[110X   functions.  The  interface  of  functions  which  [13Xreturn[113X
+  coordinates is slightly different from the [10XC[110X version; they just return lists
+  of   integers   and   you   just   give   the   window  as  argument,  e.g.,
+  [10XNCurses.getmaxyx(win)[110X returns a list [10X[nrows, ncols][110X of two integers.[133X
+  
+  [33X[0;0YCharacters  to  be written to a window can be given either as [5XGAP[105X characters
+  like  [10X'a'[110X  or  as  integers  like [10XINT_CHAR('a') = 97[110X. If you use the integer
+  version  you  can also add attributes including color settings to it for use
+  with [10XNCurses.waddch[110X.[133X
+  
+  [33X[0;0YWhen writing an application decide about an appropriate terminal setting for
+  your visual mode windows, see [14X2.1-1[114X and the utility function [2XNCurses.SetTerm[102X
+  ([14X2.2-2[114X)  below.  Use  [10XNCurses.savetty()[110X  and  [10XNCurses.resetty()[110X  to save and
+  restore the previous setting.[133X
+  
+  [33X[0;0YWe  also  provide  some  higher level functionality for displaying marked up
+  text, see [2XNCurses.PutLine[102X ([14X2.2-6[114X) and [2XNCurses.IsAttributeLine[102X ([14X2.2-3[114X).[133X
+  
+  [33X[0;0YWe  now  describe  some  utility  functions  for  putting text on a terminal
+  window.[133X
+  
+  [1X2.2-1 NCurses.ColorAttr[101X
+  
+  [29X[2XNCurses.ColorAttr[102X( [3Xfgcolor[103X, [3Xbgcolor[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan attribute for setting the foreground and background color to be
+            used on a terminal window (it is a [5XGAP[105X integer).[133X
+  
+  [29X[2XNCurses.attrs.has_colors[102X[32X global variable
+  
+  [33X[0;0YThe return value can be used like any other attribute as described in [14X2.1-7[114X.
+  The arguments [3Xfgcolor[103X and [3Xbgcolor[103X can be given as strings, allowed are those
+  in  [10X[  "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"
+  ][110X.  These  are  the  default  foreground  colors  0  to 7 on ANSI terminals.
+  Alternatively, the numbers 0 to 7 can be used directly as arguments.[133X
+  
+  [33X[0;0YNote  that terminals can be configured in a way such that these named colors
+  are not the colors which are actually displayed.[133X
+  
+  [33X[0;0YThe  variable  [2XNCurses.attrs.has_colors[102X  is  set  to  [9Xtrue[109X  or  [9Xfalse[109X if the
+  terminal  supports  colors  or  not,  respectively.  If  a terminal does not
+  support colors then [2XNCurses.ColorAttr[102X always returns [10XNCurses.attrs.NORMAL[110X.[133X
+  
+  [33X[0;0YFor  an  attribute  setting the foreground color with the default background
+  color of the terminal use [10X-1[110X as [3Xbgcolor[103X or the same as [3Xfgcolor[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xwin := NCurses.newwin(0,0,0,0);; pan := NCurses.new_panel(win);;[127X[104X
+    [4X[25Xgap>[125X [27Xdefc := NCurses.defaultColors;;[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.wmove(win, 0, 0);;[127X[104X
+    [4X[25Xgap>[125X [27Xfor a in defc do for b in defc do[127X[104X
+    [4X[25X>[125X [27X     NCurses.wattrset(win, NCurses.ColorAttr(a, b));[127X[104X
+    [4X[25X>[125X [27X     NCurses.waddstr(win, Concatenation(a,"/",b,"\t"));[127X[104X
+    [4X[25X>[125X [27X   od; od;[127X[104X
+    [4X[25Xgap>[125X [27Xif NCurses.IsStdoutATty() then[127X[104X
+    [4X[25X>[125X [27X     NCurses.update_panels();; NCurses.doupdate();;[127X[104X
+    [4X[25X>[125X [27X     NCurses.napms(5000);;     # show for 5 seconds[127X[104X
+    [4X[25X>[125X [27X     NCurses.endwin();; NCurses.del_panel(pan);; NCurses.delwin(win);;[127X[104X
+    [4X[25X>[125X [27X   fi;[127X[104X
+  [4X[32X[104X
+  
+  [1X2.2-2 NCurses.SetTerm[101X
+  
+  [29X[2XNCurses.SetTerm[102X( [[3Xrecord[103X] ) [32X function
+  
+  [33X[0;0YThis  function  provides a unified interface to the various terminal setting
+  functions of [10Xncurses[110X listed in [14X2.1-1[114X. The optional argument is a record with
+  components  which  are assigned to [9Xtrue[109X or [9Xfalse[109X. Recognised components are:
+  [10Xcbreak[110X,  [10Xecho[110X,  [10Xnl[110X,  [10Xintrflush[110X,  [10Xleaveok[110X,  [10Xscrollok[110X,  [10Xkeypad[110X,  [10Xraw[110X (with the
+  obvious meaning if set to [9Xtrue[109X or [9Xfalse[109X, respectively).[133X
+  
+  [33X[0;0YThe  default, if no argument is given, is [10Xrec(cbreak := true, echo := false,
+  nl  := false, intrflush := false, leaveok := true, scrollok := false, keypad
+  :=  true)[110X.  (This is a useful setting for many applications.) If there is an
+  argument  [3Xrecord[103X,  then  the  given  components  overwrite the corresponding
+  defaults.[133X
+  
+  [1X2.2-3 NCurses.IsAttributeLine[101X
+  
+  [29X[2XNCurses.IsAttributeLine[102X( [3Xobj[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if the argument describes a string with attributes.[133X
+  
+  [33X[0;0YAn  [13Xattribute  line[113X describes a string with attributes. It is represented by
+  either  a  string  or  a  dense  list  of  strings,  integers,  and Booleans
+  immediately  following integers, where at least one list entry must [13Xnot[113X be a
+  string.  (The  reason  is  that we want to be able to distinguish between an
+  attribute  line and a list of such lines, and that the case of plain strings
+  is  perhaps  the  most  usual  one, so we do not want to force wrapping each
+  string  in  a  list.)  The integers denote attribute values such as color or
+  font  information,  the  Booleans  denote  that  the  attribute given by the
+  preceding integer is set or reset.[133X
+  
+  [33X[0;0YIf  an integer is not followed by a Boolean then it is used as the attribute
+  for  the  following  characters,  that  is  it overwrites all previously set
+  attributes. Note that in some applications the variant with explicit Boolean
+  values  is preferable, because such a line can nicely be highlighted just by
+  prepending a [10XNCurses.attrs.STANDOUT[110X attribute.[133X
+  
+  [33X[0;0YFor an overview of attributes, see [14X2.1-7[114X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XNCurses.IsAttributeLine( "abc" );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XNCurses.IsAttributeLine( [ "abc", "def" ] );[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XNCurses.IsAttributeLine( [ NCurses.attrs.UNDERLINE, true, "abc" ] );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XNCurses.IsAttributeLine( "" );  NCurses.IsAttributeLine( [] );[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  [13Xempty  string[113X is an attribute line whereas the [13Xempty list[113X (which is not
+  in [2XIsStringRep[102X ([14XReference: IsStringRep[114X)) is [13Xnot[113X an attribute line.[133X
+  
+  [1X2.2-4 NCurses.ConcatenationAttributeLines[101X
+  
+  [29X[2XNCurses.ConcatenationAttributeLines[102X( [3Xlines[103X[, [3Xkeep[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan attribute line.[133X
+  
+  [33X[0;0YFor  a  list [3Xlines[103X of attribute lines (see [2XNCurses.IsAttributeLine[102X ([14X2.2-3[114X)),
+  [10XNCurses.ConcatenationAttributeLines[110X  returns  the attribute line obtained by
+  concatenating the attribute lines in [3Xlines[103X.[133X
+  
+  [33X[0;0YIf  the  optional  argument  [3Xkeep[103X is [9Xtrue[109X then attributes set in an entry of
+  [3Xlines[103X  are  valid  also  for  the  following entries of [3Xlines[103X. Otherwise (in
+  particular  if  there  is  no  second  argument) the attributes are reset to
+  [10XNCurses.attrs.NORMAL[110X between the entries of [3Xlines[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xplain_str:= "hello";;[127X[104X
+    [4X[25Xgap>[125X [27Xwith_attr:= [ NCurses.attrs.BOLD, "bold" ];;[127X[104X
+    [4X[25Xgap>[125X [27XNCurses.ConcatenationAttributeLines( [ plain_str, plain_str ] );[127X[104X
+    [4X[28X"hellohello"[128X[104X
+    [4X[25Xgap>[125X [27XNCurses.ConcatenationAttributeLines( [ plain_str, with_attr ] );[127X[104X
+    [4X[28X[ "hello", 2097152, "bold" ][128X[104X
+    [4X[25Xgap>[125X [27XNCurses.ConcatenationAttributeLines( [ with_attr, plain_str ] );[127X[104X
+    [4X[28X[ 2097152, "bold", 0, "hello" ][128X[104X
+    [4X[25Xgap>[125X [27XNCurses.ConcatenationAttributeLines( [ with_attr, with_attr ] );[127X[104X
+    [4X[28X[ 2097152, "bold", 0, 2097152, "bold" ][128X[104X
+    [4X[25Xgap>[125X [27XNCurses.ConcatenationAttributeLines( [ with_attr, with_attr ], true );[127X[104X
+    [4X[28X[ 2097152, "bold", 2097152, "bold" ][128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-5 NCurses.RepeatedAttributeLine[101X
+  
+  [29X[2XNCurses.RepeatedAttributeLine[102X( [3Xline[103X, [3Xwidth[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan attribute line.[133X
+  
+  [33X[0;0YFor  an  attribute  line  [3Xline[103X  (see  [2XNCurses.IsAttributeLine[102X ([14X2.2-3[114X)) and a
+  positive  integer  [3Xwidth[103X, [10XNCurses.RepeatedAttributeLine[110X returns an attribute
+  line   with   [3Xwidth[103X   displayed  characters  (see [2XNCurses.WidthAttributeLine[102X
+  ([14X2.2-7[114X))  that is obtained by concatenating sufficiently many copies of [3Xline[103X
+  and cutting off a tail if applicable.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XNCurses.RepeatedAttributeLine( "12345", 23 );[127X[104X
+    [4X[28X"12345123451234512345123"[128X[104X
+    [4X[25Xgap>[125X [27XNCurses.RepeatedAttributeLine( [ NCurses.attrs.BOLD, "12345" ], 13 );[127X[104X
+    [4X[28X[ 2097152, "12345", 0, 2097152, "12345", 0, 2097152, "123" ][128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-6 NCurses.PutLine[101X
+  
+  [29X[2XNCurses.PutLine[102X( [3Xwin[103X, [3Xy[103X, [3Xx[103X, [3Xlines[103X[, [3Xskip[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [3Xlines[103X were written, otherwise [9Xfalse[109X.[133X
+  
+  [33X[0;0YThe   argument   [3Xlines[103X   can   be   a   list   of   attribute   lines   (see
+  [2XNCurses.IsAttributeLine[102X  ([14X2.2-3[114X))  or a single attribute line. This function
+  writes the attribute lines to window [3Xwin[103X at and below of position [3Xy[103X, [3Xx[103X.[133X
+  
+  [33X[0;0YIf  the  argument  [3Xskip[103X  is given, it must be a nonnegative integer. In that
+  case  the  first  [3Xskip[103X  characters of each given line are not written to the
+  window (but the attributes are).[133X
+  
+  [1X2.2-7 NCurses.WidthAttributeLine[101X
+  
+  [29X[2XNCurses.WidthAttributeLine[102X( [3Xline[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynumber of displayed characters in an attribute line.[133X
+  
+  [33X[0;0YFor  an  attribute  line  [3Xline[103X  (see  [2XNCurses.IsAttributeLine[102X  ([14X2.2-3[114X)), the
+  function returns the number of displayed characters of [3Xline[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XNCurses.WidthAttributeLine( "abcde" );[127X[104X
+    [4X[28X5[128X[104X
+    [4X[25Xgap>[125X [27XNCurses.WidthAttributeLine( [ NCurses.attrs.BOLD, "abc",[127X[104X
+    [4X[25X>[125X [27X       NCurses.attrs.NORMAL, "de" ] );[127X[104X
+    [4X[28X5[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-8 NCurses.Grid[101X
+  
+  [29X[2XNCurses.Grid[102X( [3Xwin[103X, [3Xtrow[103X, [3Xbrow[103X, [3Xlcol[103X, [3Xrcol[103X, [3Xrowinds[103X, [3Xcolinds[103X ) [32X function
+  
+  [33X[0;0YThis  function  draws  a grid of horizontal and vertical lines on the window
+  [3Xwin[103X,  using  the  line  drawing  characters  explained  in  [14X2.1-6[114X. The given
+  arguments  specify  the  top  and bottom row of the grid, its left and right
+  column, and lists of row and column numbers where lines should be drawn.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xfun := function() local win, pan;[127X[104X
+    [4X[25X>[125X [27X     win := NCurses.newwin(0,0,0,0);[127X[104X
+    [4X[25X>[125X [27X     pan := NCurses.new_panel(win);[127X[104X
+    [4X[25X>[125X [27X     NCurses.Grid(win, 2, 11, 5, 22, [5, 6], [13, 14]);[127X[104X
+    [4X[25X>[125X [27X     NCurses.PutLine(win, 12, 0, "Press <Enter> to quit");[127X[104X
+    [4X[25X>[125X [27X     NCurses.update_panels(); NCurses.doupdate();[127X[104X
+    [4X[25X>[125X [27X     NCurses.wgetch(win);[127X[104X
+    [4X[25X>[125X [27X     NCurses.endwin();[127X[104X
+    [4X[25X>[125X [27X     NCurses.del_panel(pan); NCurses.delwin(win);[127X[104X
+    [4X[25X>[125X [27Xend;;[127X[104X
+    [4X[25Xgap>[125X [27Xfun();[127X[104X
+  [4X[32X[104X
+  
+  [1X2.2-9 NCurses.WBorder[101X
+  
+  [29X[2XNCurses.WBorder[102X( [3Xwin[103X[, [3Xchars[103X] ) [32X function
+  
+  [33X[0;0YThis  is  a convenient interface to the [10Xncurses[110X function [10Xwborder[110X. It draws a
+  border  around  the  window  [3Xwin[103X. If no second argument is given the default
+  line drawing characters are used, see [14X2.1-6[114X. Otherwise, [3Xchars[103X must be a list
+  of   [5XGAP[105X   characters  or  integers  specifying  characters,  possibly  with
+  attributes.  If  [3Xchars[103X  has  length  8  the  characters  are  used  for  the
+  left/right/top/bottom  sides and top-left/top-right/bottom-left/bottom-right
+  corners.  If [3Xchars[103X contains 2 characters the first is used for the sides and
+  the  second for all corners. If [3Xchars[103X contains just one character it is used
+  for all sides including the corners.[133X
+  
+  
+  [1X2.2-10 [33X[0;0YMouse support in [10Xncurses[110X[101X[1X applications[133X[101X
+  
+  [29X[2XNCurses.UseMouse[102X( [3Xon[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record[133X
+  
+  [29X[2XNCurses.GetMouseEvent[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya list of records[133X
+  
+  [33X[0;0Y[10Xncurses[110X  allows on some terminals ([10Xxterm[110X and related) to catch mouse events.
+  In  principle a subset of events can be catched, see [10Xmousemask[110X in [14X2.1-8[114X. But
+  this  does  not  seem  to  work  well with proper subsets of possible events
+  (probably   due  to  intermediate  processes  X,  window  manager,  terminal
+  application,  ...).  Therefore  we  suggest  to catch either all or no mouse
+  events in applications.[133X
+  
+  [33X[0;0YThis  can  be done with [2XNCurses.UseMouse[102X with argument [9Xtrue[109X to switch on the
+  recognition of mouse events and [9Xfalse[109X to switch it off. The function returns
+  a record with components [10X.new[110X and [10X.old[110X which are both set to the status [9Xtrue[109X
+  or  [9Xfalse[109X from after and before the call, respectively. (There does not seem
+  to   be   a   possibility   to   get  the  current  status  without  calling
+  [2XNCurses.UseMouse[102X.)  If you call the function with argument [9Xtrue[109X and the [10X.new[110X
+  component  of  the result is [9Xfalse[109X, then the terminal does not support mouse
+  events.[133X
+  
+  [33X[0;0YWhen the recognition of mouse events is switched on and a mouse event occurs
+  then  the  key [10XNCurses.keys.MOUSE[110X is found in the input queue, see [10Xwgetch[110X in
+  [14X2.1-4[114X.  If  this key is read the low level function [10XNCurses.getmouse[110X must be
+  called  to  fetch  further details about the event from the input queue, see
+  [14X2.1-8[114X.   In   many   cases   this  can  be  done  by  calling  the  function
+  [2XNCurses.GetMouseEvent[102X  which  also  generates  additional  information.  The
+  return  value  is a list of records, one for each panel over which the event
+  occured,  these  panels  sorted  from top to bottom (so, often you will just
+  need  the first entry if there is any). Each of these records has components
+  [10X.win[110X,  the  corresponding  window  of  the  panel,  [10X.y[110X  and [10X.x[110X, the relative
+  coordinates  in  window  [10X.win[110X  where the event occured, and [10X.event[110X, which is
+  bound  to  one  of  the  strings  in [10XNCurses.mouseEvents[110X which describes the
+  event.[133X
+  
+  [33X[0;0Y[13XSuggestion:[113X  Always  make the use of the mouse optional in your application.
+  Allow  the  user  to switch mouse usage on and off while your application is
+  running.  Some users may not like to give mouse control to your application,
+  for  example  the  standard cut and paste functionality cannot be used while
+  mouse events are catched.[133X
+  
+  [1X2.2-11 NCurses.SaveWin[101X
+  
+  [29X[2XNCurses.SaveWin[102X( [3Xwin[103X ) [32X function
+  [29X[2XNCurses.StringsSaveWin[102X( [3Xcont[103X ) [32X function
+  [29X[2XNCurses.RestoreWin[102X( [3Xwin[103X, [3Xcont[103X ) [32X function
+  [29X[2XNCurses.ShowSaveWin[102X( [3Xcont[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya [5XGAP[105X object describing the contents of a window.[133X
+  
+  [33X[0;0YThese  functions  can  be  used  to save and restore the contents of [10Xncurses[110X
+  windows.  [2XNCurses.SaveWin[102X  returns  a  list [10X[nrows, ncols, chars][110X giving the
+  number  of  rows,  number  of columns, and a list of integers describing the
+  content  of  window  [3Xwin[103X.  The  integers in the latter contain the displayed
+  characters plus the attributes for the display.[133X
+  
+  [33X[0;0YThe  function  [2XNCurses.StringsSaveWin[102X  translates  data  [3Xcont[103X in form of the
+  output  of [2XNCurses.SaveWin[102X to a list of [10Xnrows[110X strings giving the text of the
+  rows  of  the  saved  window,  and ignoring the attributes. You can view the
+  result with [2XNCurses.Pager[102X ([14X3.1-4[114X).[133X
+  
+  [33X[0;0YThe  argument  [3Xcont[103X for [2XNCurses.RestoreWin[102X must be of the same format as the
+  output  of [2XNCurses.SaveWin[102X. The content of the saved window is copied to the
+  window [3Xwin[103X, starting from the top-left corner as much as it fits.[133X
+  
+  [33X[0;0YThe  utility  [2XNCurses.ShowSaveWin[102X  can  be  used  to  display  the output of
+  [2XNCurses.SaveWin[102X (as much of the top-left corner as fits on the screen).[133X
+  

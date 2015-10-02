@@ -1,0 +1,553 @@
+  
+  [1X1 [33X[0;0YThe [5XEDIM[105X[101X[1X-Package[133X[101X
+  
+  [33X[0;0Y[13X(Elementary Divisors and Integer Matrices, by Frank Lübeck)[113X[133X
+  
+  [33X[0;0YThis  chapter  describes the functions defined in the [5XGAP[105X4 package [5XEDIM[105X. The
+  main  functions implement variants of an algorithm for computing for a given
+  prime  [22Xp[122X  the [22Xp[122X-parts of the elementary divisors of an integer matrix. These
+  algorithms  use  a  [22Xp[122X-adic method and are described by the author in [Lüb02]
+  (see [2XElementaryDivisorsPPartRk[102X ([14X1.2-1[114X)).[133X
+  
+  [33X[0;0YThese  functions  were  already  applied  to  integer  matrices of dimension
+  greater  than  [22X11000[122X  (which  had many non-trivial elementary divisors which
+  were products of small primes).[133X
+  
+  [33X[0;0YFurthermore  there  are functions for finding the biggest elementary divisor
+  of  an  invertible  integer  matrix and the inverse of a rational invertible
+  matrix (see [2XExponentSquareIntMatFullRank[102X ([14X1.3-3[114X) and [2XInverseRatMat[102X ([14X1.3-1[114X)).
+  These algorithms use [22Xp[122X-adic approximations, explained in [14X1.7[114X.[133X
+  
+  [33X[0;0YFinally  we  distribute implementations of some other algorithms for finding
+  elementary  divisors  or  normal  forms  of  integer  matrices:  A [22Xp[122X-modular
+  algorithm     by     Havas     and     Sterling     from     [HS79]     (see
+  [2XElementaryDivisorsPPartHavasSterling[102X  ([14X1.2-2[114X))  and LLL-based algorithms for
+  extended  greatest common divisors of integers (see [2XGcdexIntLLL[102X ([14X1.5-1[114X)) and
+  for  Hermite  normal forms of integer matrices with (very nice) transforming
+  matrices (see [2XHermiteIntMatLLL[102X ([14X1.5-2[114X)).[133X
+  
+  [33X[0;0YBy  default the [5XEDIM[105X is automatically loaded by [5XGAP[105X when it is installed. If
+  the  automatic  loading  is  disabled in your installation you must load the
+  package with [10XRequirePackage("edim");[110X before its functions become available.[133X
+  
+  [33X[0;0YPlease,  send me an e-mail ([7Xmailto:Frank.Luebeck@Math.RWTH-Aachen.De[107X) if you
+  have any questions, remarks, suggestions, etc. concerning this mini-package.
+  Also, I would like to hear about applications of this package.[133X
+  
+  [33X[0;0YFrank Lübeck[133X
+  
+  
+  [1X1.1 [33X[0;0YInstallation of the [5XEDIM[105X[101X[1X package[133X[101X
+  
+  [33X[0;0YTo  install this package first unpack it inside some GAP root directory into
+  the  subdirectory [11Xpkg/edim[111X (see [14X'Reference: Installing a GAP Package'[114X). Then
+  the  [5XEDIM[105X  package can already be loaded and used. But we strongly recommend
+  to  compile  a  kernel  function  as well during installation, otherwise the
+  function [2XElementaryDivisorsPPartRkExpSmall[102X ([14X1.2-1[114X) will not be available.[133X
+  
+  [33X[0;0YTo  install  the  kernel  function go to the directory [11Xpkg/edim[111X to which the
+  package was extracted and call[133X
+  
+  [33X[0;0Y[10X/bin/sh ./configure [path] [CONFIGNAME=...][110X[133X
+  
+  [33X[0;0Ywhere  [10Xpath[110X  is  a  path  to  the main [5XGAP[105X root directory (if not given, the
+  default [11X../..[111X is assumed). If you have installed several GAP kernels you can
+  compile  the corresponding [5XEDIM[105X kernel function by specifying the [10XCONFIGNAME[110X
+  that was used to configure that kernel.[133X
+  
+  [33X[0;0YAfterwards call [10Xmake[110X to compile a binary file.[133X
+  
+  [33X[0;0YIf you have installed several GAP kernels repeat these two steps for each of
+  them,  using  the  various  values  of [10XCONFIGNAME[110X. You can run a test of the
+  installation by typing [10Xmake test[110X.[133X
+  
+  [1X1.1-1 InfoEDIM[101X
+  
+  [29X[2XInfoEDIM[102X[32X info class
+  
+  [33X[0;0YThis  is  an  [9XInfo[109X class for the [5XEDIM[105X-package. By [10XSetInfoLevel(InfoEDIM, 1);[110X
+  you  can  switch on the printing of some information during the computations
+  of certain [5XEDIM[105X-functions.[133X
+  
+  
+  [1X1.2 [33X[0;0Y[22Xp[122X[101X[1X-Parts of Elementary Divisors[133X[101X
+  
+  [33X[0;0YHere we explain the main functions of the package.[133X
+  
+  [1X1.2-1 ElementaryDivisorsPPartRk[101X
+  
+  [29X[2XElementaryDivisorsPPartRk[102X( [3XA[103X, [3Xp[103X[, [3Xrk[103X] ) [32X function
+  [29X[2XElementaryDivisorsPPartRkI[102X( [3XA[103X, [3Xp[103X, [3Xrk[103X ) [32X function
+  [29X[2XElementaryDivisorsPPartRkII[102X( [3XA[103X, [3Xp[103X, [3Xrk[103X ) [32X function
+  [29X[2XElementaryDivisorsPPartRkExp[102X( [3XA[103X, [3Xp[103X, [3Xrk[103X, [3Xexp[103X ) [32X function
+  [29X[2XElementaryDivisorsPPartRkExpSmall[102X( [3XA[103X, [3Xp[103X, [3Xrk[103X, [3Xexp[103X, [3Xil[103X ) [32X function
+  
+  [33X[0;0YThese  functions  return a list [22X[m_1, m_2, ..., m_r][122X where [22Xm_i[122X is the number
+  of    nonzero   elementary   divisors   of   [3XA[103X   divisible   by   [22X[3Xp[103X^i[122X   (see
+  [2XElementaryDivisorsMat[102X ([14XReference: ElementaryDivisorsMat[114X) for a definition of
+  the elementary divisors).[133X
+  
+  [33X[0;0YThe algorithms for these functions are described in [Lüb02].[133X
+  
+  [33X[0;0Y[3XA[103X must be a matrix with integer entries, [3Xp[103X a prime, and [3Xrk[103X the rank of [3XA[103X (as
+  rational  matrix). In the first version of the command [3Xrk[103X is computed, if it
+  is not given.[133X
+  
+  [33X[0;0YThe  first version of the command delegates its job to the fourth version by
+  trying growing values for [3Xexp[103X, see below.[133X
+  
+  [33X[0;0YThe  second  and  third  versions  implement the main algorithm described in
+  [Lüb02]  and  a  variation.  Here [2XElementaryDivisorsPPartRkII[102X has a bit more
+  overhead,  but  can  be advantageous because the intermediate entries during
+  the computation can be much smaller.[133X
+  
+  [33X[0;0YIn  the  fourth  form  [3Xexp[103X must be an upper bound for the highest power of [3Xp[103X
+  appearing  in  an elementary divisor of [3XA[103X. This information allows reduction
+  of matrix entries modulo [22X[3Xp[103X^[3Xexp[103X[122X during the computation.[133X
+  
+  [33X[0;0YIf  [3Xexp[103X  is  too  small  or the given [3Xrk[103X is not correct the function returns
+  `fail'.[133X
+  
+  [33X[0;0YAs  long as [22X[3Xp[103X^[3Xexp[103X[122X is smaller than [22X2^28[122X and [22X[3Xp[103X^[3Xexp[103X + 2[122X is smaller than [22X2^31[122X we
+  use  internally  a  kernel  function  which can also be used directly in the
+  fifth  form  of the command. There [3Xil[103X can be [22X0[122X or [22X1[122X where in the second case
+  some information is printed during the computation.[133X
+  
+  [33X[0;0YThis  last  form  of  the  function was already succesfully applied to dense
+  matrices of rank up to [22X11000[122X.[133X
+  
+  [33X[0;0YNote  that  you  have  to  compile  a  file  (see [14X1.1[114X) while installing this
+  package, if you want to have this kernel function available.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage("edim",  "tst/mat");[127X[104X
+    [4X[28XReading 242x242 integer matrix 'mat' with elementary divisors 'eldiv'.[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XElementaryDivisorsPPartRkI(mat, 2, 242); time; # mat has full rank[127X[104X
+    [4X[28X[ 94, 78, 69, 57, 23, 23, 9, 2, 2, 0 ][128X[104X
+    [4X[28X490[128X[104X
+    [4X[25Xgap>[125X [27XElementaryDivisorsPPartRkExpSmall(mat, 2, 242, 10, 0); time;[127X[104X
+    [4X[28X[ 94, 78, 69, 57, 23, 23, 9, 2, 2, 0 ][128X[104X
+    [4X[28X10[128X[104X
+  [4X[32X[104X
+  
+  [1X1.2-2 ElementaryDivisorsPPartHavasSterling[101X
+  
+  [29X[2XElementaryDivisorsPPartHavasSterling[102X( [3XA[103X, [3Xp[103X, [3Xd[103X ) [32X function
+  
+  [33X[0;0YFor  an  integer  matrix  [3XA[103X and a prime [3Xp[103X this function returns a list [22X[m_1,
+  m_2,  ...,  m_r][122X where [22Xm_i[122X is the number of nonzero elementary divisors of [3XA[103X
+  divisible by [22X[3Xp[103X^i[122X.[133X
+  
+  [33X[0;0YAn  upper  bound  [3Xd[103X  for  the  highest power of [3Xp[103X appearing in an elementary
+  divisor  of  [3XA[103X  must  be  given.  Smaller  [3Xd[103X  improve the performance of the
+  algorithm considerably.[133X
+  
+  [33X[0;0YThis is an implementation of the modular algorithm described in [HS79].[133X
+  
+  [33X[0;0YWe  added  a slight improvement: we divide the considered submatrices by the
+  [3Xp[103X-part  of  the  greatest  common  divisor  of  all entries (and lower the [3Xd[103X
+  appropriately).  This reduces the size of the entries and often shortens the
+  pivot search.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage("edim",  "tst/mat");[127X[104X
+    [4X[28XReading 242x242 integer matrix 'mat' with elementary divisors 'eldiv'.[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XElementaryDivisorsPPartHavasSterling(mat, 2, 10); time;[127X[104X
+    [4X[28X[ 94, 78, 69, 57, 23, 23, 9, 2, 2 ][128X[104X
+    [4X[28X1260[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X1.3 [33X[0;0YInverse of Rational Matrices[133X[101X
+  
+  [1X1.3-1 InverseRatMat[101X
+  
+  [29X[2XInverseRatMat[102X( [3XA[103X[, [3Xp[103X] ) [32X function
+  
+  [33X[0;0YThis  function returns the inverse of an invertible matrix over the rational
+  numbers.[133X
+  
+  [33X[0;0YIt  first  computes  the  inverse  modulo some prime [3Xp[103X, computes from this a
+  [3Xp[103X-adic  approximation  to  the  inverse  and finally constructs the rational
+  entries from their [3Xp[103X-adic approximations. See section [14X1.7[114X for more details.[133X
+  
+  [33X[0;0YThis  seems  to  be better than [5XGAP[105X's standard Gauß algorithm ([10XA^-1[110X) already
+  for   small   matrices.   (Try,  e.g.,  [10XRandomMat(20,20,[-10000..10000])[110X  or
+  [10XRandomMat(100,100)[110X.)[133X
+  
+  [33X[0;0YThe optional argument [3Xp[103X should be a prime such that [3XA[103X modulo [3Xp[103X is invertible
+  (default  is [22X[3Xp[103X=251[122X). If [3XA[103X is not invertible modulo [3Xp[103X then [3Xp[103X is automatically
+  replaced by the next prime.[133X
+  
+  [1X1.3-2 RationalSolutionIntMat[101X
+  
+  [29X[2XRationalSolutionIntMat[102X( [3XA[103X, [3Xv[103X[, [3Xp[103X[, [3XinvA[103X]] ) [32X function
+  
+  [33X[0;0YThis function returns the solution [22Xx[122X of the system of linear equations [22Xx [3XA[103X =
+  [3Xv[103X[122X.[133X
+  
+  [33X[0;0YHere,  [3XA[103X  must be a matrix with integer entries which is invertible over the
+  rationals  and  [3Xv[103X  must  be a vector with integer entries of the appropriate
+  length.[133X
+  
+  [33X[0;0YThe optional arguments are a prime [3Xp[103X such that [22X[3XA[103X mod p[122X is invertible (if not
+  given, [22Xp = 251[122X is assumed) and the inverse [3XinvA[103X of [22X[3XA[103X mod p[122X.[133X
+  
+  [33X[0;0YThe solution is computed via [22Xp[122X-adic approximation as explained in [14X1.7[114X.[133X
+  
+  [1X1.3-3 ExponentSquareIntMatFullRank[101X
+  
+  [29X[2XExponentSquareIntMatFullRank[102X( [3XA[103X[, [3Xp[103X[, [3Xnr[103X]] ) [32X function
+  
+  [33X[0;0YThis  function  returns  the  biggest elementary divisor of a square integer
+  matrix [3XA[103X of full rank.[133X
+  
+  [33X[0;0YFor  such  a  matrix  [3XA[103X the least common multiple of the denominators of all
+  entries of the inverse matrix [22X[3XA[103X^-1[122X is exactly the biggest elementary divisor
+  of [3XA[103X.[133X
+  
+  [33X[0;0YThis  function  is  implemented  by  a  slight modification of [2XInverseRatMat[102X
+  ([14X1.3-1[114X). The third argument [3Xnr[103X tells the function to return the least common
+  multiple  of  the  first  [3Xnr[103X  rows of the rational inverse matrix only. Very
+  often  the  function will already return the biggest elementary divisor with
+  [22X[3Xnr[103X=2[122X  or  [22X3[122X  (and the command without this argument would spend most time in
+  checking, that this is correct).[133X
+  
+  [33X[0;0YThe optional argument [3Xp[103X should be a prime such that [3XA[103X modulo [3Xp[103X is invertible
+  (default  is [22X[3Xp[103X=251[122X). If [3XA[103X is not invertible modulo [3Xp[103X then [3Xp[103X is automatically
+  replaced by the next prime.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage("edim",  "tst/mat");[127X[104X
+    [4X[28XReading 242x242 integer matrix 'mat' with elementary divisors 'eldiv'.[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xinv := InverseRatMat(mat);; time;                      [127X[104X
+    [4X[28X840[128X[104X
+    [4X[25Xgap>[125X [27XExponentSquareIntMatFullRank(mat, 101, 3); # same as without the `3'[127X[104X
+    [4X[28X115200[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X1.4 [33X[0;0YAll Elementary Divisors Using p-adic Method[133X[101X
+  
+  [33X[0;0YIn  the  following  two  functions  we put things together. In particular we
+  handle  the  prime  parts  of the elementary divisors efficiently for primes
+  appearing  with  low  powers  in the highest elementary divisor respectively
+  determinant divisor.[133X
+  
+  [1X1.4-1 ElementaryDivisorsSquareIntMatFullRank[101X
+  
+  [29X[2XElementaryDivisorsSquareIntMatFullRank[102X( [3XA[103X ) [32X function
+  
+  [33X[0;0YThis  function  returns  a list of nonzero elementary divisors of an integer
+  matrix [3XA[103X.[133X
+  
+  [33X[0;0YHere   we   start   with   computing  the  biggest  elementary  divisor  via
+  [2XExponentSquareIntMatFullRank[102X ([14X1.3-3[114X). If it runs into a problem because [3XA[103X is
+  singular  modulo  a  choosen  prime (it starts by default with 251) then the
+  prime is automatically replaced by the next one.[133X
+  
+  [33X[0;0YThe  rest  is  done  using  [2XElementaryDivisorsPPartRkExp[102X ([14X1.2-1[114X) and [2XRankMod[102X
+  ([14X1.6-5[114X).[133X
+  
+  [33X[0;0YThe  function  fails  if the biggest elementary divisor cannot be completely
+  factored  and  the  non-factored  part  is  not  a  divisor  of  the biggest
+  elementary divisor only.[133X
+  
+  [33X[0;0YNote  that  this  function  may for many matrices not be the best choice for
+  computing  all  elementary  divisors.  You  may  first  try the standard [5XGAP[105X
+  library   routines   for   Smith  normal  form  instead  of  this  function.
+  Nevertheless  remember  [2XElementaryDivisorsSquareIntMatFullRank[102X  for hard and
+  big examples. It is particularly good when the largest elementary divisor is
+  a very small factor of the determinant.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XCollected(ElementaryDivisorsSquareIntMatFullRank(mat));      [127X[104X
+    [4X[28X[ [ 1, 49 ], [ 3, 99 ], [ 6, 7 ], [ 30, 9 ], [ 60, 9 ], [ 120, 2 ], [128X[104X
+    [4X[28X  [ 360, 10 ], [ 720, 22 ], [ 3600, 12 ], [ 14400, 14 ], [128X[104X
+    [4X[28X  [ 28800, 7 ], [ 115200, 2 ] ][128X[104X
+    [4X[25Xgap>[125X [27Xtime;[127X[104X
+    [4X[28X860[128X[104X
+    [4X[25Xgap>[125X [27Xlast2 = Collected(DiagonalOfMat(NormalFormIntMat(mat, 1).normal));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xtime;[127X[104X
+    [4X[28X5170[128X[104X
+  [4X[32X[104X
+  
+  [1X1.4-2 ElementaryDivisorsIntMatDeterminant[101X
+  
+  [29X[2XElementaryDivisorsIntMatDeterminant[102X( [3XA[103X, [3Xdet[103X[, [3Xrk[103X] ) [32X function
+  
+  [33X[0;0YThis  function  returns  a list of nonzero elementary divisors of an integer
+  matrix [3XA[103X.[133X
+  
+  [33X[0;0YHere  [3Xdet[103X  must be an integer which is a multiple of the biggest determinant
+  divisor of [3XA[103X. If the matrix does not have full rank then its rank [3Xrk[103X must be
+  given, too.[133X
+  
+  [33X[0;0YThe argument [3Xdet[103X can be given in the form of [10XCollected(FactorsInt([3Xdet[103X[10X))[110X.[133X
+  
+  [33X[0;0YThis function handles prime divisors of [3Xdet[103X with multiplicity smaller than 4
+  specially,    for   the   other   prime   divisors   [22Xp[122X   it   delegates   to
+  [2XElementaryDivisorsPPartRkExp[102X   ([14X1.2-1[114X)   where   the  [3Xexp[103X  argument  is  the
+  multiplicity  of  the  [22Xp[122X in [3Xdet[103X. (Note that this is not very good when [22Xp[122X has
+  actually a much smaller multiplicity in the largest elementary divisor.)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage("edim",  "tst/mat");[127X[104X
+    [4X[28XReading 242x242 integer matrix 'mat' with elementary divisors 'eldiv'.[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27X# not so good:[127X[104X
+    [4X[25Xgap>[125X [27XElementaryDivisorsIntMatDeterminant(mat,Product(eldiv)) = [127X[104X
+    [4X[25X>[125X [27XConcatenation([1..49]*0+1, eldiv); time;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28X5490[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X1.5 [33X[0;0YGcd and Normal Forms Using LLL[133X[101X
+  
+  [33X[0;0YThe   [5XEDIM[105X-mini   package  also  contains  implementations  of  an  extended
+  Gcd-algorithm for integers and a Hermite and Smith normal form algorithm for
+  integer  matrices  using LLL-techiques. They are well described in the paper
+  [HMM98] by Havas, Majewski and Matthews.[133X
+  
+  [33X[0;0YThey  are particularly useful if one wants to have the normal forms together
+  with  transforming  matrices. These transforming matrices have spectacularly
+  nice  (i.e.,  [21Xsmall[121X) entries in cases of input matrices which are non-square
+  or not of full rank (otherwise the transformation to the Hermite normal form
+  is unique).[133X
+  
+  [33X[0;0YIn detail:[133X
+  
+  [1X1.5-1 GcdexIntLLL[101X
+  
+  [29X[2XGcdexIntLLL[102X( [3Xn1[103X, [3Xn2[103X, [3X...[103X ) [32X function
+  
+  [33X[0;0YThis  function returns for integers [22X[3Xn1[103X, [3Xn2[103X, ...[122X a list [22X[g, [c_1, c_2, ...]][122X,
+  where [22Xg = c_1[3Xn1[103X + c_2[3Xn2[103X + ...[122X is the greatest common divisor of the [3Xni[103X. Here
+  all the [22Xc_i[122X are usually very small.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XGcdexIntLLL( 517, 244, -304, -872, -286, 854, 866, 224, -765, -38);[127X[104X
+    [4X[28X[ 1, [ 0, 0, 0, 0, 1, 0, 1, 1, 1, 1 ] ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.5-2 HermiteIntMatLLL[101X
+  
+  [29X[2XHermiteIntMatLLL[102X( [3XA[103X ) [32X function
+  
+  [33X[0;0YThis  returns  the  Hermite  normal form of an integer matrix [3XA[103X and uses the
+  LLL-algorithm to avoid entry explosion.[133X
+  
+  [1X1.5-3 HermiteIntMatLLLTrans[101X
+  
+  [29X[2XHermiteIntMatLLLTrans[102X( [3XA[103X ) [32X function
+  
+  [33X[0;0YThis function returns a pair of matrices [22X[H, L][122X where [22XH = L [3XA[103X[122X is the Hermite
+  normal  form  of  an  integer  matrix  [3XA[103X. The transforming matrix [22XL[122X can have
+  surprisingly small entries.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage("edim",  "tst/mat2");[127X[104X
+    [4X[28XReading 34x34 integer matrix 'mat2' with elementary divisors 'eldiv2'.[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xtr := HermiteIntMatLLLTrans(mat2);; Maximum(List(Flat(tr[2]), AbsInt));[127X[104X
+    [4X[28X606[128X[104X
+    [4X[25Xgap>[125X [27Xtr[2]*mat2 = tr[1];                                                [127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X1.5-4 SmithIntMatLLL[101X
+  
+  [29X[2XSmithIntMatLLL[102X( [3XA[103X ) [32X function
+  
+  [33X[0;0YThis function returns the Smith normal form of an integer matrix [3XA[103X using the
+  LLL-algorithm to avoid entry explosion.[133X
+  
+  [1X1.5-5 SmithIntMatLLLTrans[101X
+  
+  [29X[2XSmithIntMatLLLTrans[102X( [3XA[103X ) [32X function
+  
+  [33X[0;0YThis  function returns [22X[S, L, R][122X where [22XS = L [3XA[103X R[122X is the Smith normal form of
+  an integer matrix [3XA[103X.[133X
+  
+  [33X[0;0YWe  apply  the  algorithm  for  Hermite normal form several times to get the
+  Smith  normal  form,  that  is  not  in  the paper [HMM98]. The transforming
+  matrices need not be as nice as for the Hermite normal form.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage("edim",  "tst/mat2");[127X[104X
+    [4X[28XReading 34x34 integer matrix 'mat2' with elementary divisors 'eldiv2'.[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xtr := SmithIntMatLLLTrans(mat2);;[127X[104X
+    [4X[25Xgap>[125X [27Xtr[2] * mat2 * tr[3] = tr[1];    [127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X1.6 [33X[0;0YUtility Functions from the [5XEDIM[105X[101X[1X-package[133X[101X
+  
+  [1X1.6-1 RatNumberFromModular[101X
+  
+  [29X[2XRatNumberFromModular[102X( [3Xn[103X, [3Xk[103X, [3Xl[103X, [3Xx[103X ) [32X function
+  
+  [33X[0;0YThis function returns [22Xr/s = [3Xx[103X mod [3Xn[103X[122X, if it exists. More precisely:[133X
+  
+  [33X[0;0Y[3Xn[103X,  [3Xk[103X, [3Xl[103X must be positive integers with [22X2[3Xk[103X[3Xl[103X ≤ [3Xn[103X[122X and [3Xx[103X an integer with [22X-[3Xn[103X/2 <
+  [3Xx[103X ≤ [3Xn[103X/2[122X. If it exists this function returns a rational number [22Xr/s[122X with [22X0 < s
+  < [3Xl[103X[122X, [22Xgcd(s, [3Xn[103X) = 1[122X, [22X-[3Xk[103X < r < [3Xk[103X[122X and [22Xr/s[122X congruent to [22X[3Xx[103X mod [3Xn[103X[122X (i.e., [22X[3Xn[103X ∣ r - s
+  [3Xx[103X[122X).  Such  an [22Xr/s[122X is unique. The function returns [9Xfail[109X if such a number does
+  not exist.[133X
+  
+  [1X1.6-2 InverseIntMatMod[101X
+  
+  [29X[2XInverseIntMatMod[102X( [3XA[103X, [3Xp[103X ) [32X function
+  
+  [33X[0;0YThis  function  returns  an  inverse  matrix  modulo a prime [3Xp[103X or [9Xfail[109X. More
+  precisely:[133X
+  
+  [33X[0;0Y[3XA[103X  must  be an integer matrix and [3Xp[103X a prime such that [3XA[103X is invertible modulo
+  [3Xp[103X.  This  function  returns  an integer matrix [3Xinv[103X with entries in the range
+  [22X]-[3Xp[103X/2 ... [3Xp[103X/2][122X such that [3Xinv[103X[3XA[103X reduced modulo p is the identity matrix.[133X
+  
+  [33X[0;0YIt  returns  [9Xfail[109X  if  the inverse modulo [3Xp[103X does not exist. This function is
+  particularly fast for primes smaller 256.[133X
+  
+  [1X1.6-3 HadamardBoundIntMat[101X
+  
+  [29X[2XHadamardBoundIntMat[102X( [3XA[103X ) [32X function
+  
+  [33X[0;0YThe Hadamard bound for a square integer matrix [3XA[103X is the product of Euclidean
+  norms  of  the  nonzero rows (or columns) of [3XA[103X. It is an upper bound for the
+  absolute value of the determinant of [3XA[103X.[133X
+  
+  [1X1.6-4 CheapFactorsInt[101X
+  
+  [29X[2XCheapFactorsInt[102X( [3Xn[103X[, [3Xnr[103X] ) [32X function
+  
+  [33X[0;0YThis  function  returns  a  list of factors of an integer [3Xn[103X, including [21Xsmall[121X
+  prime  factors  -  here the optional argument [3Xnr[103X is the number of iterations
+  for `FactorsRho' (default is 2000).[133X
+  
+  [33X[0;0YThis  is  only  a  slight  modification  of  the library function [2XFactorsInt[102X
+  ([14XReference: FactorsInt[114X) which avoids an error message when the number is not
+  completely factored.[133X
+  
+  [1X1.6-5 RankMod[101X
+  
+  [29X[2XRankMod[102X( [3XA[103X, [3Xp[103X ) [32X function
+  
+  [33X[0;0YThis  function returns the rank of an integer matrix [3XA[103X modulo [3Xp[103X. Here [3Xp[103X must
+  not  necessarily  be  a  prime.  If  it  is not and this function returns an
+  integer, then this is the rank of [3XA[103X for all prime divisors of [3Xp[103X.[133X
+  
+  [33X[0;0YIf  during the computation a factorisation of [3Xp[103X is found (because some pivot
+  entry  has  nontrivial  greatest common divisor with [3Xp[103X) then the function is
+  recursively  applied to the found factors [10Xf_i[110X of [3Xp[103X. The result is then given
+  in the form [10X[[f_1, rk_1], [f_2, rk_2], ...][110X.[133X
+  
+  [33X[0;0YThe  idea  to  make  this  function useful for non primes was to use it with
+  large   factors   of  the  biggest  elementary  divisor  of  [3XA[103X  whose  prime
+  factorization cannot be found easily.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XReadPackage("edim",  "tst/mat");[127X[104X
+    [4X[28XReading 242x242 integer matrix 'mat' with elementary divisors 'eldiv'.[128X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XRankMod(mat, 5);[127X[104X
+    [4X[28X155[128X[104X
+    [4X[25Xgap>[125X [27XRankMod(mat, (2*79*4001));[127X[104X
+    [4X[28X[ [ 2, 148 ], [ 79, 242 ], [ 4001, 242 ] ][128X[104X
+  [4X[32X[104X
+  
+  
+  [1X1.7 [33X[0;0YInverseRatMat - the Algorithm[133X[101X
+  
+  [33X[0;0YThe  idea  is  to recover a rational matrix from an [22Xl[122X-adic approximation for
+  some prime [22Xl[122X. This description came out of discussions with Jürgen Müller. I
+  thank  John  Cannon for pointing out that the basic idea already appeared in
+  the paper [Dix82] of Dixon.[133X
+  
+  [33X[0;0YLet [22XA[122X be an invertible matrix over the rational numbers. By multiplying with
+  a constant we may assume that its entries are in fact integers.[133X
+  
+  [33X[0;0Y(1)  We  first  describe how to find an [22Xl[122X-adic approximation of [22XA^-1[122X. Find a
+  prime  [22Xl[122X  such that [22XA[122X is invertible modulo [22Xl[122X and let [22XB[122X be the integer matrix
+  with  entries  in  the  range  [22X]-l/2,l/2][122X  such  that [22XBA[122X is congruent to the
+  identity  matrix  modulo  [22Xl[122X.  (This  can  be  computed  fast  by  usual Gauß
+  elimination.)[133X
+  
+  [33X[0;0YNow  let  [22Xv  ∈  ℤ^r[122X be a row vector. Define two sequences [22Xv_i[122X and [22Xx_i[122X of row
+  vectors  in  [22Xℤ^r[122X  by: [22Xx_0 := 0 ∈ ℤ^r[122X, [22Xv_0 := -v[122X and for [22Xi > 0[122X set [22Xx_i[122X to the
+  vector  congruent  to  [22X-v_i-1  B[122X modulo [22Xl[122X having entries in the range [22X]-l/2,
+  l/2][122X. Then all entries of [22Xx_i A + v_i-1[122X are divisible by [22Xl[122X and we set [22Xv_i :=
+  (1/l) ⋅ (x_i A + v_i-1)[122X.[133X
+  
+  [33X[0;0YInduction  shows  that  for [22Xy_i := ∑_k=1^i l^k-1 x_k[122X we have [22Xy_i A = v + l^i
+  v_i[122X  for  all  [22Xi  ≥  0[122X.  Hence  the  sequence  [22Xy_i[122X,  [22Xi  ≥ 0[122X, gives an [22Xl[122X-adic
+  approximation to the vector [22Xy ∈ ℚ^r[122X with [22Xy A = v[122X.[133X
+  
+  [33X[0;0Y(2)  The  second  point  is  to  show  how  we  can  get the vector [22Xy[122X from a
+  sufficiently  good  approximation [22Xy_i[122X. Note that the sequence of [22Xy_i[122X becomes
+  constant  for  [22Xi  ≥  i_0[122X  if all entries of [22Xy[122X are integers of absolute value
+  smaller  than  [22Xl^i_0 / 2[122X because of our choice of representatives of residue
+  classes modulo [22Xl[122X in the interval [22X]-l/2, l/2][122X.[133X
+  
+  [33X[0;0YMore generally consider [22Xa / b ∈ ℚ[122X with [22Xb > 0[122X and [22Xa, b[122X coprime. Then there is
+  for  each [22Xn ∈ ℕ[122X which is coprime to [22Xb[122X a unique [22Xc ∈ ℤ[122X with [22X-n / 2 < c ≤ n / 2[122X
+  and  [22Xa  ≡  c  b  mod  n[122X.  This  [22Xc[122X can be computed via the extended Euclidean
+  algorithm applied to [22Xb[122X and [22Xn[122X.[133X
+  
+  [33X[0;0YNow  let [22Xn, α, β ∈ ℕ[122X with [22X2 α β ≤ n[122X. Then the map [22X{a/b ∈ ℚ ∣ -α ≤ a ≤ α, 1 ≤
+  b  <  β  } → ]-n/2, n/2][122X, [22Xa/b ↦ c[122X (defined as above) is injective (since for
+  [22Xa/b[122X,  [22Xa'/b'[122X  in the above set we have [22Xa b' - a' b ≡ 0 mod n[122X if and only if [22Xa
+  b' - a' b = 0[122X).[133X
+  
+  [33X[0;0YIn  practice we can use for any [22Xc ∈ ]-n/2, n/2][122X a certain extended Euclidean
+  algorithm applied to [22Xn[122X and [22Xc[122X to decide if [22Xc[122X is in the image of the above map
+  and to find the corresponding [22Xa/b[122X if it exists.[133X
+  
+  [33X[0;0Y(3)  To  put  things together we apply (2) to the entries of the vectors [22Xy_i[122X
+  constructed  in (1), choosing [22Xn = l^i[122X, [22Xα = sqrtn/2[122X and [22Xβ = sqrtn[122X. If we have
+  found  this  way  a  candidate for [22Xy[122X we can easily check if it is correct by
+  computing  [22Xy  A[122X.  If  [22Xμ[122X  is the maximal absolute value of all numerators and
+  denominators  of  the  entries of [22Xy[122X it is clear from (2) that we will find [22Xy[122X
+  from [22Xy_i[122X if [22Xl^i > 2 μ^2[122X.[133X
+  
+  [33X[0;0Y(4)  If  we  take as [22Xv[122X in (1) to(3) all standard unit vectors we clearly get
+  the  rows  of  [22XA^-1[122X.  But  we  can do it better. Namely we can take as [22Xv[122X the
+  standard  unit  vectors  multiplied  by  the  least common multiple [22Xϵ[122X of the
+  denominators  of the already computed entries of [22XA^-1[122X. In many examples this
+  [22Xϵ[122X  actually equals [22Xϵ_r[122X after the computation of the first or first few rows.
+  Therefore  we  will  often find quickly the next row of [22XA^-1[122X already in (1),
+  because  we  find  a  [22Xv_i = 0[122X such that the sequence of [22Xy_i[122X becomes constant
+  ([22X=y[122X).[133X
+  
+  
+  [1X1.7-1 [33X[0;0YRank of Integer Matrix[133X[101X
+  
+  [33X[0;0YThe  following strategy has shown to be useful in proving that some very big
+  integer matrix is not invertible.[133X
+  
+  [30X    [33X[0;6YCheck the rank modulo some small primes, say with [2XRankMod[102X ([14X1.6-5[114X).[133X
+  
+  [30X    [33X[0;6YIf  the  rank  seems  less than the number of rows choose a prime [22Xp[122X, a
+        collection  of  lines  which  is  linearly  independent  modulo [22Xp[122X, and
+        another line linearly dependend on these. Guess that this last line is
+        also  linearly  dependend  on  the chosen collection over the rational
+        numbers (maybe check modulo several small primes).[133X
+  
+  [30X    [33X[0;6YFind  columns  of  the  collection  of  lines which give an invertible
+        matrix modulo some prime.[133X
+  
+  [30X    [33X[0;6YThen  use [2XRationalSolutionIntMat[102X ([14X1.3-2[114X) with the invertible submatrix
+        and corresponding entries of the linearly dependend row to prove this.[133X
+  
+  [33X[0;0YGuessing the rank of a matrix from the rank modulo several primes, chosing a
+  maximal  set of lines which are linearly independent modulo some primes, and
+  using  [2XRationalSolutionIntMat[102X ([14X1.3-2[114X) with the remaining lines, one may also
+  find the exact rank of a huge integer matrix.[133X
+  

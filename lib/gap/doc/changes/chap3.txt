@@ -1,0 +1,353 @@
+  
+  [1X3 [33X[0;0YChanges between [5XGAP[105X[101X[1X 4.5 and [5XGAP[105X[101X[1X 4.6[133X[101X
+  
+  [33X[0;0YThis  chapter  lists  most important changes between [5XGAP[105X 4.5.7 and [5XGAP[105X 4.6.2
+  (i.e.  between  the  last release of [5XGAP[105X 4.5 and the first public release of
+  [5XGAP[105X  4.6). It also contains information about subsequent update releases for
+  [5XGAP[105X 4.6.[133X
+  
+  
+  [1X3.1 [33X[0;0Y[5XGAP[105X[101X[1X 4.6.2 (February 2013)[133X[101X
+  
+  
+  [1X3.1-1 [33X[0;0YChanges in the core [5XGAP[105X[101X[1X system introduced in [5XGAP[105X[101X[1X 4.6[133X[101X
+  
+  [33X[0;0YImproved and extended functionality:[133X
+  
+  [30X    [33X[0;6YIt  is now possible to declare a name as an operation with two or more
+        arguments   (possibly  several  times)  and  [13XTHEN[113X  declare  it  as  an
+        attribute.  Previously this was only possible in the other order. This
+        should make the system more independent of the order in which packages
+        are loaded.[133X
+  
+  [30X    [33X[0;6YWords  in fp groups are now printed in factorised form if possible and
+        not too time-consuming, i.e. [10Xa*b*a*b*a*b[110X will be printed as [10X(a*b)^3[110X.[133X
+  
+  [30X    [33X[0;6YAdded methods to calculate Hall subgroups in nonsolvable groups.[133X
+  
+  [30X    [33X[0;6YAdded  a generic method for [2XIsPSolvable[102X ([14XReference: IsPSolvable[114X) and a
+        better  generic  method for [2XIsPNilpotent[102X ([14XReference: IsPNilpotent[114X) for
+        groups.[133X
+  
+  [30X    [33X[0;6YImprovements  to  action  homomorphisms:  image  of an element can use
+        existing  stabiliser chain of the image group (to reduce the number of
+        images   to   compute),   preimages   under  linear/projective  action
+        homomorphisms use linear algebra to avoid factorisation.[133X
+  
+  [30X    [33X[0;6YTo improve efficiency, additional code was added to make sure that the
+        [10XHomePcgs[110X   of   a   permutation   group   is   in   [10XIsPcgsPermGroupRep[110X
+        representation in more cases.[133X
+  
+  [30X    [33X[0;6YAdded  an  operation [2XSortBy[102X ([14XReference: SortBy[114X) with arguments being a
+        function  [3Xf[103X  of  one  argument and a list [3Xl[103X to be sorted in such a way
+        that [10X[3Xl[103X[10X([3Xf[103X[10X[i]) <= [3Xl[103X[10X([3Xf[103X[10X[i+1])[110X.[133X
+  
+  [30X    [33X[0;6YAdded  a  kernel  function  [10XMEET_BLIST[110X  which  returns [9Xtrue[109X if the two
+        boolean  lists  have  [9Xtrue[109X in any common position and [9Xfalse[109X otherwise.
+        This  is  useful  for  representing  subsets of a fixed set by boolean
+        lists.[133X
+  
+  [30X    [33X[0;6YWhen assigning to a position in a compressed FFE vector [5XGAP[105X now checks
+        to  see  if the value being assigned can be converted into an internal
+        FFE  element  if  it  isn't  one  already.  This  uses  new  attribute
+        [2XAsInternalFFE[102X   ([14XReference:  AsInternalFFE[114X),  for  which  methods  are
+        installed for internal FFEs, Conway FFEs and ZmodpZ objects.[133X
+  
+  [30X    [33X[0;6YReplaced  [2XViewObj[102X ([14XReference: ViewObj[114X) method for fields by [2XViewString[102X
+        ([14XReference: ViewString[114X) method to improve the way how polynomial rings
+        over algebraic extenstions of fields are displayed.[133X
+  
+  [30X    [33X[0;6YMade  the info string (optional 2nd argument to [2XInstallImmediateMethod[102X
+        ([14XReference:  InstallImmediateMethod[114X))  behave  similarly  to  the info
+        string  in  [2XInstallMethod[102X  ([14XReference:  InstallMethod[114X). In particular,
+        [2XTraceImmediateMethods[102X  ([14XReference:  TraceImmediateMethods[114X)  now always
+        prints the name of the operation.[133X
+  
+  [30X    [33X[0;6YSyntax  errors  such  as [10XUnbind(x,1)[110X had the unhelpful property that [10Xx[110X
+        got unbound before the syntax error was reported. A specific check was
+        added to catch this and similar cases a little earlier.[133X
+  
+  [30X    [33X[0;6YAllow  a [10XGAPARGS[110X parameter to the top-level [5XGAP[105X [11XMakefile[111X to pass extra
+        arguments to the [5XGAP[105X used for manual building.[133X
+  
+  [30X    [33X[0;6YAdded      an      attribute     [2XUnderlyingRingElement[102X     ([14XReference:
+        UnderlyingRingElement[114X) for Lie objects.[133X
+  
+  [30X    [33X[0;6YThe  function  [2XPrimeDivisors[102X  ([14XReference: PrimeDivisors[114X) now became an
+        attribute. [suggested by Mohamed Barakat][133X
+  
+  [30X    [33X[0;6YAdded  an  operation  [2XDistancePerms[102X  ([14XReference: DistancePerms[114X) with a
+        kernel method for internal permutations and a generic method.[133X
+  
+  [30X    [33X[0;6YAdded  a  method for [2XSubfields[102X ([14XReference: Subfields[114X) to support large
+        finite fields. [reported by Inneke van Gelder][133X
+  
+  [33X[0;0YFixed bugs which could lead to crashes:[133X
+  
+  [30X    [33X[0;6YThe  extremely  old  [10XDEBUG_DEADSONS_BAGS[110X  compile-time  option has not
+        worked  correctly  for  many years and indeed crashes [5XGAP[105X. The type of
+        bug  it  is  there  to detect has not arisen in many years and we have
+        certainly  not  used this option, so it has been removed. [Reported by
+        Volker Braun][133X
+  
+  [33X[0;0YOther fixed bugs:[133X
+  
+  [30X    [33X[0;6YScanning  of  floating  point  literals  collided with iterated use of
+        integers as record field elements in expressions like [10Xr.1.2[110X.[133X
+  
+  [30X    [33X[0;6YFixed  two  potential  problems in [10XNorSerPermPcgs[110X, one corrupting some
+        internal data and one possibly mixing up different pcgs.[133X
+  
+  [30X    [33X[0;6YFixed   a   performance   problem  with  [2XNiceMonomorphism[102X  ([14XReference:
+        NiceMonomorphism[114X). [reported by John Bamberg][133X
+  
+  [30X    [33X[0;6YFixed  a  bug  in  [2XReadCSV[102X  ([14XReference: ReadCSV[114X) that caused some [11X.csv[111X
+        files being parsed incorrectly.[133X
+  
+  [33X[0;0YNo longer supported:[133X
+  
+  [30X    [33X[0;6YThe   file   [11Xlib/consistency.g[111X,  which  contained  three  undocumented
+        auxiliary  functions,  has been removed from the library. In addition,
+        the  global  record [10XRevision[110X is now deprecated, so there is no need to
+        bind its components in [5XGAP[105X packages.[133X
+  
+  
+  [1X3.1-2 [33X[0;0YNew and updated packages since [5XGAP[105X[101X[1X 4.5.4[133X[101X
+  
+  [33X[0;0YAt  the  time of the release of [5XGAP[105X 4.5 there were 99 packages redistributed
+  with [5XGAP[105X. The first public release of [5XGAP[105X 4.6 contains 106 packages.[133X
+  
+  [33X[0;0YThe  new  packages  that  have  been  added  to the redistribution since the
+  release of [5XGAP[105X 4.5.4 are:[133X
+  
+  [30X    [33X[0;6Y[5XAutoDoc[105X   package   by  S.  Gutsche,  providing  tools  for  automated
+        generation of [5XGAPDoc[105X manuals.[133X
+  
+  [30X    [33X[0;6Y[5XCongruence[105X  package  by  A.  Konovalov,  which  provides  functions to
+        construct  various canonical congruence subgroups in [22XSL_2(ℤ)[122X, and also
+        intersections  of  a  finite  number of such subgroups, implements the
+        algorithm  for  generating  Farey symbols for congruence subgroups and
+        uses  it  to  produce  a  system  of  independent generators for these
+        subgroups.[133X
+  
+  [30X    [33X[0;6Y[5XConvex[105X package by S. Gutsche, which provides structures and algorithms
+        for convex geometry.[133X
+  
+  [30X    [33X[0;6Y[5XFloat[105X  package  by  L.  Bartholdi,  which  extends  [5XGAP[105X floating-point
+        capabilities    by   providing   new   floating-point   handlers   for
+        high-precision real, interval and complex arithmetic using MPFR, MPFI,
+        MPC   or   CXSC   external   libraries.   It   also  contains  a  very
+        high-performance  implementation  of  the LLL (Lenstra-Lenstra-Lovász)
+        lattice reduction algorithm via the external library FPLLL.[133X
+  
+  [30X    [33X[0;6Y[5XPolymakeInterface[105X  package  by T. Baechler and S. Gutsche, providing a
+        link    to    the    callable   library   of   the   [5Xpolymake[105X   system
+        ([7Xhttp://www.polymake.org[107X).[133X
+  
+  [30X    [33X[0;6Y[5XToolsForHomalg[105X   package   by   M.   Barakat,   S.   Gutsche   and  M.
+        Lange-Hegermann,  which  provides some auxiliary functionality for the
+        [5Xhomalg[105X project ([7Xhttp://homalg.math.rwth-aachen.de/[107X).[133X
+  
+  [30X    [33X[0;6Y[5XToricVarieties[105X  package  by S. Gutsche, which provides data structures
+        to  handle  toric varieties by their commutative algebra structure and
+        by their combinatorics.[133X
+  
+  [33X[0;0YFurthermore,  some  packages  have  been  upgraded  substantially  since the
+  [5XGAP[105X 4.5.4 release:[133X
+  
+  [30X    [33X[0;6YStarting  from  2.x.x, the functionality for iterated monodromy groups
+        has  been  moved  from  the  [5XFR[105X  package by L. Bartholdi to a separate
+        package     IMG     (currently     undeposited,     available     from
+        [7Xhttps://github.com/laurentbartholdi/img[107X).  This completely removes the
+        dependency  of  [5XFR[105X  on  external  library modules, and should make its
+        installation much easier.[133X
+  
+  
+  [1X3.2 [33X[0;0Y[5XGAP[105X[101X[1X 4.6.3 (March 2013)[133X[101X
+  
+  [33X[0;0YImproved functionality:[133X
+  
+  [30X    [33X[0;6YSeveral  changes were made to [2XIdentityMat[102X ([14XReference: IdentityMat[114X) and
+        [2XNullMat[102X ([14XReference: NullMat[114X). First off, the documentation was changed
+        to  properly  state  that these functions support arbitrary rings, and
+        not just fields. Also, more usage examples were added to the manual.[133X
+  
+        [33X[0;6YFor  [10XNullMat[110X, it is now also always possible to specify a ring element
+        instead  of  a  ring,  and  this  is documented. This matches existing
+        [10XIdentityMat[110X  behavior, and partially worked before (undocumented), but
+        in some cases could run into error or infinite recursion.[133X
+  
+        [33X[0;6YIn  the  other  direction,  if a finite field element, [10XIdentityMat[110X now
+        really  creates  a  matrix  over  the  smallest  field containing that
+        element.  Previously,  a  matrix  over  the  prime  field  was created
+        instead, contrary to the documentation.[133X
+  
+        [33X[0;6YFurthermore, [10XIdentityMat[110X over small finite fields is now substantially
+        faster  when  creating  matrices of large dimension (say a thousand or
+        so).[133X
+  
+        [33X[0;6YFinally,   [2XMutableIdentityMat[102X   ([14XReference:   MutableIdentityMat[114X)  and
+        [2XMutableNullMat[102X  ([14XReference:  MutableNullMat[114X)  were explicitly declared
+        obsolete  (and  may  be  removed  in  [5XGAP[105X  4.7).  They  actually  were
+        deprecated  since  [5XGAP[105X  4.1,  and their use discouraged by the manual.
+        Code  using them should switch to [2XIdentityMat[102X ([14XReference: IdentityMat[114X)
+        respectively [2XNullMat[102X ([14XReference: NullMat[114X).[133X
+  
+  [30X    [33X[0;6YTwo  new  [2XPerfectResiduum[102X  ([14XReference:  PerfectResiduum[114X)  methods were
+        added for solvable and perfect groups, handling these cases optimally.
+        Moreover,  the  existing generic method was improved by changing it to
+        use     [2XDerivedSeriesOfGroup[102X     ([14XReference:    DerivedSeriesOfGroup[114X).
+        Previously,  it  would  always compute the derived series from scratch
+        and then throw away the result.[133X
+  
+  [30X    [33X[0;6YA  new  [2XMinimalGeneratingSet[102X  ([14XReference: MinimalGeneratingSet[114X) method
+        for  groups  handled by a nice monomorphisms was added, similar to the
+        existing  [2XSmallGeneratingSet[102X  ([14XReference:  SmallGeneratingSet[114X) method.
+        This  is  useful if the nice monomorphism is already mapping into a pc
+        or pcp group.[133X
+  
+  [30X    [33X[0;6YAdded    a    special    method    for   [2XDerivedSubgroup[102X   ([14XReference:
+        DerivedSubgroup[114X) if the group is known to be abelian.[133X
+  
+  [33X[0;0YFixed bugs:[133X
+  
+  [30X    [33X[0;6YFixed  a bug in [2XPowerModInt[102X ([14XReference: PowerModInt[114X) computing [22Xr^e[122X mod
+        [22Xm[122X in a special case when [22Xe=0[122X and [22Xm=0[122X. [Reported by Ignat Soroko][133X
+  
+  [30X    [33X[0;6Y[2XCoefficientsQadic[102X ([14XReference: CoefficientsQadic[114X) now better checks its
+        arguments  to  avoid  an  infinite  loop when being asked for a [3Xq[103X-adic
+        representation for [22Xq=1[122X. [Reported by Ignat Soroko][133X
+  
+  [30X    [33X[0;6YMethods    for    [10XSylowSubgroupOp[110X   (see   [2XSylowSubgroup[102X   ([14XReference:
+        SylowSubgroup[114X)) for symmetric and alternating group did not always set
+        [2XIsPGroup[102X    ([14XReference:    IsPGroup[114X)   and   [2XPrimePGroup[102X   ([14XReference:
+        PrimePGroup[114X) for the returned Sylow subgroup.[133X
+  
+  [30X    [33X[0;6YDisplay  of  matrices  consisting  of Conway field elements (which are
+        displayed as polynomials) did not print constant 1 terms.[133X
+  
+  [30X    [33X[0;6YAdded  an  extra  check  and  a  better error message in the method to
+        access  [13Xnatural[113X  generators  of  domains  using  the  [10X.[110X  operator (see
+        [2XGeneratorsOfDomain[102X ([14XReference: GeneratorsOfDomain[114X)).[133X
+  
+  [30X    [33X[0;6YTrying  to  solve  the  word  problem in an fp group where one or more
+        generators  has  a name of more than one alphabetic character led to a
+        break loop.[133X
+  
+  [30X    [33X[0;6YProvided the default method for [2XAbsoluteIrreducibleModules[102X ([14XReference:
+        AbsoluteIrreducibleModules[114X)  as a temporary workaround for the problem
+        which  may  cause  returning  wrong results or producing an error when
+        being called for a non-prime field.[133X
+  
+  [30X    [33X[0;6YA bug in the [5XGAP[105X kernel caused [10XRNamObj[110X to error out when called with a
+        string  that had the [2XIsSSortedList[102X ([14XReference: IsSSortedList[114X) property
+        set  (regardless of whether it was set to [9Xtrue[109X or [9Xfalse[109X). This in turn
+        would  lead  to  strange  (and inappropriate) errors when using such a
+        string to access entries of a record.[133X
+  
+  [30X    [33X[0;6Y[5XGAP[105X can store vectors over small finite fields (size at most 256) in a
+        special  internal  data  representation where each entry of the vector
+        uses  exactly  one byte. Due to an off-by-one bug, the case of a field
+        with  exactly  256 elements was not handled properly. As a result, [5XGAP[105X
+        failed  to  convert a vector to the special data representation, which
+        in  some  situations  could  lead to a crash. The off-by-one error was
+        fixed and now vectors over [22XGF(256)[122X work as expected.[133X
+  
+  [30X    [33X[0;6YA  bug  in  the  code  for accessing sublist via the [10Xlist{poss}[110X syntax
+        could lead to [5XGAP[105X crashing. Specifically, if the list was a compressed
+        vector  over  a finite field, and the sublist syntax was nested, as in
+        [10Xvec{poss1}{poss2}[110X.  This  now  correctly  triggers an error instead of
+        crashing.[133X
+  
+  [33X[0;0YNew packages added for the redistribution with [5XGAP[105X:[133X
+  
+  [30X    [33X[0;6Y[5XSpinSym[105X  package  by  L.  Maas,  which contains Brauer tables of Schur
+        covers  of  symmetric and alternating groups and provides some related
+        functionalities.[133X
+  
+  
+  [1X3.3 [33X[0;0Y[5XGAP[105X[101X[1X 4.6.4 (April 2013)[133X[101X
+  
+  [33X[0;0YNew functionality:[133X
+  
+  [30X    [33X[0;6YNew  command line option [10X-O[110X was introduced to disable loading obsolete
+        variables.  This  option  may be used, for example, to check that they
+        are  not  used  in  a  [5XGAP[105X  package or one's own [5XGAP[105X code. For further
+        details  see  [14XReference:  options[114X  and [14XReference: Replaced and Removed
+        Command Names[114X.[133X
+  
+  [33X[0;0YFixed bugs which could lead to incorrect results:[133X
+  
+  [30X    [33X[0;6YFixed     the     bug     in    [2XNewmanInfinityCriterion[102X    ([14XReference:
+        NewmanInfinityCriterion[114X)  which  may  cause  returning [9Xtrue[109X instead of
+        [9Xfalse[109X. [Reported by Lev Glebsky][133X
+  
+  [33X[0;0YFixed bugs which could lead to crashes:[133X
+  
+  [30X    [33X[0;6YFixed  the  kernel method for [2XRemove[102X ([14XReference: Remove[114X) which did not
+        raise  an  error in case of empty lists, but corrupted the object. The
+        error  message  in  a  library  method  is also improved. [Reported by
+        Roberto Ràdina][133X
+  
+  [33X[0;0YFixed bugs that could lead to break loops:[133X
+  
+  [30X    [33X[0;6YFixed  requirements  in  a  method to multiply a list and an algebraic
+        element. [Reported by Sebastian Gutsche][133X
+  
+  [30X    [33X[0;6YFixed  a  bug  in [2XNaturalCharacter[102X ([14XReference: NaturalCharacter (for a
+        group)[114X)  entering  a  break  loop  when being called on a homomorphism
+        whose  image  is  not  a  permutation  group.  [Reported  by Sebastian
+        Gutsche][133X
+  
+  [30X    [33X[0;6YFixed     a     bug     in     [2XExponentsConjugateLayer[102X     ([14XReference:
+        ExponentsConjugateLayer[114X)  which occured, for example, in some calls of
+        [2XSubgroupsSolvableGroup[102X  ([14XReference:  SubgroupsSolvableGroup[114X) [Reported
+        by Ramon Esteban-Romero][133X
+  
+  [30X    [33X[0;6YFixed    a    problem    with   displaying   function   fields,   e.g.
+        [10XField(Indeterminate(Rationals,"x"))[110X. [Reported by Jan Willem Knopper][133X
+  
+  [30X    [33X[0;6YFixed  two bugs in the code for [2XNaturalHomomorphismByIdeal[102X ([14XReference:
+        NaturalHomomorphismByIdeal[114X)  for polynomial rings. [Reported by Martin
+        Leuner][133X
+  
+  [30X    [33X[0;6YAdded missing method for [2XString[102X ([14XReference: String[114X) for [10X-infinity[110X.[133X
+  
+  [30X    [33X[0;6YFixed  the  bug  with  [2XONanScottType[102X  ([14XReference:  ONanScottType[114X)  not
+        recognising product action properly in some cases.[133X
+  
+  [30X    [33X[0;6YThe  method  for  [2XSlotUsagePattern[102X  ([14XReference:  SlotUsagePattern[114X) for
+        straight  line  programs  had  a  bug which triggered an error, if the
+        straight line program contained unnecessary steps.[133X
+  
+  
+  [1X3.4 [33X[0;0Y[5XGAP[105X[101X[1X 4.6.5 (July 2013)[133X[101X
+  
+  [33X[0;0YImproved functionality:[133X
+  
+  [30X    [33X[0;6Y[2XTraceMethods[102X    ([14XReference:   TraceMethods   (for   operations)[114X)   and
+        [2XUntraceMethods[102X ([14XReference: UntraceMethods (for operations)[114X) now better
+        check  their  arguments  and provide a sensible error message if being
+        called  without arguments. Also, both variants of calling them are now
+        documented.[133X
+  
+  [30X    [33X[0;6YLibrary  methods  for  [2XSortex[102X  ([14XReference: Sortex[114X) are now replaced by
+        faster  ones  using  the kernel [2XSortParallel[102X ([14XReference: SortParallel[114X)
+        functionality instead of making expensive zipped lists.[133X
+  
+  [33X[0;0YFixed bugs which could lead to incorrect results:[133X
+  
+  [30X    [33X[0;6Y[2XIntHexString[102X   ([14XReference:  IntHexString[114X)  wrongly  produced  a  large
+        integer  when  there  were  too  many  leading zeros. [Reported by Joe
+        Bohanon][133X
+  
+  [33X[0;0YFixed bugs that could lead to break loops:[133X
+  
+  [30X    [33X[0;6YA    bug    that    may    occur   in   some   cases   while   calling
+        [2XTransitiveIdentification[102X     ([14XReference:    TransitiveIdentification[114X).
+        [Reported by Izumi Miyamoto][133X
+  
+  [30X    [33X[0;6YThe new code for semidirect products of permutation groups, introduced
+        in  [5XGAP[105X  4.6,  had  a  bug  which  was causing problems for [2XProjection[102X
+        ([14XReference: Projection[114X). [Reported by Graham Ellis][133X
+  

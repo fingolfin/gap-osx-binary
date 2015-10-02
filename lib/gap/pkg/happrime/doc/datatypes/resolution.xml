@@ -1,0 +1,248 @@
+<!-- 
+  HAPPRIME - resolution.xml.in
+  Function documentation template file for HAPprime
+  Paul Smith
+
+  Copyright (C)  2007-2008
+  Paul Smith
+  National University of Ireland Galway
+
+  $Id: functions.xml.in 200 2008-02-05 14:29:47Z pas $
+-->
+
+<!-- ********************************************************** -->
+<Chapter  Label="Resolution">
+  <Heading>Resolutions</Heading>
+
+  A free &FG;-resolution of an &FG;-module <M>M</M> is a sequence of module 
+  homomorphisms
+  <Alt Only="LaTeX">
+    <Display>
+      \ldots \rightarrow M_{n+1} \rightarrow M_n \rightarrow M_{n-1} \rightarrow \ldots
+        \rightarrow M_1 \rightarrow M_0 \twoheadrightarrow M
+    </Display>
+  </Alt>
+  <Alt Not="LaTeX">
+    <Display>
+      ... ---> M_(n+1) ---> M_n ---> M_(n-1) ---> ... ---> M_1 ---> M_0 --->> M
+    </Display>
+  </Alt>
+  Where each <M>M_n</M> is a free <M>\mathbb{F}G</M>-module and the image of 
+  <M>d_{n+1}: M_{n+1} \rightarrow M_{n}</M> equals the kernel of 
+  <M>d_n: M_n \rightarrow M_{n-1}</M> for all <M>n > 0</M>. 
+  
+  <Section>
+    <Heading>The <K>HAPResolution</K> datatype in &HAPprime;</Heading>
+    
+    Both &HAP; and &HAPprime; use the <K>HAPResolution</K> datatype to store resolutions,
+    and you should refer to the &HAP; documentation for full details of this 
+    datatype. With resolutions computed by &HAP;, the boundary maps which define
+    the module homomorphisms are stored as lists of <M>\mathbb{Z}G</M>-module
+    words, each of which is an integer pair <C>[i,g]</C>. By contrast, when
+    &HAPprime; computes resolutions it stores the boundary maps as lists of 
+    &G;-generating vectors (as used in <K>FpGModuleHomomorphismGF</K>, see 
+    Chapter <Ref Chap="FpGModuleGFHom"/>). Over small finite fields (and in
+    particular in GF(2)), these 
+    compressed vectors take far less memory, saving at least a factor of two for
+    long resolutions. The different data storage method is entirely an internal
+    change - as far as the used is concerned, both versions behave exactly the
+    same.
+  </Section>
+  
+  <Section>
+    <Heading>Implementation: Constructing resolutions</Heading>
+      
+      Given the definition of a free &FG;-resolution given above, a resolution 
+      of a module <M>M</M> can be calculated by construction. If there are 
+      <M>k</M> generators for <M>M</M>, we can set <M>M_0</M> equal to the
+      free &FG;-module <M>(\mathbb{F}G)^k</M>, and the module 
+      homomorphism <M>d_0 : M_0 \rightarrow M</M> to be the one that sends the 
+      <M>i</M>th standard generator of <M>(\mathbb{F}G)^k</M> to the <M>i</M>th 
+      element of <M>M</M>. We can now recursively construct the other modules
+      and module homomorphisms in a similar manner. Given a boundary 
+      homomorphism <M>d_n = M_n \rightarrow M_{n-1}</M>, the kernel of this can 
+      be calculated. Then given a set of generators (ideally a small set) 
+      for <M>ker(d_n)</M>, we can set 
+      <M>M_{n+1} = (\mathbb{F}G)^{|ker(d_n)|}</M>, and the new module 
+      homomorphism <M>d_{n+1}</M> to be the one mapping the standard generators 
+      of <M>M_{n+1}</M> onto the generators of <M>ker(d_n)</M>.
+      <P/>
+      &HAPprime; implements the construction of resolutions using this method.
+      The construction is divided into two stages. The creation of the first 
+      homomorphism in the resolution for <M>M</M> is performed by the function 
+      <Ref Oper="LengthZeroResolutionPrimePowerGroup"/>, or for a resolution of
+      the trivial &FG;-module &FF;, the first two homomorphisms can be 
+      stated without calculation using 
+      <Ref Oper="LengthOneResolutionPrimePowerGroup"/>. Once this initial 
+      sequence is created, a longer resolution can be created by repeated 
+      application of one of <Ref Oper="ExtendResolutionPrimePowerGroupGF" BookName="HAPprime"/>, 
+      <Ref Oper="ExtendResolutionPrimePowerGroupRadical" BookName="HAPprime"/> or
+      <Ref Oper="ExtendResolutionPrimePowerGroupGF2" BookName="HAPprime"/>, each of which 
+      extends the resolution by one stage by constructing a new module and 
+      homomorphism mapping onto the minimal generators of the kernel of the 
+      last homomorphism of the input resolution. These extension functions
+      differ in speed and the amount of memory that they use.
+      The lowest-memory version, 
+      <Ref Oper="ExtendResolutionPrimePowerGroupGF" BookName="HAPprime"/>, 
+      uses the block structure of module generating vectors (see Section 
+      <Ref Subsect="FpGModuleGFalgoblock"/>) and calculates kernels of the 
+      boundary homomorphisms using 
+      <Ref Oper="KernelOfModuleHomomorphismSplit"/> and finds a minimal set
+      of generators for this kernel using 
+      <Ref Oper="MinimalGeneratorsModuleGF"/>. The much faster but 
+      memory-hungry 
+      <Ref Oper="ExtendResolutionPrimePowerGroupRadical" BookName="HAPprime"/>
+      uses <Ref Oper="KernelOfModuleHomomorphism"/> and 
+      <Ref Oper="MinimalGeneratorsModuleRadical"/> respectively.
+      <Ref Oper="ExtendResolutionPrimePowerGroupGF2" BookName="HAPprime"/> uses
+      <Ref Oper="KernelOfModuleHomomorphismGF"/> whic partitions the 
+      boundary homomorphism matrix using &FG;-reduction. This gives a small 
+      memory saving over the <C>Radical</C> method, but can take as long as the
+      <C>GF</C> scheme.
+      <P/>
+      The construction of resolutions of length <M>n</M> is wrapped up in the 
+      functions <K>ResolutionPrimePowerGroupGF</K>,
+      <K>ResolutionPrimePowerGroupRadical</K> and 
+      <K>ResolutionPrimePowerGroupAutoMem</K>, which (as well as the extension 
+      functions) are fully documented in Section 
+      <Ref Subsect="ResolutionPrimePowerGroup" BookName="HAPprime"/> of the 
+      &HAPprime; user manual.
+      
+      
+    </Section>
+  
+  <Section>
+    <Heading>Resolution construction functions</Heading>
+    <#Include Label="LengthOneResolutionPrimePowerGroup_DTmanResolution_Con">
+    <#Include Label="LengthZeroResolutionPrimePowerGroup_DTmanResolution_Con">
+  </Section>
+
+  <Section>
+    <Heading>Resolution data access functions</Heading>
+    <#Include Label="ResolutionLength_DTmanResolution_Dat">
+    <#Include Label="ResolutionGroup_DTmanResolution_Dat">
+    <#Include Label="ResolutionFpGModuleGF_DTmanResolution_Dat">
+    <#Include Label="ResolutionModuleRank_DTmanResolution_Dat">
+    <#Include Label="ResolutionModuleRanks_DTmanResolution_Dat">
+    <#Include Label="BoundaryFpGModuleHomomorphismGF_DTmanResolution_Dat">
+    <#Include Label="ResolutionsAreEqual_DTmanResolution_Dat">
+  </Section>
+
+  <Section Label="ResolutionExample">
+    <Heading>Example: Computing and working with resolutions</Heading>
+
+    In this example we construct a minimal free &FG;-resolution of length four 
+    for the group <M>G = D_8 \times Q_8</M> of order 64, which will be the 
+    sequence
+    <Alt Only="LaTeX">
+      <Display>
+        (\mathbb{F}G)^{22} \rightarrow (\mathbb{F}G)^{15} \rightarrow 
+        (\mathbb{F}G)^9 \rightarrow (\mathbb{F}G) \twoheadrightarrow \mathbb{F}
+      </Display>
+    </Alt>
+    <Alt Not="LaTeX">
+      <Display>
+        (FG)^22 ---> (FG)^15 ---> (FG)^9 ---> FG --->> F
+      </Display>
+    </Alt>
+    We first build each stage explicitly, starting with 
+    <Ref Oper="LengthOneResolutionPrimePowerGroup"/> followed by repeated
+    applications of 
+    <Ref Oper="ExtendResolutionPrimePowerGroupRadical" BookName="HAPprime"/>. We
+    extract various properties of this resolution. Finally, we construct
+    equivalent resolutions for <M>G</M> using
+    <Ref Oper="ResolutionPrimePowerGroupGF" BookName="HAPprime"/> and 
+    <Ref Oper="ResolutionPrimePowerGroupGF2" BookName="HAPprime"/> and 
+    check that the three are equivalent.
+<!--
+gap> G := DirectProduct(DihedralGroup(8), SmallGroup(8, 4));
+gap> R := LengthOneResolutionPrimePowerGroup(G);
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);
+gap> #
+gap> ResolutionLength(R);
+gap> ResolutionGroup(R);
+gap> ResolutionModuleRanks(R);
+gap> ResolutionModuleRank(R, 3);
+gap> M2 := ResolutionFpGModuleGF(R, 2);
+gap> d3 := BoundaryFpGModuleHomomorphismGF(R, 3);
+gap> ImageOfModuleHomomorphism(d3);
+gap> #
+gap> S := ResolutionPrimePowerGroupGF(G, 4);
+gap> ResolutionsAreEqual(R, S);
+gap> T := ResolutionPrimePowerGroupGF2(G, 4);
+gap> ResolutionsAreEqual(R, T);
+-->
+<Example><![CDATA[
+gap> G := DirectProduct(DihedralGroup(8), SmallGroup(8, 4));
+<pc group of size 64 with 6 generators>
+gap> R := LengthOneResolutionPrimePowerGroup(G);
+Resolution of length 1 in characteristic 2 for <pc group of size 64 with
+6 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);;
+gap> R := ExtendResolutionPrimePowerGroupRadical(R);
+Resolution of length 4 in characteristic 2 for <pc group of size 64 with
+6 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> #
+gap> ResolutionLength(R);
+4
+gap> ResolutionGroup(R);
+<pc group of size 64 with 6 generators>
+gap> ResolutionModuleRanks(R);
+[ 4, 9, 15, 22 ]
+gap> ResolutionModuleRank(R, 3);
+15
+gap> M2 := ResolutionFpGModuleGF(R, 2);
+Full canonical module FG^9 over the group ring of <pc group of size 64 with
+6 generators> in characteristic 2
+
+gap> d3 := BoundaryFpGModuleHomomorphismGF(R, 3);
+<Module homomorphism>
+
+gap> ImageOfModuleHomomorphism(d3);
+Module over the group ring of <pc group of size 64 with
+6 generators> in characteristic 2 with 15 generators in FG^9.
+
+gap> #
+gap> S := ResolutionPrimePowerGroupGF(G, 4);
+Resolution of length 4 in characteristic 2 for <pc group of size 64 with
+6 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> ResolutionsAreEqual(R, S);
+true
+gap> T := ResolutionPrimePowerGroupGF2(G, 4);
+Resolution of length 4 in characteristic 2 for <pc group of size 64 with
+6 generators> .
+No contracting homotopy available.
+A partial contracting homotopy is available.
+
+gap> ResolutionsAreEqual(R, T);
+true
+]]></Example>
+  <P/>
+  Further example of constructing resolutions and extracting data from them
+  are given in Sections <Ref Subsect="FPGModuleExample1"/>, 
+  <Ref Subsect="FPGModuleExample2"/>, <Ref Subsect="FPGModuleExample3"/>,
+  <Ref Subsect="FPGModuleHomExample1"/> and 
+  <Ref Subsect="FPGModuleHomExample2"/> in this reference manual, and also the
+  chapter of <Ref Chap="Examples" BookName="HAPprime"/> in the &HAPprime; user
+  guide.
+  </Section>
+
+  <Section>
+    <Heading>Miscellaneous resolution functions</Heading>
+    <#Include Label="BestCentralSubgroupForResolutionFiniteExtension_DTmanResolution_Misc">
+  </Section>
+
+</Chapter>
+

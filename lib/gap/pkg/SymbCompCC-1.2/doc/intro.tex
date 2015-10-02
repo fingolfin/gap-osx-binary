@@ -1,0 +1,174 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%W  intro.tex              GAP documentation      Dörte Feichtenschlager
+%%
+%H  $Id: intro.tex,    v0.5 2010/05/31   09:30:00       gap SymbCompCC $
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Overview}
+
+The coclass of a finite $p$-group of order $p^n$ and nilpotency class $c$ is 
+defined as $n-c$. This invariant of finite $p$-groups has been introduced by
+Leedham-Green and Newman in \cite{LGN80} and it became of major importance
+in $p$-group theory. 
+
+A first tool in the classification of all $p$-groups of coclass $r$ is the
+coclass graph $G(p,r)$. Its vertices are the isomorphism types of finite 
+$p$-groups of coclass $r$. Two vertices $G$ and $H$ are joined by an edge if
+$G$ is isomorphic to the quotient $H/\gamma(H)$ where $\gamma(H)$ is the last
+non-trivial term of the lower series of $H$. 
+
+Du Sautoy \cite{dS00} and Eick and Leedham-Green \cite{ELG08} proved that
+$G(p,r)$ contains certain periodic patterns. Eick and Leedham-Green 
+\cite{ELG08} define infinite coclass sequences of finite $p$-groups of 
+coclass $r$ which underpin this periodic pattern. In $G(2,r)$ and $G(3,1)$
+almost all groups are contained in an infinite coclass sequence. 
+
+Eick and Leedham-Green \cite{ELG08} also proved that the infinitely many
+$p$-groups in an infinite coclass sequence can be defined by a single 
+parametrised presentation.
+
+The first aim of this package is the definition of polycyclic parametrised
+presentations; these are parametrised presentations as defined by Eick
+and Leedham-Green \cite{ELG08} and additionally they have various features
+of polycyclic presentations. Each such presentation defines all the 
+infinitely many finite $p$-groups in an infinite coclass sequence.
+
+We then provide some algorithms to compute with polycyclic parametrised
+presentations. In particular, we introduce a generalisation of the
+collection algorithm for polycyclic parametrised presentations. Based
+on this, we describe algorithms to compute polycyclic parametrised
+presentations for Schur extensions, for the Schur multiplicator and
+for some low-dimensional cohomology groups. We refer to \cite{EF11}
+for details on the underlying algorithms and further references.
+
+Finally, we exhibit a database of polycyclic parametrised presentations
+for the infinite coclass families of the finite $2$-groups of coclass at
+most $2$ and the finite $3$-groups of coclass $1$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Background on (polycyclic) parametrised presentations}
+
+In this section we describe the polycyclic parametrised presentations 
+(pp-presentations) for infinite coclass sequences.
+
+Let $(G_x | x\in \N)$, where $\N$ denotes the natural numbers, be an 
+infinite coclass sequence; $x$ is the parameter of this infinite coclass 
+sequence. Then every group $G_x$ is an extension of a finite $p$-group $P$ 
+of order $p^n$ by an abelian $p$-group $T_x$ of rank $d$. Furthermore, every  
+$G_x$ has a polycyclic presentation (short pp-presentation) on generators 
+$g_1, \ldots, g_n, t_1, \ldots, t_d$ with relations of the form
+%display{nontext}
+$$
+\eqalign{
+&g_i^{p} = g_{i+1}^{a_{i,i,i+1}} \cdots g_n^{a_{i,i,n}}t_1^{\alpha_{i,i,1}(x)} \cdots t_d^{\alpha_{i,i,d}(x)}, \cr
+&g_i^{g_j} = g_{j+1}^{a_{i,j,j+1}} \cdots g_n^{a_{i,j,n}}t_1^{\alpha_{i,j,1}(x)} \cdots t_d^{\alpha_{i,j,d}(x)}, \cr
+&t_k^{g_i} = t_1^{b_{k,i,1}(x)} \cdots t_d^{b_{k,i,d}(x)}, \cr
+&t_k^{t_l} = t_k, \cr
+&t_k^{p^{x+e}} = 1,
+}
+$$
+%display{text}
+%g_i^p = g_{i+1}^{a_{i,i,i+1}} ... g_n^{a_{i,i,n}}t_1^{\alpha_{i,i,1}(x)}... t_d^{\alpha_{i,i,d}(x)}, 
+%g_i^{g_j} = g_{j+1}^{a_{i,j,j+1}} ... g_n^{a_{i,j,n}}t_1^{\alpha_{i,j,1}(x)}... t_d^{\alpha_{i,j,d}(x)}, 
+%t_k^{g_i} = t_1^{b_{k,i,1}(x)}... t_d^{b_{k,i,d}(x)}, 
+%t_k^{t_l} = t_k,
+%t_k^{p^{x+e}} = 1,
+%enddisplay
+where $1\le j \< i\le n$ and $1 \le k \< l\le d$; certain $a_{i,j,m}\in \{0,
+\ldots, p-1\}$, a non-negative integer $e$, $\alpha_{k,l,m}(x)$ of the form 
+$c_{k,l,m}+p^xd_{k,l,m}$ and $b_{k,l,m}$ with $b_{k,l,m},c_{k,l,m},d_{k,l,m}$ 
+certain $p$-adic integers. The $p$-adic exponents arising in the relations
+can be reduced modulo the relative orders of the involved elements and thus 
+can be reduced to integers for every specific $x$. 
+
+We call such a pp-presentation $integral$ if
+all the $p$-adic numbers $b_{k,l,m}, c_{k,l,m}, d_{k,l,m}$ are integers.
+Our algorithms introduced in this package compute with integral 
+pp-presentations only.
+
+We call such an pp-presentation $consistent$ if for every $x \in \N$
+the presentation is consistent as a polycyclic presentation; where we 
+possibly reduce the exponents in the presentation modulo the relative
+orders of the generators. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Computation of Schur multiplicators}
+
+In this section we recall briefly the method of \cite{EF11} to determine
+the Schur multiplicators of almost all groups $G_x$ in an infinite coclass 
+sequence.
+
+Suppose we are given a consistent integral pp-presentation $F/R_x$ for the
+groups $G_x$ in an infinite coclass sequence, where $F$ is a free group and
+$R_x$ is generated by parametrised relations as above. Note that the 
+exponents in these relations depend on $x$, while the number of generators
+and the number of relations does not depend on the parameter.
+
+Using this presentation we can define a parametrised presentation for the
+Schur extensions $G_x^{*} = F/[F,R_x]$, corresponding to the parametrised
+presentation $F/R_x$. The next step is to find the isomorphism types of
+$Y_x = R_x/[F,R_x]$ since $M(G_x) \cong (F^\prime \cap R_x)/[F,R_x]$ are the
+torsion subgroups of $Y_x$ as all $G_x$ are finite <p>-groups.
+
+Then $Y_x = R_x/[F,R_x]$ are generated by certain so-called
+consistency relations. Using this we can compute the isomorphism types of
+$Y_x$ and thus the isomorphism types of $M(G_x)$ for almost all $G_x$ in the
+chosen infinite coclass sequence.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Computation of low-dimensional cohomology}
+
+From the parametrised presentation $F/R_x$ we can see that the Abelian
+invariants are the same for all groups $G_x$ in an infinite coclass sequence,
+and we can compute them. Using this and the computation of the Schur
+multiplicators one obtains $H^n(G_x,\Z)$ and $H^n(G_x,GF(p))$ for $0 \le n
+\le 2$, where the $G_x$ act trivially on $\Z$ and $GF(p)$, respectively.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Example}
+
+In this section we present the well-known example of quaternion groups 
+$Q_{2^{x+3}}$. It is well known that they have a parametrised presentation of 
+the following form:
+
+%display{nontext}
+$$
+\eqalign{
+\{ g_1,g_2,t_1 | &\, g_1^{2} = t_1^{2^x}, \, g_2^{g_1} = g_2t_1^{-1+2^{x+1}},\cr
+&\, g_2^{2} = t_1, \, t_1^{g_1} = t_1^{-1+2^{x+1}},\cr
+&\, t_1^{2^{x+1}} = 1 \}.
+}
+$$
+%display{text}
+% { g_1,g_2,t_1|g_1^2 = t_1^{2^x}, g_2^{g_1} = g_2t_1^{-1+2^{x+1}},
+%                       g_2^{2} = t_1, t_1^{g_1} = t_1^{-1+2^{x+1}}, 
+%                       t_1^{2^{x+1}} = 1 }.
+%enddisplay
+
+Using this we can define the Schur extensions $Q_{2^{x+3}}^{*}$
+
+%display{nontext}
+$$
+\eqalign{
+\{ g_1,g_2,t_1,c_1, c_2, c_3 | &g_1^{2} = t_1^{2^x}c_3,
+ \, g_2^{g_1} = g_2t_1^{-1+2^{x+1}}c_2^{1-2^{x+1}},\cr
+ &\, g_2^{2} = t_1c_1,\, t_1^{g_1} = t_1^{-1+2^{x+1}}c_2^{2-2^{x+1}},\cr
+ &\, t_1^{2^{x+1}} = c_2^{2^{x+1}}, \cr
+ &\, c_1,c_2,c_3 central \}.
+}
+$$
+%display{text}
+% { g_1,g_2,t_1,c_1,c_2,c_3|g_1^{2} = t_1^{2^x}c_3,
+%                           g_2^{g_1} = g_2t_1^{-1+2^{x+1}} c_2^{1-2^{x+1}},
+%                           g_2^{2} = t_1c_1, 
+%                           t_1^{g_1} = t_1^{-1+2^{x+1}} c_2^{2-2^{x+1}},
+%                           t_1^{2^{x+1}} = c_2^{2^{x+1}},
+%                           c_1,c_2,c_3 central }.
+%enddisplay
+
+This yields $M(Q_{2^{x+3}}) = 1$. 

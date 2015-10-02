@@ -1,0 +1,301 @@
+  
+  [1X2 Examples[0X
+  
+  
+  [1X2.1 Computing the mod p group cohomology[0X
+  
+  Let G be a group and F be a field, and let FG be the group ring of G over F.
+  A  free  FG-resolution  of  the  ground  ring is an exact sequence of module
+  homomorphisms
+  
+  
+       ... ---> M_(n+1) ---> M_n ---> M_(n-1) ---> ... ---> M_1 ---> FG
+       --->> F
+  
+  
+  Where  each  M_n  is  a  free FG-module and the image of d_n+1: M_n+1 -> M_n
+  equals  the  kernel  of  d_n:  M_n  -> M_n-1 for all n > 0. The maps d_n are
+  called boundary homomorphisms. In [5XHAPprime[0m we consider the case where G is a
+  p-group and F is the prime field GF(p), and this is assumed from now on.
+  
+  If  we  now  define  the Abelian group D_n to be Hom(M_n, F), the set of all
+  homomorphisms  M_n -> F, we can obtain the dual of this sequence, which will
+  be a cochain complex of Abelian group homomorphisms
+  
+  
+       ... <--- D_(n+1) <--- D_n ---> D_(n-1) <--- ... <--- D_1 <--- F
+       <--- F
+  
+  
+  Each  group D_n will be isomorphic to F^|M_n| where |M_n| is the rank of the
+  module  M_n.  Unlike  the  resolution,  this  sequence will generally not be
+  exact, but one can define the mod-p cohomology group of G at degree n to be
+  
+  
+       H^n(G, F) = ker(D_n ---> D_(n+1)) / im(D_(n-1) ---> D_n)
+  
+  
+  for  all  n  >  0. As with the D_n, the mod-p cohomology groups will also be
+  isomorphic  to  vector  spaces over F. In the case where the resolution R is
+  minimal  (where  each  module M_n has the minimal number of generators), the
+  dimensions  of  the  (co)homology  groups  H^n(G,  F)  are  identical to the
+  dimensions  of  the  resolution  modules  M_n. The group cohomology (and the
+  similar  group  homology)  is  an  invariant  of G, and does not depend on a
+  particular free FG-resolution.
+  
+  In  the  general  case,  there  are  thus  two stages to computing the group
+  cohomology of G up to the nth cohomology group:
+  
+  (1)   Compute R, a free FG-resolution for FG, with at least n+1 terms.
+  
+  (2)   Construct  the  cochain  complex  C  from R and compute the n homology
+        groups of C
+  
+  For  example, to calculate the 9th mod-p cohomology group of the 134th order
+  64  in  the  [5XGAP[0m  small groups library (which is the Sylow 2-subgroup of the
+  Mathieu    group    M_12),    we    can    use    the    [5XHAPprime[0m   function
+  [2XResolutionPrimePowerGroupRadical[0m  ([14X3.1-1[0m)  to  compute  10  terms  of a free
+  FG-resolution  for  G and then use [5XHAP[0m functions to find the rank b_9 of the
+  cohomology  group,  which  will be isomorphic to F^b_9. Alternatively, since
+  [2XResolutionPrimePowerGroupRadical[0m    ([14X3.1-1[0m)   always   returns   a   minimal
+  resolution,  the  cohomology  group dimensions can be read directly from the
+  resolution.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := SmallGroup(64, 134);;[0X
+    [4Xgap> # First construct a FG-resolution for the group G[0X
+    [4Xgap> R := ResolutionPrimePowerGroupRadical(G, 10);[0X
+    [4XResolution of length 10 in characteristic 2 for <pc group of size 64 with[0X
+    [4X6 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> # Convert this into a cochain complex (over the prime field with p=2)[0X
+    [4Xgap> C := HomToIntegersModP(R, 2);[0X
+    [4XCochain complex of length 10 in characteristic 2 .[0X
+    [4X[0X
+    [4Xgap> # And get the rank of the 9th cohomology group[0X
+    [4Xgap> b9 := Cohomology(C, 9);[0X
+    [4X55[0X
+    [4Xgap> [0X
+    [4Xgap> # Since R is a free resolution, the ranks of the cohomology groups[0X
+    [4Xgap> # are the same as the module ranks in R[0X
+    [4Xgap> ResolutionModuleRanks(R);[0X
+    [4X[ 3, 6, 10, 15, 21, 28, 36, 45, 55, 66 ][0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X2.2   Comparing   the   memory   usage  and  speed  of  [5XHAPprime[1X  and  [5XHAP[1X's[0X
+  [1X[9XResolutionPrimePowerGroup[1X functions[0X
+  
+  For small p-groups, the group ring FG can be considered as a vector space of
+  rank  |G| with the elements of G as its basis elements. Each module M_n in a
+  FG-resolution  is  also  a  vector  space  (of  dimension  |M_n||G|) and the
+  boundary  maps  d_n  can  be represented as vector space homomorphisms. As a
+  result,  standard linear algebra techniques can be used to compute a minimal
+  resolution  by  constructing  a  sequence  of module homomorphisms where the
+  kernel  of  one  map  is  the  image of the next, and where the modules have
+  minimal  generating  sets.  See Chapter [14X'HAPprime Datatypes: Resolutions'[0m in
+  the datatypes manual for further details.
+  
+  As  the  groups  get  larger, this approach becomes less feasible due to the
+  amount  of  time  and  memory  needed to store and compute the null space of
+  large   matrices.   The   [5XHAP[0m   function   [2XResolutionPrimePowerGroup[0m   ([14XHAP:
+  ResolutionPrimePowerGroup[0m)       and       the       [5XHAPprime[0m      functions
+  [2XResolutionPrimePowerGroupRadical[0m   ([14X3.1-1[0m)  and  [2XResolutionPrimePowerGroupGF[0m
+  ([14X3.1-1[0m) all use this linear algebra approach, but the [5XHAPprime[0m functions are
+  optimised  to save memory, allowing the computation of resolutions which are
+  longer, or are of larger groups, than are possible using [5XHAP[0m alone.
+  
+  
+  [1X2.2-1 [5XHAPprime[1X takes less memory to store resolutions[0X
+  
+  Consider  computing  a  resolution of a group of an arbitrary group of order
+  128,  [10XG  =  SmallGroup(128,  844)[0m  using  [5XHAP[0m. Computation is performed on a
+  dual-core Intel Core2Duo running at 2.66MHz, and the memory available to [5XGAP[0m
+  is the standard initial allocation of 256Mb.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := SmallGroup(128, 844);;[0X
+    [4Xgap> R := ResolutionPrimePowerGroup(G, 9);[0X
+    [4XResolution of length 9 in characteristic 2 for <pc group of size 128 with[0X
+    [4X7 generators> .[0X
+    [4X[0X
+    [4Xgap> time;[0X
+    [4X27685[0X
+    [4Xgap> # Can we construct a resolution of length ten?[0X
+    [4Xgap> R := ResolutionPrimePowerGroup(G, 10);[0X
+    [4Xexceeded the permitted memory (`-o' command line option) at[0X
+    [4Xres := SemiEchelonMatDestructive( List( mat, ShallowCopy ) );[0X
+    [4X called from[0X
+    [4XSemiEchelonMat( NullspaceMat( BndMat ) ) called from[0X
+    [4XZGbasisOfKernel( i - 1 ) called from[0X
+    [4X<function>( <arguments> ) called from read-eval-loop[0X
+    [4XEntering break read-eval-print loop ...[0X
+    [4Xyou can 'quit;' to quit to outer loop, or[0X
+    [4Xyou can 'return;' to continue[0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  [5XHAPprime[0m  function  [2XResolutionPrimePowerGroupRadical[0m  ([14X3.1-1[0m)  uses  an
+  almost  identical  algorithm, but stores its boundary maps more efficiently.
+  As a result, with the same memory allowance:
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := SmallGroup(128, 844);;[0X
+    [4Xgap> R := ResolutionPrimePowerGroupRadical(G, 9);[0X
+    [4XResolution of length 9 in characteristic 2 for <pc group of size 128 with[0X
+    [4X7 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> time;[0X
+    [4X25321[0X
+    [4Xgap> # Can we construct a resolution of length ten?[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupRadical(R);;[0X
+    [4Xgap> # Yes! How about eleven?[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupRadical(R);[0X
+    [4XResolution of length 11 in characteristic 2 for <pc group of size 128 with[0X
+    [4X7 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> ResolutionModuleRanks(R);[0X
+    [4X[ 3, 6, 11, 19, 30, 44, 62, 85, 113, 146, 185 ][0X
+    [4Xgap> [0X
+    [4Xgap> # But it will run out of memory if we try to go to twelve terms[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupRadical(R);[0X
+    [4Xexceeded the permitted memory (`-o' command line option) at[0X
+    [4X...[0X
+  [4X------------------------------------------------------------------[0X
+  
+  The  [5XHAPprime[0m version can compute two further terms of the resolution, which
+  given  the  sizes  of  the  additional  modules  represents  a  considerable
+  improvement.  Just  representing the homomorphism d_10: (FG)^146 -> (FG)^113
+  as  vectors  requires  nearly as much memory again as representing the first
+  nine  homomorphisms.  To  compute and store the same resolution of length 11
+  using  [2XResolutionPrimePowerGroup[0m ([14XHAP: ResolutionPrimePowerGroup[0m) would need
+  a  little  over three times the memory used here by [5XHAPprime[0m. The time taken
+  by both versions is very similar.
+  
+  In   the  example  above,  note  also  the  use  of  the  [5XHAPprime[0m  function
+  [2XExtendResolutionPrimePowerGroupRadical[0m  ([14X3.1-2[0m),  which makes it much easier
+  to add terms to an existing resolution. In standard [5XHAP[0m, if one decides that
+  a  resolution is too short and that more terms are required, then the entire
+  resolution must be computed again from scratch.
+  
+  
+  [1X2.2-2 [5XHAPprime[1X takes less memory to compute resolutions[0X
+  
+  The  function  [2XResolutionPrimePowerGroupGF[0m  ([14X3.1-1[0m)  uses a new algorithm to
+  compute   the   kernel   of  FG-module  homomorphisms  when  FG-modules  are
+  represented  using  a  set of G-generating vectors (see [14X'HAPprime Datatypes:
+  FG-module homomorphisms'[0m in the datatypes reference manual). This provides a
+  further   memory   saving   over  [2XResolutionPrimePowerGroupRadical[0m  ([14X3.1-1[0m),
+  although at the cost of a much slower computation time:
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := SmallGroup(128, 844);;[0X
+    [4Xgap> R := ResolutionPrimePowerGroupGF(G, 9);[0X
+    [4XResolution of length 9 in characteristic 2 for <pc group of size 128 with[0X
+    [4X7 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> time;[0X
+    [4X422742[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupGF(R);;[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupGF(R);;[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupGF(R);;[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupGF(R);;[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupGF(R);;[0X
+    [4Xgap> R := ExtendResolutionPrimePowerGroupGF(R);;[0X
+    [4XResolution of length 15 in characteristic 2 for <pc group of size 128 with[0X
+    [4X7 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> ResolutionModuleRanks(R);[0X
+    [4X[ 3, 6, 11, 19, 30, 44, 62, 85, 113, 146, 185, 231, 284, 344, 412 ][0X
+    [4Xgap> # But it will run out of (the inital 256Mb) of memory at sixteen terms[0X
+  [4X------------------------------------------------------------------[0X
+  
+  Using [2XResolutionPrimePowerGroupGF[0m ([14X3.1-1[0m) we can get a further four terms of
+  the  resolution.  For  this resolution, this represents a memory saving of a
+  factor  of  five  over  [2XResolutionPrimePowerGroupRadical[0m ([14X3.1-1[0m) and fifteen
+  over [2XResolutionPrimePowerGroup[0m ([14XHAP: ResolutionPrimePowerGroup[0m), although it
+  does take fifteen times as long as either of those just to compute the first
+  nine terms, and scales less well with size.
+  
+  
+  [1X2.2-3 Automatic selection of the best method[0X
+  
+  The    two    functions    [2XResolutionPrimePowerGroupRadical[0m    ([14X3.1-1[0m)   and
+  [2XResolutionPrimePowerGroupGF[0m  ([14X3.1-1[0m)  offer  a  trade-off  between  time and
+  memory.  The function [2XResolutionPrimePowerGroupAutoMem[0m ([14X3.1-1[0m) automates the
+  decision  of  which  version  to  use,  switching from the [10XRadical[0m to the [10XGF[0m
+  version  when  it  estimates that it is about to run out of available memory
+  for  the  faster  version.  In  this  example,  we  have  also  increase the
+  [2XInfoHAPprime[0m  ([14X1.6-1[0m)  info  level to display progress information. At level
+  two,  the  rank  of  each  module  in  the  resolution is displayed as it is
+  calculated, giving an indication of progress. With this setting, the user is
+  also  notified  when  the  [10XAutoMem[0m  function  switches,  and the [10XGF[0m function
+  displays a rolling estimate of its completion time (which is not shown since
+  that output is overwritten when completed)
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4Xgap> G := SmallGroup(128, 844);;[0X
+    [4Xgap> SetInfoLevel(InfoHAPprime, 2);[0X
+    [4Xgap> R := ResolutionPrimePowerGroupAutoMem(G, 15);[0X
+    [4X#I  Dimension 2: rank 6[0X
+    [4X#I  Dimension 3: rank 11[0X
+    [4X#I  Dimension 4: rank 19[0X
+    [4X#I  Dimension 5: rank 30[0X
+    [4X#I  Dimension 6: rank 44[0X
+    [4X#I  Dimension 7: rank 62[0X
+    [4X#I  Dimension 8: rank 85[0X
+    [4X#I  Dimension 9: rank 113[0X
+    [4X#I  Finding kernel of homomorphism by splitting:[0X
+    [4X#I   - Finding kernel of U[0X
+    [4X#I   - Finding kernel of V[0X
+    [4X#I   - Finding intersection of U and V[0X
+    [4X#I   - Finding intersection preimages[0X
+    [4X#I  Dimension 10: rank 146[0X
+    [4X#I  Finding kernel of homomorphism by splitting:[0X
+    [4X#I   - Finding kernel of U[0X
+    [4X#I   - Finding kernel of V[0X
+    [4X#I   - Finding intersection of U and V[0X
+    [4X#I   - Finding intersection preimages[0X
+    [4X#I  Dimension 11: rank 185[0X
+    [4X#I  Finding kernel of homomorphism by splitting:[0X
+    [4X#I   - Finding kernel of U[0X
+    [4X#I   - Finding kernel of V[0X
+    [4X#I   - Finding intersection of U and V[0X
+    [4X#I   - Finding intersection preimages[0X
+    [4X#I  Dimension 12: rank 231[0X
+    [4X#I  Finding kernel of homomorphism by splitting:[0X
+    [4X#I   - Finding kernel of U[0X
+    [4X#I   - Finding kernel of V[0X
+    [4X#I   - Finding intersection of U and V[0X
+    [4X#I   - Finding intersection preimages[0X
+    [4X#I  Dimension 13: rank 284[0X
+    [4X#I  Finding kernel of homomorphism by splitting:[0X
+    [4X#I   - Finding kernel of U[0X
+    [4X#I   - Finding kernel of V[0X
+    [4X#I   - Finding intersection of U and V[0X
+    [4X#I   - Finding intersection preimages[0X
+    [4X#I  Dimension 14: rank 344[0X
+    [4X#I  Finding kernel of homomorphism by splitting:[0X
+    [4X#I   - Finding kernel of U[0X
+    [4X#I   - Finding kernel of V[0X
+    [4X#I   - Finding intersection of U and V[0X
+    [4X#I   - Finding intersection preimages[0X
+    [4X#I  Dimension 15: rank 412[0X
+    [4XResolution of length 15 in characteristic 2 for <pc group of size 128 with[0X
+    [4X7 generators> .[0X
+    [4XNo contracting homotopy available.[0X
+    [4XA partial contracting homotopy is available.[0X
+    [4X[0X
+    [4Xgap> StringTime(time);[0X
+    [4X" 5:45:53.613"[0X
+  [4X------------------------------------------------------------------[0X
+  

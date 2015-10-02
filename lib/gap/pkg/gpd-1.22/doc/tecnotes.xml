@@ -1,0 +1,204 @@
+<!-- ------------------------------------------------------------------- -->
+<!--                                                                     -->
+<!--  tecnotes.xml           Gpd documentation            Chris Wensley  -->
+<!--                                                                     -->
+<!--  version 1.13, 01/12/2011                                           --> 
+<!--                                                                     --> 
+<!--  Copyright (C) 2001-2011, Emma Moore and Chris Wensley,             --> 
+<!--  School of Computer Science, Bangor University, U.K.                --> 
+<!--                                                                     -->
+<!-- ------------------------------------------------------------------- -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Chapter Label="chap-tecnotes">
+<Heading>Technical Notes</Heading>
+
+This short chapter is included for the benefit of anyone wishing to 
+implement some other variety of many-object structures, 
+for example <E>ringoids</E>, which are rings with many objects; 
+<E>Lie groupoids</E>, which are Lie groups with many objects; and so on. 
+
+<Section Label="sec-tec-mwo">
+<Heading>Many object structures</Heading>
+
+Structures with many objects, and their elements, are defined in a manner similar to the single object case. For elements we have: 
+<List>
+<Item>
+<C>DeclareCategory( "IsMultiplicativeElementWithObjects", 
+    IsMultiplicativeElement ); </C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsMultiplicativeElementWithObjectsAndOnes", 
+    IsMultiplicativeElementWithObjects ); </C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsMultiplicativeElementWithObjectsAndInversesIfNonzero", 
+    IsMultiplicativeElementWithObjectsAndOnes ); </C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsGroupoidElement", </C>
+<P/>
+<C>IsMultiplicativeElementWithObjectsAndInversesIfNonzero ); </C>
+</Item>
+</List>
+as well as various category collections. 
+For the various structures we have: 
+<List>
+<Item>
+<C>DeclareCategory( "IsDomainWithObjects", IsDomain ); </C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsMagmaWithObjects", IsDomainWithObjects and 
+    IsMagma and IsMultiplicativeElementWithObjectsCollection );</C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsMagmaWithObjectsAndOnes", 
+    IsMagmaWithObjects and 
+    IsMultiplicativeElementWithObjectsAndOnesCollection ); </C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsMagmaWithObjectsAndInversesIfNonzero", 
+    IsMagmaWithObjectsAndOnes and </C>
+<P/>
+<C>IsMultiplicativeElementWithObjectsAndInversesIfNonzeroCollection ); </C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsGroupoid", IsMagmaWithObjectsAndInversesIfNonzero 
+    and IsGroupoidElementCollection ); 
+</C>
+</Item>
+</List>
+
+Some of the groupoids constructed earlier are the single piece 
+<C>Gd8</C> and the five component union <C>U5</C>: 
+<P/>
+<Example>
+<![CDATA[
+gap> CategoriesOfObject( Gd8 );
+[ "IsListOrCollection", "IsCollection", "IsExtLElement", 
+  "CategoryCollections(IsExtLElement)", "IsExtRElement", 
+  "CategoryCollections(IsExtRElement)", 
+  "CategoryCollections(IsMultiplicativeElement)", "IsGeneralizedDomain", 
+  "IsMagma", "IsDomainWithObjects", 
+  "CategoryCollections(IsMultiplicativeElementWithObjects)", 
+  "CategoryCollections(IsMultiplicativeElementWithObjectsAndOnes)", 
+  "CategoryCollections(IsMultiplicativeElementWithObjectsAndInversesIfNonzero)\
+", "CategoryCollections(IsGroupoidElement)", "IsMagmaWithObjects", 
+  "IsMagmaWithObjectsAndOnes", "IsMagmaWithObjectsAndInversesIfNonzero", 
+  "IsGroupoid" ]
+gap> FamilyObj( Gd8 );
+NewFamily( "GroupoidFamily", [ 2275 ], [ 51, 52, 77, 78, 79, 80, 90, 91, 114, 
+  115, 117, 118, 121, 202, 427, 2245, 2256, 2260, 2264, 2268, 2271, 2273, 
+  2274, 2275 ] )
+gap> KnownAttributesOfObject( Gd8 ); 
+[ "Name", "Size", "ParentAttr", "GeneratorsOfMagmaWithInverses", 
+  "ObjectList", "Pieces" ]
+gap> KnownPropertiesOfObject( Gd8 ); 
+[ "IsEmpty", "IsTrivial", "IsNonTrivial", "IsFinite", 
+  "CanEasilyCompareElements", "CanEasilySortElements", "IsDuplicateFree", 
+  "IsAssociative", "IsCommutative", "IsSinglePieceDomain", 
+  "IsDirectProductWithCompleteGraphDomain" ]
+gap> RepresentationsOfObject( Gd8 );
+[ "IsComponentObjectRep", "IsAttributeStoringRep", "IsMWOSinglePieceRep" ]
+gap> RepresentationsOfObject( U5 ); 
+[ "IsComponentObjectRep", "IsAttributeStoringRep", "IsPiecesRep" ]
+]]>
+</Example>
+ 
+Similarly, for elements, we have: 
+<P/>
+<Example>
+<![CDATA[
+gap> CategoriesOfObject(a78);
+[ "IsExtLElement", "IsExtRElement", "IsMultiplicativeElement", 
+  "IsMultiplicativeElementWithObjects" ]
+gap> FamilyObj( a78 );
+NewFamily( "MultiplicativeElementWithObjectsFamily", [ 2255 ], 
+[ 77, 78, 79, 80, 114, 117, 120, 2255 ] )
+gap> CategoriesOfObject(e2); 
+[ "IsExtLElement", "IsExtRElement", "IsMultiplicativeElement", 
+  "IsMultiplicativeElementWithObjects", 
+  "IsMultiplicativeElementWithObjectsAndOnes", 
+  "IsMultiplicativeElementWithObjectsAndInversesIfNonzero", 
+  "IsGroupoidElement" ]
+gap> FamilyObj( e2 );        
+NewFamily( "GroupoidElementFamily", [ 2267 ], 
+[ 77, 78, 79, 80, 114, 117, 120, 2255, 2259, 2263, 2267 ] )
+]]>
+</Example>
+</Section>
+
+
+<Section Label="sec-tec-mwohom">
+<Heading>Many object homomorphisms</Heading>
+
+Homomorphisms of structures with many objects have a similar heirarchy. 
+<List>
+<Item>
+<C>DeclareCategory( "IsGeneralMappingWithObjects", IsGeneralMapping ); </C>
+</Item>
+<Item>
+<C>DeclareSynonymAttr( "IsMagmaWithObjectsGeneralMapping", 
+    IsGeneralMappingWithObjects and RespectsMultiplication ); </C>
+</Item>
+<Item>
+<C>DeclareSynonymAttr( "IsMagmaWithObjectsHomomorphism", 
+    IsMagmaWithObjectsGeneralMapping and IsMapping ); </C>
+</Item>
+<Item>
+<C>DeclareCategory( "IsGroupoidHomomorphism", IsMagmaWithObjectsHomomorphism ); </C>
+</Item>
+</List>
+<P/>
+Two forms of representation are used: for mappings to a single piece; 
+and for unions of such mappings: 
+<List>
+<Item>
+<C>DeclareRepresentation( "IsMappingToSinglePieceRep",
+    IsMagmaWithObjectsHomomorphism and IsAttributeStoringRep 
+        and IsGeneralMapping, [ "Source", "Range", "PieceImages" ] ); </C>
+</Item>
+<Item>
+<C>DeclareRepresentation( "IsMappingWithObjectsRep", 
+    IsMagmaWithObjectsHomomorphism and IsAttributeStoringRep 
+        and IsGeneralMapping, [ "Source", "Range", "PiecesOfMapping" ] ); </C>
+</Item>
+</List>
+<P/>
+In previous chapters, <C>hom1</C> was an endofunction on <C>M78</C>; 
+<C>homd8</C> was a homomorphism from <C>Gd8</C> to <C>Gs3</C>; 
+and  <C>aut3</C> was an automorphism of <C>Ga4</C>. 
+All homomorphisms have family <C>GeneralMappingWithObjectsFamily</C>. 
+Perhaps it would be better to have separate families for each structure? 
+<Example>
+<![CDATA[
+gap> FamilyObj(hom1);
+NewFamily( "GeneralMappingWithObjectsFamily", [ 2279 ], 
+[ 77, 78, 79, 80, 114, 117, 120, 124, 128, 147, 338, 2279 ] )
+gap> KnownAttributesOfObject( hom1 );
+[ "Range", "Source", "PieceImages" ]
+gap> KnownPropertiesOfObject( hom1 );
+[ "CanEasilyCompareElements", "CanEasilySortElements", "IsTotal", 
+  "IsSingleValued", "RespectsMultiplication", "IsGeneralMappingToSinglePiece",
+  "IsGeneralMappingFromSinglePiece", "IsInjectiveOnObjects", 
+  "IsSurjectiveOnObjects" ]
+gap> CategoriesOfObject( homd8 );
+[ "IsExtLElement", "IsExtRElement", "IsMultiplicativeElement", 
+  "IsMultiplicativeElementWithOne", "IsMultiplicativeElementWithInverse", 
+  "IsAssociativeElement", "IsGeneralMapping", "IsGeneralMappingWithObjects", 
+  "IsGroupoidHomomorphism" ]
+gap> KnownAttributesOfObject( homd8 );
+[ "Range", "Source", "PieceImages", "ImagesOfObjects", "ImagesOfRays", 
+  "ObjectTransformationOfGroupoidHomomorphism", "RootObjectHomomorphism" ]
+gap> KnownAttributesOfObject( aut3 );
+[ "Range", "Source", "PieceImages", "ImagesOfObjects", "ImagesOfRays", 
+  "ObjectTransformationOfGroupoidHomomorphism", "RootObjectHomomorphism" ]
+]]>
+</Example>
+
+
+</Section>
+
+
+</Chapter>

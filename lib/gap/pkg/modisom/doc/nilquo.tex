@@ -1,0 +1,42 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Nilpotent Quotients}
+
+This chapter contains a description of the nilpotent quotient algorithm
+for associative finitely presented algebras. We refer to \cite{Eic11} for 
+background on the algorithms used in this Chapter.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Computing nilpotent quotients}
+
+Let $A$ be a finitely presented algebra in the GAP sense. The following
+function can be used to determine the class-$c$ nilpotent quotient of $A$.
+The quotient is described by a nilpotent table.
+
+\> NilpotentQuotientOfFpAlgebra( A, c ) F
+
+The output of this function is a nilpotent table with some additional
+entries. In particular, there is the additional entry $img$ which 
+describes the images of the generators of $A$ in the nilpotent table.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Example of nilpotent quotient computation}
+
+\beginexample
+gap> F := FreeAssociativeAlgebra(GF(2), 2);;
+gap> g := GeneratorsOfAlgebra(F);;
+gap> r := [g[1]^2, g[2]^2];;
+gap> A := F/r;;
+gap> NilpotentQuotientOfFpAlgebra(A,3);
+rec( def := [ 1, 2 ], dim := 6, fld := GF(2), 
+  img := [ <a GF2 vector of length 6>, <a GF2 vector of length 6> ], 
+  mat := [ [  ], [  ] ], rnk := 2, 
+  tab := [ [ <a GF2 vector of length 6>, <a GF2 vector of length 6>, 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ], 
+      [ <a GF2 vector of length 6>, <a GF2 vector of length 6>, 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ] ] ], 
+  wds := [ ,, [ 2, 1 ], [ 1, 2 ], [ 1, 3 ], [ 2, 4 ] ], 
+  wgs := [ 1, 1, 2, 2, 3, 3 ] )
+\endexample

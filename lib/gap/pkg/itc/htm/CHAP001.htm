@@ -1,0 +1,284 @@
+<html><head><title>[ITC] 1 What is ITC?</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>1 What is ITC?</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP001.htm#SECT001">Background</a>
+<li> <A HREF="CHAP001.htm#SECT002">Teaching CE</a>
+<li> <A HREF="CHAP001.htm#SECT003">Experimenting with CE Strategies</a>
+<li> <A HREF="CHAP001.htm#SECT004">How does it work?</a>
+<li> <A HREF="CHAP001.htm#SECT005">Acknowledgements and Addresses</a>
+</ol><p>
+<p>
+ITC stands for <strong>Interactive Todd Coxeter</strong>, it is a program that
+allows you to execute interactively single steps in an enumeration of
+the cosets of a subgroup of a finitely presented group using the
+graphics surface XGAP of <font face="Gill Sans,Helvetica,Arial">GAP</font> and thus to see in various windows
+exactly what is happening. In this chapter we will
+<p>
+<dl compact>
+<p>
+<dt>--<dd>
+  discuss the background situation that led to the concept of this
+  program,
+<p>
+<dt>--<dd>
+  very briefly point to literature about coset enumeration,
+<p>
+<dt>--<dd>
+  talk about envisaged use of ITC, and
+<p>
+<dt>--<dd>
+  explain some technical points.
+<p>
+</dl>
+<p>
+<p>
+<h2><a name="SECT001">1.1 Background</a></h2>
+<p><p>
+Coset Enumeration, in the sequel abbreviated as CE, also known as the
+Todd-Coxeter procedure, is not only the oldest but also one of the most
+often used tools in Computational Group Theory and also probably the
+most often implemented one.
+<p>
+An easy introduction to CE and some of its variants is given in
+<a href="biblio.htm#Neu82"><cite>Neu82</cite></a>. In his book <a href="biblio.htm#Sims94"><cite>Sims94</cite></a> Charles Sims puts CE into a
+much more general context based on the theory of automata. Both texts
+provide a fairly comprehensive guide to the extensive literature on
+CE. So we will assume in the sequel that the user of this manual
+understands the basic ideas of CE. We will use as far as possible the
+terminology of <a href="biblio.htm#Neu82"><cite>Neu82</cite></a>.
+<p>
+The main <font face="Gill Sans,Helvetica,Arial">GAP</font> library does contain routines for executing coset
+enumerations (see Section <a href="../../../doc/htm/ref/CHAP045.htm#SECT005">Coset Tables and Coset Enumeration</a> in
+the <font face="Gill Sans,Helvetica,Arial">GAP</font> reference manual). These routines are partly written in the
+<font face="Gill Sans,Helvetica,Arial">GAP</font> language but for efficiency also use <font face="Gill Sans,Helvetica,Arial">GAP</font> kernel functions
+written in C. Some of these programs are used by ITC.
+<p>
+The most efficient implementation of CE, allowing many ``strategies'',
+at present is the package ACE by George Havas and Colin Ramsey
+(see&nbsp;<a href="biblio.htm#Ram99"><cite>Ram99</cite></a>) which is also available as a <font face="Gill Sans,Helvetica,Arial">GAP</font>4 package.
+<p>
+It should be understood that ITC is no competitor for ACE. ACE can
+successfully deal with coset enumerations with millions of cosets. On
+the other hand handling coset tables graphically on the screen, even
+with using scrolling, in practice limits the use of ITC to
+tables with a few thousand rows. For that reason also the speed of
+the single step in the enumeration does not matter as much and ITC
+therefore is not tuned for speed in the way ACE is.
+<p>
+<p>
+<h2><a name="SECT002">1.2 Teaching CE</a></h2>
+<p><p>
+In texts on CE usually examples are demonstrated, and whenever one
+teaches the method in class, one will have to work through some
+examples. In printing as well as on the blackboard this suffers from
+a certain difficulty: In CE a number of tables, the ``coset table'', the
+``subgroup tables'', and the ``relation tables'' are being changed all the
+time, one has to gain information from (the closing of rows of)
+subgroup and relation tables and has to transfer this information into
+all relevant places of all tables. Sometimes, when so-called
+``coincidences'' occur, one even has to erase and modify already
+existing entries in tables. Describing such steps in some detail as
+well as the ever changing tables soon occupy many pages in printing.
+Doing them in front of a class one can pretty soon get confused,
+forgetting to make entries or changes etc.
+<p>
+So it is a natural demand to have a program that allows one to perform
+such steps in windows on the screen of a computer where such changes
+can be cleanly made, are transferred to all relevant places in all
+tables automatically, and are marked by colours so that one can really
+``play'' through nontrivial examples. This is what ITC provides. So
+in a first place it can be considered as a teaching tool.
+<p>
+<p>
+<h2><a name="SECT003">1.3 Experimenting with CE Strategies</a></h2>
+<p><p>
+However we hope that ITC can also be used for experiments that
+ultimately may lead to a better understanding of existing methods or
+even the design of new ones.
+<p>
+As explained in many papers about CE, the sequence in which steps are
+made has great influence on the efficiency of the methods. To be more
+exact: CE is basically a method of trial and error in which one
+defines cosets of a subgroup of a finitely presented group by
+constructing coset representatives as words in the generators of the
+group. But only the termination
+of the method (the closing of the tables) in the end guarantees that
+one has not made a mistake by defining more than one word representing
+the same coset. The discovery of such a mistake and its removal is
+what is called ``handling a coincidence'' and it is the number of
+occurrences of such mistakes (the number of coincidences encountered)
+that may vary immensely depending on the chosen sequence of definition
+of pretended representatives.
+<p>
+Therefore many different ``strategies'' for CE have been discussed in
+the literature, and programs such as ACE allow one to use a wide
+variety of such strategies. However in spite of very detailed case
+studies, in particular by George Havas, that lead to certain ``rules of
+thumb'', no strategy is uniformly the best one, a strategy that is good
+for one presentation may turn out to be much less good for another one
+(see for instance <a href="biblio.htm#CDHW73"><cite>CDHW73</cite></a>, <a href="biblio.htm#Hav91"><cite>Hav91</cite></a>, <a href="biblio.htm#HR99a"><cite>HR99a</cite></a>,
+and <a href="biblio.htm#HR99b"><cite>HR99b</cite></a>). The
+possibility to try one's own strategy stepwise interactively therefore
+can be used to get some more insight into CE which to some extent is
+an art rather than a science.
+<p>
+Already in the building of ITC a nice side product was obtained
+from such experimentation: It is important to understand that in many
+cases coincidences cannot be completely avoided for a CE to terminate.
+However when many coincidences have occurred, one is led to ask if
+there is not a shorter sequence of definitions leading to the closure
+of the tables. Starting from a given CE with coincidences involved,
+one may try to ``prune'' the definition sequence from definitions that
+in retrospect can be recognized as being redundant. Such a procedure
+has for instance been employed many years ago ``by hand'' by John Leech
+in a search for a short definition sequence for the Fibonacci Group
+ <i>F</i>(2,7) that we will take as one of our examples. A very nice
+discussion of this idea and its history is given in Margaret Edeson's
+Master's Thesis (see&nbsp;<a href="biblio.htm#Ede89"><cite>Ede89</cite></a>). Using ITC such ``pruning'' was
+first done interactively. This led to an algorithm that is described
+in the section ``The Short-cut Method'' (see Section&nbsp;<a href="CHAP003.htm#SECT005">The Short-cut Method</a>). It is now part of ITC and can be called by <code>short-cut</code>
+(see&nbsp;<a href="CHAP005.htm#SSEC002.9">short-cut</a>). In fact with the above mentioned old challenge
+problem of  <i>F</i>(2,7), it beats the formerly best known definition
+sequence leading to closure of the tables.
+<p>
+Since ITC will store sequences of definitions we intend in the
+future to investigate the possibility to improve runs of a ``Modified
+TC'' (MTC) by using such ``pruned'' definition sequences.
+<p>
+<p>
+<h2><a name="SECT004">1.4 How does it work?</a></h2>
+<p><p>
+ITC is written using the graphics facilities provided by the
+<font face="Gill Sans,Helvetica,Arial">GAP</font>4 package XGAP. We refer to the XGAP manual for a
+general description of these.
+<p>
+The ITC Coset Table as well as the Relation Tables and Subgroup
+Tables can be depicted in windows, and definitions be made in these by
+mouse click. Moreover tables with the sequence of definitions, of
+pending coincidences, and of gaps of length 1 in Subgroup or
+Relation Tables can be inspected in further windows and be used for
+deciding about the next step. A number of menus allow certain
+actions to be called.
+<p>
+In addition to the Coset Table Window which plays a special role,
+three different kinds of windows are used in ITC:
+<p>
+<p>
+<dl compact>
+<p>
+<dt><strong>Pull-down menus</strong> <dd>
+  are used with the ``top buttons'' of the Coset Table (see&nbsp;<a href="CHAP005.htm#SECT001">the Top   Buttons</a>). Clicking one of these will pop up
+  a menu from which you can select actions of ITC. You do this by
+  holding the left mouse button while moving the pointer to the
+  respective entry in the menu and releasing the mouse button there.
+  Then the respective action of the program will be executed while
+  the menu vanishes.
+<p>
+<dt><strong>Query windows</strong> <dd>
+  (sometimes also called transient windows) are used when the user
+  has to specify additonal (in most cases numerical) data for an
+  action to be performed. E.g. a user wanting to fill rows has to
+  specify in such a query window which rows shall be filled. Note
+  that no further action can be taken while such a query window is
+  open. All other possibilities to operate ITC are disabled
+  until the user has made the needed decision and closed the window.
+  Such query windows are opened by clicking the following menu
+  entries in the menus opened via the top buttons of the Coset Table
+  Window: In the menu of <code>Settings</code>: <code>change default table size</code>
+  (see&nbsp;<a href="CHAP005.htm#SSEC001.3">change default table size</a>), <code>extend table size</code> (see&nbsp;<a href="CHAP005.htm#SSEC001.4">extend   table size</a>); in the menu of <code>File</code>: <code>read definitions from file</code>
+  (see&nbsp;<a href="CHAP005.htm#SSEC001.10">read definitions from file</a>), <code>write definitions to file</code>
+  (see&nbsp;<a href="CHAP005.htm#SSEC001.11">write definitions to file</a>), and <code>write standardized table to
+  file</code> (see&nbsp;<a href="CHAP005.htm#SSEC001.12">write standardized table to file</a>). Also such query
+  windows are opened by the following ``bottom buttons'' of the Coset
+  Table Window: <code>scroll by</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.2">scroll by</a>), <code>scroll to</code>
+  (see&nbsp;<a href="CHAP005.htm#SSEC002.1">scroll to</a>), <code>Felsch</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.3">Felsch</a>), <code>fill gaps</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.6">fill   gaps</a>), <code>fill rows</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.5">fill rows</a>), <code>back to</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.7">back to</a>),
+  <code>HLT</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.4">HLT</a>), <code>short-cut</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.9">short-cut</a>), and <code>mark cosets</code>
+  (see&nbsp;<a href="CHAP005.htm#SSEC002.15">mark cosets</a>).
+<p>
+<dt>All other windows <dd>
+  are ordinary <strong>display windows</strong> that can stay open while operations
+  are caused by using other buttons or windows. Each of these display
+  windows contains a top button <code>Sheet</code> that via a pull-down menu
+  allows one either to write the contents of the display window to a
+  PostScript file or to close this display window. See the paragraph
+  <strong>Button</strong> <code>Sheet</code> in Section <a href="CHAP005.htm#SECT001">The Top Buttons</a>.
+  A display window is opened by clicking the menu entry
+  <code>show current settings</code> (see&nbsp;<a href="CHAP005.htm#SSEC001.8">show current settings</a>) in the menu
+  opened via the top button <code>Settings</code>. Further display windows are
+  opened by clicking the following bottom buttons in the Coset Table
+  Window: <code>show rels</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.10">show rels</a>), <code>show subgrp</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.11">show   subgrp</a>), <code>show defs</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.12">show defs</a>), <code>show gaps</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.13">show   gaps</a>), and <code>show coincs</code> (see&nbsp;<a href="CHAP005.htm#SSEC002.14">show coincs</a>).
+  Further display windows can be opened by clicking with the right
+  mouse button: coset numbers or dots in the Coset Table (see&nbsp;<a href="CHAP004.htm#SECT001">The   Coset Table</a>), entries in the Table of Definitions (see&nbsp;<a href="CHAP004.htm#SECT008">The Table   of Definitions</a>), entries in the List of Length 1 Gaps (see&nbsp;<a href="CHAP004.htm#SECT009">The   List of Length 1 Gaps</a>), and entries in the List of Pending
+  Coincidences (see&nbsp;<a href="CHAP004.htm#SECT010">The List of Pending Coincidences</a>). Also the
+  Subgroup Tables (see&nbsp;<a href="CHAP004.htm#SECT007">The Subgroup Tables</a>) and the Relation Tables
+  (see&nbsp;<a href="CHAP004.htm#SECT005">The Relation Tables</a>) are display windows that can be opened
+  by clicking the respective entries in the List of Subgroup
+  Generators (see&nbsp;<a href="CHAP004.htm#SECT006">The List of Subgroup Generators</a>) or the List of
+  Relators (see&nbsp;<a href="CHAP004.htm#SECT004">The List of Relators</a>), respectively. The windows
+  of Relation Tables and of Subgroup Tables differ from the other
+  display windows in a technical way: Like the Coset Table Window,
+  they stay open while the contents of the displayed tables changes.
+  Moreover, the Relation Tables are scrolled parallel to the Coset
+  Table (see&nbsp;<a href="CHAP004.htm#SECT005">The Relation Tables</a>).
+<p>
+</dl>
+<p>
+Depending on the window system and window manager you use, placing a
+new window on your screen might be done automatically or might require
+you to use the mouse to choose a position for the window and pressing
+the left mouse button to place the window.
+<p>
+Making a window active is system and window manager dependent, in most
+cases you have either to move the pointer inside the window or you
+have to click the title bar of the window.
+<p>
+We recommend to switch on title bars for all windows in your window
+manager setup. This seems to avoid a small bug in at least one window
+manager we know of and makes it easier to move your windows
+around. For the <code>twm</code> window manager for example you can achieve this
+with the option <code>DecorateTransients</code>.
+<p>
+If you do not want to do this and experience problems with small
+dialog boxes that do not accept text entered via the keyboard, try to
+start up XGAP with the command line option <code>-W</code>. This invokes some
+code within XGAP which works around a bug in some window managers.
+<p>
+Please note that because of some 16 bit limitations in the underlying
+X toolkit the present implementation of XGAP may not be able to
+handle very large virtual windows properly. For instance, sheets
+containing more than 1630 coset definitions may be corrupt.
+<p>
+In the following chapters we will describe the possibilities to work
+with windows in a systematic way and by way of examples of the use of
+ITC.
+<p>
+<p>
+<h2><a name="SECT005">1.5 Acknowledgements and Addresses</a></h2>
+<p><p>
+We thank Max Neunh&ouml;ffer for providing the needed
+environment in his package XGAP and Thomas Breuer for frequent
+advice. A first version of ITC was implemented, still under
+<font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;3, by Ludger Hippe as part of his ``Staatsexamensarbeit'' in
+1997.
+<p>
+Authors' e-mail addresses:
+<p>
+<dl compact>
+<p>
+<dt><dd>
+  Volkmar.Felsch@math.rwth-aachen.de
+<p>
+<dt><dd>
+  Joachim.Neubueser@math.rwth-aachen.de
+<p>
+</dl>
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>ITC manual<br>January 2004
+</address></body></html>

@@ -1,0 +1,804 @@
+% This file was created automatically from posetops.msk.
+% DO NOT EDIT!
+\Chapter{Graphic Posets}
+
+This chapter describes the part of {\XGAP} that allows the user to
+conveniently display posets graphically.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Introduction}
+
+A poset is just a partially ordered set. To display posets
+reasonably in a generic way we need additional structure. So for {\XGAP} a
+poset comes in so called levels. At all times in the life of a graphic
+poset there are only finitely many levels and they are totally ordered,
+that is for two levels we can always say, which one is ``higher''. The
+position within the graphic sheet reflects this ordering.
+
+The levels are parametrized by ``level parameters'', which can be any
+{\GAP} object but must be unique within a graphic poset. A level is always
+accessed by its level parameter and *not* by its number!
+
+The vertices in each level are grouped into classes. For example for 
+graphic subgroup lattices vertices in the same class correspond to conjugate
+subgroups, vertices in the same level have the same size or index in the
+whole group. The classes within each level are parametrized by ``class
+parameters'', which can be any {\GAP} object but must be unique within a
+level. A class within a level is always accessed by its class parameter and 
+*not* by its number!
+
+The user must supply a *partial order* for all of his levels. The mechanism 
+to achieve this is the operation `CompareLevels', which compares two level
+parameters. The current *total order* of the levels is always a refinement
+of the partial order. The user can permute levels, if that does not
+contradict the partial order defined by `CompareLevels'.
+
+A vertex in the poset that is ``contained in'' another vertex in the poset
+order (we speak of ``inclusion'' like in the case of subgroup lattices)
+must always be in a level that is lower on the screen, because there 
+is only a connecting line representing the inclusion. This is achieved by
+the fact, that inclusions of vertices are communicated to {\XGAP} just by
+creating an ``edge'' between them. This means, that the vertex in the
+``lower'' level lies in the vertex in the ``higher'' level. There must not
+be edges between vertices in the same level!
+
+The terminology ``vertices'' and ``edges'' comes from the fact, that a
+graphic poset is just a special case of a graphic graph, where vertices can 
+be placed anywhere in the sheet and edges have nothing to do with
+inclusion. It is planned that also a graphic graph library is implemented
+in {\XGAP} but it is not yet operational. However everything which could be 
+done not only for posets but at the same time for graphs is implemented
+already within the poset package. This explains the usage of ``graph'' in
+many places where you would otherwise expect ``poset''.
+
+What you have to do to use the graphic poset package is create a graphic
+poset (a special instance of a graphic sheet), create some levels and
+perhaps classes within them. Then you can create vertices and edges, to
+encode the ordering. Everything else is done by the library. See the next
+section for details about the available operations.
+
+Note that we chose a functional approach for certain decision
+procedures. This means that for example if you create a vertex and do not
+specify a position, an operation (`ChoosePosition') is called to determine
+the actual position. You can use the generic routines or install your own
+methods for all of those decisions. In this case you just set a new filter
+for your posets and overload the generic methods by special routines for
+objects with your new filter set. You can see this approach in the example
+in "An Example".
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Operations}
+
+*Constructors:*
+
+\medskip%
+\>GraphicPoset( <name>, <width>, <height> ) O
+
+creates a new graphic poset which is a specialization of a graphic graph
+mainly because per definition a poset comes in ``levels'' or ``layers''. 
+This leads to some algorithms that are more efficient than the general 
+ones for graphs.
+
+
+\>CreateLevel( <poset>, <levelparam> ) O
+\>CreateLevel( <poset>, <levelparam>, <lptext> ) O
+
+A level in a graphic poset can be thought of as a horizontal slice of
+the poset. It has a y coordinate of the top of the level relatively to
+the graphic sheet and a height. Every class of vertices in a graphic
+poset is in a level. The levels are totally ordered by their y
+coordinate. No two vertices which are included in each other are in the
+same level. A vertex containing another one is always ``higher'' on the
+screen, meaning in a ``higher'' level.  Every level has a unique level
+parameter, which can be any {\GAP} object. The user is responsible for all
+methods where a level parameter occurs as parameter and is not just an
+integer. There is NO {\GAP} object representing a level which is visible
+for the user of posets. All communication about levels goes via the
+level parameter. `CreateLevel' creates a new level with level parameter
+<levelparam> in the graphic poset <poset>. It returns `fail' if there
+is already a level with a level parameter which is considered ``equal''
+to <levelparam> by `CompareLevels' or <levelparam> if everything went
+well.
+
+The second method allows to specify which text appears for the level at
+the right edge of the sheet.
+
+
+\>CreateClass( <poset>, <levelparam>, <classparam> ) O
+
+A class in a graphic poset is a collection of vertices within a level
+which belong together in some sense.  Every vertex in a graphic poset
+is in a class, which in turn belongs to a level. Every class in a level
+has a unique class parameter, which can be any {\GAP} object. The user is
+responsible for all methods where a class parameter occurs as parameter
+and is not just an integer. There is NO {\GAP} object representing a class
+which is visible to the user of posets. All communication about classes
+goes via the class parameter.  `CreateClass' creates a new class in the
+level with level parameter <levelparam> in the graphic poset
+<poset>. It returns `fail' if there is no level with level parameter
+<levelparam> or there is already a class in this level with class
+parameter <classparam>. `CreateClass' returns <classparam> otherwise.
+
+
+\>`Vertex( <graph>, <data>[, <inf>] )'{Vertex![poset]}@{`Vertex'!`[poset]'} O
+
+Creates a new vertex. <inf> is a record in which additional info can be
+supplied for the new vertex. For general graphic graphs only the
+`label', `color', `shape', `x' and `y' components are applicable, they
+contain a short label which will be attached to the vertex, the color,
+the shape (`circle', `diamond', or `rectangle') and the coordinates
+relative to the graphic sheet respectively. For graphic posets also the 
+components `levelparam' and `classparam' are evaluated. If the component
+`hints' is bound in <inf> it must be a list of x coordinates which will be
+delivered to `ChoosePosition' to help placement. Those x coordinates will
+be the coordinates of other vertices related to the new one. All values of
+record components which are not specified will be determined by calling 
+some methods for graphic graphs or posets. Those are:
+  `ChooseLabel' for the label,
+  `ChooseColor' for the color,
+  `ChooseShape' for the shape,
+  `ChoosePosition' for the position,
+  `ChooseLevel' for the level parameter, 
+  `ChooseClass' for the class parameter, and
+  `ChooseWidth' for the line width of the vertex.
+`Vertex' returns `fail' if no vertex was created. This happens only, if
+one of the choose functions return `fail' or no possible value, for
+example a non-existing level or class parameter. `Vertex' returns a
+vertex object if everything went well.
+
+
+\>Edge( <graph>, <vertex1>, <vertex2> ) O
+\>Edge( <graph>, <vertex1>, <vertex2>, <defaults> ) O
+
+Adds a new edge from <vertex1> to <vertex2>. For posets this puts one
+of the vertices into the other as a maximal subvertex. So either
+<vertex1> must lie in a ``higher'' level than <vertex2> or the other way
+round. There must be no vertex ``between'' <vertex1> and <vertex2>. If
+the two vertices are in the same level or one is already indirectly
+included in the other `fail' is returned, otherwise `true'. That means,
+that in the case where one of the two vertices is already a maximal
+subobject of the other, then the method does nothing and returns `true'.
+The variation with a <defaults> record just hands this over to the lower
+levels, meaning that the line width and color are modified.
+
+
+
+*Destructors:*
+
+\medskip%
+\>Delete( <poset>, <vertex1>, <vertex2> )!{for edge in poset}
+\>Delete( <poset>, <vertex1>)!{for vertex in poset}
+\>Delete( <poset>, <levelparam>, <classparam> )!{for class in poset}
+
+These three variants of the `Delete' operation delete an edge, a vertex and 
+a class respectively.
+
+\>DeleteLevel( <poset>, <levelparam> ) O
+
+The following method applies to a level. It returns `fail' if no level
+with level parameter <levelparam> is in the poset. Otherwise the level
+is deleted and all classes within it are also deleted! `DeleteLevel'
+returns `true' if the level is successfully deleted.
+
+
+
+\medskip%
+*Operations to change a poset:*
+\medskip%
+\>ResizeLevel( <poset>, <levelparam>, <height> ) O
+
+Changes the height of a level. The y coordinate can only be changed by
+permuting levels, see below.
+Attention: This can increase the size of the sheet!
+Returns `fail' if no level with level parameter <levelparam> exists and
+`true' otherwise. 
+
+
+\>MoveLevel( <poset>, <levelparam>, <position> ) O
+
+Moves a level to another position. <position> is an absolute index in
+the list of levels. The level with level parameter <levelparam> will be
+at the position <position> after the operation. This is only allowed if
+the new ordering is compatible with the partial order given by
+`CompareLevels' and if there is no connection of a vertex in the moving
+level with another level with which it is interchanged.  So
+<levelparam> is compared with all level parameters between the old and
+the new position. If there is a contradiction, nothing happens and the
+method returns `fail'. If everything works the operation returns
+`true'.
+
+
+\>`Relabel( <graph>, <vertex>, <label> )'{Relabel![poset]}@{`Relabel'!`[poset]'} O
+\>`Relabel( <graph>, <vertex> )'{Relabel![poset]}@{`Relabel'!`[poset]'} O
+\>`Relabel( <poset>, <vertex1>, <vertex2>, <label> )'{Relabel![poset]}@{`Relabel'!`[poset]'} O
+\>`Relabel( <poset>, <vertex1>, <vertex2> )'{Relabel![poset]}@{`Relabel'!`[poset]'} O
+
+Changes the label of the vertex <vertex> or the edge between <vertex1>
+and <vertex2>. This must be a short string. In the method where no
+label is specified the new label is chosen functionally: the operation
+`ChooseLabel' is called. Returns `fail' if an error occurs and `true'
+otherwise.  This operation already exists in {\XGAP} for graphic
+objects.
+
+
+\>`Move( <graph>, <vertex>, <x>, <y> )'{Move![poset]}@{`Move'!`[poset]'} O
+\>`Move( <graph>, <vertex> )'{Move![poset]}@{`Move'!`[poset]'} O
+
+Moves vertex <vertex>. For posets coordinates are relative to the level
+of the vertex. <vertex> must be a vertex object in <graph>. If no
+coordinates are specified the operation `ChoosePosition' is
+called. `Move' returns `fail' if an error occurs and `true' otherwise.
+This operation already exists in {\XGAP} for graphic objects.
+
+
+\>`Reshape( <graph>, <vertex> )'{Reshape![poset]}@{`Reshape'!`[poset]'} O
+\>`Reshape( <graph>, <vertex>, <shape> )'{Reshape![poset]}@{`Reshape'!`[poset]'} O
+
+Changes the shape of the vertex <vertex>. <vertex> must be a vertex
+object in the graph or poset <graph>. For the method where no shape is
+specified the new shape is chosen functionally: `ChooseShape' is called
+for the corresponding data.  `Reshape' returns `fail' if an error
+occurs and `true' otherwise.  This operation already exists in {\XGAP}
+for graphic objects.
+
+
+\>`Recolor( <graph>, <vertex> )'{Recolor![poset]}@{`Recolor'!`[poset]'} O
+\>`Recolor( <graph>, <vertex>, <color> )'{Recolor![poset]}@{`Recolor'!`[poset]'} O
+\>`Recolor( <poset>, <vertex1>, <vertex2>, <color> )'{Recolor![poset]}@{`Recolor'!`[poset]'} O
+\>`Recolor( <poset>, <vertex1>, <vertex2> )'{Recolor![poset]}@{`Recolor'!`[poset]'} O
+
+Changes the color of the vertex <vertex> or the edge between <vertex1>
+and <vertex2>. <vertex> must be a vertex object in <graph>. For the
+method where no color is specified the new color is chosen
+functionally: `ChooseColor' is called for the corresponding
+data. `Recolor' returns `fail' if an error occurs and `true'
+otherwise. This operation already exists in {\XGAP} for graphic objects.
+
+
+\>`SetWidth( <graph>, <vertex1>, <vertex2>, <width> )'{SetWidth![poset]}@{`SetWidth'!`[poset]'} O
+\>`SetWidth( <graph>, <vertex1>, <vertex2> )'{SetWidth![poset]}@{`SetWidth'!`[poset]'} O
+
+Changes the line width of an edge. <vertex1> and <vertex2> must be
+vertices in the graph <graph>. For the method where no line width is
+specified the width is chosen functionally: `ChooseWidth' is called for
+the corresponding data pair. Returns `fail' if an error occurs and
+`true' otherwise. This operation already exists in {\XGAP} for graphic
+objects.
+
+
+\>`Highlight( <graph>, <vertex> )'{Highlight![poset]}@{`Highlight'!`[poset]'} O
+\>`Highlight( <graph>, <vertex>, <flag> )'{Highlight![poset]}@{`Highlight'!`[poset]'} O
+
+Changes the highlighting status of the vertex <vertex>. <vertex> must
+be a vertex object in <graph>. For the method where no flag is
+specified the new status is chosen functionally: `ChooseHighlight' is
+called for the corresponding data. Returns `fail' if an error occurs
+and `true' otherwise. This operation already exists in {\XGAP} for
+graphic objects.
+
+
+\>Select( <graph>, <vertex>, <flag> ) O
+\>Select( <graph>, <vertex> ) O
+
+Changes the selection state of the vertex <vertex>. <vertex> must be a
+vertex object in <graph>. The flag determines whether the vertex
+should be selected or deselected. This operation already exists in
+{\XGAP} for graphic objects.  The method without flags assumes `true'.
+
+
+\>DeselectAll( <graph> ) O
+
+Deselects all vertices in the graph or poset <graph>.
+
+
+\>Selected( <graph> ) O
+
+Returns a (shallow-)copy of the set of all selected vertices.
+
+
+
+\medskip%
+*Operations for decisions:*
+\medskip%
+\>ChooseLabel( <graph>, <data> ) O
+\>ChooseLabel( <graph>, <data>, <data> ) O
+
+This operation is called during vertex or edge creation, if the caller
+didn't specify a label for the vertex or edge. It has to return a short
+string which will be attached to the vertex. If it returns `fail' the
+new vertex is not generated! The generic method just returns the empty
+string, so no label is generated.  This method is also called in the
+`Relabel' method without label parameter.
+
+
+\>ChooseLevel( <poset>, <data> ) O
+
+This operation is called during vertex creation, if the caller didn't
+specify a level to which the vertex belongs. It has to return a level
+parameter which exists in the poset. If it returns `fail' the new
+vertex is not generated!
+
+
+\>ChooseClass( <poset>, <data>, <levelparam> ) O
+
+This operation is called during vertex creation, if the caller didn't
+specify a class to which the vertex belongs. It has to return a
+class parameter which exists in the poset in the level with parameter
+<levelparam>. If it returns `fail' the new vertex is not generated!
+
+
+\>ChooseColor( <graph>, <data> ) O
+\>ChooseColor( <graph>, <data1>, <data2> ) O
+
+This operation is called during vertex or edge creation. It has to return a
+color. If it returns `fail' the new vertex is not generated!
+It is also called in the `Recolor' method without color parameter.
+
+
+\>ChooseHighlight( <graph>, <data> ) O
+
+This operation is called during vertex creation. It has to return a
+flag which indicates, whether the vertex is highlighted or not. If it 
+returns `fail' the new vertex is not generated!
+It is also called in the `Highlight' method without flag parameter.
+
+
+\>ChoosePosition( <poset>, <data>, <levelparam>, <classparam>, <hints> ) O
+\>ChoosePosition( <graph>, <data> ) O
+
+This operation is called during vertex creation.  It has to return a
+list with two integers: the coordinates. For posets those are relative
+to the level the vertex resides in.  If it returns `fail' the new
+vertex is not generated! The parameters <levelparam> and <classparam>
+are level and class parameters respectively.
+
+
+\>ChooseShape( <graph>, <data> ) O
+
+This operation is called during vertex creation.
+It has to return a string out of the following list:
+`circle', `diamond', `rectangle'.
+If it returns `fail' the new vertex is not generated!
+
+
+\>ChooseWidth( <graph>, <data> ) O
+\>ChooseWidth( <graph>, <data1>, <data2> ) O
+
+This operation is called during vertex or edge creation.
+It has to return a line width.
+If it returns `fail' the new vertex or edge is not generated!
+This is also called by the `SetWidth' operation without width parameter.
+
+
+\>CompareLevels( <poset>, <levelparam1>, <levelparam2> ) O
+
+
+Compare two level parameters. -1 means that the level with parameter
+<levelparam1> is ``higher'', 1 means that the one with parameter
+<levelparam2> is ``higher'', 0 means that they are equal. `fail' means
+that they are not comparable.
+
+
+
+\medskip%
+*Operations to get information:*
+\medskip%
+\>WhichLevel( <poset>, <y> ) O
+
+Determines the level in which position <y> is. `WhichLevel' returns the
+level parameter or `fail'.
+
+
+\>WhichClass( <poset>, <x>, <y> ) O
+
+Determines a class with a vertex which contains the position
+$(<x>,<y>)$. The first class found is taken.  `WhichClass' returns a
+list with the level parameter as first and the class parameter as
+second element.  `WhichClass' returns `fail' if no such class is found.
+
+
+\>WhichVertex( <graph>, <x>, <y> ) O
+\>WhichVertex( <graph>, <data> ) O
+\>WhichVertex( <graph>, <data>, <func> ) O
+
+Determines a vertex which contains the position $(<x>,<y>)$.
+`WhichVertex' returns a vertex.  In the third form the function <func>
+must take two parameters <data> and the data entry of a vertex in
+question. It must return `true' or `false', according to the right
+vertex being found or not.  The function can for example consider just
+one record component of data records.  `WhichVertex' returns `fail' in
+case no vertex is found.
+
+
+\>WhichVertices( <graph>, <x>, <y> ) O
+\>WhichVertices( <graph>, <data> ) O
+\>WhichVertices( <graph>, <data>, <func> ) O
+
+Determines the list of vertices which contain the position
+$(<x>,<y>)$. `WhichVertices' returns a list.
+In the third form the function <func> must take two parameters <data> and
+the data entry of a vertex in question. It must return `true' or `false', 
+according to the vertex belonging into the result or not.
+The function can for example consider just one record component of
+data records.
+Returns the empty list in case no vertex is found.
+
+
+\>Levels( <poset> ) O
+
+Returns the list of level parameters in descending order meaning
+highest to lowest. 
+
+
+\>Classes( <poset>, <levelparam> ) O
+
+Returns the list of class parameters in the level with parameter
+<levelparam>. `Classes' Returns `fail' if no level with parameter
+<levelparam> exists. 
+
+
+\>Vertices( <poset>, <levelparam>, <classparam> ) O
+
+Returns the list of vertices in the class with parameter <classparam>
+in the level with parameter <levelparam>. Returns `fail' if no level
+with parameter <levelparam> or no class with parameter <classparam>
+exists in the level.
+
+
+\>Maximals( <poset>, <vertex> ) O
+
+Returns the list of maximal subvertices in <vertex>. 
+
+
+\>MaximalIn( <poset>, <vertex> ) O
+
+Returns the list of vertices, in which <vertex> is maximal.  
+
+
+\>PositionLevel( <poset>, <levelparam> ) O
+
+Returns the y position of the level relative to the graphic
+sheet and the height. Returns `fail' if no level with parameter 
+<levelparam> exists.
+
+
+
+\medskip%
+*Operations for user communication:*
+\medskip%
+\>`Menu( <graph>, <title>, <entrylist>, <typelist>, <functionslist> )'{Menu![poset]}@{`Menu'!`[poset]'} O
+
+This operation already exists in {\XGAP} for graphic sheets.
+Builds a new menu with title <title> but with information about the
+type of the menu entry. 
+This information describes the relation between the selection state of
+the vertices and the parameters supplied to the functions. It is stored 
+in the list <typelist>, which consists of strings. The following 
+types are supported:
+\beginitems
+  `forany' &  always enabled, generic routines don't change anything
+
+  `forone' &  enabled iff exactly one vertex is selected
+
+  `fortwo' &  enabled iff exactly two vertices are selected
+
+  `forthree'& enabled iff exactly three vertices are selected
+
+  `forsubset'&enabled iff at least one vertex is selected
+
+  `foredge' & enabled iff a connected pair of two vertices is selected
+
+  `formin2' & enabled iff at least two vertices are selected
+
+  `formin3' & enabled iff at least three vertices are selected
+
+\enditems
+
+<entrylist> and <functionslist> are like in the original operation for
+graphic sheets.
+The `IsMenu' object is returned. It is also stored in the sheet.
+
+
+\>ModifyEnabled( <graph>, <from>, <to> ) O
+
+Modifies the ``Enabledness'' of menu entries according to their type and
+number of selected vertices. This operation works on all menu entries
+of some menus: <from> is the first menu to work on and
+<to> the last one (indices). Only menus with the property `IsAlive' are
+considered. `ModifyEnabled' returns nothing.
+
+
+\>InstallPopup( <graph>, <func> ) O
+
+Installs a function that is called if the user clicks with the right
+button on a vertex. The function gets as parameters:
+ <poset>,<vertex>,<x>,<y>        (click position)
+
+
+\>PosetLeftClick( <poset>, <x>, <y> ) O
+
+This operation is called when the user does a left click in the poset
+<poset>. The current pointer position is supplied in the parameters <x> 
+and <y>. The generic method for `PosetLeftClick' lets the user move,
+select and deselect vertices or edges. An edge is selected as pair of
+vertices. 
+
+
+\>PosetCtrlLeftClick( <poset>, <x>, <y> ) O
+
+
+This operation is called when the user does a left click in a poset
+<poset> while holding down the control key. The current pointer
+position is supplied in the parameters <x> and <y>. The generic method
+for `PosetCtrlLeftClick' lets the user move, select and deselect
+vertices or edges. The difference to the operation without the control
+key is, that while selecting the old vertices are NOT deselected.
+Moving does not move the whole class but only one vertex. This allows
+for permuting the vertices within a class. An edge is selected as pair
+of vertices.
+
+
+\>PosetRightClick( <poset>, <x>, <y> ) O
+
+This operation is called when the user does a right click in the graph
+<graph>.  The generic method just finds the vertex under the mouse
+pointer and calls the `rightclickfunction' of the poset or graph which
+is a component in the {\GAP} object. Note that the `rightclickfunction'
+can be called with `fail' if no vertex is hit.
+
+
+
+\medskip%
+*Operations for user actions:*
+\medskip%
+\>UserDeleteVerticesOp( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Delete vertices'.
+The generic method actually deletes the selected vertices including all
+their edges.
+
+
+\>UserDeleteEdgeOp( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Delete edge'.
+The generic method deletes the edge with no further warning!
+
+
+\>UserMergeClassesOp( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Merge Classes'.
+The generic method walks through all levels and merges all classes that
+contain a selected vertex. Afterwards `UserRearrangeClasses' is called.
+
+
+\>UserMagnifyLattice( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Magnify Lattice'. 
+The generic method scales everything by $144/100$ including the sheet,
+all heights of levels and positions of vertices.
+
+
+\>UserShrinkLattice( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Shrink Lattice'. 
+The generic method scales everything by 100/144 including the sheet,
+all heights of levels and positions of vertices.
+
+
+\>UserResizeLattice( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Resize Lattice'. 
+The generic method asks the user for an x and a y factor and scales
+everything including the sheet, all heights of levels and positions of 
+vertices.
+
+
+\>UserResizeSheet( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Resize Sheet'. 
+The generic method asks the user for an x and a y pixel number and
+changes the width and height of the sheet. No positions of levels and
+vertices are changed. If the user asks for trouble he gets it!
+
+
+\>UserMoveLattice( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Move Lattice'. 
+The generic method asks the user for a pixel number and
+changes the position of all vertices horizontally. No positions of 
+levels are changed. 
+
+
+\>UserChangeLabels( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Change Labels'. 
+The user is prompted for every selected vertex, which label it should
+have.
+
+
+\>UserAverageY( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Average Y Positions'.
+In all levels the average y coordinate is calculated and all vertices are
+moved to this y position.
+
+
+\>UserAverageX( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Average X Positions'.
+The average of all x coordinates of the selected vertices is calculated.
+Then all classes with a selected vertex are moved such that the first
+selected vertex in this class has the calculated position as x position.
+
+
+\>UserRearrangeClasses( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Rearrange Classes'.
+All classes with a selected vertex are rearranged: The vertices are
+lined up neatly one after the other, sorted according to their current
+x position.
+
+
+\>UserUseBlackWhite( <sheet>, <menu>, <entry> ) O
+
+
+This is called if the user selects `Use Black and White' in the menu.
+
+
+\>PosetShowLevels( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Show Levels' in the menu.
+Switches the display of the little boxes for level handling on and off.
+
+
+\>PosetShowLevelparams( <sheet>, <menu>, <entry> ) O
+
+
+This operation is called when the user selects `Show Level Parameters' in 
+the menu. Switches the display of the level parameters at the right of
+the screen on and off.
+
+
+\>DoRedraw( <graph> ) O
+
+Redraws all vertices and connections.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{An Example}
+
+This section shows how to use the poset package to display posets. The code
+presented here is actually part of the {\XGAP} library and makes up the
+link to the C MeatAxe.
+
+This is the declaration part:
+
+\begintt
+#############################################################################
+##
+#W  meataxe.gd                  XGAP library                  Max Neunhoeffer
+##
+#Y  Copyright 1998,       Max Neunhoeffer,              Aachen,       Germany
+##
+##  This file contains declarations for MeatAxe posets
+##
+
+DeclareFilter("IsMeatAxeLattice");
+
+#############################################################################
+##
+#O  GraphicMeatAxeLattice(<name>, <width>, <height>)  . creates graphic poset
+##
+##  creates a new graphic MeatAxe lattice which is a specialization of a
+##  graphic poset. Those posets have a new filter for method selection.
+##
+DeclareOperation("GraphicMeatAxeLattice",[IsString, IsInt, IsInt]);
+\endtt
+
+The code only declares a new filter and declares a constructor operation
+for posets that lie in this new filter.
+
+The implementation:
+
+\begintt
+#############################################################################
+##
+#W  meataxe.gi                  XGAP library                  Max Neunhoeffer
+##
+#Y  Copyright 1998,       Max Neunhoeffer,              Aachen,       Germany
+##
+##  This file contains code for MeatAxe posets
+##
+
+#############################################################################
+##
+#M  GraphicMeatAxeLattice(<name>, <width>, <height>)  . creates graphic poset
+##
+##  creates a new graphic MeatAxe lattice which is a specialization of a
+##  graphic poset. Those posets have a new filter for method selection.
+##
+InstallMethod( GraphicMeatAxeLattice,
+    "for a string, and two integers",
+    true,
+    [ IsString,
+      IsInt,
+      IsInt ],
+    0,
+
+function( name, width, height )
+  local P;
+
+  P := GraphicPoset(name,width,height);
+  SetFilterObj(P,IsMeatAxeLattice);
+  return P;
+end);
+
+#############################################################################
+##
+#M  CompareLevels(<poset>,<levelparam1>,<levelparam2>)  . . . . . . . . . . .
+##  . . . . . . . . . . . . . . . . . . . . . . . .  compares two levelparams
+##
+##  Compare two level parameters. -1 means that <levelparam1> is "higher", 
+##  1 means that <levelparam2> is "higher", 0 means that they are equal. 
+##  fail means that they are not comparable. This method is for the case 
+##  if level parameters are integers and lower values mean lower levels 
+##  like in the case of MeatAxe lattices of Michael Ringe.
+##
+InstallMethod( CompareLevels,
+    "for a graphic MeatAxe lattice, and two integers",
+    true,
+    [ IsGraphicPosetRep and IsMeatAxeLattice, IsInt, IsInt ],
+    0,
+function( poset, l1, l2 )
+  if l1 < l2 then
+    return 1;
+  elif l1 > l2 then
+    return -1;
+  else
+    return 0;
+  fi;
+end);
+\endtt
+
+Besides the new constructor (which only adds a new filter) we only have to
+supply a new method for comparison of level parameters for such posets. The 
+levels are numbered with integer numbers such that lower numbers are lower
+in the lattice.
+
+There is a C program in the MeatAxe that exports a poset to a {\GAP}
+program which generates the lattice in a graphic poset sheet. The user can
+then interactively move around vertices and shrink or magnify levels. He
+can then export the resulting lattice to an encapsulated postscript file.
+Note that you need a full installation of the C MeatAxe apart from
+{\GAP} to use this feature.
+
+Another nice little example is in the `examples' subdirectory in the
+{\XGAP} distribution. It was written by Thomas Breuer (Aachen) to
+demonstrate the features of {\XGAP}. The user gets a small window with a
+puzzle and can solve it using the mouse. You can test this example by
+starting {\XGAP} and `Read'ing the file `pkg/xgap/examples/puzzle.g'.
+You can do this by using
+
+\begintt
+gap> ReadPkg("xgap","examples/puzzle.g");
+gap> p := Puzzle(4,4);
+\endtt
+
+
+
+

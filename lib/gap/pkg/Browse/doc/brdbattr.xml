@@ -1,0 +1,541 @@
+
+<Appendix Label="chap:brdbattr">
+<Heading>Some Tools for Database Handling</Heading>
+
+Two aims of the tools described in this appendix are
+<List>
+<Item>
+  speeding up selection functions
+  such as <Ref Func="AllCharacterTableNames" BookName="ctbllib"/>
+  for certain data libraries of &GAP; (with not too many entries),
+  in the sense that users can extend the list of attributes that are
+  treated in a special way
+</Item>
+<Item>
+  and a programmatic extension for rendering overviews of information
+  about the contents of databases,
+  using <Ref Func="BrowseTableFromDatabaseIdEnumerator"/>.
+</Item>
+</List>
+
+<P/>
+
+The &GAP; objects introduced for that are
+<E>database id enumerators</E> (see <Ref Subsect="subsect:dbidenum"/>) and
+<E>database attributes</E> (see <Ref Subsect="subsect:dbattr"/>).
+
+<P/>
+
+Contrary to the individual interfaces to
+the &GAP; manuals (see Section <Ref Sect="sec:manualdisp"/>),
+the &GAP; bibliography (see Section <Ref Sect="sec:gapbibl"/>),
+and the overviews of &GAP; packages, &GAP; methods, and Conway polynomials
+available in &GAP; (see Section <Ref Sect="sec:datadisp"/>),
+the approach that will be described here assumes a special way to access
+database entries.
+Thus it depends on the structure of a given database
+whether the tools described here are useful,
+or whether an individual interface fits better.
+Perhaps the examples shown in Sections <Ref Sect="sect:dbidenumxpl"/>
+and <Ref Sect="sect:transgrps"/> give an impression what is possible.
+
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sect:dbobjects">
+<Heading>&GAP; Objects for Database Handling</Heading>
+
+<#Include Label="subsect:dbidenum">
+
+<#Include Label="subsect:dbattr">
+
+<#Include Label="subsect:db_how_to_use">
+
+<#Include Label="DatabaseIdEnumerator_man">
+
+<#Include Label="DatabaseAttributeAdd_man">
+
+<#Include Label="DatabaseAttributeValueDefault_man">
+
+<#Include Label="DatabaseIdEnumeratorUpdate_man">
+
+<#Include Label="DatabaseAttributeCompute_man">
+
+<#Include Label="DatabaseAttributeSetData_man">
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sect:dbbrowse">
+<Heading>Using Database Attributes for Browse Tables</Heading>
+
+<#Include Label="subsect:attr_browse_comp">
+
+<#Include Label="BrowseTableFromDatabaseIdEnumerator_man">
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sect:dbidenumxpl">
+<Heading>Example: Database Id Enumerators and Database Attributes</Heading>
+
+As an example for the functions introduced in this appendix,
+we introduce the <E>database of small integers</E>.
+
+For that, we fix a positive integer <M>n</M> and consider the integers
+from <M>1</M> to <M>n</M> as the entries of our database.
+Using these integers as their own identifiers,
+we construct the database id enumerator.
+
+<Example>
+gap> n:= 100;;
+gap> smallintenum1:= DatabaseIdEnumerator( rec(
+>      identifiers:= [ 1 .. n ],
+>      entry:= function( dbidenum, id ) return id; end,
+>    ) );;
+</Example>
+
+Examples of attributes for this database are the properties whether or not
+an integer is a prime or a prime power.
+There are global &GAP; functions <Ref Func="IsPrimeInt" BookName="ref"/>
+and <Ref Func="IsPrimePowerInt" BookName="ref"/>
+for computing these properties,
+so we can define these database attributes via a <C>name</C> component;
+we choose <C>"values"</C> as the <C>type</C> value,
+so the values (<K>true</K> or <K>false</K>) are stored
+in a list of length <M>n</M> for each of the two database attributes.
+
+<Example>
+gap> DatabaseAttributeAdd( smallintenum1, rec(
+>      identifier:= "primes",
+>      type:= "values",
+>      name:= "IsPrimeInt",
+>    ) );
+gap> DatabaseAttributeAdd( smallintenum1, rec(
+>      identifier:= "prime powers",
+>      type:= "values",
+>      name:= "IsPrimePowerInt",
+>    ) );
+</Example>
+
+Similarly, we consider the prime factors as a database attribute.
+
+<Example>
+gap> DatabaseAttributeAdd( smallintenum1, rec(
+>      identifier:= "factors",
+>      type:= "values",
+>      name:= "Factors",
+>    ) );
+</Example>
+
+Another example of an attribute of integers is the residue modulo <M>11</M>.
+We do not want to introduce a global &GAP; function for computing the value,
+so we use the <C>create</C> component in order to define the attribute;
+again, the values (integers from <M>0</M> to <M>10</M>) are stored in a list
+of length <M>n</M>.
+
+<Example>
+gap> DatabaseAttributeAdd( smallintenum1, rec(
+>      identifier:= "residue mod 11",
+>      type:= "values",
+>      create:= function( attr, id ) return id mod 11; end,
+>    ) );
+</Example>
+
+Some integers are values of <Ref Func="Factorial" BookName="ref"/>,
+and we want to record this information and show it in a browse table.
+For most integers, nothing is stored and shown for this attribute,
+so we choose the <C>type</C> value <C>"pairs"</C>
+and precompute the information for the <C>data</C> component.
+(The default for the <C>dataDefault</C> component is an empty string,
+which is fine; so we need not prescribe this component.)
+
+<Example><![CDATA[
+gap> factorialdata:= function( n )
+>      local result, i, f;
+>      result:= [];  i:= 1;  f:= 1;;
+>      while f <= n do
+>        Add( result, [ f, i ] );  i:= i + 1;  f:= f * i;
+>      od;
+>      return result;
+>    end;;
+gap> DatabaseAttributeAdd( smallintenum1, rec(
+>      identifier:= "inverse factorial",
+>      type:= "pairs",
+>      data:= rec( automatic:= factorialdata( n ), nonautomatic:= [] ),
+>      isSorted:= true,
+>    ) );
+]]></Example>
+
+We use this setup for creating a browse table.
+The integers are shown as the first column,
+using the <C>"self"</C> attribute.
+This attribute can be used as a column of row labels
+(useful if we want to keep the column visible when one scrolls the table
+to the right)
+or as a column in the main table
+(useful if we want to search for the values);
+here we choose the former possibility.
+
+<Example>
+gap> t1:= BrowseTableFromDatabaseIdEnumerator( smallintenum1,
+>           [ "self" ],
+>           [ "primes", "prime powers", "factors", "residue mod 11",
+>             "inverse factorial" ] );;
+</Example>
+
+The following session shows some of the features of the browse table.
+
+<Example>
+gap> nop:= [ 14, 14, 14, 14, 14, 14 ];;  # ``do nothing''
+gap> sample_session:= Concatenation(
+>         # categorize by the first column, expand categories, wait, reset
+>         nop, "scsc", nop, "X", nop, "!",
+>         # sort the residue column, wait, reset
+>         "scrrrso", nop, "!",
+>         # categorize by the inverse factorial column
+>         "rscsrdx", nop, "!",
+>         # and quit the application
+>         "qQ" );;
+gap> BrowseData.SetReplay( sample_session );
+gap> NCurses.BrowseGeneric( t1 );
+gap> BrowseData.SetReplay( false );
+gap> Unbind( t1.dynamic.replay );
+</Example>
+
+(Note that the last statement above is necessary to run the session
+more than once.)
+
+The result is not too bad but we can improve the table,
+using the optional components of database attributes,
+as follows.
+
+<List>
+<Item>
+  The strings <C>"true"</C> and <C>"false"</C> shown for the Boolean valued
+  database attributes can be replaced by the perhaps more suggestive strings
+  <C>"+"</C> and <C>"-"</C>
+  (or perhaps an empty string instead of <C>"-"</C>).
+</Item>
+<Item>
+  The alignment of values inside their columns can be customized.
+</Item>
+<Item>
+  When the browse table is categorized by a column then the values in this
+  column do usually not provide suitable category rows;
+  we can prescribe individual category values.
+</Item>
+<Item>
+  The column labels can be customized.
+</Item>
+<Item>
+  Where the lexicographic order is not appropriate for sorting table entries,
+  we can prescribe an individual comparison function.
+</Item>
+<Item>
+  Sort parameters can be customized.
+</Item>
+<Item>
+  We can prescribe the width of a column, and thus distribute the attribute
+  values for this column to several rows when the values are too long.
+</Item>
+<Item>
+  Finally, in the call of <Ref Func="BrowseTableFromDatabaseIdEnumerator"/>,
+  we can add a header to the browse table.
+</Item>
+</List>
+
+We create a new database id enumerator and the corresponding browse table,
+in order to be able to compare the behaviour of the two objects.
+However, we assume that the variables <C>n</C> and <C>factorialdata</C>
+are already available.
+
+<Example>
+gap> smallintenum2:= DatabaseIdEnumerator( rec(
+>      identifiers:= [ 1 .. n ],
+>      entry:= function( dbidenum, id ) return id; end,
+>      viewLabel:= "",
+>    ) );;
+gap> DatabaseAttributeAdd( smallintenum2, rec(
+>      identifier:= "primes",
+>      type:= "values",
+>      name:= "IsPrimeInt",
+>      viewLabel:= "prime?",
+>      viewValue:= value -> BrowseData.ReplacedEntry( value,
+>          [ true, false ], [ "+", "-" ] ),
+>      sortParameters:= [ "add counter on categorizing", "yes" ],
+>      align:= "c",
+>      categoryValue:= value -> BrowseData.ReplacedEntry( value,
+>          [ true, false ], [ "prime", "nonprime" ] ),
+>    ) );
+gap> DatabaseAttributeAdd( smallintenum2, rec(
+>      identifier:= "prime powers",
+>      type:= "values",
+>      name:= "IsPrimePowerInt",
+>      viewLabel:= "prime power?",
+>      viewValue:= value -> BrowseData.ReplacedEntry( value,
+>          [ true, false ], [ "+", "-" ] ),
+>      sortParameters:= [ "add counter on categorizing", "yes" ],
+>      align:= "c",
+>      categoryValue:= value -> BrowseData.ReplacedEntry( value,
+>          [ true, false ], [ "prime power", "not prime power" ] ),
+>    ) );
+gap> DatabaseAttributeAdd( smallintenum2, rec(
+>      identifier:= "factors",
+>      type:= "values",
+>      name:= "Factors",
+>      viewLabel:= "factors",
+>      viewValue:= value -> JoinStringsWithSeparator( List( value, String ),
+>                                                     " * "),
+>      widthCol:= 10,
+>    ) );
+gap> DatabaseAttributeAdd( smallintenum2, rec(
+>      identifier:= "residue mod 11",
+>      type:= "values",
+>      create:= function( attr, id ) return id mod 11; end,
+>      viewSort:= BrowseData.SortAsIntegers,
+>      categoryValue:= res -> Concatenation( String( res ), " mod 11" ),
+>    ) );
+gap> DatabaseAttributeAdd( smallintenum2, rec(
+>      identifier:= "inverse factorial",
+>      type:= "pairs",
+>      data:= rec( automatic:= factorialdata( n ), nonautomatic:= [] ),
+>      isSorted:= true,
+>      categoryValue:= function( k )
+>        if k = "" then
+>          return "(no factorial)";
+>        else
+>          return Concatenation( String( k ), "!" );
+>        fi;
+>      end,
+>    ) );
+gap> t2:= BrowseTableFromDatabaseIdEnumerator( smallintenum2,
+>           [ "self" ],
+>           [ "primes", "prime powers", "factors", "residue mod 11",
+>             "inverse factorial" ],
+>           t -> BrowseData.HeaderWithRowCounter( t, "Small integers", n ) );;
+</Example>
+
+We run the same session as with the browse table for <C>smallintenum1</C>.
+
+<Example>
+gap> BrowseData.SetReplay( sample_session );
+gap> NCurses.BrowseGeneric( t2 );
+gap> BrowseData.SetReplay( false );
+gap> Unbind( t2.dynamic.replay );
+</Example>
+
+Another possibility to change the look of the table is to combine
+the columns for the two Boolean valued database attributes in one column,
+by showing the string <C>"+"</C> for prime powers, as before,
+and showing this string in boldface red if the number in question is a prime.
+
+We implement this idea in the following database attribute.
+However, note that this can be a bad idea because text attributes
+may be not supported in the user's terminal
+(see Section <Ref Subsect="ssec:ncursesAttrs"/>),
+or the user may have difficulties to see or to distinguish colors;
+also, it must be documented which information is encoded in the table,
+and the column label might be not sufficient for explaining what
+the text attributes mean.
+Alternatively, we could show for example combined symbols such as <C>++</C>,
+<C>+-</C>, <C>--</C> for primes, prime powers, and non-prime-powers,
+respectively.
+
+(We see that besides these issues,
+the required &GAP; code is more involved
+than what is needed for the examples above.)
+
+<Example><![CDATA[
+gap> DatabaseAttributeAdd( smallintenum2, rec(
+>      identifier:= "primes & prime powers",
+>      type:= "values",
+>      create:= function( attr, id )
+>        if   IsPrimeInt( id ) then
+>          return 2;
+>        elif IsPrimePowerInt( id ) then
+>          return 1;
+>        else
+>          return 0;
+>        fi;
+>      end,
+>      viewLabel:= [ NCurses.attrs.BOLD + NCurses.ColorAttr( "red", -1 ),
+>                    "prime", NCurses.attrs.NORMAL, " power?" ],
+>      viewValue:= value -> BrowseData.ReplacedEntry( value,
+>          [ 0, 1, 2 ], [ "-", "+",
+>                         [ NCurses.attrs.BOLD + NCurses.ColorAttr( "red", -1 ),
+>                           true, "+",
+>                           NCurses.ColorAttr( "red", -1 ), false ] ] ),
+>      sortParameters:= [ "add counter on categorizing", "yes" ],
+>      align:= "c",
+>      categoryValue:= value -> BrowseData.ReplacedEntry( value,
+>          [ 0, 1, 2 ],
+>          [ "not prime power", "prime power, not prime", "prime" ] ),
+>    ) );
+gap> t3:= BrowseTableFromDatabaseIdEnumerator( smallintenum2,
+>           [ "self" ],
+>           [ "primes & prime powers", "residue mod 11",
+>             "inverse factorial" ],
+>           t -> BrowseData.HeaderWithRowCounter( t, "Small integers", n ) );;
+gap> sample_session2:= Concatenation(
+>         # categorize by the first column, expand categories, wait, reset
+>         nop, "scsc", nop, "X", nop, "!", "Q" );;
+gap> BrowseData.SetReplay( sample_session2 );
+gap> NCurses.BrowseGeneric( t3 );
+gap> BrowseData.SetReplay( false );
+gap> Unbind( t3.dynamic.replay );
+]]></Example>
+
+Now we want to consider the database as extendible,
+that is, we want to be able to increase <M>n</M>
+after constructing the database attributes.
+For that, we use <M>n</M> as the <C>version</C> value of the
+database id enumerator,
+and provide <C>version</C> and <C>update</C> components for
+all attributes.
+
+<P/>
+
+Again, we start the construction from scratch.
+
+<Example><![CDATA[
+gap> smallintenum3:= DatabaseIdEnumerator( rec(
+>     identifiers:= [ 1 .. n ],
+>     entry:= function( dbidenum, id ) return id; end,
+>     viewLabel:= "",
+>     version:= n,
+>     update:= function( dbidenum )
+>         dbidenum.identifiers:= [ 1 .. n ];
+>         dbidenum.version:= n;
+>         return true;
+>       end,
+>     ) );;
+gap> updateByUnbindData:= function( attr )
+>      Unbind( attr.data );
+>      return true;
+>    end;;
+gap> DatabaseAttributeAdd( smallintenum3, rec(
+>     identifier:= "primes",
+>     type:= "values",
+>     name:= "IsPrimeInt",
+>     viewLabel:= "prime?",
+>     viewValue:= value -> BrowseData.ReplacedEntry( value,
+>         [ true, false ], [ "+", "-" ] ),
+>     sortParameters:= [ "add counter on categorizing", "yes" ],
+>     align:= "c",
+>     categoryValue:= value -> BrowseData.ReplacedEntry( value,
+>         [ true, false ], [ "prime", "nonprime" ] ),
+>     version:= n,
+>     update:= updateByUnbindData,
+>     ) );
+gap> DatabaseAttributeAdd( smallintenum3, rec(
+>     identifier:= "prime powers",
+>     type:= "values",
+>     name:= "IsPrimePowerInt",
+>     viewLabel:= "prime power?",
+>     viewValue:= value -> BrowseData.ReplacedEntry( value,
+>         [ true, false ], [ "+", "-" ] ),
+>     sortParameters:= [ "add counter on categorizing", "yes" ],
+>     align:= "c",
+>     categoryValue:= value -> BrowseData.ReplacedEntry( value,
+>         [ true, false ], [ "prime power", "not prime power" ] ),
+>     version:= n,
+>     update:= updateByUnbindData,
+>     ) );
+gap> DatabaseAttributeAdd( smallintenum3, rec(
+>     identifier:= "factors",
+>     type:= "values",
+>     name:= "Factors",
+>     viewLabel:= "factors",
+>     viewValue:= value -> JoinStringsWithSeparator( List( value, String ),
+>                                                    " * "),
+>     widthCol:= 10,
+>     version:= n,
+>     update:= updateByUnbindData,
+>     ) );
+gap> DatabaseAttributeAdd( smallintenum3, rec(
+>     identifier:= "residue mod 11",
+>     type:= "values",
+>     create:= function( attr, id ) return id mod 11; end,
+>     viewSort:= BrowseData.SortAsIntegers,
+>     categoryValue:= res -> Concatenation( String( res ), " mod 11" ),
+>     version:= n,
+>     update:= updateByUnbindData,
+>     ) );
+gap> DatabaseAttributeAdd( smallintenum3, rec(
+>     identifier:= "inverse factorial",
+>     type:= "pairs",
+>     data:= rec( automatic:= factorialdata( n ), nonautomatic:= [] ),
+>     isSorted:= true,
+>     categoryValue:= function( k )
+>       if k = "" then
+>         return "(no factorial)";
+>       else
+>         return Concatenation( String( k ), "!" );
+>       fi;
+>     end,
+>     version:= n,
+>     update:= function( attr )
+>         attr.data.automatic:= factorialdata( n );
+>         return true;
+>       end,
+>     ) );
+]]></Example>
+
+Now we can change the set of database entries by assigning a new value
+to the variable <C>n</C>,
+and then calling <Ref Func="DatabaseIdEnumeratorUpdate"/>.
+
+<Example>
+gap> n:= 200;;
+gap> DatabaseIdEnumeratorUpdate( smallintenum3 );
+true
+gap> t4:= BrowseTableFromDatabaseIdEnumerator( smallintenum3,
+>   [ "self" ], [ "primes", "prime powers", "factors", "residue mod 11",
+>     "inverse factorial" ],
+>   t -> BrowseData.HeaderWithRowCounter( t, "Small integers", n ) );;
+gap> BrowseData.SetReplay( sample_session );
+gap> NCurses.BrowseGeneric( t4 );
+gap> BrowseData.SetReplay( false );
+gap> Unbind( t4.dynamic.replay );
+</Example>
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sect:transgrps">
+<Heading>Example: An Overview of the &GAP; Library of Transitive Groups
+</Heading>
+
+The example shown in this section deals with &GAP;'s Library of
+Transitive Permutation Groups,
+see <Ref Sect="Transitive Permutation Groups" BookName="Ref"/>.
+Section <Ref Subsect="BrowseTransitiveGroupsInfo"/> introduces a browse table
+application for viewing information about the contents of this library,
+which is based on database attributes.
+Section <Ref Subsect="TransitiveGroupsData.AllTransitiveGroups"/> introduces
+functions based on database attributes that can be used to select groups
+from the library.
+Finally, Section <Ref Subsect="TransitiveGroupsData"/> describes
+how these two functionalities are implemented.
+
+<#Include Label="BrowseTransitiveGroupsInfo_man">
+<#Include Label="TransitiveGroupsData.SelectTransitiveGroups_man">
+<#Include Label="TransitiveGroupsData_man">
+<#Include Label="transdbattr_man">
+
+</Section>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<Section Label="sect:tomlibinfo">
+<Heading>Example: An Overview of the &GAP; Library of Tables of Marks
+</Heading>
+
+The example shown in this section deals with &GAP;'s Library of
+Tables of Marks (the <Package>TomLib</Package> package <Cite Key="TomLib"/>).
+
+<#Include Label="BrowseTomLibInfo_man">
+
+</Section>
+
+</Appendix>
+

@@ -1,0 +1,714 @@
+<html><head><title>[SONATA] 9 Fixed-point-free automorphism groups</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP008.htm">Previous</a>] [<a href ="CHAP010.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>9 Fixed-point-free automorphism groups</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP009.htm#SECT001">Fixed-point-free automorphism groups and Frobenius groups</a>
+<li> <A HREF="CHAP009.htm#SECT002">Fixed-point-free representations</a>
+<li> <A HREF="CHAP009.htm#SECT003">Fixed-point-free automorphism groups</a>
+</ol><p>
+<p>
+The functions described in this chapter are purely group-theoretic and
+are meant to provide solvable fixed-point-free automorphism groups acting on
+abelian groups (Frobenius groups with abelian Frobenius kernel and solvable
+Frobenius complement)
+for the construction of centralizer nearrings, planar nearrings, designs,
+and so on.
+<p>
+The classification of fixed-point-free automorphism groups in types I - IV 
+follows Zassenhaus' papers and <a href="biblio.htm#Wolf:Spaces"><[>Wolf:Spaces</cite></a>].
+The fixed-point-free automorphism groups acting on abelian groups are
+constructed from fixed-point-free representations as described in 
+<a href="biblio.htm#Mayr:Representations"><[>Mayr:Representations</cite></a>].
+<p>
+<p>
+<h2><a name="SECT001">9.1 Fixed-point-free automorphism groups and Frobenius groups</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>IsFpfAutomorphismGroup( </code><var>phi</var><code>, </code><var>G</var><code> )</code>
+<p>
+An automorphism group <var>Phi</var> of a group <var>G</var> acts fixed-point-free (fpf) on <var>G</var>
+if <var>Phi</var> has more than 1 element and no automorphism in <var>Phi</var> except the
+identity mapping has a fixed point besides the group identity of <var>G</var>.
+<p>
+<var>Phi</var> is fpf on <var>G</var>, iff the semidirect product of
+<var>G</var> and <var>Phi</var>, with <var>Phi</var> acting naturally on <var>G</var>, is a Frobenius group.
+<p>
+The function <code>IsFpfAutomorphismGroup</code> returns the according value 
+<code>true</code> or <code>false</code> for a group of automorphisms <var>phi</var> on the group <var>G</var>.
+<p>
+<pre>
+    gap&gt; C9 := CyclicGroup( 9 );
+    &lt;pc group of size 9 with 2 generators&gt;
+    gap&gt; a := GroupHomomorphismByFunction( C9, C9, x -&gt; x^-1 );;
+    gap&gt; phi := Group( a );;
+    gap&gt; Size( phi );
+    2
+    gap&gt; IsFpfAutomorphismGroup( phi, C9 );
+    true
+</pre>
+<p>
+<a name = "SSEC001.2"></a>
+<li><code>FpfAutomorphismGroupsMaxSize( </code><var>G</var><code> )</code>
+<p>
+<code>FpfAutomorphismGroupsMaxSize</code> returns a list with integers <var>kmax</var>
+and <var>dmax</var> where <var>kmax</var> is an upper bound for the size of an fpf
+automorphism group on the group <var>G</var>; for example, the order of <var>G</var> is
+congruent to 1 modulo <var>kmax</var> and <var>kmax</var> is odd for nonabelian groups <var>G</var>. 
+The order of any fpf automorphism group <var>phi</var> on <var>G</var> divides <var>kmax</var>.
+<p>
+Let <var>phi</var> be a metacyclic fpf automorphism group acting on <var>G</var>.
+Then <var>phi</var> has a cyclic normal subgroup whose index in <var>phi</var> divides <var>dmax</var>.
+Thus, if <var>dmax</var> is 1, then <var>G</var> admits cyclic fpf automorphism
+groups only.
+<p>
+<pre>
+    gap&gt; G := ElementaryAbelianGroup( 49 );;
+    gap&gt; FpfAutomorphismGroupsMaxSize( G );
+    [ 48, 2 ]
+    gap&gt; C15 := CyclicGroup( 15 );;
+    gap&gt; FpfAutomorphismGroupsMaxSize( C15 );
+    [ 2, 1 ]
+</pre>
+<p>
+<a name = "SSEC001.3"></a>
+<li><code>FrobeniusGroup( </code><var>phi</var><code>, </code><var>G</var><code> )</code>
+<p>
+<code>FrobeniusGroup</code> constructs the semidirect product of <var>G</var> with the 
+fpf automorphism group <var>phi</var> of <var>G</var> with the multiplication
+<var>(a,g)*(b,h)=(ab,g<sup>a</sup>h)</var> by using the function <code>SemidirectProduct</code>.
+Thus a Frobenius group with Frobenius kernel <var>G</var> and Frobenius complement
+<var>phi</var> where the action of <var>phi</var> on <var>G</var> is the natural action of automorphisms
+on the group is returned.
+<p>
+The unique Frobenius group with kernel
+<var>G = (Z<sub>3</sub>)<sup>2</sup>times(Z<sub>5</sub>)<sup>2</sup></var>
+and quaternion complement is constructed as follows:
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroupsMetacyclic( [3,3,5,5], 4, -1 ); 
+    [ [ [ [ f1, f2, f3, f4 ] -&gt; [ f1^2, f2^3, f3*f4, f3*f4^2 ], 
+              [ f1, f2, f3, f4 ] -&gt; [ f2^4, f1, f4^2, f3 ] ] ], 
+      &lt;pc group of size 225 with 4 generators&gt; ]
+    gap&gt; phi := Group( aux[1][1] );
+    &lt;group with 2 generators&gt;
+    gap&gt; G := aux[2];
+    &lt;pc group of size 225 with 4 generators&gt;
+    gap&gt; FrobeniusGroup( phi, G );
+    &lt;pc group of size 1800 with 7 generators&gt;
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">9.2 Fixed-point-free representations</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>IsFpfRepresentation( </code><var>matrices</var><code>, </code><var>F</var><code>  )</code>
+<p>
+Let <var>pi</var> be a representation of the group <var>Phi</var> over the finite field <var>F</var>.
+If for all <var>varphiinPhi</var> except for the identity the matrix <var>pi(varphi)</var>
+does not have <var>1</var> as an eigenvalue, then <var>pi</var> is said to be fpf.
+<p>
+Let <var>pi</var> be an fpf representation of <var>Phi</var> over <var>F</var> with degree
+<var>d</var>. Then <var>pi</var> is faithful, the order of <var>Phi</var> and the characteristic of
+<var>F</var> are coprime and <var>pi</var> is a sum of irreducible faithful fpf
+<var>F</var>-representations.
+The matrix group <var>pi(Phi)</var> acts fpf on the vectorspace <var>F<sup>d</sup></var>.
+<p>
+For a list of <var>dtimesd</var> matrices, <var>matrices</var>, over the field <var>F</var>,
+the function <code>IsFpfRepresentation</code> returns <code>true</code> if the  
+group generated by <var>matrices</var> acts fpf on the <var>d</var>-dimensional
+vectorspace over <var>F</var>, and <code>false</code> otherwise.
+<p>
+<pre>
+    gap&gt; F := GF(5);;
+    gap&gt; A := [[2,0],[0,3]]*One(F);
+    [ [ Z(5), 0*Z(5) ], [ 0*Z(5), Z(5)^3 ] ]
+    gap&gt; IsFpfRepresentation( [A], F );
+    true
+</pre>
+<p>
+<a name = "SSEC002.2"></a>
+<li><code>DegreeOfIrredFpfRepCyclic( </code><var>p</var><code>, </code><var>m</var><code> )</code>
+<p>
+returns the degree of the irreducible fpf representations of
+the cyclic group of order <var>m</var> over GF(<var>p</var>), where <var>m</var> and <var>p</var> are coprime.
+<p>
+Note, that all irreducible fpf representations of the cyclic group
+of order <var>m</var> over GF(<var>p</var>) have the same degree, the multiplicative order 
+of <var>p</var> modulo <var>m</var>, <code>OrderMod( p, m )</code>.
+<p>
+<pre>
+    gap&gt; DegreeOfIrredFpfRepCyclic( 5, 9 );
+    6
+</pre>
+<p>
+<a name = "SSEC002.3"></a>
+<li><code>DegreeOfIrredFpfRepMetacyclic( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code> )</code>
+<p>
+returns the degree of the irreducible fpf representations of
+the metacyclic group <var>Phi</var> determined by parameters <var>m</var> and <var>r</var> over
+GF(<var>p</var>). If the parameters are not feasible, then an error is returned.
+See <code>FpfRepresentationsMetacyclic</code> for a presentation of this
+group.
+<p>
+All irreducible fpf representations of the metacyclic group
+over GF(<var>p</var>) have the same degree, namely the size of multiplicative group
+generated by <var>p</var> and <var>r</var> modulo <var>m</var>.
+<p>
+We determine the degree of the irreducible fpf representation of the 
+quaternion group over GF(5):
+<p>
+<pre>
+    gap&gt; DegreeOfIrredFpfRepMetacyclic( 5, 4, -1 );
+    2
+</pre>
+<p>
+<a name = "SSEC002.4"></a>
+<li><code>DegreeOfIrredFpfRep2( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code>, </code><var>k</var><code> )</code>
+<p>
+returns the degree of the irreducible fpf representations of
+the type-II-group <var>Phi</var> determined by parameters <var>m</var>, <var>r</var>, and <var>k</var> over
+GF(<var>p</var>). If the parameters are not feasible or if the parameters describe
+the presentation of a metacyclic group, then an error is returned.
+See <code>FpfRepresentations2</code> for a presentation of this group.
+<p>
+All irreducible fpf representations of <var>Phi</var> over GF(<var>p</var>) have
+the same degree, namely the size of the multiplicative group
+generated by <var>p</var>, <var>r</var>, and <var>k</var> modulo <var>m</var>.
+<p>
+We determine the degree of the irreducible fpf representation of the smallest,
+not metacyclic type-2-group (order 120) over the field GF(7): 
+<p>
+<pre>
+    gap&gt; DegreeOfIrredFpfRep2( 7, 30, 11, -1 );    
+    8
+</pre>
+<p>
+<a name = "SSEC002.5"></a>
+<li><code>DegreeOfIrredFpfRep3( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code> )</code>
+<p>
+returns the degree of the irreducible fpf representations of
+the type-III-group <var>Phi</var> determined by parameters <var>m</var> and <var>r</var> over
+GF(<var>p</var>). If the parameters are not feasible, then an error is returned.
+See <code>FpfRepresentations3</code> for a presentation of this
+group.
+<p>
+All irreducible fpf representations of this group
+over GF(<var>p</var>) have the same degree.
+<p>
+We determine the degree of the irreducible fpf representation of SL(2,3)
+over GF(5):
+<p>
+<pre>
+    gap&gt; DegreeOfIrredFpfRep3( 5, 3, 1 );                                  
+    2
+</pre>
+<p>
+<a name = "SSEC002.6"></a>
+<li><code>DegreeOfIrredFpfRep4( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code>, </code><var>k</var><code> )</code>
+<p>
+returns the degree of the irreducible fpf representations of
+the type-IV-group <var>Phi</var> determined by parameters <var>m</var>, <var>r</var>, and <var>k</var> over
+GF(<var>p</var>). If the parameters are not feasible, then an error is returned.
+See <code>FpfRepresentations4</code> for a presentation of this group.
+<p>
+All irreducible fpf representations of <var>Phi</var> over GF(<var>p</var>) have
+the same degree.
+<p>
+We determine the degree of the irreducible fpf representation of the smallest
+type-4-group, the binary octahedral group of order 48, over <var>GF(5)</var>:
+<p>
+<pre>
+    gap&gt; DegreeOfIrredFpfRep4( 5, 3, 1, -1 );   
+    4
+</pre>
+<p>
+<a name = "SSEC002.7"></a>
+<li><code>FpfRepresentationsCyclic( </code><var>p</var><code>, </code><var>m</var><code> )</code>
+<p>
+Let <var>a</var> generate a cyclic group of order <var>m</var>. 
+For <var>p</var> and <var>m</var> coprime <code>FpfRepresentationsCyclic</code>
+returns a list of matrices <var>{ A<sup>i</sup> | i</var> in <var>indexlist }</var> over GF(<var>p</var>)
+as well as the list <var>indexlist</var>.
+For all <var>i</var> in <var>indexlist</var> the representation <var>a mapstoA<sup>i</sup></var>  
+is irreducible and fpf.
+The <var>A<sup>i</sup></var> with <var>i</var> in <var>indexlist</var> describe all irreducible fpf
+representations up to equivalence; each irreducible fpf
+representation is equivalent to one <var>a mapstoA<sup>i</sup></var> and no two representations
+<var>a mapstoA<sup>i</sup></var>, <var>a mapstoA<sup>j</sup></var> with <var>ineqj</var> and <var>i,j</var> in <var>indexlist</var> are
+equivalent.
+<p>
+Note, that every faithful irreducible representation of a cyclic group 
+is fpf. The number of nonequivalent faithful irreducible
+representations over GF(<var>p</var>) is given as <var>phi(m)/d</var>, where the degree <var>d</var> is
+given as the multiplicative order of <var>p</var> modulo <var>m</var> and <var>phi(m)</var> denotes
+the number of residues coprime to <var>m</var>.
+<p>
+We determine the irreducible matrix representations of the cyclic group of
+size 8 over <var>GF(5)</var>:
+<p>
+<pre>
+    gap&gt; aux := FpfRepresentationsCyclic( 5, 8 );
+    [ [ [ [ Z(5)^3, Z(5)^2 ], [ Z(5), Z(5) ] ], 
+          [ [ Z(5)^2, Z(5) ], [ Z(5)^0, Z(5)^0 ] ] ], [ 1, 7 ] ]
+    gap&gt; mats := aux[1];
+    [ [ [ Z(5)^3, Z(5)^2 ], [ Z(5), Z(5) ] ], 
+      [ [ Z(5)^2, Z(5) ], [ Z(5)^0, Z(5)^0 ] ] ]
+    gap&gt; indexlist := aux[2];
+    [ 1, 7 ]
+</pre>
+<p>
+<a name = "SSEC002.8"></a>
+<li><code>FpfRepresentationsMetacyclic( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code> )</code>
+<p>
+ Let <var>Phi</var> be a metacyclic group (i.e., <var>Phi</var> has a cyclic normal subgroup
+ with cyclic factor) admitting an fpf representation. Then <var>Phi</var>
+ fulfills one of the following two presentations, I or II. Both presentations
+ are determined by integers <var>m</var> and <var>r</var> satisfying certain conditions:
+<p>
+ Type I. Presentation of an fpf metacyclic group <var>Phi</var> with all
+ Sylow subgroups cyclic.
+ Let <var>m</var> and <var>r</var> satisfy the following conditions: 
+<p>
+<dl compact>
+<dt>(a)<dd><var>m</var> and <var>r</var> are coprime. 
+<dt>(b)<dd>Let <var>n</var> be the multiplicative order of <var>r</var> modulo <var>m</var>.
+ Then each prime divisor of <var>n</var> divides <var>m</var>.
+<dt>(c)<dd>Let <var>m'</var> be maximal such that <var>m'</var> divides <var>m</var> and <var>m'</var> is coprime
+ to <var>n</var>. Then <var>r = 1</var> mod <var>(m/m')</var>.
+</dl>
+<p>
+ Type II. Presentation of an fpf metacyclic group <var>Phi</var> with
+ generalized quaternion 2-Sylow subgroup.
+ Let <var>m</var> and <var>r</var> satisfy the following conditions: 
+<p>
+<dl compact>
+<dt>(a)<dd><var>m</var> and <var>r</var> are coprime. 
+<dt>(b)<dd>Let <var>n</var> be the multiplicative order of <var>r</var> modulo <var>m</var>.
+ Then <var>n</var> is <var>2</var> times an odd number and each prime divisor of <var>n</var> divides <var>m</var>.
+<dt>(c)<dd>Let <var>s</var> be maximal such that <var>2<sup>s</sup></var> divides <var>m</var>. Then <var>2<sup>s</sup>geq4</var>
+ and <var>r = -1</var> mod <var>2<sup>s</sup></var>. 
+<dt>(d)<dd>Let <var>m'</var> be maximal such that <var>m'</var> divides <var>m/2</var> and <var>m'</var> is
+ coprime to <var>n/2</var>. Then <var>r = 1</var> mod <var>(m/m')</var>. 
+</dl>
+<p>
+ Then the group <var>Phi</var> with 2 generators <var>a,b</var> satisfying the relations
+ <var>a<sup>m</sup> = 1, b<sup>n</sup> = a<sup>m'</sup>, b<sup>-1</sup>ab = a<sup>r</sup></var>
+ is metacyclic and fpf and has size <var>mn</var>.
+<p>
+ A group satisfying presentation I is of type I in the notation of Zassenhaus,
+ Wolf; presentation II gives a type-II-group.
+<p>
+Let <var>m</var>, <var>r</var> be as above, and let <var>p</var> coprime to <var>m</var>.
+Additionally, we require that <var>m</var> does not divide <var>r</var>-1. (Otherwise,
+<var>Phi= langlea,b | a<sup>m</sup> = 1, b<sup>n</sup> = a<sup>m'</sup>, b<sup>-1</sup>ab = a<sup>r</sup> rangle</var>
+would be cyclic.) Then
+<code>FpfRepresentationsMetacyclic</code>
+returns a list of matrices <var>{ (A<sup>i</sup>,B<sub>i</sub>) | i</var> in <var>indexlist }</var> over GF(<var>p</var>)
+as well as the list <var>indexlist</var>. The GF(<var>p</var>)-representations determined by
+<var>a mapstoA<sup>i</sup></var> and <var>b mapstoB<sub>i</sub></var> are all irreducible and fpf
+representations of
+<var>Phi= langlea,b | a<sup>m</sup> = 1, b<sup>n</sup> = a<sup>m'</sup>, b<sup>-1</sup>ab = a<sup>r</sup> rangle</var>
+up to equivalence.
+<p>
+We determine the irreducible matrix representation of the quaternion group
+(parameters <var>m = 4, r = -1</var>) over <var>GF(7)</var>:
+<p>
+<pre>
+    gap&gt; aux := FpfRepresentationsMetacyclic( 7, 4, -1 );
+    [ [ [ [ [ Z(7)^2, Z(7) ], [ Z(7), Z(7)^5 ] ], 
+              [ [ 0*Z(7), Z(7)^3 ], [ Z(7)^0, 0*Z(7) ] ] ] ], [ 1 ] ]
+    gap&gt; mats := aux[1];
+    [ [ [ [ Z(7)^2, Z(7) ], [ Z(7), Z(7)^5 ] ], 
+          [ [ 0*Z(7), Z(7)^3 ], [ Z(7)^0, 0*Z(7) ] ] ] ]
+</pre>
+<p>
+<a name = "SSEC002.9"></a>
+<li><code>FpfRepresentations2( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code>, </code><var>k</var><code> )</code>
+<p>
+ The presentation of a type-II-group which is not metacyclic is determined by
+ integers <var>m,r,k</var> satisfying the following conditions:
+<p>
+<dl compact>
+<dt>(a)<dd><var>m</var> and <var>r</var> are coprime, <var>m</var> and <var>k</var> are coprime.
+<dt>(b)<dd>Let <var>n</var> be the multiplicative order of <var>r</var> modulo <var>m</var>.
+ Then <var>n</var> is <var>2</var> times an odd number and each prime divisor of <var>n</var> divides <var>m</var>.
+<dt>(c)<dd>Let <var>m'</var> be maximal such that <var>m'</var> divides <var>m</var> and <var>m'</var> is coprime
+ to <var>n</var>. Then <var>r = 1</var> mod <var>(m/m')</var>.
+<dt>(d)<dd>Let <var>2<sup>s-1</sup></var> be maximal such that <var>2<sup>s-1</sup></var> divides <var>m</var>. Define
+ <var>l = -1</var> mod <var>2<sup>s-1</sup></var> and <var>l = 1</var> mod <var>(nm/(2<sup>s-1</sup>m'))</var>.
+ Then <var>k = l</var> mod <var>(m/m')</var>.
+<dt>(e)<dd>The multiplicative order of <var>k</var> modulo <var>m</var> equals <var>2</var> and
+ <var>kneqr<sup>(n/2)</sup></var> mod <var>m</var>. 
+</dl>
+<p>
+ Then the group <var>Phi</var> with generators <var>a,b,q</var> satisfying the
+ relations
+ <var>a<sup>m</sup> = 1, b<sup>n</sup> = a<sup>m'</sup>, b<sup>-1</sup>ab = a<sup>r</sup></var>
+ and furthermore
+ <var>q<sup>-1</sup>a q = a<sup>k</sup>, q<sup>-1</sup>b q = b<sup>l</sup></var> is fpf
+ of type II and has size <var>2mn</var>.
+<p>
+ <var>a,b</var> generate a metacyclic group with all Sylow subgroups cyclic
+ (see conditions (a), (b), (c)) of index <var>2</var> in <var>Phi</var>.
+<p>
+For <var>m</var>, <var>r</var>, <var>k</var> as above and <var>p</var> coprime to <var>m</var>
+<code>FpfRepresentations2</code>
+returns a list of matrices <var>{ (A<sub>i</sub>,B<sub>i</sub>,Q<sub>i</sub>) | i</var> in <var>indexlist }</var> over
+GF(<var>p</var>) as well as the list <var>indexlist</var>. The GF(<var>p</var>)-representations
+determined by <var>a mapstoA<sub>i</sub>, b mapstoB<sub>i</sub></var> and <var>q mapstoQ<sub>i</sub></var> are all
+irreducible, fpf representations of <var>Phi</var> upto equivalence.
+<p>
+We determine the irreducible matrix representations of the smallest
+type-II-group which is not metacyclic (parameters m = 30, r = 11, k = -1,
+size 120) over the field GF(11) and obtain 2 nonequivalent fpf representations,
+each of degree 4:
+<p>
+<pre>
+    gap&gt; DegreeOfIrredFpfRep2( 11, 30, 11, -1 );
+    4
+    gap&gt; aux := FpfRepresentations2( 11, 30, 11, -1 );
+    [ [ [ &lt;block matrix of dimensions (2*2)x(2*2)&gt;, 
+              &lt;block matrix of dimensions (2*2)x(2*2)&gt;, 
+              &lt;block matrix of dimensions (2*2)x(2*2)&gt; ], 
+          [ &lt;block matrix of dimensions (2*2)x(2*2)&gt;, 
+              &lt;block matrix of dimensions (2*2)x(2*2)&gt;, 
+              &lt;block matrix of dimensions (2*2)x(2*2)&gt; ] ], [ 1, 13 ] ]
+</pre>
+<p>
+<a name = "SSEC002.10"></a>
+<li><code>FpfRepresentations3( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code> )</code>
+<p>
+ A group <var>Phi</var> admitting an fpf representation is said to be of
+ type III if <var>Phi</var> is the semidirect product of the quaternion group 
+ and a metacyclic fpf group <var>H</var> of odd size, with the quaternion
+ group normal and <var>H</var> permuting the <var>3</var> subgroups of order <var>4</var>.   
+<p>
+ The presentation of a type-III-group is determined by integers <var>m</var> and <var>r</var>,
+ describing the metacyclic group <var>H</var> and its action on the normal quaternion
+ subgroup. The following conditions have to be satisfied for <var>m,r</var>:
+<p>
+<dl compact>
+<dt>(a)<dd><var>3</var> divides <var>m</var>; <var>m</var> is odd; <var>m</var> and <var>r</var> are coprime.
+<dt>(b)<dd>Let <var>n</var> be the multiplicative order of <var>r</var> modulo <var>m</var>.
+ Then each prime divisor of <var>n</var> divides <var>m</var>.
+<dt>(c)<dd>Let <var>m'</var> be maximal such that <var>m'</var> divides <var>m</var> and <var>m'</var> is coprime
+ to <var>n</var>. Then <var>r = 1</var> mod <var>(m/m')</var>.
+</dl>
+<p>
+ Let <var>p,q</var> with relations <var>p<sup>4</sup> = 1, q<sup>2</sup> = p<sup>2</sup>, q<sup>-1</sup>pq = p<sup>-1</sup></var> generate
+ the quaternion group. Let <var>a,b</var> generate a metacyclic group
+ determined by <var>m</var> and <var>r</var> (See <code>FpfRepresentationsMetacyclic</code>). 
+<p>
+ If <var>3</var> divides <var>n</var>, then let <var>a</var> commute with <var>p,q</var> and let
+ <var>b<sup>-1</sup>pb = q, b<sup>-1</sup>qb = pq</var>.
+<p>
+ If <var>3</var> does not divide <var>n</var>, then let <var>b</var> commute with <var>p,q</var> and let
+ <var>a<sup>-1</sup>pa = q, a<sup>-1</sup>qa = pq</var>
+<p>
+ Then the group <var>Phi</var> with generators <var>p,q,a,b</var> is of type III and
+ has size <var>8mn</var>. 
+<p>
+For <var>r neq1</var> mod <var>m</var>, <code>FpfRepresentations3</code> returns a list of matrices 
+<var>{ (P, Q, A<sub>i</sub>,B<sub>i</sub>) | i</var> in <var>indexlist }</var> over GF(<var>p</var>) as well as the list
+<var>indexlist</var>.
+<p>
+For <var>r = 1</var> mod <var>m</var>, the group <var>H</var> is cyclic and <code>FpfRepresentations3</code> returns
+<var>{ (P, Q, A<sub>i</sub>) | i</var> in <var>indexlist }</var> over GF(<var>p</var>) and <var>indexlist</var>.
+<p>
+The GF(<var>p</var>)-representations
+determined by <var>p mapstoP, q mapstoQ</var> and <var>a mapstoA<sub>i</sub>, b mapstoB<sub>i</sub></var>
+are all irreducible, fpf representations of <var>Phi</var> upto equivalence.
+<p>
+We determine the irreducible matrix representation of the smallest
+type-III-group, namely SL(2,3), (parameters m = 3, r = 1, size 24) over the
+field GF(5): 
+<p>
+<pre>
+    gap&gt; aux := FpfRepresentations3( 5, 3, 1 );
+    [ [ [ [ [ Z(5), 0*Z(5) ], [ 0*Z(5), Z(5)^3 ] ], 
+              [ [ 0*Z(5), Z(5)^2 ], [ Z(5)^0, 0*Z(5) ] ], 
+              [ [ Z(5)^3, Z(5)^0 ], [ Z(5), Z(5)^0 ] ] ] ], [ 1 ] ]
+</pre>
+<p>
+<a name = "SSEC002.11"></a>
+<li><code>FpfRepresentations4( </code><var>p</var><code>, </code><var>m</var><code>, </code><var>r</var><code>, </code><var>k</var><code> )</code>
+<p>
+ A group <var>Phi= langlep,q,a,b,zrangle</var> admitting an fpf
+ representation is said to be of type IV, if it has a normal subgroup
+ <var>H = langlep,q,a,brangle</var> of type III and index 2.
+<p>
+ The presentation of a type-IV-group is determined by integers <var>m,r,k</var>
+ satisfying the following conditions:
+<p>
+<dl compact>
+<dt>(a)<dd>Let <var>s</var> be maximal such that <var>3<sup>s</sup></var> divides <var>m</var>. Then
+ <var>sgeq1</var>; <var>m</var> is odd; <var>m</var> and <var>r</var> are coprime.
+<dt>(b)<dd>Let <var>n</var> be the multiplicative order of <var>r</var> modulo <var>m</var>.
+ Then <var>3</var> does not divide <var>n</var>; each prime divisor of <var>n</var> divides <var>m</var>.
+<dt>(c)<dd>Let <var>m'</var> be maximal such that <var>m'</var> divides <var>m</var> and <var>m'</var> is coprime
+ to <var>n</var>. Then <var>r = 1</var> mod <var>(m/m')</var>.
+<dt>(d)<dd><var>k = -1</var> mod <var>3<sup>s</sup></var>, <var>k = 1</var> mod <var>(m/m')</var> and <var>k<sup>2</sup> = 1</var> modulo <var>m</var>.
+</dl>
+<p>
+ Let <var>p,q,a,b</var> generate a type-III-group determined by <var>m,r</var> with relations as
+ given in Section <code>FpfRepresentations3</code>. Additionally, let
+ <var>z<sup>2</sup> = p<sup>2</sup>, z<sup>-1</sup>pz = qp, z<sup>-1</sup>qz = q<sup>-1</sup></var> and
+ <var>z<sup>-1</sup>a z = a<sup>k</sup>,z<sup>-1</sup>b z = b</var>. 
+<p>
+ Then the group <var>Phi</var> with generators <var>p,q,a,b</var> and <var>z</var> is of type
+ IV and has size <var>16mn</var>. 
+<p>
+For <var>r neq1</var> mod <var>m</var>, <code>FpfRepresentations4</code> returns a list of matrices 
+<var>{ (P, Q, A<sub>i</sub>,B<sub>i</sub>, Z<sub>i</sub>) | i</var> in <var>indexlist }</var> over GF(<var>p</var>) as well as the
+list <var>indexlist</var>.
+<p>
+For <var>r = 1</var> mod <var>m</var>, the function <code>FpfRepresentations4</code> returns
+<var>{ (P, Q, A<sub>i</sub>, Z<sub>i</sub>) | i</var> in <var>indexlist }</var> over GF(<var>p</var>) and <var>indexlist</var>.
+<p>
+The GF(<var>p</var>)-representations
+determined by <var>p mapstoP, q mapstoQ</var> and
+<var>a mapstoA<sub>i</sub>, b mapstoB<sub>i</sub>, z mapstoZ<sub>i</sub></var>
+are all irreducible, fpf representations of <var>Phi</var> upto equivalence.
+<p>
+We determine the <var>2</var> nonequivalent irreducible matrix representations of the
+smallest type-IV-group (binary octahedral group, m = 3, r = 1, k = -1, size 48)
+over the field GF(7): 
+<p>
+<pre>
+    gap&gt; aux := FpfRepresentations4( 7, 3, 1, -1 );
+    [ [ [ [ [ Z(7)^2, Z(7) ], [ Z(7), Z(7)^5 ] ], 
+              [ [ 0*Z(7), Z(7)^3 ], [ Z(7)^0, 0*Z(7) ] ], 
+              [ [ Z(7)^2, 0*Z(7) ], [ Z(7)^0, Z(7)^4 ] ], 
+              [ [ Z(7)^5, Z(7) ], [ Z(7), Z(7)^2 ] ] ], 
+          [ [ [ Z(7)^2, Z(7) ], [ Z(7), Z(7)^5 ] ], 
+              [ [ 0*Z(7), Z(7)^3 ], [ Z(7)^0, 0*Z(7) ] ], 
+              [ [ Z(7)^2, 0*Z(7) ], [ Z(7)^0, Z(7)^4 ] ], 
+              [ [ Z(7)^2, Z(7)^4 ], [ Z(7)^4, Z(7)^5 ] ] ] ], 
+      [ [ 1, 1 ], [ -1, 1 ] ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">9.3 Fixed-point-free automorphism groups</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>FpfAutomorphismGroupsCyclic( </code><var>ints</var><code>, </code><var>m</var><code> )</code>
+<p>
+If <code>AbelianGroup(</code><var>ints</var><code>)</code> admits a cyclic fpf automorphism group of size 
+<var>m</var>, then <code>FpfAutomorphismGroupsCyclic</code> determines one representative for 
+each conjugacy class of such fpf automorphism groups. Conjugacy is determined 
+within the whole automorphism group of <code>AbelianGroup(</code><var>ints</var><code>)</code>. 
+<p>
+<var>ints</var> has to be a list of prime power integers and is sorted in the
+function, according to the order
+<var>p<sup>i</sup>leqq<sup>j</sup> Leftrightarrowp &lt; q</var> or (<var>p=q</var> and <var>j &lt; i</var>). 
+<p>
+<code>AbelianGroup(</code><var>ints</var><code>)</code> admits a cyclic fpf automorphism group
+of size <var>m</var> iff the multiplicity of each prime power <var>p<sup>i</sup></var> in <var>ints</var>
+is divisible by <code>DegreeOfIrredFpfRepCyclic( p, m )</code>.
+<p>
+A list of generators of the nonconjugate fpf automorphism groups is returned
+together with the group <code>AbelianGroup(</code><var>ints</var><code>)</code>, on which the automorphisms act.
+Here <var>ints</var> is sorted with the order above.
+<p>
+The generators, <var>as</var>, of the <var>2</var> nonconjugate cyclic fpf
+automorphism groups of order <var>4</var> on <var>Z<sub>25</sub>timesZ<sub>5</sub></var> are computed
+as follows:
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroupsCyclic( [25,5], 4 ); 
+    [ [ [ f1, f3 ] -&gt; [ f1^2*f2, f3^2 ], 
+          [ f1, f3 ] -&gt; [ f1^2*f2, f3^3 ] ], 
+      &lt;pc group of size 125 with 2 generators&gt; ]
+    gap&gt; as := aux[1];
+    [ [ f1, f3 ] -&gt; [ f1^2*f2, f3^2 ], [ f1, f3 ] -&gt; [ f1^2*f2, f3^3 ] ]
+    gap&gt; G := aux[2];
+    &lt;pc group of size 125 with 2 generators&gt;
+</pre>
+<p>
+<a name = "SSEC003.2"></a>
+<li><code>FpfAutomorphismGroupsMetacyclic( </code><var>ints</var><code>, </code><var>m</var><code>, </code><var>r</var><code> )</code>
+<p>
+If <code>AbelianGroup(</code><var>ints</var><code>)</code> admits a metacyclic fpf automorphism group 
+determined by parameters <var>m</var> and <var>r</var> that is not cyclic
+(see <code>FpfRepresentationsMetacyclic</code> for a presentation),
+then <code>FpfAutomorphismGroupsMetacyclic</code> determines one
+representative for each conjugacy class of such fpf automorphism groups. 
+Conjugacy is determined within the whole automorphism group of 
+<code>AbelianGroup(</code><var>ints</var><code>)</code>. 
+<p>
+<var>ints</var> has to be a list of prime power integers and is sorted in the
+function, according to the order
+<var>p<sup>i</sup>leqq<sup>j</sup> Leftrightarrowp &lt; q</var> or <var>(p = q</var> and <var>igeqj)</var>. 
+<p>
+Moreover, the multiplicity of each prime power <var>p<sup>i</sup></var> in <var>ints</var> has to be
+divisible by <code>DegreeOfIrredFpfRepMetacyclic( p, m, r )</code>, which is 
+a multiple of the multiplicative order of <var>r</var> modulo <var>m</var>.
+<p>
+A list of pairs of generators (<var>a,b</var> satisfying <var>b<sup>-1</sup>ab = a<sup>r</sup>, a<sup>m</sup> = 1</var>
+and <var>b<sup>n</sup> = a<sup>m'</sup></var>) of the nonconjugate fpf automorphism groups is returned
+together with the group <code>AbelianGroup(</code><var>ints</var><code>)</code>, on which the automorphisms act.
+Here <var>ints</var> is sorted with the order above.
+<p>
+For <var>G = (Z<sub>3</sub>)<sup>2</sup>times(Z<sub>5</sub>)<sup>2</sup></var> the quaternion
+fpf automorphism group of size <var>8</var> (parameters <var>m = 4, r = -1</var>) is computed as
+follows:
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroupsMetacyclic( [3,3,5,5], 4, -1 );
+    [ [ [ [ f1, f2, f3, f4 ] -&gt; [ f1^2, f2^3, f3*f4, f3*f4^2 ], 
+              [ f1, f2, f3, f4 ] -&gt; [ f2^4, f1, f4^2, f3 ] ] ], 
+      &lt;pc group of size 225 with 4 generators&gt; ]
+    gap&gt; fs := aux[1];
+    [ [ [ f1, f2, f3, f4 ] -&gt; [ f1^2, f2^3, f3*f4, f3*f4^2 ], 
+          [ f1, f2, f3, f4 ] -&gt; [ f2^4, f1, f4^2, f3 ] ] ]
+    gap&gt; phi := Group( fs[1] );
+    &lt;group with 2 generators&gt;
+    gap&gt; G := aux[2];
+    &lt;pc group of size 225 with 4 generators&gt;
+</pre>
+<p>
+On <var>G = (Z<sub>7</sub>)<sup>2</sup>times(Z<sub>17</sub>)<sup>2</sup></var> there are <var>2</var> nonconjugate
+fpf automorphism groups isomorphic to the generalized
+quaternion group of size <var>16</var> (parameters <var>m = 8, r = -1</var>): 
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroupsMetacyclic( [7,7,17,17], 8, -1 );;
+    gap&gt; fs := aux[1];
+    [ [ [ f1, f2, f3, f4 ] -&gt; [ f1^9, f2^2, f3^4*f4^2, f3*f4^6 ], 
+          [ f1, f2, f3, f4 ] -&gt; [ f2^16, f1, f3^4*f4^5, f3^5*f4^3 ] ], 
+      [ [ f1, f2, f3, f4 ] -&gt; [ f1^9, f2^2, f3^3*f4^5, f3^6*f4 ], 
+          [ f1, f2, f3, f4 ] -&gt; [ f2^16, f1, f3^3*f4^4, f3*f4^4 ] ] ]
+    gap&gt; phis := List( fs, Group );
+    [ &lt;group with 2 generators&gt;, &lt;group with 2 generators&gt; ]
+    gap&gt; G := aux[2];
+    &lt;pc group of size 14161 with 4 generators&gt;
+</pre>
+<p>
+<a name = "SSEC003.3"></a>
+<li><code>FpfAutomorphismGroups2( </code><var>ints</var><code>, </code><var>m</var><code>, </code><var>r</var><code>, </code><var>k</var><code> )</code>
+<p>
+If <code>AbelianGroup(</code><var>ints</var><code>)</code> admits an fpf automorphism group of type II, 
+determined by parameters <var>m</var>, <var>r</var>, <var>k</var> that is not metacyclic
+(see <code>FpfRepresentations2</code> for a presentation), then <code>FpfAutomorphismGroups2</code> 
+determines one representative for each conjugacy class of such fpf
+automorphism groups. Conjugacy is determined within the whole automorphism 
+group of <code>AbelianGroup(</code><var>ints</var><code>)</code>. 
+<p>
+<var>ints</var> has to be a list of prime power integers and is sorted in the
+function, according to the order
+<var>p<sup>i</sup>leqq<sup>j</sup> Leftrightarrowp &lt; q</var> or <var>(p = q</var> and <var>igeqj)</var>. 
+<p>
+Note, that the degree of an irreducible fpf representation of a
+type-II-group which is not metacyclic is divisible by <var>4</var> and that the
+multiplicity of each prime power <var>p<sup>i</sup></var> in <var>ints</var> has to be divisible by
+<code>DegreeOfIrredFpfRep2( p, m, r, k )</code>.
+<p>
+A list of triples of generators (<var>a,b,z</var> satisfying <var>b<sup>-1</sup>ab = a<sup>r</sup>, a<sup>m</sup> = 1</var>
+and <var>z<sup>-1</sup>az = a<sup>k</sup></var>) of the nonconjugate fpf automorphism groups is 
+returned together with the group <code>AbelianGroup(</code><var>ints</var><code>)</code>, on which the 
+automorphisms act.
+Here <var>ints</var> is sorted with the order above.
+<p>
+Upto conjugacy there is only one fpf automorphism group of type II with
+parameters <var>m = 30, r = 11, k = -1</var>, size <var>120</var> on the elementary abelian
+group of size <var>11<sup>4</sup></var>:
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroups2( [11,11,11,11], 30, 11, -1 );
+    [ [ [ [ f1, f2, f3, f4 ] -&gt; [ f1^5*f2^4, f1^3*f2^10, f3^2*f4^8, 
+                  f3^6*f4 ], 
+              [ f1, f2, f3, f4 ] -&gt; [ f1^3*f2^10, f1^10*f2^8, f3^8*f4, 
+                  f3*f4^3 ], 
+              [ f1, f2, f3, f4 ] -&gt; [ f3^10, f4^10, f1, f2 ] ] ], 
+      &lt;pc group of size 14641 with 4 generators&gt; ]
+    gap&gt; phi := Group( aux[1][1] );
+    &lt;group with 3 generators&gt;
+    gap&gt; G := aux[2];
+    &lt;pc group of size 14641 with 4 generators&gt;
+</pre>
+<p>
+<a name = "SSEC003.4"></a>
+<li><code>FpfAutomorphismGroups3( </code><var>ints</var><code>, </code><var>m</var><code>, </code><var>r</var><code> )</code>
+<p>
+If <code>AbelianGroup(</code><var>ints</var><code>)</code> admits an fpf automorphism group of
+type III determined by parameters <var>m</var> and <var>r</var> (see 
+<code>FpfRepresentations3</code> for a presentation), then
+<code>FpfAutomorphismGroups3</code> determines one representative for each
+conjugacy class of such fpf automorphism groups. Conjugacy is
+determined within the whole automorphism group of <code>AbelianGroup(</code><var>ints</var><code>)</code>. 
+<p>
+<var>ints</var> has to be a list of prime power integers and is sorted in the
+function, according to the order
+<var>p<sup>i</sup>leqq<sup>j</sup> Leftrightarrowp &lt; q</var> or <var>(p = q</var> and <var>igeqj)</var>. 
+<p>
+Moreover, the multiplicity of each prime power <var>p<sup>i</sup></var> in <var>ints</var> has to be
+divisible by <code>DegreeOfIrredFpfRep3( p, m, r )</code>, which is a multiple
+of <var>2n</var> where <var>n</var> is the multiplicative order of <var>r</var> modulo <var>m</var>.
+<p>
+A list of tuples of generators, <var>[p,q,a,b]</var>, (<var>p,q</var> generating the quaternion
+group, <var>a,b</var> satisfying <var>b<sup>-1</sup>ab = a<sup>r</sup>, a<sup>m</sup> = 1</var> and <var>b<sup>n</sup> = a<sup>m'</sup></var>) of the
+nonconjugate fpf automorphism groups is returned together with the group 
+<code>AbelianGroup(</code><var>ints</var><code>)</code>, on which the automorphisms act.
+Here <var>ints</var> is sorted with the order above.
+<p>
+For <var>G = (Z<sub>5</sub>)<sup>2</sup></var> the fpf automorphism type-III-group
+isomorphic to SL(2,3) is computed as follows (parameters <var>m = 3, r = 1</var>):
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroups3( [5,5], 3, 1 ); 
+    [ [ [ [ f1, f2 ] -&gt; [ f1^2, f2^3 ], [ f1, f2 ] -&gt; [ f2^4, f1 ], 
+              [ f1, f2 ] -&gt; [ f1^3*f2, f1^2*f2 ] ] ], 
+      &lt;pc group of size 25 with 2 generators&gt; ]
+    gap&gt; phi := Group( aux[1][1] );
+    &lt;group with 3 generators&gt;
+    gap&gt; G := aux[2];
+    &lt;pc group of size 25 with 2 generators&gt;
+</pre>
+<p>
+<a name = "SSEC003.5"></a>
+<li><code>FpfAutomorphismGroups4( </code><var>ints</var><code>, </code><var>m</var><code>, </code><var>r</var><code>, </code><var>k</var><code> )</code>
+<p>
+If <code>AbelianGroup(</code><var>ints</var><code>)</code> admits an fpf automorphism group of type IV 
+determined by parameters <var>m</var>, <var>r</var>, <var>k</var> (see <code>FpfRepresentations4</code> for a 
+presentation), then <code>FpfAutomorphismGroups4</code> determines one representative 
+for each conjugacy class of such fpf automorphism groups. Conjugacy is
+determined within the whole automorphism group of <code>AbelianGroup(</code><var>ints</var><code>)</code>. 
+<p>
+<var>ints</var> has to be a list of prime power integers and is sorted in the
+function, according to the order
+<var>p<sup>i</sup>leqq<sup>j</sup> Leftrightarrowp &lt; q</var> or <var>(p = q</var> and <var>igeqj)</var>. 
+<p>
+Moreover, the multiplicity of each prime power <var>p<sup>i</sup></var> in <var>ints</var> has to be
+divisible by <code>DegreeOfIrredFpfRep4( p, m, r )</code>, which is a multiple
+of <var>2n</var> where <var>n</var> is the multiplicative order of <var>r</var> modulo <var>m</var>.
+<p>
+A list of tuples of generators, <var>[p,q,a,b,z]</var>, of the nonconjugate fpf 
+automorphism groups is returned together with the group 
+<code>AbelianGroup(</code><var>ints</var><code>)</code>, on which the automorphisms act.
+Here <var>ints</var> is sorted with the order above. 
+If <var>r = 1</var> mod <var>m</var>, then a list of tuples, <var>[p,q,a,z]</var>, is returned instead.
+<p>
+For <var>G = (Z<sub>7</sub>)<sup>2</sup></var> the fpf automorphism type-IV-group isomorphic the binary
+octahedral group of size 48 (parameters <var>m = 3, r = 1, k = -1</var>)
+is computed as follows:
+<p>
+<pre>
+    gap&gt; aux := FpfAutomorphismGroups4( [7,7], 3, 1, -1 );
+    [ [ [ [ f1, f2 ] -&gt; [ f1^2*f2^3, f1^3*f2^5 ], 
+              [ f1, f2 ] -&gt; [ f2^6, f1 ], [ f1, f2 ] -&gt; [ f1^2, f1*f2^4 ], 
+              [ f1, f2 ] -&gt; [ f1^5*f2^3, f1^3*f2^2 ] ] ], 
+      &lt;pc group of size 49 with 2 generators&gt; ]
+    gap&gt; phi := Group( aux[1][1] );
+    &lt;group with 4 generators&gt;
+    gap&gt; G := aux[2];
+    &lt;pc group of size 49 with 2 generators&gt;
+</pre>
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP008.htm">Previous</a>] [<a href ="CHAP010.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>SONATA manual<br>November 2012
+</address></body></html>

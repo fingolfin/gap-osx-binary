@@ -1,0 +1,135 @@
+  
+  [1X1 [33X[0;0YIntroduction and Overview[133X[101X
+  
+  
+  [1X1.1 [33X[0;0YIntroduction[133X[101X
+  
+  [33X[0;0YThe motivation of the package [5XBrowse[105X was to provide better functionality for
+  displaying  two-dimensional  arrays of data (e.g., character tables): moving
+  through  the data without loosing row and column labels, searching for text,
+  displaying  extra information, hiding information, allowing interactive user
+  input, ...[133X
+  
+  [33X[0;0YWe  wanted  to  achieve  this  by  using  the  capabilities  of the terminal
+  emulations  in which [5XGAP[105X is running, and not by some external graphical user
+  interface.  For  this  we  have chosen to use the widely available [10XC[110X-library
+  [10Xncurses[110X, see [NCu]. It contains functions to find out terminal capabilities,
+  to  change properties of terminals, to place text, to handle several windows
+  with  overlapping,  ... To use these functions the terminal is switched to a
+  [13Xvisual  mode[113X  so that the display of the non-visual mode of your terminal in
+  which [5XGAP[105X is running is not clobbered.[133X
+  
+  [33X[0;0Y[5XBrowse[105X has now three levels of functionality:[133X
+  
+  [8XA low level interface to [10Xncurses[110X[108X
+        [33X[0;6YThis  may  be  interesting for all kinds of applications which want to
+        display  text  with  some  markup  including  colors, maybe in several
+        windows, using the available capabilities of a terminal.[133X
+  
+  [8XA medium level interface to a generic function [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X)[108X
+        [33X[0;6YThis  is for displaying two-dimensional arrays of data, handles labels
+        for rows and columns, searching, sorting, binding keys to actions, ...
+        If  you want to implement such applications for further kinds of data,
+        first   look  at  the  examples  in  Section  [2XBrowseData.IsBrowseTable[102X
+        ([14X4.2-3[114X), then check what can be copied from the examples in Chapter [14X6[114X,
+        and consult the descriptions in Chapters [14X4[114X and [14X5[114X.[133X
+  
+  [8XApplications of these interfaces[108X
+        [33X[0;6YWe  provide  some  applications  of  the  [10Xncurses[110X interface and of the
+        generic   [2XNCurses.BrowseGeneric[102X   ([14X4.3-1[114X)   function.   These  may  be
+        interesting  for  end  users,  and also as examples for programmers of
+        further  applications. This includes (of course) a method for browsing
+        through   character   tables,  functions  for  browsing  through  data
+        collections, several games, and an interface for demos.[133X
+  
+  [33X[0;0YUsers  interested  only  in  these  applications  should  perhaps  just  try
+  [10XNCurses.Demo()[110X.[133X
+  
+  
+  [1X1.2 [33X[0;0YOverview[133X[101X
+  
+  
+  [1X1.2-1 [33X[0;0YThe [10Xncurses[110X[101X[1X interface[133X[101X
+  
+  [33X[0;0YChapter  [14X2[114X  describes [5XGAP[105X's interface to the [10Xncurses[110X [10XC[110X-library. The imported
+  [10XC[110X-functions  are  shortly explained, but for further details we refer to the
+  documentation of that library. There are also a few utility functions on [5XGAP[105X
+  level,  such  as  [2XNCurses.SetTerm[102X  ([14X2.2-2[114X),  which  simplify  the use of the
+  library.[133X
+  
+  [33X[0;0YThe concept of an [13Xattribute line[113X, see [2XNCurses.IsAttributeLine[102X ([14X2.2-3[114X), helps
+  to deal with text with markup for its display in a terminal window.[133X
+  
+  [33X[0;0YThis  chapter  is  for  users  who  want  to write their own applications of
+  [10Xncurses[110X.[133X
+  
+  
+  [1X1.2-2 [33X[0;0YApplications of [10Xncurses[110X[101X[1X[133X[101X
+  
+  [33X[0;0YIn  Chapter  [14X3[114X  we  describe  some  interactive  applications of the [10Xncurses[110X
+  interface. For example, there is [2XNCurses.Select[102X ([14X3.1-2[114X) for asking a user to
+  choose  one  or  several  of  a  given  list  of items. There is also a demo
+  function  [2XNCurses.Demo[102X  ([14X3.2-1[114X)  which we use to demonstrate features of the
+  [5XBrowse[105X package, but it may be interesting for other kinds of demos as well.[133X
+  
+  
+  [1X1.2-3 [33X[0;0YThe interface to browse two-dimensional arrays[133X[101X
+  
+  [33X[0;0YChapters   [14X4[114X   and   [14X5[114X   describe   the  interface  to  a  generic  function
+  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X)  which can be used for an interactive display
+  of  two-dimensional  arrays  of  data.  The  first of these covers the basic
+  functionality  which  may be sufficient for many applications and the second
+  gives  more  technical  details. With interactive display we mean that it is
+  not  only  possible  to  scroll  through  the  data,  but one can search for
+  strings,  sort by rows or columns, select entries, bind arbitrary actions to
+  keys and mouse events, ask for help, and more.[133X
+  
+  
+  [1X1.2-4 [33X[0;0YApplications of the generic function [10XNCurses.BrowseGeneric[110X[101X[1X[133X[101X
+  
+  [33X[0;0YIn  Chapter  [14X6[114X  we describe several applications which are using the generic
+  [2XNCurses.BrowseGeneric[102X ([14X4.3-1[114X) interface introduced before. They are provided
+  as  prototype  applications and so we include some implementation remarks in
+  their documentation.[133X
+  
+  [33X[0;0YUsers  who just want to use these applications hopefully do not need to read
+  this [5XBrowse[105X manual, all applications are coming with built-in help windows.[133X
+  
+  [33X[0;0YThere  are  different  kinds  of  applications. First, there are methods for
+  browsing  through  character  tables  and  tables  of  marks  (our  original
+  motivation  for  this  package).  Then  there  are applications for browsing
+  through  data  collections,  e.g.,  the  data available through the [5XAtlasRep[105X
+  package,  the  [5XGAP[105X bibliography or the sections of the [5XGAP[105X manuals. Finally,
+  there  are  several  games like Sam Loyd's fifteen puzzle (generalized), peg
+  solitaire,  and  Sudoku  (including  functions  to create new puzzles and to
+  solve puzzles).[133X
+  
+  
+  [1X1.3 [33X[0;0YUser preferences provided by the [5XBrowse[105X[101X[1X package[133X[101X
+  
+  
+  [1X1.3-1 [33X[0;0YThe user preference [10XEnableMouseEvents[110X[101X[1X[133X[101X
+  
+  [33X[0;0YThis  user preference defines whether mouse events are enabled by default in
+  visual  mode  (value [9Xtrue[109X) or not (value [9Xfalse[109X, this is the default). During
+  the  [5XGAP[105X  session, the value can be changed using [2XNCurses.UseMouse[102X ([14X2.2-10[114X).
+  Inside   browse  applications  based  on  [2XNCurses.BrowseGeneric[102X  ([14X4.3-1[114X)  or
+  [2XNCurses.Select[102X  ([14X3.1-2[114X),  the  value can be toggled usually by hitting the [12XM[112X
+  key.[133X
+  
+  
+  [1X1.3-2 [33X[0;0YThe user preference [10XSelectHelpMatches[110X[101X[1X[133X[101X
+  
+  [33X[0;0YIn  the  case  that  the  [5XGAP[105X  help system finds multiple matches, [9Xtrue[109X (the
+  default)  means that the user can choose one entry from a list that is shown
+  via  [2XNCurses.Select[102X ([14X3.1-2[114X), and [9Xfalse[109X means that the matches are just shown
+  in a pager.[133X
+  
+  
+  [1X1.3-3 [33X[0;0YThe user preference [10XSelectPackageName[110X[101X[1X[133X[101X
+  
+  [33X[0;0YIn  the  case  that  [2XLoadPackage[102X  ([14XReference:  LoadPackage[114X) is called with a
+  prefix  of  some  package  names, [9Xtrue[109X (the default) means that the user can
+  choose  one  matching  entry,  and  [9Xfalse[109X  means  that  the matches are just
+  printed.[133X
+  

@@ -1,0 +1,146 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Chapter{Tables}
+
+Finite dimensional algebras can be described by structure contants tables.
+For nilpotent algebras it is not neccessary to store a full structure 
+contants table. To use this feature, we introduce *nilpotent structure
+constants tables* or just *nilpotent tables* for short. These are used 
+heavily throughout the package.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Nilpotent tables}
+
+Let $A$ be a finite-dimensional nilpotent associative algebra over a 
+field $F$. Let $(b_1, \ldots, b_d)$ be a *weighted basis* of $A$; that
+is, a basis with weights $(w_1, \ldots, w_d)$ satifying that $A^j = 
+\langle b_i \mid w_i \geq j \rangle$. Let
+$$ b_i b_j = \sum_k a_{i,j,k} b_k.$$
+The nilpotent table $T$ for $A$ (with respect to the basis $(b_1,
+\ldots, b_d)$) is a record with the following entries.
+
+\beginitems
+<dim> & 
+   the dimension $d$ of $A$;
+
+<fld> & 
+   the field $F$ of $A$;
+
+<wgs> & 
+   the weights $(w_1, \ldots, w_d)$;
+
+<rnk> &
+   the rank $e$ of $A$ (i.e. the dimension of $A/A^2$).
+
+<wds> & 
+   a list of length $d$ with holes; If the $i$th entry is bounded, then 
+   it is of the form $[k,l]$. In this case, $w_i > 1$ and $b_i = b_k b_l$ 
+   and $w_k = 1$ and $w_l = w_i-1$ holds.
+  
+<tab> &
+   a partial structure contants table for $A$; If $tab[i][j][k]$ is bounded,
+   then it is $a_{i,j,k}$. Note that either a full vector $tab[i][j]$ is
+   given or $tab[i][j]$ is unbounded. The entry $tab[i][j][k]$ is available
+   for $1 \leq i,j \leq e$ and if $wds[i]$ is unbounded. 
+
+<com> &
+   optional; If this is bounded, then it is a boolean. If this boolean
+   is true, then the algebra is assumed to be commutative.
+
+\enditems
+
+In a nilpotent table not all structure contants are readily available.
+The following function determines the structure constants for the
+product $b_i b_j$. If the global variable $STORE$ is true, then the
+function stores the computed entry in the table.
+
+\> GetEntryTable( T, i, j ) F
+
+We consider two nilpotent tables as equal, if they would be equal if
+the full set of structure constants tables would be bound. The following
+function provides an effective check for this.
+
+\> CompareTables( T1, T2 ) F
+
+A nilpotent table contains redundant information and hence can be 
+inconsistent. The next functions can be used to check this to some
+extend. 
+
+\> CheckAssociativity( T ) F
+
+Checks that $(b_i b_j) b_k = b_i (b_j b_k)$ for all $i,j,k$. Note that this
+may be time-consuming.
+
+\> CheckCommutativity( T ) F
+
+Checks whether $T$ defines a commutative algebra and sets the entry $com$
+accordingly.
+
+\> CheckConsistency( T ) F
+
+Checks that $wds$ and $tab$ are compatible. This assumes that 
+CheckAssociativity returns true.
+
+All later described algorithms of this package assume that the tables 
+considered are fully consistent.
+
+\beginexample
+gap> T := rec( dim := 3, 
+               fld := GF(2), 
+               rnk := 2, 
+               wgs := [ 1, 1, 2 ],
+               wds := [ ,, [ 2, 1 ] ],
+               tab := [] );;
+gap> T.tab[1] := [[0,0,0],[0,0,1]] * One(T.fld);;
+gap> T.tab[2] := [[0,0,1],[0,0,0]] * One(T.fld);;
+gap> GetEntryTable( T, 3, 1 );
+[ 0*Z(2), 0*Z(2), 0*Z(2) ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Algebras in the GAP sense}
+
+We provide functions to convert back and forth between algebras in the GAP
+sense and nilpotent tables.
+
+\> AlgebraByTable( T ) F
+\> NilpotentTable( A ) F
+
+Note that the second function fails if $A$ is not nilpotent.
+
+For modular group algebras of $p$-groups, the group algebra itself is
+not nilpotent (as it contains a unit), but its Jacobson radial is. The
+following function determines a nilpotent table for the Jacobson radical.
+
+\> NilpotentTableOfRad( FG ) F
+
+\beginexample
+gap> A := GroupRing(GF(2), SmallGroup(8,3));
+<algebra-with-one over GF(2), with 3 generators>
+gap> NilpotentTableOfRad(A);
+rec( dim := 7, fld := GF(2), rnk := 2, 
+  tab := [ [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ], 
+      [ [ 0*Z(2), 0*Z(2), Z(2)^0, Z(2)^0, Z(2)^0, Z(2)^0, Z(2)^0 ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, Z(2)^0 ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ],, 
+      [ [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0, 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), Z(2)^0 ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ], 
+          [ 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2), 0*Z(2) ] ] ], 
+  wds := [ ,, [ 1, 2 ],, [ 1, 4 ], [ 2, 4 ], [ 1, 6 ] ], 
+  wgs := [ 1, 1, 2, 2, 3, 3, 4 ] )
+\endexample
+

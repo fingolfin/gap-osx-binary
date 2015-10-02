@@ -1,0 +1,130 @@
+  
+  [1m[4m[31m2. A sample calculation with [1mSophus[1m[4m[31m[0m
+  
+  Before  listing  the  functions of [1mSophus[0m we present a sample calculation to
+  show  the  reader  what  [1mSophus[0m  is able to compute. We list the isomorphism
+  types of the 7-dimensional nilpotent Lie algebras over $\mathbb F_2$.
+  
+  There is just one nilpotent Lie algebra with dimension 1 and dimension 2. We
+  also  set  [22m[34mL3[0m to be a list containing the abelian Lie algebra with dimension
+  3.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m[0m
+    [22m[35mgap> L1 := [ AbelianLieAlgebra( GF(2), 1 ) ];;[0m
+    [22m[35mgap> L2 := [ AbelianLieAlgebra( GF(2), 2 ) ];;[0m
+    [22m[35mgap> L3 := [ AbelianLieAlgebra( GF(2), 3 ) ];;[0m
+    [22m[35m[0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  Any   3-dimensional  non-abelian  nilpotent  Lie  algebra  is  an  immediate
+  descendant  of  a  2-dimensional  Lie  algebra.  So  we  compute  the step-1
+  descendants of [22m[34mL1[1][0m and append them to [22m[34mL3[0m.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m[0m
+    [22m[35mgap> Append( L3, Descendants( L2[1], 1 ));[0m
+    [22m[35mgap> L3;[0m
+    [22m[35m[<Lie algebra of dimension 3 over GF(2)>, [0m
+    [22m[35m<Lie algebra of dimension 3 over GF(2)> ][0m
+    [22m[35m[0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  Now  we  compute  the list of 4-dimensional Lie algebras. First we set [22m[34mL4[0m to
+  contain  the  4-dimensional  abelian Lie algebra. Then we compute the step-1
+  descendants  of  the  3-dimensional algebras and append these descendants to
+  [22m[34mL4[0m.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m[0m
+    [22m[35mgap> L4 := [ AbelianLieAlgebra( GF(2), 4 ) ];;[0m
+    [22m[35mgap> for i in L3 do[0m
+    [22m[35mgap> Append( L4, Descendants( i, 1 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> L4;[0m
+    [22m[35m[ <Lie algebra of dimension 4 over GF(2)>, [0m
+    [22m[35m<Lie algebra of dimension 4 over GF(2)>, [0m
+    [22m[35m<Lie algebra of dimension 4 over GF(2)> ][0m
+    [22m[35m[0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  We continue this way up to dimension~7.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m[0m
+    [22m[35mgap> L5 := [ AbelianLieAlgebra( GF(2), 5 ) ];;[0m
+    [22m[35mgap> for i in L3 do[0m
+    [22m[35mgap> Append( L5, Descendants( i, 2 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> for i in L4 do[0m
+    [22m[35mgap> Append( L5, Descendants( i, 1 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> L6 := [ AbelianLieAlgebra( GF(2), 6 ) ];;[0m
+    [22m[35mgap> for i in L3 do[0m
+    [22m[35mgap> Append( L6, Descendants( i, 3 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> for i in L4 do[0m
+    [22m[35mgap> Append( L6, Descendants( i, 2 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> for i in L5 do[0m
+    [22m[35mgap> Append( L6, Descendants( i, 1 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> L7 := [ AbelianLieAlgebra( GF(2), 6 ) ];;[0m
+    [22m[35mgap> for i in L4 do[0m
+    [22m[35mgap> Append( L7, Descendants( i, 3 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> for i in L5 do[0m
+    [22m[35mgap> Append( L7, Descendants( i, 2 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> for i in L6 do[0m
+    [22m[35mgap> Append( L7, Descendants( i, 1 ));[0m
+    [22m[35mgap> od;[0m
+    [22m[35mgap> Length( L7 );[0m
+    [22m[35m202[0m
+    [22m[35mgap>[0m
+    [22m[35m[0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  This  computation shows that there are 202 pairwise non-isomorphic nilpotent
+  Lie algebras over $\mathbb F_2$.
+  
+  Let  us  compute  the automorphism group of a nilpotent Lie algebra from our
+  list.  We  compute  this  automorphism  group  in  the hybrid format used by
+  [1mSophus[0m, then we compute this group as a standard [1mGAP[0m object.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m[0m
+    [22m[35mgap> AutomorphismGroupOfNilpotentLieAlgebra( L7[100] );[0m
+    [22m[35mrec( glAutos := [  ], [0m
+    [22m[35m  agAutos := [ Aut: [ v.1, v.1+v.2, v.3, v.4, v.5, v.5+v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1, v.2+v.3, v.3, v.4, v.5, v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1+v.3, v.2, v.3, v.4+v.5, v.5, v.6+v.7, v.7 ], [0m
+    [22m[35m      Aut: [ v.1+v.4, v.2, v.3+v.5, v.4+v.6, v.5+v.7, v.6+v.7, v.7 ], [0m
+    [22m[35m      Aut: [ v.1, v.2+v.4, v.3, v.4+v.5, v.5, v.6+v.7, v.7 ], [0m
+    [22m[35m      Aut: [ v.1+v.5, v.2, v.3, v.4+v.7, v.5, v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1, v.2+v.5, v.3, v.4, v.5, v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1+v.6, v.2, v.3, v.4+v.7, v.5, v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1, v.2+v.6, v.3, v.4+v.7, v.5, v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1+v.7, v.2, v.3, v.4, v.5, v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1, v.2+v.7, v.3, v.4, v.5, v.6, v.7 ], [0m
+    [22m[35m      Aut: [ v.1, v.2, v.3+v.7, v.4, v.5, v.6, v.7 ] ], glOrder := 1, [0m
+    [22m[35m  glOper := [  ], agOrder := [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ], [0m
+    [22m[35m  liealg := <Lie algebra of dimension 7 over GF(2)>, [0m
+    [22m[35m  one := Aut: [ v.1, v.2, v.3, v.4, v.5, v.6, v.7 ], size := 4096, [0m
+    [22m[35m  field := GF(2), prime := 2 )[0m
+    [22m[35mgap> [0m
+    [22m[35mgap> AutomorphismGroup( L7[100] );                     [0m
+    [22m[35m<group with 12 generators>[0m
+    [22m[35mgap> [0m
+    [22m[35m[0m
+  [22m[35m------------------------------------------------------------------[0m
+  
+  Finally let us check that two Lie algebras from our list are not isomorphic.
+  
+  [22m[35m---------------------------  Example  ----------------------------[0m
+    [22m[35m[0m
+    [22m[35mgap> AreIsomorphicNilpotentLieAlgebras( L7[100], L7[101] );[0m
+    [22m[35mfalse[0m
+    [22m[35m[0m
+  [22m[35m------------------------------------------------------------------[0m
+  

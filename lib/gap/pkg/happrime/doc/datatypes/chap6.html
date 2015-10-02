@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (HAPprime Datatypes) - Chapter 6: Internal functions</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+</head>
+<body>
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap5.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chapInd.html">Next Chapter</a>&nbsp;  </div>
+
+<p><a id="X851E59247B382424" name="X851E59247B382424"></a></p>
+<div class="ChapSects"><a href="chap6.html#X851E59247B382424">6 <span class="Heading">Internal functions</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap6.html#X82F1051D83BDADC4">6.1 <span class="Heading">Matrices as G-generators of a FG-module vector space</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7F64CD297A36FEE6">6.1-1 HAPPRIME_ValueOptionMaxFGExpansionSize</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X82E847697ACAE026">6.1-2 HAPPRIME_KernelOfGeneratingRowsDestructive</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X8074BBDF7F1B4FCE">6.1-3 HAPPRIME_GActMatrixColumns</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7F1FA48C8498A5D1">6.1-4 HAPPRIME_ExpandGeneratingRow</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X8516846779B75BE1">6.1-5 HAPPRIME_AddGeneratingRowToSemiEchelonBasisDestructive</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7CC19D338471C1A8">6.1-6 HAPPRIME_ReduceVectorDestructive</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7EF39AA47C87325E">6.1-7 <span class="Heading">HAPPRIME_ReduceGeneratorsOfModuleByXX</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7DF367CF7F8B296C">6.1-8 HAPPRIME_DisplayGeneratingRows</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X79B55E0F7DFC4E3A">6.1-9 HAPPRIME_GeneratingRowsBlockStructure</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X86FCD05B7ACB186E">6.1-10 HAPPRIME_DisplayGeneratingRowsBlocks</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X786D19C380E44CBD">6.1-11 HAPPRIME_IndependentGeneratingRows</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X872D53737FAD75A7">6.1-12 HAPPRIME_GactFGvector</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7F26CFEF82AD4546">6.1-13 <span class="Heading">HAPPRIME_CoefficientsOfGeneratingRowsXX</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X848738797C60B93B">6.1-14 <span class="Heading">HAPPRIME_GenerateFromGeneratingRowsCoefficientsXX</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7830397286C3D792">6.1-15 HAPPRIME_RemoveZeroBlocks</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X795D4B5F7C443E4D">6.1-16 HAPPRIME_AddZeroBlocks</a></span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap6.html#X820435E87D83DF34">6.2 <span class="Heading">FG-modules</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7A5176C5844FC765">6.2-1 HAPPRIME_DirectSumForm</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X873AD0187A1C3293">6.2-2 HAPPRIME_PrintModuleDescription</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7B91169A871B95A7">6.2-3 <span class="Heading">HAPPRIME_ModuleGeneratorCoefficients</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7C8B34EC7C9438AC">6.2-4 <span class="Heading">HAPPRIME_ModuleElementFromGeneratorCoefficients</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7EA258467C8190FB">6.2-5 HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsDestructive</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7ADC06E981BCF3F9">6.2-6 HAPPRIME_IsGroupAndAction</a></span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap6.html#X7C0B125E7D5415B4">6.3 <span class="Heading">Resolutions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X845662157E4E0C39">6.3-1 HAPPRIME_WordToVector</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7BCD0A1D799AD760">6.3-2 HAPPRIME_VectorToWord</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7C79C3CE822EAE32">6.3-3 HAPPRIME_BoundaryMatrices</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7981D36D840820BE">6.3-4 HAPPRIME_AddNextResolutionBoundaryMapMatNC</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7BC0F13C8706EEB2">6.3-5 HAPPRIME_CreateResolutionWithBoundaryMapMatsNC</a></span>
+</div></div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap6.html#X7862428B781B1F3D">6.4 <span class="Heading">Test functions</span></a>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7849CFA87986F190">6.4-1 HAPPRIME_SingularIsAvailable</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X84C93DCF7DD815FB">6.4-2 HAPPRIME_Random2Group</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7DB975677D6E0F8D">6.4-3 HAPPRIME_TestResolutionPrimePowerGroup</a></span>
+</div></div>
+</div>
+
+<h3>6 <span class="Heading">Internal functions</span></h3>
+
+<p><a id="X82F1051D83BDADC4" name="X82F1051D83BDADC4"></a></p>
+
+<h4>6.1 <span class="Heading">Matrices as G-generators of a FG-module vector space</span></h4>
+
+<p>Both <code class="keyw">FpGModuleGF</code> (Chapter <a href="chap3.html#X820435E87D83DF34"><b>3</b></a>) and <code class="keyw">FpGModuleHomomorphismGF</code> (Chapter <a href="chap4.html#X82F28552819A6542"><b>4</b></a>) store a matrix whose rows are G-generators for a module vector space (the module and the homomorphism's image respectively). The internal functions listed here provide common operations for dealing with these matrices.</p>
+
+<p><a id="X7F64CD297A36FEE6" name="X7F64CD297A36FEE6"></a></p>
+
+<h5>6.1-1 HAPPRIME_ValueOptionMaxFGExpansionSize</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ValueOptionMaxFGExpansionSize</code>( <var class="Arg">field, group</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Integer</p>
+
+<p>Returns the maximum matrix expansion size. This is read from the <code class="code">MaxFGExpansionSize</code> option from the <strong class="pkg">GAP</strong> options stack <a href="/home/pas/GAP/gap/doc/htm/ref/CHAP008.htm"><b>Reference: Options Stack</b></a>, computed using the <code class="code">MaxFGExpansionMemoryLimit</code> option.</p>
+
+<p><a id="X82E847697ACAE026" name="X82E847697ACAE026"></a></p>
+
+<h5>6.1-2 HAPPRIME_KernelOfGeneratingRowsDestructive</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_KernelOfGeneratingRowsDestructive</code>( <var class="Arg">gens, rowlengths, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List</p>
+
+<p>Returns a list of generating vectors for the kernel of the FG-module homomorphism defined by the generating rows <var class="Arg">gens</var> using the group and action <var class="Arg">GA</var>.</p>
+
+<p>This function computes the kernel recursively by partitioning the generating rows into</p>
+
+<p class="pcenter">
+      [ B  0 ]
+      [ C  D ]
+    </p>
+
+<p>doing column reduction if necessary to get the zero block at the top right. The matrices B&gt; and C are small enough to be expanded, while the kernel of D is calculated by recursion. The argument <var class="Arg">rowlengths</var> lists the number of non-zero blocks in each row; the rest of each row is taken to be zero. This allows the partitioning to be more efficiently performed (i.e. column reduction is not always required).</p>
+
+<p>The <strong class="pkg">GAP</strong> options stack <a href="/home/pas/GAP/gap/doc/htm/ref/CHAP008.htm"><b>Reference: Options Stack</b></a> variable <code class="code">MaxFGExpansionSize</code> can be used to specify the maximum allowable expanded matrix size. This governs the size of the B and C matrices, and thus the number of recursions before the kernel of D is also computed by recursion. A high value for will allow larger expansions and so faster computation at the cost of more memory. The <code class="code">MaxFGExpansionMemoryLimit</code> option can also be used, which sets the maximum amount of memory that <strong class="pkg">GAP</strong> is allowed to use (as a string containing an integer with the suffix <code class="code">k</code>, <code class="code">M</code> or <code class="code">G</code> to indicate kilobyes, megabytes or gigabytes respectively). In this case, the function looks at the free memory available to <strong class="pkg">GAP</strong> and computes an appropriate value for <code class="code">MaxFGExpansionSize</code>.</p>
+
+<p><a id="X8074BBDF7F1B4FCE" name="X8074BBDF7F1B4FCE"></a></p>
+
+<h5>6.1-3 HAPPRIME_GActMatrixColumns</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GActMatrixColumns</code>( <var class="Arg">g, Vt, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GActMatrixColumnsOnRight</code>( <var class="Arg">g, Vt, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Matrix</p>
+
+<p>Returns the matrix that results from the applying the group action u=gv (or u=vg in the case of the <code class="code">OnRight</code> version of this function) to each <em>column</em> vector in the matrix <var class="Arg">Vt</var>. By acting on <em>columns</em> of a matrix (i.e. the transpose of the normal <strong class="pkg">GAP</strong> representation), the group action is just a permutation of the rows of the matrix, which is a fast operation. The group and action are passed in <var class="Arg">GA</var> using the <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>) record.</p>
+
+<p>If the input matrix <var class="Arg">Vt</var> is in a compressed matrix representation, then the returned matrix will also be in compressed matrix representation.</p>
+
+<p><a id="X7F1FA48C8498A5D1" name="X7F1FA48C8498A5D1"></a></p>
+
+<h5>6.1-4 HAPPRIME_ExpandGeneratingRow</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ExpandGeneratingRow</code>( <var class="Arg">gen, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ExpandGeneratingRows</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ExpandGeneratingRowOnRight</code>( <var class="Arg">gen, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ExpandGeneratingRowsOnRight</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List</p>
+
+<p>Returns a list of G-generators for the vector space that corresponds to the of G-generator <var class="Arg">gen</var> (or generators <var class="Arg">gens</var>). This space is formed by multiplying each generator by each element of <var class="Arg">G</var> in turn, using the group and action specified in <var class="Arg">GA</var> (see <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>)). The returned list is thus |G| times larger than the input.</p>
+
+<p>For a list of generators <var class="Arg">gens</var> [v_1, v_2, ..., v_n], <code class="func">HAPPRIME_ExpandGeneratingRows</code> returns the list [g_1v_1, g_2v_1, ..., g_1v_2, g_2v_2, ..., g_|G|v_n] In other words, the form of the returned matrix is block-wise, with the expansions of each row given in turn. This function is more efficient than repeated use of <code class="func">HAPPRIME_ExpandGeneratingRow</code> since it uses the efficient <code class="func">HAPPRIME_GActMatrixColumns</code> (<a href="chap6.html#X8074BBDF7F1B4FCE"><b>6.1-3</b></a>) to perform the group action on the whole set of generating rows at a time.</p>
+
+<p>The function <code class="func">HAPPRIME_ExpandGeneratingRowsOnRight</code> is the same as above, but the group action operates on the right instead.</p>
+
+<p><a id="X8516846779B75BE1" name="X8516846779B75BE1"></a></p>
+
+<h5>6.1-5 HAPPRIME_AddGeneratingRowToSemiEchelonBasisDestructive</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_AddGeneratingRowToSemiEchelonBasisDestructive</code>( <var class="Arg">basis, gen, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Record with elements <code class="code">vectors</code> and <code class="code">basis</code></p>
+
+<p>This function augments a vector space basis with another generator. It returns a record consisting of two elements: <code class="code">vectors</code>, a set of semi-echelon basis vectors for the vector space spanned by the sum of the input <var class="Arg">basis</var> and all G-multiples of the generating vector <var class="Arg">gen</var>; and <code class="code">heads</code>, a list of the head elements, in the same format as returned by <code class="func">SemiEchelonMat</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP024.htm#SECT009"><b>Reference: SemiEchelonMat</b></a>). The generator <var class="Arg">gen</var> is expanded according to the group and action specified in the <var class="Arg">GA</var> record (see <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>)).</p>
+
+<p>If the input <var class="Arg">basis</var> is not zero, it is also modified by this function, to be the new basis (i.e. the same as the <code class="code">vectors</code> element of the returned record).</p>
+
+<p><a id="X7CC19D338471C1A8" name="X7CC19D338471C1A8"></a></p>
+
+<h5>6.1-6 HAPPRIME_ReduceVectorDestructive</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ReduceVectorDestructive</code>( <var class="Arg">v, basis, heads</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Reduces the vector <var class="Arg">v</var> (in-place) using the semi-echelon set of vectors <var class="Arg">basis</var> with heads <var class="Arg">heads</var> (as returned by <code class="func">SemiEchelonMat</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP024.htm#SECT009"><b>Reference: SemiEchelonMat</b></a>)). Returns <code class="keyw">true</code> if the vector is completely reduced to zero, or <code class="keyw">false</code> otherwise.</p>
+
+<p><a id="X7EF39AA47C87325E" name="X7EF39AA47C87325E"></a></p>
+
+<h5>6.1-7 <span class="Heading">HAPPRIME_ReduceGeneratorsOfModuleByXX</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ReduceGeneratorsOfModuleBySemiEchelon</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ReduceGeneratorsOfModuleBySemiEchelonDestructive</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ReduceGeneratorsOfModuleByLeavingOneOut</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ReduceGeneratorsOnRightByLeavingOneOut</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List of vectors</p>
+
+<p>Returns a subset of the module generators <var class="Arg">gens</var> over the group with action specified in the <var class="Arg">GA</var> record (see <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>)) that will still generate the module.</p>
+
+<p>The <code class="code">BySemiEchelon</code> functions gradually expand out the module generators into an F-basis, using that F-basis to reduce the other generators, until the full vector space of the module is spanned. The generators needed to span the space are returned, and should be a small set, although not minimal. The <code class="code">Destructive</code> version of this function will modify the input <var class="Arg">gens</var> parameter. The non-destructive version makes a copy first, so leaves the input arguments unchanged, at the expense of more memory.</p>
+
+<p>The <code class="code">ByLeavingOneOut</code> function is tries repeatedly leaving out generators from the list <var class="Arg">gens</var> to find a small subset that still generates the module. If the generators are from the field GF(2), this is guaranteed to be a minimal set of generators. The <code class="code">OnRight</code> version computes a minimal subset which generates the module under group multiplication on the right.</p>
+
+<p><a id="X7DF367CF7F8B296C" name="X7DF367CF7F8B296C"></a></p>
+
+<h5>6.1-8 HAPPRIME_DisplayGeneratingRows</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_DisplayGeneratingRows</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>nothing</p>
+
+<p>Displays a set of G-generating rows a human-readable form. The elements of each generating vector are displayed, with each block marked by a separator (since the group action on a module vector will only permute elements within a block).</p>
+
+<p>This function is used by <code class="keyw">Display</code> for both <code class="keyw">FpGModuleGF</code> and <code class="keyw">FpGModuleHomomorphismGF</code>.</p>
+
+<p>NOTE: This is currently only implemented for GF(2)</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; HAPPRIME_DisplayGeneratingRows(
+&gt;  ModuleGenerators(M), HAPPRIME_ModuleGroupAndAction(M));
+[...1..11|........|.......1|........|........]
+[........|........|........|.1....11|........]
+[........|........|........|........|..1.1.1.]
+[........|.1.1..1.|........|........|........]
+[........|........|......11|........|........]
+[........|........|1......1|........|........]
+</pre></td></tr></table>
+
+<p><a id="X79B55E0F7DFC4E3A" name="X79B55E0F7DFC4E3A"></a></p>
+
+<h5>6.1-9 HAPPRIME_GeneratingRowsBlockStructure</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GeneratingRowsBlockStructure</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Matrix</p>
+
+<p>Returns a matrix detailing the block structure of a set of module generating rows. The group action on a generator permutes the vector in blocks of length <code class="code">GA.actionBlockSize</code>: any block that contains non-zero elements will still contain non-zero elements after the group action; any block that is all zero will remain all zero. This operation returns a matrix giving this block structure: it has a one where the block is non-zero and zero where the block is all zero.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; b := HAPPRIME_GeneratingRowsBlockStructure(
+&gt;  ModuleGenerators(M), ModuleActionBlockSize(M));
+[ [ 1, 0, 1, 1, 1 ], [ 1, 0, 1, 1, 1 ], [ 0, 1, 1, 1, 1 ], [ 0, 0, 1, 1, 1 ] ]
+</pre></td></tr></table>
+
+<p><a id="X86FCD05B7ACB186E" name="X86FCD05B7ACB186E"></a></p>
+
+<h5>6.1-10 HAPPRIME_DisplayGeneratingRowsBlocks</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_DisplayGeneratingRowsBlocks</code>( <var class="Arg">gens, actionBlockSize</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>nothing</p>
+
+<p>Displays a set of G-generating rows a compact human-readable form. Each generating rows can be divided into blocks of length <var class="Arg">actionBlockSize</var>. The generating rows are displayed in a per-block form: a <code class="keyw">*</code> where the block is non-zero and <code class="keyw">.</code> where the block is all zero.</p>
+
+<p>This function is used by <code class="func">DisplayBlocks</code> (<a href="chap3.html#X7DF15EFA78F1DDF6"><b>3.4-10</b></a>) (for <code class="keyw">FpGModuleGF</code>) and <code class="func">DisplayBlocks</code> (<a href="chap4.html#X7EF5C42A79568EAE"><b>4.5-4</b></a>) (for <code class="keyw">FpGModuleHomomorphismGF</code>).</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; HAPPRIME_DisplayGeneratingRowsBlocks(
+&gt;  ModuleGenerators(M), HAPPRIME_ModuleGroupAndAction(M));
+[*.*..]
+[...*.]
+[....*]
+[.*...]
+[..*..]
+[..*..] </pre></td></tr></table>
+
+<p><a id="X786D19C380E44CBD" name="X786D19C380E44CBD"></a></p>
+
+<h5>6.1-11 HAPPRIME_IndependentGeneratingRows</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_IndependentGeneratingRows</code>( <var class="Arg">blocks</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List of lists</p>
+
+<p>Given a block structure as returned by <code class="func">HAPPRIME_GeneratingRowsBlockStructure</code> (<a href="chap6.html#X79B55E0F7DFC4E3A"><b>6.1-9</b></a>), this decomposes a set of generating rows into sets of independent rows. These are returned as a list of row indices, where each set of rows share no blocks with any other set.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; DisplayBlocks(M);
+Module over the group ring of Group( [ f1, f2, f3 ] )
+ in characteristic 2 with 6 generators in FG^5.
+[**...]
+[.*...]
+[.**..]
+[.**..]
+[...*.]
+[....*]
+Generators are in minimal echelon form.
+gap&gt; gens := ModuleGenerators(M);;
+gap&gt; G := ModuleGroup(M);;
+gap&gt; blocks := HAPPRIME_GeneratingRowsBlockStructure(gens, G);
+[ [ 1, 1, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 1, 1, 0, 0 ], [ 0, 1, 1, 0, 0 ],
+  [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ] ]
+gap&gt; HAPPRIME_IndependentGeneratingRows(blocks);
+[ [ 1, 2, 3, 4 ], [ 5 ], [ 6 ] ]
+</pre></td></tr></table>
+
+<p><a id="X872D53737FAD75A7" name="X872D53737FAD75A7"></a></p>
+
+<h5>6.1-12 HAPPRIME_GactFGvector</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GactFGvector</code>( <var class="Arg">g, v, MT</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Vector</p>
+
+<p>Returns the vector that is the result of the action u=gv of the group element <var class="Arg">g</var> on a module vector <var class="Arg">v</var> (according to the group multiplication table <var class="Arg">MT</var>. This operation is the quickest current method for a single vector. To perform the same action on a set of vectors, it is faster write the vectors as columns of a matrix and use <code class="func">HAPPRIME_GActMatrixColumns</code> (<a href="chap6.html#X8074BBDF7F1B4FCE"><b>6.1-3</b></a>) instead.</p>
+
+<p><a id="X7F26CFEF82AD4546" name="X7F26CFEF82AD4546"></a></p>
+
+<h5>6.1-13 <span class="Heading">HAPPRIME_CoefficientsOfGeneratingRowsXX</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRows</code>( <var class="Arg">gens, GA, v</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRows</code>( <var class="Arg">gens, GA, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsDestructive</code>( <var class="Arg">gens, GA, v</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsDestructive</code>( <var class="Arg">gens, GA, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsGF</code>( <var class="Arg">gens, GA, v</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsGF</code>( <var class="Arg">gens, GA, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive</code>( <var class="Arg">gens, GA, v</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive</code>( <var class="Arg">gens, GA, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive2</code>( <var class="Arg">gens, GA, v</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CoefficientsOfGeneratingRowsGFDestructive2</code>( <var class="Arg">gens, GA, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Vector, or list of vectors</p>
+
+<p>For a single vector <var class="Arg">v</var>, this function returns a vector x giving the G-coefficients from <var class="Arg">gens</var> needed to generate <var class="Arg">v</var>, i.e. the solution to the equation x*A=v, where A is the expansion of <var class="Arg">gens</var>. If there is no solution, <code class="keyw">fail</code> is returned. If a list of vectors, <var class="Arg">coll</var>, then a vector is returned that lists the solution for each vector (any of which may be <code class="keyw">fail</code>). The standard forms of this function use standard linear algebra to solve for the coefficients. The <code class="code">Destructive</code> version will corrupt both <var class="Arg">gens</var> and <var class="Arg">v</var>. The <code class="code">GF</code> versions use the block structure of the generating rows to expand only the blocks that are needed to find the solution before using linear algebra. If the generators are in echelon form, this can save memory, but is slower.</p>
+
+<p>The <code class="code">GFDestructive2</code> functions also assume an echelon form for the generators, but use back-substitution to find a set of coefficients. This can save a lot of memory but is again slower.</p>
+
+<p><a id="X848738797C60B93B" name="X848738797C60B93B"></a></p>
+
+<h5>6.1-14 <span class="Heading">HAPPRIME_GenerateFromGeneratingRowsCoefficientsXX</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GenerateFromGeneratingRowsCoefficients</code>( <var class="Arg">gens, GA, c</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GenerateFromGeneratingRowsCoefficients</code>( <var class="Arg">gens, GA, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GenerateFromGeneratingRowsCoefficientsGF</code>( <var class="Arg">gens, GA, c</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_GenerateFromGeneratingRowsCoefficientsGF</code>( <var class="Arg">gens, GA, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Vector, or list of vectors</p>
+
+<p>For a vector <var class="Arg">c</var>, returns (as a vector), the module element generated by multiplying <var class="Arg">c</var> by the expansion of the generators <var class="Arg">gens</var>. For a list of coefficient vectors <var class="Arg">coll</var>, this returns a list of generating vectors.</p>
+
+<p>The standard versions of this function use standard linear algebra. The <code class="code">GF</code> versions only performs the expansion of necessary generating rows, and only expands by one group element at a time, so will only need at most twice the amount of memory as that to store <var class="Arg">gens</var>, which is a large saving over expanding the generators by every group element at the same time, as in a naive implementation. It may also be faster.</p>
+
+<p><a id="X7830397286C3D792" name="X7830397286C3D792"></a></p>
+
+<h5>6.1-15 HAPPRIME_RemoveZeroBlocks</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_RemoveZeroBlocks</code>( <var class="Arg">gens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Vector</p>
+
+<p>Removes from a set of generating vectors <var class="Arg">gens</var> (with <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>) <var class="Arg">GA</var>) any blocks that are zero in every generating vector. Removal is done in-place, i.e. the input argument <var class="Arg">gens</var> will be modified to remove the zero blocks. Zero blocks are unaffected by any row or expansion operation, and can be removed to save time or memory in those operations. The function returns the original block structure as a vector, and this can be used in the function <code class="func">HAPPRIME_AddZeroBlocks</code> (<a href="chap6.html#X795D4B5F7C443E4D"><b>6.1-16</b></a>) to reinstate the zero blocks later, if required. See the documentation for that function for more detail of the block structure vector.</p>
+
+<p><a id="X795D4B5F7C443E4D" name="X795D4B5F7C443E4D"></a></p>
+
+<h5>6.1-16 HAPPRIME_AddZeroBlocks</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_AddZeroBlocks</code>( <var class="Arg">gens, blockStructure, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>List of vectors</p>
+
+<p>Adds zero blocks to a set of generating vectors <var class="Arg">gens</var> to make it have the block structure given in <var class="Arg">blockStructure</var> (for a given <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>) <var class="Arg">GA</var>). The generators <var class="Arg">gens</var> are modified in place, and also returned.</p>
+
+<p>The <var class="Arg">blockStructure</var> parameter is a vector of which is the length of the required output vector and has zeros where zero blocks should be, and is non-zero elsewhere. Typically, an earlier call to <code class="func">HAPPRIME_RemoveZeroBlocks</code> (<a href="chap6.html#X7830397286C3D792"><b>6.1-15</b></a>) will have been used to remove the zero blocks, and this function and such a <var class="Arg">blockStructure</var> vector is returned by this function. <code class="func">HAPPRIME_AddZeroBlocks</code> can be used to reinstate these zero blocks.</p>
+
+<p><a id="X820435E87D83DF34" name="X820435E87D83DF34"></a></p>
+
+<h4>6.2 <span class="Heading">FG-modules</span></h4>
+
+<p>FG-modules in <strong class="pkg">HAPprime</strong> use the datatype <code class="keyw">FpGModuleGF</code> (Chapter <a href="chap3.html#X820435E87D83DF34"><b>3</b></a>). Internally, this uses many of the functions listed in Section <a href="chap6.html#X82F1051D83BDADC4"><b>6.1</b></a>, and further internal functions are listed below.</p>
+
+<p><a id="X7A5176C5844FC765" name="X7A5176C5844FC765"></a></p>
+
+<h5>6.2-1 HAPPRIME_DirectSumForm</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_DirectSumForm</code>( <var class="Arg">current, new</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>String</p>
+
+<p>Returns a string containing the form of the generator matrix if the direct sum is formed between a <code class="keyw">FpGModuleGF</code> with the form <var class="Arg">current</var> and a <code class="keyw">FpGModuleGF</code> with the form <var class="Arg">new</var>. The direct sum is formed by placing the two module generating matrices in diagonal form. Given the form of the two generating matrices, this allows the form of the direct sum to be stated. See <code class="func">ModuleGeneratorsForm</code> (<a href="chap3.html#X87572B78824FB28E"><b>3.5-5</b></a>) for information about form strings.</p>
+
+<p><a id="X873AD0187A1C3293" name="X873AD0187A1C3293"></a></p>
+
+<h5>6.2-2 HAPPRIME_PrintModuleDescription</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_PrintModuleDescription</code>( <var class="Arg">M, func</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>nothing</p>
+
+<p>Used by <code class="func">PrintObj</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP006.htm#SECT003"><b>Reference: PrintObj</b></a>), <code class="func">ViewObj</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP006.htm#SECT003"><b>Reference: ViewObj</b></a>), <code class="func">Display</code> (<a href="/home/pas/GAP/gap/doc/htm/ref/CHAP006.htm#SECT003"><b>Reference: Display</b></a>) and <code class="func">DisplayBlocks</code> (<a href="chap3.html#X7DF15EFA78F1DDF6"><b>3.4-10</b></a>), this helper function prints a description of the module <var class="Arg">M</var>. The parameter <var class="Arg">func</var> can be one of the strings <code class="code">"print"</code>, <code class="code">"view"</code>, <code class="code">"display"</code> or <code class="code">"displayblocks"</code>, corresponding to the print different functions that might be called.</p>
+
+<p><a id="X7B91169A871B95A7" name="X7B91169A871B95A7"></a></p>
+
+<h5>6.2-3 <span class="Heading">HAPPRIME_ModuleGeneratorCoefficients</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ModuleGeneratorCoefficients</code>( <var class="Arg">M, elm</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ModuleGeneratorCoefficientsDestructive</code>( <var class="Arg">M, elm</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ModuleGeneratorCoefficients</code>( <var class="Arg">M, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ModuleGeneratorCoefficientsDestructive</code>( <var class="Arg">M, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Vector</p>
+
+<p>Returns the coefficients needed to make the module element <var class="Arg">elm</var> as a linear and G-combination of the module generators of the <code class="keyw">FpGModuleGF</code> <var class="Arg">M</var>. The coefficients are returned in standard vector form, or if there is no solution then <code class="code">fail</code> is returned. If a list of elements is given, then a list of coefficients (or <code class="code">fails</code>) is returned. The <code class="code">Destructive</code> form of this function might change the elements of of <var class="Arg">M</var> or <var class="Arg">elm</var>. The non-<code class="code">Destructive</code> version makes copies to ensure that they are not changed.</p>
+
+<p>See also <code class="func">HAPPRIME_ModuleElementFromGeneratorCoefficients</code> (<a href="chap6.html#X7C8B34EC7C9438AC"><b>6.2-4</b></a>).</p>
+
+<p><a id="X7C8B34EC7C9438AC" name="X7C8B34EC7C9438AC"></a></p>
+
+<h5>6.2-4 <span class="Heading">HAPPRIME_ModuleElementFromGeneratorCoefficients</span></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ModuleElementFromGeneratorCoefficients</code>( <var class="Arg">M, c</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_ModuleElementFromGeneratorCoefficients</code>( <var class="Arg">M, coll</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Vector</p>
+
+<p>Returns an element from the module <var class="Arg">M</var>, constructed as a linear and G-sum of the module generators as specified in <var class="Arg">c</var>. If a list of coefficient vectors is given, a list of corresponding module elements is returned.</p>
+
+<p>See also <code class="func">HAPPRIME_ModuleGeneratorCoefficients</code> (<a href="chap6.html#X7B91169A871B95A7"><b>6.2-3</b></a>)</p>
+
+<p><a id="X7EA258467C8190FB" name="X7EA258467C8190FB"></a></p>
+
+<h5>6.2-5 HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsDestructive</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsDestructive</code>( <var class="Arg">vgens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_MinimalGeneratorsVectorSpaceGeneratingRowsOnRightDestructive</code>( <var class="Arg">vgens, GA</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>FpGModuleGF</p>
+
+<p>Returns a module with minimal generators that is equal to the FG-module with <em>vector space</em> basis <var class="Arg">vgens</var> and <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>) as specified in <var class="Arg">GA</var>. The solution is computed by the module radical method, which is fast at the expense of memory. This function will corrupt the matrix <var class="Arg">gens</var>.</p>
+
+<p>This is a helper function for <code class="func">MinimalGeneratorsModuleRadical</code> (<a href="chap3.html#X81C340AD7EE8FA63"><b>3.5-9</b></a>) that is also used by <code class="func">ExtendResolutionPrimePowerGroupRadical</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7B435C307F28D44F"><b>HAPprime: ExtendResolutionPrimePowerGroupRadical</b></a>) (which knows that its module is already in vector-space form).</p>
+
+<p><a id="X7ADC06E981BCF3F9" name="X7ADC06E981BCF3F9"></a></p>
+
+<h5>6.2-6 HAPPRIME_IsGroupAndAction</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_IsGroupAndAction</code>( <var class="Arg">obj</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="code">true</code> if <var class="Arg">obj</var> appears to be a <code class="code">groupAndAction</code> record (see <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>)), or <code class="code">false</code> otherwise.</p>
+
+<p><a id="X7C0B125E7D5415B4" name="X7C0B125E7D5415B4"></a></p>
+
+<h4>6.3 <span class="Heading">Resolutions</span></h4>
+
+<p>For details of the main resolution functions in <strong class="pkg">HAPprime</strong>, see Chapter <a href="chap2.html#X7C0B125E7D5415B4"><b>2</b></a> of this datatypes reference manual, and <a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X7C0B125E7D5415B4"><b>HAPprime: Resolutions</b></a> in the <strong class="pkg">HAPprime</strong> user guide. This section describes the internal helper functions used by the higher-level functions.</p>
+
+<p><a id="X845662157E4E0C39" name="X845662157E4E0C39"></a></p>
+
+<h5>6.3-1 HAPPRIME_WordToVector</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_WordToVector</code>( <var class="Arg">w, dim, orderG</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b><strong class="pkg">HAP</strong> word (list of lists)</p>
+
+<p>Returns the boundary map vector that corresponds to the <strong class="pkg">HAP</strong> word vector <var class="Arg">w</var> with module ambient dimension <var class="Arg">dim</var> and group order <var class="Arg">orderG</var> (assumed to be the <code class="code">actionBlockSize</code>). A <strong class="pkg">HAP</strong> word vector has the following format: <code class="code">[ [block, elm], [block, elm], ... ]</code> where <code class="code">block</code> is a block number and <code class="code">elm</code> is a group element index (see example below).</p>
+
+<p>See also <code class="func">HAPPRIME_VectorToWord</code> (<a href="chap6.html#X7BCD0A1D799AD760"><b>6.3-2</b></a>)</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; G := CyclicGroup(4);;
+gap&gt; v := HAPPRIME_WordToVector([ [1,2],[2,3] ], 2, Order(G));
+&lt;a GF2 vector of length 8&gt;
+gap&gt; HAPPRIME_DisplayGeneratingRows([v], CanonicalGroupAndAction(G));
+[.1..|..1.]
+gap&gt; HAPPRIME_VectorToWord(v, Order(G));
+[ [ 1, 2 ], [ 2, 3 ] ]
+</pre></td></tr></table>
+
+<p><a id="X7BCD0A1D799AD760" name="X7BCD0A1D799AD760"></a></p>
+
+<h5>6.3-2 HAPPRIME_VectorToWord</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_VectorToWord</code>( <var class="Arg">vec, orderG</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p><b>Returns: </b>Vector</p>
+
+<p>The <strong class="pkg">HAP</strong> word format vector that corresponds to the boundary vector <var class="Arg">vec</var> with <code class="code">actionBlockSize</code> assumed to be <var class="Arg">orderG</var>.</p>
+
+<p>See <code class="func">HAPPRIME_WordToVector</code> (<a href="chap6.html#X845662157E4E0C39"><b>6.3-1</b></a>) for a few more details and an example.</p>
+
+<p><a id="X7C79C3CE822EAE32" name="X7C79C3CE822EAE32"></a></p>
+
+<h5>6.3-3 HAPPRIME_BoundaryMatrices</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_BoundaryMatrices</code>( <var class="Arg">R</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<p><b>Returns: </b>List of matrices</p>
+
+<p>If <var class="Arg">R</var> is a resolution which stores its boundaries as a list of matrices (e.g. one created by <strong class="pkg">HAPprime</strong>, this list is returned. Otherwise, <code class="code">fail</code> is returned. Note that the first matrix in this list corresponds to the zeroth degree: for resolutions of modules, this is the generators of the module; for resolutions of groups, this is the empty matrix. The second matrix corresponds to the first degree, and so on.</p>
+
+<p><a id="X7981D36D840820BE" name="X7981D36D840820BE"></a></p>
+
+<h5>6.3-4 HAPPRIME_AddNextResolutionBoundaryMapMatNC</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_AddNextResolutionBoundaryMapMatNC</code>( <var class="Arg">R, BndMat</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b><code class="code">HapResolution</code></p>
+
+<p>Returns the resolution <var class="Arg">R</var> extended by one term, where that term is given by the boundary map matrix <var class="Arg">BndMat</var>. If <var class="Arg">BndMat</var> is not already in compressed matrix form, it will be converted into this form, and if the boundaries in <var class="Arg">R</var> are not already in matrix form, they are all converted into this form.</p>
+
+<p><a id="X7BC0F13C8706EEB2" name="X7BC0F13C8706EEB2"></a></p>
+
+<h5>6.3-5 HAPPRIME_CreateResolutionWithBoundaryMapMatsNC</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_CreateResolutionWithBoundaryMapMatsNC</code>( <var class="Arg">G, BndMats</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b><code class="code">HapResolution</code></p>
+
+<p>Returns a <strong class="pkg">HAP</strong> resolution object for group <var class="Arg">G</var> where the module homomorphisms are given by the boundary matrices in the list <var class="Arg">BndMats</var>. This list is indexed with the boundary matrix for degree <em>zero</em> as the first element. If the resolution is the resolution of a module, the module's minimal generators are this first boundary matrix, otherwise (for the resolution of a group), this should be set to be the empty matrix <code class="code">[]</code>.</p>
+
+<p><a id="X7862428B781B1F3D" name="X7862428B781B1F3D"></a></p>
+
+<h4>6.4 <span class="Heading">Test functions</span></h4>
+
+<p>Internal helper functions for testing <strong class="pkg">HAPprime</strong>.</p>
+
+<p><a id="X7849CFA87986F190" name="X7849CFA87986F190"></a></p>
+
+<h5>6.4-1 HAPPRIME_SingularIsAvailable</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_SingularIsAvailable</code>( <var class="Arg"></var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>The <strong class="pkg">Singular</strong> package can be succesfully loaded whether the <code class="file">singular</code> executable is present or not, so this function attempts to check for the presence of this executable by searching on the system path and checking for global variables set by the <strong class="pkg">Singular</strong>.</p>
+
+<p>Whether this function returns <code class="keyw">true</code> or <code class="keyw">false</code> will not affect the rest of this package: it only affects which tests are run by the <code class="file">happrime.txt</code> and <code class="file">testall.g</code> test routines.</p>
+
+<p><a id="X84C93DCF7DD815FB" name="X84C93DCF7DD815FB"></a></p>
+
+<h5>6.4-2 HAPPRIME_Random2Group</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_Random2Group</code>( <var class="Arg">[orderG]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_Random2GroupAndAction</code>( <var class="Arg">[orderG]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Group or <code class="code">groupAndAction</code> record</p>
+
+<p>Returns a random 2-group, or a <code class="code">groupAndAction</code> record (see <code class="func">ModuleGroupAndAction</code> (<a href="chap3.html#X81F860F380EB55FC"><b>3.4-5</b></a>)) with the canonical action. The order may be specified as an argument, or if not then a group is chosen randomly (from a uniform distribution) over all of the possible groups with order from 2 to 128.</p>
+
+
+<table class="example">
+<tr><td><pre>
+gap&gt; HAPPRIME_Random2Group();
+&lt;pc group of size 8 with 3 generators&gt;
+gap&gt; HAPPRIME_Random2Group();
+&lt;pc group of size 32 with 5 generators&gt;
+</pre></td></tr></table>
+
+<p><a id="X7DB975677D6E0F8D" name="X7DB975677D6E0F8D"></a></p>
+
+<h5>6.4-3 HAPPRIME_TestResolutionPrimePowerGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; HAPPRIME_TestResolutionPrimePowerGroup</code>( <var class="Arg">[ntests]</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p><b>Returns: </b>Boolean</p>
+
+<p>Returns <code class="keyw">true</code> if <code class="func">ResolutionPrimePowerGroupGF</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X86934BE9858F7199"><b>HAPprime: ResolutionPrimePowerGroupGF (for group)</b></a>) and <code class="func">ResolutionPrimePowerGroupRadical</code> (<a href="/home/pas/GAP/gap/pkg/HAPprime/doc/userguide/chap3.html#X86934BE9858F7199"><b>HAPprime: ResolutionPrimePowerGroupRadical (for group)</b></a>) appear to be working correctly, or <code class="keyw">false</code> otherwise. This repeatedly creates resolutions of length 6 for random 2-groups (up to order 128) using both of the <strong class="pkg">HAPprime</strong> resolution algorithms, and compares them both with the original <strong class="pkg">HAP</strong> <code class="func">ResolutionPrimePowerGroup</code> (<a href="/home/pas/GAP/gap/pkg/Hap1.9/doc/chap1.html#X8735FC5E7BB5CE3A"><b>HAP: ResolutionPrimePowerGroup</b></a>) and checks that they are equal. The optional argument <var class="Arg">ntests</var> specifies how many resolutions to try: the default is 25.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap5.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chapInd.html">Next Chapter</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

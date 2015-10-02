@@ -1,0 +1,734 @@
+<!-- 
+
+         bysuborbit.xml            orb package documentation             
+                                                               Juergen Mueller
+                                                               Max Neunhoeffer
+                                                                  Felix Noeske
+
+         Copyright (C) 2005-2008 by the authors
+
+This chapter explains functionality for enumeration by suborbits.
+
+-->
+
+<Chapter Label="bysuborbit">
+<Heading>Orbit enumeration by suborbits</Heading>
+
+The code described in this chapter is quite complicated and one has
+to understand quite a lot of theory to use it. The reason for this is
+that a lot of preparatory data has to be found and supplied by the user
+in order for this code to run at all. Also the situations in which it
+can be used are quite special. However, in such a situation, the user
+is rewarded with impressive performance.
+
+<P/> The main reference for the theory is <Cite Key="MNW"/>. We briefly
+recall the basic setup: Let <M>G</M> be a group acting from the right
+on some set <M>X</M>. Let <M>k</M> be a natural number, set 
+<M>X_{{k+1}} := X</M>, and let
+<Display> U_1 &lt; U_2 &lt; \ldots &lt; U_k &lt; U_{{k+1}} = G </Display>
+be a chain of <Q>helper</Q> subgroups. Further, for <M>1 \leq i \leq k</M>
+let <M>X_i</M> be a <M>U_i</M> set and let <M>\pi_i : X_{{i+1}} \to X_i</M>
+be a homomorphism of <M>U_i</M>-sets.
+
+<P/> This chapter starts with a section about the main orbit enumeration
+function and the corresponding preparation functions. It then proceeds
+with a section on the used data structures, which will necessarily be
+rather technical. Finally, the chapter concludes with a section
+on higher level data structures like lists of orbit-by-suborbit
+objects and their administration. Note that there are quite a few
+examples in Chapter <Ref Chap="examples"/>.
+
+<Section>
+<Heading><C>OrbitBySuborbits</C> and its resulting objects</Heading>
+
+<ManSection>
+<Func Name="OrbitBySuborbit" Arg="setup, p, j, l, i, percentage"/>
+<Returns> an orbit-by-suborbit object </Returns>
+<Description>
+    This is the main function in the whole business. All notations
+    from the beginning of this Chapter <Ref Chap="bysuborbit"/> remain
+    in place. The argument <A>setup</A>
+    must be a setup record lying in the filter 
+    <Ref Filt="IsOrbitBySuborbitSetup"/> described in detail in 
+    Section <Ref Sect="obsodatastrucs"/> and produced for example by
+    <Ref Func="OrbitBySuborbitBootstrapForVectors"/> or
+    <Ref Func="OrbitBySuborbitBootstrapForLines"/> described below.
+    In particular, it contains all the generators for <M>G</M> and the
+    helper subgroups acting on the various sets. The argument <A>p</A>
+    must be the starting point of the orbit. Note that the function
+    possibly does not take <A>p</A> itself as starting point but rather
+    its <M>U_k</M>-minimalisation, which is a point in the same 
+    <M>U_k</M>-orbit as <A>p</A>. This information is important
+    for the resulting stabiliser and words representing the 
+    <M>U_k</M>-suborbits.
+    <P/>
+    The integers <A>j</A>, <A>l</A>, and <A>i</A>, for which
+    <M>k+1 \ge <A>j</A> \ge <A>l</A> &gt; <A>i</A> \ge 1</M> must hold,
+    determine the running mode. <A>j</A> indicates in which set <M>X_j</M>
+    the point <A>p</A> lies and thus in which set the orbit enumeration
+    takes place, with <M>j=k+1</M> indicating the original set <M>X</M>. 
+    The value <A>l</A> indicates which group to use for orbit enumeration.
+    So the result will be a <M>U_l</M> orbit, with <M><A>l</A>=<A>k</A>+1</M>
+    indicating a <M>G</M>-orbit. Finally, the value <A>i</A> indicates
+    which group to use for the <Q>by suborbit</Q> part, that is, the orbit
+    will be enumerated <Q>by <M>U_{<A>i</A>}</M>-orbits</Q>. Note that
+    nearly all possible combinations of these parameters actually occur,
+    because this function is also used in the <Q>on-the-fly</Q> 
+    precomputation happening behind the scenes. The most common usage
+    of this function for the user is <M><A>j</A>=<A>l</A>=<A>k</A>+1</M>
+    and <M><A>i</A>=k</M>.
+    <P/>
+    Finally, the integer <A>percentage</A> says, how much of the full
+    orbit should be enumerated, the value is in percent, thus <M>100</M>
+    means the full orbit. Usually, only values greater than <M>50</M>
+    are sensible, because one can only prove the size of the orbit
+    after enumerating at least half of it.
+    <P/>
+    The result is an <Q>orbit-by-suborbit</Q> object. For such an object
+    in particular the operations <Ref Meth="Size" Label="fororb"/>, 
+    <Ref Oper="Seed"/>,
+    <Ref Oper="SuborbitsDb"/>,
+    <Ref Oper="WordsToSuborbits"/>, <Ref Oper="Memory" Label="forob"/>,
+    <Ref Meth="Stabilizer" Label="obso"/>, and 
+    <Ref Oper="Seed"/> are defined, see below.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="OrbitBySuborbitKnownSize" 
+      Arg="setup, p, j, l, i, percentage, knownsize"/>
+<Returns> an orbit-by-suborbit object </Returns>
+<Description>
+    Basically does the same as <Ref Func="OrbitBySuborbit"/> but does
+    not compute the stabiliser by evaluating Schreier words. Instead,
+    the size of the orbit to enumerate must already be known and be
+    given in the argument <A>knownsize</A>. The other arguments are as
+    for the function <Ref Func="OrbitBySuborbit"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="Size" Arg="orb" Label="fororb"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the number of points in the orbit-by-suborbit <A>orb</A>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="Seed" Arg="orb"/>
+<Returns> a point in the orbit </Returns>
+<Description>
+Returns the starting point of the orbit-by-suborbit <A>orb</A>. It is
+the <M>U_i</M>-minimalisation of the starting point given to
+<Ref Func="OrbitBySuborbit"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="SuborbitsDb" Arg="orb"/>
+<Returns> a database of suborbits </Returns>
+<Description>
+Returns the data base of suborbits of the orbit-by-suborbit object
+<A>orb</A>. In particular, such a database object has methods
+for the operations
+<Ref Oper="Memory" Label="forob"/>, <Ref Oper="TotalLength"
+    Label="fordb"/>, and
+<Ref Oper="Representatives"/>. For descriptions see below.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="WordsToSuborbits" Arg="orb"/>
+<Returns> a list of words </Returns>
+<Description>
+Returns a list of words in the groups <M>U_*</M> reaching each of the
+suborbits in the orbit-by-suborbit <A>orb</A>. Here a word is
+a list of integers. Positive numbers index generators in following
+numbering: The first few numbers are numbers of generators of <M>U_1</M>
+the next few adjacent numbers index the generators of <M>U_2</M> and
+so on until the generators of <M>G</M> in the end. Negative numbers
+indicate the corresponding inverses of these generators.
+<P/>
+Note that <Ref Func="OrbitBySuborbit"/> takes the <M>U_i</M>-minimalisation
+of the starting point as its starting point and the words here are all
+relative to this new starting point.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Memory" Arg="ob" Label="forob"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the amount of memory needed by the object <A>ob</A>, which can
+be either an orbit-by-suborbit object, a suborbit database object,
+or an object in the filter <Ref Filt="IsOrbitBySuborbitSetup"/>.
+The amount of memory used is given in bytes. Note that this includes
+all hashes, databases, and preparatory data of substantial size.
+For orbit-by-suborbits the memory needed for the precomputation is
+not included, ask the setup object for that.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="Stabilizer" Arg="orb" Label="obso"/>
+<Returns> a permutation group </Returns>
+<Description>
+Returns the stabiliser of the starting point of the orbit-by-suborbit
+in <A>orb</A> in form of a permutation group, using the given
+faithful permutation representation in the setup record.
+<P/>
+Note that <Ref Func="OrbitBySuborbit"/> takes the <M>U_i</M>-minimalisation
+of the starting point as its starting point and the stabiliser returned
+here is the one of this new starting point.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="StabWords" Arg="orb"/>
+<Returns> a list of words </Returns>
+<Description>
+Returns generators for the stabiliser of the starting point of the 
+orbit-by-suborbit
+in <A>orb</A> in form of words as described with the operation <Ref
+Oper="WordsToSuborbits"/>. Note again that <Ref Func="OrbitBySuborbit"/>
+takes the <M>U_i</M>-minimalisation of the starting point as its
+starting point and the stabiliser returned here is the one of this new
+starting point.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="SavingFactor" Arg="orb" Label="fororb"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the quotient of the total number of points stored in the
+orbit-by-suborbit <A>orb</A> and the total number of <M>U</M>-minimal points
+stored. Note that the memory for the precomputations is not considered
+here!
+</Description>
+</ManSection>
+
+The following operations apply to orbit-by-suborbit database objects:
+
+<ManSection>
+<Oper Name="TotalLength" Arg="db" Label="fordb"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the total number of points stored in all suborbits in the 
+orbit-by-suborbit database <A>db</A>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Representatives" Arg="db"/>
+<Returns> a list of points </Returns>
+<Description>
+Returns a list of representatives of the suborbits stored in the
+orbit-by-suborbit database <A>db</A>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="SavingFactor" Arg="db" Label="fordb"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the quotient of the total number of points stored in the
+suborbit database <A>db</A> and the total number of <M>U</M>-minimal points
+stored. Note that the memory for the precomputations is not considered
+here!
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="OrigSeed" Arg="orb"/>
+<Returns> a point </Returns>
+<Description>
+    Returns the original starting point for the orbit, not yet
+    minimalised.
+</Description>
+</ManSection>
+
+</Section>
+
+
+<Section>
+<Heading>Preparation functions for <Ref Func="OrbitBySuborbit"/></Heading>
+
+<ManSection>
+<Func Name="OrbitBySuborbitBootstrapForVectors" 
+      Arg="gens, permgens, sizes, codims, opt"/>
+  <Returns> a setup record in the filter <Ref Filt="IsOrbitBySuborbitSetup"/>
+  </Returns>
+<Description>
+All notations from the beginning of this Chapter <Ref Chap="bysuborbit"/> 
+remain in place.
+This function is for the action of matrices on row vectors, so all generators
+must be matrices. The set <M>X</M> thus is a row space usually over a 
+finite field and the sets <M>X_i</M> are quotient spaces. The matrix
+generators for the various groups have to be adjusted with a base change,
+such that the canonical projection onto <M>X_i</M> is just to take the
+first few entries in a vector, which means, that the submodules divided
+out are generated by the last standard basis vectors.
+<P/>
+The first argument <A>gens</A> must be a list of lists of generators. 
+The outer list must have length <M>k+1</M> with entry <M>i</M> being a list 
+of matrices generating <M>U_i</M>, given in the action on <M>X=X_{{k+1}}</M>.
+The above mentioned base change must have been done. The second
+argument <A>permgens</A> must be an analogous list with generator lists
+for the <M>U_i</M>. 
+These representations are used to compute membership and
+group orders of stabilisers. In its simplest form, <A>permgens</A> is a 
+list of permutation representations of the same degree, giving a set of 
+generators for each individual group <M>U_i</M>. Alternatively, if for some 
+<M>U_i</M>, <M>i > 1</M>, it is required that the stabilizer of its action 
+is to be calculated as a matrix group, generators of <M>U_i</M> in some 
+matrix representation may be supplied. However, it is then mandatory that 
+for all <M>1 &lt; i \leq k+1</M> the generator lists have the following format:
+The <M>i</M>-th entry of <A>permgens</A> is 
+a list concatenating the generator lists of <M>U_1</M> up to <M>U_i</M> (in
+this order) all of whose elements are in either some permutation or some matrix 
+representation. Note that currently, the generators of <M>U_1</M> need
+to be always given in a permutation representation.
+The argument <A>sizes</A> must be a list of
+length <M>k+1</M> and entry <M>i</M> must be the group order of <M>U_i</M>
+(again with <M>U_{{k+1}}</M> being <M>G</M>). Finally, the argument
+<A>codims</A> must be a list of length <M>k</M> containing integers
+with the <M>i</M>th entry being the codimension of the <M>U_i</M>-invariant
+subspace <M>Y_i</M> of <M>X</M> with <M>X_i = X/Y_i</M>. These
+codimensions must not decrease for obvious reasons, but some of them
+may be equal. The last argument <A>opt</A> is an options record.
+See below for possible entries.
+<P/>
+The function does all necessary steps to fill a setup record
+(see <Ref Sect="obsodatastrucs"/>) to be used with 
+<Ref Func="OrbitBySuborbit"/>. For details see the code.
+<P/>
+Currently, the following components in the options record <A>opt</A>
+have a meaning:
+<List>
+<Mark><C>regvecfachints</C></Mark>
+<Item>If bound it must be a list. In position <M>i</M> for <M>i&gt;1</M>
+there may be a list of vectors in the <M>i</M>-th quotient space <M>X_i</M>
+that can be used to distinguish the left <M>U_{{i-1}}</M> cosets in
+<M>U_i</M>. All vectors in this list are tried and the first one that
+actually works is used.
+</Item>
+<Mark><C>regvecfullhints</C></Mark>
+<Item>If bound it must be a list. In position <M>i</M> for <M>i&gt;1</M>
+there may be a list of vectors in the full space <M>X</M>
+that can be used to distinguish the left <M>U_{{i-1}}</M> cosets in
+<M>U_i</M>. All vectors in this list are tried and the first one that
+actually works is used.
+</Item>
+<Mark><C>stabchainrandom</C></Mark>
+<Item>If bound the value is copied into the <C>stabchainrandom</C>
+    component of the setup record.</Item>
+<Mark><C>nostabchainfullgroup</C></Mark>
+<Item>If bound it must be <K>true</K> or <K>false</K>. If it is 
+    unbound or set to <K>true</K>, no stabilizer chain is computed for the
+    group <M>U_{k+1}</M>. Its default value is <K>false</K>.</Item>
+</List>
+</Description>
+</ManSection>
+    
+<ManSection>
+<Func Name="OrbitBySuborbitBootstrapForLines" 
+      Arg="gens, permgens, sizes, codims, opt"/>
+  <Returns> a setup record in the filter <Ref Filt="IsOrbitBySuborbitSetup"/>
+  </Returns>
+<Description>
+All notations from the beginning of this Chapter <Ref Chap="bysuborbit"/> 
+remain in place. This does exactly the same as 
+<Ref Func="OrbitBySuborbitBootstrapForVectors"/> except that it handles
+the case of matrices acting on one-dimensional subspaces. Those 
+one-dimensional subspaces are represented by normalised vectors,
+where a vector is normalised if its first non-vanishing entry is equal
+to <M>1</M>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="OrbitBySuborbitBootstrapForSpaces" 
+      Arg="gens, permgens, sizes, codims, spcdim, opt"/>
+  <Returns> a setup record in the filter <Ref Filt="IsOrbitBySuborbitSetup"/>
+  </Returns>
+<Description>
+All notations from the beginning of this Chapter <Ref Chap="bysuborbit"/> 
+remain in place. This does exactly the same as 
+<Ref Func="OrbitBySuborbitBootstrapForVectors"/> except that it handles
+the case of matrices acting on <A>spcdim</A>-dimensional subspaces. Those 
+subspaces are represented by fully echelonised bases.
+</Description>
+</ManSection>
+</Section>
+
+<Section Label="obsodatastrucs">
+<Heading>Data structures for orbit-by-suborbits</Heading>
+
+The description in this section is necessarily technical. It is meant
+more as extended annotations to the source code than as user documentation.
+Usually it should not be necessary for the user to know the details
+presented here.
+
+The function <Ref Func="OrbitBySuborbit"/> needs an information record
+of the following form:
+
+<ManSection>
+<Filt Name="IsOrbitBySuborbitSetup" Arg="ob" Type="Category"/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
+<Description>
+Objects in this category are also in <C>IsComponentObjRep</C>. We describe
+the components, refering to the setup at the beginning of this
+Chapter <Ref Chap="bysuborbit"/>.
+<List>
+<Mark><C>k</C></Mark>
+<Item> The number of helper subgroups.  </Item>
+<Mark><C>size</C></Mark>
+<Item> A list of length <M>k+1</M> containing the orders of the groups
+    <M>U_i</M>, including <M>U_{{k+1}} = G</M>.
+</Item>
+<Mark><C>index</C></Mark>
+<Item> A list of length <M>k</M> with the index <M>[U_i:U_{{i-1}}]</M>
+    in position <M>i</M> (<M>U_0 = \{1\}</M>).
+</Item>
+<Mark><C>els</C></Mark>
+<Item> A list of length <M>k+1</M> containing generators of the groups
+in their action on various sets. In position <M>i</M> we store all the
+generators for all groups acting on <M>X_i</M>, that is for the groups
+<M>U_1, \ldots, U_i</M> (where position <M>k+1</M> includes the generators
+for <M>G</M>. In each position the generators of all those groups
+are concatentated starting with <M>U_1</M> and ending with <M>U_i</M>.
+</Item>
+<Mark><C>elsinv</C></Mark>
+<Item> The inverses of all the elements in the <C>els</C> component in the
+same arrangement.
+</Item>
+<Mark><C>trans</C></Mark>
+<Item> A list of length <M>k</M> in which position <M>i</M> for <M>i>1</M>
+contains 
+a list of words in the generators for a transversal of <M>U_{{i-1}}</M>
+in <M>U_i</M> (with <M>U_0 = 1</M>).
+</Item>
+<Mark><C>pifunc</C></Mark>
+<Item> Projection functions. This is a list of length <M>k+1</M> containing
+in position <M>j</M> a list of length <M>j-1</M> containing in position
+<M>i</M> a &GAP; function doing the projection <M>X_j \to X_i</M>.
+These &GAP; functions take two arguments, namely the point to map
+and secondly the value of the <C>pi</C> component at positions
+<C>[j][i]</C>. Usually <C>pifunc</C> is just the slicing operator
+in &GAP; and <C>pi</C> contains the components to project onto
+as a range object.
+</Item>
+<Mark><C>pi</C></Mark>
+<Item> See the description of the <C>pifunc</C> component.
+</Item>
+<Mark><C>op</C></Mark>
+<Item> A list of <M>k+1</M> &GAP; operation functions, each taking a point
+<M>p</M> and a generator <M>g</M> in the action given by the index and 
+returning <M>pg</M>.
+</Item>
+<Mark><C>info</C></Mark>
+<Item> 
+A list of length <M>k</M> containing a hash table with the minimalisation
+lookup data. These hash tables grow during orbit enumerations as
+precomputations are done behind the scenes.
+<P/>
+<C>info[1]</C> contains precomputation data for <M>X_1</M>. Assume
+<M>x \in X_1</M> to be <M>U_1</M>-minimal. For all <M>z \in xU_1</M>
+with <M>z \neq x</M> we store the number of an element in the
+<C>wordcache</C> mapping <M>z</M> to <M>x</M>. For <M>z=x</M> we
+store a record with two components <C>gens</C> and <C>size</C>, 
+where <C>gens</C> stores generators for the stabiliser
+Stab<M>_{{U_1}}(x)</M> as words in the group generators and
+<C>size</C> stores the size of that stabiliser.
+<P/>
+<C>info[i]</C> for <M>i>1</M> contains precomputation data for
+<M>X_i</M>. Assume <M>x \in X_i</M> to be <M>U_i</M>-minimal.
+For all <M>U_{{i-1}}</M>-minimal <M>z \in xU_i \setminus xU_{{i-1}}</M> 
+we store the number
+of an element in <C>trans[i]</C> mapping <M>z</M> into <M>xU_{{i-1}}</M>.
+For all <M>U_{{i-1}}</M>-minimal <M>z \in xU_{{i-1}}</M> with
+<M>z \neq x</M> 
+we store the negative of the number of a word in <C>wordcache</C> that
+is in the generators of <M>U_{{i-1}}</M> and maps <M>z</M> to <M>x</M>.
+For <M>z=x</M> we store the stabiliser information as in the case
+<M>i=1</M>.
+<P/>
+This information together with the information in the following
+componente allows the minimalisation function to do its job.
+</Item>
+<Mark><C>cosetrecog</C></Mark>
+<Item> 
+A list of length <M>k</M> beginning with the index <M>1</M>. The
+entry at position <M>i</M> is bound to a function taking <M>3</M> arguments, 
+namely <M>i</M> itself, a word in the group generators of 
+<M>U_1, \ldots, U_k</M> which lies in <M>U_i</M>,
+and the setup record. The function computes the number <C>j</C> of an element
+in <C>trans[i]</C>, such that the element of <M>U_i</M> described by
+the word lies in <C>trans[i][j] U_{{i-1}}</C>.
+</Item>
+<Mark><C>cosetinfo</C></Mark>
+<Item> 
+A list of things that can be used by the functions in
+<C>cosetrecog</C>.
+</Item>
+<Mark><C>suborbnr</C></Mark>
+<Item> 
+A list of length <M>k</M> that contains in position <M>i</M> the number
+of <M>U_i</M>-orbits in <M>X_i</M> archived in <C>info[i]</C> during
+precomputation.
+</Item>
+<Mark><C>sumstabl</C></Mark>
+<Item> 
+A list of length <M>k</M> that contains in position <M>i</M> the sum
+of the point stabiliser sizes of all <M>U_i</M>-orbits <M>X_i</M>
+archived in <C>info[i]</C> during precomputation.
+</Item>
+<Mark><C>permgens</C></Mark>
+<Item> 
+A list of length <M>k+1</M> containing in position <M>i</M> generators
+for <M>U_1, \ldots, U_i</M> in a faithful permutation representation
+of <M>U_i</M>. Generators fit to the generators in <C>els</C>.
+For the variant <Ref Func="OrbitBySuborbitKnownSize"/> the <M>k+1</M>
+entry can be unbound.
+</Item>
+<Mark><C>permgensinv</C></Mark>
+<Item> 
+The inverses of the generators in <C>permgens</C> in the same arrangement.
+</Item>
+<Mark><C>sample</C></Mark>
+<Item> 
+A list of length <M>k+1</M> containing sample points in the sets
+<M>X_i</M>.
+</Item>
+<Mark><C>stabchainrandom</C></Mark>
+<Item> 
+The value is used as the value for the <C>random</C> option
+for <C>StabChain</C> calculations to determine stabiliser sizes.
+Note that the algorithms are randomized if you use this feature with
+a value smaller than <M>1000</M>.
+</Item>
+<Mark><C>wordhash</C></Mark>
+<Item> 
+A hash to quickly recognise already used words. For every word in the
+hash the position of that word in the <C>wordcache</C> list is stored
+as value in the hash.
+</Item>
+<Mark><C>wordcache</C></Mark>
+<Item> 
+A list of words in the wordcache for indexing purposes.
+</Item>
+<Mark><C>hashlen</C></Mark>
+<Item> 
+Initial length of hash tables used for the enumeration of lists
+of <M>U_i</M>-minimal points.
+</Item>
+<Mark><C>staborblenlimit</C></Mark>
+<Item> 
+This contains the limit, up to which orbits of stabilisers are computed
+using word action. After this limit, the stabiliser elements are actually
+evaluated in the group.
+</Item>
+<Mark><C>stabsizelimitnostore</C></Mark>
+<Item>
+    If the stabiliser in the quotient is larger than this limit, the
+    suborbit is not stored.
+</Item>
+<Mark><C>cache</C></Mark>
+<Item>A linked list cache object (see <Ref Oper="LinkedListCache"/>)
+    to store already computed transversal elements. The cache nodes
+    are referenced in the <C>transcache</C> component and are stored
+    in the cache <C>cache</C>.
+</Item>
+<Mark><C>transcache</C></Mark>
+<Item>This is a list of lists of weak pointer objects. The weak
+    pointer object at position <C>[i][j]</C> holds references to
+    cache nodes of transversal elements of <M>U_{i-1}</M> in <M>U_i</M> in
+    representation <M>j</M>. 
+</Item>
+</List>
+</Description>
+</ManSection>
+
+<Subsection>
+    <Heading>The global record <C>ORB</C></Heading>
+
+In this section we describe the global record <C>ORB</C>, which
+contains some entries that can tune the behaviour of the
+orbit-by-suborbit functions. The record has the following components:
+
+<List>
+    <Mark><C>MINSHASHLEN</C></Mark>
+    <Item>This positive integer is the initial value of the hash size
+        when enumerating orbits of stored stabilisers to find all or 
+        search through <M>U_{{i-1}}</M>-minimal vectors in an
+        <M>U_i</M>-orbit. The default value is <M>1000</M>.</Item>
+    <Mark><C>ORBITBYSUBORBITDEPTH</C></Mark>
+    <Item>This integer indicates how many recursive calls to
+        <C>OrbitBySubOrbitInner</C> have been done. The initial value
+        is <M>0</M> to indicate that no such call has happened. This
+    variable is necessary since the minimalisation routine sometimes
+    uses <C>OrbitBySubOrbitInner</C> recursively to complete some
+    precomputation <Q>on the fly</Q> during some other
+    orbit-by-suborbit enumeration. This
+    component is always set to <M>0</M> automatically when calling
+    <Ref Func="OrbitBySuborbit"/> or <Ref
+        Func="OrbitBySuborbitKnownSize"/> so the user should usually
+    not have to worry about it at all.
+    </Item>
+    <Mark><C>PATIENCEFORSTAB</C></Mark>
+    <Item>This integer indicates how many Schreier generators for the
+    stabiliser are tried before assuming that the stabiliser is
+    complete. Whenever a new generator for the stabiliser is found
+    that increases the size of the currently known stabiliser, the
+    count is reset to <M>0</M> that is, only when
+    <C>ORB.PATIENCEFORSTAB</C> unsuccessful Schreier generators have
+    been tried no more Schreier generators are created. The default
+    value for this component is <M>1000</M>. This feature is purely
+    heuristical and therefore this value has to be adjusted for some
+    orbit enumerations.
+    </Item>
+    <Mark><C>PLEASEEXITNOW</C></Mark>
+    <Item>This value is usually set to <K>false</K>. Setting it to
+        <K>true</K> in a break loop tells the orbit-by-suborbit
+        routines to exit gracefully at the next possible time. Simply
+        leaving such a break loop with <K>quit;</K> is not safe, since
+    the routines might be in the process of updating precomputation
+    data and the data structures might be left corrupt. Always use
+    this component to leave an orbit enumeration prematurely.
+    </Item>
+    <Mark><C>REPORTSUBORBITS</C></Mark>
+    <Item>This positive integer governs how often information messages
+        about newly found suborbits are printed. The default value is
+        <M>1000</M> saying that after every <M>1000</M> suborbits a message 
+        is printed, if the info level is at its default value
+        <M>1</M>. If the info level is increased, then this component
+        does no longer affect the printing and all found suborbits
+        are reported.
+    </Item>
+    <Mark><C>TRIESINQUOTIENT</C> and <C>TRIESINWHOLESPACE</C></Mark>
+    <Item>The bootstrap routines 
+        <Ref Func="OrbitBySuborbitBootstrapForVectors"/>,
+        <Ref Func="OrbitBySuborbitBootstrapForLines"/> and
+        <Ref Func="OrbitBySuborbitBootstrapForSpaces"/> all need to
+        compute transversals of one helper subgroup in the next one.
+        They use orbit enumerations in various spaces to achieve this.
+        The component <C>TRIESINQUOTIENT</C> must be a non-negative
+        integer and indicates how often a random vector in the
+        corresponding quotient space is tried to find an orbit that
+        can distinguish between cosets. The other component
+        <C>TRIESINWHOLESPACE</C> also must be a non-negative integer
+        and indicates how often a random vector in the whole space
+        is tried. The default values are <M>3</M> and <M>20</M>
+        resepectively.
+        </Item>
+</List>
+
+</Subsection>
+
+</Section>
+
+<Section>
+<Heading>Lists of orbit-by-suborbit objects</Heading>
+
+There are a few functions that help to administrate lists of
+orbit-by-suborbits.
+
+<ManSection>
+<Func Name="InitOrbitBySuborbitList" Arg="setup, nrrandels"/>
+<Returns> a list of orbit-by-suborbits object </Returns>
+<Description>
+Creates an object that stores a list of orbit-by-suborbits. The
+argument <A>setup</A> must be an orbit-by-suborbit setup record
+and <A>nrrandels</A> must be an integer. It indicates how many random
+elements in <M>G</M> should be used to do a probabilistic check for
+membership in case an orbit-by-suborbit is only partially known.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IsVectorInOrbitBySuborbitList" Arg="v, obsol"/>
+<Returns> <K>fail</K> or an integer </Returns>
+<Description>
+Checks probabilistically, if the element <A>v</A> lies in one of
+the partially enumerated orbit-by-suborbits in the orbit-by-suborbit list
+object <A>obsol</A>. If yes, the number of that orbit-by-suborbit is
+returned and the answer is guaranteed to be correct. If the
+answer is <K>fail</K> there is a small probability that the point
+actually lies in one of the orbits but this could not be shown.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="OrbitsFromSeedsToOrbitList" Arg="obsol, li"/>
+<Returns> nothing </Returns>
+<Description>
+Takes the elements in the list <A>li</A> as seeds for orbit-by-suborbits.
+For each such seed it is first checked whether it lies in one of the
+orbit-by-suborbits in <A>obsol</A>, which must be an orbit-by-suborbit
+list object. If not found, 51&percent; of the orbit-by-suborbit of the 
+seed is enumerated and added to the list <A>obsol</A>.
+<P/>
+This function is a good way to quickly enumerate a greater number of 
+orbit-by-suborbits.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="VerifyDisjointness" Arg="obsol"/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
+<Description>
+This function checks deterministically, whether the orbit-by-suborbits
+in the orbit-by-suborbit list object <A>obsol</A> are disjoint or not
+and returns the corresponding boolean value. This is not a 
+Monte-Carlo algorithm. If the answer is <K>false</K>, the function
+writes out, which orbits are in fact identical.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Memory" Arg="obsol" Label="forobsol"/>
+<Returns> an integer </Returns>
+<Description>
+    Returns the total memory used for all orbit-by-suborbits in the 
+    orbit-by-suborbit-list <A>obsol</A>.
+    Precomputation data is not included, ask the setup object instead.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="TotalLength" Arg="obsol" Label="forobsol"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the total number of points stored in all orbit-by-suborbits in the 
+orbit-by-suborbit-list <A>obsol</A>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Meth Name="Size" Arg="obsol" Label="forobsol"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the total number of points in the orbit-by-suborbit-list <A>obsol</A>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="SavingFactor" Arg="obsol" Label="forobsol"/>
+<Returns> an integer </Returns>
+<Description>
+Returns the quotient of the total number of points stored in all 
+orbit-by-suborbits in the orbit-by-suborbit-list <A>obsol</A>
+and the total number of <M>U</M>-minimal points
+stored, which is the average saving factor considering all orbit-by-suborbits
+together. Note that the memory for the precomputations is not considered
+here!
+</Description>
+</ManSection>
+
+</Section>
+
+<!-- ############################################################ -->
+
+</Chapter>
